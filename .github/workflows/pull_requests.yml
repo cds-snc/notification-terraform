@@ -33,4 +33,11 @@ jobs:
 
       - name: Setup Terragrunt
         run: |
-          wget -O /usr/local/bin/terragrunt_linux_amd64 https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64
+          mkdir bin
+          wget -O bin/terragrunt_linux_amd64 https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64
+          echo "/bin" >> $GITHUB_PATH
+
+      - name: Test Terragrunt
+        run: |
+          terragrunt -version
+
