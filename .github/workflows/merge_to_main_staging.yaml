@@ -1,8 +1,7 @@
 name: "Merge to main (Staging)"
 
 on:
-  push:
-    branches: [staging_apply]
+  pull_request:
     paths:
       - "/aws/*"
       - "/env/staging/*"
