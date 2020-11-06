@@ -33,6 +33,7 @@ Common networking assets such as:
 - NAT gateway
 - Route table
 - S3 logging buckets
+- KMS
 
 #### `aws/eks`
 Assets to create a working Elastic Kubernetes Service (EKS):
