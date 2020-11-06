@@ -47,7 +47,7 @@ jobs:
 
       - name: Get touched Terragrunt modules
         run: |
-          MODULES=`${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
+          MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
           echo "MODULES=$MODULES" >> $GITHUB_ENV
 
       - name: Plan aws/common
