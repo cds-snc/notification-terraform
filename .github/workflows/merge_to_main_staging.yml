@@ -21,12 +21,14 @@ env:
 
 jobs:
   terraform-apply:
-    if: github.ref != 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          # Fetches entire history, so we can analyze commits since last tag
+          fetch-depth: 0
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
@@ -70,3 +72,8 @@ jobs:
           echo $MODULES
           cd env/staging/eks
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v4.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
