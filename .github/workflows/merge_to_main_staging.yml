@@ -41,30 +41,20 @@ jobs:
           chmod +x bin/terragrunt
           echo "bin" >> $GITHUB_PATH
 
-      - name: Get changed terraform files
-        id: changed-terraform-files
-        uses: futuratrepadeira/changed-files@v3.3.0
+      - name: Get changed files
+        id: changed-files
+        uses: jitterbit/get-changed-files@v1
         with:
-          repo-token: ${{ github.token }}
-          pattern: '^.*\.(tf)$'
-          result-encoding: "json"
+          format: 'json'
 
       - name: Get touched Terragrunt modules
         run: |
-          MODULES=`jq --argjson created '${{ steps.changed-terraform-files.outputs.files_created }}' --argjson updated '${{ steps.changed-terraform-files.outputs.files_updated }}' -n '$updated + $created' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
+          MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
           echo "MODULES=$MODULES" >> $GITHUB_ENV
-
-      - name: Get changed terragrunt files
-        id: changed-terragrunt-files
-        uses: futuratrepadeira/changed-files@v3.3.0
-        with:
-          repo-token: ${{ github.token }}
-          pattern: '^.*\.(hcl)$'
-          result-encoding: "json"
 
       - name: Get touched Terragrunt configurations
         run: |
-          CONFIGS=`jq --argjson created '${{ steps.changed-terragrunt-files.outputs.files_created }}' --argjson updated '${{ steps.changed-terragrunt-files.outputs.files_updated }}' -n '$updated + $created' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'` 
+          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'` 
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Apply aws/common
