@@ -4,9 +4,8 @@ on:
   push:
     branches: [staging_apply]
     paths:
-      - "/aws/*"
-      - "/env/staging/*"
-      - ".github/workflows/*"
+      - "/aws/**"
+      - "/env/staging/**"
 
 defaults:
   run:
