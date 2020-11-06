@@ -77,3 +77,4 @@ jobs:
         uses: mathieudutour/github-tag-action@v4.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: main
