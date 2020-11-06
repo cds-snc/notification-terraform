@@ -2,7 +2,11 @@ name: "Merge to main (Staging)"
 
 on:
   push:
-    branches: [main]
+    branches: 
+      - main
+    paths:
+      - "aws/**"
+      - "env/staging/**"
 
 defaults:
   run:
