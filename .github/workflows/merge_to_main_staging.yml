@@ -1,10 +1,11 @@
-name: "Pull requests"
+name: "Merge to main (Staging)"
 
 on:
-  pull_request:
+  push:
+    branches: [main]
     paths:
       - "/aws/**"
-      - ".github/workflows/*"
+      - "/env/staging/**"
 
 defaults:
   run:
@@ -18,7 +19,7 @@ env:
   TERRAGRUNT_VERSION: v0.26.0
 
 jobs:
-  terraform-plan:
+  terraform-apply:
     if: github.ref != 'refs/heads/master'
     runs-on: ubuntu-latest
 
@@ -50,16 +51,21 @@ jobs:
           MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
           echo "MODULES=$MODULES" >> $GITHUB_ENV
 
-      - name: Plan aws/common
-        if: contains(env.MODULES, 'common')
+      - name: Get touched Terragrunt configurations
+        run: |
+          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'` 
+          echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
+
+      - name: Apply aws/common
+        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common') 
         run: |
           echo $MODULES
           cd env/staging/common
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Plan aws/eks
-        if: contains(env.MODULES, 'eks')
+      - name: Apply aws/eks
+        if: contains(env.MODULES, 'eks')  || contains(env.CONFIGS, 'eks') 
         run: |
           echo $MODULES
           cd env/staging/eks
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
