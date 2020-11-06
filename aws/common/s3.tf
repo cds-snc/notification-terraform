@@ -22,6 +22,10 @@ resource "aws_s3_bucket" "csv_bucket" {
     }
   }
 
+  logging {
+    target_bucket = aws_s3_bucket.csv_bucket_logs.bucket
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
@@ -53,10 +57,6 @@ resource "aws_s3_bucket" "csv_bucket_logs" {
     expiration {
       days = 90
     }
-  }
-
-  logging {
-    target_bucket = aws_s3_bucket.csv_bucket_logs.bucket
   }
   
   tags = {
