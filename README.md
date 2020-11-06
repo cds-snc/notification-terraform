@@ -26,7 +26,7 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 
 ### What is each Terraform module
 
-#### `aws\common`
+#### `aws/common`
 Common networking assets such as:
 - VPC 
 - Subnets 
@@ -35,14 +35,14 @@ Common networking assets such as:
 - Route table
 - S3 logging buckets
 
-#### `aws\eks`
+#### `aws/eks`
 Assets to create a working Elastic Kubernetes Service (EKS):
 - EKS Controlplane
 - EKS Worker groups
 - Security groups for Network traffic control
 - Application Load Balancer to ingress data into worker nodes
 
-#### `aws\rds`
+#### `aws/rds`
 Assets to create a working Relational Database Service (RDS):
 - TBD
 
