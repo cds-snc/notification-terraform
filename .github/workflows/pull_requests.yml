@@ -1,0 +1,67 @@
+name: "Pull requests"
+
+on:
+  pull_request:
+    paths:
+      - "/aws/*"
+      - ".github/workflows/*"
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ca-central-1
+  TERRAFORM_VERSION: 0.13.5
+  TERRAGRUNT_VERSION: v0.26.0
+
+jobs:
+  terraform-plan:
+    if: github.ref != 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+          mkdir bin
+          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64
+          chmod +x bin/terragrunt
+          echo "bin" >> $GITHUB_PATH
+
+      - name: Get changed files
+        id: changed-files
+        uses: futuratrepadeira/changed-files@v3.3.0
+        with:
+          repo-token: ${{ github.token }}
+          pattern: '^.*\.(tf)$'
+          result-encoding: 'json'
+
+      - name: Get touched Terragrunt modules
+        run: |
+          MODULES=`jq --argjson created '${{ steps.changed-files.outputs.files_created }}' --argjson updated '${{ steps.changed-files.outputs.files_updated }}' -n '$updated + $created' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
+          echo "MODULES=$MODULES" >> $GITHUB_ENV
+
+      - name: Plan aws/common
+        if: contains(env.MODULES, 'common')
+        run: |
+          echo $MODULES
+          cd env/staging/common
+          ../../../bin/terragrunt plan --terragrunt-non-interactive
+
+      - name: Plan aws/eks
+        if: contains(env.MODULES, 'eks')
+        run: |
+          echo $MODULES
+          cd env/staging/eks
+          ../../../bin/terragrunt plan --terragrunt-non-interactive
