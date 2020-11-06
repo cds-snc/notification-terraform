@@ -2,11 +2,10 @@ name: "Merge to main (Staging)"
 
 on:
   push:
-    branches: [staging_apply]
+    branches: [main]
     paths:
       - "/aws/**"
       - "/env/staging/**"
-      - ".github/workflows/*"
 
 defaults:
   run:
