@@ -6,6 +6,7 @@ on:
     paths:
       - "/aws/**"
       - "/env/staging/**"
+      - ".github/workflows/*"
 
 defaults:
   run:
