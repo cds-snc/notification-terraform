@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "aws/**"
+      - "env/staging/**"
       - ".github/workflows/*"
 
 defaults:
@@ -50,8 +51,13 @@ jobs:
           MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
           echo "MODULES=$MODULES" >> $GITHUB_ENV
 
+      - name: Get touched Terragrunt configurations
+        run: |
+          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'` 
+          echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
+
       - name: Plan aws/common
-        if: contains(env.MODULES, 'common')
+        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common') 
         run: |
           echo $MODULES
           cd env/staging/common
@@ -65,7 +71,7 @@ jobs:
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/eks
-        if: contains(env.MODULES, 'eks')
+        if: contains(env.MODULES, 'eks') || contains(env.CONFIGS, 'eks') 
         run: |
           echo $MODULES
           cd env/staging/eks
