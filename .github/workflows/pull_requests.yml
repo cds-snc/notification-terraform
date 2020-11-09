@@ -57,6 +57,13 @@ jobs:
           cd env/staging/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
+      - name: Plan aws/dns
+        if: contains(env.MODULES, 'dns')
+        run: |
+          echo $MODULES
+          cd env/staging/dns
+          ../../../bin/terragrunt plan --terragrunt-non-interactive
+
       - name: Plan aws/eks
         if: contains(env.MODULES, 'eks')
         run: |

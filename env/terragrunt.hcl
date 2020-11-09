@@ -29,6 +29,11 @@ variable account_id {
   type        = string
 }
 
+variable domain {
+  description = "The current domain"
+  type        = string
+}
+
 variable env {
   description = "The current running environment"
   type        = string

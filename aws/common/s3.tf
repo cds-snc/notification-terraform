@@ -58,7 +58,7 @@ resource "aws_s3_bucket" "csv_bucket_logs" {
       days = 90
     }
   }
-  
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
