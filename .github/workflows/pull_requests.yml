@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "aws/**"
+      - "env/staging/**"
       - ".github/workflows/*"
 
 defaults:
