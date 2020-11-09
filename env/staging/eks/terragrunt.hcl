@@ -28,7 +28,7 @@ include {
 
 inputs = {
   primary_worker_desired_size   = 3
-  primary_worker_instance_types = ["t3.medium"]
+  primary_worker_instance_types = ["t3.medium"] 
   primary_worker_max_size       = 5
   primary_worker_min_size       = 1
   vpc_id                        = dependency.common.outputs.vpc_id
