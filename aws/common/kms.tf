@@ -20,7 +20,7 @@ resource "aws_kms_key" "notification-canada-ca" {
     },
     {
       "Effect": "Allow",
-      "Principal": { "Service": "logs.ca-central-1.amazonaws.com" },
+      "Principal": { "Service": "logs.${var.region}.amazonaws.com" },
       "Action": [ 
         "kms:Encrypt*",
         "kms:Decrypt*",
