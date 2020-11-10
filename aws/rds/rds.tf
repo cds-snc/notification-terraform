@@ -29,7 +29,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
-  database_name                = "notification-canada-ca-${var.env}"
+  database_name                = "NotificationCamnadaCa${var.env}"
   final_snapshot_identifier    = "server-${random_string.random.result}"
   master_username              = "postgres"
   master_password              = var.rds_cluster_password
