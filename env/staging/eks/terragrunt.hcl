@@ -34,6 +34,7 @@ inputs = {
   vpc_id                        = dependency.common.outputs.vpc_id
   vpc_private_subnets           = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets            = dependency.common.outputs.vpc_public_subnets
+  sns_monthly_spend_limit       = 1
 }
 
 terraform {
