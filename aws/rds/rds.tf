@@ -37,6 +37,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_backup_window   = "07:00-09:00"
   db_subnet_group_name      = aws_db_subnet_group.notification-canada-ca.name
   storage_encrypted         = true
+  deletion_protection       = true
 
 
   vpc_security_group_ids = [
