@@ -136,6 +136,8 @@ resource "aws_s3_bucket" "document_bucket_logs" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+
+  #tfsec:ignore:AWS002 - Ignore log of logs
 }
 
 resource "aws_s3_bucket_public_access_block" "document_bucket_logs" {
