@@ -72,6 +72,12 @@ resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEC2ContainerRegistry
   role       = aws_iam_role.eks-worker-role.name
 }
 
+# Reference: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-prerequisites.html
+resource "aws_iam_role_policy_attachment" "eks-worker-CloudWatchAgentServerPolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  role       = aws_iam_role.eks-worker-role.name
+}
+
 # Reference: https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
 resource "aws_iam_policy" "ALB-eks-controller-policy" {
   name   = "AWSLoadBalancerControllerIAMPolicy"
