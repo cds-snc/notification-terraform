@@ -3,7 +3,7 @@ variable eks_cluster_securitygroup {
 }
 
 variable rds_cluster_password {
-  type = number
+  type = string
 }
 
 variable rds_instance_count {
