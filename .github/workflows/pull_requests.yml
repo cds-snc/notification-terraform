@@ -72,6 +72,8 @@ jobs:
 
       - name: Plan aws/rds
         if: contains(env.MODULES, 'rds') || contains(env.CONFIGS, 'rds') 
+        env:
+          TF_VAR_rds_cluster_password: this_is_a_dummy_password_for_plan
         run: |
           echo $MODULES
           cd env/staging/rds
