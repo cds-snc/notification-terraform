@@ -33,7 +33,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   final_snapshot_identifier = "server-${random_string.random.result}"
   master_username           = "postgres"
   master_password           = var.rds_cluster_password
-  backup_retention_period   = 1
+  backup_retention_period   = 8
   preferred_backup_window   = "07:00-09:00"
   db_subnet_group_name      = aws_db_subnet_group.notification-canada-ca.name
   storage_encrypted         = true
