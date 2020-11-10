@@ -69,3 +69,12 @@ jobs:
           echo $MODULES
           cd env/staging/eks
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+
+      - name: Plan aws/rds
+        if: contains(env.MODULES, 'rds') || contains(env.CONFIGS, 'rds') 
+        env:
+          TF_VAR_rds_cluster_password: fake_password_for_plan_123456
+        run: |
+          echo $MODULES
+          cd env/staging/rds
+          ../../../bin/terragrunt plan --terragrunt-non-interactive
