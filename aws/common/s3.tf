@@ -103,6 +103,10 @@ resource "aws_s3_bucket" "document_bucket" {
   logging {
     target_bucket = aws_s3_bucket.document_bucket_logs.bucket
   }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "document_bucket" {
@@ -163,6 +167,10 @@ resource "aws_s3_bucket" "alb_log_bucket" {
 
   logging {
     target_bucket = aws_s3_bucket.document_bucket_logs.bucket
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
