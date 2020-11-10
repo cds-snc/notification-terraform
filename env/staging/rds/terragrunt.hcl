@@ -34,7 +34,8 @@ include {
 
 inputs = {
   eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
-  rds_instance_type         = "db.t3.medium	"
+  rds_instance_count        = 1
+  rds_instance_type         = "db.t3.medium"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
 }
 

@@ -2,11 +2,15 @@ variable eks_cluster_securitygroup {
   type = string
 }
 
-variable rds_instance_type {
-  type = string
+variable rds_cluster_password {
+  type = number
 }
 
-variable rds_server_db_password {
+variable rds_instance_count {
+  type = number
+}
+
+variable rds_instance_type {
   type = string
 }
 
