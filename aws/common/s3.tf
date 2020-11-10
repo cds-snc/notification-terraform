@@ -74,3 +74,12 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket_logs" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_s3_bucket" "asset_bucket" {
+  bucket = "notification-canada-ca-${var.env}-asset-upload"
+  acl    = "public-read"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
