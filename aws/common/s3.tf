@@ -77,13 +77,13 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket_logs" {
 
 resource "aws_s3_bucket" "asset_bucket" {
   bucket = "notification-canada-ca-${var.env}-asset-upload"
+  #tfsec:ignore:AWS001 - Public read access
   acl    = "public-read"
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 
-  #tfsec:ignore:AWS001 - Public read access
   #tfsec:ignore:AWS002 - No logging enabled
   #tfsec:ignore:AWS017 - Defines an unencrypted S3 bucket
 }
