@@ -8,6 +8,7 @@ variable rds_cluster_password {
 
 variable rds_instance_count {
   type = number
+  default = 1
 }
 
 variable rds_instance_type {
