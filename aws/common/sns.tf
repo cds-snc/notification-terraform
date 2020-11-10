@@ -28,5 +28,5 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical" {
 resource "aws_sns_sms_preferences" "update-sms-prefs" {
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
   delivery_status_success_sampling_rate = 100
-  monthly_spend_limit                   = 1000
+  monthly_spend_limit                   = 1
 }
