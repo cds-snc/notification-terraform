@@ -127,12 +127,12 @@ data "archive_file" "ses_to_sqs_email_callbacks" {
 }
 
 resource "aws_lambda_function" "ses_to_sqs_email_callbacks" {
-  filename      = archive_file.ses_to_sqs_email_callbacks.output_path
+  filename      = data.archive_file.ses_to_sqs_email_callbacks.output_path
   function_name = "ses-to-sqs-email-callbacks"
   role          = aws_iam_role.iam_lambda_to_sqs.arn
   handler       = "ses-to-sqs-email-callbacks.lambda_handler"
 
-  source_code_hash = archive_file.ses_to_sqs_email_callbacks.output_base64sha256
+  source_code_hash = data.archive_file.ses_to_sqs_email_callbacks.output_base64sha256
 
   runtime = "python3.8"
 }
