@@ -90,5 +90,36 @@ resource "aws_iam_role_policy_attachment" "eks-worker-AWSLoadBalancerControllerI
 }
 
 ###
-# AWS application IAM service account
+# Application level policies
 ###
+
+resource "aws_iam_policy" "notification-worker-policy" {
+  name        = "notification-worker-policy"
+  description = "Permissions for a notification worker"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "mobiletargeting:*",
+        "ses:SendEmail",
+        "ses:SendRawEmail",
+        "sqs:*",
+        "sns:Publish",
+        "securityhub:BatchImportFindings",
+        "s3:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "notification-worker-policy" {
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.eks-worker-role.name
+}
