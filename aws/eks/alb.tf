@@ -39,7 +39,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-document-api" {
-  name     = "notification-canada-ca-alb-document-api"
+  name     = "notification-document-api"
   port     = 7000
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -70,7 +70,7 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-document" {
-  name     = "notification-canada-ca-alb-document"
+  name     = "notification-alb-document"
   port     = 7001
   protocol = "HTTP"
   vpc_id   = var.vpc_id
