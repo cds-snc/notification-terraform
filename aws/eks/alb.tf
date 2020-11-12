@@ -35,6 +35,68 @@ resource "aws_alb_listener" "notification-canada-ca" {
 }
 
 ###
+# Document API Specific routing
+###
+
+resource "aws_alb_target_group" "notification-canada-ca-document-api" {
+  name     = "notification-document-api"
+  port     = 7000
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+  health_check {
+    path    = "/"
+    matcher = "200"
+  }
+}
+
+resource "aws_lb_listener_rule" "document-api-host-route" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
+  }
+
+  condition {
+    host_header {
+      values = ["document.api.*"]
+    }
+  }
+}
+
+###
+# Document Specific routing
+###
+
+resource "aws_alb_target_group" "notification-canada-ca-document" {
+  name     = "notification-alb-document"
+  port     = 7001
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+  health_check {
+    path    = "/"
+    matcher = "200"
+  }
+}
+
+resource "aws_lb_listener_rule" "document-host-route" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 200
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-document.arn
+  }
+
+  condition {
+    host_header {
+      values = ["document.*"]
+    }
+  }
+}
+
+###
 # API Specific routing
 ###
 
@@ -51,7 +113,7 @@ resource "aws_alb_target_group" "notification-canada-ca-api" {
 
 resource "aws_lb_listener_rule" "api-host-route" {
   listener_arn = aws_alb_listener.notification-canada-ca.arn
-  priority     = 100
+  priority     = 300
 
   action {
     type             = "forward"
@@ -82,7 +144,7 @@ resource "aws_alb_target_group" "notification-canada-ca-admin" {
 
 resource "aws_lb_listener_rule" "admin-host-route" {
   listener_arn = aws_alb_listener.notification-canada-ca.arn
-  priority     = 200
+  priority     = 400
 
   action {
     type             = "forward"
@@ -91,7 +153,7 @@ resource "aws_lb_listener_rule" "admin-host-route" {
 
   condition {
     host_header {
-      values = ["admin.*"]
+      values = ["*"]
     }
   }
 }
