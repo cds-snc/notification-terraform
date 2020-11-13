@@ -156,3 +156,46 @@ resource "aws_iam_role_policy_attachment" "notification-fargate-worker-policy" {
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.eks-fargate-worker-role.name
 }
+
+
+###
+# AWS EKS Service account
+###
+
+data "tls_certificate" "notification-canada-ca" {
+  url = aws_eks_cluster.notification-canada-ca-eks-cluster.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "notification-canada-ca" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.notification-canada-ca.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.notification-canada-ca-eks-cluster.identity[0].oidc[0].issuer
+}
+
+data "aws_iam_policy_document" "eks-assume-role-policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:kube-system:aws-node"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "notification-service-account-role" {
+  assume_role_policy = data.aws_iam_policy_document.eks-assume-role-policy.json
+  name               = "notification-service-account-role"
+}
+
+resource "aws_iam_role_policy_attachment" "notification-service-worker-policy" {
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.notification-service-account-role.name
+}
