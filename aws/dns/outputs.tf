@@ -1,6 +1,6 @@
 output "acm_cert_name_validation" {
   description = "Certificate verification CNAME for naked domain"
-  value = aws_acm_certificate.notification-canada-ca.domain_validation_options
+  value       = aws_acm_certificate.notification-canada-ca.domain_validation_options
 }
 
 output "ses_verification" {

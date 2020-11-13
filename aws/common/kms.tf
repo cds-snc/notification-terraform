@@ -42,7 +42,19 @@ resource "aws_kms_key" "notification-canada-ca" {
           "kms:Decrypt","kms:GenerateDataKey"
       ],
       "Resource": "*"
-    }
+    },
+    {
+    "Effect": "Allow",
+    "Principal": {
+      "Service": "ses.amazonaws.com"
+    },
+    "Action": [
+      "kms:GenerateDataKey*",
+      "kms:Decrypt"
+    ],
+    "Resource": "*"
+  }
+    
   ]
 }
 EOF
