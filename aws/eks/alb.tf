@@ -72,7 +72,7 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
 
   condition {
     host_header {
-      values = ["document.api.*"]
+      values = ["api.document.*"]
     }
   }
 }
