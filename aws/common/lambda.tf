@@ -153,3 +153,10 @@ resource "aws_lambda_function" "sns_to_sqs_sms_callbacks" {
 
   runtime = "python3.8"
 }
+
+resource "aws_lambda_permission" "allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
+  principal     = "events.amazonaws.com"
+}
