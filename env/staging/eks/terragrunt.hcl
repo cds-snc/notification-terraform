@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../dns"]
 }
 
 dependency "common" {
@@ -22,19 +22,31 @@ dependency "common" {
   }
 }
 
+dependency "dns" {
+  config_path = "../dns"
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs = {
+    aws_acm_notification_canada_ca_arn = ""
+  }
+}
+
 include {
   path = find_in_parent_folders()
 }
 
 inputs = {
-  primary_worker_desired_size   = 3
-  primary_worker_instance_types = ["t3.medium"]
-  primary_worker_max_size       = 5
-  primary_worker_min_size       = 1
-  vpc_id                        = dependency.common.outputs.vpc_id
-  vpc_private_subnets           = dependency.common.outputs.vpc_private_subnets
-  vpc_public_subnets            = dependency.common.outputs.vpc_public_subnets
-  sns_monthly_spend_limit       = 1
+  aws_acm_notification_canada_ca_arn = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
+  primary_worker_desired_size        = 3
+  primary_worker_instance_types      = ["t3.medium"]
+  primary_worker_max_size            = 5
+  primary_worker_min_size            = 1
+  vpc_id                             = dependency.common.outputs.vpc_id
+  vpc_private_subnets                = dependency.common.outputs.vpc_private_subnets
+  vpc_public_subnets                 = dependency.common.outputs.vpc_public_subnets
+  sns_monthly_spend_limit            = 1
 }
 
 terraform {
