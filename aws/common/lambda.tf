@@ -135,6 +135,10 @@ resource "aws_lambda_function" "ses_to_sqs_email_callbacks" {
   source_code_hash = data.archive_file.ses_to_sqs_email_callbacks.output_base64sha256
 
   runtime = "python3.8"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
 }
 
 data "archive_file" "sns_to_sqs_sms_callbacks" {
@@ -152,6 +156,10 @@ resource "aws_lambda_function" "sns_to_sqs_sms_callbacks" {
   source_code_hash = data.archive_file.sns_to_sqs_sms_callbacks.output_base64sha256
 
   runtime = "python3.8"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
