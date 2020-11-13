@@ -33,7 +33,6 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEKSVPCResourceController" {
 }
 
 
-
 ###
 # AWS EKS IAM worker role
 ###
@@ -122,4 +121,38 @@ EOF
 resource "aws_iam_role_policy_attachment" "notification-worker-policy" {
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.eks-worker-role.name
+}
+
+###
+# AWS Fargate IAM worker role
+###
+
+resource "aws_iam_role" "eks-fargate-worker-role" {
+  name = "eks-fargate-worker-role"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "eks-fargate-pods.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+}
+
+# Reference: https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html
+resource "aws_iam_role_policy_attachment" "eks-fargate-worker-AmazonEKSFargatePodExecutionRolePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
+  role       = aws_iam_role.eks-worker-role.name
+}
+
+resource "aws_iam_role_policy_attachment" "notification-fargate-worker-policy" {
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.eks-fargate-worker-role.name
 }
