@@ -70,6 +70,7 @@ resource "aws_iam_role" "iam_lambda_to_sqs" {
   ]
 }
 POLICY
+}
 
 resource "aws_iam_policy" "lambda_logging" {
   name        = "lambda_logging"
@@ -92,6 +93,7 @@ resource "aws_iam_policy" "lambda_logging" {
   ]
 }
 POLICY
+}
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
   role       = aws_iam_role.iam_lambda_to_sqs.name
