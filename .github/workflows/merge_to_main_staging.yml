@@ -2,7 +2,7 @@ name: "Merge to main (Staging)"
 
 on:
   push:
-    branches: 
+    branches:
       - main
     paths:
       - "aws/**"
@@ -19,6 +19,7 @@ env:
   TERRAFORM_VERSION: 0.13.5
   TERRAGRUNT_VERSION: v0.26.0
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
+  TF_VAR_cloudwatch_slack_webhook: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
 
 jobs:
   terraform-apply:
@@ -52,30 +53,30 @@ jobs:
 
       - name: Get touched Terragrunt modules
         run: |
-          MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'` 
+          MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
           echo "MODULES=$MODULES" >> $GITHUB_ENV
 
       - name: Get touched Terragrunt configurations
         run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'` 
+          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Apply aws/common
-        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common') 
+        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common')
         run: |
           echo $MODULES
           cd env/staging/common
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
-        if: contains(env.MODULES, 'eks')  || contains(env.CONFIGS, 'eks') 
+        if: contains(env.MODULES, 'eks')  || contains(env.CONFIGS, 'eks')
         run: |
           echo $MODULES
           cd env/staging/eks
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
-        if: contains(env.MODULES, 'rds')  || contains(env.CONFIGS, 'rds') 
+        if: contains(env.MODULES, 'rds')  || contains(env.CONFIGS, 'rds')
         run: |
           echo $MODULES
           cd env/staging/rds
