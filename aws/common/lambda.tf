@@ -40,9 +40,16 @@ resource "aws_lambda_function" "sns_to_sqs_sms_callbacks" {
   }
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch" {
+resource "aws_lambda_permission" "allow_cloudwatch_events" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   principal     = "events.amazonaws.com"
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_logs" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
+  principal     = "logs.amazonaws.com"
 }
