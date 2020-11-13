@@ -30,3 +30,9 @@ resource "aws_sns_sms_preferences" "update-sms-prefs" {
   delivery_status_success_sampling_rate = 100
   monthly_spend_limit                   = var.sns_monthly_spend_limit
 }
+
+resource "aws_sns_topic_subscription" "ses_sns_to_lambda" {
+  topic_arn = aws_sns_topic.notification-canada-ca-ses-callback.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.ses_to_sqs_email_callbacks.arn
+}
