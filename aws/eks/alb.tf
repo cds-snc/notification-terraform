@@ -20,12 +20,29 @@ resource "aws_alb" "notification-canada-ca" {
 
 resource "aws_alb_listener" "notification-canada-ca" {
   load_balancer_arn = aws_alb.notification-canada-ca.id
-  port              = 80 #tfsec:ignore:AWS004
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = var.aws_acm_notification_canada_ca_arn
 
   default_action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.notification-canada-ca-admin.arn
+  }
+}
+
+resource "aws_lb_listener" "notification-canada-ca-80" {
+  load_balancer_arn = aws_lb.notification-canada-ca.id
+  port              = 80 #tfsec:ignore:AWS004
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 
