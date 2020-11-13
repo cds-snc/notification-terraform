@@ -55,7 +55,7 @@ POLICY
 resource "aws_iam_role" "iam_lambda_to_sqs" {
   name = "iam_lambda_to_sqs"
 
-  assume_role_policy = <<EOF
+  assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -69,7 +69,7 @@ resource "aws_iam_role" "iam_lambda_to_sqs" {
     }
   ]
 }
-EOF
+POLICY
 }
 
 resource "aws_iam_policy" "lambda_logging" {
@@ -77,7 +77,7 @@ resource "aws_iam_policy" "lambda_logging" {
   path        = "/"
   description = "IAM policy for logging from a Lambda"
 
-  policy = <<EOF
+  policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -92,7 +92,7 @@ resource "aws_iam_policy" "lambda_logging" {
     }
   ]
 }
-EOF
+POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
@@ -105,7 +105,7 @@ resource "aws_iam_policy" "lambda_sqs_send" {
   path        = "/"
   description = "IAM policy for sending messages to SQS from Lambda"
 
-  policy = <<EOF
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -118,7 +118,7 @@ resource "aws_iam_policy" "lambda_sqs_send" {
         }
     ]
 }
-EOF
+POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_sqs" {
