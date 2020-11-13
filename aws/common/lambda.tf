@@ -48,7 +48,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_events" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs" {
-  statement_id  = "AllowExecutionFromCloudWatch"
+  statement_id  = "AllowExecutionFromCloudWatchLogs"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.amazonaws.com"
