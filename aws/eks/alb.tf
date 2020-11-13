@@ -31,7 +31,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
 }
 
 resource "aws_lb_listener" "notification-canada-ca-80" {
-  load_balancer_arn = aws_lb.notification-canada-ca.id
+  load_balancer_arn = aws_alb.notification-canada-ca.id
   port              = 80 #tfsec:ignore:AWS004
   protocol          = "HTTP"
 
