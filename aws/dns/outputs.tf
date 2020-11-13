@@ -3,6 +3,11 @@ output "acm_cert_name_validation" {
   value       = aws_acm_certificate.notification-canada-ca.domain_validation_options
 }
 
+output "aws_acm_notification_canada_ca_arn" {
+  description = "Certificate ARN for use in loadbalancer"
+  value       = aws_acm_certificate.notification-canada-ca.arn
+}
+
 output "ses_verification" {
   description = "Verification TXT record for SES"
   value       = aws_ses_domain_identity.notification-canada-ca.verification_token
