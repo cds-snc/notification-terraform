@@ -53,3 +53,10 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs" {
   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.amazonaws.com"
 }
+
+resource "aws_lambda_permission" "allow_sns" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ses_to_sqs_email_callbacks.function_name
+  principal     = "sns.amazonaws.com"
+}

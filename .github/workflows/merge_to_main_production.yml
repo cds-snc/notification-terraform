@@ -56,6 +56,12 @@ jobs:
           echo $MODULES
           cd env/production/common
 
+      - name: Apply aws/dns
+        if: contains(env.CONFIGS, 'dns') 
+        run: |
+          echo $MODULES
+          cd env/production/dns
+
       - name: Apply aws/eks
         if: contains(env.CONFIGS, 'eks') 
         run: |
