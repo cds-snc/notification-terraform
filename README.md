@@ -35,6 +35,11 @@ Common networking assets such as:
 - S3 logging buckets
 - KMS
 
+#### `aws/dns`
+DNS specific outputs for the domain nameserver
+- SES DKIM and CNAME validation
+- ACM CNAME validation
+
 #### `aws/eks`
 Assets to create a working Elastic Kubernetes Service (EKS):
 - EKS Controlplane

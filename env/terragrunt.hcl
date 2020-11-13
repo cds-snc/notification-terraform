@@ -4,6 +4,7 @@ locals {
 
 inputs = {
   account_id = "${local.vars.inputs.account_id}"
+  domain     = "${local.vars.inputs.domain}"
   env        = "${local.vars.inputs.env}"
   region     = "ca-central-1"
 }
@@ -26,6 +27,11 @@ generate "common_variables" {
   contents  = <<EOF
 variable account_id {
   description = "(Required) The account ID to perform actions on."
+  type        = string
+}
+
+variable domain {
+  description = "The current domain"
   type        = string
 }
 

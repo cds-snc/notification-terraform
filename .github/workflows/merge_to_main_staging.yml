@@ -68,6 +68,13 @@ jobs:
           cd env/staging/common
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/dns
+        if: contains(env.MODULES, 'dns') || contains(env.CONFIGS, 'dns') 
+        run: |
+          echo $MODULES
+          cd env/staging/dns
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/eks
         if: contains(env.MODULES, 'eks')  || contains(env.CONFIGS, 'eks')
         run: |
