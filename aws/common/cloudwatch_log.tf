@@ -14,7 +14,10 @@ resource "aws_cloudwatch_log_group" "sns_deliveries" {
 resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
   name = "sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure"
 
-  depends_on = [aws_lambda_permission.allow_cloudwatch]
+  depends_on = [
+    aws_lambda_permission.allow_cloudwatch_logs,
+    aws_lambda_permission.allow_cloudwatch_events
+  ]
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
