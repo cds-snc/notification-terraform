@@ -1,3 +1,7 @@
+output "notification_canada_ca_ses_callback_arn" {
+  value = aws_sns_topic.notification-canada-ca-ses-callback.arn
+}
+
 output "vpc_id" {
   value = aws_vpc.notification-canada-ca.id
 }
