@@ -1,5 +1,5 @@
 resource "aws_wafv2_web_acl" "notification-canada-ca" {
-  name        = "managed-rule-example"
+  name        = "notification-canada-ca-waf"
   scope       = "REGIONAL"
 
   default_action {
