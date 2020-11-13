@@ -65,3 +65,17 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
 ###
 # AWS EKS Fragate profiles
 ###
+
+resource "aws_eks_fargate_profile" "notification-canada-ca-fargate-profile" {
+  cluster_name           = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  fargate_profile_name   = "notification-canada-ca-fargate"
+  pod_execution_role_arn = aws_iam_role.eks-fargate-worker-role.arn
+  subnet_ids             = var.vpc_private_subnets
+
+  selector {
+    namespace = "notification-canada-ca"
+    labels = {
+      "profile" : "fargate"
+    }
+  }
+}

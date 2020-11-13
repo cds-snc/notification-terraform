@@ -18,6 +18,7 @@ env:
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.13.5
   TERRAGRUNT_VERSION: v0.26.0
+  TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
 
 jobs:
   terraform-apply:
@@ -78,6 +79,13 @@ jobs:
         run: |
           echo $MODULES
           cd env/staging/eks
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/rds
+        if: contains(env.MODULES, 'rds')  || contains(env.CONFIGS, 'rds') 
+        run: |
+          echo $MODULES
+          cd env/staging/rds
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Bump version and push tag
