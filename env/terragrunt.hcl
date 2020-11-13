@@ -4,6 +4,7 @@ locals {
 
 inputs = {
   account_id = "${local.vars.inputs.account_id}"
+  domain     = "${local.vars.inputs.domain}"
   env        = "${local.vars.inputs.env}"
   region     = "ca-central-1"
 }
