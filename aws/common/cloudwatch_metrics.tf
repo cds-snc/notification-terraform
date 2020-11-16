@@ -9,3 +9,15 @@ resource "aws_cloudwatch_log_metric_filter" "500-errors" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error" {
+  name           = "celery-error"
+  pattern        = "\"ERROR/Worker\""
+  log_group_name = var.eks_cluster_log_group_name
+
+  metric_transformation {
+    name      = "celery-error"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
