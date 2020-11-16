@@ -50,6 +50,10 @@ jobs:
           CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*production?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'` 
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
+      - name: Inject token authentication
+        run: |
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
       - name: Apply aws/common
         if: contains(env.CONFIGS, 'common') 
         run: |

@@ -1,5 +1,5 @@
 terraform {
-  source = "git::git@github.com:cds-snc/notification-terraform.git//aws/common?ref=v0.13.2"
+  source = "https://github.com/cds-snc/notification-terraform.git//aws/common?ref=v0.13.2"
 }
 
 include {
