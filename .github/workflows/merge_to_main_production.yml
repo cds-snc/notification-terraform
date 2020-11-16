@@ -52,7 +52,7 @@ jobs:
 
       - name: Inject token authentication
         run: |
-          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Apply aws/common
         if: contains(env.CONFIGS, 'common') 
