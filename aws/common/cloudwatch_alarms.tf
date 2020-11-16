@@ -50,7 +50,6 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
 
-
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
   alarm_name          = "ses-complaint-rate-warning"
   alarm_description   = "Complaint rate >=0.3% over the last 12 hours"
@@ -93,8 +92,24 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-reponse-critical" {
-  alarm_name          = "healtheck-page-slow-reponse-critical"
+resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-critical" {
+  alarm_name          = "sqs-email-stuck-in-queue-critical"
+  alarm_description   = "ApproximateAgeOfOldestMessage in email queue is older than 10 minutes for 15 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "3"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = "300"
+  extended_statistic  = "p90"
+  threshold           = 60 * 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  dimensions = {
+    QueueName = "eks-notification-canada-casend-email-tasks"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
+  alarm_name          = "healtheck-page-slow-response-critical"
   alarm_description   = "Healthcheck page response time is above 200ms for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
