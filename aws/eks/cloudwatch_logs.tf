@@ -7,6 +7,9 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
   retention_in_days = 7
 }
 
+###
+# AWS EKS Cloudwatch log metric filters
+###
 resource "aws_cloudwatch_log_metric_filter" "500-errors" {
   name           = "500-errors"
   pattern        = "\"\\\" 500 \""
