@@ -13,3 +13,11 @@ output "vpc_private_subnets" {
 output "vpc_public_subnets" {
   value = aws_subnet.notification-canada-ca-public.*.id
 }
+
+output "sns_alert_warning_arn" {
+  value = aws_sns_topic.notification-canada-ca-alert-warning.arn
+}
+
+output "sns_alert_critical_arn" {
+  value = aws_sns_topic.notification-canada-ca-alert-critical.arn
+}
