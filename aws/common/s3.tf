@@ -89,7 +89,7 @@ resource "aws_s3_bucket" "asset_bucket" {
 }
 
 resource "aws_s3_bucket_policy" "asset_bucket_public_read" {
-  bucket = aws_s3_bucket.asset_bucket.arn
+  bucket = aws_s3_bucket.asset_bucket.id
 
   policy = <<POLICY
 {
