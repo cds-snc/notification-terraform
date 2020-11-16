@@ -6,7 +6,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warni
   metric_name         = "HTTPCode_ELB_500_Count"
   namespace           = "AWS/ApplicationELB"
   period              = "60"
-  extended_statistic  = "Sum"
+  statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [var.sns_alert_warning_arn]
   dimensions = {
@@ -22,7 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
   metric_name         = "HTTPCode_ELB_500_Count"
   namespace           = "AWS/ApplicationELB"
   period              = "300"
-  extended_statistic  = "Sum"
+  statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
   dimensions = {
@@ -38,7 +38,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation.name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation.namespace
   period              = "60"
-  extended_statistic  = "Sum"
+  statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
@@ -51,7 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation.name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation.namespace
   period              = "60"
-  extended_statistic  = "Sum"
+  statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }

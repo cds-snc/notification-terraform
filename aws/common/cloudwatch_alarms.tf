@@ -116,7 +116,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   metric_name         = "production_notifications_app_GET_status_show_status_200"
   namespace           = "CWAgent"
   period              = "300"
-  extended_statistic  = "Average"
+  statistic           = "Average"
   threshold           = 2
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
@@ -129,7 +129,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
   metric_name         = "aws_cloudwatch_log_metric_filter.500-errors.metric_transformation.name"
   namespace           = "aws_cloudwatch_log_metric_filter.500-errors.metric_transformation.namespace"
   period              = "60"
-  extended_statistic  = "Sum"
+  statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
@@ -142,7 +142,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   metric_name         = "aws_cloudwatch_log_metric_filter.500-errors.metric_transformation.name"
   namespace           = "aws_cloudwatch_log_metric_filter.500-errors.metric_transformation.namespace"
   period              = "300"
-  extended_statistic  = "Sum"
+  statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
