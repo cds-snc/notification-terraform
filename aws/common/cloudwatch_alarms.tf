@@ -61,7 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
   period              = 60 * 60 * 12
   statistic           = "Average"
   threshold           = 0.3 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
@@ -77,8 +77,8 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue" {
-  alarm_name          = "sqs-sms-stuck-in-queue"
+resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
+  alarm_name          = "sqs-sms-stuck-in-queue-critical"
   alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 5 minutes for 15 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
@@ -93,8 +93,8 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-reponse" {
-  alarm_name          = "healtheck-page-slow-reponse"
+resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-reponse-critical" {
+  alarm_name          = "healtheck-page-slow-reponse-critical"
   alarm_description   = "Healthcheck page response time is above 200ms for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
@@ -104,4 +104,49 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-reponse" {
   extended_statistic  = "Average"
   threshold           = 2
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warning" {
+  alarm_name          = "load-balancer-1-500-error-1-minute-warning"
+  alarm_description   = "One 500 error in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "HTTPCode_ELB_500_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = "60"
+  extended_statistic  = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    LoadBalancer = var.alb_arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-critical" {
+  alarm_name          = "load-balancer-10-500-error-5-minutes-critical"
+  alarm_description   = "Ten 500 errors in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "HTTPCode_ELB_500_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = "300"
+  extended_statistic  = "Sum"
+  threshold           = 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  dimensions = {
+    LoadBalancer = var.alb_arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
+  alarm_name          = "logs-1-500-error-1-minute-warning"
+  alarm_description   = "One 500 error in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.500 - errors.metric_transformation.name
+  namespace           = aws_cloudwatch_log_metric_filter.500 - errors.metric_transformation.namespace
+  period              = "60"
+  extended_statistic  = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
