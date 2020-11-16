@@ -120,3 +120,29 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   threshold           = 2
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
+  alarm_name          = "no-emails-sent-1-minute-warning"
+  alarm_description   = "SES sending rate is less than 1 per minute"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Delivery"
+  namespace           = "AWS/SES"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
+  alarm_name          = "no-emails-sent-5-minutes-critical"
+  alarm_description   = "No emails delivered with SES in 5 minutes"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Delivery"
+  namespace           = "AWS/SES"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+}
