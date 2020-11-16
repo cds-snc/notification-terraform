@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
   period              = 60 * 60 * 12
   statistic           = "Average"
   threshold           = 5 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
