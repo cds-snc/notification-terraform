@@ -40,7 +40,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" {
@@ -53,7 +53,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
   period              = "60"
   statistic           = "Sum"
   threshold           = 10
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  alarm_actions       = [var.sns_alert_critical_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
@@ -66,7 +66,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
@@ -79,5 +79,5 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   period              = "300"
   statistic           = "Sum"
   threshold           = 10
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  alarm_actions       = [var.sns_alert_critical_arn]
 }
