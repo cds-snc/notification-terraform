@@ -1,11 +1,11 @@
 name: "Merge to main (Production)"
 
-on:
-  push:
-    branches: 
-      - main
-    paths:
-      - "env/production/**"
+on: [pull_request]
+#  push:
+#    branches: 
+#      - main
+#    paths:
+#      - "env/production/**"
 
 defaults:
   run:
@@ -55,15 +55,4 @@ jobs:
         run: |
           echo $MODULES
           cd env/production/common
-
-      - name: Apply aws/dns
-        if: contains(env.CONFIGS, 'dns') 
-        run: |
-          echo $MODULES
-          cd env/production/dns
-
-      - name: Apply aws/eks
-        if: contains(env.CONFIGS, 'eks') 
-        run: |
-          echo $MODULES
-          cd env/production/eks
+          ../../../bin/terragrunt plan --terragrunt-non-interactive -auto-approve
