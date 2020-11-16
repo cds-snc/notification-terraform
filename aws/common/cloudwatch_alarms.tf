@@ -133,3 +133,16 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
   threshold           = 1
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
+  alarm_name          = "logs-10-500-error-5-minutes-critical"
+  alarm_description   = "Ten 500 errors in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "aws_cloudwatch_log_metric_filter.500-errors.metric_transformation.name"
+  namespace           = "aws_cloudwatch_log_metric_filter.500-errors.metric_transformation.namespace"
+  period              = "300"
+  extended_statistic  = "Sum"
+  threshold           = 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+}
