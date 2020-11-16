@@ -29,3 +29,11 @@ variable vpc_private_subnets {
 variable vpc_public_subnets {
   type = list
 }
+
+variable sns_alert_warning_arn {
+  type = string
+}
+
+variable sns_alert_critical_arn {
+  type = string
+}
