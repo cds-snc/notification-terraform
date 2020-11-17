@@ -1,3 +1,9 @@
+# Note to maintainers:
+# Updating alarms? Update the Google Sheet also!
+# https://docs.google.com/spreadsheets/d/1IXHkln60B6V_ztDyjSpSNDTB1we6KB31eLOPTZGpWfA/edit
+#
+# There are also alarms defined in aws/common/cloudwatch_alarms.tf
+
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warning" {
   alarm_name          = "load-balancer-1-500-error-1-minute-warning"
   alarm_description   = "One 500 error in 1 minute"

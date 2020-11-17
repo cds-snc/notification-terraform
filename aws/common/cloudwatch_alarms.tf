@@ -1,3 +1,9 @@
+# Note to maintainers:
+# Updating alarms? Update the Google Sheet also!
+# https://docs.google.com/spreadsheets/d/1IXHkln60B6V_ztDyjSpSNDTB1we6KB31eLOPTZGpWfA/edit
+#
+# There are also alarms defined in aws/eks/cloudwatch_alarms.tf
+
 resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
   alarm_name          = "sns-spending-warning"
   alarm_description   = "SNS spending reached 80% of limit this month"
