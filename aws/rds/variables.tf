@@ -18,3 +18,7 @@ variable rds_instance_type {
 variable vpc_private_subnets {
   type = list
 }
+
+variable sns_alert_warning_arn {
+  type = string
+}

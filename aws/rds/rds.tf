@@ -60,3 +60,19 @@ resource "aws_rds_cluster" "notification-canada-ca" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_db_event_subscription" "notification-canada-ca" {
+  name      = "notification-canada-ca-events-subscription"
+  sns_topic = var.sns_alert_warning_arn
+
+  source_type = "db-instance"
+
+  # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html
+  event_categories = [
+    "availability",
+    "failover",
+    "failure",
+    "low storage",
+    "maintenance",
+  ]
+}
