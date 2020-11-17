@@ -22,6 +22,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   engine                       = aws_rds_cluster.notification-canada-ca.engine
   engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
   performance_insights_enabled = true
+  preferred_maintenance_window = "wed:04:00-wed:04:30"
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
