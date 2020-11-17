@@ -14,6 +14,7 @@ dependency "common" {
       "subnet-08de34a9e1a7458dc",
       "subnet-0af8b8402f1d605ff",
     ]
+    sns_alert_warning_arn = ""
   }
 }
 
@@ -37,6 +38,7 @@ inputs = {
   rds_instance_count        = 1
   rds_instance_type         = "db.t3.medium"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
+  sns_alert_warning_arn     = dependency.common.outputs.sns_alert_warning_arn
 }
 
 terraform {
