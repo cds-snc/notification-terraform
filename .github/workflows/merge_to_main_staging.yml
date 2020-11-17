@@ -19,7 +19,10 @@ env:
   TERRAFORM_VERSION: 0.13.5
   TERRAGRUNT_VERSION: v0.26.0
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
-  TF_VAR_cloudwatch_slack_webhook: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
+  TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
 
 jobs:
   terraform-apply:
@@ -69,7 +72,7 @@ jobs:
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
-        if: contains(env.MODULES, 'dns') || contains(env.CONFIGS, 'dns') 
+        if: contains(env.MODULES, 'dns') || contains(env.CONFIGS, 'dns')
         run: |
           echo $MODULES
           cd env/staging/dns

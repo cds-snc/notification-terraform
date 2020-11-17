@@ -38,3 +38,15 @@ resource "aws_sns_topic_subscription" "ses_sns_to_lambda" {
 
   depends_on = [aws_lambda_permission.allow_sns]
 }
+
+resource "aws_sns_topic_subscription" "warning_slack_topic" {
+  topic_arn = aws_sns_topic.notification-canada-ca-alert-warning.arn
+  protocol  = "lambda"
+  endpoint  = notify_slack.warning.notify_slack_lambda_function_arn
+}
+
+resource "aws_sns_topic_subscription" "critical_slack_topic" {
+  topic_arn = aws_sns_topic.notification-canada-ca-alert-critical.arn
+  protocol  = "lambda"
+  endpoint  = notify_slack.critical.notify_slack_lambda_function_arn
+}
