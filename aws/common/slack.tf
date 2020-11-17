@@ -1,6 +1,5 @@
 # Doc: https://registry.terraform.io/modules/terraform-aws-modules/notify-slack/aws/
-module "notify_slack" {
-  alias   = "warning"
+module "notify_slack_warning" {
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "~> 4.0"
 
@@ -12,8 +11,7 @@ module "notify_slack" {
   slack_emoji       = ":aws:"
 }
 
-module "notify_slack" {
-  alias   = "critical"
+module "notify_slack_critical" {
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "~> 4.0"
 
