@@ -1,10 +1,6 @@
 name: "Terraform security scan"
 
-on:
-  pull_request:
-    paths:
-      - "aws/**"
-      - "env/staging/**"
+on: [pull_request]
 
 defaults:
   run:
