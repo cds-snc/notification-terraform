@@ -9,7 +9,7 @@ module "notify_slack_warning" {
   slack_webhook_url = var.cloudwatch_slack_webhook_warning_topic
   slack_channel     = var.slack_channel_warning_topic
   slack_username    = "[WARNING] AWS Cloudwatch"
-  slack_emoji       = ":aws:"
+  slack_emoji       = ":warning:"
 
   lambda_function_name                   = "notify-slack-warning"
   cloudwatch_log_group_retention_in_days = 90
@@ -25,7 +25,7 @@ module "notify_slack_critical" {
   slack_webhook_url = var.cloudwatch_slack_webhook_critical_topic
   slack_channel     = var.slack_channel_critical_topic
   slack_username    = "[CRITICAL] AWS Cloudwatch"
-  slack_emoji       = ":aws:"
+  slack_emoji       = ":rotating_light:"
 
   lambda_function_name                   = "notify-slack-critical"
   cloudwatch_log_group_retention_in_days = 90

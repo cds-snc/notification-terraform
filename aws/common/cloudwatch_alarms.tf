@@ -120,11 +120,15 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
   metric_name         = "production_notifications_app_GET_status_show_status_200"
-  namespace           = "CWAgent"
+  namespace           = "NotificationCanadaCa"
   period              = "300"
   statistic           = "Average"
   threshold           = 2
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  treat_missing_data  = "missing"
+  dimensions = {
+    metric_type = "timing"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
