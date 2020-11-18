@@ -36,6 +36,38 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warning" {
+  alarm_name          = "load-balancer-1-502-error-1-minute-warning"
+  alarm_description   = "One 502 error in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "HTTPCode_ELB_502_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [var.sns_alert_warning_arn]
+  dimensions = {
+    LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-critical" {
+  alarm_name          = "load-balancer-10-502-error-5-minutes-critical"
+  alarm_description   = "Ten 502 errors in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "HTTPCode_ELB_502_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [var.sns_alert_critical_arn]
+  dimensions = {
+    LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
   alarm_name          = "logs-1-celery-error-1-minute-warning"
   alarm_description   = "One Celery error in 1 minute"
