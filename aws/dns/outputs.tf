@@ -8,6 +8,11 @@ output "aws_acm_notification_canada_ca_arn" {
   value       = aws_acm_certificate.notification-canada-ca.arn
 }
 
+output "aws_acm_alt_notification_canada_ca_arn" {
+  description = "Certificate ARN for use in loadbalancer for alt domain"
+  value       = var.alt_domain != "" ? aws_acm_certificate.notification-canada-ca-alt[0].arn : ""
+}
+
 output "ses_verification" {
   description = "Verification TXT record for SES"
   value       = aws_ses_domain_identity.notification-canada-ca.verification_token
