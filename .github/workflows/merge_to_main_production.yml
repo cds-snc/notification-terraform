@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "env/production/**"
+      - ".github/workflows/merge_to_main_production.yml"
 
 defaults:
   run:
