@@ -5,6 +5,7 @@ locals {
 inputs = {
   account_id = "${local.vars.inputs.account_id}"
   domain     = "${local.vars.inputs.domain}"
+  alt_domain = "${local.vars.inputs.alt_domain}"
   env        = "${local.vars.inputs.env}"
   region     = "ca-central-1"
 }
@@ -32,6 +33,11 @@ variable account_id {
 
 variable domain {
   description = "The current domain"
+  type        = string
+}
+
+variable alt_domain {
+  description = "The alternative domain, if it exists"
   type        = string
 }
 
