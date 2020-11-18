@@ -17,6 +17,11 @@ env:
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.13.5
   TERRAGRUNT_VERSION: v0.26.0
+  TF_VAR_rds_cluster_password: ${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}
+  TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_slack_channel_warning_topic: "notification-ops"
+  TF_VAR_slack_channel_critical_topic: "notification-ops"
 
 jobs:
   terraform-apply:
@@ -57,6 +62,23 @@ jobs:
       - name: Apply aws/common
         if: contains(env.CONFIGS, 'common') 
         run: |
-          echo $MODULES
           cd env/production/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+
+      - name: Apply aws/dns
+        if: contains(env.CONFIGS, 'dns')
+        run: |
+          cd env/production/dns
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/eks
+        if: contains(env.CONFIGS, 'eks')
+        run: |
+          cd env/production/eks
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/rds
+        if: contains(env.CONFIGS, 'rds')
+        run: |
+          cd env/production/rds
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
