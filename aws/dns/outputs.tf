@@ -9,9 +9,8 @@ output "aws_acm_notification_canada_ca_arn" {
 }
 
 output "aws_acm_alt_notification_canada_ca_arn" {
-  count       = var.alt_domain != "" ? 1 : 0
   description = "Certificate ARN for use in loadbalancer for alt domain"
-  value       = aws_acm_certificate.notification-canada-ca-alt.arn
+  value       = var.alt_domain != "" ? aws_acm_certificate.notification-canada-ca-alt[0].arn : ""
 }
 
 output "ses_verification" {
