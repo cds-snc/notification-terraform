@@ -2,14 +2,6 @@ terraform {
   source = "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v0.20.0"
 }
 
-dependencies {
-  paths = ["../common"]
-}
-
-dependency "common" {
-  config_path = "../common"
-}
-
 include {
   path = find_in_parent_folders()
 }
