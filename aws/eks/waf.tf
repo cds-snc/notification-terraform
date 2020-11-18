@@ -1,6 +1,6 @@
 resource "aws_wafv2_web_acl" "notification-canada-ca" {
-  name        = "notification-canada-ca-waf"
-  scope       = "REGIONAL"
+  name  = "notification-canada-ca-waf"
+  scope = "REGIONAL"
 
   default_action {
     allow {}
