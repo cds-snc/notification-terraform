@@ -180,7 +180,7 @@ data "aws_iam_policy_document" "eks-assume-role-policy" {
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:kube-system:aws-node"]
+      values   = ["system:serviceaccount:notification-canada-ca:notification-service-account"]
     }
 
     principals {
