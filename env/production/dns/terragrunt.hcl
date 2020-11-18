@@ -1,5 +1,5 @@
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v0.21.1"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v0.22.0"
 }
 
 dependencies {

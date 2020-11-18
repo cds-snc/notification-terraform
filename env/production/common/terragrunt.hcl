@@ -1,7 +1,7 @@
 # Uses GitHub tags for release management
 #
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/common?ref=v0.20.0"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/common?ref=v0.22.0"
 }
 
 include {
