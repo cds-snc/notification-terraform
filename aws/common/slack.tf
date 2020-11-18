@@ -13,6 +13,8 @@ module "notify_slack_warning" {
 
   lambda_function_name                   = "notify-slack-warning"
   cloudwatch_log_group_retention_in_days = 90
+
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-warning]
 }
 
 module "notify_slack_critical" {
@@ -29,4 +31,6 @@ module "notify_slack_critical" {
 
   lambda_function_name                   = "notify-slack-critical"
   cloudwatch_log_group_retention_in_days = 90
+
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-critical]
 }
