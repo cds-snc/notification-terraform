@@ -32,7 +32,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
 
 resource "aws_lb_listener_certificate" "alt_domain_certificate" {
   count           = var.aws_acm_alt_notification_canada_ca_arn != "" ? 1 : 0
-  listener_arn    = aws_lb_listener.notification-canada-ca.arn
+  listener_arn    = aws_alb_listener.notification-canada-ca.arn
   certificate_arn = var.aws_acm_alt_notification_canada_ca_arn
 }
 
