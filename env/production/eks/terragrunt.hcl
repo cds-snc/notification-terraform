@@ -1,5 +1,5 @@
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/common?ref=v0.22.0"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/common?ref=v0.23.0"
 }
 
 dependencies {
