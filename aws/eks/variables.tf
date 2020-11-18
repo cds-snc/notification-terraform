@@ -2,6 +2,10 @@ variable aws_acm_notification_canada_ca_arn {
   type = string
 }
 
+variable aws_acm_alt_notification_canada_ca_arn {
+  type = string
+}
+
 variable primary_worker_desired_size {
   type = number
 }
