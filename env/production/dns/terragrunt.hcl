@@ -1,3 +1,4 @@
+# Uses GitHub tags for release management
 terraform {
   source = "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v0.23.0"
 }
