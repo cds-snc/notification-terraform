@@ -63,7 +63,7 @@ jobs:
         if: contains(env.CONFIGS, 'common') 
         run: |
           cd env/production/common
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
+          ../../../bin/terragrunt apply --terragrunt-non-interactive
 
       - name: Apply aws/dns
         if: contains(env.CONFIGS, 'dns')
