@@ -19,6 +19,8 @@ dependency "common" {
       "subnet-0c7d18c0c51b28b61",
       "subnet-0c91f7c6b8211904b",
     ]
+    sns_alert_warning_arn  = ""
+    sns_alert_critical_arn = ""
   }
 }
 
@@ -46,6 +48,8 @@ inputs = {
   vpc_id                             = dependency.common.outputs.vpc_id
   vpc_private_subnets                = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                 = dependency.common.outputs.vpc_public_subnets
+  sns_alert_warning_arn              = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn             = dependency.common.outputs.sns_alert_critical_arn
   sns_monthly_spend_limit            = 1
 }
 
