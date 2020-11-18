@@ -7,5 +7,5 @@ include {
 }
 
 inputs = {
-  sns_monthly_spend_limit = 1
+  sns_monthly_spend_limit = 10000
 }
