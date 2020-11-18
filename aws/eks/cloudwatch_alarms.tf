@@ -15,6 +15,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warni
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
   }
@@ -31,6 +32,8 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
+  treat_missing_data  = "notBreaching"
+
   dimensions = {
     LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
   }
@@ -47,6 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warni
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
   }
@@ -63,6 +67,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
   }
@@ -78,6 +83,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
@@ -91,6 +97,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
   period              = "60"
   statistic           = "Sum"
   threshold           = 10
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
 }
 
@@ -104,6 +111,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
@@ -117,5 +125,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   period              = "300"
   statistic           = "Sum"
   threshold           = 10
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
 }
