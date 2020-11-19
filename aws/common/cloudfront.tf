@@ -39,6 +39,9 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     cloudfront_default_certificate = true
   }
 
+  restrictions {
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
