@@ -50,6 +50,8 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     }
   }
 
+  depends_on = [aws_acm_certificate.asset]
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
