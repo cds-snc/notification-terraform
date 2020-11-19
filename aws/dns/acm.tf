@@ -10,7 +10,7 @@ resource "aws_acm_certificate" "notification-canada-ca" {
     create_before_destroy = true
     # TF bug on AWS 2.0: prevents certificates from being destroyed/recreated
     # https://github.com/hashicorp/terraform-provider-aws/issues/8531
-    ignore_changes = ["subject_alternative_names"]
+    ignore_changes = [subject_alternative_names]
   }
 
   tags = {
@@ -32,7 +32,7 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
     create_before_destroy = true
     # TF bug on AWS 2.0: prevents certificates from being destroyed/recreated
     # https://github.com/hashicorp/terraform-provider-aws/issues/8531
-    ignore_changes = ["subject_alternative_names"]
+    ignore_changes = [subject_alternative_names]
   }
 
   tags = {
