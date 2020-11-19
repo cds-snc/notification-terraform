@@ -2,7 +2,7 @@ name: "Merge to main (Production)"
 
 on:
   push:
-    branches: 
+    branches:
       - main
     paths:
       - "env/production/**"
@@ -13,6 +13,12 @@ defaults:
     shell: bash
 
 env:
+  # Set the GitHub tag here to update the infrastructure
+  # to a new version in production
+  # See https://github.com/cds-snc/notification-terraform/releases
+  INFRASTRUCTURE_VERSION: '0.24.0'
+
+  # Terraform environment variables
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
@@ -53,7 +59,7 @@ jobs:
 
       - name: Get touched Terragrunt configurations
         run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*production?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'` 
+          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*production?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Inject token authentication
@@ -61,25 +67,21 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Apply aws/common
-        if: contains(env.CONFIGS, 'common') 
         run: |
           cd env/production/common
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
-        if: contains(env.CONFIGS, 'dns')
         run: |
           cd env/production/dns
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
-        if: contains(env.CONFIGS, 'eks')
         run: |
           cd env/production/eks
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
-        if: contains(env.CONFIGS, 'rds')
         run: |
           cd env/production/rds
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
