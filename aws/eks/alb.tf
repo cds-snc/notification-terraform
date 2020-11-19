@@ -219,7 +219,7 @@ resource "aws_lb_listener_rule" "alt-domain-host-route" {
 
   condition {
     host_header {
-      values = [${var.alt_domain}]
+      values = [var.alt_domain]
     }
   }
 }
