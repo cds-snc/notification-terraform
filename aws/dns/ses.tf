@@ -26,3 +26,8 @@ resource "aws_ses_identity_notification_topic" "notification-canada-ca-complaint
   identity                 = aws_ses_domain_identity.notification-canada-ca.domain
   include_original_headers = false
 }
+
+resource "aws_ses_domain_mail_from" "notification-canada-ca" {
+  domain           = aws_ses_domain_identity.notification-canada-ca.domain
+  mail_from_domain = "bounce.${aws_ses_domain_identity.notification-canada-ca.domain}"
+}
