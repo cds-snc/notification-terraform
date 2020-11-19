@@ -18,9 +18,12 @@ Terragrunt scripts are found in `env`, which defines all the environment specifi
 ### How are changes applied to the different environments?
 Changes are applied through Git merges to this repository. Terragrunt supports the idea of [remote terraform configurations based on tags](https://terragrunt.gruntwork.io/docs/features/keep-your-terraform-code-dry/#remote-terraform-configurations). This mean we can setup the following continuous integration workflows:
 
+#### Staging
 - All pull requests run a `terraform plan` against `staging` and report changes if there are any
-- All merges into the `main` branch that touch code in `aws` and `env\staging` run a `terraform apply` against `staging` and update the staging environment. The megre to `main` also tags the commit based on semantic versioning.
-- `terragrunt.hcl` files in the `env/production` folder are updated with the correct tag and merged to the `main` branch
+- All merges into the `main` branch that touch code in `aws` and `env/staging` run a `terraform apply` against `staging` and update the staging environment. The merge to `main` also tags the commit based on semantic versioning.
+
+#### Production
+- The production infrastructure version is updated in [.github/workflows/merge_to_main_production.yml](`.github/workflows/merge_to_main_production.yml`)
 - CI detects changes in `env/production` and runs `terraform apply` to apply changes to `production`
 
 ### What is each Terraform module
