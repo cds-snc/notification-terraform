@@ -67,6 +67,31 @@ resource "aws_alb_target_group" "notification-canada-ca-document-api" {
   }
 }
 
+resource "aws_lb_listener_rule" "alt-domain-document-api-host-route" {
+  count        = var.alt_domain != "" ? 1 : 0
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 10
+
+  action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      host        = "api.document.${var.domain}"
+      path        = "/#{path}"
+      query       = "#{query}"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["api.document.${var.alt_domain}"]
+    }
+  }
+}
+
 resource "aws_lb_listener_rule" "document-api-host-route" {
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 100
@@ -95,6 +120,31 @@ resource "aws_alb_target_group" "notification-canada-ca-document" {
   health_check {
     path    = "/"
     matcher = "200"
+  }
+}
+
+resource "aws_lb_listener_rule" "alt-domain-document-host-route" {
+  count        = var.alt_domain != "" ? 1 : 0
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 20
+
+  action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      host        = "document.${var.domain}"
+      path        = "/#{path}"
+      query       = "#{query}"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["document.${var.alt_domain}"]
+    }
   }
 }
 
@@ -148,6 +198,31 @@ resource "aws_lb_listener_rule" "api-host-route" {
 ###
 # Admin Specific routing
 ###
+
+resource "aws_lb_listener_rule" "alt-domain-host-route" {
+  count        = var.alt_domain != "" ? 1 : 0
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 40
+
+  action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      host        = "${var.domain}"
+      path        = "/#{path}"
+      query       = "#{query}"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["${var.alt_domain}"]
+    }
+  }
+}
 
 resource "aws_alb_target_group" "notification-canada-ca-admin" {
   name     = "notification-canada-ca-alb-admin"
