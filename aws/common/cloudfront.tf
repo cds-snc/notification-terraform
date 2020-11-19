@@ -40,6 +40,8 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
   }
 
   restrictions {
+    geo_restriction {
+    }
   }
 
   tags = {
