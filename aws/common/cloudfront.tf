@@ -4,7 +4,7 @@ resource "aws_cloudfront_origin_access_identity" "default" {
 resource "aws_cloudfront_distribution" "asset_bucket" {
   origin {
     domain_name = aws_s3_bucket.asset_bucket.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.asset_bucket.id
+    origin_id   = "asset-cloudfront-${var.env}"
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
@@ -33,12 +33,15 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     min_ttl                = 0
     default_ttl            = 60 * 60 * 12
     max_ttl                = 60 * 60 * 24
+    compress               = true
   }
 
   # tfsec:ignore:AWS021 outdated SSL/TLS policies
   viewer_certificate {
     cloudfront_default_certificate = true
   }
+
+  price_class = "PriceClass_100"
 
   restrictions {
     geo_restriction {
