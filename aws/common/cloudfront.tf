@@ -35,6 +35,7 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     max_ttl                = 60 * 60 * 24
   }
 
+  # tfsec:ignore:AWS021 outdated SSL/TLS policies
   viewer_certificate {
     cloudfront_default_certificate = true
   }
