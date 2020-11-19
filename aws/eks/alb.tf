@@ -211,7 +211,7 @@ resource "aws_lb_listener_rule" "alt-domain-host-route" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-      host        = "${var.domain}"
+      host        = var.domain
       path        = "/#{path}"
       query       = "#{query}"
     }
