@@ -37,7 +37,7 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.assets.arn
+    acm_certificate_arn      = aws_acm_certificate.assets-notification-canada.arn
     minimum_protocol_version = "TLSv1.2_2018"
     ssl_support_method       = "sni-only"
   }
@@ -49,8 +49,6 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
       restriction_type = "none"
     }
   }
-
-  depends_on = [aws_acm_certificate.assets]
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
