@@ -87,3 +87,10 @@ jobs:
           echo $MODULES
           cd env/staging/rds
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+
+      - name: Plan aws/cloudfront
+        if: contains(env.MODULES, 'cloudfront') || contains(env.CONFIGS, 'cloudfront')
+        run: |
+          echo $MODULES
+          cd env/staging/cloudfront
+          ../../../bin/terragrunt plan --terragrunt-non-interactive

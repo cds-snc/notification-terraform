@@ -8,6 +8,11 @@ output "aws_acm_notification_canada_ca_arn" {
   value       = aws_acm_certificate.notification-canada-ca.arn
 }
 
+output "aws_acm_assets_notification_canada_ca_arn" {
+  description = "Certificate ARN for use in assets CDN"
+  value       = aws_acm_certificate.assets-notification-canada-ca.arn
+}
+
 output "aws_acm_alt_notification_canada_ca_arn" {
   description = "Certificate ARN for use in loadbalancer for alt domain"
   value       = var.alt_domain != "" ? aws_acm_certificate.notification-canada-ca-alt[0].arn : ""
