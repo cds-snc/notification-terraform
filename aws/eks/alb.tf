@@ -62,7 +62,7 @@ resource "aws_alb_target_group" "notification-canada-ca-document-api" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   health_check {
-    path    = "/"
+    path    = "/_status"
     matcher = "200"
   }
 }
@@ -118,7 +118,7 @@ resource "aws_alb_target_group" "notification-canada-ca-document" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   health_check {
-    path    = "/"
+    path    = "/_status"
     matcher = "200"
   }
 }
@@ -174,7 +174,7 @@ resource "aws_alb_target_group" "notification-canada-ca-api" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   health_check {
-    path    = "/"
+    path    = "/_status"
     matcher = "200"
   }
 }
@@ -230,7 +230,7 @@ resource "aws_alb_target_group" "notification-canada-ca-admin" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   health_check {
-    path    = "/"
+    path    = "/_status"
     matcher = "200"
   }
 }
