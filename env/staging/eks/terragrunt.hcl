@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../dns"]
+  paths = ["../common", "../dns", "../cloudfront"]
 }
 
 dependency "common" {

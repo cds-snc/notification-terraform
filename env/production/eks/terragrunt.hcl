@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../dns"]
+  paths = ["../common", "../dns", "../cloudfront"]
 }
 
 dependency "common" {
@@ -12,6 +12,10 @@ dependency "common" {
 
 dependency "dns" {
   config_path = "../dns"
+}
+
+dependency "cloudfront" {
+  config_path = "../cloudfront"
 }
 
 include {
@@ -30,4 +34,5 @@ inputs = {
   vpc_public_subnets                     = dependency.common.outputs.vpc_public_subnets
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
+  cloudfront_assets_arn                  = dependency.cloudfront.outputs.cloudfront_assets_arn
 }
