@@ -7,7 +7,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
   mock_outputs = {
     asset_bucket_regional_domain_name = ""
   }
@@ -18,7 +18,7 @@ dependency "dns" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
   mock_outputs = {
     aws_acm_assets_notification_canada_ca_arn = ""
   }
