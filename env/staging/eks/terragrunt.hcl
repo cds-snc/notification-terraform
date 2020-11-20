@@ -35,6 +35,17 @@ dependency "dns" {
   }
 }
 
+dependency "cloudfront" {
+  config_path = "../cloudfront"
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs = {
+    cloudfront_assets_arn = ""
+  }
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -51,6 +62,7 @@ inputs = {
   vpc_public_subnets                     = dependency.common.outputs.vpc_public_subnets
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
+  cloudfront_assets_arn                  = dependency.cloudfront.outputs.cloudfront_assets_arn
 }
 
 terraform {
