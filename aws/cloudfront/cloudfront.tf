@@ -3,7 +3,7 @@ resource "aws_cloudfront_origin_access_identity" "default" {
 
 resource "aws_cloudfront_distribution" "asset_bucket" {
   origin {
-    domain_name = aws_s3_bucket.asset_bucket.bucket_regional_domain_name
+    domain_name = var.asset_bucket_regional_domain_name
     origin_id   = "asset-cloudfront-${var.env}"
 
     s3_origin_config {
@@ -36,9 +36,10 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     compress               = true
   }
 
-  # tfsec:ignore:AWS021 outdated SSL/TLS policies
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = var.aws_acm_assets_notification_canada_ca_arn
+    minimum_protocol_version = "TLSv1.2_2018"
+    ssl_support_method       = "sni-only"
   }
 
   price_class = "PriceClass_100"
