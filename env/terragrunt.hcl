@@ -21,6 +21,13 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias               = "us-west-2"
+  region              = "us-west-2"
+  version             = "~> 2.0"
+  allowed_account_ids = [var.account_id]
+}
+
+provider "aws" {
   alias               = "us-east-1"
   region              = "us-east-1"
   version             = "~> 2.0"
