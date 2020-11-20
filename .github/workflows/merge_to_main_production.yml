@@ -16,7 +16,7 @@ env:
   # Set the GitHub tag here to update the infrastructure
   # to a new version in production
   # See https://github.com/cds-snc/notification-terraform/releases
-  INFRASTRUCTURE_VERSION: '0.27.0'
+  INFRASTRUCTURE_VERSION: '0.29.1'
 
   # Terraform environment variables
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
@@ -84,4 +84,9 @@ jobs:
       - name: Apply aws/rds
         run: |
           cd env/production/rds
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/cloudfront
+        run: |
+          cd env/production/cloudfront
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve

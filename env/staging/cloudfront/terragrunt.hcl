@@ -29,7 +29,7 @@ include {
 }
 
 inputs = {
-  asset_bucket_regional_domain_name = dependency.common.outputs.asset_bucket_regional_domain_name
+  asset_bucket_regional_domain_name         = dependency.common.outputs.asset_bucket_regional_domain_name
   aws_acm_assets_notification_canada_ca_arn = dependency.dns.outputs.aws_acm_assets_notification_canada_ca_arn
 }
 

@@ -11,8 +11,8 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     }
   }
 
-  enabled         = true
-  is_ipv6_enabled = true
+  enabled             = true
+  is_ipv6_enabled     = true
   default_root_object = "gov-canada-en.svg"
 
   aliases = ["assets.${var.domain}"]
