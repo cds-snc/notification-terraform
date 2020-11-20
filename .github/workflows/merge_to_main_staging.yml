@@ -67,35 +67,30 @@ jobs:
       - name: Apply aws/common
         if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common')
         run: |
-          echo $MODULES
           cd env/staging/common
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
         if: contains(env.MODULES, 'dns') || contains(env.CONFIGS, 'dns')
         run: |
-          echo $MODULES
           cd env/staging/dns
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
         if: contains(env.MODULES, 'eks')  || contains(env.CONFIGS, 'eks')
         run: |
-          echo $MODULES
           cd env/staging/eks
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
         if: contains(env.MODULES, 'rds')  || contains(env.CONFIGS, 'rds')
         run: |
-          echo $MODULES
           cd env/staging/rds
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
         if: contains(env.MODULES, 'cloudfront')  || contains(env.CONFIGS, 'cloudfront')
         run: |
-          echo $MODULES
           cd env/staging/cloudfront
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
