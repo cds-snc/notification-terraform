@@ -54,6 +54,9 @@ Assets to create a working Elastic Kubernetes Service (EKS):
 Assets to create a working Relational Database Service (RDS):
 - TBD
 
+#### `aws/cloudfront`
+Assets to create to serve static assets on CloudFront CDN.
+
 ### How is this different to the existing Notification terraform?
 There are a couple of changes compared to the existing Notification terraform:
 
