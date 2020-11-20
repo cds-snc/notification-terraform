@@ -92,6 +92,13 @@ jobs:
           cd env/staging/rds
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/cloudfront
+        if: contains(env.MODULES, 'cloudfront')  || contains(env.CONFIGS, 'cloudfront')
+        run: |
+          echo $MODULES
+          cd env/staging/cloudfront
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Bump version and push tag
         uses: mathieudutour/github-tag-action@v4.6
         with:
