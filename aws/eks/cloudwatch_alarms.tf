@@ -273,3 +273,20 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
+  alarm_name          = "ddos-detected-load-balancer-critical"
+  alarm_description   = "DDoS has been detected on the load balancer"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "DDoSDetected"
+  namespace           = "AWS/DDoSProtection"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+  dimensions = {
+    ResourceArn = aws_shield_protection.notification-canada-ca.resource_arn
+  }
+}
