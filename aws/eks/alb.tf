@@ -12,6 +12,8 @@ resource "aws_alb" "notification-canada-ca" {
   ]
   subnets = var.vpc_public_subnets
 
+  enable_deletion_protection = true
+
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
