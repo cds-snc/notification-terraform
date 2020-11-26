@@ -141,6 +141,7 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
+  treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
 
@@ -154,5 +155,6 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   period              = "300"
   statistic           = "Sum"
   threshold           = 1
+  treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
