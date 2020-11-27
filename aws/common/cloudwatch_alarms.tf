@@ -159,7 +159,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   statistic           = "Average"
   threshold           = 2
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  treat_missing_data  = "missing"
+  treat_missing_data  = "breaching"
   dimensions = {
     metric_type = "timing"
   }
