@@ -153,7 +153,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   alarm_description   = "Healthcheck page response time is above 200ms for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
-  metric_name         = "production_notifications_app_GET_status_show_status_200"
+  metric_name         = "production_notifications_api_GET_status_show_status_200"
   namespace           = "NotificationCanadaCa"
   period              = "300"
   statistic           = "Average"
