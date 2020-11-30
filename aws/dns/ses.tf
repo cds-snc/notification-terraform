@@ -67,6 +67,6 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-complain
   count                    = var.env == "production" ? 1 : 0
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Complaint"
-  identity                 = aws_ses_domain_identity.notification-canada-ca.domain
+  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande[0].domain
   include_original_headers = false
 }
