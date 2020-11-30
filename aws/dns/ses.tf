@@ -51,7 +51,7 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-bounce-t
   count                    = var.env == "production" ? 1 : 0
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Bounce"
-  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande.domain
+  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande[0].domain
   include_original_headers = false
 }
 
@@ -59,7 +59,7 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-delivery
   count                    = var.env == "production" ? 1 : 0
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Delivery"
-  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande.domain
+  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande[0].domain
   include_original_headers = false
 }
 
