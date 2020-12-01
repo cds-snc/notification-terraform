@@ -22,6 +22,6 @@ jobs:
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
 
-            const body = 'Updating alarms? Great! Please update the [Google Sheet](https://docs.google.com/spreadsheets/d/1gkrL3Trxw0xEkX724C1bwpfeRsTlK2X60wtCjF6MFRA/edit) and add a :thumbsup: to this message :pray:';
+            const body = 'Updating alarms :alarm_clock:? Great! Please update the [Google Sheet](https://docs.google.com/spreadsheets/d/1gkrL3Trxw0xEkX724C1bwpfeRsTlK2X60wtCjF6MFRA/edit) and add a :thumbsup: to this message after :pray:';
 
             github.issues.createComment({ issue_number, owner, repo, body });
