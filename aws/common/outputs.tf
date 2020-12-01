@@ -25,3 +25,7 @@ output "sns_alert_critical_arn" {
 output "asset_bucket_regional_domain_name" {
   value = aws_s3_bucket.asset_bucket.bucket_regional_domain_name
 }
+
+output "alb_log_bucket" {
+  value = aws_s3_bucket.alb_log_bucket.bucket
+}
