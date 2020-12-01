@@ -3,6 +3,7 @@
 # https://docs.google.com/spreadsheets/d/1gkrL3Trxw0xEkX724C1bwpfeRsTlK2X60wtCjF6MFRA/edit
 #
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
+# Testing
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
   alarm_name          = "sns-spending-warning"
