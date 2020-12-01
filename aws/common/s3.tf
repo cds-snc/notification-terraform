@@ -173,6 +173,44 @@ resource "aws_s3_bucket_policy" "asset_bucket_public_read" {
 POLICY
 }
 
+resource "aws_s3_bucket" "legacy_asset_bucket" {
+  count = var.env == "production" ? 1 : 0
+
+  bucket = "notification-alpha-canada-ca-asset-upload"
+  #tfsec:ignore:AWS001 - Public read access
+  acl = "public-read"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+
+  #tfsec:ignore:AWS002 - No logging enabled
+  #tfsec:ignore:AWS017 - Defines an unencrypted S3 bucket
+}
+
+resource "aws_s3_bucket_policy" "legacy_asset_bucket_public_read" {
+  count = var.env == "production" ? 1 : 0
+
+  bucket = aws_s3_bucket.legacy_asset_bucket[0].id
+
+  policy = <<POLICY
+{
+   "Version":"2008-10-17",
+   "Statement":[
+      {
+         "Sid":"AllowPublicRead",
+         "Effect":"Allow",
+         "Principal":{
+            "AWS":"*"
+         },
+         "Action":"s3:GetObject",
+         "Resource":"${aws_s3_bucket.legacy_asset_bucket[0].arn}/*"
+      }
+   ]
+}
+POLICY
+}
+
 resource "aws_s3_bucket" "document_bucket" {
   bucket = "notification-canada-ca-${var.env}-document-download"
   acl    = "private"
