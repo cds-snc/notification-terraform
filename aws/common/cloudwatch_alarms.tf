@@ -1,6 +1,6 @@
 # Note to maintainers:
 # Updating alarms? Update the Google Sheet also!
-# https://docs.google.com/spreadsheets/d/1IXHkln60B6V_ztDyjSpSNDTB1we6KB31eLOPTZGpWfA/edit
+# https://docs.google.com/spreadsheets/d/1gkrL3Trxw0xEkX724C1bwpfeRsTlK2X60wtCjF6MFRA/edit
 #
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
 
@@ -28,6 +28,40 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
   statistic           = "Maximum"
   threshold           = 0.9 * var.sns_monthly_spend_limit
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
+  alarm_description   = "SMS success rate to Canadian numbers is below 85% over the last 6 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "SMSSuccessRate"
+  namespace           = "AWS/SNS"
+  period              = 60 * 60 * 6
+  statistic           = "Average"
+  threshold           = 85 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    SMSType = "Transactional"
+    Country = "CA"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
+  alarm_description   = "SMS success rate to Canadian numbers is below 75% over the last 6 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "SMSSuccessRate"
+  namespace           = "AWS/SNS"
+  period              = 60 * 60 * 6
+  statistic           = "Average"
+  threshold           = 75 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  dimensions = {
+    SMSType = "Transactional"
+    Country = "CA"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
@@ -119,13 +153,13 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   alarm_description   = "Healthcheck page response time is above 200ms for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
-  metric_name         = "production_notifications_app_GET_status_show_status_200"
+  metric_name         = "production_notifications_api_GET_status_show_status_200"
   namespace           = "NotificationCanadaCa"
   period              = "300"
   statistic           = "Average"
   threshold           = 2
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  treat_missing_data  = "missing"
+  treat_missing_data  = "breaching"
   dimensions = {
     metric_type = "timing"
   }
@@ -141,6 +175,7 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
+  treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
 
@@ -154,5 +189,6 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   period              = "300"
   statistic           = "Sum"
   threshold           = 1
+  treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }

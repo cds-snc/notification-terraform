@@ -1,6 +1,6 @@
 # Note to maintainers:
 # Updating alarms? Update the Google Sheet also!
-# https://docs.google.com/spreadsheets/d/1IXHkln60B6V_ztDyjSpSNDTB1we6KB31eLOPTZGpWfA/edit
+# https://docs.google.com/spreadsheets/d/1gkrL3Trxw0xEkX724C1bwpfeRsTlK2X60wtCjF6MFRA/edit
 #
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
