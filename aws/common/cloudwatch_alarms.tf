@@ -32,12 +32,12 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
   alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
-  alarm_description   = "SMS success rate to Canadian numbers is below 85% over the last 6 hours"
+  alarm_description   = "SMS success rate to Canadian numbers is below 85% over the last 24 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
   metric_name         = "SMSSuccessRate"
   namespace           = "AWS/SNS"
-  period              = 60 * 60 * 6
+  period              = 60 * 60 * 24
   statistic           = "Average"
   threshold           = 85 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
@@ -49,12 +49,12 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
   alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
-  alarm_description   = "SMS success rate to Canadian numbers is below 75% over the last 6 hours"
+  alarm_description   = "SMS success rate to Canadian numbers is below 75% over the last 24 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
   metric_name         = "SMSSuccessRate"
   namespace           = "AWS/SNS"
-  period              = 60 * 60 * 6
+  period              = 60 * 60 * 24
   statistic           = "Average"
   threshold           = 75 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
