@@ -288,8 +288,12 @@ resource "aws_s3_bucket" "alb_log_bucket" {
     }
   }
 
-  logging {
-    target_bucket = aws_s3_bucket.document_bucket_logs.bucket
+  lifecycle_rule {
+    enabled = true
+
+    expiration {
+      days = 90
+    }
   }
 
   tags = {
