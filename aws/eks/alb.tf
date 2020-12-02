@@ -12,6 +12,11 @@ resource "aws_alb" "notification-canada-ca" {
   ]
   subnets = var.vpc_public_subnets
 
+  access_logs {
+    bucket  = var.alb_log_bucket
+    enabled = true
+  }
+
   enable_deletion_protection = true
 
   tags = {
