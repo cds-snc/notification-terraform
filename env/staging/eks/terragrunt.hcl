@@ -21,6 +21,7 @@ dependency "common" {
     ]
     sns_alert_warning_arn  = ""
     sns_alert_critical_arn = ""
+    alb_log_bucket         = ""
   }
 }
 
@@ -62,6 +63,7 @@ inputs = {
   vpc_public_subnets                     = dependency.common.outputs.vpc_public_subnets
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
+  alb_log_bucket                         = dependency.common.outputs.alb_log_bucket
   cloudfront_assets_arn                  = dependency.cloudfront.outputs.cloudfront_assets_arn
 }
 
