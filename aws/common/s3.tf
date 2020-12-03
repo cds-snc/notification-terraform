@@ -322,7 +322,7 @@ resource "aws_s3_bucket_policy" "alb_log_bucket_allow_elb_account" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${var.elb-account-ids[var.region]}:root"
+        "AWS": "arn:aws:iam::${var.elb_account_ids[var.region]}:root"
       },
       "Action": "s3:PutObject",
       "Resource":"${aws_s3_bucket.alb_log_bucket.arn}/*"

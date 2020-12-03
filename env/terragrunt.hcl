@@ -9,7 +9,7 @@ inputs = {
   env        = "${local.vars.inputs.env}"
   region     = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
-  elb-account-ids = {
+  elb_account_ids = {
     "ca-central-1" = "985666609251"
   }
 }
@@ -67,6 +67,12 @@ variable env {
 variable region {
   description = "The current AWS region"
   type        = string
+}
+
+# https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
+variable elb_account_ids {
+  description = "AWS account IDs used by load balancers"
+  type        = map(string)
 }
 EOF
 }
