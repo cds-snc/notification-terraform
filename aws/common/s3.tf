@@ -311,3 +311,44 @@ resource "aws_s3_bucket_public_access_block" "alb_log_bucket" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_s3_bucket_policy" "alb_log_bucket_allow_elb_account" {
+  bucket = aws_s3_bucket.alb_log_bucket.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${var.elb-account-ids[var.region]}:root"
+      },
+      "Action": "s3:PutObject",
+      "Resource":"${aws_s3_bucket.alb_log_bucket.arn}/*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "delivery.logs.amazonaws.com"
+      },
+      "Action": "s3:PutObject",
+      "Resource":"${aws_s3_bucket.alb_log_bucket.arn}/*",
+      "Condition": {
+        "StringEquals": {
+          "s3:x-amz-acl": "bucket-owner-full-control"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "delivery.logs.amazonaws.com"
+      },
+      "Action": "s3:GetBucketAcl",
+      "Resource": "${aws_s3_bucket.alb_log_bucket.arn}"
+    }
+  ]
+}
+POLICY
+}

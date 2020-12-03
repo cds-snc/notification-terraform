@@ -8,6 +8,10 @@ inputs = {
   alt_domain = "${local.vars.inputs.alt_domain}"
   env        = "${local.vars.inputs.env}"
   region     = "ca-central-1"
+  # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
+  elb-account-ids = {
+    "ca-central-1" = "985666609251"
+  }
 }
 
 generate "provider" {
