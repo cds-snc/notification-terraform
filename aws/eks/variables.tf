@@ -45,3 +45,7 @@ variable sns_alert_critical_arn {
 variable cloudfront_assets_arn {
   type = string
 }
+
+variable alb_log_bucket {
+  type = string
+}
