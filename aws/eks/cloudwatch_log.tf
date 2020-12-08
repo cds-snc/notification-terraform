@@ -33,3 +33,15 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "over-rate-limit" {
+  name           = "over-rate-limit"
+  pattern        = "has been rate limited for daily use sent"
+  log_group_name = "/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application"
+
+  metric_transformation {
+    name      = "over-rate-limit"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
