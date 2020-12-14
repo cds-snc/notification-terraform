@@ -3,7 +3,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   scope = "REGIONAL"
 
   default_action {
-    block {}
+    allow {}
   }
 
   # Use a bunch of AWS managed rules
@@ -11,6 +11,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
     priority = 1
+
+    action {
+      block {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -30,6 +34,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 2
 
+    action {
+      block {}
+    }
+
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
@@ -47,6 +55,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   rule {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
     priority = 3
+
+    action {
+      block {}
+    }
 
     statement {
       managed_rule_group_statement {
@@ -66,6 +78,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesLinuxRuleSet"
     priority = 4
 
+    action {
+      block {}
+    }
+
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesLinuxRuleSet"
@@ -83,6 +99,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   rule {
     name     = "AWSManagedRulesAnonymousIpList"
     priority = 5
+
+    action {
+      block {}
+    }
 
     statement {
       managed_rule_group_statement {
