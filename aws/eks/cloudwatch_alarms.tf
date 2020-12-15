@@ -302,5 +302,5 @@ resource "aws_cloudwatch_metric_alarm" "daily-service-rate-limit-error-1-minute-
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
 }
