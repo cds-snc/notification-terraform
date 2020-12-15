@@ -290,3 +290,17 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
     ResourceArn = aws_shield_protection.notification-canada-ca.resource_arn
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "daily-service-rate-limit-error-1-minute-warning" {
+  alarm_name          = "daily-service-rate-limit-error-1-minute-warning"
+  alarm_description   = "The daily rate limit has been reached."
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.over-daily-rate-limit.name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+}
