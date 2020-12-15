@@ -192,3 +192,17 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "daily-rate-limit-error-1-minute-warning" {
+  alarm_name          = "daily-rate-limit-error-1-minute-warning"
+  alarm_description   = "The daily rate limit has been reached."
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "over-daily-rate-limit"
+  namespace           = "LogMetrics"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+}
