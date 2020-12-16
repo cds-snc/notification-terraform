@@ -297,7 +297,7 @@ resource "aws_cloudwatch_metric_alarm" "daily-service-rate-limit-error-5-minutes
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.over-daily-rate-limit.name
-  namespace           = aws_cloudwatch_log_metric_filter.over-daily-rate-limit.namespace
+  namespace           = "LogMetrics"
   period              = "300"
   statistic           = "Sum"
   threshold           = 1
