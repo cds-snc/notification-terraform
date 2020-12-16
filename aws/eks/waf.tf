@@ -42,6 +42,13 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+
+        # Do not block traffic matching the rule GenericRFI_BODY.
+        # It seems genuine calls to the API /v2/notifications/email
+        # endpoint match this
+        excluded_rule {
+          name = "GenericRFI_BODY"
+        }
       }
     }
 
