@@ -291,8 +291,8 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "daily-service-rate-limit-error-1-minute-warning" {
-  alarm_name          = "daily-service-rate-limit-error-1-minute-warning"
+resource "aws_cloudwatch_metric_alarm" "daily-service-rate-limit-error-5-minutes-warning" {
+  alarm_name          = "daily-service-rate-limit-error-5-minutes-warning"
   alarm_description   = "The daily rate limit has been reached."
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
