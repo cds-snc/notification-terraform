@@ -77,3 +77,4 @@ resource "aws_db_event_subscription" "notification-canada-ca" {
     "maintenance",
   ]
 }
+

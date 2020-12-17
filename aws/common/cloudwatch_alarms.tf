@@ -192,4 +192,3 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
-
