@@ -40,12 +40,11 @@ resource "aws_sns_topic_subscription" "ses_sns_to_lambda" {
 }
 
 resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
-  count  = var.env == "production" ? 1 : 0
+  count = var.env == "production" ? 1 : 0
 
-  topic_arn = aws_sns_topic.notification-canada-ca-alert-critical.arn
-  protocol  = "https"
-  endpoint  = var.cloudwatch_opsgenie_alarm_webhook
+  topic_arn            = aws_sns_topic.notification-canada-ca-alert-critical.arn
+  protocol             = "https"
+  endpoint             = var.cloudwatch_opsgenie_alarm_webhook
   raw_message_delivery = false
-
-  depends_on = [var.cloudwatch_opsgenie_alarm_webhook]
 }
+
