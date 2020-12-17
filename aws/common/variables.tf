@@ -17,3 +17,7 @@ variable slack_channel_warning_topic {
 variable slack_channel_critical_topic {
   type = string
 }
+
+variable cloudwatch_opsgenie_alarm_webhook {
+  type = string
+}
