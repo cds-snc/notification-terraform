@@ -46,5 +46,6 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
   protocol             = "https"
   endpoint             = var.cloudwatch_opsgenie_alarm_webhook
   raw_message_delivery = false
+  endpoint_auto_confirms = true
 }
 
