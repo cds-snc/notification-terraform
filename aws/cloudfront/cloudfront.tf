@@ -55,3 +55,4 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
