@@ -16,6 +16,7 @@ resource "aws_cloudwatch_event_rule" "aws_health" {
          "CLOUDFRONT",
          "CLOUDWATCH",
          "EC2",
+         "ECR",
          "EKS",
          "IAM",
          "KMS",
