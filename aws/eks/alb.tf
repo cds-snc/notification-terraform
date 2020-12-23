@@ -242,6 +242,33 @@ resource "aws_alb_target_group" "notification-canada-ca-admin" {
   }
 }
 
+###
+# WWW to non-WWW
+###
+
+resource "aws_lb_listener_rule" "www-domain-host-route" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 50
+
+  action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      host        = var.domain
+      path        = "/#{path}"
+      query       = "#{query}"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["www.${var.domain}"]
+    }
+  }
+}
 
 ###
 # WAF
@@ -251,3 +278,4 @@ resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
   resource_arn = aws_alb.notification-canada-ca.arn
   web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
 }
+

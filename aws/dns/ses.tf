@@ -70,3 +70,4 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-complain
   identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande[0].domain
   include_original_headers = false
 }
+

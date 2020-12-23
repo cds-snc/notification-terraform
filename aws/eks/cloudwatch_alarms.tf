@@ -32,6 +32,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -67,6 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
@@ -99,6 +101,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
@@ -127,6 +130,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
@@ -286,7 +290,22 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
   dimensions = {
     ResourceArn = aws_shield_protection.notification-canada-ca.resource_arn
   }
+}
+
+resource "aws_cloudwatch_metric_alarm" "daily-service-rate-limit-error-5-minutes-warning" {
+  alarm_name          = "daily-service-rate-limit-error-5-minutes-warning"
+  alarm_description   = "The daily rate limit has been reached for a service"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.over-daily-rate-limit.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.over-daily-rate-limit.metric_transformation[0].namespace
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
 }

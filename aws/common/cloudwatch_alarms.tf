@@ -28,6 +28,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
   statistic           = "Maximum"
   threshold           = 0.9 * var.sns_monthly_spend_limit
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
@@ -58,6 +59,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
   statistic           = "Average"
   threshold           = 75 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
     SMSType = "Transactional"
     Country = "CA"
@@ -88,6 +90,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
   statistic           = "Average"
   threshold           = 7 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
@@ -114,6 +117,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
   statistic           = "Average"
   threshold           = 0.4 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
@@ -127,6 +131,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   extended_statistic  = "p90"
   threshold           = 60 * 5
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
     QueueName = "eks-notification-canada-casend-sms-tasks"
   }
@@ -134,15 +139,16 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-critical" {
   alarm_name          = "sqs-email-stuck-in-queue-critical"
-  alarm_description   = "ApproximateAgeOfOldestMessage in email queue is older than 10 minutes for 15 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in email queue is older than 15 minutes for 15 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = "300"
   extended_statistic  = "p90"
-  threshold           = 60 * 10
+  threshold           = 60 * 15
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
     QueueName = "eks-notification-canada-casend-email-tasks"
   }
@@ -159,6 +165,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   statistic           = "Average"
   threshold           = 2
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   treat_missing_data  = "breaching"
   dimensions = {
     metric_type = "timing"
@@ -191,4 +198,5 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   threshold           = 1
   treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
