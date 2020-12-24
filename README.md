@@ -26,6 +26,18 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 - The production infrastructure version is updated in [.github/workflows/merge_to_main_production.yml](`.github/workflows/merge_to_main_production.yml`)
 - CI detects changes in `env/production` and runs `terraform apply` to apply changes to `production`
 
+#### Necessary Additional Steps
+
+Manual actions we had to do for our infrastructure:
+
+- For [ACM](https://github.com/cds-snc/notification-terraform/blob/main/aws/dns/acm.tf) we do not automatically set the required DNS records to have a valid certificate because the DNS zone is managed on a different account. We had to copy/paste CNAME records to https://github.com/cds-snc/dns/blob/master/terraform/notification.canada.ca-zone.tf 
+- For [SES](https://github.com/cds-snc/notification-terraform/blob/main/aws/dns/ses.tf) this is similar. We had to add DNS records for TXT and DKIM validation on the DNS repo as well (Terraform objects `aws_ses_domain_identity` et `aws_ses_domain_dkim`)
+- For [load balancer target groups](https://github.com/cds-snc/notification-terraform/blob/main/aws/eks/alb.tf), we need to put the ARNs on target group files for our Kubernetes cluster in staging [and production](https://github.com/cds-snc/notification-manifests/tree/main/env/production) (Terraform object aws_alb_target_group)
+- In order to use [AWS Shield Advanced](https://aws.amazon.com/shield/) we had to click on a button to accept a monthly 3k USD bill/account
+- We had to request limits for SES, SNS
+- We had to order Pinpoint long code numbers
+- We had to extract IAM credentials from the Terraform state in DynamoDB to get AWS keys
+
 ### What is each Terraform module
 
 #### `aws/common`
