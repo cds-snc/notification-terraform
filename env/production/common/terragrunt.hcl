@@ -11,5 +11,4 @@ include {
 inputs = {
   elasticache_node_type   = "cache.t3.micro"
   sns_monthly_spend_limit  = 10000
-  vpc_private_subnets     = dependency.common.outputs.vpc_private_subnets
 }
