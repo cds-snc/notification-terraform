@@ -1,17 +1,32 @@
-terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/elasticache?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
-}
-
 dependencies {
   paths = ["../common", "../eks"]
 }
 
 dependency "common" {
   config_path = "../common"
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs = {
+    vpc_private_subnets = [
+      "subnet-001e585d12cce4d1e",
+      "subnet-08de34a9e1a7458dc",
+      "subnet-0af8b8402f1d605ff",
+    ]
+    sns_alert_warning_arn = ""
+  }
 }
 
 dependency "eks" {
   config_path = "../eks"
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs = {
+    eks-cluster-securitygroup = "sg-0e2c3ef6c5c75b74c"
+  }
 }
 
 include {
@@ -23,4 +38,8 @@ inputs = {
   elasticache_node_type     = "cache.t3.micro"
   sns_alert_warning_arn     = dependency.common.outputs.sns_alert_warning_arn
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
+}
+
+terraform {
+  source = "../../../aws//elasticache"
 }
