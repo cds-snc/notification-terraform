@@ -25,3 +25,7 @@ variable "slack_channel_warning_topic" {
 variable "sns_monthly_spend_limit" {
   type = number
 }
+
+variable "vpc_private_subnets" {
+  type = list(any)
+}
