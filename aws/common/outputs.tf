@@ -7,7 +7,7 @@ output "vpc_id" {
 }
 
 output "vpc_private_subnets" {
-  value = "${local.vpc_private_subnets}"
+  value = local.vpc_private_subnets
 }
 
 output "vpc_public_subnets" {
