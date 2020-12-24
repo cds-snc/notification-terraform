@@ -10,10 +10,6 @@ variable "cloudwatch_slack_webhook_warning_topic" {
   type = string
 }
 
-variable "elasticache_node_type" {
-  type = string
-}
-
 variable "slack_channel_critical_topic" {
   type = string
 }
