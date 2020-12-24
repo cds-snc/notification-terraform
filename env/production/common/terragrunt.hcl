@@ -9,5 +9,6 @@ include {
 }
 
 inputs = {
-  sns_monthly_spend_limit = 10000
+  elasticache_node_type   = "cache.t3.micro"
+  sns_monthly_spend_limit  = 10000
 }

@@ -1,8 +1,4 @@
-variable "sns_monthly_spend_limit" {
-  type = number
-}
-
-variable "cloudwatch_slack_webhook_warning_topic" {
+variable "cloudwatch_opsgenie_alarm_webhook" {
   type = string
 }
 
@@ -10,7 +6,11 @@ variable "cloudwatch_slack_webhook_critical_topic" {
   type = string
 }
 
-variable "slack_channel_warning_topic" {
+variable "cloudwatch_slack_webhook_warning_topic" {
+  type = string
+}
+
+variable "elasticache_node_type" {
   type = string
 }
 
@@ -18,6 +18,10 @@ variable "slack_channel_critical_topic" {
   type = string
 }
 
-variable "cloudwatch_opsgenie_alarm_webhook" {
+variable "slack_channel_warning_topic" {
   type = string
+}
+
+variable "sns_monthly_spend_limit" {
+  type = number
 }
