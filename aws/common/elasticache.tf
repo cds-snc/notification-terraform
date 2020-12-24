@@ -5,10 +5,6 @@
 resource "aws_elasticache_subnet_group" "notification-canada-ca-cache-subnet" {
     name       = "notification-canada-ca-${var.env}-cache-subnet"
     subnet_ids = local.vpc_private_subnets
-
-    tags = {
-        CostCenter = "notification-canada-ca-${var.env}"
-    }
 }
 
 resource "aws_elasticache_cluster" "notification-cluster-cache" {
