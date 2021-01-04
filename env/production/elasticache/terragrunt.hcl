@@ -20,7 +20,7 @@ include {
 
 inputs = {
   eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
-  rds_instance_count        = 1
+  elasticache_node_count    = 1
   elasticache_node_type     = "cache.t3.micro"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
 }
