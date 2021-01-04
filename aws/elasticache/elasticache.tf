@@ -19,7 +19,7 @@ resource "aws_elasticache_cluster" "notification-cluster-cache" {
   maintenance_window   = "thu:04:00-thu:05:00"
   node_type            = var.elasticache_node_type
   num_cache_nodes      = var.elasticache_node_count
-  parameter_group_name = "default.redis4.0"
+  parameter_group_name = "default.redis6.x"
   port                 = 6379
   security_group_ids = [
     var.eks_cluster_securitygroup
