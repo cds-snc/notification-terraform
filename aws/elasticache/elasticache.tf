@@ -11,7 +11,7 @@ resource "aws_elasticache_cluster" "notification-cluster-cache" {
     # Default is false with this param, it looks counter-intuitive because
     # applied changes would only happen during maintenance window if false.
     apply_immediately    = true
-    cluster_id           = "notification-cluster-cache"
+    cluster_id           = "notification-canada-ca-${var.env}-cluster-cache"
     engine               = "redis"
     # The nearest versions of Redis supported by AWS next to the one we
     # use (i.e. v3.5.3) would be 3.2.10 or 4.0.10. The former does not
