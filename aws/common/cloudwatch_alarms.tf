@@ -120,6 +120,22 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
 
+resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
+  alarm_name          = "sqs-sms-stuck-in-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 3 minutes for 15 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "3"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = "300"
+  extended_statistic  = "p90"
+  threshold           = 60 * 3
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "eks-notification-canada-casend-sms-tasks"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   alarm_name          = "sqs-sms-stuck-in-queue-critical"
   alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 5 minutes for 15 minutes"
@@ -137,6 +153,22 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-warning" {
+  alarm_name          = "sqs-email-stuck-in-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in email queue is older than 10 minutes for 15 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "3"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = "300"
+  extended_statistic  = "p90"
+  threshold           = 60 * 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "eks-notification-canada-casend-email-tasks"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-critical" {
   alarm_name          = "sqs-email-stuck-in-queue-critical"
   alarm_description   = "ApproximateAgeOfOldestMessage in email queue is older than 15 minutes for 15 minutes"
@@ -151,6 +183,23 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-critical" {
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
     QueueName = "eks-notification-canada-casend-email-tasks"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
+  alarm_name          = "healtheck-page-slow-response-warning"
+  alarm_description   = "Healthcheck page response time is above 100ms for 10 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "production_notifications_api_GET_status_show_status_200"
+  namespace           = "NotificationCanadaCa"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "breaching"
+  dimensions = {
+    metric_type = "timing"
   }
 }
 
