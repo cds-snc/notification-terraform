@@ -2,6 +2,10 @@ variable "sns_monthly_spend_limit" {
   type = number
 }
 
+variable "sns_monthly_spend_limit_us_west_2" {
+  type = number
+}
+
 variable "cloudwatch_slack_webhook_warning_topic" {
   type = string
 }
