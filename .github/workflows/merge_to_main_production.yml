@@ -87,11 +87,6 @@ jobs:
           cd env/production/eks
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/elasticache
-        run: |
-          cd env/production/elasticache
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
-
       - name: Apply aws/rds
         run: |
           cd env/production/rds
