@@ -69,6 +69,8 @@ resource "aws_cloudwatch_log_subscription_filter" "sns_failures_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_us_west_2_to_lambda" {
+  provider = aws.us-west-2
+
   name            = "sns_us_west_2_to_lambda"
   log_group_name  = aws_cloudwatch_log_group.sns_deliveries_us_west_2.name
   filter_pattern  = ""
@@ -76,6 +78,8 @@ resource "aws_cloudwatch_log_subscription_filter" "sns_us_west_2_to_lambda" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_failures_us_west_2_to_lambda" {
+  provider = aws.us-west-2
+
   name            = "sns_failures_us_west_2_to_lambda"
   log_group_name  = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
   filter_pattern  = ""
