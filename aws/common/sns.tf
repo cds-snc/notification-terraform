@@ -31,6 +31,14 @@ resource "aws_sns_sms_preferences" "update-sms-prefs" {
   monthly_spend_limit                   = var.sns_monthly_spend_limit
 }
 
+resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
+  provider = aws.us-west-2
+
+  delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
+  delivery_status_success_sampling_rate = 100
+  monthly_spend_limit                   = var.sns_monthly_spend_limit_us_west_2
+}
+
 resource "aws_sns_topic_subscription" "ses_sns_to_lambda" {
   topic_arn = aws_sns_topic.notification-canada-ca-ses-callback.arn
   protocol  = "lambda"
