@@ -25,6 +25,8 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     forwarded_values {
       query_string = false
 
+      headers = ["Cache-Control"]
+
       cookies {
         forward = "none"
       }
