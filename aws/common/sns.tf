@@ -19,7 +19,9 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning" {
 resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-west-2" {
   provider = aws.us-west-2
 
-  name = "alert-warning-us-west-2"
+  name              = "alert-warning-us-west-2"
+  kms_master_key_id = aws_kms_key.notification-canada-ca-us-west-2.arn
+
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -38,7 +40,9 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical" {
 resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
   provider = aws.us-west-2
 
-  name = "alert-critical-us-west-2"
+  name              = "alert-critical-us-west-2"
+  kms_master_key_id = aws_kms_key.notification-canada-ca-us-west-2.arn
+
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
