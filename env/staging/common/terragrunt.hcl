@@ -7,5 +7,6 @@ include {
 }
 
 inputs = {
-  sns_monthly_spend_limit = 1
+  sns_monthly_spend_limit           = 1
+  sns_monthly_spend_limit_us_west_2 = 1
 }

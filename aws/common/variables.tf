@@ -21,3 +21,7 @@ variable "slack_channel_warning_topic" {
 variable "sns_monthly_spend_limit" {
   type = number
 }
+
+variable "sns_monthly_spend_limit_us_west_2" {
+  type = number
+}
