@@ -293,7 +293,7 @@ resource "aws_alb_target_group" "notification-canada-ca-documentation" {
   }
 }
 
-resource "aws_lb_listener_rule" "api-host-route" {
+resource "aws_lb_listener_rule" "documentation-host-route" {
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 60
 
