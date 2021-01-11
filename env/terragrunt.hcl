@@ -3,11 +3,12 @@ locals {
 }
 
 inputs = {
-  account_id = "${local.vars.inputs.account_id}"
-  domain     = "${local.vars.inputs.domain}"
-  alt_domain = "${local.vars.inputs.alt_domain}"
-  env        = "${local.vars.inputs.env}"
-  region     = "ca-central-1"
+  account_id           = "${local.vars.inputs.account_id}"
+  domain               = "${local.vars.inputs.domain}"
+  alt_domain           = "${local.vars.inputs.alt_domain}"
+  documentation_domain = "${local.vars.inputs.documentation_domain}"
+  env                  = "${local.vars.inputs.env}"
+  region               = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
   elb_account_ids = {
     "ca-central-1" = "985666609251"
