@@ -96,6 +96,8 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
 }
 
 resource "aws_sns_topic_subscription" "alert_critical_us_west_2_to_opsgenie" {
+  provider = aws.us-west-2
+
   count = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
