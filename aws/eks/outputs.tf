@@ -17,6 +17,10 @@ output "document_api_target_group_arn" {
   value = aws_alb_target_group.notification-canada-ca-document-api.arn
 }
 
+output "documentation_target_group_arn" {
+  value = aws_alb_target_group.notification-canada-ca-documentation.arn
+}
+
 ###
 # EKS cluster
 ###
