@@ -67,8 +67,6 @@ resource "aws_sns_topic_subscription" "ses_sns_to_lambda" {
   topic_arn = aws_sns_topic.notification-canada-ca-ses-callback.arn
   protocol  = "lambda"
   endpoint  = aws_lambda_function.ses_to_sqs_email_callbacks.arn
-
-  depends_on = [aws_lambda_permission.allow_sns]
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_warning_us_west_2_to_lambda" {
@@ -77,8 +75,6 @@ resource "aws_sns_topic_subscription" "sns_alert_warning_us_west_2_to_lambda" {
   topic_arn = aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn
   protocol  = "lambda"
   endpoint  = module.notify_slack_warning.notify_slack_lambda_function_arn
-
-  depends_on = [aws_lambda_permission.allow_sns]
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_critical_us_west_2_to_lambda" {
@@ -87,8 +83,6 @@ resource "aws_sns_topic_subscription" "sns_alert_critical_us_west_2_to_lambda" {
   topic_arn = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
   protocol  = "lambda"
   endpoint  = module.notify_slack_critical.notify_slack_lambda_function_arn
-
-  depends_on = [aws_lambda_permission.allow_sns]
 }
 
 resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
@@ -102,6 +96,8 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
 }
 
 resource "aws_sns_topic_subscription" "alert_critical_us_west_2_to_opsgenie" {
+  provider = aws.us-west-2
+
   count = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
