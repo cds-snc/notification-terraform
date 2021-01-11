@@ -47,14 +47,14 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.amazonaws.com"
-  source_arn    = aws_cloudwatch_log_group.sns_deliveries.arn
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries.arn}:*"
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.amazonaws.com"
-  source_arn    = aws_cloudwatch_log_group.sns_deliveries_failures.arn
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries_failures.arn}:*"
 }
 
 ##
@@ -64,14 +64,14 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes_us_west_2"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.amazonaws.com"
-  source_arn    = aws_cloudwatch_log_group.sns_deliveries_us_west_2.arn
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries_us_west_2.arn}:*"
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures_us_west_2" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.amazonaws.com"
-  source_arn    = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.arn
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.arn}:*"
 }
 
 ##
