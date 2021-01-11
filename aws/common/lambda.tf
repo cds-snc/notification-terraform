@@ -60,3 +60,19 @@ resource "aws_lambda_permission" "allow_sns" {
   function_name = aws_lambda_function.ses_to_sqs_email_callbacks.function_name
   principal     = "sns.amazonaws.com"
 }
+
+resource "aws_lambda_permission" "sns_warning_us_west_2_to_slack_lambda" {
+  statement_id  = "AllowExecutionFromSNSWarningUSWest2"
+  action        = "lambda:InvokeFunction"
+  function_name = module.notify_slack_warning.notify_slack_lambda_function_arn
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn
+}
+
+resource "aws_lambda_permission" "sns_critical_us_west_2_to_slack_lambda" {
+  statement_id  = "AllowExecutionFromSNSCriticalUSWest2"
+  action        = "lambda:InvokeFunction"
+  function_name = module.notify_slack_critical.notify_slack_lambda_function_arn
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
+}
