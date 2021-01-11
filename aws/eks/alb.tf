@@ -282,8 +282,8 @@ resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
 ###
 # Documentation Specific Routing
 ###
-resource "aws_alb_target_group" "notification-documentation" {
-  name     = "notification-canada-ca-alb-documentation"
+resource "aws_alb_target_group" "notification-canada-ca-documentation" {
+  name     = "notification-can-documentation"
   port     = 9000
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -299,7 +299,7 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-documentation.arn
+    target_group_arn = aws_alb_target_group.notification-canada-ca-documentation.arn
   }
 
   action {
