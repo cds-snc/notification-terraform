@@ -29,4 +29,12 @@ resource "aws_elasticache_cluster" "notification-cluster-cache" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+
+  # We need to ignore engine_version changes for the time being, because there
+  # is a bug in terraform that prevents proper support of Redis v6 in the AWS
+  # provider. For more details, see issue:
+  # https://github.com/hashicorp/terraform-provider-aws/issues/15625
+  lifecycle {
+    ignore_changes = [engine_version]
+  }
 }
