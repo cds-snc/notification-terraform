@@ -294,19 +294,6 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
     target_group_arn = aws_alb_target_group.notification-canada-ca-documentation.arn
   }
 
-  action {
-    type = "redirect"
-    
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-      host        = "documentation.${var.domain}"
-      path        = "/#{path}"
-      query       = "#{query}"
-    }
-  }
-
   condition {
     host_header {
       values = ["documentation.*"]
