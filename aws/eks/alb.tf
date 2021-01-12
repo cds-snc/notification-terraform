@@ -273,6 +273,7 @@ resource "aws_lb_listener_rule" "www-domain-host-route" {
 ###
 # Documentation Specific Routing
 ###
+
 resource "aws_alb_target_group" "notification-canada-ca-documentation" {
   name     = "notification-documentation"
   port     = 80
