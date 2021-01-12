@@ -301,6 +301,30 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
   }
 }
 
+resource "aws_lb_listener_rule" "documentation-host-redirect" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 70
+
+  action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      host        = "documentation.${var.domain}"
+      path        = "/#{path}"
+      query       = "#{query}"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["doc.*"]
+    }
+  }
+}
+
 ###
 # WAF
 ###
