@@ -271,19 +271,10 @@ resource "aws_lb_listener_rule" "www-domain-host-route" {
 }
 
 ###
-# WAF
-###
-
-resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
-  resource_arn = aws_alb.notification-canada-ca.arn
-  web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
-}
-
-###
 # Documentation Specific Routing
 ###
 resource "aws_alb_target_group" "notification-canada-ca-documentation" {
-  name     = "notification-can-documentation"
+  name     = "notification-documentation"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -320,4 +311,13 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
       values = ["documentation.*"]
     }
   }
+}
+
+###
+# WAF
+###
+
+resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
+  resource_arn = aws_alb.notification-canada-ca.arn
+  web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
 }
