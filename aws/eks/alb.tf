@@ -284,11 +284,11 @@ resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
 ###
 resource "aws_alb_target_group" "notification-canada-ca-documentation" {
   name     = "notification-can-documentation"
-  port     = 9000
+  port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   health_check {
-    path    = "/_status"
+    path    = "/"
     matcher = "200"
   }
 }
@@ -309,7 +309,7 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-      host        = var.documentation_domain
+      host        = "documentation.${var.domain}"
       path        = "/#{path}"
       query       = "#{query}"
     }
