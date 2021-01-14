@@ -16,3 +16,8 @@ aws-staging-eks-dev:
 
 fmt:
 	terraform fmt -recursive aws && terragrunt hclfmt
+
+get-tg-arns:
+	aws elbv2 describe-target-groups --output json >> response.json
+	python -c 'import utils; print utils.get_target_group_arns()'
+	rm response.json utils.pyc
