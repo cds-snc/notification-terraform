@@ -271,6 +271,61 @@ resource "aws_lb_listener_rule" "www-domain-host-route" {
 }
 
 ###
+# Documentation Specific Routing
+###
+
+resource "aws_alb_target_group" "notification-canada-ca-documentation" {
+  name     = "notification-documentation"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+  health_check {
+    path    = "/"
+    matcher = "200"
+  }
+}
+
+resource "aws_lb_listener_rule" "documentation-host-route" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 60
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-documentation.arn
+  }
+
+  condition {
+    host_header {
+      values = ["documentation.*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "documentation-host-redirect" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 70
+
+  action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+      host        = "documentation.${var.domain}"
+      path        = "/#{path}"
+      query       = "#{query}"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["doc.*"]
+    }
+  }
+}
+
+###
 # WAF
 ###
 
@@ -278,4 +333,3 @@ resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
   resource_arn = aws_alb.notification-canada-ca.arn
   web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
 }
-

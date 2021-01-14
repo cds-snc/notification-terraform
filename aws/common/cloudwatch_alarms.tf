@@ -17,6 +17,21 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
 
+resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-warning" {
+  provider = aws.us-west-2
+
+  alarm_name          = "sns-spending-us-west-2-warning"
+  alarm_description   = "SNS spending reached 80% of limit this month"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "SMSMonthToDateSpentUSD"
+  namespace           = "AWS/SNS"
+  period              = "300"
+  statistic           = "Maximum"
+  threshold           = 0.8 * var.sns_monthly_spend_limit_us_west_2
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
+}
+
 resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
   alarm_name          = "sns-spending-critical"
   alarm_description   = "SNS spending reached 90% of limit this month"
@@ -31,14 +46,31 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
 
+resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
+  provider = aws.us-west-2
+
+  alarm_name          = "sns-spending-us-west-2-critical"
+  alarm_description   = "SNS spending reached 90% of limit this month"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "SMSMonthToDateSpentUSD"
+  namespace           = "AWS/SNS"
+  period              = "300"
+  statistic           = "Maximum"
+  threshold           = 0.9 * var.sns_monthly_spend_limit_us_west_2
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
+}
+
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
   alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
-  alarm_description   = "SMS success rate to Canadian numbers is below 85% over the last 24 hours"
+  alarm_description   = "SMS success rate to Canadian numbers is below 85% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
   metric_name         = "SMSSuccessRate"
   namespace           = "AWS/SNS"
-  period              = 60 * 60 * 24
+  period              = 60 * 60 * 12
   statistic           = "Average"
   threshold           = 85 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
@@ -48,18 +80,60 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
-  alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
-  alarm_description   = "SMS success rate to Canadian numbers is below 75% over the last 24 hours"
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-warning" {
+  provider = aws.us-west-2
+
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-warning"
+  alarm_description   = "SMS success rate to Canadian numbers is below 85% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
   metric_name         = "SMSSuccessRate"
   namespace           = "AWS/SNS"
-  period              = 60 * 60 * 24
+  period              = 60 * 60 * 12
+  statistic           = "Average"
+  threshold           = 85 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
+  dimensions = {
+    SMSType = "Transactional"
+    Country = "CA"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
+  alarm_description   = "SMS success rate to Canadian numbers is below 75% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  metric_name         = "SMSSuccessRate"
+  namespace           = "AWS/SNS"
+  period              = 60 * 60 * 12
   statistic           = "Average"
   threshold           = 75 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  dimensions = {
+    SMSType = "Transactional"
+    Country = "CA"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-critical" {
+  provider = aws.us-west-2
+
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-critical"
+  alarm_description   = "SMS success rate to Canadian numbers is below 75% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  metric_name         = "SMSSuccessRate"
+  namespace           = "AWS/SNS"
+  period              = 60 * 60 * 12
+  statistic           = "Average"
+  threshold           = 75 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
   dimensions = {
     SMSType = "Transactional"
     Country = "CA"
