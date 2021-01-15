@@ -44,7 +44,7 @@ Within the Makefile, you can pull the Target Group ARNs using the
 
 ```
 # If you would like to specify an environment, it can by done like so
-AWS_PROFILE=notify-staging make decrypt-staging
+AWS_PROFILE=notify-staging make get-tg-arns
 ```
 
 ### What is each Terraform module
