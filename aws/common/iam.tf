@@ -194,7 +194,7 @@ resource "aws_iam_access_key" "inspec-scanner" {
 }
 
 resource "aws_iam_group_policy" "inspec_cloud_guard_rails" {
-  name = "InspecCloudGuardRails"
+  name  = "InspecCloudGuardRails"
   group = aws_iam_group.inspec.name
 
   policy = <<EOF
