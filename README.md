@@ -36,6 +36,17 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 - We had to order Pinpoint long code numbers and set the Pinpoint spending limit manually through the console
 - We had to extract IAM credentials from the Terraform state in DynamoDB to get AWS keys
 
+#### Helpful Commands
+
+Within the Makefile, you can pull the Target Group ARNs using the 
+
+`get-tg-arns`
+
+```
+# If you would like to specify an environment, it can by done like so
+AWS_PROFILE=notify-staging make decrypt-staging
+```
+
 ### What is each Terraform module
 
 #### `aws/common`
