@@ -50,4 +50,5 @@ module "notify_slack_general" {
   lambda_function_name                   = "notify-slack-general"
   cloudwatch_log_group_retention_in_days = 90
 
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-general]
 }
