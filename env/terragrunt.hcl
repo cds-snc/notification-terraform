@@ -37,6 +37,13 @@ provider "aws" {
   version             = "~> 3.0"
   allowed_account_ids = [var.account_id]
 }
+
+provider "aws" {
+  alias               = "ca-central-1"
+  region              = "ca-central-1"
+  version             = "~> 3.0"
+  allowed_account_ids = [var.account_id]
+}
 EOF
 }
 
