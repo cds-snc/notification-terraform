@@ -167,3 +167,67 @@ resource "aws_iam_user_policy" "write_s3_bulk_send" {
 }
 EOF
 }
+
+###
+# IAM role for Continuous guardrail scanning
+# https://github.com/cds-snc/continuous-guardrail-scanning
+# Group + User + Credentials + Policy
+###
+resource "aws_iam_group" "inspec" {
+  name = "inspec"
+}
+
+resource "aws_iam_user" "inspec-scanner" {
+  name = "inspec-scanner"
+}
+
+resource "aws_iam_user_group_membership" "inspec-scanner-to-inspec" {
+  user = aws_iam_user.inspec-scanner.name
+
+  groups = [
+    aws_iam_group.inspec.name
+  ]
+}
+
+resource "aws_iam_access_key" "inspec-scanner" {
+  user = aws_iam_user.inspec-scanner.name
+}
+
+resource "aws_iam_group_policy" "inspec_cloud_guard_rails" {
+  name  = "InspecCloudGuardRails"
+  group = aws_iam_group.inspec.name
+
+  policy = <<EOF
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Sid":"InspecCloudGuardRails",
+         "Effect":"Allow",
+         "Action":[
+            "cloudtrail:DescribeTrails",
+            "ec2:DescribeInstances",
+            "ec2:DescribeRegions",
+            "ec2:DescribeVolumes",
+            "iam:GetAccountSummary",
+            "iam:GetInstanceProfile",
+            "iam:GetLoginProfile",
+            "iam:ListAccessKeys",
+            "iam:ListAttachedUserPolicies",
+            "iam:ListMFADevices",
+            "iam:ListUserPolicies",
+            "iam:ListUsers",
+            "iam:ListVirtualMFADevices",
+            "rds:DescribeDBInstances",
+            "s3:GetBucketLocation",
+            "s3:GetBucketTagging",
+            "s3:GetEncryptionConfiguration",
+            "s3:ListAllMyBuckets",
+            "SNS:ListTopics"
+         ],
+         "Resource":"*"
+      }
+   ]
+}
+EOF
+}
