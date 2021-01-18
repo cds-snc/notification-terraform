@@ -144,12 +144,19 @@ resource "aws_s3_bucket" "asset_bucket" {
   #tfsec:ignore:AWS001 - Public read access
   acl = "public-read"
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 
   #tfsec:ignore:AWS002 - No logging enabled
-  #tfsec:ignore:AWS017 - Defines an unencrypted S3 bucket
 }
 
 resource "aws_s3_bucket_policy" "asset_bucket_public_read" {
@@ -180,12 +187,19 @@ resource "aws_s3_bucket" "legacy_asset_bucket" {
   #tfsec:ignore:AWS001 - Public read access
   acl = "public-read"
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 
   #tfsec:ignore:AWS002 - No logging enabled
-  #tfsec:ignore:AWS017 - Defines an unencrypted S3 bucket
 }
 
 resource "aws_s3_bucket_policy" "legacy_asset_bucket_public_read" {
