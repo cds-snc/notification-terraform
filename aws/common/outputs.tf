@@ -22,6 +22,10 @@ output "sns_alert_critical_arn" {
   value = aws_sns_topic.notification-canada-ca-alert-critical.arn
 }
 
+output "sns_alert_general_arn" {
+  value = aws_sns_topic.notification-canada-ca-alert-general.arn
+}
+
 output "asset_bucket_regional_domain_name" {
   value = aws_s3_bucket.asset_bucket.bucket_regional_domain_name
 }
