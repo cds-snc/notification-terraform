@@ -38,9 +38,7 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 
 #### Helpful Commands
 
-Within the Makefile, you can pull the Target Group ARNs using the 
-
-`get-tg-arns`
+Within the Makefile, you can pull the Target Group ARNs using the `get-tg-arns` command
 
 ```
 # If you would like to specify an environment, it can by done like so
