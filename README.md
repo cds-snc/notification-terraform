@@ -26,6 +26,26 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 - The production infrastructure version is updated in [.github/workflows/merge_to_main_production.yml](`.github/workflows/merge_to_main_production.yml`)
 - CI detects changes in `env/production` and runs `terraform apply` to apply changes to `production`
 
+#### Necessary additional steps
+⚠️ We had to perform some actions on other repositories or manually using the AWS Console. Here is a list of these actions:
+
+- [ACM](https://github.com/cds-snc/notification-terraform/blob/main/aws/dns/acm.tf): We do not automatically set the required DNS records to have a valid certificate because the DNS zone is managed on a different account. We had to copy/paste CNAME records to https://github.com/cds-snc/dns/blob/master/terraform/notification.canada.ca-zone.tf 
+- [SES](https://github.com/cds-snc/notification-terraform/blob/main/aws/dns/ses.tf): We had to add DNS records for TXT and DKIM validation on the DNS repo as well (Terraform objects `aws_ses_domain_identity` et `aws_ses_domain_dkim`)
+- [Load balancer target groups](https://github.com/cds-snc/notification-terraform/blob/main/aws/eks/alb.tf): We needed to put the ARNs on target group files for our Kubernetes cluster in staging [and production](https://github.com/cds-snc/notification-manifests/tree/main/env/production) (Terraform object aws_alb_target_group)
+- In order to use [AWS Shield Advanced](https://aws.amazon.com/shield/) we had to click on a button to accept a monthly 3k USD bill/account
+- We had to request limits for SES, SNS
+- We had to order Pinpoint long code numbers and set the Pinpoint spending limit manually through the console
+- We had to extract IAM credentials from the Terraform state in DynamoDB to get AWS keys
+
+#### Helpful commands
+
+Within the Makefile, you can pull the Target Group ARNs using the `get-tg-arns` command
+
+```
+# If you would like to specify an environment, it can by done like so
+AWS_PROFILE=notify-staging make get-tg-arns
+```
+
 ### What is each Terraform module
 
 #### `aws/common`
