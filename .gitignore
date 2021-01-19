@@ -29,3 +29,6 @@ override.tf.json
 # example: *tfplan*
 
 .terragrunt*
+
+# VSCode editor's files
+.vscode
