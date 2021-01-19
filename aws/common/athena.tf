@@ -9,6 +9,4 @@ resource "aws_athena_database" "notification_athena" {
   encryption_configuration {
     encryption_option = "SSE_S3"
   }
-
-  depends_on = [aws_s3_bucket.athena_bucket]
 }
