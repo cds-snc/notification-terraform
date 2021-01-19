@@ -31,3 +31,15 @@ resource "aws_athena_workgroup" "primary" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_athena_named_query" "create_table_alb_log" {
+  name      = "alb_log_create_table"
+  workgroup = aws_athena_workgroup.primary.name
+  database  = aws_athena_database.notification_athena.name
+  query = templatefile("${path.module}/sql/alb_log_create_table.sql.tmpl",
+    {
+      database_name   = aws_athena_database.notification_athena.name
+      table_name      = "alb_logs"
+      bucket_location = "s3://notification-canada-ca-staging-alb-logs/AWSLogs/${var.current.account_id}/elasticloadbalancing/${data.aws_region.current.name}"
+  })
+}
