@@ -10,11 +10,19 @@ variable "cloudwatch_slack_webhook_warning_topic" {
   type = string
 }
 
+variable "cloudwatch_slack_webhook_general_topic" {
+  type = string
+}
+
 variable "slack_channel_critical_topic" {
   type = string
 }
 
 variable "slack_channel_warning_topic" {
+  type = string
+}
+
+variable "slack_channel_general_topic" {
   type = string
 }
 

@@ -64,7 +64,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
 
 resource "aws_db_event_subscription" "notification-canada-ca" {
   name      = "notification-canada-ca-events-subscription"
-  sns_topic = var.sns_alert_warning_arn
+  sns_topic = var.sns_alert_general_arn
 
   source_type = "db-instance"
 

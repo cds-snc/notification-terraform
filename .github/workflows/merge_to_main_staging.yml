@@ -21,8 +21,10 @@ env:
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
+  TF_VAR_slack_channel_general_topic: "notification-staging-ops"
 
 jobs:
   terraform-apply:

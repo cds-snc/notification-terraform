@@ -42,6 +42,10 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
+variable "sns_alert_general_arn" {
+  type = string
+}
+
 variable "cloudfront_assets_arn" {
   type = string
 }
