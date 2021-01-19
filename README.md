@@ -27,6 +27,7 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 - CI detects changes in `env/production` and runs `terraform apply` to apply changes to `production`
 
 #### Necessary additional steps
+⚠️ We had to perform some actions on other repositories or manually using the AWS Console. Here is a list of these actions:
 
 - [ACM](https://github.com/cds-snc/notification-terraform/blob/main/aws/dns/acm.tf): We do not automatically set the required DNS records to have a valid certificate because the DNS zone is managed on a different account. We had to copy/paste CNAME records to https://github.com/cds-snc/dns/blob/master/terraform/notification.canada.ca-zone.tf 
 - [SES](https://github.com/cds-snc/notification-terraform/blob/main/aws/dns/ses.tf): We had to add DNS records for TXT and DKIM validation on the DNS repo as well (Terraform objects `aws_ses_domain_identity` et `aws_ses_domain_dkim`)
