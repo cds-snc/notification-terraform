@@ -32,7 +32,7 @@ resource "aws_athena_workgroup" "primary" {
   }
 }
 
-resource "aws_athena_named_query" "create_table_alb_log" {
+resource "aws_athena_named_query" "create_table_alb_logs" {
   name      = "create_table_alb_logs"
   workgroup = aws_athena_workgroup.primary.name
   database  = aws_athena_database.notification_athena.name
