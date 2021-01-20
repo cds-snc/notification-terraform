@@ -40,6 +40,6 @@ resource "aws_athena_named_query" "create_table_alb_logs" {
     {
       database_name   = aws_athena_database.notification_athena.name
       table_name      = "alb_logs"
-      bucket_location = "s3://notification-canada-ca-staging-alb-logs/AWSLogs/${var.account_id}/elasticloadbalancing/${var.region}"
+      bucket_location = "s3://${aws_s3_bucket.alb_log_bucket.bucket}/AWSLogs/${var.account_id}/elasticloadbalancing/${var.region}"
   })
 }
