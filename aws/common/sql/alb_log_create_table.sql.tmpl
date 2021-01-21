@@ -37,7 +37,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS `${database_name}.${table_name}`(
                classification_reason string
             )
             PARTITIONED BY (
-               `date` string
+               year string, month string, day string
             )
             ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
             WITH SERDEPROPERTIES (
@@ -45,15 +45,3 @@ CREATE EXTERNAL TABLE IF NOT EXISTS `${database_name}.${table_name}`(
                'input.regex' =
                '([^ ]*) ([^ ]*) ([^ ]*) ([^ ]*):([0-9]*) ([^ ]*)[:-]([0-9]*) ([-.0-9]*) ([-.0-9]*) ([-.0-9]*) (|[-0-9]*) (-|[-0-9]*) ([-0-9]*) ([-0-9]*) \"([^ ]*) ([^ ]*) (- |[^ ]*)\" \"([^\"]*)\" ([A-Z0-9-]+) ([A-Za-z0-9.-]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\" ([-.0-9]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^ ]*)\" \"([^\s]+?)\" \"([^\s]+)\" \"([^ ]*)\" \"([^ ]*)\"')
             LOCATION '${bucket_location}'
-            TBLPROPERTIES (
-               'projection.enabled' = 'true',
-               'projection.date.type' = 'date',
-               'projection.date.range' = 'NOW-5YEARS,NOW',
-               'projection.date.format' = 'yyyy/MM/dd',
-               'projection.date.interval' = '1',
-               'projection.date.interval.unit' = 'DAYS',
-               'storage.location.template' = '${bucket_location}/$${date}',
-               'classification'='csv',
-               'compressionType'='gzip',
-               'typeOfData'='file'
-            )
