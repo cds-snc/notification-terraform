@@ -3,7 +3,7 @@
 ###
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
-  name              = "/aws/eks/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/cluster"
+  name              = "/aws/eks/${var.eks_cluster_name}/cluster"
   retention_in_days = 14
 }
 
