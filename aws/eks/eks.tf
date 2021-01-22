@@ -6,7 +6,7 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   name     = "notification-canada-ca-${var.env}-eks-cluster"
   role_arn = aws_iam_role.eks-cluster-role.arn
 
-  enabled_cluster_log_types = ["api", "audit"]
+  enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler"]
 
   vpc_config {
     security_group_ids = [
