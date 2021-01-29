@@ -1,5 +1,5 @@
 ###
-# Athena deployment configuration for the Notification application
+# Athena deployment configuration for Notify
 ###
 
 resource "aws_athena_database" "notification_athena" {
