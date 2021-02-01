@@ -42,7 +42,7 @@ def to_queue(queue, message):
             "delivery_info": {
                 "priority": 0,
                 "exchange": "default",
-                "routing_key": "notify-internal-tasks"
+                "routing_key": "delivery-receipts"
             },
             "body_encoding": "base64",
             "delivery_tag": str(uuid.uuid4())
@@ -61,7 +61,7 @@ def lambda_handler(event, context):
     log_events = payload['logEvents']
 
     sqs = boto3.resource('sqs')
-    queue = sqs.get_queue_by_name(QueueName="eks-notification-canada-canotify-internal-tasks")
+    queue = sqs.get_queue_by_name(QueueName="eks-notification-canada-cadelivery-receipts")
 
     for log_event in log_events:
         print(f'LogEvent: {log_event}')
