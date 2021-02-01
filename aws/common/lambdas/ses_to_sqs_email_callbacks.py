@@ -7,7 +7,7 @@ import uuid
 def lambda_handler(event, context):
     sqs = boto3.resource('sqs')
     queue = sqs.get_queue_by_name(
-        QueueName='eks-notification-canada-delivery-receipts'
+        QueueName='eks-notification-canada-cadelivery-receipts'
     )
 
     for record in event["Records"]:
