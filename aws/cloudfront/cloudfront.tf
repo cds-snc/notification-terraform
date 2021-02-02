@@ -39,9 +39,11 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
 
   viewer_certificate {
     acm_certificate_arn      = var.aws_acm_assets_notification_canada_ca_arn
-    minimum_protocol_version = "TLSv1.2_2018"
+    minimum_protocol_version = "TLSv1.2_2019"
     ssl_support_method       = "sni-only"
   }
+
+  web_acl_id = aws_wafv2_web_acl.assets_cdn.arn
 
   price_class = "PriceClass_100"
 

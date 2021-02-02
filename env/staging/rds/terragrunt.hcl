@@ -15,6 +15,7 @@ dependency "common" {
       "subnet-0af8b8402f1d605ff",
     ]
     sns_alert_general_arn = ""
+    kms_arn               = ""
   }
 }
 
@@ -39,6 +40,7 @@ inputs = {
   rds_instance_type         = "db.t3.medium"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
   sns_alert_general_arn     = dependency.common.outputs.sns_alert_general_arn
+  kms_arn                   = dependency.common.outputs.kms_arn
 }
 
 terraform {
