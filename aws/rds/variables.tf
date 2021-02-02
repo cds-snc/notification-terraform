@@ -22,3 +22,7 @@ variable "vpc_private_subnets" {
 variable "sns_alert_general_arn" {
   type = string
 }
+
+variable "kms_arn" {
+  type = string
+}
