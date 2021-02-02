@@ -14,16 +14,18 @@ resource "aws_db_subnet_group" "notification-canada-ca" {
 }
 
 resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
-  count                           = var.rds_instance_count
-  identifier                      = "notification-canada-ca-${var.env}-instance-${count.index}"
-  cluster_identifier              = aws_rds_cluster.notification-canada-ca.id
-  instance_class                  = var.rds_instance_type
-  db_subnet_group_name            = aws_db_subnet_group.notification-canada-ca.name
-  engine                          = aws_rds_cluster.notification-canada-ca.engine
-  engine_version                  = aws_rds_cluster.notification-canada-ca.engine_version
-  performance_insights_enabled    = true
-  performance_insights_kms_key_id = var.kms_arn
-  preferred_maintenance_window    = "wed:04:00-wed:04:30"
+  count                        = var.rds_instance_count
+  identifier                   = "notification-canada-ca-${var.env}-instance-${count.index}"
+  cluster_identifier           = aws_rds_cluster.notification-canada-ca.id
+  instance_class               = var.rds_instance_type
+  db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
+  engine                       = aws_rds_cluster.notification-canada-ca.engine
+  engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
+  performance_insights_enabled = true
+  #tfsec:ignore:AWS053 - Encryption for RDS Perfomance Insights should be enabled.
+  # Cannot set a custom KMS key after performance insights has been enabled
+  # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
+  preferred_maintenance_window = "wed:04:00-wed:04:30"
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -43,8 +45,8 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
-  storage_encrypted            = true
-  deletion_protection          = true
+  storage_encrypted   = true
+  deletion_protection = true
 
 
   vpc_security_group_ids = [
