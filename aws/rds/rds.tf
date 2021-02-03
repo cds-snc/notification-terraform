@@ -43,8 +43,8 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
-  storage_encrypted            = true
-  deletion_protection          = true
+  storage_encrypted   = true
+  deletion_protection = true
 
 
   vpc_security_group_ids = [
@@ -78,5 +78,15 @@ resource "aws_db_event_subscription" "notification-canada-ca" {
     "low storage",
     "maintenance",
   ]
+}
+
+resource "aws_db_event_subscription" "notification-canada-ca-cluster" {
+  name      = "notification-canada-ca-aurora-cluster-events-subscription"
+  sns_topic = var.sns_alert_general_arn
+
+  source_type = "db-cluster"
+
+  # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html
+  # We are interested in all events so leaving out the event_categories parameter
 }
 
