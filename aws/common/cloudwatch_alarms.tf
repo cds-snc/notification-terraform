@@ -302,3 +302,35 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warning" {
+  alarm_name          = "lambda-ses-delivery-receipts-errors-warning"
+  alarm_description   = "5 errors on Lambda ses-to-sqs-email-callbacks in 10 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 60 * 10
+  statistic           = "Sum"
+  threshold           = 5
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    FunctionName = aws_lambda_function.ses_to_sqs_email_callbacks.function_name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda-sns-delivery-receipts-errors-warning" {
+  alarm_name          = "lambda-sns-delivery-receipts-errors-warning"
+  alarm_description   = "5 errors on Lambda sns-to-sqs-sms-callbacks in 10 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 60 * 10
+  statistic           = "Sum"
+  threshold           = 5
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    FunctionName = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
+  }
+}
