@@ -82,3 +82,13 @@ resource "aws_db_event_subscription" "notification-canada-ca" {
   ]
 }
 
+resource "aws_db_event_subscription" "notification-canada-ca-cluster" {
+  name      = "notification-canada-ca-aurora-cluster-events-subscription"
+  sns_topic = var.sns_alert_general_arn
+
+  source_type = "db-cluster"
+
+  # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html
+  # We are interested in all events so leaving out the event_categories parameter
+}
+
