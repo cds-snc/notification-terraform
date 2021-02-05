@@ -32,6 +32,18 @@ resource "aws_ses_domain_mail_from" "notification-canada-ca" {
   mail_from_domain = "bounce.${aws_ses_domain_identity.notification-canada-ca.domain}"
 }
 
+###
+# Receiving emails
+###
+
+resource "aws_ses_domain_identity" "notification-canada-ca-receiving" {
+  # Email receiving with SES is available in only 3 regions
+  # so we use us-east-1
+  # https://docs.aws.amazon.com/general/latest/gr/ses.html
+  provider = aws.us-east-1
+
+  domain = var.domain
+}
 
 ###
 # Additional sending domains
