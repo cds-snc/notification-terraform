@@ -62,6 +62,8 @@ resource "aws_lambda_function" "ses_receiving_emails" {
     }
   }
 
+  depends_on = [aws_cloudwatch_log_group.ses_receiving_emails]
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
