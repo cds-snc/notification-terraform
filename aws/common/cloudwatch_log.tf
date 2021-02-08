@@ -15,7 +15,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
 }
 
 resource "aws_cloudwatch_log_group" "ses_receiving_emails" {
-  name = "/aws/lambda/${aws_lambda_function.ses_receiving_emails.function_name}"
+  name = "/aws/lambda/${var.lambda_ses_receiving_emails_name}"
 
   retention_in_days = 90
 

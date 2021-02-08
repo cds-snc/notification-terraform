@@ -48,7 +48,7 @@ data "archive_file" "ses_receiving_emails" {
 
 resource "aws_lambda_function" "ses_receiving_emails" {
   filename      = data.archive_file.ses_receiving_emails.output_path
-  function_name = "ses-receiving-emails"
+  function_name = var.lambda_ses_receiving_emails_name
   role          = aws_iam_role.iam_lambda_to_sqs.arn
   handler       = "ses_receiving_emails.lambda_handler"
 

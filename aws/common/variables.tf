@@ -33,3 +33,8 @@ variable "sns_monthly_spend_limit" {
 variable "sns_monthly_spend_limit_us_west_2" {
   type = number
 }
+
+variable "lambda_ses_receiving_emails_name" {
+  type    = string
+  default = "ses-receiving-emails"
+}
