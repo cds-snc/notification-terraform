@@ -37,3 +37,7 @@ output "alb_log_bucket" {
 output "kms_arn" {
   value = aws_kms_key.notification-canada-ca.arn
 }
+
+output "lambda_ses_receiving_emails_arn" {
+  value = aws_lambda_function.ses_receiving_emails.arn
+}
