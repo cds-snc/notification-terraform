@@ -45,6 +45,28 @@ resource "aws_ses_domain_identity" "notification-canada-ca-receiving" {
   domain = var.domain
 }
 
+resource "aws_ses_receipt_rule_set" "main" {
+  provider = aws.us-east-1
+
+  rule_set_name = "main"
+}
+
+resource "aws_ses_receipt_rule" "inbound-to-lambda" {
+  provider = aws.us-east-1
+
+  name          = "inbound-to-lambda"
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+  recipients    = [var.domain]
+  enabled       = true
+  scan_enabled  = true
+
+  lambda_action {
+    function_arn    = var.lambda_ses_receiving_emails_arn
+    invocation_type = "Event"
+    position        = 1
+  }
+}
+
 ###
 # Additional sending domains
 ###
