@@ -141,11 +141,8 @@ resource "aws_lambda_permission" "sns_critical_us_west_2_to_slack_lambda" {
 resource "aws_lambda_permission" "ses_receiving_emails" {
   provider = aws.us-east-1
 
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.ses_receiving_emails.function_name
-  # tfsec:ignore:AWS058 Ensure that lambda function permission has a source arn specified
-  # The `principal` is our own AWS account ID so it's fine to not specify `source_arn`.
-  # We do not specify `source_arn` because SES is in another module, with a dependency
-  # already on this module, this would create a circular dependency.
-  principal = var.account_id
+  action         = "lambda:InvokeFunction"
+  function_name  = aws_lambda_function.ses_receiving_emails.function_name
+  principal      = "ses.amazonaws.com"
+  source_account = var.account_id
 }
