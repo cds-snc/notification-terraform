@@ -51,6 +51,12 @@ resource "aws_ses_receipt_rule_set" "main" {
   rule_set_name = "main"
 }
 
+resource "aws_ses_active_receipt_rule_set" "main" {
+  provider = aws.us-east-1
+
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+}
+
 resource "aws_ses_receipt_rule" "inbound-to-lambda" {
   provider = aws.us-east-1
 
