@@ -139,6 +139,8 @@ resource "aws_lambda_permission" "sns_critical_us_west_2_to_slack_lambda" {
 # SES in us-east-1 for handling incoming emails
 ##
 resource "aws_lambda_permission" "ses_receiving_emails" {
+  provider = aws.us-east-1
+
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.ses_receiving_emails.function_name
   # tfsec:ignore:AWS058 Ensure that lambda function permission has a source arn specified
