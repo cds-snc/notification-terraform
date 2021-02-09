@@ -14,6 +14,16 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "ses_receiving_emails" {
+  name = "/aws/lambda/${var.lambda_ses_receiving_emails_name}"
+
+  retention_in_days = 90
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_cloudwatch_log_group" "sns_deliveries_us_west_2" {
   provider = aws.us-west-2
 
