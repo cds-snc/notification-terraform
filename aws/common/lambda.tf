@@ -47,6 +47,11 @@ data "archive_file" "ses_receiving_emails" {
 }
 
 resource "aws_lambda_function" "ses_receiving_emails" {
+  # https://docs.aws.amazon.com/ses/latest/DeveloperGuide/regions.html#region-receive-email
+  # With the exception of Amazon S3 buckets, all of the AWS resources that you use for
+  # receiving email with Amazon SES have to be in the same AWS Region as the Amazon SES endpoint.
+  provider = aws.us-east-1
+
   filename      = data.archive_file.ses_receiving_emails.output_path
   function_name = var.lambda_ses_receiving_emails_name
   role          = aws_iam_role.iam_lambda_to_sqs.arn
