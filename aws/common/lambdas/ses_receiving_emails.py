@@ -84,7 +84,8 @@ def lambda_handler(event, context):
         sender = payload["mail"]["source"]
         parsed = parseaddr(sender)[1]
         if parsed == '':
-            print(f"Error: could not parse sender {sender}")
+            print(f"Error: could not parse sender {sender}. Stopping.")
+            return {'statusCode': 200}
         sender = parsed
 
         # Get the subject
