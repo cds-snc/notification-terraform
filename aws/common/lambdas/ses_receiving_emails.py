@@ -8,7 +8,7 @@ from email.utils import parseaddr
 
 SENDING_DOMAIN = os.environ['NOTIFY_SENDING_DOMAIN']
 SQS_REGION = os.environ['SQS_REGION']
-CELERY_QUEUE_PREFIX = os.environ['SQS_REGION']
+CELERY_QUEUE_PREFIX = os.environ['CELERY_QUEUE_PREFIX']
 CELERY_QUEUE = 'notify-internal-tasks'
 CELERY_TASK_NAME = 'send-notify-no-reply'
 
