@@ -40,6 +40,40 @@ resource "aws_lambda_function" "sns_to_sqs_sms_callbacks" {
   }
 }
 
+data "archive_file" "ses_receiving_emails" {
+  type        = "zip"
+  source_file = "${path.module}/lambdas/ses_receiving_emails.py"
+  output_path = "${path.module}/lambdas/ses_receiving_emails.zip"
+}
+
+resource "aws_lambda_function" "ses_receiving_emails" {
+  # https://docs.aws.amazon.com/ses/latest/DeveloperGuide/regions.html#region-receive-email
+  # With the exception of Amazon S3 buckets, all of the AWS resources that you use for
+  # receiving email with Amazon SES have to be in the same AWS Region as the Amazon SES endpoint.
+  provider = aws.us-east-1
+
+  filename      = data.archive_file.ses_receiving_emails.output_path
+  function_name = var.lambda_ses_receiving_emails_name
+  role          = aws_iam_role.iam_lambda_to_sqs.arn
+  handler       = "ses_receiving_emails.lambda_handler"
+
+  source_code_hash = data.archive_file.ses_receiving_emails.output_base64sha256
+
+  runtime = "python3.8"
+
+  environment {
+    variables = {
+      NOTIFY_SENDING_DOMAIN = var.domain
+    }
+  }
+
+  depends_on = [aws_cloudwatch_log_group.ses_receiving_emails]
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 ##
 # CloudWatch log groups for SNS deliveries in ca-central-1
 ##
@@ -99,4 +133,18 @@ resource "aws_lambda_permission" "sns_critical_us_west_2_to_slack_lambda" {
   function_name = module.notify_slack_critical.notify_slack_lambda_function_arn
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
+}
+
+##
+# SES in us-east-1 for handling incoming emails
+##
+resource "aws_lambda_permission" "ses_receiving_emails" {
+  provider = aws.us-east-1
+
+  action         = "lambda:InvokeFunction"
+  function_name  = aws_lambda_function.ses_receiving_emails.function_name
+  principal      = "ses.amazonaws.com"
+  # tfsec:ignore:AWS058 Ensure that lambda function permission has a source arn specified
+  # can ignore this because we specify `source_account` instead of `source_arn`
+  source_account = var.account_id
 }
