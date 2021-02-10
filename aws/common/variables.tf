@@ -38,3 +38,10 @@ variable "lambda_ses_receiving_emails_name" {
   type    = string
   default = "ses-receiving-emails"
 }
+
+variable "celery_queue_prefix" {
+  type = string
+  # Matches the env NOTIFICATION_QUEUE_PREFIX
+  # in https://github.com/cds-snc/notification-manifests/blob/main/base/api-deployment.yaml
+  default = "eks-notification-canada-ca"
+}
