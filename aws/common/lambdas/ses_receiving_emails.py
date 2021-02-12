@@ -9,6 +9,7 @@ from email.utils import parseaddr
 SENDING_DOMAIN = os.environ['NOTIFY_SENDING_DOMAIN']
 SQS_REGION = os.environ['SQS_REGION']
 CELERY_QUEUE_PREFIX = os.environ['CELERY_QUEUE_PREFIX']
+GC_NOTIFY_SERVICE_EMAIL = os.environ['GC_NOTIFY_SERVICE_EMAIL']
 CELERY_QUEUE = 'notify-internal-tasks'
 CELERY_TASK_NAME = 'send-notify-no-reply'
 
@@ -64,6 +65,10 @@ def parse_recipients(headers):
     return [r for r in recipients if r.endswith(f"@{SENDING_DOMAIN}")]
 
 
+def notify_service_in_recipients(recipients):
+    return GC_NOTIFY_SERVICE_EMAIL in recipients
+
+
 def lambda_handler(event, context):
     sqs = boto3.resource('sqs', region_name=SQS_REGION)
     queue = sqs.get_queue_by_name(QueueName=f"{CELERY_QUEUE_PREFIX}{CELERY_QUEUE}")
@@ -73,11 +78,20 @@ def lambda_handler(event, context):
     # https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-notifications-contents.html
     for record in event["Records"]:
         payload = record["ses"]
+        print(f"Full payload {payload}")
+
         spam_verdict = payload["receipt"]["spamVerdict"]
         virus_verdict = payload["receipt"]["virusVerdict"]
 
         # Check for potential spam or virus and do not reply
         if spam_verdict == "FAIL" or virus_verdict == "FAIL":
+            return {'statusCode': 200}
+
+        # Identify a "Precedence" header and do not reply
+        # https://tools.ietf.org/html/rfc3834
+        has_precendence = any([True for h in payload["mail"]["headers"] if h["name"] == "Precedence"])
+        if has_precendence:
+            print("Not replying because found a Precedence header. Stopping.")
             return {'statusCode': 200}
 
         # Get the sender
@@ -103,7 +117,14 @@ def lambda_handler(event, context):
 
         recipients = parse_recipients(payload["mail"]["commonHeaders"])
 
-        print(f"Full payload {payload}")
+        # Do not reply to people emailing the GC Notify service.
+        # This service has a reply email address set and clients
+        # should not ignore this header.
+        # Prevent an auto-reply loop.
+        if notify_service_in_recipients(recipients):
+            print("Not replying because recipients contain the GC Notify service. Stopping.")
+            return {'statusCode': 200}
+
         print(
             f"Received email addressed to {recipients} from {sender} with subject {subject} in reply to {messageId}"
         )
