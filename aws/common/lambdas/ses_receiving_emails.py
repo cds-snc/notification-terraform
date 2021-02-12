@@ -9,6 +9,7 @@ from email.utils import parseaddr
 SENDING_DOMAIN = os.environ['NOTIFY_SENDING_DOMAIN']
 SQS_REGION = os.environ['SQS_REGION']
 CELERY_QUEUE_PREFIX = os.environ['CELERY_QUEUE_PREFIX']
+GC_NOTIFY_SERVICE_EMAIL = os.environ['GC_NOTIFY_SERVICE_EMAIL']
 CELERY_QUEUE = 'notify-internal-tasks'
 CELERY_TASK_NAME = 'send-notify-no-reply'
 
@@ -64,6 +65,10 @@ def parse_recipients(headers):
     return [r for r in recipients if r.endswith(f"@{SENDING_DOMAIN}")]
 
 
+def notify_service_in_recipients(recipients):
+    return GC_NOTIFY_SERVICE_EMAIL in recipients
+
+
 def lambda_handler(event, context):
     sqs = boto3.resource('sqs', region_name=SQS_REGION)
     queue = sqs.get_queue_by_name(QueueName=f"{CELERY_QUEUE_PREFIX}{CELERY_QUEUE}")
@@ -111,6 +116,14 @@ def lambda_handler(event, context):
             messageId = matches.groups()[0]
 
         recipients = parse_recipients(payload["mail"]["commonHeaders"])
+
+        # Do not reply to people emailing the GC Notify service.
+        # This service has a reply email address set and clients
+        # should not ignore this header.
+        # Prevent an auto-reply loop.
+        if notify_service_in_recipients(recipients):
+            print("Not replying because recipients contain the GC Notify service. Stopping.")
+            return {'statusCode': 200}
 
         print(
             f"Received email addressed to {recipients} from {sender} with subject {subject} in reply to {messageId}"
