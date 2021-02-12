@@ -73,11 +73,20 @@ def lambda_handler(event, context):
     # https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-notifications-contents.html
     for record in event["Records"]:
         payload = record["ses"]
+        print(f"Full payload {payload}")
+
         spam_verdict = payload["receipt"]["spamVerdict"]
         virus_verdict = payload["receipt"]["virusVerdict"]
 
         # Check for potential spam or virus and do not reply
         if spam_verdict == "FAIL" or virus_verdict == "FAIL":
+            return {'statusCode': 200}
+
+        # Identify a "Precedence" header and do not reply
+        # https://tools.ietf.org/html/rfc3834
+        has_precendence = any([True for h in payload["mail"]["headers"] if h["name"] == "Precedence"])
+        if has_precendence:
+            print("Not replying because found a Precedence header. Stopping.")
             return {'statusCode': 200}
 
         # Get the sender
@@ -103,7 +112,6 @@ def lambda_handler(event, context):
 
         recipients = parse_recipients(payload["mail"]["commonHeaders"])
 
-        print(f"Full payload {payload}")
         print(
             f"Received email addressed to {recipients} from {sender} with subject {subject} in reply to {messageId}"
         )
