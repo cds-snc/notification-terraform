@@ -8,9 +8,9 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 
   enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler", "authenticator"]
 
-  # tfsec:ignore:AWS068 EKS cluster should not have open CIDR range for public access
-  # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/203
   vpc_config {
+    # tfsec:ignore:AWS068 EKS cluster should not have open CIDR range for public access
+    # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/203
     security_group_ids = [
       aws_security_group.notification-canada-ca-worker.id
     ]
