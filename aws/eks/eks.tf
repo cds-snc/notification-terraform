@@ -14,8 +14,9 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
     security_group_ids = [
       aws_security_group.notification-canada-ca-worker.id
     ]
-    subnet_ids             = var.vpc_private_subnets
-    endpoint_public_access = false
+    subnet_ids              = var.vpc_private_subnets
+    endpoint_private_access = true
+    endpoint_public_access  = false
   }
 
   # tfsec:ignore:AWS066 EKS should have the encryption of secrets enabled
