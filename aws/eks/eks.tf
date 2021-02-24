@@ -8,6 +8,8 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 
   enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler", "authenticator"]
 
+  # tfsec:ignore:AWS068 EKS cluster should not have open CIDR range for public access
+  # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/203
   vpc_config {
     security_group_ids = [
       aws_security_group.notification-canada-ca-worker.id
@@ -19,8 +21,6 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   # tfsec:ignore:AWS066 EKS should have the encryption of secrets enabled
   # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/202
 
-  # tfsec:ignore:AWS068 EKS cluster should not have open CIDR range for public access
-  # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/203
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
   # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
