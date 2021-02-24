@@ -14,9 +14,10 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
     security_group_ids = [
       aws_security_group.notification-canada-ca-worker.id
     ]
-    subnet_ids              = var.vpc_private_subnets
-    endpoint_private_access = true
-    endpoint_public_access  = false
+    subnet_ids = var.vpc_private_subnets
+    # tfsec:ignore:AWS069 EKS Clusters should have the public access disabled
+    # Cannot connect with kubectl if we do this atm, will tackle later
+    # https://github.com/cds-snc/notification-terraform/issues/205
   }
 
   # tfsec:ignore:AWS066 EKS should have the encryption of secrets enabled
