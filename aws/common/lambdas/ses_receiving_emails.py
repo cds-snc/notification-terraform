@@ -69,6 +69,10 @@ def notify_service_in_recipients(recipients):
     return GC_NOTIFY_SERVICE_EMAIL in recipients
 
 
+def no_reply_in_recipients(recipients):
+    return any([email.startswith('no-reply@') for email in recipients])
+
+
 def lambda_handler(event, context):
     sqs = boto3.resource('sqs', region_name=SQS_REGION)
     queue = sqs.get_queue_by_name(QueueName=f"{CELERY_QUEUE_PREFIX}{CELERY_QUEUE}")
@@ -123,6 +127,10 @@ def lambda_handler(event, context):
         # Prevent an auto-reply loop.
         if notify_service_in_recipients(recipients):
             print("Not replying because recipients contain the GC Notify service. Stopping.")
+            return {'statusCode': 200}
+
+        if no_reply_in_recipients(recipients):
+            print("Not replying because recipients contain a no-reply email address. Stopping.")
             return {'statusCode': 200}
 
         print(
