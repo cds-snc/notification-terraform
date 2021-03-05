@@ -74,7 +74,14 @@ resource "aws_ses_receipt_rule" "inbound-to-lambda" {
 }
 
 ###
-# Additional sending domains
+# Additional custom sending domains for emails
+# trvapply-vrtdemande.apps.cic.gc.ca is alone for historic reasons
+# and is not refactored to make sure the ressource is not destroyed/recreated.
+# Read the section "Refactoring Can Be Tricky"
+# https://blog.gruntwork.io/terraform-tips-tricks-loops-if-statements-and-gotchas-f739bbae55f9
+#
+# Afterwards there is a more automated way, using the list variable
+# `custom_sending_domains`.
 ###
 
 resource "aws_ses_domain_identity" "cic-trvapply-vrtdemande" {
@@ -111,3 +118,42 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-complain
   include_original_headers = false
 }
 
+resource "aws_ses_domain_identity" "custom_sending_domains" {
+  for_each = var.custom_sending_domains
+  domain   = each.value
+}
+
+resource "aws_ses_domain_dkim" "custom_sending_domains" {
+  for_each = var.custom_sending_domains
+  domain   = each.value
+}
+
+resource "aws_ses_identity_notification_topic" "custom_sending_domains_bounce_topic" {
+  for_each                 = var.custom_sending_domains
+  topic_arn                = var.notification_canada_ca_ses_callback_arn
+  notification_type        = "Bounce"
+  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  include_original_headers = false
+}
+
+resource "aws_ses_identity_notification_topic" "custom_sending_domains_delivery_topic" {
+  for_each                 = var.custom_sending_domains
+  topic_arn                = var.notification_canada_ca_ses_callback_arn
+  notification_type        = "Delivery"
+  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  include_original_headers = false
+}
+
+resource "aws_ses_identity_notification_topic" "custom_sending_domains_complaint_topic" {
+  for_each                 = var.custom_sending_domains
+  topic_arn                = var.notification_canada_ca_ses_callback_arn
+  notification_type        = "Complaint"
+  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  include_original_headers = false
+}
+
+resource "aws_ses_domain_mail_from" "custom_sending_domains" {
+  for_each         = var.custom_sending_domains
+  domain           = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  mail_from_domain = "bounce.${aws_ses_domain_identity.custom_sending_domains[each.value].domain}"
+}
