@@ -6,6 +6,6 @@ variable "lambda_ses_receiving_emails_arn" {
   type = string
 }
 
-variable "custom_sending_domains" {
+variable "ses_custom_sending_domains" {
   type = set(string)
 }
