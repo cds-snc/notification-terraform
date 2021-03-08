@@ -80,7 +80,7 @@ resource "aws_ses_receipt_rule" "inbound-to-lambda" {
 # Read the section "Refactoring Can Be Tricky"
 # https://blog.gruntwork.io/terraform-tips-tricks-loops-if-statements-and-gotchas-f739bbae55f9
 #
-# Afterwards there is a more automated way, using the list variable
+# Afterwards there is a more automated way, using the set variable
 # `ses_custom_sending_domains`.
 ###
 
