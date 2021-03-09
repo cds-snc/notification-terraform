@@ -111,7 +111,8 @@ resource "aws_iam_policy" "lambda_sqs_send" {
     "Statement": [
         {
             "Action": [
-                "sqs:*"
+                "sqs:Get*",
+                "sqs:SendMessage"
             ],
             "Effect": "Allow",
             "Resource": "*"
