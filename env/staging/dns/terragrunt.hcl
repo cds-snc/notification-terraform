@@ -21,7 +21,7 @@ include {
 inputs = {
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
   lambda_ses_receiving_emails_arn         = dependency.common.outputs.lambda_ses_receiving_emails_arn
-  ses_custom_sending_domains              = ["custom-sending-domain.staging.notification.cdssandbox.xyz", "test.example.com"]
+  ses_custom_sending_domains              = ["custom-sending-domain.staging.notification.cdssandbox.xyz"]
 }
 
 terraform {
