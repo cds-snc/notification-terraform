@@ -52,7 +52,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
 resource "aws_sns_topic" "notification-canada-ca-alert-general" {
   name = "alert-general"
 
-  # tfsec:ignore:AWS016
+  # tfsec:ignore:AWS016 Unencrypted SNS topic
   # > Amazon RDS event notification is only available for unencrypted SNS topics.
   # > If you specify an encrypted SNS topic, event notifications aren't sent for the topic.
   #
