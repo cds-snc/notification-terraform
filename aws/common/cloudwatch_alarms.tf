@@ -334,3 +334,33 @@ resource "aws_cloudwatch_metric_alarm" "lambda-sns-delivery-receipts-errors-warn
     FunctionName = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "sign-in-3-500-error-15-minutes-critical" {
+  alarm_name          = "sign-in-3-500-error-15-minutes-critical"
+  alarm_description   = "Three 500 errors in 15 minutes for sign-in"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "production_notifications_admin_POST_main_sign_in_500"
+  namespace           = "NotificationCanadaCa"
+  period              = 60 * 15
+  statistic           = "Sum"
+  threshold           = 3
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical" {
+  alarm_name          = "contact-3-500-error-15-minutes-critical"
+  alarm_description   = "Three 500 errors in 15 minutes for contact us"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "production_notifications_admin_POST_main_contact_500"
+  namespace           = "NotificationCanadaCa"
+  period              = 60 * 15
+  statistic           = "Sum"
+  threshold           = 3
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+}
