@@ -74,6 +74,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
   statistic           = "Average"
   threshold           = 85 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     SMSType = "Transactional"
     Country = "CA"
@@ -94,6 +95,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   statistic           = "Average"
   threshold           = 85 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     SMSType = "Transactional"
     Country = "CA"
@@ -113,6 +115,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
   threshold           = 75 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     SMSType = "Transactional"
     Country = "CA"
@@ -134,6 +137,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   threshold           = 75 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     SMSType = "Transactional"
     Country = "CA"
