@@ -47,14 +47,14 @@ variable "celery_queue_prefix" {
 }
 
 variable "sqs_sms_queue_name" {
-  type    = string
+  type = string
   # See QueueNames in
   # https://github.com/cds-snc/notification-api/blob/master/app/config.py
   default = "send-sms-tasks"
 }
 
 variable "sqs_throttled_sms_queue_name" {
-  type    = string
+  type = string
   # See QueueNames in
   # https://github.com/cds-snc/notification-api/blob/master/app/config.py
   default = "send-throttled-sms-tasks"
