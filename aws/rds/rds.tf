@@ -35,7 +35,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
-  engine_version               = 11.8
+  engine_version               = 11.9
   database_name                = "NotificationCanadaCa${var.env}"
   final_snapshot_identifier    = "server-${random_string.random.result}"
   master_username              = "postgres"
@@ -58,6 +58,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
       # Ignore changes to tags, e.g. because a management agent
       # updates these based on some ruleset managed elsewhere.
       tags,
+      engine_version
     ]
   }
 
