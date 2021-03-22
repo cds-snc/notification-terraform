@@ -1,33 +1,11 @@
-// Historically we do not have data where it spikes above 4%
-// Since it is CPU related missing data could mean the service is missing
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-medium-cpu-warning" {
   alarm_name          = "redis-elasticache-medium-cpu-warning"
-  alarm_description   = "Average CPU of Redis Elasticache >= 5% during 1 minutes"
+  alarm_description   = "Average CPU of Redis ElastiCache >= 50% during 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = "1"
   metric_name         = "CPUUtilization"
   namespace           = "AWS/ElastiCache"
-  period              = "30"
-  statistic           = "Average"
-  threshold           = 5
-  alarm_actions       = [var.sns_alert_warning_arn]
-  treat_missing_data  = "breaching"
-  dimensions = {
-    CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
-  }
-}
-
-// 50% is an arbitrary number as historical data has never shown CPU usage above 4% which is handled by
-// the medium threshold; 10x is a reasonable number
-// FIXME: Please consider upgrading this to a critical warning
-resource "aws_cloudwatch_metric_alarm" "redis-elasticache-critical-cpu-warning" {
-  alarm_name          = "redis-elasticache-critical-cpu-warning"
-  alarm_description   = "Average CPU of Redis Elasticache >= 50% during 1 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/ElastiCache"
-  period              = "30"
+  period              = "60"
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
@@ -37,16 +15,16 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-critical-cpu-warning" 
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-engine-cpu-warning" {
-  alarm_name          = "redis-elasticache-high-engine-cpu-warning"
-  alarm_description   = "Average Engine CPU of Redis Elasticache >= 2% during 1 minutes"
+resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-cpu-warning" {
+  alarm_name          = "redis-elasticache-high-cpu-warning"
+  alarm_description   = "Average CPU of Redis ElastiCache >= 70% during 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "EngineCPUUtilization"
+  evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
   namespace           = "AWS/ElastiCache"
-  period              = "30"
+  period              = "60"
   statistic           = "Average"
-  threshold           = 2
+  threshold           = 70
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "breaching"
   dimensions = {
@@ -56,14 +34,14 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-engine-cpu-warnin
 
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning" {
   alarm_name          = "redis-elasticache-high-db-memory-warning"
-  alarm_description   = "Average DB Memory on Redis Elasticache >= 2% during 1 minutes"
+  alarm_description   = "Average DB Memory on Redis ElastiCache >= 60% during 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = "1"
   metric_name         = "DatabaseMemoryUsagePercentage"
   namespace           = "AWS/ElastiCache"
-  period              = "30"
+  period              = "60"
   statistic           = "Average"
-  threshold           = 2
+  threshold           = 60
   alarm_actions       = [var.sns_alert_warning_arn]
   dimensions = {
     CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
@@ -72,14 +50,14 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning
 
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warning" {
   alarm_name          = "redis-elasticache-high-connection-warning"
-  alarm_description   = "Average Number of Connections on Redis Elasticache >= 30 connections during 1 minutes"
+  alarm_description   = "Average Number of Connections on Redis ElastiCache >= 1000 connections during 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = "1"
   metric_name         = "CurrConnections"
   namespace           = "AWS/ElastiCache"
-  period              = "30"
+  period              = "60"
   statistic           = "Average"
-  threshold           = 30
+  threshold           = 1000
   alarm_actions       = [var.sns_alert_warning_arn]
   dimensions = {
     CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
