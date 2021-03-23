@@ -6,6 +6,6 @@ variable "asset_bucket_regional_domain_name" {
   type = string
 }
 
-variable "cloudfront_default_oai_arn" {
+variable "cloudfront_default_oai_path" {
   type = string
 }

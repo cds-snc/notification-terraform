@@ -42,6 +42,6 @@ output "lambda_ses_receiving_emails_arn" {
   value = aws_lambda_function.ses_receiving_emails.arn
 }
 
-output "cloudfront_default_oai_arn" {
+output "cloudfront_default_oai_path" {
   value = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
 }

@@ -4,7 +4,7 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
     origin_id   = "asset-cloudfront-${var.env}"
 
     s3_origin_config {
-      origin_access_identity = var.cloudfront_default_oai_arn
+      origin_access_identity = var.cloudfront_default_oai_path
     }
   }
 

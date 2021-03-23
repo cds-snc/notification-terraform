@@ -18,6 +18,6 @@ include {
 
 inputs = {
   asset_bucket_regional_domain_name         = dependency.common.outputs.asset_bucket_regional_domain_name
-  cloudfront_default_oai_arn                = dependency.common.outputs.cloudfront_default_oai_arn
+  cloudfront_default_oai_path               = dependency.common.outputs.cloudfront_default_oai_path
   aws_acm_assets_notification_canada_ca_arn = dependency.dns.outputs.aws_acm_assets_notification_canada_ca_arn
 }
