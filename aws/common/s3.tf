@@ -168,7 +168,7 @@ resource "aws_s3_bucket_policy" "asset_bucket" {
          "Sid":"OnlyCloudfrontReadAccess",
          "Effect":"Allow",
          "Principal": {
-            "AWS": "${var.cloudfront_default_oai_arn}"
+            "AWS": "${aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path}"
           },
          "Action":"s3:GetObject",
          "Resource":"${aws_s3_bucket.asset_bucket.arn}/*"

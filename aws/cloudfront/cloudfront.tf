@@ -1,13 +1,10 @@
-resource "aws_cloudfront_origin_access_identity" "default" {
-}
-
 resource "aws_cloudfront_distribution" "asset_bucket" {
   origin {
     domain_name = var.asset_bucket_regional_domain_name
     origin_id   = "asset-cloudfront-${var.env}"
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
+      origin_access_identity = var.cloudfront_default_oai_arn
     }
   }
 
