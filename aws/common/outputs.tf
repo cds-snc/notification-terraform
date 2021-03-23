@@ -42,10 +42,10 @@ output "lambda_ses_receiving_emails_arn" {
   value = aws_lambda_function.ses_receiving_emails.arn
 }
 
-output "aws_s3_bucket_asset_bucket_id" {
+output "s3_bucket_asset_bucket_id" {
   value = aws_s3_bucket.asset_bucket.id
 }
 
-output "aws_s3_bucket_asset_bucket_arn" {
+output "s3_bucket_asset_bucket_arn" {
   value = aws_s3_bucket.asset_bucket.arn
 }
