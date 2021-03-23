@@ -157,27 +157,6 @@ resource "aws_s3_bucket" "asset_bucket" {
   #tfsec:ignore:AWS002 - No logging enabled
 }
 
-resource "aws_s3_bucket_policy" "asset_bucket" {
-  bucket = aws_s3_bucket.asset_bucket.id
-
-  policy = <<POLICY
-{
-   "Version":"2021-03-23",
-   "Statement":[
-      {
-         "Sid":"OnlyCloudfrontReadAccess",
-         "Effect":"Allow",
-         "Principal": {
-            "AWS": "${aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path}"
-          },
-         "Action":"s3:GetObject",
-         "Resource":"${aws_s3_bucket.asset_bucket.arn}/*"
-      }
-   ]
-}
-POLICY
-}
-
 resource "aws_s3_bucket" "legacy_asset_bucket" {
   count = var.env == "production" ? 1 : 0
 

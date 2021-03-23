@@ -6,6 +6,10 @@ variable "asset_bucket_regional_domain_name" {
   type = string
 }
 
-variable "cloudfront_default_oai_path" {
+variable "aws_s3_bucket_asset_bucket_id" {
+  type = string
+}
+
+variable "aws_s3_bucket_asset_bucket_arn"{
   type = string
 }

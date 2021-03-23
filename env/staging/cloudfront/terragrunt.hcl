@@ -10,7 +10,6 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     asset_bucket_regional_domain_name = ""
-    cloudfront_default_oai_path = ""
   }
 }
 
@@ -31,7 +30,8 @@ include {
 
 inputs = {
   asset_bucket_regional_domain_name         = dependency.common.outputs.asset_bucket_regional_domain_name
-  cloudfront_default_oai_path               = dependency.common.outputs.cloudfront_default_oai_path
+  aws_s3_bucket_asset_bucket_id             = dependency.common.outputs.aws_s3_bucket_asset_bucket_id
+  aws_s3_bucket_asset_bucket_arn            = dependency.common.outputs.aws_s3_bucket_asset_bucket_arn
   aws_acm_assets_notification_canada_ca_arn = dependency.dns.outputs.aws_acm_assets_notification_canada_ca_arn
 }
 
