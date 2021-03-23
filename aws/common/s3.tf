@@ -159,27 +159,6 @@ resource "aws_s3_bucket" "asset_bucket" {
   #tfsec:ignore:AWS002 - No logging enabled
 }
 
-resource "aws_s3_bucket_policy" "asset_bucket_public_read" {
-  bucket = aws_s3_bucket.asset_bucket.id
-
-  policy = <<POLICY
-{
-   "Version":"2008-10-17",
-   "Statement":[
-      {
-         "Sid":"AllowPublicRead",
-         "Effect":"Allow",
-         "Principal":{
-            "AWS":"*"
-         },
-         "Action":"s3:GetObject",
-         "Resource":"${aws_s3_bucket.asset_bucket.arn}/*"
-      }
-   ]
-}
-POLICY
-}
-
 resource "aws_s3_bucket" "legacy_asset_bucket" {
   count = var.env == "production" ? 1 : 0
 
