@@ -152,6 +152,8 @@ resource "aws_s3_bucket" "asset_bucket" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+
+  #tfsec:ignore:AWS002 - No logging enabled
 }
 
 resource "aws_s3_bucket_public_access_block" "asset_bucket" {
