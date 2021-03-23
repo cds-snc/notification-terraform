@@ -222,6 +222,18 @@ resource "aws_s3_bucket" "document_bucket" {
     }
   }
 
+  # Expire files attached directly to emails after a few days.
+  # Those are stored in a `tmp/` folder.
+  # See https://github.com/cds-snc/notification-document-download-api
+  lifecycle_rule {
+    enabled = true
+    prefix  = "tmp/"
+
+    expiration {
+      days = 3
+    }
+  }
+
   logging {
     target_bucket = aws_s3_bucket.document_bucket_logs.bucket
   }
