@@ -11,4 +11,5 @@ include {
 inputs = {
   sns_monthly_spend_limit           = 10000
   sns_monthly_spend_limit_us_west_2 = 1000
+  cloudfront_default_oai_arn        = dependency.cloudfront.outputs.cloudfront_default_oai_arn
 }

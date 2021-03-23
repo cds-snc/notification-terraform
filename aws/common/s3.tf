@@ -141,8 +141,6 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket_logs" {
 
 resource "aws_s3_bucket" "asset_bucket" {
   bucket = "notification-canada-ca-${var.env}-asset-upload"
-  #tfsec:ignore:AWS001 - Public read access
-  acl = "public-read"
 
   server_side_encryption_configuration {
     rule {
@@ -159,19 +157,19 @@ resource "aws_s3_bucket" "asset_bucket" {
   #tfsec:ignore:AWS002 - No logging enabled
 }
 
-resource "aws_s3_bucket_policy" "asset_bucket_public_read" {
+resource "aws_s3_bucket_policy" "asset_bucket" {
   bucket = aws_s3_bucket.asset_bucket.id
 
   policy = <<POLICY
 {
-   "Version":"2008-10-17",
+   "Version":"2021-03-23",
    "Statement":[
       {
-         "Sid":"AllowPublicRead",
+         "Sid":"OnlyCloudfrontReadAccess",
          "Effect":"Allow",
-         "Principal":{
-            "AWS":"*"
-         },
+         "Principal": {
+            "AWS": "${var.cloudfront_default_oai_arn}"
+          },
          "Action":"s3:GetObject",
          "Resource":"${aws_s3_bucket.asset_bucket.arn}/*"
       }
