@@ -1,3 +1,11 @@
+dependencies {
+  paths = ["../cloudfront"]
+}
+
+dependency "cloudfront" {
+  config_path = "../cloudfront"
+}
+
 terraform {
   source = "../../../aws//common"
 }
