@@ -10,6 +10,7 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     asset_bucket_regional_domain_name = ""
+    cloudfront_default_oai_arn = ""
   }
 }
 
