@@ -75,6 +75,24 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count-warning" {
+  alarm_name          = "document-download-api-high-request-count-warning"
+  alarm_description   = "More than 300 4XX requests in 10 minutes on ${aws_alb_target_group.notification-canada-ca-document-api.name} target group"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "HTTPCode_Target_4XX_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = 60 * 10
+  statistic           = "Sum"
+  threshold           = 300
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
+    TargetGroup  = aws_alb_target_group.notification-canada-ca-document-api.arn_suffix
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
   alarm_name          = "logs-1-celery-error-1-minute-warning"
   alarm_description   = "One Celery error in 1 minute"

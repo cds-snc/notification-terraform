@@ -422,3 +422,20 @@ resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
+  alarm_name          = "document-download-bucket-size-warning"
+  alarm_description   = "Document download S3 bucket size is larger than ${var.alarm_warning_document_download_bucket_size_gb} GB"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "BucketSizeBytes"
+  namespace           = "AWS/S3"
+  period              = 60 * 15
+  statistic           = "Average"
+  threshold           = var.alarm_warning_document_download_bucket_size_gb * 1000 * 1000 * 1000 # Convert the GB variable to bytes
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    StorageType = "StandardStorage"
+    BucketName  = aws_s3_bucket.document_bucket.bucket
+  }
+}
