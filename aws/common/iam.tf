@@ -219,6 +219,7 @@ resource "aws_iam_group_policy" "inspec_cloud_guard_rails" {
             "iam:ListUserPolicies",
             "iam:ListUsers",
             "iam:ListVirtualMFADevices",
+            "rds:DescribeDBClusters",
             "rds:DescribeDBInstances",
             "s3:GetBucketLocation",
             "s3:GetBucketTagging",
