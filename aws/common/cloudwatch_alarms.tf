@@ -430,7 +430,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
   evaluation_periods  = "1"
   metric_name         = "BucketSizeBytes"
   namespace           = "AWS/S3"
-  period              = 60 * 15
+  period              = 24 * 60 * 60
   statistic           = "Average"
   threshold           = var.alarm_warning_document_download_bucket_size_gb * 1024 * 1024 * 1024 # Convert the GB variable to bytes
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
