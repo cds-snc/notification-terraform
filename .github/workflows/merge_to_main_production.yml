@@ -16,7 +16,7 @@ env:
   # Set the GitHub tag here to update the infrastructure
   # to a new version in production
   # See https://github.com/cds-snc/notification-terraform/releases
-  INFRASTRUCTURE_VERSION: '0.85.0'
+  INFRASTRUCTURE_VERSION: '0.86.1'
 
   # Terraform environment variables
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
