@@ -60,6 +60,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
       tags,
       engine_version
     ]
+    prevent_destroy = true
   }
 
   tags = {
