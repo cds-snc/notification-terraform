@@ -27,6 +27,10 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
   preferred_maintenance_window = "wed:04:00-wed:04:30"
 
+  lifecycle {
+    prevent_destroy = true
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
