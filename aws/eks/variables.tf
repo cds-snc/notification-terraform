@@ -57,3 +57,7 @@ variable "alb_log_bucket" {
 variable "eks_cluster_name" {
   type = string
 }
+
+locals {
+  eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
+}
