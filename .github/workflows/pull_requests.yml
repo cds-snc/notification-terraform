@@ -46,7 +46,7 @@ jobs:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
           cd env/staging/common
-          echo "::set-output name=out::$(../../../bin/terragrunt plan --terragrunt-non-interactive)"
+          ../../../bin/terragrunt plan --terragrunt-non-interactive
         continue-on-error: true
 
       - name: Plan aws/dns
@@ -88,7 +88,7 @@ jobs:
 
       - name: Testing Output
         if: always()
-        run: echo ${{ steps.plan-common.outputs.out }}
+        run: echo ${{ join(steps.plan-common.outputs.*, '\n') }}
 
       - uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
