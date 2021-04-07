@@ -40,64 +40,91 @@ jobs:
           chmod +x bin/terragrunt
           echo "bin" >> $GITHUB_PATH
 
-      - name: Get changed files
-        id: changed-files
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: 'json'
-
-      - name: Get touched Terragrunt modules
-        run: |
-          MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
-          echo "MODULES=$MODULES" >> $GITHUB_ENV
-
-      - name: Get touched Terragrunt configurations
-        run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
-          echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
-
       - name: Plan aws/common
-        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common')
+        id: plan-aws-common
         env:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
-          echo $MODULES
+          echo "aws/common"
           cd env/staging/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/dns
-        if: contains(env.MODULES, 'dns')
+        id: plan-aws-dns
         run: |
-          echo $MODULES
+          echo "aws/dns"
           cd env/staging/dns
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/eks
-        if: contains(env.MODULES, 'eks') || contains(env.CONFIGS, 'eks')
+        id: plan-aws-eks
         run: |
-          echo $MODULES
+          echo "aws/eks"
           cd env/staging/eks
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/elasticache
-        if: contains(env.MODULES, 'elasticache') || contains(env.CONFIGS, 'elasticache')
+        id: plan-aws-elasticache
         run: |
-          echo $MODULES
+          echo "aws/elasticache"
           cd env/staging/elasticache
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/rds
-        if: contains(env.MODULES, 'rds') || contains(env.CONFIGS, 'rds')
+        id: plan-aws-rds
         env:
           TF_VAR_rds_cluster_password: fake_password_for_plan_123456
         run: |
-          echo $MODULES
+          echo "aws/rds"
           cd env/staging/rds
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/cloudfront
-        if: contains(env.MODULES, 'cloudfront') || contains(env.CONFIGS, 'cloudfront')
+        id: plan-aws-cloudfront
         run: |
-          echo $MODULES
+          echo "aws/cloudfront"
           cd env/staging/cloudfront
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "
+            Terraform\n
+            ${{ steps.plan-aws-common.outputs.stdout }}\n\n
+            ${{ steps.plan-aws-dns.outputs.stdout }}\n\n
+            ${{ steps.plan-aws-eks.outputs.stdout }}\n\n
+            ${{ steps.plan-aws-elasticache.outputs.stdout }}\n\n
+            ${{ steps.plan-aws-rds.outputs.stdout }}\n\n
+            ${{ steps.plan-aws-cloudfront.outputs.stdout }}\n\n
+            "
+          OUTCOME: "
+            Common: ${{ steps.plan-aws-common.outcome }}\n
+            DNS: ${{ steps.plan-aws-dns.outcome }}\n
+            EKS: ${{ steps.plan-aws-eks.outcome }}\n
+            Elasticache: ${{ steps.plan-aws-elasticache.outcome }}\n
+            RDS: ${{ steps.plan-aws-rds.outcome }}\n
+            CloudFront: ${{ steps.plan-aws-cloudfront.outcome }}\n
+            "
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = #### Terraform Plan
+
+            \`${{ process.env.OUTCOME }}\`
+
+            <details>
+            <summary>Show Plan</summary>
+
+            \`\`\`${process.env.PLAN}\`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
