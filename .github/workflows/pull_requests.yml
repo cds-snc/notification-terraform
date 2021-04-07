@@ -46,7 +46,7 @@ jobs:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
           cd env/staging/common
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
+          echo "::set-output name=output::$(../../../bin/terragrunt plan --terragrunt-non-interactive)"
         continue-on-error: true
 
       - name: Plan aws/dns
@@ -88,14 +88,14 @@ jobs:
 
       - name: Testing Output
         if: always()
-        run: echo ${{ steps.plan-cloudfront.outputs.stdout }}
+        run: echo ${{ steps.plan-cloudfront.outputs.output }}
 
       - uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
         env:
           PLAN: "
             <details><summary>Common</summary>
-              ${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}
+              ${{steps.plan-common.outputs.stdout}}
             </details>
             <details><summary>DNS</summary>
               ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
@@ -112,7 +112,7 @@ jobs:
             <details><summary>CloudFront</summary>
               ${{format('{0}{1}', steps.plan-cloudfront.outputs.stdout, steps.plan-cloudfront.outputs.stderr)}}
             </details>"
-          OUTCOME: "Common: ${{ steps.plan-aws-common.outcome }}
+          OUTCOME: "Common: ${{ steps.plan-common.outcome }}
 
             DNS: ${{ steps.plan-dns.outcome }}
 
@@ -127,7 +127,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { PLAN, OUTCOME } = process.env
-            const output = `#### Terraform Plan
+            const output = `#### Terraform Outcome
 
             ${ OUTCOME }
 
@@ -150,6 +150,7 @@ jobs:
           steps.plan-common.outputs.exit_code  == 1 ||
           steps.plan-dns.outputs.exit_code  == 1 ||
           steps.plan-eks.outputs.exit_code  == 1 ||
+          steps.plan-elasticache.outputs.exit_code  == 1 ||
           steps.plan-rds.outputs.exit_code  == 1 ||
           steps.plan-cloudfront.outputs.exit_code  == 1
           )
