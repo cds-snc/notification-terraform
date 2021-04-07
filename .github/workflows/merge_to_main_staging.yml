@@ -67,37 +67,31 @@ jobs:
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Apply aws/common
-        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common')
         run: |
           cd env/staging/common
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
-        if: contains(env.MODULES, 'dns') || contains(env.CONFIGS, 'dns')
         run: |
           cd env/staging/dns
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
-        if: contains(env.MODULES, 'eks')  || contains(env.CONFIGS, 'eks')
         run: |
           cd env/staging/eks
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/elasticache
-        if: contains(env.MODULES, 'elasticache')  || contains(env.CONFIGS, 'elasticache')
         run: |
           cd env/staging/elasticache
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
-        if: contains(env.MODULES, 'rds')  || contains(env.CONFIGS, 'rds')
         run: |
           cd env/staging/rds
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
-        if: contains(env.MODULES, 'cloudfront')  || contains(env.CONFIGS, 'cloudfront')
         run: |
           cd env/staging/cloudfront
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
