@@ -46,7 +46,7 @@ jobs:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
           cd env/staging/common
-          echo "::set-output name=output::$(../../../bin/terragrunt plan --terragrunt-non-interactive)"
+          echo "::set-output name=out::$(../../../bin/terragrunt plan --terragrunt-non-interactive)"
         continue-on-error: true
 
       - name: Plan aws/dns
@@ -88,14 +88,14 @@ jobs:
 
       - name: Testing Output
         if: always()
-        run: echo ${{ steps.plan-cloudfront.outputs.output }}
+        run: echo ${{ steps.plan-common.outputs.out }}
 
       - uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
         env:
           PLAN: "
             <details><summary>Common</summary>
-              ${{steps.plan-common.outputs.stdout}}
+              ${{steps.plan-common.outputs.out}}
             </details>
             <details><summary>DNS</summary>
               ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
