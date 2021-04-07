@@ -31,7 +31,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1.2.1
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
+          terraform_wrapper: true
 
       - name: Setup Terragrunt
         run: |
@@ -95,7 +95,7 @@ jobs:
         env:
           PLAN: "
             <details><summary>Common</summary>
-              ${{steps.plan-common.outputs.out}}
+              ${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}
             </details>
             <details><summary>DNS</summary>
               ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
