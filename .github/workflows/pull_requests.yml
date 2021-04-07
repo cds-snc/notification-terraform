@@ -125,7 +125,7 @@ jobs:
             const { PLAN, OUTCOME } = process.env
             const output = `#### Terraform Plan
 
-            \`\`\`${ PLAN }\`\`\`
+            \`\`\`${ OUTCOME }\`\`\`
 
             #### Terraform Plan
 
