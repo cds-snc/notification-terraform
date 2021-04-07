@@ -86,6 +86,10 @@ jobs:
           ../../../bin/terragrunt plan --terragrunt-non-interactive
         continue-on-error: true
 
+      - name: Testing Output
+        if: always()
+        run: echo ${{ steps.plan-cloudfront.outputs.stdout }}
+
       - uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
         env:
@@ -125,7 +129,7 @@ jobs:
             const { PLAN, OUTCOME } = process.env
             const output = `#### Terraform Plan
 
-            \`\`\`${ OUTCOME }\`\`\`
+            ${ OUTCOME }
 
             #### Terraform Plan
 
