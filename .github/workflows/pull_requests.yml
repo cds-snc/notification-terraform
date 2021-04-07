@@ -41,83 +41,77 @@ jobs:
           echo "bin" >> $GITHUB_PATH
 
       - name: Plan aws/common
-        id: plan-aws-common
+        id: plan-common
         env:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
           echo "aws/common"
           cd env/staging/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+        continue-on-error: true
 
       - name: Plan aws/dns
-        id: plan-aws-dns
+        id: plan-dns
         run: |
           echo "aws/dns"
           cd env/staging/dns
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+        continue-on-error: true
 
       - name: Plan aws/eks
-        id: plan-aws-eks
+        id: plan-eks
         run: |
           echo "aws/eks"
           cd env/staging/eks
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+        continue-on-error: true
 
       - name: Plan aws/elasticache
-        id: plan-aws-elasticache
+        id: plan-elasticache
         run: |
           echo "aws/elasticache"
           cd env/staging/elasticache
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+        continue-on-error: true
 
       - name: Plan aws/rds
-        id: plan-aws-rds
+        id: plan-rds
         env:
           TF_VAR_rds_cluster_password: fake_password_for_plan_123456
         run: |
           echo "aws/rds"
           cd env/staging/rds
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+        continue-on-error: true
 
       - name: Plan aws/cloudfront
-        id: plan-aws-cloudfront
+        id: plan-cloudfront
         run: |
           echo "aws/cloudfront"
           cd env/staging/cloudfront
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+        continue-on-error: true
 
       - uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "
-            Terraform\n
-            ${{ steps.plan-aws-common.outputs.stdout }}\n\n
-            ${{ steps.plan-aws-dns.outputs.stdout }}\n\n
-            ${{ steps.plan-aws-eks.outputs.stdout }}\n\n
-            ${{ steps.plan-aws-elasticache.outputs.stdout }}\n\n
-            ${{ steps.plan-aws-rds.outputs.stdout }}\n\n
-            ${{ steps.plan-aws-cloudfront.outputs.stdout }}\n\n
-            "
-          OUTCOME: "
-            Common: ${{ steps.plan-aws-common.outcome }}\n
-            DNS: ${{ steps.plan-aws-dns.outcome }}\n
-            EKS: ${{ steps.plan-aws-eks.outcome }}\n
-            Elasticache: ${{ steps.plan-aws-elasticache.outcome }}\n
-            RDS: ${{ steps.plan-aws-rds.outcome }}\n
-            CloudFront: ${{ steps.plan-aws-cloudfront.outcome }}\n
-            "
+          PLAN: "Terraform\n
+            ::group::Common\n${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}::endgroup::\n
+            ::group::DNS\n${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}::endgroup::\n
+            ::group::EKS\n${{format('{0}{1}', steps.plan-eks.outputs.stdout, steps.plan-eks.outputs.stderr)}}::endgroup::\n
+            ::group::ElastiCache\n${{format('{0}{1}', steps.plan-elasticache.outputs.stdout, steps.plan-elasticache.outputs.stderr)}}::endgroup::\n
+            ::group::RDS\n${{format('{0}{1}', steps.plan-rds.outputs.stdout, steps.plan-rds.outputs.stderr)}}::endgroup::\n
+            ::group::CloudFront\n${{format('{0}{1}', steps.plan-cloudfront.outputs.stdout, steps.plan-cloudfront.outputs.stderr)}}::endgroup::\n"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { PLAN, OUTCOME } = process.env
+            const { PLAN } = process.env
             const output = `#### Terraform Plan
-
-            \`${ OUTCOME }\`
 
             <details>
             <summary>Show Plan</summary>
 
-            \`\`\`${ PLAN }\`\`\`
+            ${ PLAN }
 
             </details>
 
@@ -129,3 +123,31 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+      - name: Check Success
+        if: |
+          ( success()  ||  failure() ) &&
+          (
+          steps.plan-common.outputs.exit_code  == 1 ||
+          steps.plan-dns.outputs.exit_code  == 1 ||
+          steps.plan-eks.outputs.exit_code  == 1 ||
+          steps.plan-rds.outputs.exit_code  == 1 ||
+          steps.plan-cloudfront.outputs.exit_code  == 1
+          )
+        env:
+          OUTCOME: "Common: ${{ steps.plan-aws-common.outcome }}
+
+            DNS: ${{ steps.plan-dns.outcome }}
+
+            EKS: ${{ steps.plan-eks.outcome }}
+
+            Elasticache: ${{ steps.plan-elasticache.outcome }}
+
+            RDS: ${{ steps.plan-rds.outcome }}
+
+            CloudFront: ${{ steps.plan-cloudfront.outcome }}"
+        run: |
+          const { OUTCOME } = process.env
+          const output = `#### Outcome
+
+          \`${ OUTCOME }\``
+          exit 1
