@@ -31,7 +31,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1.2.1
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: true
+          terraform_wrapper: false
 
       - name: Setup Terragrunt
         run: |
@@ -41,13 +41,16 @@ jobs:
           echo "bin" >> $GITHUB_PATH
 
       - name: Plan aws/common
+        uses: the-commons-project/terragrunt-github-actions@master
         id: plan-common
         env:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
-        run: |
-          cd env/staging/common
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
-        continue-on-error: true
+        with:
+          tf_actions_version: ${{ env.TERRAFORM_VERSION }}
+          tg_actions_version: ${{ env.TERRAGRUNT_VERSION }}
+          tf_actions_subcommand: 'plan'
+          tf_actions_working_dir: 'env/staging/common'
+          tf_actions_comment: true
 
       - name: Plan aws/dns
         id: plan-dns
