@@ -91,22 +91,22 @@ jobs:
         env:
           PLAN: "
             <details><summary>Common</summary>
-              \`\`\`${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}\`\`\`
+              ${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}
             </details>
             <details><summary>DNS</summary>
-              \`\`\`${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}\`\`\`
+              ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
             </details>
             <details><summary>EKS</summary>
-              \`\`\`${{format('{0}{1}', steps.plan-eks.outputs.stdout, steps.plan-eks.outputs.stderr)}}\`\`\`
+              ${{format('{0}{1}', steps.plan-eks.outputs.stdout, steps.plan-eks.outputs.stderr)}}
             </details>
             <details><summary>ElastiCache</summary>
-              \`\`\`${{format('{0}{1}', steps.plan-elasticache.outputs.stdout, steps.plan-elasticache.outputs.stderr)}}\`\`\`
+              ${{format('{0}{1}', steps.plan-elasticache.outputs.stdout, steps.plan-elasticache.outputs.stderr)}}
             </details>
             <details><summary>RDS</summary>
-              \`\`\`${{format('{0}{1}', steps.plan-rds.outputs.stdout, steps.plan-rds.outputs.stderr)}}\`\`\`
-            </details>\n
+              ${{format('{0}{1}', steps.plan-rds.outputs.stdout, steps.plan-rds.outputs.stderr)}}
+            </details>
             <details><summary>CloudFront</summary>
-              \`\`\`${{format('{0}{1}', steps.plan-cloudfront.outputs.stdout, steps.plan-cloudfront.outputs.stderr)}}\`\`\`
+              ${{format('{0}{1}', steps.plan-cloudfront.outputs.stdout, steps.plan-cloudfront.outputs.stderr)}}
             </details>"
           OUTCOME: "Common: ${{ steps.plan-aws-common.outcome }}
 
