@@ -109,7 +109,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = #### Terraform Plan
+            const output = `#### Terraform Plan
 
             \`${{ process.env.OUTCOME }}\`
 
@@ -120,7 +120,7 @@ jobs:
 
             </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`;
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\``;
 
             github.issues.createComment({
               issue_number: context.issue.number,
