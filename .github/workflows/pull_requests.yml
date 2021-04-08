@@ -40,6 +40,9 @@ jobs:
           chmod +x bin/terragrunt
           echo "bin" >> $GITHUB_PATH
 
+      - name: Unlock Terraform
+        run: terraform force-unlock 3923bbea-48a5-aecb-bd37-bcb8423f8dfe
+
       - name: Plan aws/common
         id: plan-common
         env:
