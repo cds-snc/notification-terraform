@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.9.2'
-        run: python3 -V
+      - run: python3 -V
 
 #      - name: Setup Terraform
 #        uses: hashicorp/setup-terraform@v1.2.1
