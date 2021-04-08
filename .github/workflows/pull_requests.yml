@@ -27,131 +27,142 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.2.1
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v1.2.1
+#        with:
+#          terraform_version: ${{ env.TERRAFORM_VERSION }}
+#          terraform_wrapper: false
+#
+#      - name: Setup Terragrunt
+#        run: |
+#          mkdir bin
+#          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64
+#          chmod +x bin/terragrunt
+#          echo "bin" >> $GITHUB_PATH
+
+      - name: 'Terragrunt Plan AWS/Common'
+        uses: the-commons-project/terragrunt-github-actions@master
         with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
-
-      - name: Setup Terragrunt
-        run: |
-          mkdir bin
-          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64
-          chmod +x bin/terragrunt
-          echo "bin" >> $GITHUB_PATH
-
-      - name: Plan aws/common
-        id: plan-common
+          tf_actions_version: ${{ env.TERRAFORM_VERSION }}
+          tg_actions_version: ${{ env.TERRAGRUNT_VERSION }}
+          tf_actions_subcommand: 'plan'
+          tf_actions_working_dir: 'env/staging/common'
+          tf_actions_comment: true
         env:
-          TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
-        run: |
-          cd env/staging/common
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
-        continue-on-error: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Plan aws/dns
-        id: plan-dns
-        run: |
-          cd env/staging/dns
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
-        continue-on-error: true
-
-      - name: Plan aws/eks
-        id: plan-eks
-        run: |
-          cd env/staging/eks
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
-        continue-on-error: true
-
-      - name: Plan aws/elasticache
-        id: plan-elasticache
-        run: |
-          cd env/staging/elasticache
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
-        continue-on-error: true
-
-      - name: Plan aws/rds
-        id: plan-rds
-        env:
-          TF_VAR_rds_cluster_password: fake_password_for_plan_123456
-        run: |
-          cd env/staging/rds
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
-        continue-on-error: true
-
-      - name: Plan aws/cloudfront
-        id: plan-cloudfront
-        run: |
-          cd env/staging/cloudfront
-          ../../../bin/terragrunt plan --terragrunt-non-interactive
-        continue-on-error: true
-
-      - name: Testing Output
-        if: always()
-        run: echo ${{ join(steps.plan-common.outputs.*, '\n') }}
-
-      - uses: actions/github-script@v3
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "
-            <details><summary>Common</summary>
-              ${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}
-            </details>
-            <details><summary>DNS</summary>
-              ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
-            </details>
-            <details><summary>EKS</summary>
-              ${{format('{0}{1}', steps.plan-eks.outputs.stdout, steps.plan-eks.outputs.stderr)}}
-            </details>
-            <details><summary>ElastiCache</summary>
-              ${{format('{0}{1}', steps.plan-elasticache.outputs.stdout, steps.plan-elasticache.outputs.stderr)}}
-            </details>
-            <details><summary>RDS</summary>
-              ${{format('{0}{1}', steps.plan-rds.outputs.stdout, steps.plan-rds.outputs.stderr)}}
-            </details>
-            <details><summary>CloudFront</summary>
-              ${{format('{0}{1}', steps.plan-cloudfront.outputs.stdout, steps.plan-cloudfront.outputs.stderr)}}
-            </details>"
-          OUTCOME: "Common: ${{ steps.plan-common.outcome }}
-
-            DNS: ${{ steps.plan-dns.outcome }}
-
-            EKS: ${{ steps.plan-eks.outcome }}
-
-            Elasticache: ${{ steps.plan-elasticache.outcome }}
-
-            RDS: ${{ steps.plan-rds.outcome }}
-
-            CloudFront: ${{ steps.plan-cloudfront.outcome }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { PLAN, OUTCOME } = process.env
-            const output = `#### Terraform Outcome
-
-            ${ OUTCOME }
-
-            #### Terraform Plan
-
-            ${ PLAN }
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\``;
-
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-      - name: Check Success
-        if: |
-          ( success()  ||  failure() ) &&
-          (
-          steps.plan-common.outputs.exit_code  == 1 ||
-          steps.plan-dns.outputs.exit_code  == 1 ||
-          steps.plan-eks.outputs.exit_code  == 1 ||
-          steps.plan-elasticache.outputs.exit_code  == 1 ||
-          steps.plan-rds.outputs.exit_code  == 1 ||
-          steps.plan-cloudfront.outputs.exit_code  == 1
-          )
-        run: exit 1
+#      - name: Plan aws/common
+#        id: plan-common
+#        env:
+#          TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
+#        run: |
+#          cd env/staging/common
+#          ../../../bin/terragrunt plan --terragrunt-non-interactive
+#        continue-on-error: true
+#
+#      - name: Plan aws/dns
+#        id: plan-dns
+#        run: |
+#          cd env/staging/dns
+#          ../../../bin/terragrunt plan --terragrunt-non-interactive
+#        continue-on-error: true
+#
+#      - name: Plan aws/eks
+#        id: plan-eks
+#        run: |
+#          cd env/staging/eks
+#          ../../../bin/terragrunt plan --terragrunt-non-interactive
+#        continue-on-error: true
+#
+#      - name: Plan aws/elasticache
+#        id: plan-elasticache
+#        run: |
+#          cd env/staging/elasticache
+#          ../../../bin/terragrunt plan --terragrunt-non-interactive
+#        continue-on-error: true
+#
+#      - name: Plan aws/rds
+#        id: plan-rds
+#        env:
+#          TF_VAR_rds_cluster_password: fake_password_for_plan_123456
+#        run: |
+#          cd env/staging/rds
+#          ../../../bin/terragrunt plan --terragrunt-non-interactive
+#        continue-on-error: true
+#
+#      - name: Plan aws/cloudfront
+#        id: plan-cloudfront
+#        run: |
+#          cd env/staging/cloudfront
+#          ../../../bin/terragrunt plan --terragrunt-non-interactive
+#        continue-on-error: true
+#
+#      - name: Testing Output
+#        if: always()
+#        run: echo ${{ join(steps.plan-common.outputs.*, '\n') }}
+#
+#      - uses: actions/github-script@v3
+#        if: github.event_name == 'pull_request'
+#        env:
+#          PLAN: "
+#            <details><summary>Common</summary>
+#              ${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}
+#            </details>
+#            <details><summary>DNS</summary>
+#              ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
+#            </details>
+#            <details><summary>EKS</summary>
+#              ${{format('{0}{1}', steps.plan-eks.outputs.stdout, steps.plan-eks.outputs.stderr)}}
+#            </details>
+#            <details><summary>ElastiCache</summary>
+#              ${{format('{0}{1}', steps.plan-elasticache.outputs.stdout, steps.plan-elasticache.outputs.stderr)}}
+#            </details>
+#            <details><summary>RDS</summary>
+#              ${{format('{0}{1}', steps.plan-rds.outputs.stdout, steps.plan-rds.outputs.stderr)}}
+#            </details>
+#            <details><summary>CloudFront</summary>
+#              ${{format('{0}{1}', steps.plan-cloudfront.outputs.stdout, steps.plan-cloudfront.outputs.stderr)}}
+#            </details>"
+#          OUTCOME: "Common: ${{ steps.plan-common.outcome }}
+#
+#            DNS: ${{ steps.plan-dns.outcome }}
+#
+#            EKS: ${{ steps.plan-eks.outcome }}
+#
+#            Elasticache: ${{ steps.plan-elasticache.outcome }}
+#
+#            RDS: ${{ steps.plan-rds.outcome }}
+#
+#            CloudFront: ${{ steps.plan-cloudfront.outcome }}"
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          script: |
+#            const { PLAN, OUTCOME } = process.env
+#            const output = `#### Terraform Outcome
+#
+#            ${ OUTCOME }
+#
+#            #### Terraform Plan
+#
+#            ${ PLAN }
+#
+#            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\``;
+#
+#            github.issues.createComment({
+#              issue_number: context.issue.number,
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              body: output
+#            })
+#      - name: Check Success
+#        if: |
+#          ( success()  ||  failure() ) &&
+#          (
+#          steps.plan-common.outputs.exit_code  == 1 ||
+#          steps.plan-dns.outputs.exit_code  == 1 ||
+#          steps.plan-eks.outputs.exit_code  == 1 ||
+#          steps.plan-elasticache.outputs.exit_code  == 1 ||
+#          steps.plan-rds.outputs.exit_code  == 1 ||
+#          steps.plan-cloudfront.outputs.exit_code  == 1
+#          )
+#        run: exit 1
