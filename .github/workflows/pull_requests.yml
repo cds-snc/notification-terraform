@@ -48,6 +48,7 @@ jobs:
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: 'env/staging/common'
           tf_actions_comment: true
+          args: '--terragrunt-non-interactive'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
