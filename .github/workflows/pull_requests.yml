@@ -27,11 +27,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-#      - name: Setup Terraform
-#        uses: hashicorp/setup-terraform@v1.2.1
-#        with:
-#          terraform_version: ${{ env.TERRAFORM_VERSION }}
-#          terraform_wrapper: false
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
 
       - name: Setup Terragrunt
         run: |
@@ -41,16 +41,16 @@ jobs:
           echo "bin" >> $GITHUB_PATH
 
       - name: Plan aws/common
-        uses: the-commons-project/terragrunt-github-actions@master
         id: plan-common
         env:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
-        with:
-          tf_actions_version: ${{ env.TERRAFORM_VERSION }}
-          tg_actions_version: ${{ env.TERRAGRUNT_VERSION }}
-          tf_actions_subcommand: 'plan'
-          tf_actions_working_dir: 'env/staging/common'
-          tf_actions_comment: true
+        run: |
+          cd env/staging/common
+          ../../../bin/terragrunt plan --terragrunt-non-interactive > common.out 2>&1
+        continue-on-error: true
+
+      - id: plan-common-output
+        run: echo "::set-output name=common-out::$(cat common.out)"
 
       - name: Plan aws/dns
         id: plan-dns
@@ -98,7 +98,7 @@ jobs:
         env:
           PLAN: "
             <details><summary>Common</summary>
-              ${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}
+              ${{ steps.plan-common-output.outputs.common-out }}
             </details>
             <details><summary>DNS</summary>
               ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
