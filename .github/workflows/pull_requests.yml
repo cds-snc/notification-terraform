@@ -49,7 +49,13 @@ jobs:
           tf_actions_working_dir: 'env/staging/common'
           tf_actions_comment: true
         env:
-          TF_INPUT: false
+          TF_VAR_cloudwatch_opsgenie_alarm_webhook: ''
+          TF_VAR_cloudwatch_cloudwatch_slack_webhook_critical_topic: ''
+          TF_VAR_cloudwatch_cloudwatch_slack_webhook_warning_topic: ''
+          TF_VAR_cloudwatch_cloudwatch_slack_webhook_general_topic: ''
+          TF_VAR_cloudwatch_slack_channel_critical_topic: ''
+          TF_VAR_cloudwatch_slack_channel_warning_topic: ''
+          TF_VAR_cloudwatch_slack_channel_general_topic: ''
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Terragrunt Plan AWS/DNS'
