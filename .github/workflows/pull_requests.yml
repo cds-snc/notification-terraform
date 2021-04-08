@@ -33,12 +33,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.2.1
+      - name: Python Install
+        uses: actions/setup-python@v2
         with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
+          python-version: '3.9.2'
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v1.2.1
+#        with:
+#          terraform_version: ${{ env.TERRAFORM_VERSION }}
+#          terraform_wrapper: false
 #
 #      - name: Setup Terragrunt
 #        run: |
