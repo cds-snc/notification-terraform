@@ -49,7 +49,7 @@ jobs:
           tf_actions_working_dir: 'env/staging/common'
           tf_actions_comment: true
         env:
-          TF_CLI_ARGS: '--terragrunt-non-interactive'
+          TF_INPUT: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Terragrunt Plan AWS/DNS'
