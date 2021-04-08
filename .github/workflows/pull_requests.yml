@@ -46,7 +46,7 @@ jobs:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
           cd env/staging/common
-          ../../../bin/terragrunt plan --terragrunt-non-interactive > common.out 2>&1
+          ../../../bin/terragrunt plan --terragrunt-non-interactive > common.out
         continue-on-error: true
 
       - id: plan-common-output
