@@ -46,10 +46,7 @@ jobs:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
           cd env/staging/common
-          ../../../bin/terragrunt plan --terragrunt-non-interactive 2>&1 | tee common.log
-          result_code=${PIPESTATUS[0]}
-          echo "::set-output name=common-out::$(cat common.log)"
-          exit $result_code
+          ../../../bin/terragrunt plan --terragrunt-non-interactive -lock=false
         continue-on-error: true
 
       - name: Plan aws/dns
@@ -98,7 +95,7 @@ jobs:
         env:
           PLAN: "
             <details><summary>Common</summary>
-              ${{ steps.plan-common-output.outputs.common-out }}
+              ${{format('{0}{1}', steps.plan-common.outputs.stdout, steps.plan-common.outputs.stderr)}}
             </details>
             <details><summary>DNS</summary>
               ${{format('{0}{1}', steps.plan-dns.outputs.stdout, steps.plan-dns.outputs.stderr)}}
