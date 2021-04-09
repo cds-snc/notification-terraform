@@ -18,6 +18,8 @@ env:
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: v0.26.0
   TARGET_ENV_PATH: staging
+  TF_VAR_rds_cluster_password: fake_password_for_plan_123456
+  TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
 
 jobs:
   terraform-plan:
@@ -36,16 +38,26 @@ jobs:
       - name: Get touched GitHub Actions configurations
         run: |
           echo "modified files = ${{ steps.changed-files.outputs.added_modified }}"
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
+          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*github?)\/(.*workflows?)\/(.*)").captures[2].string] | unique | select(length > 0)'`
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Print Configs
         run: echo "Configs = ${{env.CONFIGS}}"
 
-      - name: Set Target Path
-        if: github.ref != 'refs/heads/main'
+      - name: Determine Merge To Production
+        if: contains(env.CONFIGS, 'merge_to_main_production')
         run: |
-          echo "::set-env name=TARGET_ENV_PATH::staging"
+          echo "TARGET_ENV_PATH=production" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_rds_cluster_password=${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}" >> $GITHUB_ENV
+          TF_VAR_cloudwatch_slack_webhook_warning_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          TF_VAR_cloudwatch_slack_webhook_critical_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          TF_VAR_cloudwatch_slack_webhook_general_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          TF_VAR_slack_channel_warning_topic=notification-ops" >> $GITHUB_ENV
+          TF_VAR_slack_channel_critical_topic=notification-ops" >> $GITHUB_ENV
+          TF_VAR_slack_channel_general_topic=notification-ops" >> $GITHUB_ENV
+          TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
@@ -61,35 +73,31 @@ jobs:
           echo "bin" >> $GITHUB_PATH
 
       - name: Plan aws/common
-        env:
-          TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
-          cd env/staging/common
+          cd env/${{env.TARGET_ENV_PATH}}/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/dns
         run: |
-          cd env/staging/dns
+          cd env/${{env.TARGET_ENV_PATH}}/dns
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/eks
         run: |
-          cd env/staging/eks
+          cd env/${{env.TARGET_ENV_PATH}}/eks
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/elasticache
         run: |
-          cd env/staging/elasticache
+          cd env/${{env.TARGET_ENV_PATH}}/elasticache
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/rds
-        env:
-          TF_VAR_rds_cluster_password: fake_password_for_plan_123456
         run: |
-          cd env/staging/rds
+          cd env/${{env.TARGET_ENV_PATH}}/rds
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/cloudfront
         run: |
-          cd env/staging/cloudfront
+          cd env/${{env.TARGET_ENV_PATH}}/cloudfront
           ../../../bin/terragrunt plan --terragrunt-non-interactive
