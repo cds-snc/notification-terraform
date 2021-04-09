@@ -41,7 +41,7 @@ jobs:
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Determine Merge To Production
-        if: contains(env.CONFIGS, 'merge_to_main_production')
+        if: contains(env.CONFIGS, 'pull_request')
         run: |
           echo "TARGET_ENV_PATH=production" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
