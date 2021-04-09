@@ -37,7 +37,6 @@ jobs:
 
       - name: Get touched GitHub Actions configurations
         run: |
-          echo "modified files = ${{ steps.changed-files.outputs.added_modified }}"
           CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*github?)\/(.*workflows?)\/(.*)").captures[2].string] | unique | select(length > 0)'`
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
@@ -48,13 +47,13 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "TF_VAR_rds_cluster_password=${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}" >> $GITHUB_ENV
-          TF_VAR_cloudwatch_slack_webhook_warning_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
-          TF_VAR_cloudwatch_slack_webhook_critical_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
-          TF_VAR_cloudwatch_slack_webhook_general_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
-          TF_VAR_slack_channel_warning_topic=notification-ops" >> $GITHUB_ENV
-          TF_VAR_slack_channel_critical_topic=notification-ops" >> $GITHUB_ENV
-          TF_VAR_slack_channel_general_topic=notification-ops" >> $GITHUB_ENV
-          TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_warning_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_critical_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_general_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_warning_topic=notification-ops" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_critical_topic=notification-ops" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_general_topic=notification-ops" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
