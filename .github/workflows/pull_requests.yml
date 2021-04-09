@@ -35,7 +35,8 @@ jobs:
 
       - name: Get touched GitHub Actions configurations
         run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*\.github?)\/(.*workflows?)\/(.*pull_request.+)").captures[3].string] | unique | select(length > 0)'`
+          echo "modified files = ${{ steps.changed-files.outputs.added_modified }}"
+          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Print Configs
