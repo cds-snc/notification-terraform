@@ -28,8 +28,8 @@ jobs:
       - name: Set Target Path
         if: github.ref == 'refs/heads/main'
         run: |
-        echo "::set-env name=TARGET_ENV_PATH::production"
-        echo "Running plan against env/${{ env.TARGET_ENV_PATH }}"
+          echo "TARGET_ENV_PATH=production" >> $GITHUB_ENV
+          echo "Running plan against env/${{ env.TARGET_ENV_PATH }}"
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -51,25 +51,21 @@ jobs:
         env:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
-          echo $MODULES
           cd env/${{env.TARGET_ENV_PATH}}/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/dns
         run: |
-          echo $MODULES
           cd env/${{env.TARGET_ENV_PATH}}/dns
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/eks
         run: |
-          echo $MODULES
           cd env/${{env.TARGET_ENV_PATH}}/eks
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/elasticache
         run: |
-          echo $MODULES
           cd env/${{env.TARGET_ENV_PATH}}/elasticache
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
@@ -77,12 +73,10 @@ jobs:
         env:
           TF_VAR_rds_cluster_password: fake_password_for_plan_123456
         run: |
-          echo $MODULES
           cd env/${{env.TARGET_ENV_PATH}}/rds
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/cloudfront
         run: |
-          echo $MODULES
           cd env/${{env.TARGET_ENV_PATH}}/cloudfront
           ../../../bin/terragrunt plan --terragrunt-non-interactive
