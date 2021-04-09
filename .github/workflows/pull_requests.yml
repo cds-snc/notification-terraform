@@ -40,7 +40,7 @@ jobs:
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Print Configs
-        run: echo "Configs = ${{env.CONFIGS}}
+        run: echo "Configs = ${{env.CONFIGS}}"
 
       - name: Set Target Path
         if: github.ref != 'refs/heads/main'
