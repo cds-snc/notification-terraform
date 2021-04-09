@@ -17,7 +17,7 @@ env:
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: v0.26.0
-  TARGET_ENV_PATH: 'staging'
+  TARGET_ENV_PATH: staging
 
 jobs:
   terraform-plan:
@@ -28,8 +28,8 @@ jobs:
       - name: Set Target Path
         if: github.ref == 'refs/heads/main'
         run: |
-        echo "::set-env name=TARGET_ENV_PATH::'production'"
-        echo "Running plan against env/${env.TARGET_ENV_PATH}"
+        echo "::set-env name=TARGET_ENV_PATH::production"
+        echo "Running plan against env/${{ env.TARGET_ENV_PATH }}"
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -52,25 +52,25 @@ jobs:
           TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
           echo $MODULES
-          cd env/${env.TARGET_ENV_PATH}/common
+          cd env/${{env.TARGET_ENV_PATH}}/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/dns
         run: |
           echo $MODULES
-          cd env/${env.TARGET_ENV_PATH}/dns
+          cd env/${{env.TARGET_ENV_PATH}}/dns
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/eks
         run: |
           echo $MODULES
-          cd env/${env.TARGET_ENV_PATH}/eks
+          cd env/${{env.TARGET_ENV_PATH}}/eks
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/elasticache
         run: |
           echo $MODULES
-          cd env/${env.TARGET_ENV_PATH}/elasticache
+          cd env/${{env.TARGET_ENV_PATH}}/elasticache
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/rds
@@ -78,11 +78,11 @@ jobs:
           TF_VAR_rds_cluster_password: fake_password_for_plan_123456
         run: |
           echo $MODULES
-          cd env/${env.TARGET_ENV_PATH}/rds
+          cd env/${{env.TARGET_ENV_PATH}}/rds
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/cloudfront
         run: |
           echo $MODULES
-          cd env/${env.TARGET_ENV_PATH}/cloudfront
+          cd env/${{env.TARGET_ENV_PATH}}/cloudfront
           ../../../bin/terragrunt plan --terragrunt-non-interactive
