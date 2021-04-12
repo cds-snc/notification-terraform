@@ -59,8 +59,7 @@ jobs:
           echo "TF_VAR_slack_channel_critical_topic=notification-ops" >> $GITHUB_ENV
           echo "TF_VAR_slack_channel_general_topic=notification-ops" >> $GITHUB_ENV
           echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
-          INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
-          echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
+          echo "INFRASTRUCTURE_VERSION=${{`cat ./.github/workflows/infrastructure_version.txt`}}" >> $GITHUB_ENV
 
           echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
 
