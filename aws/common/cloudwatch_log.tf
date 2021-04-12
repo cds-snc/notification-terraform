@@ -1,3 +1,6 @@
+###
+# AWS CloudWatch Log Groups
+###
 resource "aws_cloudwatch_log_group" "sns_deliveries" {
   name = "sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber"
 
@@ -46,6 +49,72 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
   }
 }
 
+###
+# AWS CloudWatch Logs Metrics
+###
+resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam" {
+  name = "sns-sms-blocked-as-spam"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  pattern        = "{ $.delivery.providerResponse = \"Blocked as spam by phone carrier\" }"
+  log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures.name
+
+  metric_transformation {
+    name          = "sns-sms-blocked-as-spam"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "us-west-2-sns-sms-blocked-as-spam" {
+  provider = aws.us-west-2
+
+  name = "us-west-2-sns-sms-blocked-as-spam"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  pattern        = "{ $.delivery.providerResponse = \"Blocked as spam by phone carrier\" }"
+  log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
+
+  metric_transformation {
+    name          = "us-west-2-sns-sms-blocked-as-spam"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable" {
+  name = "sns-sms-phone-carrier-unavailable"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  pattern        = "{ $.delivery.providerResponse = \"Phone carrier is currently unreachable/unavailable\" }"
+  log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures.name
+
+  metric_transformation {
+    name          = "sns-sms-phone-carrier-unavailable"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "us-west-2-sns-sms-phone-carrier-unavailable" {
+  provider = aws.us-west-2
+
+  name = "us-west-2-sns-sms-phone-carrier-unavailable"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  pattern        = "{ $.delivery.providerResponse = \"Phone carrier is currently unreachable/unavailable\" }"
+  log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
+
+  metric_transformation {
+    name          = "us-west-2-sns-sms-phone-carrier-unavailable"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+###
+# AWS CloudWatch Logs Subscriptions
+###
 resource "aws_cloudwatch_log_subscription_filter" "sns_to_lambda" {
   name            = "sns_to_lambda"
   log_group_name  = aws_cloudwatch_log_group.sns_deliveries.name
