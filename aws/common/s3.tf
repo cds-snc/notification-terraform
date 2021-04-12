@@ -23,7 +23,6 @@ resource "aws_s3_bucket" "csv_bucket" {
   }
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
-  #
   logging {
     target_bucket = aws_s3_bucket.csv_bucket_logs.bucket
   }
