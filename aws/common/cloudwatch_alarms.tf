@@ -158,10 +158,10 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
   treat_missing_data  = "notBreaching"
 }
 
-resource "aws_cloudwatch_metric_alarm" "us-west-2-sns-sms-blocked-as-spam-warning" {
+resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warning" {
   provider = aws.us-west-2
 
-  alarm_name          = "us-west-2-sns-sms-blocked-as-spam-warning"
+  alarm_name          = "sns-sms-blocked-as-spam-us-west-2-warning"
   alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
@@ -188,10 +188,10 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warnin
   treat_missing_data  = "notBreaching"
 }
 
-resource "aws_cloudwatch_metric_alarm" "us-west-2-sns-sms-phone-carrier-unavailable-warning" {
+resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-west-2-warning" {
   provider = aws.us-west-2
 
-  alarm_name          = "us-west-2-sns-sms-phone-carrier-unavailable-warning"
+  alarm_name          = "sns-sms-phone-carrier-unavailable-us-west-2-warning"
   alarm_description   = "More than 10 SMS failed because a phone carrier is unavailable over 6 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
