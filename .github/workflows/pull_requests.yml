@@ -37,11 +37,16 @@ jobs:
 
       - name: Get touched GitHub Actions configurations
         run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*github?)\/(.*workflows?)\/(.*)").captures[2].string] | unique | select(length > 0)'`
-          echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
+          WORKFLOWS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*github?)\/(.*workflows?)\/(.*)").captures[2].string] | unique | select(length > 0)'`
+          echo "WORKFLOWS=WORKFLOWS" >> $GITHUB_ENV
+
+      - name: Get touched Terragrunt configurations
+        run: |
+          IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
+          echo "IS_PRODUCTION=IS_PRODUCTION" >> $GITHUB_ENV
 
       - name: Determine Merge To Production
-        if: contains(env.CONFIGS, 'pull_request')
+        if: contains(env.WORKFLOWS, 'pull_request') || contains(env.WORKFLOWS, 'infrastructure_version') || contains(env.IS_PRODUCTION, 'production')
         run: |
           echo "TARGET_ENV_PATH=production" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
@@ -54,6 +59,7 @@ jobs:
           echo "TF_VAR_slack_channel_critical_topic=notification-ops" >> $GITHUB_ENV
           echo "TF_VAR_slack_channel_general_topic=notification-ops" >> $GITHUB_ENV
           echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
+          echo "INFRASTRUCTURE_VERSION=${{cat .github/workflows/infrastructure_version.txt}}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
