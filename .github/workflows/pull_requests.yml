@@ -46,7 +46,7 @@ jobs:
           echo "IS_PRODUCTION=IS_PRODUCTION" >> $GITHUB_ENV
 
       - name: Determine Merge To Production
-        if: contains(env.WORKFLOWS, 'pull_request') || contains(env.WORKFLOWS, 'infrastructure_version') || contains(env.IS_PRODUCTION, 'production')
+        if: contains(env.WORKFLOWS, 'merge_to_main_production') || contains(env.WORKFLOWS, 'infrastructure_version') || contains(env.IS_PRODUCTION, 'production')
         run: |
           echo "TARGET_ENV_PATH=production" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
@@ -59,9 +59,8 @@ jobs:
           echo "TF_VAR_slack_channel_critical_topic=notification-ops" >> $GITHUB_ENV
           echo "TF_VAR_slack_channel_general_topic=notification-ops" >> $GITHUB_ENV
           echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
-          echo "INFRASTRUCTURE_VERSION=${{`cat ./.github/workflows/infrastructure_version.txt`}}" >> $GITHUB_ENV
-
-          echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
+          INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
+          echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
