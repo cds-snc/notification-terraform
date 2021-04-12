@@ -144,6 +144,66 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
+  alarm_name          = "sns-sms-blocked-as-spam-warning"
+  alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam.metric_transformation[0].namespace
+  period              = 60 * 60 * 12
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warning" {
+  provider = aws.us-west-2
+
+  alarm_name          = "sns-sms-blocked-as-spam-us-west-2-warning"
+  alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2.metric_transformation[0].namespace
+  period              = 60 * 60 * 12
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warning" {
+  alarm_name          = "sns-sms-phone-carrier-unavailable-warning"
+  alarm_description   = "More than 10 SMS failed because a phone carrier is unavailable over 6 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].namespace
+  period              = 60 * 60 * 6
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-west-2-warning" {
+  provider = aws.us-west-2
+
+  alarm_name          = "sns-sms-phone-carrier-unavailable-us-west-2-warning"
+  alarm_description   = "More than 10 SMS failed because a phone carrier is unavailable over 6 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].namespace
+  period              = 60 * 60 * 6
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
+  treat_missing_data  = "notBreaching"
+}
+
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
   alarm_name          = "ses-bounce-rate-warning"
   alarm_description   = "Bounce rate >=5% over the last 12 hours"
