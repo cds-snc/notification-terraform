@@ -165,8 +165,8 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warnin
   alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.us-west-2-sns-sms-blocked-as-spam.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.us-west-2-sns-sms-blocked-as-spam.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2.metric_transformation[0].namespace
   period              = 60 * 60 * 12
   statistic           = "Sum"
   threshold           = 10
@@ -195,8 +195,8 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
   alarm_description   = "More than 10 SMS failed because a phone carrier is unavailable over 6 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.us-west-2-sns-sms-phone-carrier-unavailable.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.us-west-2-sns-sms-phone-carrier-unavailable.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].namespace
   period              = 60 * 60 * 6
   statistic           = "Sum"
   threshold           = 10
