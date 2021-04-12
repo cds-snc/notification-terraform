@@ -42,7 +42,7 @@ jobs:
 
       - name: Get touched production Terragrunt configurations
         run: |
-          IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
+          IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.+?)\/").captures[1].string] | unique | select(length > 0)'`
           echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
 
       - name: Determine Merge To Production
