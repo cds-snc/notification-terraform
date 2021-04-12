@@ -40,7 +40,7 @@ jobs:
           WORKFLOWS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*github?)\/(.*workflows?)\/(.*)").captures[2].string] | unique | select(length > 0)'`
           echo "WORKFLOWS=$WORKFLOWS" >> $GITHUB_ENV
 
-      - name: Get touched Terragrunt configurations
+      - name: Get touched production Terragrunt configurations
         run: |
           IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
           echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
