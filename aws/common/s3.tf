@@ -22,6 +22,8 @@ resource "aws_s3_bucket" "csv_bucket" {
     }
   }
 
+  #tfsec:ignore:AWS077 - Versioning is not enabled
+  #
   logging {
     target_bucket = aws_s3_bucket.csv_bucket_logs.bucket
   }
@@ -51,6 +53,7 @@ resource "aws_s3_bucket" "csv_bucket_logs" {
     }
   }
 
+
   lifecycle_rule {
     enabled = true
 
@@ -64,6 +67,7 @@ resource "aws_s3_bucket" "csv_bucket_logs" {
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
+  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
 resource "aws_s3_bucket" "bulk_send" {
@@ -86,6 +90,7 @@ resource "aws_s3_bucket" "bulk_send" {
     }
   }
 
+  #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
     target_bucket = aws_s3_bucket.bulk_send_logs.bucket
   }
@@ -128,6 +133,7 @@ resource "aws_s3_bucket" "bulk_send_logs" {
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
+  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
 resource "aws_s3_bucket_public_access_block" "csv_bucket_logs" {
@@ -154,6 +160,7 @@ resource "aws_s3_bucket" "asset_bucket" {
   }
 
   #tfsec:ignore:AWS002 - No logging enabled
+  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
 resource "aws_s3_bucket_public_access_block" "asset_bucket" {
@@ -185,6 +192,7 @@ resource "aws_s3_bucket" "legacy_asset_bucket" {
   }
 
   #tfsec:ignore:AWS002 - No logging enabled
+  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
 resource "aws_s3_bucket_policy" "legacy_asset_bucket_public_read" {
@@ -234,6 +242,7 @@ resource "aws_s3_bucket" "document_bucket" {
     }
   }
 
+  #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
     target_bucket = aws_s3_bucket.document_bucket_logs.bucket
   }
@@ -276,6 +285,7 @@ resource "aws_s3_bucket" "document_bucket_logs" {
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
+  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
 resource "aws_s3_bucket_public_access_block" "document_bucket_logs" {
@@ -312,6 +322,7 @@ resource "aws_s3_bucket" "alb_log_bucket" {
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
+  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
 resource "aws_s3_bucket_public_access_block" "alb_log_bucket" {
@@ -384,6 +395,7 @@ resource "aws_s3_bucket" "athena_bucket" {
     }
   }
 
+  #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
     target_bucket = aws_s3_bucket.athena_bucket_logs.bucket
   }
@@ -426,4 +438,5 @@ resource "aws_s3_bucket" "athena_bucket_logs" {
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
+  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
