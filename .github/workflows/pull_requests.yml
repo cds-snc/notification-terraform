@@ -38,12 +38,12 @@ jobs:
       - name: Get touched GitHub Actions configurations
         run: |
           WORKFLOWS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*github?)\/(.*workflows?)\/(.*)").captures[2].string] | unique | select(length > 0)'`
-          echo "WORKFLOWS=WORKFLOWS" >> $GITHUB_ENV
+          echo "WORKFLOWS=$WORKFLOWS" >> $GITHUB_ENV
 
       - name: Get touched Terragrunt configurations
         run: |
           IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
-          echo "IS_PRODUCTION=IS_PRODUCTION" >> $GITHUB_ENV
+          echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
 
       - name: Determine Merge To Production
         if: contains(env.WORKFLOWS, 'merge_to_main_production') || contains(env.WORKFLOWS, 'infrastructure_version') || contains(env.IS_PRODUCTION, 'production')
