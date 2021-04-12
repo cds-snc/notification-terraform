@@ -56,5 +56,7 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+
+  #tfsec:ignore:AWS071 - Access logging disabled
 }
 
