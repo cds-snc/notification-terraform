@@ -45,6 +45,22 @@ jobs:
           IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
           echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
 
+      - name: Test contains merge_to_main_production
+        if: contains(env.WORKFLOWS, 'merge_to_main_production')
+        run: echo "merge_to_main_production"
+
+      - name: Test contains merge_to_main_production.yml
+        if: contains(env.WORKFLOWS, 'merge_to_main_production.yml')
+        run: echo "merge_to_main_production.yml"
+
+      - name: Test contains infrastructure_version
+        if: contains(env.WORKFLOWS, 'infrastructure_version')
+        run: echo "infrastructure_version"
+
+      - name: Test contains infrastructure_version.txt
+        if: contains(env.WORKFLOWS, 'infrastructure_version.txt')
+        run: echo "infrastructure_version.txt"
+
       - name: Determine Merge To Production
         if: contains(env.WORKFLOWS, 'merge_to_main_production') || contains(env.WORKFLOWS, 'infrastructure_version') || contains(env.IS_PRODUCTION, 'production')
         run: |
