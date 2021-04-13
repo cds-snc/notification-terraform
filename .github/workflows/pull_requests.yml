@@ -17,15 +17,50 @@ env:
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: v0.26.0
+  TARGET_ENV_PATH: staging
+  TF_VAR_rds_cluster_password: fake_password_for_plan_123456
+  TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
 
 jobs:
   terraform-plan:
-    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Get changed files
+        id: changed-files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'json'
+
+      - name: Get touched GitHub Actions configurations
+        run: |
+          WORKFLOWS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*github?)\/(.*workflows?)\/(.*)").captures[2].string] | unique | select(length > 0)'`
+          echo "WORKFLOWS=$WORKFLOWS" >> $GITHUB_ENV
+
+      - name: Get touched production Terragrunt configurations
+        run: |
+          IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.+?)\/").captures[1].string] | unique | select(length > 0)'`
+          echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
+
+      - name: Determine Merge To Production
+        if: contains(env.WORKFLOWS, 'merge_to_main_production.yml') || contains(env.WORKFLOWS, 'infrastructure_version.txt') || contains(env.IS_PRODUCTION, 'production')
+        run: |
+          echo "TARGET_ENV_PATH=production" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_rds_cluster_password=${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_warning_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_critical_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_general_topic=${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_warning_topic=notification-ops" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_critical_topic=notification-ops" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_general_topic=notification-ops" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
+          INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
+          echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
@@ -40,64 +75,32 @@ jobs:
           chmod +x bin/terragrunt
           echo "bin" >> $GITHUB_PATH
 
-      - name: Get changed files
-        id: changed-files
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: 'json'
-
-      - name: Get touched Terragrunt modules
-        run: |
-          MODULES=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*aws?)\/(.*)\/").captures[1].string] | unique | select(length > 0)'`
-          echo "MODULES=$MODULES" >> $GITHUB_ENV
-
-      - name: Get touched Terragrunt configurations
-        run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*staging?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
-          echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
-
       - name: Plan aws/common
-        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common')
-        env:
-          TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
         run: |
-          echo $MODULES
-          cd env/staging/common
+          cd env/${{env.TARGET_ENV_PATH}}/common
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/dns
-        if: contains(env.MODULES, 'dns')
         run: |
-          echo $MODULES
-          cd env/staging/dns
+          cd env/${{env.TARGET_ENV_PATH}}/dns
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/eks
-        if: contains(env.MODULES, 'eks') || contains(env.CONFIGS, 'eks')
         run: |
-          echo $MODULES
-          cd env/staging/eks
+          cd env/${{env.TARGET_ENV_PATH}}/eks
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/elasticache
-        if: contains(env.MODULES, 'elasticache') || contains(env.CONFIGS, 'elasticache')
         run: |
-          echo $MODULES
-          cd env/staging/elasticache
+          cd env/${{env.TARGET_ENV_PATH}}/elasticache
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/rds
-        if: contains(env.MODULES, 'rds') || contains(env.CONFIGS, 'rds')
-        env:
-          TF_VAR_rds_cluster_password: fake_password_for_plan_123456
         run: |
-          echo $MODULES
-          cd env/staging/rds
+          cd env/${{env.TARGET_ENV_PATH}}/rds
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/cloudfront
-        if: contains(env.MODULES, 'cloudfront') || contains(env.CONFIGS, 'cloudfront')
         run: |
-          echo $MODULES
-          cd env/staging/cloudfront
+          cd env/${{env.TARGET_ENV_PATH}}/cloudfront
           ../../../bin/terragrunt plan --terragrunt-non-interactive

@@ -13,11 +13,6 @@ defaults:
     shell: bash
 
 env:
-  # Set the GitHub tag here to update the infrastructure
-  # to a new version in production
-  # See https://github.com/cds-snc/notification-terraform/releases
-  INFRASTRUCTURE_VERSION: '0.87.0'
-
   # Terraform environment variables
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
@@ -40,6 +35,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Infrastructure Version
+        # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure
+        # to a new version in production
+        # See https://github.com/cds-snc/notification-terraform/releases
+        run: |
+          INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
+          echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
