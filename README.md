@@ -9,14 +9,14 @@
 The promise of Terragrunt is to make it easier to maintain Terraform code by providing a wrapper around modules, adhering to "Don't repeat yourself" (DRY) configuration as well as better remote state management. For a complete explanation of features, take a look at the [excellent documentation](https://terragrunt.gruntwork.io/docs/#features).
 
 ### How is this repository structured?
-The terraform code contained in `aws` is split into several independent modules that all use their own remote terraform state file. These modules know nothing about Terragrunt and are used by Terragrunt as simple infrastructure definitions. All the Terraform code in `aws` is environment agnostic, this means, it does not know if it runs in `dev`, `staging`, or `production`. This is achieved through variable interpolations. For example a kubernetes cluster in `staging` requires less powerful compute nodes than in `production`. As a result the kubernetes worker definition contains the `var.primary_worker_instance_types` variable.
+The Terraform code contained in `aws` is split into several independent modules that all use their own remote Terraform state file. These modules know nothing about Terragrunt and are used by Terragrunt as simple infrastructure definitions. All the Terraform code in `aws` is environment agnostic, this means, it does not know if it runs in `dev`, `staging`, or `production`. This is achieved through variable interpolations. For example a Kubernetes cluster in `staging` requires less powerful compute nodes than in `production`. As a result the Kubernetes worker definition contains the `var.primary_worker_instance_types` variable.
 
-The directory structure inside `aws` reflects the split into independent modules. For example, `common`, contains all the networking logic required inside the application, while `eks` and `rds` represent the deployments of the kubernetes cluster and the RDS database. The advantage is that if changes need to be made to infrastructure, should they fail, the state file has less chance of corruption and blast radius is decreased. Additionally, there are significant time gains in running modules independently as the infrastructure dependency graph is limited.
+The directory structure inside `aws` reflects the split into independent modules. For example, `common`, contains all the networking logic required inside the application, while `eks` and `rds` represent the deployments of the Kubernetes cluster and the RDS database. The advantage is that if changes need to be made to infrastructure, should they fail, the state file has less chance of corruption and blast radius is decreased. Additionally, there are significant time gains in running modules independently as the infrastructure dependency graph is limited.
 
-Terragrunt scripts are found in `env`, which defines all the environment specific variables. Contained are subdirectories that define all the terraform modules that should exist in each environment. 
+Terragrunt scripts are found in `env`, which defines all the environment specific variables. Contained are subdirectories that define all the Terraform modules that should exist in each environment.
 
 ### How are changes applied to the different environments?
-Changes are applied through Git merges to this repository. Terragrunt supports the idea of [remote terraform configurations based on tags](https://terragrunt.gruntwork.io/docs/features/keep-your-terraform-code-dry/#remote-terraform-configurations). This mean we can setup the following continuous integration workflows:
+Changes are applied through Git merges to this repository. Terragrunt supports the idea of [remote Terraform configurations based on tags](https://terragrunt.gruntwork.io/docs/features/keep-your-terraform-code-dry/#remote-terraform-configurations). This mean we can setup the following continuous integration workflows:
 
 #### Staging
 - All pull requests run a `terraform plan` on all modules against `staging` and report changes if there are any
@@ -25,7 +25,7 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 #### Production
 - All pull requests run a `terraform plan` on all modules against `production` and report changes if there are any
 - The production infrastructure version located at [.github/workflows/infrastructure_version.txt](`.github/workflows/infrastructure_version.txt`) is manually populated with the `tag` used to deploy to production
-- [pull_request.yml](`.github/workflows/pull_request.yml`) and [merge_to_main_production.yml](`.github/workflows/merge_to_main_production.yml`) uses `infrastructure_version.txt` to perform `plan` and `apply`, respectively, to production
+- [pull_request.yml](`.github/workflows/pull_request.yml`) and [merge_to_main_production.yml](`.github/workflows/merge_to_main_production.yml`) use `infrastructure_version.txt` to perform `plan` and `apply`, respectively, to production
 - CI detects changes in `env/production` and runs `terraform apply` to apply changes to `production`
 
 #### Necessary additional steps
@@ -50,15 +50,24 @@ AWS_PROFILE=notify-staging make get-tg-arns
 
 ### What is each Terraform module
 
+#### `aws/cloudfront`
+Assets to create to serve static assets on CloudFront CDN.
+
 #### `aws/common`
 Common networking assets such as:
 - VPC 
 - Subnets 
 - Internet gateway
 - NAT gateway
-- Route table
-- S3 logging buckets
+- Route tables
+- S3 buckets
 - KMS
+- CloudWatch
+- IAM
+- SNS
+- Pinpoint
+- KMS
+- Lambdas
 
 #### `aws/dns`
 DNS specific outputs for the domain nameserver
@@ -67,33 +76,17 @@ DNS specific outputs for the domain nameserver
 
 #### `aws/eks`
 Assets to create a working Elastic Kubernetes Service (EKS):
-- EKS Controlplane
-- EKS Worker groups
+- EKS control plane
+- EKS worker groups
 - Security groups for Network traffic control
 - Application Load Balancer to ingress data into worker nodes
+- Web application firewall
+
+#### `aws/elasticache`
+Assets an Elasticache Redis cluster.
 
 #### `aws/rds`
-Assets to create a working Relational Database Service (RDS):
-- TBD
-
-#### `aws/cloudfront`
-Assets to create to serve static assets on CloudFront CDN.
-
-### How is this different to the existing Notification terraform?
-There are a couple of changes compared to the existing Notification terraform:
-
-- We no longer use the third party EKS Terraform module, instead we just use straight up Terraform code
-- We no longer use the third party VPC Terraform module, instead we just use straight up Terraform code 
-- We make use of all three availability zones in Canada, previously we used two
-- We are using an application load balancer to directly access pods in the cluster, previously we used Traefik as a proxy on each node.
-- We are using AWS Shield for DDoS protection
-- We are using PostgreSQL on Aurora instead of a PostgreSQL database.
+Assets to create a working Relational Database Service (RDS) using Aurora PostgreSQL.
 
 ### Preliminary architecture diagram
 ![notify-temp-arch](https://user-images.githubusercontent.com/867334/98271915-7083ba00-1f5e-11eb-82e1-30b188c4dfb9.png)
-
-### Current Module Execution times 
-
-- Common ~ 3 mins
-- EKS ~ 18 mins
-- RDS ~
