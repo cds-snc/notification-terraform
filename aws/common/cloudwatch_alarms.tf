@@ -326,34 +326,67 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
 
 resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-warning" {
   alarm_name          = "sqs-email-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in email queue is older than 10 minutes for 15 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in email queue reached 60 seconds"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "3"
+  evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = 60 * 5
-  statistic           = "Average"
-  threshold           = 60 * 10
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
-    QueueName = "eks-notification-canada-casend-email-tasks"
+    QueueName = "${var.celery_queue_prefix}send-email-tasks"
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-critical" {
   alarm_name          = "sqs-email-stuck-in-queue-critical"
-  alarm_description   = "ApproximateAgeOfOldestMessage in email queue is older than 15 minutes for 15 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in email queue reached 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "3"
+  evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = 60 * 5
-  statistic           = "Average"
-  threshold           = 60 * 15
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
-    QueueName = "eks-notification-canada-casend-email-tasks"
+    QueueName = "${var.celery_queue_prefix}send-email-tasks"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
+  alarm_name          = "sqs-bulk-queue-delay-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in bulk queue reached 10 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}bulk-tasks"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
+  alarm_name          = "sqs-bulk-queue-delay-critical"
+  alarm_description   = "ApproximateAgeOfOldestMessage in bulk queue reached 30 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 30
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}bulk-tasks"
   }
 }
 
