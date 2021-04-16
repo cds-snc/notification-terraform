@@ -324,8 +324,8 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-warning" {
-  alarm_name          = "sqs-email-stuck-in-queue-warning"
+resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
+  alarm_name          = "sqs-email-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in email queue reached 60 seconds"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
@@ -340,8 +340,8 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-email-stuck-in-queue-critical" {
-  alarm_name          = "sqs-email-stuck-in-queue-critical"
+resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
+  alarm_name          = "sqs-email-queue-delay-critical"
   alarm_description   = "ApproximateAgeOfOldestMessage in email queue reached 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
