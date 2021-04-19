@@ -30,6 +30,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
   port              = 443
   protocol          = "HTTPS"
   certificate_arn   = var.aws_acm_notification_canada_ca_arn
+  ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
 
   default_action {
     type             = "forward"
