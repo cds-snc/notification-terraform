@@ -24,7 +24,7 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
   name           = "celery-error"
-  pattern        = "\"ERROR/Worker\""
+  pattern        = "?\"ERROR/Worker\" ?\"ERROR/ForkPoolWorker\""
   log_group_name = local.eks_application_log_group
 
   metric_transformation {
