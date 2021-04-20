@@ -30,6 +30,8 @@ resource "aws_alb_listener" "notification-canada-ca" {
   port              = 443
   protocol          = "HTTPS"
   certificate_arn   = var.aws_acm_notification_canada_ca_arn
+  # See https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies
+  # And https://cyber.gc.ca/en/guidance/guidance-securely-configuring-network-protocols-itsp40062
   ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
 
   default_action {
