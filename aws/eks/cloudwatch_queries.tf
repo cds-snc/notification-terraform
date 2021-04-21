@@ -24,7 +24,7 @@ resource "aws_cloudwatch_query_definition" "celery-errors" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.labels.app like /^celery/
-| filter strcontains(@message, 'ERROR/Worker')
+| filter @message like /ERROR\/.*Worker/
 | sort @timestamp desc
 | limit 20
 QUERY
