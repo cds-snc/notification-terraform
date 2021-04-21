@@ -59,7 +59,7 @@ def to_queue(queue, data):
 
 def parse_recipients(headers, receipt):
     # Gather recipients from our own domain only
-    recipients = headers.get("to", []) + headers.get("cc", []) + headers.get("bcc", []) + receipt.get('recipients', [])
+    recipients = headers.get("to", []) + headers.get("cc", []) + headers.get("bcc", []) + receipt.get("recipients", [])
     recipients = [parseaddr(r)[1] for r in set(recipients)]
 
     return [r for r in recipients if r.endswith(f"@{SENDING_DOMAIN}")]
