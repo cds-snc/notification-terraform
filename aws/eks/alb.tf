@@ -32,6 +32,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
   certificate_arn   = var.aws_acm_notification_canada_ca_arn
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies
   # And https://cyber.gc.ca/en/guidance/guidance-securely-configuring-network-protocols-itsp40062
+  #tfsec:ignore:AWS010 Outdated SSL policy
   ssl_policy        = "ELBSecurityPolicy-2016-08"
 
   default_action {
