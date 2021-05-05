@@ -32,9 +32,56 @@ resource "aws_ses_domain_mail_from" "notification-canada-ca" {
   mail_from_domain = "bounce.${aws_ses_domain_identity.notification-canada-ca.domain}"
 }
 
+###
+# Receiving emails
+###
+
+resource "aws_ses_domain_identity" "notification-canada-ca-receiving" {
+  # Email receiving with SES is available in only 3 regions
+  # so we use us-east-1
+  # https://docs.aws.amazon.com/general/latest/gr/ses.html
+  provider = aws.us-east-1
+
+  domain = var.domain
+}
+
+resource "aws_ses_receipt_rule_set" "main" {
+  provider = aws.us-east-1
+
+  rule_set_name = "main"
+}
+
+resource "aws_ses_active_receipt_rule_set" "main" {
+  provider = aws.us-east-1
+
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+}
+
+resource "aws_ses_receipt_rule" "inbound-to-lambda" {
+  provider = aws.us-east-1
+
+  name          = "inbound-to-lambda"
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+  recipients    = [var.domain]
+  enabled       = true
+  scan_enabled  = true
+
+  lambda_action {
+    function_arn    = var.lambda_ses_receiving_emails_arn
+    invocation_type = "Event"
+    position        = 1
+  }
+}
 
 ###
-# Additional sending domains
+# Additional custom sending domains for emails
+# trvapply-vrtdemande.apps.cic.gc.ca is alone for historic reasons
+# and is not refactored to make sure the ressource is not destroyed/recreated.
+# Read the section "Refactoring Can Be Tricky"
+# https://blog.gruntwork.io/terraform-tips-tricks-loops-if-statements-and-gotchas-f739bbae55f9
+#
+# Afterwards there is a more automated way, using the set variable
+# `ses_custom_sending_domains`.
 ###
 
 resource "aws_ses_domain_identity" "cic-trvapply-vrtdemande" {
@@ -71,3 +118,42 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-complain
   include_original_headers = false
 }
 
+resource "aws_ses_domain_identity" "custom_sending_domains" {
+  for_each = var.ses_custom_sending_domains
+  domain   = each.value
+}
+
+resource "aws_ses_domain_dkim" "custom_sending_domains" {
+  for_each = var.ses_custom_sending_domains
+  domain   = each.value
+}
+
+resource "aws_ses_identity_notification_topic" "custom_sending_domains_bounce_topic" {
+  for_each                 = var.ses_custom_sending_domains
+  topic_arn                = var.notification_canada_ca_ses_callback_arn
+  notification_type        = "Bounce"
+  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  include_original_headers = false
+}
+
+resource "aws_ses_identity_notification_topic" "custom_sending_domains_delivery_topic" {
+  for_each                 = var.ses_custom_sending_domains
+  topic_arn                = var.notification_canada_ca_ses_callback_arn
+  notification_type        = "Delivery"
+  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  include_original_headers = false
+}
+
+resource "aws_ses_identity_notification_topic" "custom_sending_domains_complaint_topic" {
+  for_each                 = var.ses_custom_sending_domains
+  topic_arn                = var.notification_canada_ca_ses_callback_arn
+  notification_type        = "Complaint"
+  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  include_original_headers = false
+}
+
+resource "aws_ses_domain_mail_from" "custom_sending_domains" {
+  for_each         = var.ses_custom_sending_domains
+  domain           = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  mail_from_domain = "bounce.${aws_ses_domain_identity.custom_sending_domains[each.value].domain}"
+}

@@ -14,3 +14,7 @@ variable "elasticache_node_type" {
 variable "vpc_private_subnets" {
   type = list(any)
 }
+
+variable "sns_alert_warning_arn" {
+  type = string
+}

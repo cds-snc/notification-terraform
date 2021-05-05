@@ -42,10 +42,22 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
+variable "sns_alert_general_arn" {
+  type = string
+}
+
 variable "cloudfront_assets_arn" {
   type = string
 }
 
 variable "alb_log_bucket" {
   type = string
+}
+
+variable "eks_cluster_name" {
+  type = string
+}
+
+locals {
+  eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
 }

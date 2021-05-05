@@ -1,5 +1,5 @@
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/rds?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/elasticache?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {
@@ -20,8 +20,8 @@ include {
 
 inputs = {
   eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
-  rds_instance_count        = 3
-  rds_instance_type         = "db.t3.medium"
+  elasticache_node_count    = 1
+  elasticache_node_type     = "cache.t3.micro"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
-  sns_alert_general_arn     = dependency.common.outputs.sns_alert_general_arn
+  sns_alert_warning_arn     = dependency.common.outputs.sns_alert_warning_arn
 }

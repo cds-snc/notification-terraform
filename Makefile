@@ -16,3 +16,6 @@ aws-staging-eks-dev:
 
 fmt:
 	terraform fmt -recursive aws && terragrunt hclfmt
+
+get-tg-arns:
+	aws elbv2 describe-target-groups --query 'TargetGroups[*].[TargetGroupName,TargetGroupArn]' --output table

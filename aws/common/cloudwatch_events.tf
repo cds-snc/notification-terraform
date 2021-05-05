@@ -18,9 +18,11 @@ resource "aws_cloudwatch_event_rule" "aws_health" {
          "EC2",
          "ECR",
          "EKS",
+         "ELASTICACHE",
          "IAM",
          "KMS",
          "LAMBDA",
+         "PINPOINT",
          "RDS",
          "ROUTE53",
          "SES",
@@ -36,5 +38,5 @@ EOF
 resource "aws_cloudwatch_event_target" "aws_health_sns_warning" {
   rule      = aws_cloudwatch_event_rule.aws_health.name
   target_id = "aws_health_sns_warning"
-  arn       = aws_sns_topic.notification-canada-ca-alert-warning.arn
+  arn       = aws_sns_topic.notification-canada-ca-alert-general.arn
 }

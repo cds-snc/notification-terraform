@@ -22,7 +22,14 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   engine                       = aws_rds_cluster.notification-canada-ca.engine
   engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
   performance_insights_enabled = true
+  #tfsec:ignore:AWS053 - Encryption for RDS Perfomance Insights should be enabled.
+  # Cannot set a custom KMS key after performance insights has been enabled
+  # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
   preferred_maintenance_window = "wed:04:00-wed:04:30"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -32,7 +39,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
-  engine_version               = 11.8
+  engine_version               = 11.9
   database_name                = "NotificationCanadaCa${var.env}"
   final_snapshot_identifier    = "server-${random_string.random.result}"
   master_username              = "postgres"
@@ -41,8 +48,9 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_backup_window      = "07:00-09:00"
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
-  storage_encrypted            = true
-  deletion_protection          = true
+  #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
+  storage_encrypted   = true
+  deletion_protection = true
 
 
   vpc_security_group_ids = [
@@ -54,7 +62,9 @@ resource "aws_rds_cluster" "notification-canada-ca" {
       # Ignore changes to tags, e.g. because a management agent
       # updates these based on some ruleset managed elsewhere.
       tags,
+      engine_version
     ]
+    prevent_destroy = true
   }
 
   tags = {
@@ -64,7 +74,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
 
 resource "aws_db_event_subscription" "notification-canada-ca" {
   name      = "notification-canada-ca-events-subscription"
-  sns_topic = var.sns_alert_warning_arn
+  sns_topic = var.sns_alert_general_arn
 
   source_type = "db-instance"
 
@@ -76,5 +86,15 @@ resource "aws_db_event_subscription" "notification-canada-ca" {
     "low storage",
     "maintenance",
   ]
+}
+
+resource "aws_db_event_subscription" "notification-canada-ca-cluster" {
+  name      = "notification-canada-ca-aurora-cluster-events-subscription"
+  sns_topic = var.sns_alert_general_arn
+
+  source_type = "db-cluster"
+
+  # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html
+  # We are interested in all events so leaving out the event_categories parameter
 }
 

@@ -16,13 +16,15 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
-  TERRAFORM_VERSION: 0.13.5
+  TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: v0.26.0
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
+  TF_VAR_slack_channel_general_topic: "notification-staging-ops"
 
 jobs:
   terraform-apply:
@@ -65,37 +67,31 @@ jobs:
           echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
 
       - name: Apply aws/common
-        if: contains(env.MODULES, 'common') || contains(env.CONFIGS, 'common')
         run: |
           cd env/staging/common
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
-        if: contains(env.MODULES, 'dns') || contains(env.CONFIGS, 'dns')
         run: |
           cd env/staging/dns
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
-        if: contains(env.MODULES, 'eks')  || contains(env.CONFIGS, 'eks')
         run: |
           cd env/staging/eks
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/elasticache
-        if: contains(env.MODULES, 'elasticache')  || contains(env.CONFIGS, 'elasticache')
         run: |
           cd env/staging/elasticache
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
-        if: contains(env.MODULES, 'rds')  || contains(env.CONFIGS, 'rds')
         run: |
           cd env/staging/rds
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
-        if: contains(env.MODULES, 'cloudfront')  || contains(env.CONFIGS, 'cloudfront')
         run: |
           cd env/staging/cloudfront
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
