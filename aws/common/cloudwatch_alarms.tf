@@ -534,3 +534,20 @@ resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
     BucketName  = aws_s3_bucket.document_bucket.bucket
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warning" {
+  alarm_name          = "live-service-over-daily-rate-limit-warning"
+  alarm_description   = "A live service reached its daily rate limit and has been blocked from sending more notifications"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "production_notifications_api_validators_rate_limit_live_service_daily"
+  namespace           = "NotificationCanadaCa"
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    metric_type = "counter"
+  }
+}
