@@ -64,7 +64,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
   alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
-  alarm_description   = "SMS success rate to Canadian numbers is below 85% over 2 consecutive periods of 12 hours"
+  alarm_description   = "SMS success rate to Canadian numbers is below 60% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
@@ -72,7 +72,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
   namespace           = "AWS/SNS"
   period              = 60 * 60 * 12
   statistic           = "Average"
-  threshold           = 85 / 100
+  threshold           = 60 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
@@ -104,7 +104,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
   alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
-  alarm_description   = "SMS success rate to Canadian numbers is below 75% over 2 consecutive periods of 12 hours"
+  alarm_description   = "SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
@@ -112,7 +112,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
   namespace           = "AWS/SNS"
   period              = 60 * 60 * 12
   statistic           = "Average"
-  threshold           = 75 / 100
+  threshold           = 25 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   treat_missing_data  = "notBreaching"
@@ -401,7 +401,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
   namespace           = "NotificationCanadaCa"
   period              = "300"
   statistic           = "Average"
-  threshold           = 1
+  threshold           = 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   treat_missing_data  = "breaching"
   dimensions = {
@@ -418,7 +418,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   namespace           = "NotificationCanadaCa"
   period              = "300"
   statistic           = "Average"
-  threshold           = 2
+  threshold           = 200
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   treat_missing_data  = "breaching"
