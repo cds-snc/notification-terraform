@@ -21,6 +21,13 @@ resource "aws_security_group" "notification-canada-ca-alb" {
     cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
+  ingress {
+    protocol    = "tcp"
+    from_port   = 4444
+    to_port     = 4444
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
