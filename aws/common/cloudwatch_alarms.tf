@@ -401,7 +401,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
   namespace           = "NotificationCanadaCa"
   period              = "300"
   statistic           = "Average"
-  threshold           = 1
+  threshold           = 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   treat_missing_data  = "breaching"
   dimensions = {
@@ -418,7 +418,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   namespace           = "NotificationCanadaCa"
   period              = "300"
   statistic           = "Average"
-  threshold           = 2
+  threshold           = 200
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   treat_missing_data  = "breaching"
