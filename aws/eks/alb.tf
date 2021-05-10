@@ -33,7 +33,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies
   # And https://cyber.gc.ca/en/guidance/guidance-securely-configuring-network-protocols-itsp40062
   #tfsec:ignore:AWS010 Outdated SSL policy
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  ssl_policy = "ELBSecurityPolicy-2016-08"
 
   default_action {
     type             = "forward"
@@ -59,6 +59,27 @@ resource "aws_lb_listener" "notification-canada-ca-80" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
+    }
+  }
+}
+
+# An HTTPS listener with an old SSL policy
+# for some clients that cannot upgrade to TLSv1.2
+resource "aws_lb_listener" "notification-canada-ca-legacy-tls" {
+  load_balancer_arn = aws_alb.notification-canada-ca.id
+  port              = 4444
+  protocol          = "HTTPS"
+  certificate_arn   = var.aws_acm_notification_canada_ca_arn
+  #tfsec:ignore:AWS010 Outdated SSL policy
+  ssl_policy = "ELBSecurityPolicy-2016-08"
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Unauthorized"
+      status_code  = "401"
     }
   }
 }
@@ -202,6 +223,22 @@ resource "aws_lb_listener_rule" "api-host-route" {
   condition {
     host_header {
       values = ["api.*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "api-host-route-legacy-tls" {
+  listener_arn = aws_lb_listener.notification-canada-ca-legacy-tls.arn
+  priority     = 1
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-api.arn
+  }
+
+  condition {
+    host_header {
+      values = ["api.${var.domain}"]
     }
   }
 }
