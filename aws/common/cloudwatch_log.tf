@@ -49,6 +49,16 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
+  name = "route53/${var.region}/${var.account_id}/DNS/logs"
+
+  retention_in_days = 14
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 ###
 # AWS CloudWatch Logs Metrics
 ###
