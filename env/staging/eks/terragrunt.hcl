@@ -55,10 +55,10 @@ include {
 inputs = {
   aws_acm_notification_canada_ca_arn     = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
   aws_acm_alt_notification_canada_ca_arn = dependency.dns.outputs.aws_acm_alt_notification_canada_ca_arn
-  primary_worker_desired_size            = 3
-  primary_worker_instance_types          = ["t3.medium"]
-  primary_worker_max_size                = 5
-  primary_worker_min_size                = 1
+  primary_worker_desired_size            = 5
+  primary_worker_instance_types          = ["m5.large"]
+  primary_worker_max_size                = 7
+  primary_worker_min_size                = 4
   vpc_id                                 = dependency.common.outputs.vpc_id
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                     = dependency.common.outputs.vpc_public_subnets
