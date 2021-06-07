@@ -204,6 +204,36 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
   treat_missing_data  = "notBreaching"
 }
 
+resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-warning" {
+  alarm_name          = "sns-sms-rate-exceeded-warning"
+  alarm_description   = "At least 1 SNS SMS rate exceeded error in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded.metric_transformation[0].namespace
+  period              = 60 * 5
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning" {
+  provider = aws.us-west-2
+
+  alarm_name          = "sns-sms-rate-exceeded-us-west-2-warning"
+  alarm_description   = "At least 1 SNS SMS rate exceeded error in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2.metric_transformation[0].namespace
+  period              = 60 * 5
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
+  treat_missing_data  = "notBreaching"
+}
+
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
   alarm_name          = "ses-bounce-rate-warning"
   alarm_description   = "Bounce rate >=5% over the last 12 hours"
@@ -389,6 +419,25 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}bulk-tasks"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rate-warning" {
+  alarm_name          = "sqs-send-throttled-sms-tasks-receive-rate-warning"
+  alarm_description   = "NumberOfMessagesReceived is more than the expected maximum rate for send-throttled-sms-tasks SQS queue"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "NumberOfMessagesReceived"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Sum"
+  # Maximum rate is supposed to be 1 SMS per second, so 60 messages
+  # per minute, but giving it a 10% room.
+  threshold     = 60 * 1.1
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}send-throttled-sms-tasks"
   }
 }
 
