@@ -122,6 +122,40 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable-u
   }
 }
 
+resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded" {
+  name = "sns-sms-rate-exceeded"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  # https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-long-codes.html
+  # Canadian long code numbers are limited at 1 SMS per second/number
+  pattern        = "{ $.delivery.providerResponse = \"Rate exceeded.\" }"
+  log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures.name
+
+  metric_transformation {
+    name          = "sns-sms-rate-exceeded"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
+  provider = aws.us-west-2
+
+  name = "sns-sms-rate-exceeded-us-west-2"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  # https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-long-codes.html
+  # Canadian long code numbers are limited at 1 SMS per second/number
+  pattern        = "{ $.delivery.providerResponse = \"Rate exceeded.\" }"
+  log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
+
+  metric_transformation {
+    name          = "sns-sms-rate-exceeded-us-west-2"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
 ###
 # AWS CloudWatch Logs Subscriptions
 ###
