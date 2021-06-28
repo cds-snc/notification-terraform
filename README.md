@@ -1,6 +1,5 @@
 # notification-terraform
 
-
 ### Requires
 - Terraform (https://www.terraform.io/)
 - Terragrunt (https://terragrunt.gruntwork.io/)
