@@ -323,14 +323,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning" {
   alarm_name          = "sqs-throttled-sms-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in throttled SMS queue is older than 1 minute in a 5-minute period"
+  alarm_description   = "ApproximateAgeOfOldestMessage in throttled SMS queue >= 5 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = "5"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60 * 5
   statistic           = "Average"
-  threshold           = 60
+  threshold           = 60 * 5
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_throttled_sms_queue_name}"
@@ -339,14 +339,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning
 
 resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critical" {
   alarm_name          = "sqs-throttled-sms-stuck-in-queue-critical"
-  alarm_description   = "ApproximateAgeOfOldestMessage in throttled SMS queue is older than 1 minute for 10 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in throttled SMS queue >= 10 minute for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = "10"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = 60 * 5
+  period              = 60 * 10
   statistic           = "Average"
-  threshold           = 60
+  threshold           = 60 * 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
