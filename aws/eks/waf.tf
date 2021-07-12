@@ -12,8 +12,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesAmazonIpReputationList"
     priority = 1
 
-    override_action {
-      count {}
+    action {
+      block {}
     }
 
     statement {
@@ -34,14 +34,21 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 2
 
-    override_action {
-      count {}
+    action {
+      block {}
     }
 
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+
+        # Do not block traffic matching the rule GenericRFI_BODY.
+        # It seems genuine calls to the API /v2/notifications/email
+        # endpoint match this
+        excluded_rule {
+          name = "GenericRFI_BODY"
+        }
       }
     }
 
@@ -56,8 +63,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
     priority = 3
 
-    override_action {
-      count {}
+    action {
+      block {}
     }
 
     statement {
@@ -78,8 +85,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesLinuxRuleSet"
     priority = 4
 
-    override_action {
-      count {}
+    action {
+      block {}
     }
 
     statement {
@@ -100,14 +107,20 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesAnonymousIpList"
     priority = 5
 
-    override_action {
-      count {}
+    action {
+      block {}
     }
 
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAnonymousIpList"
         vendor_name = "AWS"
+
+        # Do not block traffic from hosting providers as we risk
+        # blocking genuine traffic from us or clients
+        excluded_rule {
+          name = "HostingProviderIPList"
+        }
       }
     }
 
