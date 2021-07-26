@@ -2,6 +2,10 @@ variable "eks_cluster_securitygroup" {
   type = string
 }
 
+variable "rds_server_db_user" {
+  type = string
+}
+
 variable "rds_cluster_password" {
   type = string
 }
@@ -22,3 +26,4 @@ variable "vpc_private_subnets" {
 variable "sns_alert_general_arn" {
   type = string
 }
+

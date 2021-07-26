@@ -267,17 +267,17 @@ resource "aws_iam_role_policy" "rds-proxy-to-secrets-policy" {
             "Effect": "Allow",
             "Action": "secretsmanager:GetSecretValue",
             "Resource": [
-                "arn:aws:secretsmanager:us-east-2:${var.account_id}:secret:secret_name_1"
+                "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:secret_name_1"
             ]
         },
         {
             "Sid": "VisualEditor1",
             "Effect": "Allow",
             "Action": "kms:Decrypt",
-            "Resource": "arn:aws:kms:us-east-2:${var.account_id}:key/key_id",
+            "Resource": "arn:aws:kms:${var.region}:${var.account_id}:key/*",
             "Condition": {
                 "StringEquals": {
-                    "kms:ViaService": "secretsmanager.us-east-2.amazonaws.com"
+                    "kms:ViaService": "secretsmanager.${var.region}.amazonaws.com"
                 }
             }
         }
