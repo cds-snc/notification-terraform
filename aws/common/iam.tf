@@ -233,3 +233,55 @@ resource "aws_iam_group_policy" "inspec_cloud_guard_rails" {
 }
 EOF
 }
+
+resource "aws_iam_role" "rds-proxy-to-secrets-role" {
+  name = "rds-proxy-to-secrets-role"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "rds.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy" "rds-proxy-to-secrets-policy" {
+  name = "rds-proxy-to-secrets-policy"
+  role = aws_iam_role.rds-proxy-to-secrets-role.id
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "secretsmanager:GetSecretValue",
+            "Resource": [
+                "arn:aws:secretsmanager:us-east-2:${var.account_id}:secret:secret_name_1"
+            ]
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "kms:Decrypt",
+            "Resource": "arn:aws:kms:us-east-2:${var.account_id}:key/key_id",
+            "Condition": {
+                "StringEquals": {
+                    "kms:ViaService": "secretsmanager.us-east-2.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
+POLICY
+}

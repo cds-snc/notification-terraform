@@ -52,7 +52,6 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   storage_encrypted   = true
   deletion_protection = true
 
-
   vpc_security_group_ids = [
     var.eks_cluster_securitygroup
   ]
@@ -98,3 +97,42 @@ resource "aws_db_event_subscription" "notification-canada-ca-cluster" {
   # We are interested in all events so leaving out the event_categories parameter
 }
 
+resource "aws_db_proxy" "notification-canada-ca-proxy" {
+  name                   = "notification-canada-ca-proxy"
+  debug_logging          = false
+  engine_family          = "POSTGRESQL"
+  idle_client_timeout    = 300 # 5 minutes
+  require_tls            = true
+  role_arn               = aws_iam_role.example.arn
+  vpc_security_group_ids = [var.eks_cluster_securitygroup]
+  vpc_subnet_ids         = var.vpc_private_subnets
+
+  auth {
+    auth_scheme = "SECRETS"
+    description = "example"
+    iam_auth    = "DISABLED"
+    secret_arn  = aws_secretsmanager_secret.example.arn
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_db_proxy_default_target_group" "example" {
+  db_proxy_name = aws_db_proxy.example.name
+
+  connection_pool_config {
+    connection_borrow_timeout    = 120
+    init_query                   = "SET x=1, y=2"
+    max_connections_percent      = 100
+    max_idle_connections_percent = 50
+    session_pinning_filters      = ["EXCLUDE_VARIABLE_SETS"]
+  }
+}
+
+resource "aws_db_proxy_target" "example" {
+  db_instance_identifier = aws_db_instance.example.id
+  db_proxy_name          = aws_db_proxy.example.name
+  target_group_name      = aws_db_proxy_default_target_group.example.name
+}
