@@ -18,9 +18,6 @@ resource "aws_secretsmanager_secret_version" "superuser" {
     password = var.rds_cluster_password
   })
 
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
 }
 
 
@@ -61,6 +58,7 @@ module "rds_proxy" {
     "postgres" = {
       description = aws_secretsmanager_secret.superuser.description
       arn         = aws_secretsmanager_secret.superuser.arn
+      kms_key_id  = var.kms_arn
     }
   }
 
