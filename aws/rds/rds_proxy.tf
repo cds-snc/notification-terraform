@@ -1,10 +1,14 @@
+locals {
+  db_user = "postgres"
+}
+
 ################################################################################
 # Secrets - DB user passwords
 ################################################################################
 
 resource "aws_secretsmanager_secret" "superuser" {
-  name        = "postgres"
-  description = "Database superuser `postgres` database connection values"
+  name        = local.db_user
+  description = "Database superuser ${local.db_username}, database connection values"
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -14,7 +18,7 @@ resource "aws_secretsmanager_secret" "superuser" {
 resource "aws_secretsmanager_secret_version" "superuser" {
   secret_id = aws_secretsmanager_secret.superuser.id
   secret_string = jsonencode({
-    username = "postgres"
+    username = local.db_user
     password = var.rds_cluster_password
   })
 
@@ -55,7 +59,7 @@ module "rds_proxy" {
   }
 
   secrets = {
-    "postgres" = {
+    local.db_user = {
       description = aws_secretsmanager_secret.superuser.description
       arn         = aws_secretsmanager_secret.superuser.arn
       kms_key_id  = var.kms_arn

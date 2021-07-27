@@ -2,6 +2,10 @@ variable "eks_cluster_securitygroup" {
   type = string
 }
 
+variable "kms_arn" {
+  type = string
+}
+
 variable "rds_server_db_user" {
   type = string
 }
