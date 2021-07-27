@@ -1,3 +1,32 @@
+################################################################################
+# Secrets - DB user passwords
+################################################################################
+
+resource "aws_secretsmanager_secret" "superuser" {
+  name        = "postgres"
+  description = "Database superuser `postgres` database connection values"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "superuser" {
+  secret_id = aws_secretsmanager_secret.superuser.id
+  secret_string = jsonencode({
+    username = "postgres"
+    password = var.rds_cluster_password
+  })
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+
+################################################################################
+# RDS Proxy
+################################################################################
 
 module "rds_proxy" {
   source = "clowdhaus/rds-proxy/aws"
@@ -29,18 +58,15 @@ module "rds_proxy" {
   }
 
   secrets = {
-    "superuser" = {
-      description = "Aurora PostgreSQL superuser password"
-      arn         = "arn:aws:secretsmanager:us-east-1:123456789012:secret:superuser-6gsjLD"
-      kms_key_id  = "6ca29066-552a-46c5-a7d7-7bf9a15fc255"
+    "postgres" = {
+      description = aws_secretsmanager_secret.superuser.description
+      arn         = aws_secretsmanager_secret.superuser.arn
     }
   }
 
   engine_family = "POSTGRESQL"
-#   db_host       = "myendpoint.cluster-custom-123456789012.${var.region}.rds.amazonaws.com"
-#   db_name       = "example"
-  db_host       = module.rds.rds_cluster_endpoint
-  db_name       = module.rds.rds_cluster_database_name
+  db_host       = aws_rds_cluster.notification-canada-ca.endpoint
+  db_name       = aws_rds_cluster.notification-canada-ca.database_name
 
   # Target Aurora cluster
   target_db_cluster     = true
