@@ -8,7 +8,7 @@ locals {
 
 resource "aws_secretsmanager_secret" "superuser" {
   name        = local.db_user
-  description = "Database superuser ${local.db_username}, database connection values"
+  description = "Database superuser ${local.db_user}, database connection values"
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
