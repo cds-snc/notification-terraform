@@ -6,7 +6,7 @@ locals {
 # Secrets - DB user passwords
 ################################################################################
 
-resource "aws_secretsmanager_secret" "superuser" {
+resource "aws_secretsmanager_secret" "database_user" {
   name        = local.db_user
   description = "Database superuser ${local.db_user}, database connection values"
 
@@ -15,8 +15,8 @@ resource "aws_secretsmanager_secret" "superuser" {
   }
 }
 
-resource "aws_secretsmanager_secret_version" "superuser" {
-  secret_id = aws_secretsmanager_secret.superuser.id
+resource "aws_secretsmanager_secret_version" "database_user" {
+  secret_id = aws_secretsmanager_secret.database_user.id
   secret_string = jsonencode({
     username = local.db_user
     password = var.rds_cluster_password
@@ -59,8 +59,8 @@ module "rds_proxy" {
 
   secrets = {
     "${local.db_user}" = {
-      description = aws_secretsmanager_secret.superuser.description
-      arn         = aws_secretsmanager_secret.superuser.arn
+      description = aws_secretsmanager_secret.database_user.description
+      arn         = aws_secretsmanager_secret.database_user.arn
       kms_key_id  = var.kms_arn
     }
   }
