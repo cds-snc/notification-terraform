@@ -12,6 +12,7 @@ variable "rds_server_db_user" {
 
 variable "rds_cluster_password" {
   type = string
+  sensitive   = true
 }
 
 variable "rds_instance_count" {
