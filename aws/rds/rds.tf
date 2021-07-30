@@ -22,7 +22,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   engine                       = aws_rds_cluster.notification-canada-ca.engine
   engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
   performance_insights_enabled = true
-  #tfsec:ignore:AWS053 - Encryption for RDS Perfomance Insights should be enabled.
+  # tfsec:ignore:AWS053 - Encryption for RDS Perfomance Insights should be enabled.
   # Cannot set a custom KMS key after performance insights has been enabled
   # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
   preferred_maintenance_window = "wed:04:00-wed:04:30"
@@ -51,7 +51,6 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
   storage_encrypted   = true
   deletion_protection = true
-
 
   vpc_security_group_ids = [
     var.eks_cluster_securitygroup
@@ -97,4 +96,3 @@ resource "aws_db_event_subscription" "notification-canada-ca-cluster" {
   # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html
   # We are interested in all events so leaving out the event_categories parameter
 }
-

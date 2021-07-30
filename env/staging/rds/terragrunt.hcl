@@ -9,6 +9,7 @@ dependency "common" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
+    kms_arn = ""
     vpc_private_subnets = [
       "subnet-001e585d12cce4d1e",
       "subnet-08de34a9e1a7458dc",
@@ -35,6 +36,7 @@ include {
 
 inputs = {
   eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
+  kms_arn                   = dependency.common.outputs.kms_arn
   rds_instance_count        = 3
   rds_instance_type         = "db.r6g.large"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets

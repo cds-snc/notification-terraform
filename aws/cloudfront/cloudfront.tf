@@ -59,4 +59,3 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
 
   #tfsec:ignore:AWS071 - Access logging disabled
 }
-
