@@ -33,6 +33,7 @@ module "rds_proxy" {
   version = "~> 2.0"
 
   name                    = "rds-proxy"
+  iam_auth                = "DISABLED"
   iam_role_name           = "rds-proxy-to-secrets-role"
   iam_policy_name         = "rds-proxy-to-secrets-policy"
 
@@ -73,6 +74,9 @@ module "rds_proxy" {
   target_db_cluster     = true
   db_cluster_identifier = aws_rds_cluster.notification-canada-ca.cluster_identifier
 
+  proxy_tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
