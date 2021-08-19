@@ -8,6 +8,9 @@ variable "admin_client_user_name" {
   sensitive = true
 }
 
+variable "api_host_name" {
+  type = string
+}
 
 variable "asset_domain" {
   type = string
@@ -34,7 +37,6 @@ variable "base_domain" {
 
 variable "csv_upload_bucket_name" {
   type = string
-  sensitive = true
 }
 
 variable "dangerous_salt" {
