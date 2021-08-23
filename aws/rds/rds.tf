@@ -71,6 +71,31 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   }
 }
 
+resource "aws_rds_cluster_parameter_group" "default" {
+  name        = "rds-cluster-pg"
+  family      = "aurora-postgresql11"
+  description = "RDS default cluster parameter group"
+
+  parameter {
+    name  = "log_min_error_statement"
+    value = "debug5"
+  }
+
+  parameter {
+    name  = "log_connections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_disconnections"
+    value = "1"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_db_event_subscription" "notification-canada-ca" {
   name      = "notification-canada-ca-events-subscription"
   sns_topic = var.sns_alert_general_arn
