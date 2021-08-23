@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "api" {
-  name        = "api-gateway"
+  name        = "api-scratch"
   description = "Proxy to handle requests to our API"
 
   endpoint_configuration {
@@ -17,6 +17,16 @@ resource "aws_api_gateway_method" "method" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.resource.id
   http_method   = "ANY"
+  authorization = "NONE"
+  request_parameters = {
+    "method.request.path.proxy" = true
+  }
+}
+
+resource "aws_api_gateway_method" "root_method" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_rest_api.api.root_resource_id
+  http_method   = "GET"
   authorization = "NONE"
   request_parameters = {
     "method.request.path.proxy" = true
@@ -72,24 +82,24 @@ resource "aws_api_gateway_stage" "api" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   stage_name    = "v1"
 
-  access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.api_gateway_log_group.arn
-    format          = "{\"requestId\":\"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\":\"$context.identity.caller\", \"requestTime\":\"$context.requestTime\", \"httpMethod\":\"$context.httpMethod\", \"resourcePath\":\"$context.resourcePath\", \"status\":\"$context.status\", \"responseLength\":\"$context.responseLength\"}"
-  }
+  # access_log_settings {
+  #   destination_arn = aws_cloudwatch_log_group.api_gateway_log_group.arn
+  #   format          = "{\"requestId\":\"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\":\"$context.identity.caller\", \"requestTime\":\"$context.requestTime\", \"httpMethod\":\"$context.httpMethod\", \"resourcePath\":\"$context.resourcePath\", \"status\":\"$context.status\", \"responseLength\":\"$context.responseLength\"}"
+  # }
 }
 
-resource "aws_api_gateway_domain_name" "api" {
-  regional_certificate_arn = data.aws_acm_certificate.notification-canada-ca.arn
-  domain_name              = "api-lambda.${var.notify_email_domain}"
-  security_policy          = "TLS_1_2"
+# resource "aws_api_gateway_domain_name" "api" {
+#   regional_certificate_arn = data.aws_acm_certificate.notification-canada-ca.arn
+#   domain_name              = "api-lambda.${var.notify_email_domain}"
+#   security_policy          = "TLS_1_2"
 
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-}
+#   endpoint_configuration {
+#     types = ["REGIONAL"]
+#   }
+# }
 
-resource "aws_api_gateway_base_path_mapping" "api" {
-  api_id      = aws_api_gateway_rest_api.api.id
-  stage_name  = aws_api_gateway_stage.api.stage_name
-  domain_name = aws_api_gateway_domain_name.api.domain_name
-}
+# resource "aws_api_gateway_base_path_mapping" "api" {
+#   api_id      = aws_api_gateway_rest_api.api.id
+#   stage_name  = aws_api_gateway_stage.api.stage_name
+#   domain_name = aws_api_gateway_domain_name.api.domain_name
+# }
