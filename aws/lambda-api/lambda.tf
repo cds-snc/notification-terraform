@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "api" {
-  function_name = "api-${var.environment}"
+  function_name = "api-${var.env}"
 
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.api.repository_url}:latest"
@@ -36,7 +36,7 @@ resource "aws_lambda_function" "api" {
       MLWR_HOST = var.mlwr_host
       NOTIFICATION_QUEUE_PREFIX = var.notification_queue_prefix
       NOTIFY_EMAIL_DOMAIN = var.domain
-      NOTIFY_ENVIRONMENT = var.environment
+      NOTIFY_ENVIRONMENT = var.env
       REDIS_ENABLED = var.redis_enabled
       REDIS_URL = var.redis_url
       SECRET_KEY = var.secret_key
