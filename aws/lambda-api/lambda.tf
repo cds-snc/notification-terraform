@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "api" {
-  function_name = "api"
+  function_name = "api-${var.environment}"
 
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.api.repository_url}:latest"
@@ -8,6 +8,16 @@ resource "aws_lambda_function" "api" {
   timeout = 60
 
   memory_size = 1024
+  publish = true
+
+  # vpc_config {
+  #   security_group_ids = [
+  #     asdf,
+  #   ]
+  #   subnet_ids = [
+  #     asdf,
+  #   ]
+  # }
 
   environment {
     variables = {
@@ -35,12 +45,7 @@ resource "aws_lambda_function" "api" {
       SQLALCHEMY_POOL_SIZE = var.sqlalchemy_pool_size
     }
   }
-
-  vpc_config {
-    security_group_ids = [module.rds.proxy_security_group_id]
-    subnet_ids         = module.vpc.private_subnet_ids
-  }
-
+  
   lifecycle {
     ignore_changes = [
       image_uri,
@@ -48,10 +53,24 @@ resource "aws_lambda_function" "api" {
   }
 }
 
-resource "aws_lambda_permission" "api" {
-  statement_id  = "AllowAPIGatewayInvoke"
+resource "aws_lambda_permission" "api_1" {
+  statement_id  = "AllowAPIGatewayInvoke1"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.api.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
+
+resource "aws_lambda_permission" "api_2" {
+  statement_id  = "AllowAPIGatewayInvoke2"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.api.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*/*"
+}
+
+# resource "aws_lambda_provisioned_concurrency_config" "api" {
+#   function_name                     = aws_lambda_function.api.function_name
+#   provisioned_concurrent_executions = 2
+#   qualifier                         = aws_lambda_function.api.version
+# }
