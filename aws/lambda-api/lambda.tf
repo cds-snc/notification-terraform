@@ -10,14 +10,10 @@ resource "aws_lambda_function" "api" {
   memory_size = 1024
   publish = true
 
-  # vpc_config {
-  #   security_group_ids = [
-  #     asdf,
-  #   ]
-  #   subnet_ids = [
-  #     asdf,
-  #   ]
-  # }
+  vpc_config {
+    security_group_ids = var.eks_cluster_securitygroup
+    subnet_ids = var.vpc_private_subnets
+  }
 
   environment {
     variables = {

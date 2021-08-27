@@ -80,3 +80,11 @@ variable "sqlalchemy_database_uri" {
 variable "sqlalchemy_pool_size" {
   type = string
 }
+
+variable "vpc_private_subnets" {
+  type = list(any)
+}
+
+variable "eks_cluster_securitygroup" {
+  type = list(any)
+}
