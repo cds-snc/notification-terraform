@@ -9,7 +9,7 @@ include {
 }
 
 inputs = {
-  sns_monthly_spend_limit                        = 10000
+  sns_monthly_spend_limit                        = 30000
   sns_monthly_spend_limit_us_west_2              = 2000
   alarm_warning_document_download_bucket_size_gb = 100
 }
