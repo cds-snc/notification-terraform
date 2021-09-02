@@ -11,7 +11,9 @@ resource "aws_lambda_function" "api" {
   publish = true
 
   vpc_config {
-    security_group_ids = var.eks_cluster_securitygroup
+    security_group_ids = [
+    var.eks_cluster_securitygroup,
+  ]
     subnet_ids = var.vpc_private_subnets
   }
 

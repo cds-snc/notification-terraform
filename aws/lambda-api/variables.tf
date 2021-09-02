@@ -86,5 +86,5 @@ variable "vpc_private_subnets" {
 }
 
 variable "eks_cluster_securitygroup" {
-  type = list(any)
+  type = string
 }
