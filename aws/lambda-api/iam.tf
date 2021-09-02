@@ -78,3 +78,38 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
   role       = aws_iam_role.api.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
+
+###
+# Application level policies
+###
+
+resource "aws_iam_policy" "lambda-notification-worker-policy" {
+  name        = "lambda-notification-worker-policy"
+  description = "Permissions for a notification worker"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "mobiletargeting:*",
+        "ses:SendEmail",
+        "ses:SendRawEmail",
+        "sqs:*",
+        "sns:Publish",
+        "securityhub:BatchImportFindings",
+        "s3:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "lambda-notification-worker-policy" {
+  policy_arn = aws_iam_policy.lambda-notification-worker-policy.arn
+  role       = aws_iam_role.api.name
+}
