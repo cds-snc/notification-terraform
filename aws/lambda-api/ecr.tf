@@ -3,7 +3,7 @@ resource "aws_ecr_repository" "api" {
   #tfsec:ignore:AWS078
 
   name                 = "notify/api-${var.env}"
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true
