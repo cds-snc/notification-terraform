@@ -88,3 +88,7 @@ variable "vpc_private_subnets" {
 variable "eks_cluster_securitygroup" {
   type = string
 }
+
+variable "document_download_api_host" {
+  type = string
+}
