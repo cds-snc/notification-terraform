@@ -36,6 +36,36 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   }
 }
 
+resource "aws_rds_cluster_parameter_group" "default" {
+  name        = "rds-cluster-pg"
+  family      = "aurora-postgresql11"
+  description = "RDS customized cluster parameter group"
+
+  parameter {
+    name  = "log_min_error_statement"
+    value = "debug5"
+  }
+
+  parameter {
+    name  = "log_connections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_disconnections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_statement"
+    value = "all"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
@@ -51,6 +81,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
   storage_encrypted   = true
   deletion_protection = true
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.default.name
 
   vpc_security_group_ids = [
     var.eks_cluster_securitygroup
