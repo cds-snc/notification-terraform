@@ -1,10 +1,10 @@
 variable "admin_client_secret" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "admin_client_user_name" {
-  type = string
+  type      = string
   sensitive = true
 }
 
@@ -21,7 +21,7 @@ variable "asset_upload_bucket_name" {
 }
 
 variable "auth_tokens" {
-  type = string
+  type      = string
   sensitive = true
 }
 
@@ -40,7 +40,7 @@ variable "csv_upload_bucket_name" {
 }
 
 variable "dangerous_salt" {
-  type = string
+  type      = string
   sensitive = true
 }
 
@@ -65,7 +65,7 @@ variable "redis_url" {
 }
 
 variable "secret_key" {
-  type = string
+  type      = string
   sensitive = true
 }
 
