@@ -37,6 +37,9 @@ include {
 inputs = {
   eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
+  aws_pinpoint_region       = "us-west-2"
+  redis_enabled             = "1"
+  sqlalchemy_pool_size      = "256"
 }
 
 terraform {
