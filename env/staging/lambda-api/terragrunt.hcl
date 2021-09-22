@@ -40,6 +40,8 @@ inputs = {
   aws_pinpoint_region       = "us-west-2"
   redis_enabled             = "1"
   sqlalchemy_pool_size      = "256"
+  api_image_tag             = "latest"
+
 }
 
 terraform {

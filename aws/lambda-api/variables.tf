@@ -92,3 +92,7 @@ variable "eks_cluster_securitygroup" {
 variable "document_download_api_host" {
   type = string
 }
+
+variable "api_image_tag" {
+  type = string
+}

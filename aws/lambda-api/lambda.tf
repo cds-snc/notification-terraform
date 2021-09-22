@@ -2,7 +2,7 @@ resource "aws_lambda_function" "api" {
   function_name = "api-${var.env}"
 
   package_type = "Image"
-  image_uri    = "${aws_ecr_repository.api.repository_url}:latest"
+  image_uri    = "${aws_ecr_repository.api.repository_url}:${var.api_image_tag}"
 
   role    = aws_iam_role.api.arn
   timeout = 60
