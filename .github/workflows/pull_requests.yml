@@ -72,8 +72,8 @@ jobs:
         run: |
           mkdir bin
           wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/$TERRAGRUNT_VERSION/terragrunt_linux_amd64
-          chmod +x bin/terragrunt
-          echo "bin" >> $GITHUB_PATH
+          chmod +x bin/*
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
       - name: Plan aws/common
         run: |
@@ -109,3 +109,12 @@ jobs:
         run: |
           cd env/${{env.TARGET_ENV_PATH}}/lambda-api
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+
+      - name: Terragrunt plan lambda-api
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "infrastructure/terragrunt/env/${{env.TARGET_ENV_PATH}}/lambda-api"
+          comment-delete: "true"
+          comment-title: "Prod: lambda-api"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
