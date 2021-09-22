@@ -14,6 +14,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
   period              = "300"
   statistic           = "Maximum"
   threshold           = 0.8 * var.sns_monthly_spend_limit
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
 
@@ -60,6 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
   period              = "300"
   statistic           = "Maximum"
   threshold           = 0.9 * var.sns_monthly_spend_limit_us_west_2
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
 }
