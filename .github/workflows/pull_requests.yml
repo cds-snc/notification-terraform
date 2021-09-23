@@ -109,12 +109,3 @@ jobs:
         run: |
           cd env/${{env.TARGET_ENV_PATH}}/lambda-api
           ../../../bin/terragrunt plan --terragrunt-non-interactive
-
-      - name: Terragrunt plan lambda-api
-        uses: cds-snc/terraform-plan@v1
-        with:
-          directory: "infrastructure/terragrunt/env/${{env.TARGET_ENV_PATH}}/lambda-api"
-          comment-delete: "true"
-          comment-title: "Prod: lambda-api"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
