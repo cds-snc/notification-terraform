@@ -41,8 +41,8 @@ env:
   TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
   TF_VAR_sqlalchemy_database_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_URI }}
-  TF_VAR_eks_cluster_securitygroup: ${{ secrets.EKS_CLUSTER_SECURITY_GROUP }}
-  TF_VAR_document_download_api_host: ${{ secrets.DOCUMENT_DOWNLOAD_API_HOST }}
+  TF_VAR_eks_cluster_securitygroup: ${{ secrets.STAGING_EKS_CLUSTER_SECURITY_GROUP }}
+  TF_VAR_document_download_api_host: ${{ secrets.STAGING_DOCUMENT_DOWNLOAD_API_HOST }}
 
 jobs:
   terraform-apply:
