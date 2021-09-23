@@ -37,7 +37,7 @@ module "rds_proxy" {
   iam_role_name           = "rds-proxy-to-secrets-role"
   iam_policy_name         = "rds-proxy-to-secrets-policy"
 
-  idle_client_timeout     = 600
+  idle_client_timeout     = 1800
   max_connections_percent = 90
   require_tls             = false
 
