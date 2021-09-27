@@ -78,6 +78,9 @@ resource "aws_api_gateway_integration_response" "integration_response" {
   http_method = aws_api_gateway_method.method.http_method
   status_code = aws_api_gateway_method_response.api_response_200.status_code
 
+  depends_on = [
+    aws_api_gateway_integration.integration
+  ]
   response_templates = {
     "application/json" = ""
   }
@@ -86,6 +89,9 @@ resource "aws_api_gateway_integration_response" "integration_response" {
 resource "aws_api_gateway_deployment" "api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
 
+  depends_on = [
+    aws_api_gateway_integration.integration
+  ]
   lifecycle {
     create_before_destroy = true
   }
