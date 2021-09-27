@@ -60,8 +60,8 @@ resource "aws_lambda_permission" "api_1" {
   source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
 
-# resource "aws_lambda_provisioned_concurrency_config" "api" {
-#   function_name                     = aws_lambda_function.api.function_name
-#   provisioned_concurrent_executions = 2
-#   qualifier                         = aws_lambda_function.api.version
-# }
+resource "aws_lambda_provisioned_concurrency_config" "api" {
+  function_name                     = aws_lambda_function.api.function_name
+  provisioned_concurrent_executions = 1
+  qualifier                         = aws_lambda_function.api.version
+}
