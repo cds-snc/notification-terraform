@@ -41,7 +41,9 @@ inputs = {
   redis_enabled             = "1"
   sqlalchemy_pool_size      = "256"
   api_image_tag             = "latest"
-
+  scaling_min_capacity      = 1
+  scaling_max_capacity      = 10
+  scaling_target_value      = 0.9
 }
 
 terraform {

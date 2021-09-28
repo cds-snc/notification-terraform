@@ -67,8 +67,8 @@ resource "aws_lambda_provisioned_concurrency_config" "api" {
 }
 
 resource "aws_appautoscaling_target" "api" {
-  max_capacity       = 4
-  min_capacity       = 1
+  min_capacity       = var.scaling_min_capacity
+  max_capacity       = var.scaling_max_capacity
   resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_function.api.version}"
   scalable_dimension = "lambda:function:ProvisionedConcurrency"
   service_namespace  = "lambda"
@@ -82,7 +82,7 @@ resource "aws_appautoscaling_policy" "api" {
   service_namespace  = aws_appautoscaling_target.api.service_namespace
 
   target_tracking_scaling_policy_configuration {
-    target_value = 0.7
+    target_value = var.scaling_target_value
     predefined_metric_specification {
       predefined_metric_type = "LambdaProvisionedConcurrencyUtilization"
     }
