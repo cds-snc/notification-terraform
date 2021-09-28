@@ -20,6 +20,23 @@ env:
   TARGET_ENV_PATH: staging
   TF_VAR_rds_cluster_password: fake_password_for_plan_123456
   TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
+  TF_VAR_admin_client_secret: ${{ secrets.STAGING_ADMIN_CLIENT_SECRET }}
+  TF_VAR_admin_client_user_name: ${{ secrets.STAGING_ADMIN_CLIENT_USER_NAME }}
+  TF_VAR_api_host_name: ${{ secrets.STAGING_API_HOST_NAME }}
+  TF_VAR_asset_domain: ${{ secrets.STAGING_ASSET_DOMAIN }}
+  TF_VAR_asset_upload_bucket_name: ${{ secrets.STAGING_ASSET_UPLOAD_BUCKET_NAME }}
+  TF_VAR_auth_tokens: ${{ secrets.STAGING_AUTH_TOKENS }}
+  TF_VAR_base_domain: ${{ secrets.STAGING_BASE_DOMAIN }}
+  TF_VAR_csv_upload_bucket_name: ${{ secrets.STAGING_CSV_UPLOAD_BUCKET_NAME }}
+  TF_VAR_dangerous_salt: ${{ secrets.STAGING_DANGEROUS_SALT }}
+  TF_VAR_documents_bucket: ${{ secrets.STAGING_DOCUMENTS_BUCKET }}
+  TF_VAR_document_download_api_host: ${{ secrets.STAGING_DOCUMENT_DOWNLOAD_API_HOST }}
+  TF_VAR_mlwr_host: "false"
+  TF_VAR_notification_queue_prefix: eks-notification-canada-ca
+  TF_VAR_redis_url: ${{ secrets.STAGING_REDIS_URL }}
+  TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_sqlalchemy_database_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_URI }}
 
 jobs:
   terraform-plan:
