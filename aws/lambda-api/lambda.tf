@@ -62,7 +62,7 @@ resource "aws_lambda_permission" "api_1" {
 
 resource "aws_lambda_provisioned_concurrency_config" "api" {
   function_name                     = aws_lambda_function.api.function_name
-  provisioned_concurrent_executions = 1
+  provisioned_concurrent_executions = var.scaling_min_capacity
   qualifier                         = aws_lambda_function.api.version
 }
 
