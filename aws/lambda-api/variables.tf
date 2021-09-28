@@ -96,3 +96,15 @@ variable "document_download_api_host" {
 variable "api_image_tag" {
   type = string
 }
+
+variable "scaling_min_capacity" {
+  type = number
+}
+
+variable "scaling_max_capacity" {
+  type = number
+}
+
+variable "scaling_target_value" {
+  type = number
+}

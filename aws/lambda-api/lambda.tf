@@ -60,8 +60,31 @@ resource "aws_lambda_permission" "api_1" {
   source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
 
-# resource "aws_lambda_provisioned_concurrency_config" "api" {
-#   function_name                     = aws_lambda_function.api.function_name
-#   provisioned_concurrent_executions = 2
-#   qualifier                         = aws_lambda_function.api.version
-# }
+resource "aws_lambda_provisioned_concurrency_config" "api" {
+  function_name                     = aws_lambda_function.api.function_name
+  provisioned_concurrent_executions = var.scaling_min_capacity
+  qualifier                         = aws_lambda_function.api.version
+}
+
+resource "aws_appautoscaling_target" "api" {
+  min_capacity       = var.scaling_min_capacity
+  max_capacity       = var.scaling_max_capacity
+  resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_function.api.version}"
+  scalable_dimension = "lambda:function:ProvisionedConcurrency"
+  service_namespace  = "lambda"
+}
+
+resource "aws_appautoscaling_policy" "api" {
+  name               = "api-scaling-policy"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.api.resource_id
+  scalable_dimension = aws_appautoscaling_target.api.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.api.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    target_value = var.scaling_target_value
+    predefined_metric_specification {
+      predefined_metric_type = "LambdaProvisionedConcurrencyUtilization"
+    }
+  }
+}
