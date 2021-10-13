@@ -74,17 +74,29 @@ resource "aws_appautoscaling_target" "api" {
   service_namespace  = "lambda"
 }
 
-resource "aws_appautoscaling_policy" "api" {
-  name               = "api-scaling-policy"
-  policy_type        = "TargetTrackingScaling"
+# Scale up at noon EST, scale down at 5 pm EST
+resource "aws_appautoscaling_scheduled_action" "api-noon" {
+  name               = "api-noon"
+  service_namespace  = aws_appautoscaling_target.api.service_namespace
   resource_id        = aws_appautoscaling_target.api.resource_id
   scalable_dimension = aws_appautoscaling_target.api.scalable_dimension
-  service_namespace  = aws_appautoscaling_target.api.service_namespace
+  schedule           = "cron(0 12 * * ? *)"
+  timezone           = "America/Toronto"
+  scalable_target_action {
+    min_capacity = 2
+    max_capacity = 10
+  }
+}
 
-  target_tracking_scaling_policy_configuration {
-    target_value = var.scaling_target_value
-    predefined_metric_specification {
-      predefined_metric_type = "LambdaProvisionedConcurrencyUtilization"
-    }
+resource "aws_appautoscaling_scheduled_action" "api-5pm" {
+  name               = "api-5pm"
+  service_namespace  = aws_appautoscaling_target.api.service_namespace
+  resource_id        = aws_appautoscaling_target.api.resource_id
+  scalable_dimension = aws_appautoscaling_target.api.scalable_dimension
+  schedule           = "cron(0 17 * * ? *)"
+  timezone           = "America/Toronto"
+  scalable_target_action {
+    min_capacity = 1
+    max_capacity = 5
   }
 }
