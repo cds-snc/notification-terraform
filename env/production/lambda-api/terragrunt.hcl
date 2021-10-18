@@ -35,17 +35,18 @@ include {
 }
 
 inputs = {
+  env                       = "production"
+  api_image_tag             = "release"
   eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
   aws_pinpoint_region       = "us-west-2"
   redis_enabled             = "1"
   sqlalchemy_pool_size      = "256"
-  api_image_tag             = "release"
   scaling_min_capacity      = 1
   scaling_max_capacity      = 10
   scaling_target_value      = 0.9
 }
 
 terraform {
-  source = "../../../aws/lambda-api"
+  source = "../../../aws//lambda-api"
 }
