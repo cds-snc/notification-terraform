@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "api" {
-  name        = "api-${var.env}"
+  name        = "api-lambda"
   description = "Proxy to handle requests to our API"
 
   endpoint_configuration {
