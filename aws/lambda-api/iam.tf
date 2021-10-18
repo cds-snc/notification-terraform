@@ -44,7 +44,7 @@ data "aws_iam_policy_document" "api_policies" {
       "ecr:BatchGetImage"
     ]
     resources = [
-      aws_ecr_repository.api.arn
+      aws_ecr_repository.api-lambda.arn
     ]
   }
 
