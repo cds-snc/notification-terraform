@@ -35,17 +35,25 @@ include {
 }
 
 inputs = {
-  env                           = "production"
-  api_image_tag                 = "release"
-  eks_cluster_securitygroup     = dependency.eks.outputs.eks-cluster-securitygroup
-  vpc_private_subnets           = dependency.common.outputs.vpc_private_subnets
-  aws_pinpoint_region           = "us-west-2"
-  redis_enabled                 = "1"
-  sqlalchemy_pool_size          = "256"
-  low_demand_min_concurrency    = 1
-  low_demand_max_concurrency    = 5
-  high_demand_min_concurrency   = 3
-  high_demand_max_concurrency   = 10
+  env                         = "production"
+  api_image_tag               = "release"
+  eks_cluster_securitygroup   = dependency.eks.outputs.eks-cluster-securitygroup
+  vpc_private_subnets         = dependency.common.outputs.vpc_private_subnets
+  aws_pinpoint_region         = "us-west-2"
+  redis_enabled               = "1"
+  sqlalchemy_pool_size        = "256"
+  low_demand_min_concurrency  = 1
+  low_demand_max_concurrency  = 5
+  high_demand_min_concurrency = 3
+  high_demand_max_concurrency = 10
+  admin_client_user_name      = "notify-admin"
+  asset_domain                = "assets.notification.canada.ca"
+  asset_upload_bucket_name    = "notification-canada-ca-production-asset-upload"
+  csv_upload_bucket_name      = "notification-canada-ca-production-csv-upload"
+  documents_bucket            = "notification-alpha-canada-ca-document-download"
+  notification_queue_prefix   = "eks-notification-canada-ca"
+  document_download_api_host  = "https://api.document.notification.canada.ca/"
+  redis_enabled               = 1
 }
 
 terraform {

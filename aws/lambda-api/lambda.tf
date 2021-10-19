@@ -60,16 +60,22 @@ resource "aws_lambda_permission" "api_1" {
 
 resource "aws_lambda_provisioned_concurrency_config" "api" {
   function_name                     = aws_lambda_function.api.function_name
-  provisioned_concurrent_executions = var.high_demand_min_concurrency # TODO: this shouldn't change when we run terraform
+  provisioned_concurrent_executions = var.low_demand_min_concurrency
   qualifier                         = aws_lambda_function.api.version
+  lifecycle {
+    ignore_changes = [provisioned_concurrent_executions]
+  }
 }
 
 resource "aws_appautoscaling_target" "api" {
-  min_capacity       = var.high_demand_min_concurrency # TODO: this shouldn't change when we run terraform
-  max_capacity       = var.high_demand_max_concurrency # TODO: this shouldn't change when we run terraform
+  min_capacity       = var.high_demand_min_concurrency
+  max_capacity       = var.high_demand_max_concurrency
   resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_function.api.version}"
   scalable_dimension = "lambda:function:ProvisionedConcurrency"
   service_namespace  = "lambda"
+  lifecycle {
+    ignore_changes = [min_capacity, max_capacity]
+  }
 }
 
 # Scale up at noon EST, scale down at 5 pm EST

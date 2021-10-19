@@ -42,13 +42,18 @@ inputs = {
   aws_pinpoint_region         = "us-west-2"
   redis_enabled               = "1"
   sqlalchemy_pool_size        = "256"
-  scaling_min_capacity        = 1
-  scaling_max_capacity        = 10
-  scaling_target_value        = 0.9
   low_demand_min_concurrency  = 1
   low_demand_max_concurrency  = 5
   high_demand_min_concurrency = 1
   high_demand_max_concurrency = 10
+  admin_client_user_name      = "notify-admin"
+  asset_domain                = "assets.staging.notification.cdssandbox.xyz"
+  asset_upload_bucket_name    = "notification-canada-ca-staging-asset-upload"
+  csv_upload_bucket_name      = "notification-canada-ca-staging-csv-upload"
+  documents_bucket            = "notification-canada-ca-staging-document-download"
+  notification_queue_prefix   = "eks-notification-canada-ca"
+  document_download_api_host  = "https://api.document.staging.notification.cdssandbox.xyz"
+  redis_enabled               = 1
 }
 
 terraform {
