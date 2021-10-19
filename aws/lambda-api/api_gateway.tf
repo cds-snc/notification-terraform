@@ -111,7 +111,7 @@ resource "aws_api_gateway_stage" "api" {
 resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
   name = "api_gateway_log_group"
   tags = {
-    Environment = "staging"
+    Environment = var.env
     Application = "lambda"
   }
 }
