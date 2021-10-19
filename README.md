@@ -84,6 +84,9 @@ Assets to create a working Elastic Kubernetes Service (EKS):
 #### `aws/elasticache`
 Assets an Elasticache Redis cluster.
 
+#### `aws/lambda-api`
+Assets to create and hook up a lambda function for the api:  the lambda function, an api gateway, and the private container repository (currently required for deploying images into lambda functions).
+
 #### `aws/rds`
 Assets to create a working Relational Database Service (RDS) using Aurora PostgreSQL.
 
