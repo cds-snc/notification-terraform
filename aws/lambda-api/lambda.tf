@@ -60,13 +60,13 @@ resource "aws_lambda_permission" "api_1" {
 
 resource "aws_lambda_provisioned_concurrency_config" "api" {
   function_name                     = aws_lambda_function.api.function_name
-  provisioned_concurrent_executions = var.scaling_min_capacity
+  provisioned_concurrent_executions = var.high_demand_min_concurrency # TODO: this shouldn't change when we run terraform
   qualifier                         = aws_lambda_function.api.version
 }
 
 resource "aws_appautoscaling_target" "api" {
-  min_capacity       = var.scaling_min_capacity
-  max_capacity       = var.scaling_max_capacity
+  min_capacity       = var.high_demand_min_concurrency # TODO: this shouldn't change when we run terraform
+  max_capacity       = var.high_demand_max_concurrency # TODO: this shouldn't change when we run terraform
   resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_function.api.version}"
   scalable_dimension = "lambda:function:ProvisionedConcurrency"
   service_namespace  = "lambda"
@@ -81,8 +81,8 @@ resource "aws_appautoscaling_scheduled_action" "api-noon" {
   schedule           = "cron(0 12 * * ? *)"
   timezone           = "America/Toronto"
   scalable_target_action {
-    min_capacity = 2
-    max_capacity = 10
+    min_capacity = var.high_demand_min_concurrency
+    max_capacity = var.high_demand_max_concurrency
   }
 }
 
@@ -94,7 +94,7 @@ resource "aws_appautoscaling_scheduled_action" "api-5pm" {
   schedule           = "cron(0 17 * * ? *)"
   timezone           = "America/Toronto"
   scalable_target_action {
-    min_capacity = 1
-    max_capacity = 5
+    min_capacity = var.low_demand_min_concurrency
+    max_capacity = var.low_demand_max_concurrency
   }
 }

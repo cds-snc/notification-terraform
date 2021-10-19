@@ -88,14 +88,18 @@ variable "api_image_tag" {
   type = string
 }
 
-variable "scaling_min_capacity" {
+variable "low_demand_min_concurrency" {
   type = number
 }
 
-variable "scaling_max_capacity" {
+variable "low_demand_max_concurrency" {
   type = number
 }
 
-variable "scaling_target_value" {
+variable "high_demand_min_concurrency" {
+  type = number
+}
+
+variable "high_demand_max_concurrency" {
   type = number
 }
