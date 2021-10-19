@@ -8,10 +8,6 @@ variable "admin_client_user_name" {
   sensitive = true
 }
 
-variable "api_host_name" {
-  type = string
-}
-
 variable "asset_domain" {
   type = string
 }
@@ -27,11 +23,6 @@ variable "auth_tokens" {
 
 // check if this already exists
 variable "aws_pinpoint_region" {
-  type = string
-}
-
-// check if this already exists
-variable "base_domain" {
   type = string
 }
 

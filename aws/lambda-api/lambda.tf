@@ -21,12 +21,10 @@ resource "aws_lambda_function" "api" {
     variables = {
       ADMIN_CLIENT_SECRET            = var.admin_client_secret
       ADMIN_CLIENT_USER_NAME         = var.admin_client_user_name
-      API_HOST_NAME                  = var.api_host_name
       ASSET_DOMAIN                   = var.asset_domain
       ASSET_UPLOAD_BUCKET_NAME       = var.asset_upload_bucket_name
       AUTH_TOKENS                    = var.auth_tokens
       AWS_PINPOINT_REGION            = var.aws_pinpoint_region
-      BASE_DOMAIN                    = var.base_domain
       CSV_UPLOAD_BUCKET_NAME         = var.csv_upload_bucket_name
       DANGEROUS_SALT                 = var.dangerous_salt
       DOCUMENTS_BUCKET               = var.documents_bucket
