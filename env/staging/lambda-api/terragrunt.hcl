@@ -52,7 +52,6 @@ inputs = {
   csv_upload_bucket_name      = "notification-canada-ca-staging-csv-upload"
   documents_bucket            = "notification-canada-ca-staging-document-download"
   notification_queue_prefix   = "eks-notification-canada-ca"
-  document_download_api_host  = "https://api.document.staging.notification.cdssandbox.xyz"
   redis_enabled               = 1
 }
 
