@@ -111,3 +111,8 @@ jobs:
         run: |
           cd env/production/rds
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/lambda-api
+        run: |
+          cd env/production/lambda-api
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
