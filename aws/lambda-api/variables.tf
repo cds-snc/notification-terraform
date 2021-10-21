@@ -8,10 +8,6 @@ variable "admin_client_user_name" {
   sensitive = true
 }
 
-variable "api_host_name" {
-  type = string
-}
-
 variable "asset_domain" {
   type = string
 }
@@ -27,11 +23,6 @@ variable "auth_tokens" {
 
 // check if this already exists
 variable "aws_pinpoint_region" {
-  type = string
-}
-
-// check if this already exists
-variable "base_domain" {
   type = string
 }
 
@@ -97,14 +88,18 @@ variable "api_image_tag" {
   type = string
 }
 
-variable "scaling_min_capacity" {
+variable "low_demand_min_concurrency" {
   type = number
 }
 
-variable "scaling_max_capacity" {
+variable "low_demand_max_concurrency" {
   type = number
 }
 
-variable "scaling_target_value" {
+variable "high_demand_min_concurrency" {
+  type = number
+}
+
+variable "high_demand_max_concurrency" {
   type = number
 }

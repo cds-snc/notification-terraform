@@ -21,12 +21,10 @@ resource "aws_lambda_function" "api" {
     variables = {
       ADMIN_CLIENT_SECRET            = var.admin_client_secret
       ADMIN_CLIENT_USER_NAME         = var.admin_client_user_name
-      API_HOST_NAME                  = var.api_host_name
       ASSET_DOMAIN                   = var.asset_domain
       ASSET_UPLOAD_BUCKET_NAME       = var.asset_upload_bucket_name
       AUTH_TOKENS                    = var.auth_tokens
       AWS_PINPOINT_REGION            = var.aws_pinpoint_region
-      BASE_DOMAIN                    = var.base_domain
       CSV_UPLOAD_BUCKET_NAME         = var.csv_upload_bucket_name
       DANGEROUS_SALT                 = var.dangerous_salt
       DOCUMENTS_BUCKET               = var.documents_bucket
@@ -62,16 +60,22 @@ resource "aws_lambda_permission" "api_1" {
 
 resource "aws_lambda_provisioned_concurrency_config" "api" {
   function_name                     = aws_lambda_function.api.function_name
-  provisioned_concurrent_executions = var.scaling_min_capacity
+  provisioned_concurrent_executions = var.low_demand_min_concurrency
   qualifier                         = aws_lambda_function.api.version
+  lifecycle {
+    ignore_changes = [provisioned_concurrent_executions]
+  }
 }
 
 resource "aws_appautoscaling_target" "api" {
-  min_capacity       = var.scaling_min_capacity
-  max_capacity       = var.scaling_max_capacity
+  min_capacity       = var.high_demand_min_concurrency
+  max_capacity       = var.high_demand_max_concurrency
   resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_function.api.version}"
   scalable_dimension = "lambda:function:ProvisionedConcurrency"
   service_namespace  = "lambda"
+  lifecycle {
+    ignore_changes = [min_capacity, max_capacity]
+  }
 }
 
 # Scale up at noon EST, scale down at 5 pm EST
@@ -83,8 +87,8 @@ resource "aws_appautoscaling_scheduled_action" "api-noon" {
   schedule           = "cron(0 12 * * ? *)"
   timezone           = "America/Toronto"
   scalable_target_action {
-    min_capacity = 2
-    max_capacity = 10
+    min_capacity = var.high_demand_min_concurrency
+    max_capacity = var.high_demand_max_concurrency
   }
 }
 
@@ -96,7 +100,7 @@ resource "aws_appautoscaling_scheduled_action" "api-5pm" {
   schedule           = "cron(0 17 * * ? *)"
   timezone           = "America/Toronto"
   scalable_target_action {
-    min_capacity = 1
-    max_capacity = 5
+    min_capacity = var.low_demand_min_concurrency
+    max_capacity = var.low_demand_max_concurrency
   }
 }

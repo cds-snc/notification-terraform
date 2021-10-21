@@ -35,8 +35,8 @@ include {
 }
 
 inputs = {
-  env                         = "staging"
-  api_image_tag               = "latest"
+  env                         = "production"
+  api_image_tag               = "release"
   eks_cluster_securitygroup   = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets         = dependency.common.outputs.vpc_private_subnets
   aws_pinpoint_region         = "us-west-2"
@@ -44,13 +44,13 @@ inputs = {
   sqlalchemy_pool_size        = "256"
   low_demand_min_concurrency  = 1
   low_demand_max_concurrency  = 5
-  high_demand_min_concurrency = 1
+  high_demand_min_concurrency = 3
   high_demand_max_concurrency = 10
   admin_client_user_name      = "notify-admin"
-  asset_domain                = "assets.staging.notification.cdssandbox.xyz"
-  asset_upload_bucket_name    = "notification-canada-ca-staging-asset-upload"
-  csv_upload_bucket_name      = "notification-canada-ca-staging-csv-upload"
-  documents_bucket            = "notification-canada-ca-staging-document-download"
+  asset_domain                = "assets.notification.canada.ca"
+  asset_upload_bucket_name    = "notification-canada-ca-production-asset-upload"
+  csv_upload_bucket_name      = "notification-canada-ca-production-csv-upload"
+  documents_bucket            = "notification-alpha-canada-ca-document-download"
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1
 }
