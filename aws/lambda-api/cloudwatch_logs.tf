@@ -7,7 +7,7 @@ resource "aws_cloudwatch_log_group" "api_access" {
   retention_in_days = 14
 
   tags = {
-    CostCenter = var.billing_code
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 
