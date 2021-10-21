@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "api_policies" {
       "logs:PutLogEvents"
     ]
     resources = [
-      aws_cloudwatch_log_group.api_gateway_log_group.arn
+      aws_cloudwatch_log_group.api_access.arn
     ]
   }
 
