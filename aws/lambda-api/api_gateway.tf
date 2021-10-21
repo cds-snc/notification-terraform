@@ -103,17 +103,8 @@ resource "aws_api_gateway_stage" "api" {
   stage_name    = "v1"
 
   access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.api_gateway_log_group.arn
+    destination_arn = aws_cloudwatch_log_group.api_access.arn
     format          = "{\"requestId\":\"$context.requestId\", \"ip\": \"$context.identity.sourceIp\", \"caller\":\"$context.identity.caller\", \"requestTime\":\"$context.requestTime\", \"httpMethod\":\"$context.httpMethod\", \"resourcePath\":\"$context.resourcePath\", \"status\":\"$context.status\", \"responseLength\":\"$context.responseLength\"}"
-  }
-}
-
-resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
-  name              = "api_gateway_log_group"
-  retention_in_days = 90
-  tags = {
-    Environment = var.env
-    Application = "lambda"
   }
 }
 
