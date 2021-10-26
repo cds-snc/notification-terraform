@@ -4,7 +4,7 @@ resource "aws_lambda_function" "performance-test" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.performance-test.repository_url}:latest"
 
-  role    = "${aws_iam_role.performance-test.arn}"
+  role    = aws_iam_role.performance-test.arn
   timeout = 60
 
   memory_size = 1024
@@ -26,7 +26,7 @@ resource "aws_cloudwatch_event_target" "performance-test" {
       instance = "$.detail.instance",
       status   = "$.detail.status",
     }
-    input_template = <<EOF
+    input_template = <<-EOF
 {
   "instance_id": <instance>,
   "instance_status": <status>
