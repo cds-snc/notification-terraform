@@ -3,7 +3,7 @@ resource "aws_ecr_repository" "performance-test" {
   #tfsec:ignore:AWS078
 
   name                 = "notify/performance-test"
-  image_tag_mutability = "IMMUTABLE"
+  image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
     scan_on_push = true
