@@ -32,9 +32,7 @@ data "aws_iam_policy_document" "api_policies" {
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
-    resources = [
-      aws_cloudwatch_log_group.api_gateway_log_group.arn
-    ]
+    resources = [aws_cloudwatch_log_group.api_gateway_log_group.arn]
   }
 
   statement {
@@ -43,9 +41,7 @@ data "aws_iam_policy_document" "api_policies" {
       "ecr:GetDownloadUrlForlayer",
       "ecr:BatchGetImage"
     ]
-    resources = [
-      aws_ecr_repository.api-lambda.arn
-    ]
+    resources = [aws_ecr_repository.api-lambda.arn]
   }
 
   statement {
