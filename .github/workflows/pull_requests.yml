@@ -128,6 +128,7 @@ jobs:
           ../../../bin/terragrunt plan --terragrunt-non-interactive
 
       - name: Plan aws/performance-test
+        if: env.TARGET_ENV_PATH == 'staging'
         run: |
           cd env/${{env.TARGET_ENV_PATH}}/performance-test
           ../../../bin/terragrunt plan --terragrunt-non-interactive
