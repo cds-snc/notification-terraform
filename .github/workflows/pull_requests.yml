@@ -126,3 +126,8 @@ jobs:
         run: |
           cd env/${{env.TARGET_ENV_PATH}}/lambda-api
           ../../../bin/terragrunt plan --terragrunt-non-interactive
+
+      - name: Plan aws/performance-test
+        run: |
+          cd env/${{env.TARGET_ENV_PATH}}/performance-test
+          ../../../bin/terragrunt plan --terragrunt-non-interactive
