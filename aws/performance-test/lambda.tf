@@ -27,11 +27,11 @@ resource "aws_cloudwatch_event_target" "performance-test" {
       status   = "$.detail.status",
     }
     input_template = <<-EOF
-{
-  "instance_id": <instance>,
-  "instance_status": <status>
-}
-EOF
+    {
+      "instance_id": <instance>,
+      "instance_status": <status>
+    }
+    EOF
   }
 }
 
