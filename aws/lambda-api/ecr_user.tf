@@ -26,32 +26,30 @@ resource "aws_iam_group_policy_attachment" "ecr" {
 resource "aws_iam_policy" "ecr" {
   name        = "ecr-api-lambda-access"
   description = "Allow push to only api-lambda ECR"
+  policy      = data.aws_iam_policy_document.ecr.json
+}
 
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "GetAuthorizationToken",
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:GetAuthorizationToken"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Sid" : "AllowPushPull",
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:BatchGetImage",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:CompleteLayerUpload",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:InitiateLayerUpload",
-          "ecr:PutImage",
-          "ecr:UploadLayerPart"
-        ]
-        Resource = aws_ecr_repository.api-lambda.arn
-      }
+data "aws_iam_policy_document" "ecr" {
+  statement {
+    sid    = "GetAuthorizationToken"
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
     ]
-  })
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowPushPull"
+    effect = "Allow"
+    actions = [
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart"
+    ]
+    resources = [aws_ecr_repository.api-lambda.arn]
+  }
 }
