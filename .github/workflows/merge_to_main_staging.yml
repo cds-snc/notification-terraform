@@ -111,6 +111,11 @@ jobs:
           cd env/staging/lambda-api
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/performance-test
+        run: |
+          cd env/staging/performance-test
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Bump version and push tag
         uses: mathieudutour/github-tag-action@v4.6
         with:
