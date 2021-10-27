@@ -109,8 +109,8 @@ resource "aws_api_gateway_stage" "api" {
 }
 
 resource "aws_api_gateway_domain_name" "api" {
-  regional_certificate_arn = aws_acm_certificate.api_lambda_certificate.arn
-  domain_name              = var.domain_name
+  regional_certificate_arn = var.certificate_arn
+  domain_name              = var.api_lambda_domain_name
   security_policy          = "TLS_1_2"
 
   endpoint_configuration {
