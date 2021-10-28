@@ -62,6 +62,20 @@ jobs:
           IS_PRODUCTION=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.+?)\/").captures[1].string] | unique | select(length > 0)'`
           echo "IS_PRODUCTION=$IS_PRODUCTION" >> $GITHUB_ENV
 
+      - name: Determine Merge To Staging
+        if: contains(env.WORKFLOWS, 'merge_to_main_staging.yml') || contains(env.IS_PRODUCTION, 'staging')
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_rds_cluster_password=${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_warning_topic=${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_critical_topic=${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_slack_webhook_general_topic=${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_warning_topic=notification-staging-ops" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_critical_topic=notification-staging-ops" >> $GITHUB_ENV
+          echo "TF_VAR_slack_channel_general_topic=notification-staging-ops" >> $GITHUB_ENV
+          echo "TF_VAR_cloudwatch_opsgenie_alarm_webhook=${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}" >> $GITHUB_ENV
+
       - name: Determine Merge To Production
         if: contains(env.WORKFLOWS, 'merge_to_main_production.yml') || contains(env.WORKFLOWS, 'infrastructure_version.txt') || contains(env.IS_PRODUCTION, 'production')
         run: |
