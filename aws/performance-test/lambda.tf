@@ -18,8 +18,8 @@ resource "aws_lambda_function" "performance-test" {
 }
 
 resource "aws_cloudwatch_event_target" "performance-test" {
-  arn  = "${aws_lambda_function.performance-test.arn}"
-  rule = "${aws_cloudwatch_event_rule.performance-testing.id}"
+  arn  = aws_lambda_function.performance-test.arn
+  rule = aws_cloudwatch_event_rule.performance-testing.id
 
   input_transformer {
     input_paths = {
