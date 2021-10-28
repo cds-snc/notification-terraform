@@ -47,7 +47,6 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.performance-test.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_sns_topic.notification-canada-ca-ses-callback.arn
   qualifier     = aws_lambda_alias.performance-lambda-alias.name
 }
 resource "aws_lambda_alias" "performance-lambda-alias" {
