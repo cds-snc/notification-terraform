@@ -1,6 +1,4 @@
 resource "aws_route53_record" "api_lambda_A" {
-  # checkov:skip=CKV2_AWS_23: False-positive, record is attached to API gateway domain name
-
   zone_id = var.hosted_zone_id
   name    = var.api_lambda_domain_name
   type    = "A"
