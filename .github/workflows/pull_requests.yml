@@ -26,7 +26,7 @@ env:
   TF_VAR_asset_upload_bucket_name: ${{ secrets.STAGING_ASSET_UPLOAD_BUCKET_NAME }}
   TF_VAR_auth_tokens: ${{ secrets.STAGING_AUTH_TOKENS }}
   TF_VAR_base_domain: ${{ secrets.STAGING_BASE_DOMAIN }}
-  TF_VAR_cloudwatch_opsgenie_alarm_webhook: ${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}
+  TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
   TF_VAR_cloudwatch_slack_webhook: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}

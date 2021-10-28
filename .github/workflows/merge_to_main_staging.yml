@@ -26,7 +26,7 @@ env:
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
-  TF_VAR_cloudwatch_opsgenie_alarm_webhook: ${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}
+  TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
   TF_VAR_admin_client_secret: ${{ secrets.STAGING_ADMIN_CLIENT_SECRET }}
   TF_VAR_auth_tokens: ${{ secrets.STAGING_AUTH_TOKENS }}
   TF_VAR_dangerous_salt: ${{ secrets.STAGING_DANGEROUS_SALT }}
