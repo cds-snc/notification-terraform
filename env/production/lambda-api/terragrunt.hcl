@@ -1,3 +1,9 @@
+# Uses GitHub tags for release management
+#
+terraform {
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/lambda-api?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+}
+
 dependencies {
   paths = ["../common", "../eks", "../dns"]
 }
@@ -65,8 +71,4 @@ inputs = {
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1
   certificate_arn             = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
-}
-
-terraform {
-  source = "../../../aws//lambda-api"
 }

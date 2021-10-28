@@ -5,6 +5,8 @@ on:
     branches:
       - main
     paths:
+      - "env/production/**"
+      - ".github/workflows/merge_to_main_production.yml"
       - ".github/workflows/infrastructure_version.txt"
 
 defaults:
