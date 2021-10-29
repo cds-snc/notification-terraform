@@ -36,7 +36,6 @@ env:
   TF_VAR_sqlalchemy_database_uri: ${{ secrets.PRODUCTION_SQLALCHEMY_DATABASE_URI }}
   TF_VAR_document_download_api_host: ${{ secrets.PRODUCTION_DOCUMENT_DOWNLOAD_API_HOST }}
   TF_VAR_api_lambda_domain_name: ${{ secrets.PRODUCTION_API_LAMBDA_DOMAIN_NAME }}
-  TF_VAR_hosted_zone_id: ${{ secrets.PRODUCTION_HOSTED_ZONE_ID }}
 
 jobs:
   terraform-apply:
