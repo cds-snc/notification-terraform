@@ -3,10 +3,7 @@ name: "Terragrunt plan PRODUCTION"
 on:
   pull_request:
     paths:
-      - "aws/**"
-      - "env/production/**"
-      - "env/terragrunt.hcl"
-      - ".github/workflows/terragrunt_plan_production.yml"
+      - ".github/workflows/infrastructure_version.txt"
 
 env:
   TARGET_ENV_PATH: production
