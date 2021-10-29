@@ -1,5 +1,5 @@
 resource "aws_iam_user" "ecr-user" {
-  name = "ecr-user"
+  name = "AllTheSteves"
 }
 
 resource "aws_iam_access_key" "ecr-user" {
