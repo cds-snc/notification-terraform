@@ -1,0 +1,144 @@
+name: "Terragrunt plan STAGING"
+
+on:
+  pull_request:
+    paths:
+      - "aws/**"
+      - "env/staging/**"
+      - "env/terragrunt.hcl"
+      - ".github/workflows/terragrunt_plan_staging.yml"
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ca-central-1
+  TERRAFORM_VERSION: 0.14.4
+  TERRAGRUNT_VERSION: v0.26.0
+  TARGET_ENV_PATH: staging
+  TF_VAR_rds_cluster_password: fake_password_for_plan_123456
+  TF_VAR_cloudwatch_slack_webhook: "https://example.com/slack/webhook"
+  TF_VAR_admin_client_secret: ${{ secrets.STAGING_ADMIN_CLIENT_SECRET }}
+  TF_VAR_admin_client_user_name: ${{ secrets.STAGING_ADMIN_CLIENT_USER_NAME }}
+  TF_VAR_api_host_name: ${{ secrets.STAGING_API_HOST_NAME }}
+  TF_VAR_asset_domain: ${{ secrets.STAGING_ASSET_DOMAIN }}
+  TF_VAR_asset_upload_bucket_name: ${{ secrets.STAGING_ASSET_UPLOAD_BUCKET_NAME }}
+  TF_VAR_auth_tokens: ${{ secrets.STAGING_AUTH_TOKENS }}
+  TF_VAR_base_domain: ${{ secrets.STAGING_BASE_DOMAIN }}
+  TF_VAR_csv_upload_bucket_name: ${{ secrets.STAGING_CSV_UPLOAD_BUCKET_NAME }}
+  TF_VAR_dangerous_salt: ${{ secrets.STAGING_DANGEROUS_SALT }}
+  TF_VAR_documents_bucket: ${{ secrets.STAGING_DOCUMENTS_BUCKET }}
+  TF_VAR_document_download_api_host: ${{ secrets.STAGING_DOCUMENT_DOWNLOAD_API_HOST }}
+  TF_VAR_mlwr_host: "false"
+  TF_VAR_notification_queue_prefix: eks-notification-canada-ca
+  TF_VAR_redis_url: ${{ secrets.STAGING_REDIS_URL }}
+  TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_sqlalchemy_database_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_URI }}
+
+jobs:
+  terragrunt-plan-staging:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@3d8debd658c92063839bc97da5c2427100420dec # v1.3.2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+          mkdir bin
+          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v$TERRAGRUNT_VERSION/terragrunt_linux_amd64
+          chmod +x bin/*
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+      - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
+        id: filter
+        with:
+          filters: |
+            common:
+              - '.github/workflows/terragrunt-plan-staging.yml'
+              - 'env/common/**'
+              - 'env/terragrunt.hcl'
+              - 'env/staging/env_vars.hcl'
+            dns:
+              - 'aws/dns/**'
+              - 'env/staging/dns/**'
+            eks:
+              - 'aws/eks/**'
+              - 'env/staging/eks/**'
+            elasticache:
+              - 'aws/elasticache/**'
+              - 'env/staging/elasticache/**'
+            rds:
+              - 'aws/rds/**'
+              - 'env/staging/rds/**'
+            cloudfront:
+              - 'aws/cloudfront/**'
+              - 'env/staging/cloudfront/**'
+            lambda-api:
+              - 'aws/lambda-api/**'
+              - 'env/staging/lambda-api/**'
+      
+      - name: Terragrunt plan dns
+        if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/dns"
+          comment-delete: "true"
+          comment-title: "Staging: dns"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan eks
+        if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/eks"
+          comment-delete: "true"
+          comment-title: "Staging: eks"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan elasticache
+        if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/elasticache"
+          comment-delete: "true"
+          comment-title: "Staging: elasticache"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan rds
+        if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/rds"
+          comment-delete: "true"
+          comment-title: "Staging: rds"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan cloudfront
+        if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/cloudfront"
+          comment-delete: "true"
+          comment-title: "Staging: cloudfront"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan lambda-api
+        if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/lambda-api"
+          comment-delete: "true"
+          comment-title: "Staging: lambda-api"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
