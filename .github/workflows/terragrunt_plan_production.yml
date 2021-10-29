@@ -101,7 +101,7 @@ jobs:
         with:
           directory: "env/production/dns"
           comment-delete: "true"
-          comment-title: "Staging: dns"
+          comment-title: "Production: dns"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -111,7 +111,7 @@ jobs:
         with:
           directory: "env/production/eks"
           comment-delete: "true"
-          comment-title: "Staging: eks"
+          comment-title: "Production: eks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -121,7 +121,7 @@ jobs:
         with:
           directory: "env/production/elasticache"
           comment-delete: "true"
-          comment-title: "Staging: elasticache"
+          comment-title: "Production: elasticache"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -131,7 +131,7 @@ jobs:
         with:
           directory: "env/production/rds"
           comment-delete: "true"
-          comment-title: "Staging: rds"
+          comment-title: "Production: rds"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -141,7 +141,7 @@ jobs:
         with:
           directory: "env/production/cloudfront"
           comment-delete: "true"
-          comment-title: "Staging: cloudfront"
+          comment-title: "Production: cloudfront"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -151,6 +151,6 @@ jobs:
         with:
           directory: "env/production/lambda-api"
           comment-delete: "true"
-          comment-title: "Staging: lambda-api"
+          comment-title: "Production: lambda-api"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
