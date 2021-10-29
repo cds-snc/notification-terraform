@@ -6,10 +6,6 @@ variable "kms_arn" {
   type = string
 }
 
-variable "rds_server_db_user" {
-  type = string
-}
-
 variable "rds_cluster_password" {
   type      = string
   sensitive = true
