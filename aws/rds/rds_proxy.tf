@@ -29,20 +29,20 @@ resource "aws_secretsmanager_secret_version" "database_user" {
 ################################################################################
 
 module "rds_proxy" {
-  source = "clowdhaus/rds-proxy/aws"
+  source  = "clowdhaus/rds-proxy/aws"
   version = "~> 2.0"
 
-  name                    = "rds-proxy"
-  iam_auth                = "DISABLED"
-  iam_role_name           = "rds-proxy-to-secrets-role"
-  iam_policy_name         = "rds-proxy-to-secrets-policy"
+  name            = "rds-proxy"
+  iam_auth        = "DISABLED"
+  iam_role_name   = "rds-proxy-to-secrets-role"
+  iam_policy_name = "rds-proxy-to-secrets-policy"
 
   idle_client_timeout     = 1800
   max_connections_percent = 90
   require_tls             = false
 
-  vpc_subnet_ids          = var.vpc_private_subnets
-  vpc_security_group_ids  = [var.eks_cluster_securitygroup]
+  vpc_subnet_ids         = var.vpc_private_subnets
+  vpc_security_group_ids = [var.eks_cluster_securitygroup]
 
   db_proxy_endpoints = {
     read_write = {
