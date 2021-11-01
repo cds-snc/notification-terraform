@@ -79,8 +79,8 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
-  storage_encrypted   = true
-  deletion_protection = true
+  storage_encrypted               = true
+  deletion_protection             = true
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.default.name
 
   vpc_security_group_ids = [
