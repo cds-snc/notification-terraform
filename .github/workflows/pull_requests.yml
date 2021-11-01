@@ -19,6 +19,10 @@ env:
   TERRAGRUNT_VERSION: v0.26.0
   TARGET_ENV_PATH: staging
   
+  # Prevents repeated creation of the Slack lambdas if already existing.
+  # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
+  TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
+
   TF_VAR_admin_client_secret: ${{ secrets.STAGING_ADMIN_CLIENT_SECRET }}
   TF_VAR_admin_client_user_name: ${{ secrets.STAGING_ADMIN_CLIENT_USER_NAME }}
   TF_VAR_api_host_name: ${{ secrets.STAGING_API_HOST_NAME }}
