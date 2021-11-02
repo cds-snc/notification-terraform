@@ -156,7 +156,7 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-      - name: import aws_api_gateway_domain_name.api_lambda
+      - name: import aws_api_gateway_domain_name for api lambda
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
         run: |
           cd env/staging/lambda-api
