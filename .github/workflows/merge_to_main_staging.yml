@@ -111,6 +111,7 @@ jobs:
       - name: Apply aws/lambda-api
         run: |
           cd env/staging/lambda-api
+          ../../../bin/terragrunt state rm 'aws_api_gateway_domain_name.api_lambda'
           ../../../bin/terragrunt import aws_api_gateway_domain_name.api_lambda ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
