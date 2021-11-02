@@ -1,5 +1,11 @@
+# Uses GitHub tags for release management
+#
+terraform {
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/lambda-api?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+}
+
 dependencies {
-  paths = ["../common", "../eks"]
+  paths = ["../common", "../eks", "../dns"]
 }
 
 dependency "common" {
@@ -30,6 +36,17 @@ dependency "eks" {
   }
 }
 
+dependency "dns" {
+config_path = "../dns"
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs = {
+    aws_acm_notification_canada_ca_arn = ""
+  }
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -53,8 +70,5 @@ inputs = {
   documents_bucket            = "notification-alpha-canada-ca-document-download"
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1
-}
-
-terraform {
-  source = "../../../aws//lambda-api"
+  certificate_arn             = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
 }

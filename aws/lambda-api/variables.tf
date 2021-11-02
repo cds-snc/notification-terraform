@@ -103,3 +103,11 @@ variable "high_demand_min_concurrency" {
 variable "high_demand_max_concurrency" {
   type = number
 }
+
+variable "api_lambda_domain_name" {
+  type = string
+}
+
+variable "certificate_arn" {
+  type = string
+}
