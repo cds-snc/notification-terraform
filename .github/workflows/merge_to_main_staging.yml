@@ -36,7 +36,6 @@ env:
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
   TF_VAR_sqlalchemy_database_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_URI }}
   TF_VAR_document_download_api_host: ${{ secrets.STAGING_DOCUMENT_DOWNLOAD_API_HOST }}
-  TF_VAR_api_lambda_domain_name: ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
 
 jobs:
   terraform-apply:
@@ -111,6 +110,7 @@ jobs:
       - name: Apply aws/lambda-api
         run: |
           cd env/staging/lambda-api
+          ../../../bin/terragrunt import aws_api_gateway_domain_name.api_lambda ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/performance-test
