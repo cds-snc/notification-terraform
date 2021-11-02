@@ -40,6 +40,7 @@ env:
   TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
   TF_VAR_sqlalchemy_database_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_URI }}
+  TF_VAR_api_lambda_domain_name: ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
@@ -155,11 +156,11 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-      - name: import aws_api_gateway_domain_name.api-lambda
+      - name: import aws_api_gateway_domain_name.api
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
         run: |
           cd env/staging/lambda-api
-          ../../../bin/terragrunt import aws_api_gateway_domain_name.api_lambda ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
+          ../../../bin/terragrunt import aws_api_gateway_domain_name.api ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
 
       - name: Terragrunt plan lambda-api
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
