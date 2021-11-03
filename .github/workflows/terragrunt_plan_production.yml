@@ -47,6 +47,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          path: main_branch
+
+      - name: Set INFRASTRUCTURE_VERSION_MAIN
+        run: |
+          INFRASTRUCTURE_VERSION_MAIN=`cat main_branch/.github/workflows/infrastructure_version.txt`
+          echo "INFRASTRUCTURE_VERSION_MAIN=$INFRASTRUCTURE_VERSION_MAIN" >> $GITHUB_ENV
+
+      - name: Delete main branch
+        run: |
+          rm -rf main_branch
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -67,11 +82,6 @@ jobs:
         run: |
           INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
-
-      - name: set INFRASTRUCTURE_VERSION_MAIN
-        run: |
-          INFRASTRUCTURE_VERSION_MAIN=`git show main:.github/workflows/infrastructure_version.txt`
-          echo "INFRASTRUCTURE_VERSION_MAIN=$INFRASTRUCTURE_VERSION_MAIN" >> $GITHUB_ENV
 
       - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
         id: filter
