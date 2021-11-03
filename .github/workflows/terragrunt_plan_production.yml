@@ -68,36 +68,42 @@ jobs:
           INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
-      # - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
-      #   id: filter
-      #   with:
-      #     filters: |
-      #       common:
-      #         - '.github/workflows/terragrunt-plan-production.yml'
-      #         - 'env/common/**'
-      #         - 'env/terragrunt.hcl'
-      #         - 'env/production/env_vars.hcl'
-      #       dns:
-      #         - 'aws/dns/**'
-      #         - 'env/production/dns/**'
-      #       eks:
-      #         - 'aws/eks/**'
-      #         - 'env/production/eks/**'
-      #       elasticache:
-      #         - 'aws/elasticache/**'
-      #         - 'env/production/elasticache/**'
-      #       rds:
-      #         - 'aws/rds/**'
-      #         - 'env/production/rds/**'
-      #       cloudfront:
-      #         - 'aws/cloudfront/**'
-      #         - 'env/production/cloudfront/**'
-      #       lambda-api:
-      #         - 'aws/lambda-api/**'
-      #         - 'env/production/lambda-api/**'
+      - name: set INFRASTRUCTURE_VERSION_MAIN
+        run: |
+          INFRASTRUCTURE_VERSION_MAIN=`git show main:.github/workflows/infrastructure_version.txt`
+          echo "INFRASTRUCTURE_VERSION_MAIN=$INFRASTRUCTURE_VERSION_MAIN" >> $GITHUB_ENV
+
+      - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
+        id: filter
+        with:
+          base: "v${{ env.INFRASTRUCTURE_VERSION_MAIN }}"
+          filters: |
+            common:
+              - '.github/workflows/terragrunt-plan-production.yml'
+              - 'env/common/**'
+              - 'env/terragrunt.hcl'
+              - 'env/production/env_vars.hcl'
+            dns:
+              - 'aws/dns/**'
+              - 'env/production/dns/**'
+            eks:
+              - 'aws/eks/**'
+              - 'env/production/eks/**'
+            elasticache:
+              - 'aws/elasticache/**'
+              - 'env/production/elasticache/**'
+            rds:
+              - 'aws/rds/**'
+              - 'env/production/rds/**'
+            cloudfront:
+              - 'aws/cloudfront/**'
+              - 'env/production/cloudfront/**'
+            lambda-api:
+              - 'aws/lambda-api/**'
+              - 'env/production/lambda-api/**'
       
       - name: Terragrunt plan common
-        # if: ${{ steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/common"
@@ -107,7 +113,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan dns
-        # if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/dns"
@@ -116,7 +122,7 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
       - name: Terragrunt plan eks
-        # if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/eks"
@@ -126,7 +132,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan elasticache
-        # if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/elasticache"
@@ -136,7 +142,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan rds
-        # if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/rds"
@@ -146,7 +152,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan cloudfront
-        # if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/cloudfront"
@@ -156,7 +162,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-api
-        # if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/lambda-api"
