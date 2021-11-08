@@ -15,6 +15,26 @@ resource "aws_lambda_function" "performance-test" {
       image_uri,
     ]
   }
+
+  environment {
+    variables = {
+      AWS_ACCESS_KEY_ID                           = var.aws_access_key_id
+      AWS_SECRET_ACCESS_KEY                       = var.aws_secret_access_key
+      AWS_DEFAULT_OUTPUT                          = var.aws_default_output
+      AWS_DEFAULT_REGION                          = var.aws_default_region
+      LOAD_TEST_PHONE_NUMBER                      = var.load_test_phone_number 
+      LOAD_TEST_EMAIL                             = var.load_test_email
+      LOAD_TEST_AWS_S3_BUCKET                     = var.load_test_aws_s3_bucket
+      LOAD_TEST_CSV_DIRECTORY_PATH                = var.load_test_csv_directory_path
+      LOAD_TEST_DOMAIN                            = var.load_test_domain
+      LOAD_TEST_SMS_TEMPLATE_ID                   = var.load_test_sms_template_id
+      LOAD_TEST_BULK_EMAIL_TEMPLATE_ID            = var.load_test_bulk_email_template_id
+      LOAD_TEST_EMAIL_TEMPLATE_ID                 = var.load_test_email_template_id
+      LOAD_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID = var.load_test_email_with_attachment_template_id
+      LOAD_TEST_EMAIL_WITH_LINK_TEMPLATE_ID       = var.load_test_email_with_link_template_id
+      TEST_AUTH_HEADER                            = var.test_auth_header
+    }
+  }
 }
 
 resource "aws_cloudwatch_event_target" "performance-test" {
