@@ -18,10 +18,6 @@ resource "aws_lambda_function" "performance-test" {
 
   environment {
     variables = {
-      AWS_ACCESS_KEY_ID                           = var.aws_access_key_id
-      AWS_SECRET_ACCESS_KEY                       = var.aws_secret_access_key
-      AWS_DEFAULT_OUTPUT                          = var.aws_default_output
-      AWS_DEFAULT_REGION                          = var.aws_default_region
       LOAD_TEST_PHONE_NUMBER                      = var.load_test_phone_number 
       LOAD_TEST_EMAIL                             = var.load_test_email
       LOAD_TEST_AWS_S3_BUCKET                     = var.load_test_aws_s3_bucket
