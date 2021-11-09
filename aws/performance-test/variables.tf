@@ -15,7 +15,7 @@ variable "load_test_email" {
 }
 variable "load_test_aws_s3_bucket" {
   type        = string
-  default     = "notify-performance-test-results-${var.env}"
+  default     = "notify-performance-test-results-staging"
   description = "This helps identify aws s3 bucket."
 }
 variable "load_test_csv_directory_path" {
