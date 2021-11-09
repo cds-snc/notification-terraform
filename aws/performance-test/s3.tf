@@ -20,8 +20,8 @@ data "aws_iam_policy_document" "notify_performance_test_s3" {
     ]
 
     resources = [
-      aws_s3_bucket.reliability_file_storage.arn,
-      "${aws_s3_bucket.reliability_file_storage.arn}/*"
+      module.notify_performance_test_results.s3_bucket_arn,
+      "${module.notify_performance_test_results.s3_bucket_arn}/*"
     ]
   }
 }
