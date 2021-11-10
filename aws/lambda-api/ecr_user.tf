@@ -53,11 +53,11 @@ data "aws_iam_policy_document" "ecr" {
     resources = [aws_ecr_repository.api-lambda.arn]
   }
   statement {
-    sid       = "PermissionsToUpdateFunction"
-      effect  = "Allow"
-      actions = [
-        "lambda:UpdateFunctionCode"
-      ]
+    sid    = "PermissionsToUpdateFunction"
+    effect = "Allow"
+    actions = [
+      "lambda:UpdateFunctionCode"
+    ]
     resources = [
       aws_lambda_function.api.arn
     ]
