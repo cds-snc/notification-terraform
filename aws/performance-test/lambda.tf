@@ -18,7 +18,7 @@ resource "aws_lambda_function" "performance-test" {
 
   environment {
     variables = {
-      LOAD_TEST_PHONE_NUMBER                      = var.load_test_phone_number 
+      LOAD_TEST_PHONE_NUMBER                      = var.load_test_phone_number
       LOAD_TEST_EMAIL                             = var.load_test_email
       LOAD_TEST_AWS_S3_BUCKET                     = var.load_test_aws_s3_bucket
       LOAD_TEST_CSV_DIRECTORY_PATH                = var.load_test_csv_directory_path
