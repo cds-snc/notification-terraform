@@ -1,7 +1,7 @@
 module "notify_performance_test_results" {
   source            = "github.com/cds-snc/terraform-modules?ref=v0.0.38//S3"
-  bucket_name       = "notify-performance-test-results-staging"
-  billing_tag_value = "notification-canada-ca-staging"
+  bucket_name       = "notify-performance-test-results-${var.env}"
+  billing_tag_value = "notification-canada-ca-${var.env}"
 }
 resource "aws_iam_policy" "notify_performance_test_s3" {
   name   = "NotifyPerformanceTestS3Access"
