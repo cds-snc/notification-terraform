@@ -113,11 +113,11 @@ variable "certificate_arn" {
 }
 
 variable "recaptcha_public_key" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "recaptcha_private_key" {
-  type = string
+  type      = string
   sensitive = true
 }
