@@ -111,3 +111,12 @@ variable "api_lambda_domain_name" {
 variable "certificate_arn" {
   type = string
 }
+
+variable "recaptcha_public_key" {
+  type = string
+}
+
+variable "recaptcha_private_key" {
+  type = string
+
+}
