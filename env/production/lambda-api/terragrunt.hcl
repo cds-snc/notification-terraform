@@ -37,7 +37,7 @@ dependency "eks" {
 }
 
 dependency "dns" {
-config_path = "../dns"
+  config_path = "../dns"
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.

@@ -40,6 +40,8 @@ resource "aws_lambda_function" "api" {
       SQLALCHEMY_DATABASE_URI        = var.sqlalchemy_database_uri
       SQLALCHEMY_POOL_SIZE           = var.sqlalchemy_pool_size
       DOCUMENT_DOWNLOAD_API_HOST     = var.document_download_api_host
+      RECAPTCHA_PUBLIC_KEY           = var.recaptcha_public_key
+      RECAPTCHA_PRIVATE_KEY          = var.recaptcha_private_key
     }
   }
 
