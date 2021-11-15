@@ -38,6 +38,9 @@ env:
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
+  TF_VAR_recaptcha_public_key: ${{ secrets.STAGING_RECAPTCHA_PUBLIC_KEY }}
+  TF_VAR_recaptcha_private_key: ${{ secrets.STAGING_RECAPTCHA_PRIVATE_KEY }}
+  
 
 jobs:
   terragrunt-plan-staging:
