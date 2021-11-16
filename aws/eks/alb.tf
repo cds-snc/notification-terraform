@@ -77,8 +77,8 @@ resource "aws_lb_listener" "notification-canada-ca-legacy-tls" {
 
     fixed_response {
       content_type = "text/plain"
-      message_body = "Unauthorized"
-      status_code  = "401"
+      message_body = "Forbidden"
+      status_code  = "403"
     }
   }
 }
