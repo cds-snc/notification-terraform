@@ -44,6 +44,8 @@ inputs = {
   low_demand_max_concurrency  = 5
   high_demand_min_concurrency = 1
   high_demand_max_concurrency = 10
+  billing_tag_key             = "CostCentre"
+  billing_tag_value           = "notification-canada-ca-staging"
 }
 
 terraform {

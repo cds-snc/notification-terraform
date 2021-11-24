@@ -59,10 +59,8 @@ variable "test_auth_header" {
   description = "Identifies api auth header."
 }
 variable "billing_tag_key" {
-  type    = string
-  default = "CostCentre"
+  type = string
 }
 variable "billing_tag_value" {
-  type    = string
-  default = "PlatformNotify"
+  type = string
 }

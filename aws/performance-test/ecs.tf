@@ -2,7 +2,7 @@
 # ECS Fargate cluster
 #
 resource "aws_ecs_cluster" "perf_test" {
-  name = "performanceTestCluster"
+  name = "performance_test_cluster"
 
   setting {
     name  = "containerInsights"
