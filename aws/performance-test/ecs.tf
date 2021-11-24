@@ -46,11 +46,10 @@ data "template_file" "perf_test_container_definition" {
 }
 
 resource "aws_ecs_task_definition" "perf_test_task" {
-  family       = aws_ecs_cluster.perf_test.name
-  cpu          = 2
-  memory       = 512
-  network_mode = "awsvpc"
-
+  family                   = aws_ecs_cluster.perf_test.name
+  cpu                      = 2
+  memory                   = 512
+  network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.perf_test_ecs_task.arn
   task_role_arn            = aws_iam_role.perf_test_ecs_task.arn
