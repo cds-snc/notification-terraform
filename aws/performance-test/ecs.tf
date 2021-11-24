@@ -47,7 +47,7 @@ resource "aws_ecs_task_definition" "perf_test_task" {
   memory                   = 512
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn       = aws_iam_role.perf_test_ecs_task.arn
+  execution_role_arn       = aws_iam_role.container_execution_role.arn
   task_role_arn            = aws_iam_role.perf_test_ecs_task.arn
   container_definitions    = data.template_file.perf_test_container_definition.rendered
 
