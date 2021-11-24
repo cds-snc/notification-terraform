@@ -1,0 +1,37 @@
+[
+  {
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${AWS_LOGS_GROUP}",
+        "awslogs-region": "${AWS_LOGS_REGION}",
+        "awslogs-stream-prefix": "${AWS_LOGS_STREAM_PREFIX}"
+      }
+    },
+    "volumesFrom": [],
+    "essential": true,
+    "name": "performance test",
+    "image": "${aws_ecr_repository.performance-test.repository_url}",
+    
+    "environment": [
+      {
+        "name": "DEFAULT_DOMAIN",
+        "value": "${DEFAULT_DOMAIN}"
+      },
+    ],
+    "secrets": [
+      {
+        "name": "S3_UPLOADS_BUCKET",
+        "valueFrom": "${S3_UPLOADS_BUCKET}"
+      },
+      {
+        "name": "S3_UPLOADS_KEY",
+        "valueFrom": "${S3_UPLOADS_KEY}"
+      },
+      {
+        "name": "S3_UPLOADS_SECRET",
+        "valueFrom": "${S3_UPLOADS_SECRET}"
+      },
+    ]
+  }
+]

@@ -55,6 +55,14 @@ variable "perf_test_email_with_link_template_id" {
 }
 variable "test_auth_header" {
   type        = string
-  default     = "apikey-v1 c55039fc-c0e1-44db-a14e-b6a669148ec6"
+  default     = "apikey-v1 00000000-0000-0000-0000-000000000000"
   description = "Identifies api auth header."
+}
+variable "billing_tag_key" {
+  type    = string
+  default = "CostCentre"
+}
+variable "billing_tag_value" {
+  type    = string
+  default = "PlatformNotify"
 }
