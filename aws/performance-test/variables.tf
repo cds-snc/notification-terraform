@@ -64,3 +64,16 @@ variable "billing_tag_key" {
 variable "billing_tag_value" {
   type = string
 }
+
+variable "name" {
+  type    = string
+  default = "perf-test"
+}
+
+variable "event_rule_schedule_expression" {
+  type = string
+}
+
+variable "vpc_public_subnets" {
+  type = list(string)
+}
