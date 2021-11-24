@@ -38,6 +38,12 @@ resource "aws_iam_role_policy_attachment" "perf_test_ecs_task_get_ecr_image_poli
   policy_arn = aws_iam_policy.perf_test_ecs_task_get_ecr_image.arn
 }
 
+resource "aws_iam_role_policy_attachment" "perf_test_s3_attach" {
+  role       = aws_iam_role.perf_test_ecs_task.name
+  policy_arn = aws_iam_policy.notify_performance_test_s3.arn
+}
+
+
 # resource "aws_iam_role_policy_attachment" "wordpress_ecs_task_efs_policy_attach" {
 #   count = var.enable_efs ? 1 : 0
 
@@ -101,4 +107,3 @@ data "aws_iam_policy_document" "perf_test_ecs_task_get_ecr_image" {
     ]
   }
 }
-
