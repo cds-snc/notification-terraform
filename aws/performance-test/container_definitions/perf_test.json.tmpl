@@ -8,6 +8,13 @@
         "awslogs-stream-prefix": "${AWS_LOGS_STREAM_PREFIX}"
       }
     },
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 10000,
+        "hardLimit": 10000
+      }
+    ],
     "volumesFrom": [],
     "essential": true,
     "name": "performance test",
