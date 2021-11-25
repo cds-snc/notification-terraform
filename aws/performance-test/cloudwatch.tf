@@ -25,15 +25,3 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
     }
   }
 }
-
-resource "aws_cloudwatch_log_metric_filter" "ecs_task_error_metric" {
-  name           = "EcsTaskError-${var.name}"
-  pattern        = "Error"
-  log_group_name = aws_cloudwatch_log_group.perf_test_ecs_logs.name
-
-  metric_transformation {
-    name      = "EcsTaskError-${var.name}"
-    namespace = "perf_test_metrics"
-    value     = "1"
-  }
-}
