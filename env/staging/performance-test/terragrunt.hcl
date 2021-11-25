@@ -40,7 +40,6 @@ include {
 }
 
 inputs = {
-  env                                         = "staging"
   eks_cluster_securitygroup                   = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_public_subnets                          = dependency.common.outputs.vpc_public_subnets
   aws_pinpoint_region                         = "ca-central-1"

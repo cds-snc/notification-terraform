@@ -18,13 +18,13 @@ resource "aws_iam_role_policy_attachment" "ce_cs" {
 # Server Metrics Execution Role
 ###
 
-resource "aws_iam_role" "server_metrics_container_execution_role" {
-  name               = "server_metrics_container_execution_role"
+resource "aws_iam_role" "perf_test_container_execution_role" {
+  name               = "perf_test_container_execution_role"
   assume_role_policy = data.aws_iam_policy_document.container_execution_role.json
 }
 
-resource "aws_iam_role_policy_attachment" "server_metrics_ce_cs" {
-  role       = aws_iam_role.server_metrics_container_execution_role.name
+resource "aws_iam_role_policy_attachment" "perf_test_ce_cs" {
+  role       = aws_iam_role.perf_test_container_execution_role.name
   policy_arn = data.aws_iam_policy.ec2_container_service.arn
 }
 
