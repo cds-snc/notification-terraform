@@ -6,26 +6,9 @@ resource "aws_iam_role" "perf_test_ecs_task" {
   }
 }
 
-resource "aws_iam_policy" "perf_test_ecs_task_get_ecr_image" {
-  name   = "PerformanceTestEcsTaskGetEcrImage"
-  path   = "/"
-  policy = data.aws_iam_policy_document.perf_test_ecs_task_get_ecr_image.json
-}
-
-
 resource "aws_iam_role_policy_attachment" "perf_test_ecs_task_policy_attach" {
   role       = aws_iam_role.perf_test_ecs_task.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-resource "aws_iam_role_policy_attachment" "perf_test_ecs_task_ec2_policy_attach" {
-  role       = aws_iam_role.perf_test_ecs_task.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-}
-
-resource "aws_iam_role_policy_attachment" "perf_test_ecs_task_get_ecr_image_policy_attach" {
-  role       = aws_iam_role.perf_test_ecs_task.name
-  policy_arn = aws_iam_policy.perf_test_ecs_task_get_ecr_image.arn
 }
 
 resource "aws_iam_role_policy_attachment" "perf_test_s3_attach" {
@@ -44,18 +27,5 @@ data "aws_iam_policy_document" "ecs_task_assume" {
       type        = "Service"
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
-  }
-}
-
-data "aws_iam_policy_document" "perf_test_ecs_task_get_ecr_image" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "ecr:GetDownloadUrlForlayer",
-      "ecr:BatchGetImage"
-    ]
-    resources = [
-      aws_ecr_repository.performance-test.arn
-    ]
   }
 }
