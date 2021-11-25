@@ -1,3 +1,24 @@
+variable "perf_test_phone_number" {
+  sensitive   = true
+  type        = string
+  description = "Identifies delivery phone number."
+}
+variable "perf_test_email" {
+  sensitive   = true
+  type        = string
+  description = "Identifies delivery email address."
+}
+variable "perf_test_domain" {
+  sensitive   = true
+  type        = string
+  description = "Identifies performance test domain."
+}
+variable "test_auth_header" {
+  sensitive   = true
+  type        = string
+  description = "Identifies api auth header."
+}
+
 variable "schedule_expression" {
   type        = string
   description = "This aws cloudwatch event rule scheule expression that specifies when the scheduler runs."
@@ -8,21 +29,12 @@ variable "billing_tag_key" {
 variable "billing_tag_value" {
   type = string
 }
-
 variable "name" {
   type    = string
   default = "perf-test"
 }
 variable "vpc_public_subnets" {
   type = list(string)
-}
-variable "perf_test_phone_number" {
-  type        = string
-  description = "Identifies delivery phone number."
-}
-variable "perf_test_email" {
-  type        = string
-  description = "Identifies delivery email address."
 }
 variable "perf_test_aws_s3_bucket" {
   type        = string
@@ -31,10 +43,6 @@ variable "perf_test_aws_s3_bucket" {
 variable "perf_test_csv_directory_path" {
   type        = string
   description = "Identifies the csv directory."
-}
-variable "perf_test_domain" {
-  type        = string
-  description = "Identifies performance test domain."
 }
 variable "perf_test_sms_template_id" {
   type        = string
@@ -55,8 +63,4 @@ variable "perf_test_email_with_attachment_template_id" {
 variable "perf_test_email_with_link_template_id" {
   type        = string
   description = "Identifies email with link template id."
-}
-variable "test_auth_header" {
-  type        = string
-  description = "Identifies api auth header."
 }
