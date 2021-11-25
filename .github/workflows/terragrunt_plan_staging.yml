@@ -38,10 +38,10 @@ env:
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
-  TF_VAR_perf_test_phone_number: ${{ secrets.PERF_TEST_PHONE_NUMBER }}
-  TF_VAR_perf_test_email: ${{ secrets.PERF_TEST_EMAIL }}
-  TF_VAR_perf_test_domain: $ {{ secrets.PERF_TEST_DOMAIN }}
-  TF_VAR_test_auth_header: $ {{ secrets.PERF_TEST_AUTH_HEADER }}
+  TF_VAR_perf_test_phone_number: "test phone"
+  TF_VAR_perf_test_email: "test email"
+  TF_VAR_perf_test_domain: "test domain"
+  TF_VAR_test_auth_header: "test header"
 
 jobs:
   terragrunt-plan-staging:
