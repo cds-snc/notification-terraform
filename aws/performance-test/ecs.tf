@@ -47,10 +47,10 @@ data "template_file" "perf_test_container_definition" {
     PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID = var.perf_test_email_with_attachment_template_id
     PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID       = var.perf_test_email_with_link_template_id
 
-    PERF_TEST_PHONE_NUMBER = var.perf_test_phone_number
-    PERF_TEST_EMAIL        = var.perf_test_email
-    PERF_TEST_DOMAIN       = var.perf_test_domain
-    TEST_AUTH_HEADER       = var.test_auth_header
+    # PERF_TEST_PHONE_NUMBER = var.perf_test_phone_number
+    # PERF_TEST_EMAIL        = var.perf_test_email
+    # PERF_TEST_DOMAIN       = var.perf_test_domain
+    # TEST_AUTH_HEADER       = var.test_auth_header
   }
 }
 
