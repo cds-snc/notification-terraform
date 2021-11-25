@@ -15,14 +15,50 @@
     
     "environment": [
       {
-        "name": "DEFAULT_DOMAIN",
-        "value": "${DEFAULT_DOMAIN}"
+        "name": "PERF_TEST_AWS_S3_BUCKET",
+        "valueFrom": "${PERF_TEST_AWS_S3_BUCKET}"
+      },
+      {
+        "name": "PERF_TEST_CSV_DIRECTORY_PATH",
+        "valueFrom": "${PERF_TEST_CSV_DIRECTORY_PATH}"
+      },
+      {
+        "name": "PERF_TEST_SMS_TEMPLATE_ID",
+        "valueFrom": "${PERF_TEST_SMS_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_BULK_EMAIL_TEMPLATE_ID",
+        "valueFrom": "${PERF_TEST_BULK_EMAIL_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL_TEMPLATE_ID",
+        "valueFrom": "${PERF_TEST_EMAIL_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID",
+        "valueFrom": "${PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID",
+        "valueFrom": "${PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID}"
       },
     ],
     "secrets": [
       {
-        "name": "PERF_TEST_API_KEY",
-        "valueFrom": "${PERF_TEST_API_KEY}"
+        "name": "PERF_TEST_PHONE_NUMBER",
+        "valueFrom": "${PERF_TEST_PHONE_NUMBER}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL",
+        "valueFrom": "${PERF_TEST_EMAIL}"
+      },
+      {
+        "name": "PERF_TEST_DOMAIN",
+        "valueFrom": "${PERF_TEST_DOMAIN}"
+      },
+      {
+        "name": "TEST_AUTH_HEADER",
+        "valueFrom": "${TEST_AUTH_HEADER}"
       },
     ]
   }

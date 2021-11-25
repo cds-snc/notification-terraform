@@ -40,27 +40,21 @@ include {
 }
 
 inputs = {
-  env                            = "staging"
-  api_image_tag                  = "latest"
-  eks_cluster_securitygroup      = dependency.eks.outputs.eks-cluster-securitygroup
-  vpc_private_subnets            = dependency.common.outputs.vpc_private_subnets
-  vpc_public_subnets             = dependency.common.outputs.vpc_public_subnets
-  aws_pinpoint_region            = "ca-central-1"
-  low_demand_min_concurrency     = 1
-  low_demand_max_concurrency     = 5
-  high_demand_min_concurrency    = 1
-  high_demand_max_concurrency    = 10
-  billing_tag_key                = "CostCentre"
-  billing_tag_value              = "notification-canada-ca-staging"
-  
-  schedule_expression = "cron(0 0 * * ? *)"
-  perf_test_aws_s3_bucket = "notify-performance-test-results-staging"
-  perf_test_csv_directory_path = "/tmp/notify_performance_test"
-  perf_test_sms_template_id = "d5fea9f3-f69d-481e-9186-b7f4eaa5cf63"
-  perf_test_bulk_email_template_id =  "fa759679-30f2-4666-94e2-bd4921329c46"
-  perf_test_email_template_id = "fa759679-30f2-4666-94e2-bd4921329c46"
+  env                                         = "staging"
+  eks_cluster_securitygroup                   = dependency.eks.outputs.eks-cluster-securitygroup
+  vpc_public_subnets                          = dependency.common.outputs.vpc_public_subnets
+  aws_pinpoint_region                         = "ca-central-1"
+
+  billing_tag_key                             = "CostCentre"
+  billing_tag_value                           = "notification-canada-ca-staging"
+  schedule_expression                         = "cron(0 0 * * ? *)"
+  perf_test_aws_s3_bucket                     = "notify-performance-test-results-staging"
+  perf_test_csv_directory_path                = "/tmp/notify_performance_test"
+  perf_test_sms_template_id                   = "d5fea9f3-f69d-481e-9186-b7f4eaa5cf63"
+  perf_test_bulk_email_template_id            =  "fa759679-30f2-4666-94e2-bd4921329c46"
+  perf_test_email_template_id                 = "fa759679-30f2-4666-94e2-bd4921329c46"
   perf_test_email_with_attachment_template_id = "fa759679-30f2-4666-94e2-bd4921329c46"
-  perf_test_email_with_link_template_id = "9fb324a5-821d-4b54-9d52-d9ba1fa8373a"
+  perf_test_email_with_link_template_id       = "9fb324a5-821d-4b54-9d52-d9ba1fa8373a"
 }
 
 terraform {
