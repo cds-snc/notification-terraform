@@ -37,17 +37,3 @@ resource "aws_cloudwatch_log_metric_filter" "ecs_task_error_metric" {
     value     = "1"
   }
 }
-
-# resource "aws_cloudwatch_metric_alarm" "ecs_task_error_alarm" {
-#   alarm_name          = "EcsTaskError-${var.name}"
-#   comparison_operator = "GreaterThanThreshold"
-#   evaluation_periods  = "1"
-#   metric_name         = aws_cloudwatch_log_metric_filter.ecs_task_error_metric.name
-#   namespace           = "perf_test_metrics"
-#   period              = "60"
-#   statistic           = "Sum"
-#   threshold           = "0"
-#   alarm_description   = "This monitors for errors in the ECS ${var.name} task"
-
-#   alarm_actions = [var.ecs_task_alarm_action]
-# }
