@@ -21,10 +21,6 @@ data "aws_iam_policy_document" "ecs_task_assume" {
     actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-    principals {
-      type        = "Service"
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
