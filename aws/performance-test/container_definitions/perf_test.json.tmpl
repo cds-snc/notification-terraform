@@ -48,22 +48,24 @@
       {
         "name": "PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID",
         "value": "${PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID}"
-      },
+      }
+    ],
+    "secrets": [
       {
         "name": "PERF_TEST_PHONE_NUMBER",
-        "value": "${PERF_TEST_PHONE_NUMBER}"
+        "valueFrom": "${perf_test_phone_number_arn}"
       },
       {
         "name": "PERF_TEST_EMAIL",
-        "value": "${PERF_TEST_EMAIL}"
+        "valueFrom": "${perf_test_email_arn}"
       },
       {
         "name": "PERF_TEST_DOMAIN",
-        "value": "${PERF_TEST_DOMAIN}"
+        "valueFrom": "${perf_test_domain_arn}"
       },
       {
         "name": "TEST_AUTH_HEADER",
-        "value": "${TEST_AUTH_HEADER}"
+        "valueFrom": "${test_auth_header_arn}"
       }
     ]
   }
