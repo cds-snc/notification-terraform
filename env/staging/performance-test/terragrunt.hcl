@@ -9,18 +9,12 @@ dependency "common" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs = {
-    kms_arn = ""
-    vpc_private_subnets = [
-      "",
-      "",
-      "",
-    ]
+    vpc_id = ""
     vpc_public_subnets = [
       "",
       "",
       "",
     ]
-    sns_alert_general_arn = ""
   }
 }
 
