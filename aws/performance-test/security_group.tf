@@ -1,6 +1,7 @@
 resource "aws_security_group" "perf_test" {
   name        = "perf_test"
   description = "Performance Test Security Group"
+  vpc_id      = var.vpc_id
 
   egress {
     from_port = 443

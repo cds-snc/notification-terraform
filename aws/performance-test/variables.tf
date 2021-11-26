@@ -33,6 +33,9 @@ variable "name" {
   type    = string
   default = "perf-test"
 }
+variable "vpc_id" {
+  type = string
+}
 variable "vpc_public_subnets" {
   type = list(string)
 }

@@ -42,6 +42,7 @@ include {
 inputs = {
   eks_cluster_securitygroup                   = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_public_subnets                          = dependency.common.outputs.vpc_public_subnets
+  vpc_id                                      = dependency.common.outputs.vpc_id
   aws_pinpoint_region                         = "ca-central-1"
 
   billing_tag_key                             = "CostCentre"
