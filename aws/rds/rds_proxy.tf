@@ -30,7 +30,7 @@ resource "aws_secretsmanager_secret_version" "database_user" {
 
 module "rds_proxy" {
   source  = "clowdhaus/rds-proxy/aws"
-  version = "~> 2.0"
+  version = "2.0.0"
 
   name            = "rds-proxy"
   iam_auth        = "DISABLED"
