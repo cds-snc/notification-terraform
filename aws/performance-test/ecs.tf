@@ -67,5 +67,6 @@ resource "aws_ecs_task_definition" "perf_test_task" {
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
+    testTag               = true
   }
 }
