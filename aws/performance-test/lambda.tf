@@ -28,7 +28,7 @@ resource "aws_lambda_function" "performance-test" {
       PERF_TEST_EMAIL_TEMPLATE_ID                 = var.perf_test_email_template_id
       PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID = var.perf_test_email_with_attachment_template_id
       PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID       = var.perf_test_email_with_link_template_id
-      TEST_AUTH_HEADER                            = var.perf_test_auth_header
+      PERF_TEST_AUTH_HEADER                       = var.perf_test_auth_header
     }
   }
 }
