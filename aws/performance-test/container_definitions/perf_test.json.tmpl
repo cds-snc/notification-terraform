@@ -64,8 +64,12 @@
         "valueFrom": "${PERF_TEST_DOMAIN_ARN}"
       },
       {
+        "name": "PERF_TEST_AUTH_HEADER",
+        "valueFrom": "${PERF_TEST_AUTH_HEADER_ARN}"
+      },
+      {
         "name": "TEST_AUTH_HEADER",
-        "valueFrom": "${TEST_AUTH_HEADER_ARN}"
+        "valueFrom": "${PERF_TEST_AUTH_HEADER_ARN}"
       }
     ]
   }

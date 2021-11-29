@@ -25,11 +25,11 @@ resource "aws_secretsmanager_secret_version" "perf_test_domain" {
   secret_string = var.perf_test_domain
 }
 
-resource "aws_secretsmanager_secret" "test_auth_header" {
-  name = "test_auth_header"
+resource "aws_secretsmanager_secret" "perf_test_auth_header" {
+  name = "perf_test_auth_header"
 }
 
-resource "aws_secretsmanager_secret_version" "test_auth_header" {
-  secret_id     = aws_secretsmanager_secret.test_auth_header.id
-  secret_string = var.test_auth_header
+resource "aws_secretsmanager_secret_version" "perf_test_auth_header" {
+  secret_id     = aws_secretsmanager_secret.perf_test_auth_header.id
+  secret_string = var.perf_test_auth_header
 }

@@ -13,7 +13,7 @@ variable "perf_test_domain" {
   type        = string
   description = "Identifies performance test domain."
 }
-variable "test_auth_header" {
+variable "perf_test_auth_header" {
   sensitive   = true
   type        = string
   description = "Identifies api auth header."
