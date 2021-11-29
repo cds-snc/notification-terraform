@@ -13,7 +13,7 @@ variable "perf_test_domain" {
   type        = string
   description = "Identifies performance test domain."
 }
-variable "test_auth_header" {
+variable "perf_test_auth_header" {
   sensitive   = true
   type        = string
   description = "Identifies api auth header."
@@ -32,6 +32,9 @@ variable "billing_tag_value" {
 variable "name" {
   type    = string
   default = "perf-test"
+}
+variable "vpc_id" {
+  type = string
 }
 variable "vpc_public_subnets" {
   type = list(string)

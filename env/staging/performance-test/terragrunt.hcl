@@ -9,18 +9,12 @@ dependency "common" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs = {
-    kms_arn = ""
-    vpc_private_subnets = [
-      "",
-      "",
-      "",
-    ]
+    vpc_id = ""
     vpc_public_subnets = [
       "",
       "",
       "",
     ]
-    sns_alert_general_arn = ""
   }
 }
 
@@ -42,6 +36,7 @@ include {
 inputs = {
   eks_cluster_securitygroup                   = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_public_subnets                          = dependency.common.outputs.vpc_public_subnets
+  vpc_id                                      = dependency.common.outputs.vpc_id
   aws_pinpoint_region                         = "ca-central-1"
 
   billing_tag_key                             = "CostCentre"
