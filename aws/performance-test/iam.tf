@@ -32,7 +32,7 @@ resource "aws_iam_role_policy_attachment" "perf_test_ecs_task_get_secret_value_p
 }
 
 resource "aws_iam_policy" "perf_test_ecs_task_get_secret_value" {
-  name   = "WordpressEcsTaskGetSecretValue"
+  name   = "PerfTestEcsTaskGetSecretValue"
   path   = "/"
   policy = data.aws_iam_policy_document.perf_test_ecs_task_get_secret_value.json
 }
