@@ -38,6 +38,7 @@ data "template_file" "perf_test_container_definition" {
     AWS_LOGS_GROUP         = aws_cloudwatch_log_group.perf_test_ecs_logs.name
     AWS_LOGS_REGION        = var.region
     AWS_LOGS_STREAM_PREFIX = "${aws_ecs_cluster.perf_test.name}-task"
+    ECR_REPOSITORY_URL     = aws_ecr_repository.performance-test.repository_url
 
     PERF_TEST_AWS_S3_BUCKET                     = var.perf_test_aws_s3_bucket
     PERF_TEST_CSV_DIRECTORY_PATH                = var.perf_test_csv_directory_path
@@ -46,17 +47,18 @@ data "template_file" "perf_test_container_definition" {
     PERF_TEST_EMAIL_TEMPLATE_ID                 = var.perf_test_email_template_id
     PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID = var.perf_test_email_with_attachment_template_id
     PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID       = var.perf_test_email_with_link_template_id
-    PERF_TEST_PHONE_NUMBER                      = var.perf_test_phone_number
-    PERF_TEST_EMAIL                             = var.perf_test_email
-    PERF_TEST_DOMAIN                            = var.perf_test_domain
-    TEST_AUTH_HEADER                            = var.test_auth_header
+
+    PERF_TEST_PHONE_NUMBER_ARN = aws_secretsmanager_secret_version.perf_test_phone_number.arn
+    PERF_TEST_EMAIL_ARN        = aws_secretsmanager_secret_version.perf_test_email.arn
+    PERF_TEST_DOMAIN_ARN       = aws_secretsmanager_secret_version.perf_test_domain.arn
+    PERF_TEST_AUTH_HEADER_ARN  = aws_secretsmanager_secret_version.perf_test_auth_header.arn
   }
 }
 
 resource "aws_ecs_task_definition" "perf_test_task" {
   family                   = aws_ecs_cluster.perf_test.name
-  cpu                      = 2
-  memory                   = 512
+  cpu                      = 2048
+  memory                   = 4096
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.container_execution_role.arn
