@@ -17,7 +17,7 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
     launch_type         = "FARGATE"
     platform_version    = "1.4.0"
     task_count          = 1
-    task_definition_arn = aws_ecs_task_definition.perf_test_task.arn
+    task_definition_arn = aws_iam_role.scheduled_task_perf_test_event_role.arn
 
     network_configuration {
       subnets          = var.vpc_public_subnets
