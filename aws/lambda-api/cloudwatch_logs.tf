@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "api_assume" {
 resource "aws_cloudwatch_log_metric_filter" "web-500-errors-lambda-api" {
   name           = "web-500-errors-lambda-api"
   pattern        = "\"\\\" 500 \""
-  log_group_name = aws_cloudwatch_log_group.api_gateway_log_group.name
+  log_group_name = "/aws/lambda/${aws_lambda_function.api.function_name}"
 
   metric_transformation {
     name      = "500-errors-lambda-api"
@@ -51,4 +51,3 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors-lambda-api" {
     value     = "1"
   }
 }
-
