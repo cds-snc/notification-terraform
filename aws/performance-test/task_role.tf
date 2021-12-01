@@ -18,7 +18,7 @@ resource "aws_iam_role_policy_attachment" "perf_test_s3_attach" {
 
 data "aws_iam_policy_document" "ecs_task_assume" {
   statement {
-    actions = ["sts:AssumeRole", "iam:PassRole"]
+    actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = ["ecs-tasks.amazonaws.com"]
