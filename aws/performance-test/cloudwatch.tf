@@ -20,8 +20,13 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
     task_definition_arn = aws_ecs_task_definition.perf_test_task.arn
 
     network_configuration {
-      subnets         = var.vpc_public_subnets
-      security_groups = [aws_security_group.perf_test.id]
+      subnets          = var.vpc_public_subnets
+      security_groups  = [aws_security_group.perf_test.id]
+      assign_public_ip = true
+    }
+
+    tags = {
+      (var.billing_tag_key) = var.billing_tag_value
     }
   }
 }
