@@ -15,8 +15,8 @@ dependency "common" {
       "",
       "",
     ]
-    sns_alert_general_arn = "",
-    sns_alert_warning_arn = "",
+    sns_alert_general_arn = ""
+    sns_alert_warning_arn = ""
     sns_alert_critical_arn = ""
   }
 }
