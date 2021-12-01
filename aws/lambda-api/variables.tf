@@ -111,3 +111,11 @@ variable "api_lambda_domain_name" {
 variable "certificate_arn" {
   type = string
 }
+
+variable "sns_alert_warning_arn" {
+  type = string
+}
+
+variable "sns_alert_critical_arn" {
+  type = string
+}
