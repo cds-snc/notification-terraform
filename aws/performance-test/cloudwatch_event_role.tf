@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "scheduled_task_perf_test_event_role_cloudwatch_p
     effect  = "Allow"
     actions = ["ecs:RunTask"]
     #checkov:skip=CKV_AWS_111:for testing only
-    resources = ["*"]
+    resources = [aws_ecs_task_definition.perf_test_task.arn]
   }
   statement {
     actions = ["iam:PassRole"]
