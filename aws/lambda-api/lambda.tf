@@ -30,6 +30,7 @@ resource "aws_lambda_function" "api" {
       DOCUMENTS_BUCKET               = var.documents_bucket
       ENVIRONMENT                    = var.env
       MLWR_HOST                      = var.mlwr_host
+      NEW_RELIC_APP_NAME             = var.new_relic_app_name
       NOTIFICATION_QUEUE_PREFIX      = var.notification_queue_prefix
       NOTIFY_EMAIL_DOMAIN            = var.domain
       NOTIFY_ENVIRONMENT             = var.env

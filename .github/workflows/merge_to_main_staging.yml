@@ -31,6 +31,7 @@ env:
   TF_VAR_auth_tokens: ${{ secrets.STAGING_AUTH_TOKENS }}
   TF_VAR_dangerous_salt: ${{ secrets.STAGING_DANGEROUS_SALT }}
   TF_VAR_mlwr_host: False
+  TF_VAR_new_relic_app_name: notification-lambda-api-staging
   TF_VAR_redis_url: ${{ secrets.STAGING_REDIS_URL }}
   TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
