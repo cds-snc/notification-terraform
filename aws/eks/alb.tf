@@ -221,7 +221,7 @@ resource "aws_lb_listener_rule" "api-host-route" {
 
   condition {
     host_header {
-      values = ["api.*"]
+      values = ["api.*", "api-k8s.*"]
     }
   }
 }
