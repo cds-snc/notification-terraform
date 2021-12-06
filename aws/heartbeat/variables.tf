@@ -1,19 +1,18 @@
 variable "heartbeat_api_key" {
   sensitive   = true
   type        = string
-  description = "Identifies delivery phone number."
+  description = "Identifies the heartbeat api key."
 }
 
 variable "heartbeat_base_url" {
   sensitive   = true
   type        = list(string)
-  description = "Identifies delivery phone number."
+  description = "Identifies the base url to trigger the heartbeat function with."
 }
 
 variable "heartbeat_template_id" {
-  sensitive   = true
   type        = string
-  description = "Identifies delivery phone number."
+  description = "Identifies the template id on the ."
 }
 
 variable "schedule_expression" {
