@@ -177,7 +177,7 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
   # WAF Regex blocks are combined with OR logic. 
   # Regex support is limited, please see: 
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
-  
+
   # GET /_status
   regular_expression {
     regex_string = "/_status"
