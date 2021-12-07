@@ -185,12 +185,12 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
 
   # GET /services/<uuid:service_id>/documents/<uuid:document_id>
   regular_expression {
-    regex_string = "/services/[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}/documents/[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}"
+    regex_string = "/services/[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}/documents/[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}"
   }
 
   # POST /services/<uuid:service_id>/documents
   regular_expression {
-    regex_string = "/services/[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}/documents"
+    regex_string = "/services/[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}/documents"
   }
 
   tags = {
