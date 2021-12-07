@@ -5,4 +5,9 @@ skip-check:
   - CKV_AWS_51  # we use latest tag and this would break functionality
   - CKV_AWS_136 # we trust AWS Managed Keys
   - CKV_AWS_158 # we trust AWS managed Keys
-  
+  - CKV_AWS_59  # API Gateway: anonymous access required by API
+  - CKV_AWS_73  # API Gateway: X-ray tracing not required
+  - CKV_AWS_117 # Lambda: access to VPC resources not required
+  - CKV_AWS_120 # API Gateway: caching is not wanted
+  - CKV_AWS_28  # Dynamodb point in time recovery is not required
+  - CKV_AWS_119 # AWS Managed keys are acceptable
