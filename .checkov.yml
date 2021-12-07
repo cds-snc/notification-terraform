@@ -1,0 +1,8 @@
+skip-check:
+  - CKV_AWS_149 # we trust AWS managed keys and do not need to provide our own
+  - CKV_AWS_162 # our security profile allows for uname and pword for RDS auth
+  - CKV_AWS_128 # our security profile allows for uname and pword for RDS auth
+  - CKV_AWS_51  # we use latest tag and this would break functionality
+  - CKV_AWS_136 # we trust AWS Managed Keys
+  - CKV_AWS_158 # we trust AWS managed Keys
+  
