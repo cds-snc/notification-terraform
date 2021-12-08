@@ -124,3 +124,12 @@ jobs:
           comment-title: "Production: lambda-api"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan heartbeat
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/production/heartbeat"
+          comment-delete: "true"
+          comment-title: "Production: heartbeat"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
