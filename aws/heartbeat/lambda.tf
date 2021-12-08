@@ -1,18 +1,18 @@
 module "heartbeat" {
-  source                   = "github.com/cds-snc/terraform-modules?ref=v0.0.45//lambda"
-  name                     = "heartbeat"
-  billing_tag_value        = var.billing_tag_value
-  ecr_arn                  = aws_ecr_repository.heartbeat.arn
-  enable_lambda_insights   = true
-  image_uri                = "${aws_ecr_repository.heartbeat.repository_url}:latest"
-  timeout                  = 60
-  memory                   = 1024
+  source                 = "github.com/cds-snc/terraform-modules?ref=v0.0.45//lambda"
+  name                   = "heartbeat"
+  billing_tag_value      = var.billing_tag_value
+  ecr_arn                = aws_ecr_repository.heartbeat.arn
+  enable_lambda_insights = true
+  image_uri              = "${aws_ecr_repository.heartbeat.repository_url}:latest"
+  timeout                = 60
+  memory                 = 1024
 
   environment {
     variables = {
-      heartbeat_api_key                    = var.heartbeat_api_key
-      heartbeat_base_url                   = var.heartbeat_base_url
-      heartbeat_template_id                = var.heartbeat_template_id
+      heartbeat_api_key     = var.heartbeat_api_key
+      heartbeat_base_url    = var.heartbeat_base_url
+      heartbeat_template_id = var.heartbeat_template_id
     }
   }
 }

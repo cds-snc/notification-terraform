@@ -1,6 +1,5 @@
 resource "aws_ecr_repository" "heartbeat" {
   # The :latest tag is used in Staging
-  #tfsec:ignore:AWS078
 
   name                 = "notify/heartbeat"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
