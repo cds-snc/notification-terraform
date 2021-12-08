@@ -118,3 +118,8 @@ jobs:
         run: |
           cd env/production/lambda-api
           ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/heartbeat
+        run: |
+          cd env/production/heartbeat
+          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
