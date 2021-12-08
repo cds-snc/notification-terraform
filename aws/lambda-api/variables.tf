@@ -43,6 +43,10 @@ variable "mlwr_host" {
   type = string
 }
 
+variable "new_relic_app_name" {
+  type = string
+}
+
 variable "notification_queue_prefix" {
   type = string
 }
