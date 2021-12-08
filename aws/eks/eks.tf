@@ -20,6 +20,7 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
     # https://github.com/cds-snc/notification-terraform/issues/205
   }
 
+  #checkov:skip=CKV_AWS_151: "Ensure Kubernetes Secrets are encrypted using Customer Master Keys (CMKs) managed in AWS KMS"
   # tfsec:ignore:AWS066 EKS should have the encryption of secrets enabled
   # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/202
 

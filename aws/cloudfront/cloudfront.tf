@@ -58,4 +58,5 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
   }
 
   #tfsec:ignore:AWS071 - Access logging disabled
+  #checkov:skip=CKV_AWS_20: Access logging disabled
 }

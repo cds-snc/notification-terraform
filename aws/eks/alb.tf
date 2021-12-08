@@ -3,6 +3,7 @@
 ###
 
 resource "aws_alb" "notification-canada-ca" {
+  #checkov:skip=CKV_AWS_131: "Ensure that ALB drops HTTP headers" this alb is supposed to be on the internet
   name               = "notification-${var.env}-alb"
   internal           = false #tfsec:ignore:AWS005
   load_balancer_type = "application"
