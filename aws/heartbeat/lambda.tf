@@ -8,12 +8,10 @@ module "heartbeat" {
   timeout                = 60
   memory                 = 1024
 
-  environment {
-    variables = {
-      heartbeat_api_key     = var.heartbeat_api_key
-      heartbeat_base_url    = var.heartbeat_base_url
-      heartbeat_template_id = var.heartbeat_template_id
-    }
+  environment_variables = {
+    heartbeat_api_key     = var.heartbeat_api_key
+    heartbeat_base_url    = var.heartbeat_base_url
+    heartbeat_template_id = var.heartbeat_template_id
   }
 }
 

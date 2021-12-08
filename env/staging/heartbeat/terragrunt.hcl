@@ -3,7 +3,6 @@ include {
 }
 
 inputs = {
-  billing_tag_key                             = "CostCenter"
   billing_tag_value                           = "notification-canada-ca-staging"
   schedule_expression                         = "cron(*/1 * * * *)"
 }

@@ -1,3 +1,8 @@
+variable "billing_tag_value" {
+  type        = string
+  description = "Identifies the billing code."
+}
+
 variable "heartbeat_api_key" {
   sensitive   = true
   type        = string
@@ -6,8 +11,8 @@ variable "heartbeat_api_key" {
 
 variable "heartbeat_base_url" {
   sensitive   = true
-  type        = list(string)
-  description = "Identifies the base url to trigger the heartbeat function with."
+  type        = string
+  description = "Identifies the base url to trigger the heartbeat function with. This is a string in the secrets and parsed in the lambda"
 }
 
 variable "heartbeat_template_id" {
