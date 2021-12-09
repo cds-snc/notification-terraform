@@ -32,5 +32,5 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   action        = "lambda:InvokeFunction"
   function_name = module.heartbeat.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = module.heartbeat.function_arn
+  source_arn    = aws_cloudwatch_event_rule.heartbeat_testing.arn
 }
