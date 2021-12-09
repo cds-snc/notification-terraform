@@ -16,6 +16,8 @@ dependency "common" {
       "",
     ]
     sns_alert_general_arn = ""
+    sns_alert_warning_arn = ""
+    sns_alert_critical_arn = ""
   }
 }
 
@@ -65,6 +67,8 @@ inputs = {
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1
   certificate_arn             = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
+  sns_alert_warning_arn       = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn      = dependency.common.outputs.sns_alert_critical_arn
 }
 
 terraform {

@@ -1,0 +1,73 @@
+[
+  {
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${AWS_LOGS_GROUP}",
+        "awslogs-region": "${AWS_LOGS_REGION}",
+        "awslogs-stream-prefix": "${AWS_LOGS_STREAM_PREFIX}"
+      }
+    },
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 98304,
+        "hardLimit": 98304
+      }
+    ],
+    "volumesFrom": [],
+    "essential": true,
+    "name": "performance-tests-container",
+    "image": "${ECR_REPOSITORY_URL}",
+    "cpu": 0,
+    
+    "environment": [
+      {
+        "name": "PERF_TEST_AWS_S3_BUCKET",
+        "value": "${PERF_TEST_AWS_S3_BUCKET}"
+      },
+      {
+        "name": "PERF_TEST_CSV_DIRECTORY_PATH",
+        "value": "${PERF_TEST_CSV_DIRECTORY_PATH}"
+      },
+      {
+        "name": "PERF_TEST_SMS_TEMPLATE_ID",
+        "value": "${PERF_TEST_SMS_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_BULK_EMAIL_TEMPLATE_ID",
+        "value": "${PERF_TEST_BULK_EMAIL_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL_TEMPLATE_ID",
+        "value": "${PERF_TEST_EMAIL_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID",
+        "value": "${PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID",
+        "value": "${PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID}"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "PERF_TEST_PHONE_NUMBER",
+        "valueFrom": "${PERF_TEST_PHONE_NUMBER_ARN}"
+      },
+      {
+        "name": "PERF_TEST_EMAIL",
+        "valueFrom": "${PERF_TEST_EMAIL_ARN}"
+      },
+      {
+        "name": "PERF_TEST_DOMAIN",
+        "valueFrom": "${PERF_TEST_DOMAIN_ARN}"
+      },
+      {
+        "name": "PERF_TEST_AUTH_HEADER",
+        "valueFrom": "${PERF_TEST_AUTH_HEADER_ARN}"
+      }
+    ]
+  }
+]

@@ -43,6 +43,10 @@ variable "mlwr_host" {
   type = string
 }
 
+variable "new_relic_app_name" {
+  type = string
+}
+
 variable "notification_queue_prefix" {
   type = string
 }
@@ -109,5 +113,13 @@ variable "api_lambda_domain_name" {
 }
 
 variable "certificate_arn" {
+  type = string
+}
+
+variable "sns_alert_warning_arn" {
+  type = string
+}
+
+variable "sns_alert_critical_arn" {
   type = string
 }
