@@ -141,9 +141,11 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                   byte_match_statement {
                     positional_constraint = "STARTS_WITH"
                     field_to_match {
-                      uri_path {}
+                      single_header {
+                        name = "Host"
+                      }
                     }
-                    search_string = "https://api.document"
+                    search_string = "api.document"
                     text_transformation {
                       priority = 1
                       type     = "COMPRESS_WHITE_SPACE"
@@ -178,9 +180,11 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
               byte_match_statement {
                 positional_constraint = "STARTS_WITH"
                 field_to_match {
-                  uri_path {}
+                  single_header {
+                    name = "Host"
+                  }
                 }
-                search_string = "http://api"
+                search_string = "api"
                 text_transformation {
                   priority = 1
                   type     = "COMPRESS_WHITE_SPACE"
@@ -196,9 +200,11 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
               or_statement {
                 statement {
                   byte_match_statement {
-                    positional_constraint = "CONTAINS"
+                    positional_constraint = "EXACTLY"
                     field_to_match {
-                      uri_path {}
+                      single_header {
+                        name = "Host"
+                      }
                     }
                     search_string = "staging.notification.cdssandbox.xyz"
                     text_transformation {
@@ -213,9 +219,11 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                 }
                 statement {
                   byte_match_statement {
-                    positional_constraint = "CONTAINS"
+                    positional_constraint = "EXACTLY"
                     field_to_match {
-                      uri_path {}
+                      single_header {
+                        name = "Host"
+                      }
                     }
                     search_string = "notification.canada.ca"
                     text_transformation {
