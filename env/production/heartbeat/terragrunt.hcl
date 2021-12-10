@@ -8,5 +8,5 @@ inputs = {
 }
 
 terraform {
-  source = "../../../aws//heartbeat"
+    source = "git::https://github.com/cds-snc/notification-terraform//aws/heartbeat?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
