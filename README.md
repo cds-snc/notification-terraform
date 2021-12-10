@@ -87,6 +87,14 @@ Assets an Elasticache Redis cluster.
 #### `aws/lambda-api`
 Assets to create and hook up a lambda function for the api:  the lambda function, an api gateway, and the private container repository (currently required for deploying images into lambda functions).
 
+To add or change environment variables we 
+- add them to GitHub secrets (both production and staging versions)
+  - for example, `PRODUCTION_NEW_VARIABLE` and `STAGING_NEW_VARIABLE`
+- add then to the staging and production plan and merge GitHub actions
+  -  for example, adding lines such as `TF_VAR_new_variable: ${{ secrets.STAGING_NEW_VARIABLE }} to the actions
+- add new variable declarations to terraform, by adding to the `variables.tf` file. Be sure to mark any sensitive variables with `sensitive = true`. This should prevent them from being revealed in the terrafrom plan.
+- add new variables to `lambda.tf` by adding a line such as `NEW_VARIABLE = var.new_variable`
+
 #### `aws/rds`
 Assets to create a working Relational Database Service (RDS) using Aurora PostgreSQL.
 
