@@ -70,6 +70,7 @@ inputs = {
   asset_upload_bucket_name    = "notification-canada-ca-production-asset-upload"
   csv_upload_bucket_name      = "notification-canada-ca-production-csv-upload"
   documents_bucket            = "notification-alpha-canada-ca-document-download"
+  new_relic_app_name          = "notification-lambda-api-production"
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1
   certificate_arn             = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
