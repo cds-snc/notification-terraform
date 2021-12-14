@@ -131,29 +131,29 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
 
     statement {
-      or_statement {
+      and_statement {
         statement {
-          and_statement {
-            statement {
-              byte_match_statement {
-                positional_constraint = "STARTS_WITH"
-                field_to_match {
-                  single_header {
-                    name = "Host"
-                  }
-                }
-                search_string = "api.document"
-                text_transformation {
-                  priority = 1
-                  type     = "COMPRESS_WHITE_SPACE"
-                }
-                text_transformation {
-                  priority = 2
-                  type     = "LOWERCASE"
-                }
+          byte_match_statement {
+            positional_constraint = "STARTS_WITH"
+            field_to_match {
+              single_header {
+                name = "Host"
               }
             }
+            search_string = "api.document"
+            text_transformation {
+              priority = 1
+              type     = "COMPRESS_WHITE_SPACE"
+            }
+            text_transformation {
+              priority = 2
+              type     = "LOWERCASE"
+            }
+          }
+        }
 
+        statement {
+          not_statement {
             statement {
               regex_pattern_set_reference_statement {
                 arn = aws_wafv2_regex_pattern_set.re_document_download.arn
@@ -172,31 +172,50 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             }
           }
         }
-
-        statement {
-          regex_pattern_set_reference_statement {
-            arn = aws_wafv2_regex_pattern_set.re_no_api_nor_domain.arn
-            field_to_match {
-              single_header {
-                name = "Host"
-              }
-            }
-            text_transformation {
-              priority = 1
-              type     = "COMPRESS_WHITE_SPACE"
-            }
-            text_transformation {
-              priority = 2
-              type     = "LOWERCASE"
-            }
-          }
-        }
       }
     }
 
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "document_download_api_invalid_path"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "api_invalid_path"
+    priority = 11
+
+    action {
+      block {
+        custom_response {
+          response_code = 204
+        }
+      }
+    }
+
+    statement {
+      regex_pattern_set_reference_statement {
+        arn = aws_wafv2_regex_pattern_set.re_no_api_nor_domain.arn
+        field_to_match {
+          single_header {
+            name = "Host"
+          }
+        }
+        text_transformation {
+          priority = 1
+          type     = "COMPRESS_WHITE_SPACE"
+        }
+        text_transformation {
+          priority = 2
+          type     = "LOWERCASE"
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "api_invalid_path"
       sampled_requests_enabled   = true
     }
   }
