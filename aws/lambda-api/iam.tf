@@ -55,12 +55,9 @@ data "aws_iam_policy_document" "api_policies" {
   statement {
     effect = "Allow"
     actions = [
-      "mobiletargeting:*",
-      "ses:SendEmail",
-      "ses:SendRawEmail",
-      "sqs:*",
-      "sns:Publish",
-      "securityhub:BatchImportFindings",
+      "sqs:*",                           # need to send stuff to celery workers
+      "sns:Publish",                     # probably dont need 
+      "securityhub:BatchImportFindings", # what is this for?
     ]
     resources = ["*"]
   }
