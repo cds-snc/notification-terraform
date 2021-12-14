@@ -18,6 +18,8 @@ dependency "common" {
     sns_alert_general_arn = ""
     sns_alert_warning_arn = ""
     sns_alert_critical_arn = ""
+    s3_bucket_csv_upload_bucket_name = ""
+    s3_bucket_csv_upload_bucket_arn = ""
   }
 }
 
@@ -62,7 +64,8 @@ inputs = {
   admin_client_user_name      = "notify-admin"
   asset_domain                = "assets.staging.notification.cdssandbox.xyz"
   asset_upload_bucket_name    = "notification-canada-ca-staging-asset-upload"
-  csv_upload_bucket_name      = "notification-canada-ca-staging-csv-upload"
+  csv_upload_bucket_name      = dependency.common.outputs.s3_bucket_csv_upload_bucket_name
+  csv_upload_bucket_arn       = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   documents_bucket            = "notification-canada-ca-staging-document-download"
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1

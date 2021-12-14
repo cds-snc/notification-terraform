@@ -30,6 +30,10 @@ variable "csv_upload_bucket_name" {
   type = string
 }
 
+variable "csv_upload_bucket_arn" {
+  type = string
+}
+
 variable "dangerous_salt" {
   type      = string
   sensitive = true

@@ -47,13 +47,20 @@ data "aws_iam_policy_document" "api_policies" {
   statement {
     effect = "Allow"
     actions = [
+      "s3:*"
+    ]
+    resources = [var.csv_upload_bucket_arn]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
       "mobiletargeting:*",
       "ses:SendEmail",
       "ses:SendRawEmail",
       "sqs:*",
       "sns:Publish",
       "securityhub:BatchImportFindings",
-      "s3:*"
     ]
     resources = ["*"]
   }

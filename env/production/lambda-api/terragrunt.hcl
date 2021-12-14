@@ -24,6 +24,8 @@ dependency "common" {
     sns_alert_general_arn = ""
     sns_alert_warning_arn = ""
     sns_alert_critical_arn = ""
+    s3_bucket_csv_upload_bucket_name = ""
+    s3_bucket_csv_upload_bucket_arn = ""
   }
 }
 
@@ -68,7 +70,8 @@ inputs = {
   admin_client_user_name      = "notify-admin"
   asset_domain                = "assets.notification.canada.ca"
   asset_upload_bucket_name    = "notification-canada-ca-production-asset-upload"
-  csv_upload_bucket_name      = "notification-canada-ca-production-csv-upload"
+  csv_upload_bucket_name      = dependency.common.outputs.s3_bucket_csv_upload_bucket_name
+  csv_upload_bucket_arn       = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   documents_bucket            = "notification-alpha-canada-ca-document-download"
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1
