@@ -27,10 +27,3 @@ output "documentation_target_group_arn" {
 output "eks-cluster-securitygroup" {
   value = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }
-
-###
-# WAF
-###
-output "waf_arn" {
-  value = aws_wafv2_web_acl.notification-canada-ca.arn
-}

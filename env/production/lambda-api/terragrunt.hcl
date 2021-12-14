@@ -35,7 +35,6 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs = {
     eks-cluster-securitygroup = ""
-    waf_arn = ""
   }
 }
 
@@ -76,5 +75,4 @@ inputs = {
   certificate_arn             = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
   sns_alert_warning_arn       = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn      = dependency.common.outputs.sns_alert_critical_arn
-  waf_arn                     = dependency.eks.outputs.waf_arn
 }
