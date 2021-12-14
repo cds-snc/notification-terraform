@@ -4,7 +4,7 @@ include {
 
 inputs = {
   billing_tag_value                           = "notification-canada-ca-production"
-  schedule_expression                         = "cron(* * * * ? *)"
+  schedule_expression                         = "rate(1 minute)"
 }
 
 terraform {
