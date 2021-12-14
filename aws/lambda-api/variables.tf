@@ -123,3 +123,7 @@ variable "sns_alert_warning_arn" {
 variable "sns_alert_critical_arn" {
   type = string
 }
+
+variable "waf_arn" {
+  type = string
+}

@@ -134,3 +134,8 @@ resource "aws_api_gateway_method_settings" "all" {
     logging_level   = "INFO"
   }
 }
+
+resource "aws_wafv2_web_acl_association" "waf_association" {
+  resource_arn = aws_api_gateway_stage.api.arn
+  web_acl_arn  = var.waf_arn
+}
