@@ -1,4 +1,4 @@
-resource "aws_cloudwatch_query_definition" "50X-errors" {
+resource "aws_cloudwatch_query_definition" "api-lambda-50X-errors" {
   name = "API lambda - 50X errors"
 
   log_group_names = [
