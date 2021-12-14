@@ -73,6 +73,7 @@ inputs = {
   csv_upload_bucket_name      = dependency.common.outputs.s3_bucket_csv_upload_bucket_name
   csv_upload_bucket_arn       = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   documents_bucket            = "notification-alpha-canada-ca-document-download"
+  new_relic_app_name          = "notification-lambda-api-production"
   notification_queue_prefix   = "eks-notification-canada-ca"
   redis_enabled               = 1
   certificate_arn             = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
