@@ -73,6 +73,7 @@ jobs:
             common:
               - '.github/workflows/terragrunt-plan-staging.yml'
               - 'aws/common/**'
+              - 'env/staging/common/**'
               - 'env/terragrunt.hcl'
               - 'env/staging/env_vars.hcl'
             dns:
