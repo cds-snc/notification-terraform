@@ -10,6 +10,10 @@ resource "aws_lambda_function" "api" {
   reserved_concurrent_executions = 850
   memory_size                    = 1024
 
+  tracing_config {
+    mode = "Active"
+  }
+
   vpc_config {
     security_group_ids = [
       var.eks_cluster_securitygroup,
