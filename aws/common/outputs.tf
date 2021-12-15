@@ -49,3 +49,11 @@ output "s3_bucket_asset_bucket_id" {
 output "s3_bucket_asset_bucket_arn" {
   value = aws_s3_bucket.asset_bucket.arn
 }
+
+output "s3_bucket_csv_upload_bucket_arn" {
+  value = aws_s3_bucket.csv_bucket.arn
+}
+
+output "s3_bucket_csv_upload_bucket_name" {
+  value = aws_s3_bucket.csv_bucket.bucket
+}
