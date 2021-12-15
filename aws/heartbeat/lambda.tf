@@ -15,7 +15,7 @@ module "heartbeat" {
   }
 }
 
-resource "aws_lambda_function_event_invoke_config" "heartbeat_" {
+resource "aws_lambda_function_event_invoke_config" "heartbeat_invoke_config" {
   function_name                = module.heartbeat.function_name
   maximum_event_age_in_seconds = 60
   maximum_retry_attempts       = 0
