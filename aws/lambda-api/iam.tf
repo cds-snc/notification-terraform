@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "api_policies" {
     actions = [
       "s3:*"
     ]
-    resources = [var.csv_upload_bucket_arn]
+    resources = ["${var.csv_upload_bucket_arn}/*"]
   }
 
   statement {
