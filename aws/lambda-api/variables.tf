@@ -30,6 +30,10 @@ variable "csv_upload_bucket_name" {
   type = string
 }
 
+variable "csv_upload_bucket_arn" {
+  type = string
+}
+
 variable "dangerous_salt" {
   type      = string
   sensitive = true
@@ -135,4 +139,8 @@ variable "sns_alert_warning_arn" {
 
 variable "sns_alert_critical_arn" {
   type = string
+}
+
+locals {
+  api_lambda_log_group = "/aws/lambda/api-lambda"
 }

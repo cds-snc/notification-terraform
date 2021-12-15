@@ -8,6 +8,7 @@ dependency "common" {
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state = true
   mock_outputs = {
     kms_arn = ""
     vpc_private_subnets = [
@@ -18,6 +19,8 @@ dependency "common" {
     sns_alert_general_arn = ""
     sns_alert_warning_arn = ""
     sns_alert_critical_arn = ""
+    s3_bucket_csv_upload_bucket_name = ""
+    s3_bucket_csv_upload_bucket_arn = ""
   }
 }
 
@@ -48,6 +51,7 @@ include {
 }
 
 inputs = {
+<<<<<<< HEAD
   env                                    = "staging"
   api_image_tag                          = "latest"
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
@@ -62,7 +66,8 @@ inputs = {
   admin_client_user_name                 = "notify-admin"
   asset_domain                           = "assets.staging.notification.cdssandbox.xyz"
   asset_upload_bucket_name               = "notification-canada-ca-staging-asset-upload"
-  csv_upload_bucket_name                 = "notification-canada-ca-staging-csv-upload"
+  csv_upload_bucket_name                 = dependency.common.outputs.s3_bucket_csv_upload_bucket_name
+  csv_upload_bucket_arn       = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   documents_bucket                       = "notification-canada-ca-staging-document-download"
   new_relic_app_name                     = "notification-lambda-api-staging"
   new_relic_distribution_tracing_enabled = "true"
