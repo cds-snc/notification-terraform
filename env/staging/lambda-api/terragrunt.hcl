@@ -51,7 +51,6 @@ include {
 }
 
 inputs = {
-<<<<<<< HEAD
   env                                    = "staging"
   api_image_tag                          = "latest"
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
