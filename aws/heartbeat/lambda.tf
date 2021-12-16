@@ -15,6 +15,12 @@ module "heartbeat" {
   }
 }
 
+resource "aws_lambda_function_event_invoke_config" "heartbeat_invoke_config" {
+  function_name                = module.heartbeat.function_name
+  maximum_event_age_in_seconds = 60
+  maximum_retry_attempts       = 0
+}
+
 resource "aws_cloudwatch_event_target" "heartbeat" {
   arn  = module.heartbeat.function_arn
   rule = aws_cloudwatch_event_rule.heartbeat_testing.id

@@ -13,7 +13,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 1
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -57,7 +57,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 3
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
