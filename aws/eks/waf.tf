@@ -137,7 +137,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             positional_constraint = "STARTS_WITH"
             field_to_match {
               single_header {
-                name = "Host"
+                name = "host"
               }
             }
             search_string = "api.document"
