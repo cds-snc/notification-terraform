@@ -24,3 +24,11 @@ variable "schedule_expression" {
   type        = string
   description = "This aws cloudwatch event rule scheule expression that specifies when the scheduler runs."
 }
+
+variable "sns_alert_warning_arn" {
+  type = string
+}
+
+variable "sns_alert_critical_arn" {
+  type = string
+}
