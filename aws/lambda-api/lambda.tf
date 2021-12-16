@@ -1,14 +1,18 @@
 resource "aws_lambda_function" "api" {
   function_name = "api-lambda"
+  role          = aws_iam_role.api.arn
+  publish       = true
 
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.api-lambda.repository_url}:${var.api_image_tag}"
 
-  role    = aws_iam_role.api.arn
-  timeout = 60
+  timeout                        = 60
+  reserved_concurrent_executions = 850
+  memory_size                    = 1024
 
-  memory_size = 1024
-  publish     = true
+  tracing_config {
+    mode = "Active"
+  }
 
   vpc_config {
     security_group_ids = [
