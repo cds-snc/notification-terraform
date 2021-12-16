@@ -221,3 +221,20 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+#
+# WAF logging to CloudWatch log group
+#
+resource "aws_wafv2_web_acl_logging_configuration" "notification-canada-ca-waf-logs" {
+  log_destination_configs = [aws_cloudwatch_log_group.notification-canada-ca-waf-logs.arn]
+  resource_arn            = aws_wafv2_web_acl.notification-canada-ca.arn
+}
+
+resource "aws_cloudwatch_log_group" "notification-canada-ca-waf-logs" {
+  name              = "aws-waf-logs-notification-canada-ca-waf"
+  retention_in_days = 7
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
