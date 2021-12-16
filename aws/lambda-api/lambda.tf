@@ -23,28 +23,31 @@ resource "aws_lambda_function" "api" {
 
   environment {
     variables = {
-      ADMIN_CLIENT_SECRET            = var.admin_client_secret
-      ADMIN_CLIENT_USER_NAME         = var.admin_client_user_name
-      ASSET_DOMAIN                   = var.asset_domain
-      ASSET_UPLOAD_BUCKET_NAME       = var.asset_upload_bucket_name
-      AUTH_TOKENS                    = var.auth_tokens
-      AWS_PINPOINT_REGION            = var.aws_pinpoint_region
-      CSV_UPLOAD_BUCKET_NAME         = var.csv_upload_bucket_name
-      DANGEROUS_SALT                 = var.dangerous_salt
-      DOCUMENTS_BUCKET               = var.documents_bucket
-      ENVIRONMENT                    = var.env
-      MLWR_HOST                      = var.mlwr_host
-      NEW_RELIC_APP_NAME             = var.new_relic_app_name
-      NOTIFICATION_QUEUE_PREFIX      = var.notification_queue_prefix
-      NOTIFY_EMAIL_DOMAIN            = var.domain
-      NOTIFY_ENVIRONMENT             = var.env
-      REDIS_ENABLED                  = var.redis_enabled
-      REDIS_URL                      = var.redis_url
-      SECRET_KEY                     = var.secret_key
-      SQLALCHEMY_DATABASE_READER_URI = var.sqlalchemy_database_reader_uri
-      SQLALCHEMY_DATABASE_URI        = var.sqlalchemy_database_uri
-      SQLALCHEMY_POOL_SIZE           = var.sqlalchemy_pool_size
-      DOCUMENT_DOWNLOAD_API_HOST     = var.document_download_api_host
+      ADMIN_CLIENT_SECRET                   = var.admin_client_secret
+      ADMIN_CLIENT_USER_NAME                = var.admin_client_user_name
+      ASSET_DOMAIN                          = var.asset_domain
+      ASSET_UPLOAD_BUCKET_NAME              = var.asset_upload_bucket_name
+      AUTH_TOKENS                           = var.auth_tokens
+      AWS_PINPOINT_REGION                   = var.aws_pinpoint_region
+      CSV_UPLOAD_BUCKET_NAME                = var.csv_upload_bucket_name
+      DANGEROUS_SALT                        = var.dangerous_salt
+      DOCUMENTS_BUCKET                      = var.documents_bucket
+      ENVIRONMENT                           = var.env
+      MLWR_HOST                             = var.mlwr_host
+      NEW_RELIC_APP_NAME                    = var.new_relic_app_name
+      NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
+      NEW_RELIC_LICENSE_KEY                 = var.new_relic_license_key
+      NEW_RELIC_MONITOR_MODE                = var.new_relic_monitor_mode
+      NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
+      NOTIFY_EMAIL_DOMAIN                   = var.domain
+      NOTIFY_ENVIRONMENT                    = var.env
+      REDIS_ENABLED                         = var.redis_enabled
+      REDIS_URL                             = var.redis_url
+      SECRET_KEY                            = var.secret_key
+      SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
+      SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
+      SQLALCHEMY_POOL_SIZE                  = var.sqlalchemy_pool_size
+      DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
     }
   }
 
