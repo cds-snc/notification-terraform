@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "heartbeat_assume" {
 
 resource "aws_cloudwatch_log_metric_filter" "heartbeat-500-errors-api" {
   name           = "heartbeat-500-errors-api"
-  pattern        = "\"\\\" 500 \""
+  pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\""
   log_group_name = "/aws/lambda/${module.heartbeat.function_name}"
 
   metric_transformation {
