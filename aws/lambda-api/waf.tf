@@ -13,7 +13,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     priority = 1
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -57,7 +57,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     priority = 3
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
@@ -114,6 +114,28 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "AWSManagedRulesAnonymousIpList"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "AWSManagedRulesBotControlRuleSet"
+    priority = 6
+
+    override_action {
+      count {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesBotControlRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AWSManagedRulesBotControlRuleSet"
       sampled_requests_enabled   = true
     }
   }
