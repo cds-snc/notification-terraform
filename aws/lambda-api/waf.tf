@@ -150,3 +150,20 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     sampled_requests_enabled   = false
   }
 }
+
+#
+# WAF logging to CloudWatch log group
+#
+resource "aws_wafv2_web_acl_logging_configuration" "notification-canada-ca-api-lambda-waf-logs" {
+  log_destination_configs = [aws_cloudwatch_log_group.notification-canada-ca-api-lambda-waf-logs.arn]
+  resource_arn            = aws_wafv2_web_acl.api_lambda.arn
+}
+
+resource "aws_cloudwatch_log_group" "notification-canada-ca-api-lambda-waf-logs" {
+  name              = "aws-waf-logs-notification-canada-ca-api-lambda-waf"
+  retention_in_days = 7
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
