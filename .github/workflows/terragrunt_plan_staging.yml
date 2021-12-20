@@ -37,6 +37,7 @@ env:
   TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
   TF_VAR_sqlalchemy_database_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_URI }}
+  TF_VAR_api_domain_name: ${{ secrets.STAGING_API_DOMAIN_NAME }}
   TF_VAR_api_lambda_domain_name: ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
   TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
   # Prevents repeated creation of the Slack lambdas if already existing.

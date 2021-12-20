@@ -125,6 +125,10 @@ variable "high_demand_max_concurrency" {
   type = number
 }
 
+variable "api_domain_name" {
+  type = string
+}
+
 variable "api_lambda_domain_name" {
   type = string
 }
