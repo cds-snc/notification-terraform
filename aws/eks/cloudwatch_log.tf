@@ -38,11 +38,26 @@ resource "aws_cloudwatch_log_metric_filter" "platform-admin-looking-at-sensitive
 
   name = "platform-admin-looking-at-sensitive-service"
   # The UUIDv4 is a Notify service ID we are interested in
-  pattern        = "\"Sensitive Admin API request\""
+  pattern        = "\"Admin API request\" \"432cb269-7c85-4e38-8e42-3828ec7e5799\""
   log_group_name = local.eks_application_log_group
 
   metric_transformation {
     name          = "platform-admin-looking-at-sensitive-service"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "platform-admin-looking-at-sensitive-service-new" {
+
+  name = "platform-admin-looking-at-sensitive-service-new"
+  # The UUIDv4 is a Notify service ID we are interested in
+  pattern        = "\"Sensitive Admin API request\""
+  log_group_name = local.eks_application_log_group
+
+  metric_transformation {
+    name          = "platform-admin-looking-at-sensitive-service-new"
     namespace     = "LogMetrics"
     value         = "1"
     default_value = "0"
