@@ -312,10 +312,10 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   alarm_name          = "sqs-sms-stuck-in-queue-critical"
   alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 1 minute for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = "10"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = 60 * 5
+  period              = 60
   statistic           = "Average"
   threshold           = 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
