@@ -180,14 +180,14 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warnin
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warning" {
   alarm_name          = "sns-sms-phone-carrier-unavailable-warning"
-  alarm_description   = "More than 20 SMS failed because a phone carrier is unavailable over 6 hours"
+  alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].namespace
-  period              = 60 * 60 * 6
+  period              = 60 * 60 * 3
   statistic           = "Sum"
-  threshold           = 20
+  threshold           = 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   treat_missing_data  = "notBreaching"
 }
@@ -196,12 +196,12 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
   provider = aws.us-west-2
 
   alarm_name          = "sns-sms-phone-carrier-unavailable-us-west-2-warning"
-  alarm_description   = "More than 20 SMS failed because a phone carrier is unavailable over 6 hours"
+  alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].namespace
-  period              = 60 * 60 * 6
+  period              = 60 * 60 * 3
   statistic           = "Sum"
   threshold           = 20
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
