@@ -203,7 +203,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
   namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].namespace
   period              = 60 * 60 * 3
   statistic           = "Sum"
-  threshold           = 20
+  threshold           = 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
   treat_missing_data  = "notBreaching"
 }
