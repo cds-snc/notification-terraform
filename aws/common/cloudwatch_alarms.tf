@@ -453,7 +453,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60 * 5
-  statistic           = "Average"
+  statistic           = "Maximum"
   threshold           = 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -469,8 +469,8 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Average"
-  threshold           = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
