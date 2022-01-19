@@ -463,14 +463,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
   alarm_name          = "sqs-db-tasks-stuck-in-queue-critical"
-  alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 1 minute for 10 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 15 minute for 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "10"
+  evaluation_periods  = "15"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Maximum"
-  threshold           = 60 * 10
+  threshold           = 60 * 15
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
