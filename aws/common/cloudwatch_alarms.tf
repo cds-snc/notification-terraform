@@ -447,14 +447,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
 
 resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
   alarm_name          = "sqs-db-tasks-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 1 minute in a 5-minute period"
+  alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 5 minutes in a 1-minute period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = 60 * 5
+  period              = 60
   statistic           = "Maximum"
-  threshold           = 60
+  threshold           = 60 * 5
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
