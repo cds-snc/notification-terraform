@@ -60,6 +60,13 @@ variable "sqs_throttled_sms_queue_name" {
   default = "send-throttled-sms-tasks"
 }
 
+variable "sqs_db_tasks_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "database-tasks"
+}
+
 variable "alarm_warning_document_download_bucket_size_gb" {
   type = number
 }

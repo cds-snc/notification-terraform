@@ -180,14 +180,14 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warnin
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warning" {
   alarm_name          = "sns-sms-phone-carrier-unavailable-warning"
-  alarm_description   = "More than 10 SMS failed because a phone carrier is unavailable over 6 hours"
+  alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].namespace
-  period              = 60 * 60 * 6
+  period              = 60 * 60 * 3
   statistic           = "Sum"
-  threshold           = 10
+  threshold           = 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   treat_missing_data  = "notBreaching"
 }
@@ -196,14 +196,14 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
   provider = aws.us-west-2
 
   alarm_name          = "sns-sms-phone-carrier-unavailable-us-west-2-warning"
-  alarm_description   = "More than 10 SMS failed because a phone carrier is unavailable over 6 hours"
+  alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].namespace
-  period              = 60 * 60 * 6
+  period              = 60 * 60 * 3
   statistic           = "Sum"
-  threshold           = 10
+  threshold           = 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
   treat_missing_data  = "notBreaching"
 }
@@ -312,10 +312,10 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   alarm_name          = "sqs-sms-stuck-in-queue-critical"
   alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 1 minute for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = "10"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = 60 * 5
+  period              = 60
   statistic           = "Average"
   threshold           = 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
@@ -442,6 +442,39 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}send-throttled-sms-tasks"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
+  alarm_name          = "sqs-db-tasks-stuck-in-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 5 minutes in a 1-minute period"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 5
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
+  alarm_name          = "sqs-db-tasks-stuck-in-queue-critical"
+  alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 15 minute for 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "15"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 15
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
   }
 }
 

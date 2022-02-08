@@ -39,3 +39,15 @@ data "aws_iam_policy_document" "api_assume" {
     }
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "errors-lambda-api" {
+  name           = "errors-lambda-api"
+  pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\""
+  log_group_name = "/aws/lambda/${aws_lambda_function.api.function_name}"
+
+  metric_transformation {
+    name      = "errors-lambda-api"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
