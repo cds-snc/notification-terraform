@@ -78,10 +78,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     name     = "AWSManagedRulesLinuxRuleSet"
     priority = 4
 
-    override_action {
-      block {}
-    }
-
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesLinuxRuleSet"
