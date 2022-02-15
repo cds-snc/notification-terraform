@@ -63,3 +63,19 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warnin
     CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "redis-elasticache-evictions-warning" {
+  alarm_name          = "redis-elasticache-evictions-warning"
+  alarm_description   = "Average Number of Evictions on Redis ElastiCache >= 1 connections during 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Evictions"
+  namespace           = "AWS/ElastiCache"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = 1
+  alarm_actions       = [var.sns_alert_warning_arn]
+  dimensions = {
+    CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
+  }
+}
