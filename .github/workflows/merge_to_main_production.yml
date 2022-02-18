@@ -15,8 +15,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
-  TERRAFORM_VERSION: 1.1.5
-  TERRAGRUNT_VERSION: 0.36.1
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.PRODUCTION_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
@@ -48,6 +46,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Set environment variables
+        uses: ./.github/actions/setvars
+        with:
+          varFilePath: ./.env
 
       - name: Setup Infrastructure Version
         # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure

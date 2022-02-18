@@ -3,6 +3,7 @@ name: "Terragrunt plan STAGING"
 on:
   pull_request:
     paths:
+      - ".env"    
       - "aws/**"
       - "env/staging/**"
       - "env/terragrunt.hcl"
@@ -13,8 +14,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
-  TERRAFORM_VERSION: 1.1.5
-  TERRAGRUNT_VERSION: 0.36.1
   TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.STAGING_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
@@ -56,6 +55,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set environment variables
+        uses: ./.github/actions/setvars
+        with:
+          varFilePath: ./.env
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@3d8debd658c92063839bc97da5c2427100420dec # v1.3.2
         with:
@@ -70,8 +74,6 @@ jobs:
           echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
       - name: Install Conftest
-        env:
-          CONFTEST_VERSION: 0.27.0
         run: |
           wget "https://github.com/open-policy-agent/conftest/releases/download/v${{ env.CONFTEST_VERSION }}/conftest_${{ env.CONFTEST_VERSION }}_Linux_x86_64.tar.gz" \
           && wget "https://github.com/open-policy-agent/conftest/releases/download/v${{ env.CONFTEST_VERSION }}/checksums.txt" \
