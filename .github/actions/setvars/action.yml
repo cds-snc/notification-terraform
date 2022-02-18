@@ -1,0 +1,13 @@
+name: Set environment variables
+description: Configures environment variables for a workflow
+inputs:
+  envVarFile:
+    description: Path to the .env variable file to add to the GitHub environment variables
+    required: false
+    default: ./.env
+runs:
+  using: "composite"
+  steps:
+    - name: Set environment variables 
+      run: sed "" ${{ inputs.envVarFile }} >> $GITHUB_ENV
+      shell: bash

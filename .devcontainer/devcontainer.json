@@ -4,9 +4,9 @@
     "dockerfile": "Dockerfile",
     "context": "..",
     "args": {
-      "TERRAFORM_VERSION": "0.14.4",
       "AWS_CLI_VERSION": "2.2.29",
-      "TERRAGRUNT_VERSION": "0.35.13"
+      "TERRAFORM_VERSION": "1.1.5",
+      "TERRAGRUNT_VERSION": "0.36.1"
     }
   },
   "containerEnv": {
