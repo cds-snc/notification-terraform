@@ -50,7 +50,7 @@ jobs:
       - name: Set environment variables
         uses: ./.github/actions/setvars
         with:
-          varFilePath: ./.env
+          envVarFile: ./.env
 
       - name: Setup Infrastructure Version
         # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure

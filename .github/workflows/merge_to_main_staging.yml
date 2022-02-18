@@ -60,7 +60,7 @@ jobs:
       - name: Set environment variables
         uses: ./.github/actions/setvars
         with:
-          varFilePath: ./.env
+          envVarFile: ./.env
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
