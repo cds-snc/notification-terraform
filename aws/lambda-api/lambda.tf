@@ -33,6 +33,8 @@ resource "aws_lambda_function" "api" {
       DANGEROUS_SALT                        = var.dangerous_salt
       DOCUMENTS_BUCKET                      = var.documents_bucket
       ENVIRONMENT                           = var.env
+      FF_BATCH_INSERTION                    = var.ff_batch_insertion
+      FF_REDIS_BATCH_SAVING                 = var.ff_redis_batch_saving
       MLWR_HOST                             = var.mlwr_host
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled

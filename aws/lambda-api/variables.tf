@@ -148,3 +148,11 @@ variable "sns_alert_critical_arn" {
 locals {
   api_lambda_log_group = "/aws/lambda/api-lambda"
 }
+
+variable "ff_batch_insertion" {
+  type = bool
+}
+
+variable "ff_redis_batch_saving" {
+  type = bool
+}
