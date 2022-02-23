@@ -50,7 +50,7 @@ resource "aws_lambda_function" "api" {
       SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
       SQLALCHEMY_POOL_SIZE                  = var.sqlalchemy_pool_size
       DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
-      FF_NOTIFICATION_CELERY_PERSISTENCE    = "1"
+      FF_NOTIFICATION_CELERY_PERSISTENCE    = "True"
     }
   }
 
