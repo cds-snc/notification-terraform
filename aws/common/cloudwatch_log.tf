@@ -59,6 +59,15 @@ resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "batch_saving_emf_logs" {
+  name              = "BatchSaving"
+  retention_in_days = 7
+  tags = {
+    CostCenter  = "notification-canada-ca-${var.env}"
+    Environment = var.env
+  }
+}
+
 ###
 # AWS CloudWatch Logs Metrics
 ###

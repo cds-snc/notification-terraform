@@ -156,3 +156,7 @@ variable "ff_batch_insertion" {
 variable "ff_redis_batch_saving" {
   type = bool
 }
+
+variable "ff_cloudwatch_metrics_enabled" {
+  type = bool
+}

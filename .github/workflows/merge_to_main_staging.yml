@@ -22,6 +22,7 @@ env:
   TERRAGRUNT_VERSION: 0.35.13
   TF_VAR_ff_batch_insertion: ${{ secrets.STAGING_FF_BATCH_INSERTION }}
   TF_VAR_ff_redis_batch_saving: ${{ secrets.STAGING_FF_REDIS_BATCH_SAVING }}
+  TF_VAR_ff_cloudwatch_metrics_enabled: ${{ secrets.STAGING_FF_CLOUDWATCH_METRICS_ENABLED }}
   TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.STAGING_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
