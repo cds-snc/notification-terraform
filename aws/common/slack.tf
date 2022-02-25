@@ -1,7 +1,7 @@
 # Doc: https://registry.terraform.io/modules/terraform-aws-modules/notify-slack/aws/
 module "notify_slack_warning" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "~> 4.0"
+  version = "~> 4.20"
 
   create_sns_topic = false
   sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-warning.name
@@ -13,13 +13,14 @@ module "notify_slack_warning" {
 
   lambda_function_name                   = "notify-slack-warning"
   cloudwatch_log_group_retention_in_days = 90
+  recreate_missing_package               = true
 
   depends_on = [aws_sns_topic.notification-canada-ca-alert-warning]
 }
 
 module "notify_slack_critical" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "~> 4.0"
+  version = "~> 4.20"
 
   create_sns_topic = false
   sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-critical.name
@@ -31,13 +32,14 @@ module "notify_slack_critical" {
 
   lambda_function_name                   = "notify-slack-critical"
   cloudwatch_log_group_retention_in_days = 90
+  recreate_missing_package               = true
 
   depends_on = [aws_sns_topic.notification-canada-ca-alert-critical]
 }
 
 module "notify_slack_general" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "~> 4.0"
+  version = "~> 4.20"
 
   create_sns_topic = false
   sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-general.name
@@ -49,5 +51,6 @@ module "notify_slack_general" {
 
   lambda_function_name                   = "notify-slack-general"
   cloudwatch_log_group_retention_in_days = 90
+  recreate_missing_package               = true
 
 }
