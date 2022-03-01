@@ -17,9 +17,6 @@ env:
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: 0.35.13
-  TF_VAR_ff_batch_insertion: ${{ secrets.PRODUCTION_FF_BATCH_INSERTION }}
-  TF_VAR_ff_redis_batch_saving: ${{ secrets.PRODUCTION_FF_REDIS_BATCH_SAVING }}
-  TF_VAR_ff_cloudwatch_metrics_enabled: ${{ secrets.PRODUCTION_FF_CLOUDWATCH_METRICS_ENABLED }}
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.PRODUCTION_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
