@@ -33,8 +33,6 @@ resource "aws_lambda_function" "api" {
       DANGEROUS_SALT                        = var.dangerous_salt
       DOCUMENTS_BUCKET                      = var.documents_bucket
       ENVIRONMENT                           = var.env
-      FF_BATCH_INSERTION                    = var.ff_batch_insertion
-      FF_REDIS_BATCH_SAVING                 = var.ff_redis_batch_saving
       MLWR_HOST                             = var.mlwr_host
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
@@ -50,8 +48,10 @@ resource "aws_lambda_function" "api" {
       SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
       SQLALCHEMY_POOL_SIZE                  = var.sqlalchemy_pool_size
       DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
-      FF_NOTIFICATION_CELERY_PERSISTENCE    = "True"
+      FF_BATCH_INSERTION                    = var.ff_batch_insertion
+      FF_REDIS_BATCH_SAVING                 = var.ff_redis_batch_saving
       FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
+      FF_NOTIFICATION_CELERY_PERSISTENCE    = var.ff_notification_celery_persistence
     }
   }
 
