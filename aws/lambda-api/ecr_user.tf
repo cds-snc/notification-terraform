@@ -1,3 +1,8 @@
+locals {
+  api-lambda-ecr-arn      = aws_ecr_repository.api-lambda.arn
+  api-lambda-function-arn = aws_lambda_function.api.arn
+}
+
 resource "aws_iam_user" "ecr-user" {
   name = "ecr-user"
 }
@@ -50,7 +55,7 @@ data "aws_iam_policy_document" "ecr" {
       "ecr:PutImage",
       "ecr:UploadLayerPart"
     ]
-    resources = [aws_ecr_repository.api-lambda.arn]
+    resources = [local.api-lambda-ecr-arn]
   }
   statement {
     sid    = "PermissionsToUpdateFunction"
@@ -58,8 +63,6 @@ data "aws_iam_policy_document" "ecr" {
     actions = [
       "lambda:UpdateFunctionCode"
     ]
-    resources = [
-      aws_lambda_function.api.arn
-    ]
+    resources = [local.api-lambda-function-arn]
   }
 }
