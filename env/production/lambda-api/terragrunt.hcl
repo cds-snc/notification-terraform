@@ -82,4 +82,8 @@ inputs = {
   certificate_arn                        = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
+  ff_batch_insertion                     = "true"
+  ff_redis_batch_saving                  = "true"
+  ff_cloudwatch_metrics_enabled          = "true"
+  ff_notification_celery_persistence     = "true"
 }

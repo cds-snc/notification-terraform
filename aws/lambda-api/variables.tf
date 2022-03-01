@@ -160,3 +160,7 @@ variable "ff_redis_batch_saving" {
 variable "ff_cloudwatch_metrics_enabled" {
   type = bool
 }
+
+variable "ff_notification_celery_persistence" {
+  type = bool
+}
