@@ -402,7 +402,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Maximum"
-  threshold           = 60 * 10
+  threshold           = 60 * 30
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}bulk-tasks"
@@ -418,7 +418,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Maximum"
-  threshold           = 60 * 30
+  threshold           = 60 * 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   dimensions = {
