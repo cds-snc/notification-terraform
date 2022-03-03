@@ -72,17 +72,21 @@ variable "alarm_warning_document_download_bucket_size_gb" {
 }
 
 variable "alarm_warning_inflight_processed_created_delta_threshold" {
-  type = number
+  description = "Warning alarm threshold for the difference between processed and created inflights"
+  type        = number
 }
 
 variable "alarm_critical_inflight_processed_created_delta_threshold" {
-  type = number
+  description = "Critical alarm threshold for the difference between processed and created inflights"
+  type        = number
 }
 
 variable "alarm_warning_bulk_processed_created_delta_threshold" {
-  type = number
+  description = "Warning alarm threshold for the difference between processed and created bulk sends"
+  type        = number
 }
 
 variable "alarm_critical_bulk_processed_created_delta_threshold" {
-  type = number
+  description = "Critical alarm threshold for the difference between processed and created bulk sends"
+  type        = number
 }
