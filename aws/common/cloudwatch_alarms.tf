@@ -637,3 +637,208 @@ resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warni
     metric_type = "counter"
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
+  alarm_name          = "inflights-not-being-processed-warning"
+  alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_inflight_processed_created_delta_threshold}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_warning_inflight_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+
+  metric_query {
+    id    = "inflight_created"
+    label = "Inflight created"
+
+    metric {
+      metric_name = "batch_saving_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "inflight_processed"
+    label = "Inflight processed"
+
+    metric {
+      metric_name = "batch_saving_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(inflight_created - inflight_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" {
+  alarm_name          = "inflights-not-being-processed-critical"
+  alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_inflight_processed_created_delta_threshold}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_critical_inflight_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+
+  metric_query {
+    id    = "inflight_created"
+    label = "Inflight created"
+
+    metric {
+      metric_name = "batch_saving_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "inflight_processed"
+    label = "Inflight processed"
+
+    metric {
+      metric_name = "batch_saving_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(inflight_created - inflight_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
+  alarm_name          = "bulk-not-being-processed-warning"
+  alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_warning_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
+  alarm_name          = "bulk-not-being-processed-critical"
+  alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_critical_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
