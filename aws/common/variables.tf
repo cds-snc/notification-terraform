@@ -70,3 +70,19 @@ variable "sqs_db_tasks_queue_name" {
 variable "alarm_warning_document_download_bucket_size_gb" {
   type = number
 }
+
+variable "alarm_warning_inflight_processed_created_delta_threshold" {
+  type = number
+}
+
+variable "alarm_critical_inflight_processed_created_delta_threshold" {
+  type = number
+}
+
+variable "alarm_warning_bulk_processed_created_delta_threshold" {
+  type = number
+}
+
+variable "alarm_critical_bulk_processed_created_delta_threshold" {
+  type = number
+}
