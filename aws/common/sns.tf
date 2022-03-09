@@ -136,10 +136,10 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
   endpoint_auto_confirms = true
 }
 
-resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie_ok_us_west_2" {
+resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie_ok" {
   count = var.env == "production" ? 1 : 0
 
-  topic_arn              = aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn
+  topic_arn              = aws_sns_topic.notification-canada-ca-alert-ok.arn
   protocol               = "https"
   endpoint               = var.cloudwatch_opsgenie_alarm_webhook
   raw_message_delivery   = false
