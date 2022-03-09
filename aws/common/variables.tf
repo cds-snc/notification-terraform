@@ -1,17 +1,25 @@
 variable "cloudwatch_opsgenie_alarm_webhook" {
-  type = string
+  desdescription = "OpsGenie webhook used to trigger a page when there is a critical alarm."
+  type           = string
+  sensitive      = true
 }
 
 variable "cloudwatch_slack_webhook_critical_topic" {
-  type = string
+  desdescription = "Slack webhook used to post critical alarm notifications."
+  type           = string
+  sensitive      = true
 }
 
 variable "cloudwatch_slack_webhook_warning_topic" {
-  type = string
+  desdescription = "Slack webhook used to post warning alarm notifications."
+  type           = string
+  sensitive      = true
 }
 
 variable "cloudwatch_slack_webhook_general_topic" {
-  type = string
+  desdescription = "Slack webhook used to post general alarm notifications."
+  type           = string
+  sensitive      = true
 }
 
 variable "slack_channel_critical_topic" {
