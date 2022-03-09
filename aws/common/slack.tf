@@ -17,6 +17,24 @@ module "notify_slack_warning" {
   depends_on = [aws_sns_topic.notification-canada-ca-alert-warning]
 }
 
+module "notify_slack_ok" {
+  source  = "terraform-aws-modules/notify-slack/aws"
+  version = "~> 4.24.0"
+
+  create_sns_topic = false
+  sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-ok.name
+
+  slack_webhook_url = var.cloudwatch_slack_webhook_general_topic
+  slack_channel     = var.slack_channel_general_topic
+  slack_username    = "[OK] AWS Cloudwatch"
+  slack_emoji       = ":green:"
+
+  lambda_function_name                   = "notify-slack-ok"
+  cloudwatch_log_group_retention_in_days = 90
+
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-ok]
+}
+
 module "notify_slack_critical" {
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "~> 4.24.0"
@@ -35,6 +53,7 @@ module "notify_slack_critical" {
   depends_on = [aws_sns_topic.notification-canada-ca-alert-critical]
 }
 
+# Shared generic slack webhook & topic.
 module "notify_slack_general" {
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "~> 4.24.0"

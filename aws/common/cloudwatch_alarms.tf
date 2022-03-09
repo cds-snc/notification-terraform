@@ -46,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
   threshold           = 0.9 * var.sns_monthly_spend_limit
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
@@ -63,7 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
   threshold           = 0.9 * var.sns_monthly_spend_limit_us_west_2
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
@@ -118,7 +118,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
   statistic           = "Average"
   threshold           = 25 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     SMSType = "Transactional"
@@ -140,7 +140,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   statistic           = "Average"
   threshold           = 75 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     SMSType = "Transactional"
@@ -262,7 +262,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
   statistic           = "Average"
   threshold           = 7 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
@@ -289,7 +289,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
   statistic           = "Average"
   threshold           = 0.4 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
@@ -319,7 +319,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   statistic           = "Average"
   threshold           = 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_sms_queue_name}"
   }
@@ -352,7 +352,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
   statistic           = "Average"
   threshold           = 60 * 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_throttled_sms_queue_name}"
   }
@@ -387,7 +387,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
   statistic           = "Maximum"
   threshold           = 60 * 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}send-email-tasks"
   }
@@ -420,7 +420,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   statistic           = "Maximum"
   threshold           = 60 * 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}bulk-tasks"
   }
@@ -439,7 +439,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
   # per minute, but giving it a 10% room.
   threshold     = 60 * 1.1
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}send-throttled-sms-tasks"
   }
@@ -472,7 +472,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
   statistic           = "Maximum"
   threshold           = 60 * 15
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
   }
@@ -506,7 +506,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
   statistic           = "Average"
   threshold           = 200
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   treat_missing_data  = "breaching"
   dimensions = {
     metric_type = "timing"
@@ -539,7 +539,7 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   threshold           = 1
   treat_missing_data  = "breaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warning" {
@@ -586,7 +586,7 @@ resource "aws_cloudwatch_metric_alarm" "sign-in-3-500-error-15-minutes-critical"
   threshold           = 3
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical" {
@@ -601,7 +601,7 @@ resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical"
   threshold           = 3
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
@@ -647,7 +647,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "inflight_created"
@@ -698,7 +698,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" 
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "inflight_created"
@@ -741,7 +741,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
-  alarm_name          = "bulk-not-being-processed-warning"
+  alarm_name          = "bulk-buffer-not-being-processed-warning"
   alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold}"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -750,7 +750,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
 
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "bulk_created"
@@ -793,7 +793,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
-  alarm_name          = "bulk-not-being-processed-critical"
+  alarm_name          = "bulk-buffer-not-being-processed-critical"
   alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold}"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -801,7 +801,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "bulk_created"
