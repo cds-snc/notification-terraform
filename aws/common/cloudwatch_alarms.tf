@@ -640,7 +640,7 @@ resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warni
 
 resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
   alarm_name          = "inflights-not-being-processed-warning"
-  alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_inflight_processed_created_delta_threshold}"
+  alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_warning_inflight_processed_created_delta_threshold
@@ -691,7 +691,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" {
   alarm_name          = "inflights-not-being-processed-critical"
-  alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_inflight_processed_created_delta_threshold}"
+  alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_critical_inflight_processed_created_delta_threshold
@@ -742,7 +742,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" 
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
   alarm_name          = "bulk-buffer-not-being-processed-warning"
-  alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold}"
+  alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_warning_bulk_processed_created_delta_threshold
@@ -794,7 +794,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
   alarm_name          = "bulk-buffer-not-being-processed-critical"
-  alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold}"
+  alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_critical_bulk_processed_created_delta_threshold
