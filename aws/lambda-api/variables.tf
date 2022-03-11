@@ -1,11 +1,19 @@
+variable "admin_base_url" {
+  type = string
+}
+
 variable "admin_client_secret" {
   type      = string
   sensitive = true
 }
 
-variable "admin_client_user_name" {
+variable "allow_html_service_ids" {
   type      = string
   sensitive = true
+}
+
+variable "api_host_name" {
+  type = string
 }
 
 variable "asset_domain" {
@@ -16,14 +24,40 @@ variable "asset_upload_bucket_name" {
   type = string
 }
 
-variable "auth_tokens" {
+variable "aws_pinpoint_region" {
+  type = string
+}
+
+variable "aws_route53_zone" {
   type      = string
   sensitive = true
 }
 
-// check if this already exists
-variable "aws_pinpoint_region" {
+variable "aws_ses_access_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "aws_ses_region" {
   type = string
+}
+
+variable "aws_ses_secret_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "aws_ses_smpt" {
+  type = string
+}
+
+variable "aws_us_toll_free_number" {
+  type      = string
+  sensitive = true
+}
+
+variable "batch_insertion_chunk_size" {
+  type = number
 }
 
 variable "csv_upload_bucket_name" {
@@ -39,12 +73,62 @@ variable "dangerous_salt" {
   sensitive = true
 }
 
-variable "documents_bucket" {
+variable "ff_batch_insertion" {
+  type = bool
+}
+
+variable "ff_cloudwatch_metrics_enabled" {
+  type = bool
+}
+
+variable "ff_notification_celery_persistence" {
+  type = bool
+}
+
+variable "ff_redis_batch_saving" {
+  type = bool
+}
+
+variable "fido2_domain" {
   type = string
+}
+
+variable "fresh_desk_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "fresh_desk_api_url" {
+  type = string
+}
+
+variable "fresh_desk_product_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "hc_en_service_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "hc_fr_service_id" {
+  type      = string
+  sensitive = true
 }
 
 variable "mlwr_host" {
   type = string
+}
+
+variable "mlwr_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "mlwr_user" {
+  type      = string
+  sensitive = true
 }
 
 variable "new_relic_app_name" {
@@ -81,6 +165,15 @@ variable "secret_key" {
   sensitive = true
 }
 
+variable "sendgrid_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "sendgrid_url" {
+  type = string
+}
+
 variable "sqlalchemy_database_reader_uri" {
   type = string
 }
@@ -91,6 +184,25 @@ variable "sqlalchemy_database_uri" {
 
 variable "sqlalchemy_pool_size" {
   type = string
+}
+
+variable "statsd_host" {
+  type = string
+}
+
+variable "twilio_account_sid" {
+  type      = string
+  sensitive = true
+}
+
+variable "twilio_auth_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "twilio_from_number" {
+  type      = string
+  sensitive = true
 }
 
 variable "vpc_private_subnets" {
@@ -149,18 +261,20 @@ locals {
   api_lambda_log_group = "/aws/lambda/api-lambda"
 }
 
-variable "ff_batch_insertion" {
-  type = bool
+variable "zendesk_api_key" {
+  type      = string
+  sensitive = true
 }
 
-variable "ff_redis_batch_saving" {
-  type = bool
+variable "zendesk_api_url" {
+  type = string
 }
 
-variable "ff_cloudwatch_metrics_enabled" {
-  type = bool
+variable "zendesk_sell_api_key" {
+  type      = string
+  sensitive = true
 }
 
-variable "ff_notification_celery_persistence" {
-  type = bool
+variable "zendesk_sell_api_url" {
+  type = string
 }

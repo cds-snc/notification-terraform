@@ -23,17 +23,35 @@ resource "aws_lambda_function" "api" {
 
   environment {
     variables = {
+      ADMIN_BASE_URL                        = var.admin_base_url
       ADMIN_CLIENT_SECRET                   = var.admin_client_secret
-      ADMIN_CLIENT_USER_NAME                = var.admin_client_user_name
+      ALLOW_HTML_SERVICE_IDS                = var.allow_html_service_ids
+      API_HOST_NAME                         = var.api_host_name
       ASSET_DOMAIN                          = var.asset_domain
       ASSET_UPLOAD_BUCKET_NAME              = var.asset_upload_bucket_name
-      AUTH_TOKENS                           = var.auth_tokens
       AWS_PINPOINT_REGION                   = var.aws_pinpoint_region
+      AWS_ROUTE53_ZONE                      = var.aws_route53_zone
+      AWS_SES_ACCESS_KEY                    = var.aws_ses_access_key
+      AWS_SES_REGION                        = var.aws_ses_region
+      AWS_SES_SECRET_KEY                    = var.aws_ses_secret_key
+      AWS_US_TOLL_FREE_NUMBER               = var.aws_us_toll_free_number
+      BATCH_INSERTION_CHUNK_SIZE            = var.batch_insertion_chunk_size
       CSV_UPLOAD_BUCKET_NAME                = var.csv_upload_bucket_name
       DANGEROUS_SALT                        = var.dangerous_salt
-      DOCUMENTS_BUCKET                      = var.documents_bucket
-      ENVIRONMENT                           = var.env
+      DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
+      FF_BATCH_INSERTION                    = var.ff_batch_insertion
+      FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
+      FF_NOTIFICATION_CELERY_PERSISTENCE    = var.ff_notification_celery_persistence
+      FF_REDIS_BATCH_SAVING                 = var.ff_redis_batch_saving
+      FIDO2_DOMAIN                          = var.fido2_domain
+      FRESH_DESK_API_KEY                    = var.fresh_desk_api_key
+      FRESH_DESK_API_URL                    = var.fresh_desk_api_url
+      FRESH_DESK_PRODUCT_ID                 = var.fresh_desk_product_id
+      HC_EN_SERVICE_ID                      = var.hc_en_service_id
+      HC_FR_SERVICE_ID                      = var.hc_fr_service_id
       MLWR_HOST                             = var.mlwr_host
+      MLWR_KEY                              = var.mlwr_key
+      MLWR_USER                             = var.mlwr_user
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
       NEW_RELIC_LICENSE_KEY                 = var.new_relic_license_key
@@ -44,14 +62,19 @@ resource "aws_lambda_function" "api" {
       REDIS_ENABLED                         = var.redis_enabled
       REDIS_URL                             = var.redis_url
       SECRET_KEY                            = var.secret_key
+      SENDGRID_API_KEY                      = var.sendgrid_api_key
+      SENTRY_URL                            = var.sendgrid_url
       SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
       SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
       SQLALCHEMY_POOL_SIZE                  = var.sqlalchemy_pool_size
-      DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
-      FF_BATCH_INSERTION                    = var.ff_batch_insertion
-      FF_REDIS_BATCH_SAVING                 = var.ff_redis_batch_saving
-      FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
-      FF_NOTIFICATION_CELERY_PERSISTENCE    = var.ff_notification_celery_persistence
+      STATSD_HOST                           = var.statsd_host
+      TWILIO_ACCOUNT_SID                    = var.twilio_account_sid
+      TWILIO_AUTH_TOKEN                     = var.twilio_auth_token
+      TWILIO_FROM_NUMBER                    = var.twilio_from_number
+      ZENDESK_API_KEY                       = var.zendesk_api_key
+      ZENDESK_API_URL                       = var.zendesk_api_url
+      ZENDESK_SELL_API_KEY                  = var.zendesk_sell_api_key
+      ZENDESK_SELL_API_URL                  = var.zendesk_sell_api_url
     }
   }
 

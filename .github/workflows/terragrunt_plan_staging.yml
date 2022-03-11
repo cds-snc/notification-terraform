@@ -29,11 +29,10 @@ env:
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
   TF_VAR_admin_client_secret: ${{ secrets.STAGING_ADMIN_CLIENT_SECRET }}
   TF_VAR_api_host_name: ${{ secrets.STAGING_API_HOST_NAME }}
-  TF_VAR_auth_tokens: ${{ secrets.STAGING_AUTH_TOKENS }}
   TF_VAR_base_domain: ${{ secrets.STAGING_BASE_DOMAIN }}
   TF_VAR_dangerous_salt: ${{ secrets.STAGING_DANGEROUS_SALT }}
   TF_VAR_document_download_api_host: ${{ secrets.STAGING_DOCUMENT_DOWNLOAD_API_HOST }}
-  TF_VAR_mlwr_host: "false"
+  TF_VAR_mlwr_host: "False"
   TF_VAR_redis_url: ${{ secrets.STAGING_REDIS_URL }}
   TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
