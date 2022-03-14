@@ -1,4 +1,4 @@
-resource "aws_secretsmanager_secret" "app_environment_variables" {
+resource "aws_secretsmanager_secret" "environment_variables" {
   name = "environment_variables"
 
   tags = {
@@ -7,5 +7,5 @@ resource "aws_secretsmanager_secret" "app_environment_variables" {
 }
 
 data "aws_secretsmanager_secret_version" "current" {
-  secret_id = aws_secretsmanager_secret.app_environment_variables.id
+  secret_id = aws_secretsmanager_secret.environment_variables.id
 }
