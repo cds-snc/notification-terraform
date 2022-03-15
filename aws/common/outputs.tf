@@ -60,6 +60,6 @@ output "s3_bucket_csv_upload_bucket_name" {
 
 output "environment_variables_current_secret_string" {
   description = "Environment variables shared between EKS and Lambda"
-  value       = data.aws_secretsmanager_secret_version.environment_variables_current.secret_string
+  value       = data.aws_secretsmanager_secret_version.current.secret_string
   sensitive   = true
 }
