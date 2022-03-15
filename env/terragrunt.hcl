@@ -12,7 +12,6 @@ inputs = {
   elb_account_ids = {
     "ca-central-1" = "985666609251"
   }
-  new_relic_account_id = "2691974"
 }
 
 generate "provider" {
