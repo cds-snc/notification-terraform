@@ -80,17 +80,6 @@ jobs:
           chmod +x bin/terragrunt
           echo "bin" >> $GITHUB_PATH
 
-      - name: Get changed files
-        id: changed-files
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: 'json'
-
-      - name: Get touched Terragrunt configurations
-        run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*production?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
-          echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
-
       - name: Inject token authentication
         run: |
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
