@@ -21,7 +21,6 @@ resource "aws_lambda_function" "api" {
     subnet_ids = var.vpc_private_subnets
   }
 
-  layers = ["arn:aws:lambda:ca-central-1:451483290750:layer:NewRelicPython39:12"]
   environment {
     variables = {
       ADMIN_CLIENT_SECRET                   = var.admin_client_secret
