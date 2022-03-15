@@ -1,6 +1,8 @@
 name: "Merge to main (Staging)"
 
 on:
+  # This will be used to dispatch this workflow from the manifest repo when environment variables change
+  workflow_dispatch:
   push:
     branches:
       - main
