@@ -20,8 +20,6 @@ resource "aws_lambda_function" "api" {
     ]
     subnet_ids = var.vpc_private_subnets
   }
-
-  layers = ["arn:aws:lambda:ca-central-1:451483290750:layer:NewRelicPython39:12"]
   environment {
     variables = {
       ADMIN_CLIENT_SECRET                   = var.admin_client_secret
@@ -35,6 +33,7 @@ resource "aws_lambda_function" "api" {
       DOCUMENTS_BUCKET                      = var.documents_bucket
       ENVIRONMENT                           = var.env
       MLWR_HOST                             = var.mlwr_host
+      AWS_LAMBDA_EXEC_WRAPPER               = "/opt/newrelic_lambda_wrapper.py"
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
       NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = false
