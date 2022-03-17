@@ -1,3 +1,26 @@
+locals {
+  lambda_environment_variables = {
+    DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
+    SQLALCHEMY_DATABASE_URI               = jsondecode(var.manifest_environment_variables)["POSTGRES_SQL"]
+    NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
+    NOTIFY_EMAIL_DOMAIN                   = jsondecode(var.manifest_environment_variables)["BASE_DOMAIN"]
+    NOTIFY_ENVIRONMENT                    = jsondecode(var.manifest_environment_variables)["ENVIRONMENT"]
+    REDIS_ENABLED                         = var.redis_enabled
+    NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
+    NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
+    NEW_RELIC_APP_NAME                    = var.new_relic_app_name
+    NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
+    NEW_RELIC_LICENSE_KEY                 = var.new_relic_license_key
+    NEW_RELIC_MONITOR_MODE                = var.new_relic_monitor_mode
+    NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
+    NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
+    FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
+  }
+  # Merge the common environment variables with the lambda specific ones.
+  # The second argument in the merge will override any values in the first argument that has the same key
+  merged_environment_variables = merge(jsondecode(var.manifest_environment_variables), local.lambda_environment_variables)
+}
+
 resource "aws_lambda_function" "api" {
   function_name = "api-lambda"
   role          = aws_iam_role.api.arn
@@ -21,41 +44,7 @@ resource "aws_lambda_function" "api" {
     subnet_ids = var.vpc_private_subnets
   }
   environment {
-    variables = {
-      ADMIN_CLIENT_SECRET                   = var.admin_client_secret
-      ADMIN_CLIENT_USER_NAME                = var.admin_client_user_name
-      ASSET_DOMAIN                          = var.asset_domain
-      ASSET_UPLOAD_BUCKET_NAME              = var.asset_upload_bucket_name
-      AUTH_TOKENS                           = var.auth_tokens
-      AWS_PINPOINT_REGION                   = var.aws_pinpoint_region
-      CSV_UPLOAD_BUCKET_NAME                = var.csv_upload_bucket_name
-      DANGEROUS_SALT                        = var.dangerous_salt
-      DOCUMENTS_BUCKET                      = var.documents_bucket
-      ENVIRONMENT                           = var.env
-      MLWR_HOST                             = var.mlwr_host
-      NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
-      NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
-      NEW_RELIC_APP_NAME                    = var.new_relic_app_name
-      NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
-      NEW_RELIC_LICENSE_KEY                 = var.new_relic_license_key
-      NEW_RELIC_MONITOR_MODE                = var.new_relic_monitor_mode
-      NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
-      NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
-      NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
-      NOTIFY_EMAIL_DOMAIN                   = var.domain
-      NOTIFY_ENVIRONMENT                    = var.env
-      REDIS_ENABLED                         = var.redis_enabled
-      REDIS_URL                             = var.redis_url
-      SECRET_KEY                            = var.secret_key
-      SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
-      SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
-      SQLALCHEMY_POOL_SIZE                  = var.sqlalchemy_pool_size
-      DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
-      FF_BATCH_INSERTION                    = var.ff_batch_insertion
-      FF_REDIS_BATCH_SAVING                 = var.ff_redis_batch_saving
-      FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
-      FF_NOTIFICATION_CELERY_PERSISTENCE    = var.ff_notification_celery_persistence
-    }
+    variables = local.merged_environment_variables
   }
 
   lifecycle {
