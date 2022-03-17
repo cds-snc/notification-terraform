@@ -149,6 +149,10 @@ locals {
   api_lambda_log_group = "/aws/lambda/api-lambda"
 }
 
+variable "new_relic_account_id" {
+  type = string
+}
+
 variable "ff_batch_insertion" {
   type = bool
 }
