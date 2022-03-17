@@ -35,7 +35,6 @@ resource "aws_lambda_function" "api" {
       MLWR_HOST                             = var.mlwr_host
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
       NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
-      NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = false
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
       NEW_RELIC_LICENSE_KEY                 = var.new_relic_license_key
