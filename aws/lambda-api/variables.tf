@@ -153,6 +153,11 @@ variable "new_relic_account_id" {
   type = string
 }
 
+variable "manifest_environment_variables" {
+  type      = string
+  sensitive = true
+}
+
 variable "ff_batch_insertion" {
   type = bool
 }
