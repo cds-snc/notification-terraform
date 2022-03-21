@@ -1,5 +1,6 @@
 locals {
   lambda_environment_variables = {
+    AWS_REGION                            = null # Reserved key that is currently not supported for modification in lambdas. Setting to null will remove this value from the env
     DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
     SQLALCHEMY_DATABASE_URI               = jsondecode(var.manifest_environment_variables)["POSTGRES_SQL"]
     NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
@@ -20,6 +21,7 @@ locals {
   # The second argument in the merge will override any values in the first argument that has the same key
   merged_environment_variables = sensitive(merge(jsondecode(var.manifest_environment_variables), local.lambda_environment_variables))
 }
+
 
 resource "aws_lambda_function" "api" {
   function_name = "api-lambda"
