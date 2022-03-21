@@ -18,7 +18,7 @@ locals {
   }
   # Merge the common environment variables with the lambda specific ones.
   # The second argument in the merge will override any values in the first argument that has the same key
-  merged_environment_variables = merge(jsondecode(var.manifest_environment_variables), local.lambda_environment_variables)
+  merged_environment_variables = sensitive(merge(jsondecode(var.manifest_environment_variables), local.lambda_environment_variables))
 }
 
 resource "aws_lambda_function" "api" {
