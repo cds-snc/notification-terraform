@@ -5,7 +5,3 @@ resource "aws_secretsmanager_secret" "environment_variables" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
-
-data "aws_secretsmanager_secret_version" "current" {
-  secret_id = aws_secretsmanager_secret.environment_variables.id
-}
