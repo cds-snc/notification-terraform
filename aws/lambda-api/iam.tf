@@ -61,6 +61,22 @@ data "aws_iam_policy_document" "api_policies" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:DescribeParameters",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:ssm:GetParameters",
+    ]
+    resources = "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES"
+  }
 }
 
 resource "aws_iam_policy" "api" {
