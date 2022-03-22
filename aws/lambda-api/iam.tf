@@ -75,7 +75,9 @@ data "aws_iam_policy_document" "api_policies" {
     actions = [
       "ssm:ssm:GetParameters",
     ]
-    resources = "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES"
+    resources = [
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES"
+    ]
   }
 }
 
