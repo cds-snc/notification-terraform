@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "api_policies" {
   statement {
     effect = "Allow"
     actions = [
-      "ssm:ssm:GetParameters",
+      "ssm:GetParameters",
     ]
     resources = [
       "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES"
