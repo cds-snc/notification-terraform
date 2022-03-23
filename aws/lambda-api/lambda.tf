@@ -44,6 +44,7 @@ resource "aws_lambda_function" "api" {
   lifecycle {
     ignore_changes = [
       image_uri,
+      description, # Will be updated outside TF to force cold start existing lambdas. Primarily when common envs are updated
     ]
   }
 }
