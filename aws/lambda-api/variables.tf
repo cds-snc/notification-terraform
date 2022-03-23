@@ -44,7 +44,8 @@ variable "documents_bucket" {
 }
 
 variable "mlwr_host" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "new_relic_app_name" {
@@ -82,11 +83,13 @@ variable "secret_key" {
 }
 
 variable "sqlalchemy_database_reader_uri" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "sqlalchemy_database_uri" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "sqlalchemy_pool_size" {
