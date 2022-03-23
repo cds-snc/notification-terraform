@@ -22,7 +22,6 @@ resource "aws_lambda_function" "api" {
   }
   environment {
     variables = {
-      ADMIN_CLIENT_SECRET                   = var.admin_client_secret
       DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
       SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
       SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
