@@ -25,6 +25,7 @@ resource "aws_lambda_function" "api" {
       ADMIN_CLIENT_SECRET                   = var.admin_client_secret
       DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
       SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
+      SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
       NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
       NOTIFY_EMAIL_DOMAIN                   = var.domain
       NOTIFY_ENVIRONMENT                    = var.env
