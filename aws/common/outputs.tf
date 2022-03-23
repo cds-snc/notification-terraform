@@ -53,7 +53,3 @@ output "s3_bucket_asset_bucket_arn" {
 output "s3_bucket_csv_upload_bucket_arn" {
   value = aws_s3_bucket.csv_bucket.arn
 }
-
-output "s3_bucket_csv_upload_bucket_name" {
-  value = aws_s3_bucket.csv_bucket.bucket
-}
