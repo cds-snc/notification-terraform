@@ -201,3 +201,16 @@ resource "aws_default_network_acl" "notification-canada-ca" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_flow_log" "cloud-based-sensor" {
+  log_destination      = "arn:aws:s3:::${var.cbs_satellite_bucket_name}/vpc_flow_logs/"
+  log_destination_type = "s3"
+  traffic_type         = "ALL"
+  vpc_id               = aws_vpc.notification-canada-ca.id
+  log_format           = "$${vpc-id} $${version} $${account-id} $${interface-id} $${srcaddr} $${dstaddr} $${srcport} $${dstport} $${protocol} $${packets} $${bytes} $${start} $${end} $${action} $${log-status} $${subnet-id} $${instance-id}"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+    Terraform  = true
+  }
+}

@@ -50,10 +50,6 @@ variable "cloudfront_assets_arn" {
   type = string
 }
 
-variable "alb_log_bucket" {
-  type = string
-}
-
 variable "eks_cluster_name" {
   type = string
 }
