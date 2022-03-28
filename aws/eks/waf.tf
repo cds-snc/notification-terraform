@@ -292,6 +292,10 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
     prefix             = local.cbs_satellite_bucket_prefix
     bucket_arn         = local.cbs_satellite_bucket_arn
     compression_format = "GZIP"
+
+    # Buffer incoming data size (MB), before delivering to S3 bucket
+    # Should be greater than amount of data ingested in a 10 second period
+    buffer_size = 5
   }
 
   tags = {
