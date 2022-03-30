@@ -72,6 +72,6 @@ data "aws_iam_policy_document" "ecr" {
     actions = [
       "lambda:GetLayerVersion"
     ]
-    resources = ["arn:aws:lambda:ca-central-1:451483290750:layer:NewRelicPython*"]
+    resources = ["arn:aws:lambda:ca-central-1:451483290750:layer:NewRelicPython*:*"]
   }
 }
