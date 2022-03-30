@@ -35,8 +35,6 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
-      NEW_RELIC_LICENSE_KEY                 = var.new_relic_license_key
-      NEW_RELIC_MONITOR_MODE                = var.new_relic_monitor_mode
       NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
       FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
