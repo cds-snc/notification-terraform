@@ -13,5 +13,5 @@ data "aws_secretsmanager_secret" "new-relic-license-key-secret" {
 }
 
 data "aws_secretsmanager_secret_version" "new-relic-license-key" {
-  secret_id = data.aws_secretsmanager_secret.new-relic-license-key.id
+  secret_id = data.aws_secretsmanager_secret.new-relic-license-key-secret.id
 }
