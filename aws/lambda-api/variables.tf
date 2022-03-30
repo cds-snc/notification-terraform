@@ -22,6 +22,11 @@ variable "new_relic_distribution_tracing_enabled" {
   type = string
 }
 
+variable "new_relic_license_key" {
+  type      = string
+  sensitive = true
+}
+
 variable "notification_queue_prefix" {
   type = string
 }
