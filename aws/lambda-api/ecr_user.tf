@@ -65,4 +65,13 @@ data "aws_iam_policy_document" "ecr" {
     ]
     resources = [local.api-lambda-function-arn]
   }
+
+  statement {
+    sid    = "PermissionsToDownloadNewRelicLambdaLayers"
+    effect = "Allow"
+    actions = [
+      "lambda:GetLayerVersion"
+    ]
+    resources = ["arn:aws:lambda:ca-central-1:451483290750:layer:*"]
+  }
 }
