@@ -65,7 +65,6 @@ inputs = {
   csv_upload_bucket_arn                  = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   new_relic_app_name                     = "notification-lambda-api-staging"
   new_relic_distribution_tracing_enabled = "true"
-  new_relic_monitor_mode                 = "true"
   notification_queue_prefix              = "eks-notification-canada-ca"
   redis_enabled                          = 1
   certificate_arn                        = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
