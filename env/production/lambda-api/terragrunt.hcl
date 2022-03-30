@@ -22,10 +22,10 @@ dependency "common" {
       "",
       "",
     ]
-    sns_alert_general_arn            = ""
-    sns_alert_warning_arn            = ""
-    sns_alert_critical_arn           = ""
-    s3_bucket_csv_upload_bucket_arn  = ""
+    sns_alert_general_arn           = ""
+    sns_alert_warning_arn           = ""
+    sns_alert_critical_arn          = ""
+    s3_bucket_csv_upload_bucket_arn = ""
   }
 }
 
@@ -59,7 +59,7 @@ inputs = {
   env                                    = "production"
   admin_base_url                         = "https://notification.canada.ca"
   api_domain_name                        = "api.notification.canada.ca"
-  api_lambda_domain_name                 = "api-lambda.notification.canada.ca"  
+  api_lambda_domain_name                 = "api-lambda.notification.canada.ca"
   api_image_tag                          = "release"
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets

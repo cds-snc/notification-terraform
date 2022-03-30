@@ -16,10 +16,10 @@ dependency "common" {
       "",
       "",
     ]
-    sns_alert_general_arn            = ""
-    sns_alert_warning_arn            = ""
-    sns_alert_critical_arn           = ""
-    s3_bucket_csv_upload_bucket_arn  = ""
+    sns_alert_general_arn           = ""
+    sns_alert_warning_arn           = ""
+    sns_alert_critical_arn          = ""
+    s3_bucket_csv_upload_bucket_arn = ""
   }
 }
 
