@@ -54,6 +54,10 @@ variable "eks_cluster_name" {
   type = string
 }
 
+variable "firehose_waf_logs_iam_role_arn" {
+  type = string
+}
+
 locals {
   eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
 }

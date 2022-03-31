@@ -274,11 +274,6 @@ resource "aws_wafv2_web_acl_logging_configuration" "cloudwatch-waf-logs" {
 #
 # WAF logging to Cloud Based Sensor satellite bucket
 #
-locals {
-  cbs_satellite_bucket_arn    = "arn:aws:s3:::${var.cbs_satellite_bucket_name}"
-  cbs_satellite_bucket_prefix = "waf_acl_logs/AWSLogs/${var.account_id}/"
-}
-
 resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
   name        = "aws-waf-logs-notification-canada-ca-waf"
   destination = "extended_s3"
@@ -288,9 +283,9 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
   }
 
   extended_s3_configuration {
-    role_arn           = aws_iam_role.firehose-waf-logs.arn
-    prefix             = local.cbs_satellite_bucket_prefix
-    bucket_arn         = local.cbs_satellite_bucket_arn
+    role_arn           = var.firehose_waf_logs_iam_role_arn
+    prefix             = "waf_acl_logs/AWSLogs/${var.account_id}/lb/"
+    bucket_arn         = "arn:aws:s3:::${var.cbs_satellite_bucket_name}"
     compression_format = "GZIP"
 
     # Buffer incoming data size (MB), before delivering to S3 bucket
@@ -301,60 +296,6 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
     Terraform  = true
-  }
-}
-
-resource "aws_iam_role" "firehose-waf-logs" {
-  name               = "FirehoseWafLogs"
-  assume_role_policy = data.aws_iam_policy_document.firehose-assume.json
-}
-
-resource "aws_iam_policy" "firehose-waf-logs" {
-  name   = "FirehoseWafLogsPolicy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.firehose-waf-logs.json
-}
-
-resource "aws_iam_role_policy_attachment" "firehose-waf-logs" {
-  role       = aws_iam_role.firehose-waf-logs.name
-  policy_arn = aws_iam_policy.firehose-waf-logs.arn
-}
-
-data "aws_iam_policy_document" "firehose-assume" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    effect  = "Allow"
-    principals {
-      type        = "Service"
-      identifiers = ["firehose.amazonaws.com"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "firehose-waf-logs" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:AbortMultipartUpload",
-      "s3:GetBucketLocation",
-      "s3:GetObject",
-      "s3:ListBucket",
-      "s3:ListBucketMultipartUploads",
-      "s3:PutObject"
-    ]
-    resources = [
-      local.cbs_satellite_bucket_arn,
-      "${local.cbs_satellite_bucket_arn}/*"
-    ]
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "iam:CreateServiceLinkedRole"
-    ]
-    resources = [
-      "arn:aws:iam::*:role/aws-service-role/wafv2.amazonaws.com/AWSServiceRoleForWAFV2Logging"
-    ]
   }
 }
 
