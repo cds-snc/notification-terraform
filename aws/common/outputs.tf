@@ -53,3 +53,7 @@ output "s3_bucket_asset_bucket_arn" {
 output "s3_bucket_csv_upload_bucket_arn" {
   value = aws_s3_bucket.csv_bucket.arn
 }
+
+output "firehose_waf_logs_iam_role_arn" {
+  value = aws_iam_role.firehose_waf_logs.arn
+}
