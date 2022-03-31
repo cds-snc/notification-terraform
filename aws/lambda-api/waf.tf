@@ -167,3 +167,13 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-api-lambda-waf-logs"
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_wafv2_web_acl_logging_configuration" "cloudwatch-api-lambda-waf-logs" {
+  log_destination_configs = [aws_cloudwatch_log_group.notification-canada-ca-api-lambda-waf-logs.arn]
+  resource_arn            = aws_wafv2_web_acl.api_lambda.arn
+  redacted_fields {
+    single_header {
+      name = "authorization"
+    }
+  }
+}
