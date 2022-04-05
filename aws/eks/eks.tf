@@ -57,7 +57,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   }
 
   update_config {
-    max_unavailable_percentage = 25
+    max_unavailable = 1
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
