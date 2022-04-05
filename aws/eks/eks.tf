@@ -56,6 +56,10 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
     min_size     = var.primary_worker_min_size
   }
 
+  update_config {
+    max_unavailable_percentage = 25
+  }
+
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
   # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
   depends_on = [
