@@ -53,6 +53,10 @@ variable "eks_cluster_securitygroup" {
   type = string
 }
 
+variable "firehose_waf_logs_iam_role_arn" {
+  type = string
+}
+
 variable "document_download_api_host" {
   type = string
 }

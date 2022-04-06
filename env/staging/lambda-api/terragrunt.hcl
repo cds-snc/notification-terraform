@@ -20,6 +20,7 @@ dependency "common" {
     sns_alert_warning_arn           = ""
     sns_alert_critical_arn          = ""
     s3_bucket_csv_upload_bucket_arn = ""
+    firehose_waf_logs_iam_role_arn  = ""
   }
 }
 
@@ -63,6 +64,7 @@ inputs = {
   high_demand_min_concurrency            = 1
   high_demand_max_concurrency            = 10
   csv_upload_bucket_arn                  = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
+  firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   new_relic_app_name                     = "notification-lambda-api-staging"
   new_relic_distribution_tracing_enabled = "true"
   notification_queue_prefix              = "eks-notification-canada-ca"

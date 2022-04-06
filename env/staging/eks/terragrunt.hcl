@@ -19,10 +19,10 @@ dependency "common" {
       "subnet-0c7d18c0c51b28b61",
       "subnet-0c91f7c6b8211904b",
     ]
-    sns_alert_warning_arn  = ""
-    sns_alert_critical_arn = ""
-    sns_alert_general_arn  = ""
-    alb_log_bucket         = ""
+    sns_alert_warning_arn          = ""
+    sns_alert_critical_arn         = ""
+    sns_alert_general_arn          = ""
+    firehose_waf_logs_iam_role_arn = ""
   }
 }
 
@@ -65,7 +65,7 @@ inputs = {
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_general_arn                  = dependency.common.outputs.sns_alert_general_arn
-  alb_log_bucket                         = dependency.common.outputs.alb_log_bucket
+  firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                  = dependency.cloudfront.outputs.cloudfront_assets_arn
   eks_cluster_name                       = "notification-canada-ca-staging-eks-cluster"
 }

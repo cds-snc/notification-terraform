@@ -50,11 +50,11 @@ variable "cloudfront_assets_arn" {
   type = string
 }
 
-variable "alb_log_bucket" {
+variable "eks_cluster_name" {
   type = string
 }
 
-variable "eks_cluster_name" {
+variable "firehose_waf_logs_iam_role_arn" {
   type = string
 }
 
