@@ -52,6 +52,6 @@ resource "aws_athena_named_query" "create_table_waf_logs" {
     {
       database_name   = aws_athena_database.notification_athena.name
       table_name      = "waf_logs"
-      bucket_location = "s3://${var.cbs_satellite_bucket_name}/waf_acl_logs/AWSLogs/${var.account_id}/lb/${var.region}/"
+      bucket_location = "s3://${var.cbs_satellite_bucket_name}/waf_acl_logs/AWSLogs/${var.account_id}/lb/"
   })
 }
