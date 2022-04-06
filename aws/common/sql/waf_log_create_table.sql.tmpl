@@ -1,0 +1,107 @@
+-- Inspired from the following links:
+-- https://docs.aws.amazon.com/athena/latest/ug/waf-logs.html#create-waf-table
+CREATE EXTERNAL TABLE `${database_name}.${table_name}` (
+  `timestamp` bigint,
+  `formatversion` int,
+  `webaclid` string,
+  `terminatingruleid` string,
+  `terminatingruletype` string,
+  `action` string,
+  `terminatingrulematchdetails` array<
+                                  struct<
+                                    conditiontype:string,
+                                    location:string,
+                                    matcheddata:array<string>
+                                        >
+                                     >,
+  `httpsourcename` string,
+  `httpsourceid` string,
+  `rulegrouplist` array<
+                     struct<
+                        rulegroupid:string,
+                        terminatingrule:struct<
+                           ruleid:string,
+                           action:string,
+                           rulematchdetails:string
+                                               >,
+                        nonterminatingmatchingrules:array<
+                                                       struct<
+                                                          ruleid:string,
+                                                          action:string,
+                                                          rulematchdetails:array<
+                                                               struct<
+                                                                  conditiontype:string,
+                                                                  location:string,
+                                                                  matcheddata:array<string>
+                                                                     >
+                                                                  >
+                                                               >
+                                                            >,
+                        excludedrules:array<
+                                         struct<
+                                            ruleid:string,
+                                            exclusiontype:string
+                                               >
+                                            >
+                           >
+                       >,
+  `ratebasedrulelist` array<
+                        struct<
+                          ratebasedruleid:string,
+                          ratebasedrulename:string,
+                          limitkey:string,
+                          limitvalue:string,
+                          maxrateallowed:int
+                              >
+                           >,
+  `nonterminatingmatchingrules` array<
+                                  struct<
+                                    ruleid:string,
+                                    action:string,
+                                    rulematchdetails:array<
+                                        struct<
+                                            conditiontype:string,
+                                            location:string,
+                                            matcheddata:array<string>
+                                              >
+                                            >,
+                                    captcharesponse:struct<
+                                                    responsecode:string,
+                                                    solvetimestamp:bigint
+                                                          >
+                                        >
+                                     >,
+  `requestheadersinserted` string,
+  `responsecodesent` string,
+  `httprequest` struct<
+                      clientip:string,
+                      country:string,
+                      headers:array<
+                                struct<
+                                  name:string,
+                                  value:string
+                                      >
+                                   >,
+                      uri:string,
+                      args:string,
+                      httpversion:string,
+                      httpmethod:string,
+                      requestid:string
+                      >,
+  `labels` array<
+             struct<
+               name:string
+                   >
+                  >,
+  `captcharesponse` struct<
+                        responsecode:string,
+                        solvetimestamp:bigint,
+                        failurereason:string
+                    >
+)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES (
+ 'paths'='action,formatVersion,httpRequest,httpSourceId,httpSourceName,labels,nonTerminatingMatchingRules,rateBasedRuleList,requestHeadersInserted,responseCodeSent,ruleGroupList,terminatingRuleId,terminatingRuleMatchDetails,terminatingRuleType,timestamp,webaclId,captchaResponse')
+STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION '${bucket_location}';
