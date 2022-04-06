@@ -152,33 +152,6 @@ resource "aws_wafv2_web_acl" "api_lambda" {
 }
 
 #
-# WAF logging to CloudWatch log group
-#
-resource "aws_wafv2_web_acl_logging_configuration" "notification-canada-ca-api-lambda-waf-logs" {
-  log_destination_configs = [aws_cloudwatch_log_group.notification-canada-ca-api-lambda-waf-logs.arn]
-  resource_arn            = aws_wafv2_web_acl.api_lambda.arn
-}
-
-resource "aws_cloudwatch_log_group" "notification-canada-ca-api-lambda-waf-logs" {
-  name              = "aws-waf-logs-notification-canada-ca-api-lambda-waf"
-  retention_in_days = 7
-
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
-}
-
-resource "aws_wafv2_web_acl_logging_configuration" "cloudwatch-api-lambda-waf-logs" {
-  log_destination_configs = [aws_cloudwatch_log_group.notification-canada-ca-api-lambda-waf-logs.arn]
-  resource_arn            = aws_wafv2_web_acl.api_lambda.arn
-  redacted_fields {
-    single_header {
-      name = "authorization"
-    }
-  }
-}
-
-#
 # WAF logging to Cloud Based Sensor satellite bucket
 #
 resource "aws_kinesis_firehose_delivery_stream" "firehose-api-lambda-waf-logs" {
