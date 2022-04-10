@@ -38,4 +38,5 @@ inputs = {
   firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                  = dependency.cloudfront.outputs.cloudfront_assets_arn
   eks_cluster_name                       = "notification-canada-ca-production-eks-cluster"
+  eks_node_ami_version                   = "1.19.15-20220317"
 }
