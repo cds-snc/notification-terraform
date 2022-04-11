@@ -39,7 +39,7 @@ module "rds_proxy" {
 
   idle_client_timeout     = 1800
   max_connections_percent = 90
-  require_tls             = false
+  require_tls             = true
 
   vpc_subnet_ids         = var.vpc_private_subnets
   vpc_security_group_ids = [var.eks_cluster_securitygroup]
