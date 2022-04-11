@@ -47,12 +47,17 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   node_role_arn   = aws_iam_role.eks-worker-role.arn
   subnet_ids      = var.vpc_private_subnets
 
-  instance_types = var.primary_worker_instance_types
+  release_version = var.eks_node_ami_version
+  instance_types  = var.primary_worker_instance_types
 
   scaling_config {
     desired_size = var.primary_worker_desired_size
     max_size     = var.primary_worker_max_size
     min_size     = var.primary_worker_min_size
+  }
+
+  update_config {
+    max_unavailable = 1
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.

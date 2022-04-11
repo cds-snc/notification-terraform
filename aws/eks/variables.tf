@@ -58,6 +58,11 @@ variable "firehose_waf_logs_iam_role_arn" {
   type = string
 }
 
+variable "eks_node_ami_version" {
+  description = "The Amazon Machine Image version used by the EKS EC2 nodes" # https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html
+  type        = string
+}
+
 locals {
   eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
 }
