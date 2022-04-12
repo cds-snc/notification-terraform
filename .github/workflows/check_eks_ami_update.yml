@@ -30,7 +30,7 @@ jobs:
           --query 'Parameter.Value' --output text)"
         echo "::set-output name=ami::${LATEST_AMI}"
 
-    - name: Get Staging cluter node group AMI image release version
+    - name: Get Staging cluster node group AMI image release version
       id: current
       run: |
         CURRENT_AMI="$(aws eks describe-nodegroup \
