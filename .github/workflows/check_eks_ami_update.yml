@@ -6,7 +6,6 @@ on:
 
 env:
   AWS_DEFAULT_REGION: ca-central-1
-  EKS_AMI_PARAMETER_STORE: /aws/service/eks/optimized-ami/1.19/amazon-linux-2/recommended/release_version
   EKS_CLUSTER_NAME: notification-canada-ca-staging-eks-cluster
   EKS_CLUSTER_NODE_GROUP_NAME: notification-canada-ca-staging-eks-primary-node-group
 
@@ -25,8 +24,11 @@ jobs:
     - name: Get latest AMI image release version
       id: latest
       run: |
+        CLUSTER_VERSION="$(aws eks describe-cluster \
+          --name ${{ env.EKS_CLUSTER_NAME }} \
+          --query 'cluster.version' --output text)"
         LATEST_AMI="$(aws ssm get-parameter \
-          --name ${{ env.EKS_AMI_PARAMETER_STORE }} \
+          --name /aws/service/eks/optimized-ami/$CLUSTER_VERSION/amazon-linux-2/recommended/release_version \
           --query 'Parameter.Value' --output text)"
         echo "::set-output name=ami::${LATEST_AMI}"
 
