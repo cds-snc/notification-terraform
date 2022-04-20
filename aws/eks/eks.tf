@@ -5,6 +5,7 @@
 resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   name     = var.eks_cluster_name
   role_arn = aws_iam_role.eks-cluster-role.arn
+  version  = var.eks_cluster_version
 
   enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler", "authenticator"]
 

@@ -54,6 +54,11 @@ variable "eks_cluster_name" {
   type = string
 }
 
+variable "eks_cluster_version" {
+  description = "Kubernetes version of the cluster"
+  type        = string
+}
+
 variable "firehose_waf_logs_iam_role_arn" {
   type = string
 }
