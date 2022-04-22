@@ -68,8 +68,11 @@ inputs = {
   firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                  = dependency.cloudfront.outputs.cloudfront_assets_arn
   eks_cluster_name                       = "notification-canada-ca-staging-eks-cluster"
-  eks_cluster_version                    = "1.20"
-  eks_node_ami_version                   = "1.20.11-20220406"  
+  eks_cluster_version                    = "1.21"
+  eks_addon_coredns_version              = "v1.8.3-eksbuild.1"
+  eks_addon_kube_proxy_version           = "v1.20.4-eksbuild.2"
+  eks_addon_vpc_cni_version              = "v1.11.0-eksbuild.1"
+  eks_node_ami_version                   = "1.21.5-20220420"
 }
 
 terraform {
