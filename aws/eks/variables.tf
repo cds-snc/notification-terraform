@@ -59,6 +59,21 @@ variable "eks_cluster_version" {
   type        = string
 }
 
+variable "eks_addon_coredns_version" {
+  description = "CoreDNS EKS addon version"
+  type        = string
+}
+
+variable "eks_addon_kube_proxy_version" {
+  description = "kube-proxy EKS addon version"
+  type        = string
+}
+
+variable "eks_addon_vpc_cni_version" {
+  description = "VPC-CNI EKS addon version"
+  type        = string
+}
+
 variable "firehose_waf_logs_iam_role_arn" {
   type = string
 }
