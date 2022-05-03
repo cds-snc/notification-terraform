@@ -478,6 +478,106 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-warning" {
+  alarm_name          = "sqs-priority-db-tasks-stuck-in-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 5 minutes in a 1-minute period"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 5
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_priority_db_tasks_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-critical" {
+  alarm_name          = "sqs-priority-db-tasks-stuck-in-queue-critical"
+  alarm_description   = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 15 minute for 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "15"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 15
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_priority_db_tasks_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warning" {
+  alarm_name          = "sqs-normal-db-tasks-stuck-in-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 5 minutes in a 1-minute period"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 5
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_normal_db_tasks_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-critical" {
+  alarm_name          = "sqs-normal-db-tasks-stuck-in-queue-critical"
+  alarm_description   = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 15 minute for 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "15"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 15
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_normal_db_tasks_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning" {
+  alarm_name          = "sqs-bulk-db-tasks-stuck-in-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 5 minutes in a 1-minute period"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 5
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_db_tasks_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critical" {
+  alarm_name          = "sqs-bulk-db-tasks-stuck-in-queue-critical"
+  alarm_description   = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 15 minute for 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "15"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 15
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_db_tasks_queue_name}"
+  }
+}
+
+
 resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
   alarm_name          = "healtheck-page-slow-response-warning"
   alarm_description   = "Healthcheck page response time is above 100ms for 10 minutes"

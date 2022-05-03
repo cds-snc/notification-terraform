@@ -75,6 +75,27 @@ variable "sqs_db_tasks_queue_name" {
   default = "database-tasks"
 }
 
+variable "sqs_priority_db_tasks_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "priority-database-tasks.fifo"
+}
+
+variable "sqs_normal_db_tasks_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "normal-database-tasks"
+}
+
+variable "sqs_bulk_db_tasks_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "bulk-database-tasks"
+}
+
 variable "alarm_warning_document_download_bucket_size_gb" {
   type = number
 }
