@@ -523,7 +523,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warni
   threshold           = 60 * 5
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_normal_db_tasks_queue_name}"
+    QueueName = aws_sqs_queue.normal_db_tasks_queue.name
   }
 }
 
@@ -540,7 +540,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-criti
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_normal_db_tasks_queue_name}"
+    QueueName = aws_sqs_queue.normal_db_tasks_queue.name
   }
 }
 
@@ -556,7 +556,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning
   threshold           = 60 * 5
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_db_tasks_queue_name}"
+    QueueName = aws_sqs_queue.bulk_db_tasks_queue.name
   }
 }
 
@@ -573,7 +573,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critica
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_db_tasks_queue_name}"
+    QueueName = aws_sqs_queue.bulk_db_tasks_queue.name
   }
 }
 
