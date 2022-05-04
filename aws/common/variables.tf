@@ -75,6 +75,18 @@ variable "sqs_db_tasks_queue_name" {
   default = "database-tasks"
 }
 
+variable "sqs_priority_db_tasks_queue_name" {
+  type = string
+}
+
+variable "sqs_normal_db_tasks_queue_name" {
+  type = string
+}
+
+variable "sqs_bulk_db_tasks_queue_name" {
+  type = string
+}
+
 variable "alarm_warning_document_download_bucket_size_gb" {
   type = number
 }
