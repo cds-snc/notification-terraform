@@ -175,8 +175,7 @@ resource "aws_s3_bucket" "legacy_asset_bucket" {
   count = var.env == "production" ? 1 : 0
 
   bucket = "notification-alpha-canada-ca-asset-upload"
-  #tfsec:ignore:AWS001 - Public read access
-  acl = "public-read"
+  acl    = "private"
 
   server_side_encryption_configuration {
     rule {
@@ -194,27 +193,15 @@ resource "aws_s3_bucket" "legacy_asset_bucket" {
   #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
-resource "aws_s3_bucket_policy" "legacy_asset_bucket_public_read" {
+resource "aws_s3_bucket_public_access_block" "legacy_asset_bucket" {
   count = var.env == "production" ? 1 : 0
 
   bucket = aws_s3_bucket.legacy_asset_bucket[0].id
 
-  policy = <<POLICY
-{
-   "Version":"2008-10-17",
-   "Statement":[
-      {
-         "Sid":"AllowPublicRead",
-         "Effect":"Allow",
-         "Principal":{
-            "AWS":"*"
-         },
-         "Action":"s3:GetObject",
-         "Resource":"${aws_s3_bucket.legacy_asset_bucket[0].arn}/*"
-      }
-   ]
-}
-POLICY
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "document_bucket" {
