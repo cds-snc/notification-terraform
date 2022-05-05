@@ -72,7 +72,7 @@ inputs = {
   eks_addon_coredns_version              = "v1.8.4-eksbuild.1"
   eks_addon_kube_proxy_version           = "v1.21.2-eksbuild.2"
   eks_addon_vpc_cni_version              = "v1.11.0-eksbuild.1"
-  eks_node_ami_version                   = "1.22.6-20220421"
+  eks_node_ami_version                   = "1.22.6-20220429"
 }
 
 terraform {
