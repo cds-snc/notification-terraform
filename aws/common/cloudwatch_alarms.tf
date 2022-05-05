@@ -455,6 +455,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
@@ -471,6 +472,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -488,6 +490,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-war
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = aws_sqs_queue.priority_db_tasks_queue.name
@@ -504,6 +507,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-cri
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -521,6 +525,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warni
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = aws_sqs_queue.normal_db_tasks_queue.name
@@ -537,6 +542,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-criti
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -554,6 +560,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = aws_sqs_queue.bulk_db_tasks_queue.name
@@ -570,6 +577,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critica
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
