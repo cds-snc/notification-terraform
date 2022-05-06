@@ -1,6 +1,7 @@
 resource "aws_lambda_function" "api" {
   function_name = "api-lambda"
   role          = aws_iam_role.api.arn
+  publish       = true
 
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.api-lambda.repository_url}:${var.api_image_tag}"
@@ -54,7 +55,7 @@ resource "aws_lambda_alias" "api_latest" {
   name             = "latest"
   description      = "The most recently deployed version of the API"
   function_name    = aws_lambda_function.api.arn
-  function_version = "$LATEST"
+  function_version = aws_lambda_function.api.version
 }
 
 resource "aws_lambda_permission" "api_1" {
