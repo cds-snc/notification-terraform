@@ -50,6 +50,13 @@ resource "aws_lambda_function" "api" {
   }
 }
 
+resource "aws_lambda_alias" "api_latest" {
+  name             = "latest"
+  description      = "The most recently deployed version of the API"
+  function_name    = aws_lambda_function.api.arn
+  function_version = "$LATEST"
+}
+
 resource "aws_lambda_permission" "api_1" {
   statement_id  = "AllowAPIGatewayInvoke1"
   action        = "lambda:InvokeFunction"
@@ -61,7 +68,7 @@ resource "aws_lambda_permission" "api_1" {
 resource "aws_lambda_provisioned_concurrency_config" "api" {
   function_name                     = aws_lambda_function.api.function_name
   provisioned_concurrent_executions = var.low_demand_min_concurrency
-  qualifier                         = aws_lambda_function.api.version
+  qualifier                         = aws_lambda_alias.api_latest.name
   lifecycle {
     ignore_changes = [provisioned_concurrent_executions]
   }
