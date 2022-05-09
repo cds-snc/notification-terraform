@@ -61,6 +61,13 @@ data "aws_iam_policy_document" "ecr" {
     sid    = "PermissionsToUpdateFunction"
     effect = "Allow"
     actions = [
+      "lambda:GetAlias",
+      "lambda:GetFunction",
+      "lambda:GetFunctionConfiguration",
+      "lambda:ListAliases",
+      "lambda:ListVersionsByFunction",
+      "lambda:PublishVersion",
+      "lambda:UpdateAlias",
       "lambda:UpdateFunctionCode"
     ]
     resources = [local.api-lambda-function-arn]
