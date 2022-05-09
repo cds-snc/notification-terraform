@@ -1117,7 +1117,7 @@ resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warnin
 
 resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critical" {
   alarm_name          = "priority-bulk-buffer-not-being-processed-critical"
-  alarm_description   = "Priority batch saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
+  alarm_description   = "Priority batch saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_priority_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_critical_priority_bulk_processed_created_delta_threshold
