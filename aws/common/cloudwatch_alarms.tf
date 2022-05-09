@@ -848,6 +848,115 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" 
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "priority-inflights-not-being-processed-warning" {
+  alarm_name          = "priority-inflights-not-being-processed-warning"
+  alarm_description   = "Batch saving priority inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_priority_inflight_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_warning_priority_inflight_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "priority_inflight_created"
+    label = "Priority inflight created"
+
+    metric {
+      metric_name = "batch_saving_priority_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "priority"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "priority_inflight_processed"
+    label = "Priority inflight processed"
+
+    metric {
+      metric_name = "batch_saving_priority_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "priority"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "priority_delta"
+    expression  = "ABS(priority_inflight_created - priority_inflight_processed)"
+    label       = "Priority delta"
+    return_data = "true"
+  }
+}
+
+
+resource "aws_cloudwatch_metric_alarm" "priority_inflights-not-being-processed-critical" {
+  alarm_name          = "priority-inflights-not-being-processed-critical"
+  alarm_description   = "Batch saving priority inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_priority_inflight_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_critical_priority_inflight_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "priority_inflight_created"
+    label = "Priority inflight created"
+
+    metric {
+      metric_name = "batch_saving_priority_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "priority"
+
+      }
+    }
+  }
+
+  metric_query {
+    id    = "priority_inflight_processed"
+    label = "Priority inflight processed"
+
+    metric {
+      metric_name = "batch_saving_priority_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "priority"
+
+      }
+    }
+  }
+
+  metric_query {
+    id          = "priority_delta"
+    expression  = "ABS(priority_inflight_created - priority_inflight_processed)"
+    label       = "Priority delta"
+    return_data = "true"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
   alarm_name          = "bulk-buffer-not-being-processed-warning"
   alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -947,6 +1056,116 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
     id          = "delta"
     expression  = "ABS(bulk_created - bulk_processed)"
     label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warning" {
+  alarm_name          = "priority-bulk-buffer-not-being-processed-warning"
+  alarm_description   = "Priority batch saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_priority_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_warning_priority_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "priority_bulk_created"
+    label = "Priority bulk created"
+
+    metric {
+      metric_name = "priority_batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "priority"
+
+      }
+    }
+  }
+
+  metric_query {
+    id    = "priority_bulk_processed"
+    label = "Priority bulk processed"
+
+    metric {
+      metric_name = "priority_batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "priority"
+
+      }
+    }
+  }
+
+  metric_query {
+    id          = "priority_delta"
+    expression  = "ABS(priority_bulk_created - priority_bulk_processed)"
+    label       = "Priority delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critical" {
+  alarm_name          = "priority-bulk-buffer-not-being-processed-critical"
+  alarm_description   = "Priority batch saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_critical_priority_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "priority_bulk_created"
+    label = "Priority bulk created"
+
+    metric {
+      metric_name = "priority_batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "priority"
+
+      }
+    }
+  }
+
+  metric_query {
+    id    = "priority_bulk_processed"
+    label = "Priority bulk processed"
+
+    metric {
+      metric_name = "priority_batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "priority"
+
+      }
+    }
+  }
+
+  metric_query {
+    id          = "priority_delta"
+    expression  = "ABS(priority_bulk_created - priority_bulk_processed)"
+    label       = "Priority delta"
     return_data = "true"
   }
 }
