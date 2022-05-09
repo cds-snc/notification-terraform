@@ -77,7 +77,7 @@ resource "aws_lambda_provisioned_concurrency_config" "api" {
 resource "aws_appautoscaling_target" "api" {
   min_capacity       = var.high_demand_min_concurrency
   max_capacity       = var.high_demand_max_concurrency
-  resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_function.api.version}"
+  resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_alias.api_latest.name}"
   scalable_dimension = "lambda:function:ProvisionedConcurrency"
   service_namespace  = "lambda"
   lifecycle {
