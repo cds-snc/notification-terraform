@@ -31,7 +31,6 @@ resource "aws_lambda_function" "api" {
       NOTIFY_EMAIL_DOMAIN                   = var.domain
       NOTIFY_ENVIRONMENT                    = var.env
       REDIS_ENABLED                         = var.redis_enabled
-      # NEW_RELIC_CONFIG_FILE               = "/app/newrelic.ini"
       NEW_RELIC_ENVIRONMENT                 = var.env
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
       NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
