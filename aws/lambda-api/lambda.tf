@@ -31,6 +31,7 @@ resource "aws_lambda_function" "api" {
       NOTIFY_EMAIL_DOMAIN                   = var.domain
       NOTIFY_ENVIRONMENT                    = var.env
       REDIS_ENABLED                         = var.redis_enabled
+      NEW_RELIC_ENVIRONMENT                 = var.env
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
       NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
@@ -49,6 +50,13 @@ resource "aws_lambda_function" "api" {
   }
 }
 
+resource "aws_lambda_alias" "api_latest" {
+  name             = "latest"
+  description      = "The most recently deployed version of the API"
+  function_name    = aws_lambda_function.api.arn
+  function_version = aws_lambda_function.api.version
+}
+
 resource "aws_lambda_permission" "api_1" {
   statement_id  = "AllowAPIGatewayInvoke1"
   action        = "lambda:InvokeFunction"
@@ -60,7 +68,7 @@ resource "aws_lambda_permission" "api_1" {
 resource "aws_lambda_provisioned_concurrency_config" "api" {
   function_name                     = aws_lambda_function.api.function_name
   provisioned_concurrent_executions = var.low_demand_min_concurrency
-  qualifier                         = aws_lambda_function.api.version
+  qualifier                         = aws_lambda_alias.api_latest.name
   lifecycle {
     ignore_changes = [provisioned_concurrent_executions]
   }
@@ -69,7 +77,7 @@ resource "aws_lambda_provisioned_concurrency_config" "api" {
 resource "aws_appautoscaling_target" "api" {
   min_capacity       = var.high_demand_min_concurrency
   max_capacity       = var.high_demand_max_concurrency
-  resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_function.api.version}"
+  resource_id        = "function:${aws_lambda_function.api.function_name}:${aws_lambda_alias.api_latest.name}"
   scalable_dimension = "lambda:function:ProvisionedConcurrency"
   service_namespace  = "lambda"
   lifecycle {
