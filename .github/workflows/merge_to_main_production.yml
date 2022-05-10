@@ -57,18 +57,8 @@ jobs:
           INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.2.1
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
-
-      - name: Setup Terragrunt
-        run: |
-          mkdir bin
-          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v$TERRAGRUNT_VERSION/terragrunt_linux_amd64
-          chmod +x bin/terragrunt
-          echo "bin" >> $GITHUB_PATH
+      - name: Setup Terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
 
       - name: Inject token authentication
         run: |
@@ -77,42 +67,42 @@ jobs:
       - name: Apply aws/common
         run: |
           cd env/production/common
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
         run: |
           cd env/production/dns
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
         run: |
           cd env/production/cloudfront
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
         run: |
           cd env/production/eks
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/elasticache
         run: |
           cd env/production/elasticache
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
         run: |
           cd env/production/rds
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-api
         run: |
           cd env/production/lambda-api
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/heartbeat
         run: |
           cd env/production/heartbeat
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Slack message on failure
         if: ${{ failure() }}
