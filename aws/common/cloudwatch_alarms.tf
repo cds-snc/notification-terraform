@@ -950,3 +950,328 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
     return_data = "true"
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warning" {
+  alarm_name          = "priority-bulk-buffer-not-being-processed-warning"
+  alarm_description   = "Priority bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_warning_priority_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "priority"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "priority"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critical" {
+  alarm_name          = "priority_bulk-buffer-not-being-processed-critical"
+  alarm_description   = "Priority bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_critical_priority_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "priority"
+
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "priority"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-warning" {
+  alarm_name          = "normal-bulk-buffer-not-being-processed-warning"
+  alarm_description   = "Normal bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_warning_normal_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "normal"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "normal"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-critical" {
+  alarm_name          = "normal_bulk-buffer-not-being-processed-critical"
+  alarm_description   = "Normal bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_critical_normal_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "normal"
+
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "normal"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-warning" {
+  alarm_name          = "bulk-bulk-buffer-not-being-processed-warning"
+  alarm_description   = "Bulk bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_warning_bulk_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "bulk"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "bulk"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" {
+  alarm_name          = "bulk_bulk-buffer-not-being-processed-critical"
+  alarm_description   = "Bulk bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  threshold           = var.alarm_critical_bulk_bulk_processed_created_delta_threshold
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "bulk_created"
+    label = "Bulk created"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created  = "True"
+        priority = "bulk"
+
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed"
+    label = "Bulk processed"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+        priority     = "bulk"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "delta"
+    expression  = "ABS(bulk_created - bulk_processed)"
+    label       = "Delta"
+    return_data = "true"
+  }
+}
+

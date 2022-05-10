@@ -322,3 +322,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-criti
     return_data = "true"
   }
 }
+
+
+## processing bulk jobs ##
+
