@@ -59,63 +59,53 @@ jobs:
         with:
           envVarFile: ./.env
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.2.1
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
-
-      - name: Setup Terragrunt
-        run: |
-          mkdir bin
-          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v$TERRAGRUNT_VERSION/terragrunt_linux_amd64
-          chmod +x bin/terragrunt
-          echo "bin" >> $GITHUB_PATH
+      - name: Setup Terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
 
       - name: Apply aws/common
         run: |
           cd env/staging/common
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
         run: |
           cd env/staging/dns
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
         run: |
           cd env/staging/eks
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/elasticache
         run: |
           cd env/staging/elasticache
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
         run: |
           cd env/staging/rds
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
         run: |
           cd env/staging/cloudfront
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-api
         run: |
           cd env/staging/lambda-api
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/performance-test
         run: |
           cd env/staging/performance-test
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/heartbeat
         run: |
           cd env/staging/heartbeat
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Bump version and push tag
         if: github.event_name != 'workflow_dispatch' # We don't want to tag new versions when launched via workflow_dispatch since only environment variables changed
