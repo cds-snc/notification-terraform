@@ -805,7 +805,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" 
   threshold           = var.alarm_critical_inflight_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
@@ -908,7 +908,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
   threshold           = var.alarm_critical_bulk_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
@@ -961,7 +961,6 @@ resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warnin
 
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "bulk_created"
@@ -1013,7 +1012,7 @@ resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critic
   threshold           = var.alarm_critical_priority_bulk_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
@@ -1069,7 +1068,6 @@ resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-warning"
 
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "bulk_created"
@@ -1121,7 +1119,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-critical
   threshold           = var.alarm_critical_normal_bulk_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
@@ -1177,7 +1175,6 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-warning" {
 
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "bulk_created"
@@ -1229,7 +1226,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
   threshold           = var.alarm_critical_bulk_bulk_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
