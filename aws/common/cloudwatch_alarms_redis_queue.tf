@@ -13,7 +13,6 @@ resource "aws_cloudwatch_metric_alarm" "priority-inflights-not-being-processed-w
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "inflight_created"
@@ -66,7 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "priority_inflights-not-being-processed-c
   threshold           = var.alarm_critical_priority_inflight_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
@@ -120,7 +119,6 @@ resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-war
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "inflight_created"
@@ -172,7 +170,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-cri
   threshold           = var.alarm_critical_normal_inflight_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
@@ -226,7 +224,6 @@ resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-warni
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
     id    = "inflight_created"
@@ -278,7 +275,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-criti
   threshold           = var.alarm_critical_bulk_inflight_processed_created_delta_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
@@ -322,7 +319,3 @@ resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-criti
     return_data = "true"
   }
 }
-
-
-## processing bulk jobs ##
-
