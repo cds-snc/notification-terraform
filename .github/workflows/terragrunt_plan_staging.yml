@@ -83,6 +83,9 @@ jobs:
             lambda-api:
               - 'aws/lambda-api/**'
               - 'env/staging/lambda-api/**'
+            lambda-admin-pr:
+              - 'aws/lambda-admin-pr/**'
+              - 'env/staging/lambda-admin-pr/**'              
             performance-test:
               - 'aws/performance-test/**'
               - 'env/staging/performance-test/**'
@@ -159,6 +162,16 @@ jobs:
           comment-title: "Staging: lambda-api"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan lambda-admin-pr
+        if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v2
+        with:
+          directory: "env/staging/lambda-admin-pr"
+          comment-delete: "true"
+          comment-title: "Staging: lambda-admin-pr"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"          
 
       - name: Terragrunt plan performance-test
         if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
