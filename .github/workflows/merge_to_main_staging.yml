@@ -97,6 +97,11 @@ jobs:
           cd env/staging/lambda-api
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/lambda-admin-pr
+        run: |
+          cd env/staging/lambda-admin-pr
+          terragrunt apply --terragrunt-non-interactive -auto-approve          
+
       - name: Apply aws/performance-test
         run: |
           cd env/staging/performance-test
