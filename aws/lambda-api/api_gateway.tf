@@ -89,9 +89,14 @@ resource "aws_api_gateway_integration_response" "integration_response" {
 resource "aws_api_gateway_deployment" "api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
 
+  triggers = {
+    redeployment = sha1(file("${path.module}/api_gateway.tf"))
+  }
+
   depends_on = [
     aws_api_gateway_integration.integration
   ]
+
   lifecycle {
     create_before_destroy = true
   }
