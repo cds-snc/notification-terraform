@@ -101,12 +101,72 @@ variable "alarm_critical_inflight_processed_created_delta_threshold" {
   type        = number
 }
 
+variable "alarm_warning_priority_inflight_processed_created_delta_threshold" {
+  description = "Warning alarm threshold for the difference between processed and created priority inflights"
+  type        = number
+}
+
+variable "alarm_critical_priority_inflight_processed_created_delta_threshold" {
+  description = "Critical alarm threshold for the difference between processed and created priority inflights"
+  type        = number
+}
+
+variable "alarm_warning_normal_inflight_processed_created_delta_threshold" {
+  description = "Warning alarm threshold for the difference between processed and created priority inflights"
+  type        = number
+}
+
+variable "alarm_critical_normal_inflight_processed_created_delta_threshold" {
+  description = "Critical alarm threshold for the difference between processed and created priority inflights"
+  type        = number
+}
+
+variable "alarm_warning_bulk_inflight_processed_created_delta_threshold" {
+  description = "Warning alarm threshold for the difference between processed and created priority inflights"
+  type        = number
+}
+
+variable "alarm_critical_bulk_inflight_processed_created_delta_threshold" {
+  description = "Critical alarm threshold for the difference between processed and created priority inflights"
+  type        = number
+}
+
 variable "alarm_warning_bulk_processed_created_delta_threshold" {
   description = "Warning alarm threshold for the difference between processed and created bulk sends"
   type        = number
 }
 
 variable "alarm_critical_bulk_processed_created_delta_threshold" {
+  description = "Critical alarm threshold for the difference between processed and created bulk sends"
+  type        = number
+}
+
+variable "alarm_warning_priority_bulk_processed_created_delta_threshold" {
+  description = "Warning alarm threshold for the difference between processed and created bulk sends"
+  type        = number
+}
+
+variable "alarm_critical_priority_bulk_processed_created_delta_threshold" {
+  description = "Critical alarm threshold for the difference between processed and created bulk sends"
+  type        = number
+}
+
+variable "alarm_warning_normal_bulk_processed_created_delta_threshold" {
+  description = "Warning alarm threshold for the difference between processed and created bulk sends"
+  type        = number
+}
+
+variable "alarm_critical_normal_bulk_processed_created_delta_threshold" {
+  description = "Critical alarm threshold for the difference between processed and created bulk sends"
+  type        = number
+}
+
+variable "alarm_warning_bulk_bulk_processed_created_delta_threshold" {
+  description = "Warning alarm threshold for the difference between processed and created bulk sends"
+  type        = number
+}
+
+variable "alarm_critical_bulk_bulk_processed_created_delta_threshold" {
   description = "Critical alarm threshold for the difference between processed and created bulk sends"
   type        = number
 }
