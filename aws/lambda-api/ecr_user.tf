@@ -1,3 +1,8 @@
+locals {
+  api-lambda-ecr-arn      = aws_ecr_repository.api-lambda.arn
+  api-lambda-function-arn = aws_lambda_function.api.arn
+}
+
 resource "aws_iam_user" "ecr-user" {
   name = "ecr-user"
 }
@@ -50,16 +55,30 @@ data "aws_iam_policy_document" "ecr" {
       "ecr:PutImage",
       "ecr:UploadLayerPart"
     ]
-    resources = [aws_ecr_repository.api-lambda.arn]
+    resources = [local.api-lambda-ecr-arn]
   }
   statement {
     sid    = "PermissionsToUpdateFunction"
     effect = "Allow"
     actions = [
+      "lambda:GetAlias",
+      "lambda:GetFunction",
+      "lambda:GetFunctionConfiguration",
+      "lambda:ListAliases",
+      "lambda:ListVersionsByFunction",
+      "lambda:PublishVersion",
+      "lambda:UpdateAlias",
       "lambda:UpdateFunctionCode"
     ]
-    resources = [
-      aws_lambda_function.api.arn
+    resources = [local.api-lambda-function-arn]
+  }
+
+  statement {
+    sid    = "PermissionsToDownloadNewRelicLambdaLayers"
+    effect = "Allow"
+    actions = [
+      "lambda:GetLayerVersion"
     ]
+    resources = ["arn:aws:lambda:ca-central-1:451483290750:layer:NewRelicPython*:*"]
   }
 }

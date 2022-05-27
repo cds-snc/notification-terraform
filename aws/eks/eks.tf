@@ -5,6 +5,7 @@
 resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   name     = var.eks_cluster_name
   role_arn = aws_iam_role.eks-cluster-role.arn
+  version  = var.eks_cluster_version
 
   enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler", "authenticator"]
 
@@ -48,12 +49,17 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   node_role_arn   = aws_iam_role.eks-worker-role.arn
   subnet_ids      = var.vpc_private_subnets
 
-  instance_types = var.primary_worker_instance_types
+  release_version = var.eks_node_ami_version
+  instance_types  = var.primary_worker_instance_types
 
   scaling_config {
     desired_size = var.primary_worker_desired_size
     max_size     = var.primary_worker_max_size
     min_size     = var.primary_worker_min_size
+  }
+
+  update_config {
+    max_unavailable = 1
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
@@ -87,4 +93,29 @@ resource "aws_eks_fargate_profile" "notification-canada-ca-fargate-profile" {
       "profile" : "fargate"
     }
   }
+}
+
+###
+# AWS EKS addons
+###
+
+resource "aws_eks_addon" "coredns" {
+  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name        = "coredns"
+  addon_version     = var.eks_addon_coredns_version
+  resolve_conflicts = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name        = "kube-proxy"
+  addon_version     = var.eks_addon_kube_proxy_version
+  resolve_conflicts = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "vpc_cni" {
+  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name        = "vpc-cni"
+  addon_version     = var.eks_addon_vpc_cni_version
+  resolve_conflicts = "OVERWRITE"
 }

@@ -1,6 +1,8 @@
 name: "Merge to main (Production)"
 
 on:
+  # This will be used to dispatch this workflow from the manifest repo when environment variables change
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -15,8 +17,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
-  TERRAFORM_VERSION: 0.14.4
-  TERRAGRUNT_VERSION: 0.35.13
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.PRODUCTION_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
@@ -28,18 +28,13 @@ env:
   TF_VAR_slack_channel_critical_topic: "notification-ops"
   TF_VAR_slack_channel_general_topic: "notification-ops"
   TF_VAR_cloudwatch_opsgenie_alarm_webhook: ${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}
-  TF_VAR_admin_client_secret: ${{ secrets.PRODUCTION_ADMIN_CLIENT_SECRET }}
-  TF_VAR_auth_tokens: ${{ secrets.PRODUCTION_AUTH_TOKENS }}
-  TF_VAR_dangerous_salt: ${{ secrets.PRODUCTION_DANGEROUS_SALT }}
-  TF_VAR_mlwr_host: False
-  TF_VAR_redis_url: ${{ secrets.PRODUCTION_REDIS_URL }}
-  TF_VAR_secret_key: ${{ secrets.PRODUCTION_SECRET_KEY }}
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.PRODUCTION_SQLALCHEMY_DATABASE_READER_URI }}
   TF_VAR_sqlalchemy_database_uri: ${{ secrets.PRODUCTION_SQLALCHEMY_DATABASE_URI }}
   TF_VAR_document_download_api_host: ${{ secrets.PRODUCTION_DOCUMENT_DOWNLOAD_API_HOST }}
-  TF_VAR_api_domain_name: ${{ secrets.PRODUCTION_API_DOMAIN_NAME }}
-  TF_VAR_api_lambda_domain_name: ${{ secrets.PRODUCTION_API_LAMBDA_DOMAIN_NAME }}
   TF_VAR_new_relic_license_key: ${{ secrets.PRODUCTION_NEW_RELIC_LICENSE_KEY }}
+  # Prevents repeated creation of the Slack lambdas if already existing.
+  # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
+  TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
 
 jobs:
   terraform-apply:
@@ -49,6 +44,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set environment variables
+        uses: ./.github/actions/setvars
+        with:
+          envVarFile: ./.env
+
       - name: Setup Infrastructure Version
         # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure
         # to a new version in production
@@ -57,29 +57,8 @@ jobs:
           INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.2.1
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
-
-      - name: Setup Terragrunt
-        run: |
-          mkdir bin
-          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v$TERRAGRUNT_VERSION/terragrunt_linux_amd64
-          chmod +x bin/terragrunt
-          echo "bin" >> $GITHUB_PATH
-
-      - name: Get changed files
-        id: changed-files
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: 'json'
-
-      - name: Get touched Terragrunt configurations
-        run: |
-          CONFIGS=`echo '${{ steps.changed-files.outputs.added_modified }}' | jq -c '[.[] | match("(.*env?)\/(.*production?)\/(.*)\/").captures[2].string] | unique | select(length > 0)'`
-          echo "CONFIGS=$CONFIGS" >> $GITHUB_ENV
+      - name: Setup Terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
 
       - name: Inject token authentication
         run: |
@@ -88,39 +67,45 @@ jobs:
       - name: Apply aws/common
         run: |
           cd env/production/common
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
         run: |
           cd env/production/dns
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
         run: |
           cd env/production/cloudfront
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
         run: |
           cd env/production/eks
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/elasticache
         run: |
           cd env/production/elasticache
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
         run: |
           cd env/production/rds
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-api
         run: |
           cd env/production/lambda-api
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/heartbeat
         run: |
           cd env/production/heartbeat
-          ../../../bin/terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Slack message on failure
+        if: ${{ failure() }}
+        run: |
+          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/workflows/merge_to_main_production.yml|Merge to main (Production)>"}}]}'
+          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}          

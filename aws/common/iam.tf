@@ -233,3 +233,61 @@ resource "aws_iam_group_policy" "inspec_cloud_guard_rails" {
 }
 EOF
 }
+
+##
+# IAM role for a Kinesis Firehose to write AWS WAF ACL logs to the
+# Cloud Based Sensor S3 satellite bucket 
+##
+resource "aws_iam_role" "firehose_waf_logs" {
+  name               = "FirehoseWafLogs"
+  assume_role_policy = data.aws_iam_policy_document.firehose_assume.json
+}
+
+resource "aws_iam_policy" "firehose_waf_logs" {
+  name   = "FirehoseWafLogsPolicy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.firehose_waf_logs.json
+}
+
+resource "aws_iam_role_policy_attachment" "firehose_waf_logs" {
+  role       = aws_iam_role.firehose_waf_logs.name
+  policy_arn = aws_iam_policy.firehose_waf_logs.arn
+}
+
+data "aws_iam_policy_document" "firehose_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["firehose.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "firehose_waf_logs" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.cbs_satellite_bucket_name}",
+      "arn:aws:s3:::${var.cbs_satellite_bucket_name}/*"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:CreateServiceLinkedRole"
+    ]
+    resources = [
+      "arn:aws:iam::*:role/aws-service-role/wafv2.amazonaws.com/AWSServiceRoleForWAFV2Logging"
+    ]
+  }
+}

@@ -3,6 +3,7 @@ name: "Terragrunt plan STAGING"
 on:
   pull_request:
     paths:
+      - ".env"    
       - "aws/**"
       - "env/staging/**"
       - "env/terragrunt.hcl"
@@ -26,19 +27,9 @@ env:
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
-  TF_VAR_admin_client_secret: ${{ secrets.STAGING_ADMIN_CLIENT_SECRET }}
-  TF_VAR_api_host_name: ${{ secrets.STAGING_API_HOST_NAME }}
-  TF_VAR_auth_tokens: ${{ secrets.STAGING_AUTH_TOKENS }}
-  TF_VAR_base_domain: ${{ secrets.STAGING_BASE_DOMAIN }}
-  TF_VAR_dangerous_salt: ${{ secrets.STAGING_DANGEROUS_SALT }}
   TF_VAR_document_download_api_host: ${{ secrets.STAGING_DOCUMENT_DOWNLOAD_API_HOST }}
-  TF_VAR_mlwr_host: "false"
-  TF_VAR_redis_url: ${{ secrets.STAGING_REDIS_URL }}
-  TF_VAR_secret_key: ${{ secrets.STAGING_SECRET_KEY }}
   TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
   TF_VAR_sqlalchemy_database_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_URI }}
-  TF_VAR_api_domain_name: ${{ secrets.STAGING_API_DOMAIN_NAME }}
-  TF_VAR_api_lambda_domain_name: ${{ secrets.STAGING_API_LAMBDA_DOMAIN_NAME }}
   TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
@@ -56,18 +47,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@3d8debd658c92063839bc97da5c2427100420dec # v1.3.2
+      - name: Set environment variables
+        uses: ./.github/actions/setvars
         with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
+          envVarFile: ./.env
 
-      - name: Setup Terragrunt
-        run: |
-          mkdir bin
-          wget -O bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v$TERRAGRUNT_VERSION/terragrunt_linux_amd64
-          chmod +x bin/*
-          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+      - name: Setup Terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
+
       - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
         id: filter
         with:
@@ -96,6 +83,9 @@ jobs:
             lambda-api:
               - 'aws/lambda-api/**'
               - 'env/staging/lambda-api/**'
+            lambda-admin-pr:
+              - 'aws/lambda-admin-pr/**'
+              - 'env/staging/lambda-admin-pr/**'              
             performance-test:
               - 'aws/performance-test/**'
               - 'env/staging/performance-test/**'
@@ -105,7 +95,7 @@ jobs:
       
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/common"
           comment-delete: "true"
@@ -115,7 +105,7 @@ jobs:
 
       - name: Terragrunt plan dns
         if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/dns"
           comment-delete: "true"
@@ -125,7 +115,7 @@ jobs:
 
       - name: Terragrunt plan eks
         if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/eks"
           comment-delete: "true"
@@ -135,7 +125,7 @@ jobs:
 
       - name: Terragrunt plan elasticache
         if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/elasticache"
           comment-delete: "true"
@@ -145,7 +135,7 @@ jobs:
 
       - name: Terragrunt plan rds
         if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/rds"
           comment-delete: "true"
@@ -155,7 +145,7 @@ jobs:
 
       - name: Terragrunt plan cloudfront
         if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/cloudfront"
           comment-delete: "true"
@@ -165,7 +155,7 @@ jobs:
 
       - name: Terragrunt plan lambda-api
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/lambda-api"
           comment-delete: "true"
@@ -173,9 +163,19 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+      - name: Terragrunt plan lambda-admin-pr
+        if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v2
+        with:
+          directory: "env/staging/lambda-admin-pr"
+          comment-delete: "true"
+          comment-title: "Staging: lambda-admin-pr"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"          
+
       - name: Terragrunt plan performance-test
         if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v2
         with:
           directory: "env/staging/performance-test"
           comment-delete: "true"

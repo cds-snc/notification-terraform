@@ -40,6 +40,18 @@ resource "aws_athena_named_query" "create_table_alb_logs" {
     {
       database_name   = aws_athena_database.notification_athena.name
       table_name      = "alb_logs"
-      bucket_location = "s3://${aws_s3_bucket.alb_log_bucket.bucket}/AWSLogs/${var.account_id}/elasticloadbalancing/${var.region}"
+      bucket_location = "s3://${var.cbs_satellite_bucket_name}/lb_logs/AWSLogs/${var.account_id}/elasticloadbalancing/${var.region}/"
+  })
+}
+
+resource "aws_athena_named_query" "create_table_waf_logs" {
+  name      = "create_table_waf_logs"
+  workgroup = aws_athena_workgroup.primary.name
+  database  = aws_athena_database.notification_athena.name
+  query = templatefile("${path.module}/sql/waf_log_create_table.sql.tmpl",
+    {
+      database_name   = aws_athena_database.notification_athena.name
+      table_name      = "waf_logs"
+      bucket_location = "s3://${var.cbs_satellite_bucket_name}/waf_acl_logs/AWSLogs/${var.account_id}/lb/"
   })
 }

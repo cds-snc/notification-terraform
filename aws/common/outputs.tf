@@ -30,10 +30,6 @@ output "asset_bucket_regional_domain_name" {
   value = aws_s3_bucket.asset_bucket.bucket_regional_domain_name
 }
 
-output "alb_log_bucket" {
-  value = aws_s3_bucket.alb_log_bucket.bucket
-}
-
 output "kms_arn" {
   value = aws_kms_key.notification-canada-ca.arn
 }
@@ -54,6 +50,6 @@ output "s3_bucket_csv_upload_bucket_arn" {
   value = aws_s3_bucket.csv_bucket.arn
 }
 
-output "s3_bucket_csv_upload_bucket_name" {
-  value = aws_s3_bucket.csv_bucket.bucket
+output "firehose_waf_logs_iam_role_arn" {
+  value = aws_iam_role.firehose_waf_logs.arn
 }

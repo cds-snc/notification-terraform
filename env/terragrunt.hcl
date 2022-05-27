@@ -12,6 +12,8 @@ inputs = {
   elb_account_ids = {
     "ca-central-1" = "985666609251"
   }
+  new_relic_account_id      = "2691974"
+  cbs_satellite_bucket_name = "cbs-satellite-${local.vars.inputs.account_id}"
 }
 
 generate "provider" {
@@ -79,6 +81,11 @@ variable "region" {
 variable "elb_account_ids" {
   description = "AWS account IDs used by load balancers"
   type        = map(string)
+}
+
+variable "cbs_satellite_bucket_name" {
+  description = "Name of the Cloud Based Sensor S3 satellite bucket"
+  type        = string
 }
 EOF
 }

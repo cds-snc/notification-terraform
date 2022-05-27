@@ -1,0 +1,48 @@
+name: Check for EKS AMI updates
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 13 * * 1" # 1pm Monday UTC
+
+env:
+  AWS_DEFAULT_REGION: ca-central-1
+  EKS_CLUSTER_NAME: notification-canada-ca-staging-eks-cluster
+  EKS_CLUSTER_NODE_GROUP_NAME: notification-canada-ca-staging-eks-primary-node-group
+
+jobs:
+  check-eks-ami-update:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+    - name: Get latest AMI image release version
+      id: latest
+      run: |
+        CLUSTER_VERSION="$(aws eks describe-cluster \
+          --name ${{ env.EKS_CLUSTER_NAME }} \
+          --query 'cluster.version' --output text)"
+        LATEST_AMI="$(aws ssm get-parameter \
+          --name /aws/service/eks/optimized-ami/$CLUSTER_VERSION/amazon-linux-2/recommended/release_version \
+          --query 'Parameter.Value' --output text)"
+        echo "::set-output name=ami::${LATEST_AMI}"
+
+    - name: Get Staging cluster node group AMI image release version
+      id: current
+      run: |
+        CURRENT_AMI="$(aws eks describe-nodegroup \
+          --cluster-name ${{ env.EKS_CLUSTER_NAME }} \
+          --nodegroup-name ${{ env.EKS_CLUSTER_NODE_GROUP_NAME }} \
+          --query 'nodegroup.releaseVersion' --output text)"
+        echo "::set-output name=ami::${CURRENT_AMI}"
+
+    - name: Post to slack
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      run: |
+        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available: <https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html|${{ steps.latest.outputs.ami }}>"}}]}'
+        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 

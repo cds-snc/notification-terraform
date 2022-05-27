@@ -40,7 +40,7 @@ resource "aws_api_gateway_integration" "root_integration" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api.invoke_arn
+  uri                     = aws_lambda_alias.api_latest.invoke_arn
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"
@@ -65,7 +65,7 @@ resource "aws_api_gateway_integration" "integration" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api.invoke_arn
+  uri                     = aws_lambda_alias.api_latest.invoke_arn
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"
@@ -89,9 +89,14 @@ resource "aws_api_gateway_integration_response" "integration_response" {
 resource "aws_api_gateway_deployment" "api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
 
+  triggers = {
+    redeployment = sha1(file("${path.module}/api_gateway.tf"))
+  }
+
   depends_on = [
     aws_api_gateway_integration.integration
   ]
+
   lifecycle {
     create_before_destroy = true
   }

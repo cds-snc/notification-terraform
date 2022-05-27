@@ -1,49 +1,16 @@
-variable "admin_client_secret" {
-  type      = string
-  sensitive = true
-}
-
-variable "admin_client_user_name" {
-  type      = string
-  sensitive = true
-}
-
-variable "asset_domain" {
+variable "admin_base_url" {
   type = string
 }
 
-variable "asset_upload_bucket_name" {
+variable "api_domain_name" {
   type = string
 }
 
-variable "auth_tokens" {
-  type      = string
-  sensitive = true
-}
-
-// check if this already exists
-variable "aws_pinpoint_region" {
-  type = string
-}
-
-variable "csv_upload_bucket_name" {
+variable "api_lambda_domain_name" {
   type = string
 }
 
 variable "csv_upload_bucket_arn" {
-  type = string
-}
-
-variable "dangerous_salt" {
-  type      = string
-  sensitive = true
-}
-
-variable "documents_bucket" {
-  type = string
-}
-
-variable "mlwr_host" {
   type = string
 }
 
@@ -60,10 +27,6 @@ variable "new_relic_license_key" {
   sensitive = true
 }
 
-variable "new_relic_monitor_mode" {
-  type = string
-}
-
 variable "notification_queue_prefix" {
   type = string
 }
@@ -72,25 +35,14 @@ variable "redis_enabled" {
   type = string
 }
 
-variable "redis_url" {
-  type = string
-}
-
-variable "secret_key" {
+variable "sqlalchemy_database_reader_uri" {
   type      = string
   sensitive = true
 }
 
-variable "sqlalchemy_database_reader_uri" {
-  type = string
-}
-
 variable "sqlalchemy_database_uri" {
-  type = string
-}
-
-variable "sqlalchemy_pool_size" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "vpc_private_subnets" {
@@ -98,6 +50,10 @@ variable "vpc_private_subnets" {
 }
 
 variable "eks_cluster_securitygroup" {
+  type = string
+}
+
+variable "firehose_waf_logs_iam_role_arn" {
   type = string
 }
 
@@ -125,14 +81,6 @@ variable "high_demand_max_concurrency" {
   type = number
 }
 
-variable "api_domain_name" {
-  type = string
-}
-
-variable "api_lambda_domain_name" {
-  type = string
-}
-
 variable "certificate_arn" {
   type = string
 }
@@ -147,4 +95,12 @@ variable "sns_alert_critical_arn" {
 
 locals {
   api_lambda_log_group = "/aws/lambda/api-lambda"
+}
+
+variable "new_relic_account_id" {
+  type = string
+}
+
+variable "ff_cloudwatch_metrics_enabled" {
+  type = bool
 }
