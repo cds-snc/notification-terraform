@@ -126,6 +126,9 @@ resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
     ]
 }
 EOF
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
 }
 
 
