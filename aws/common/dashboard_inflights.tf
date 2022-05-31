@@ -1,12 +1,52 @@
 resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
-  dashboard_name = "Inflights"
+  dashboard_name = "Redis batching"
   dashboard_body = <<EOF
 {
     "widgets": [
+          {
+            "height": 6,
+            "width": 9,
+            "y": 0,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "NotificationCanadaCa", "batch_saving_published", "list_name", "inbox:email:priority" ],
+                    [ "...", "inbox:email:normal" ],
+                    [ "...", "inbox:email:bulk" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ca-central-1",
+                "stat": "Sum",
+                "period": 300,
+                "title": "Added to email inboxes"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 0,
+            "x": 9,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "NotificationCanadaCa", "batch_saving_published", "list_name", "inbox:sms:priority" ],
+                    [ "...", "inbox:sms:normal" ],
+                    [ "...", "inbox:sms:bulk" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ca-central-1",
+                "stat": "Sum",
+                "period": 300,
+                "title": "Added to sms inboxes"
+            }
+        },
         {
             "height": 6,
             "width": 6,
-            "y": 0,
+            "y": 6,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -26,7 +66,7 @@ resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
         {
             "height": 6,
             "width": 6,
-            "y": 0,
+            "y": 6,
             "x": 6,
             "type": "metric",
             "properties": {
@@ -46,7 +86,7 @@ resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
         {
             "height": 6,
             "width": 6,
-            "y": 0,
+            "y": 6,
             "x": 12,
             "type": "metric",
             "properties": {
@@ -66,7 +106,7 @@ resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
         {
             "height": 6,
             "width": 6,
-            "y": 6,
+            "y": 12,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -86,7 +126,7 @@ resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
         {
             "height": 6,
             "width": 6,
-            "y": 6,
+            "y": 12,
             "x": 6,
             "type": "metric",
             "properties": {
@@ -106,7 +146,7 @@ resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
         {
             "height": 6,
             "width": 6,
-            "y": 6,
+            "y": 12,
             "x": 12,
             "type": "metric",
             "properties": {
