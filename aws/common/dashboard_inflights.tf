@@ -1,5 +1,5 @@
-resource "aws_cloudwatch_dashboard" "inflights_dashboard" {
-  dashboard_name = "Redis-batching"
+resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
+  dashboard_name = "Redis-batch-saving"
   dashboard_body = <<EOF
 {
     "widgets": [
