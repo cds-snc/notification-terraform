@@ -141,6 +141,30 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
+    name     = "ip_blocking_rule"
+    priority = 7
+
+    action {
+      block {
+        custom_response {
+          response_code = 301
+        }
+      }
+    }
+
+    statement {
+      ip_set_reference_statement {
+        arn = "arn:aws:wafv2:ca-central-1:296255494825:regional/ipset/Support_Form_Attacker/5e4e44e6-09ae-4415-ac90-75189d525b42"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ip_blocking_rule"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
     name     = "document_download_invalid_path"
     priority = 10
 
