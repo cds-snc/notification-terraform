@@ -7,10 +7,6 @@ resource "aws_iam_user" "ecr-user" {
   name = "ecr-user"
 }
 
-resource "aws_iam_access_key" "ecr-user" {
-  user = aws_iam_user.ecr-user.name
-}
-
 resource "aws_iam_group_membership" "ecr" {
   name = "ecr-group-membership"
   users = [

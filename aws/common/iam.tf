@@ -190,10 +190,6 @@ resource "aws_iam_user_group_membership" "inspec-scanner-to-inspec" {
   ]
 }
 
-resource "aws_iam_access_key" "inspec-scanner" {
-  user = aws_iam_user.inspec-scanner.name
-}
-
 resource "aws_iam_group_policy" "inspec_cloud_guard_rails" {
   name  = "InspecCloudGuardRails"
   group = aws_iam_group.inspec.name

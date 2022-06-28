@@ -7,7 +7,7 @@ resource "aws_cloudwatch_query_definition" "api-lambda-errors" {
 
   query_string = <<QUERY
 fields @timestamp, @message, @logStream
-| filter levelname like /ERROR/
+| filter @message like /rror/
 | sort @timestamp desc
 | limit 20
 QUERY
