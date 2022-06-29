@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "csv_bucket" {
     enabled = true
 
     expiration {
-      days = 30
+      days = 7
     }
   }
 
