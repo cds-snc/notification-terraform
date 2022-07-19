@@ -236,7 +236,7 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
 
   # GET /d/<base64_uuid:service_id>/<base64_uuid:document_id>
   regular_expression {
-    regex_string = "/d/[\\w]{22}/[\\w]{22}"
+    regex_string = "/d/[\\S]{22}/[\\S]{22}"
   }
 
   # POST /services/<uuid:service_id>/documents
