@@ -2,15 +2,13 @@ resource "aws_acm_certificate" "notification-canada-ca" {
   domain_name = var.domain
   subject_alternative_names = [
     "*.${var.domain}",
+    "*.api.${var.domain}",
     "*.document.${var.domain}"
   ]
   validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true
-    # TF bug on AWS 2.0: prevents certificates from being destroyed/recreated
-    # https://github.com/hashicorp/terraform-provider-aws/issues/8531
-    ignore_changes = [subject_alternative_names]
   }
 
   tags = {
@@ -24,15 +22,13 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
   domain_name = var.alt_domain
   subject_alternative_names = [
     "*.${var.alt_domain}",
+    "*.api.${var.alt_domain}",
     "*.document.${var.alt_domain}"
   ]
   validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true
-    # TF bug on AWS 2.0: prevents certificates from being destroyed/recreated
-    # https://github.com/hashicorp/terraform-provider-aws/issues/8531
-    ignore_changes = [subject_alternative_names]
   }
 
   tags = {
