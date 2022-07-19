@@ -22,7 +22,7 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
   domain_name = var.alt_domain
   subject_alternative_names = [
     "*.${var.alt_domain}",
-    "*.api.${var.domain}",
+    "*.api.${var.alt_domain}",
     "*.document.${var.alt_domain}"
   ]
   validation_method = "DNS"
