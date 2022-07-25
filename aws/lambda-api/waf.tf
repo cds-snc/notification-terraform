@@ -44,11 +44,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
         vendor_name = "AWS"
 
         excluded_rule {
-          name = "NoUserAgent_HEADER"
-        }
-
-        excluded_rule {
-          name = "SizeRestrictions_BODY"
+          name = "CrossSiteScripting_BODY"
         }
 
         excluded_rule {
@@ -60,7 +56,11 @@ resource "aws_wafv2_web_acl" "api_lambda" {
         }
 
         excluded_rule {
-          name = "CrossSiteScripting_BODY"
+          name = "NoUserAgent_HEADER"
+        }
+
+        excluded_rule {
+          name = "SizeRestrictions_BODY"
         }
       }
     }
