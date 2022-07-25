@@ -35,13 +35,33 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     priority = 2
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+
+        excluded_rule {
+          name = "NoUserAgent_HEADER"
+        }
+
+        excluded_rule {
+          name = "SizeRestrictions_BODY"
+        }
+
+        excluded_rule {
+          name = "EC2MetaDataSSRF_BODY"
+        }
+
+        excluded_rule {
+          name = "GenericRFI_BODY"
+        }
+
+        excluded_rule {
+          name = "CrossSiteScripting_BODY"
+        }
       }
     }
 
