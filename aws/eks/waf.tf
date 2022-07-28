@@ -165,46 +165,18 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         limit              = 20
         aggregate_key_type = "IP"
         scope_down_statement {
-          or_statement {
-            byte_match_statement {
-              field_to_match {
-                uri_path {}
-              }
-              positional_constraint = "STARTS_WITH"
-              search_string         = "/sign-in"
-              text_transformation = [
-                {
-                  type     = "NONE"
-                  priority = 0
-                }
-              ]
+          byte_match_statement {
+            field_to_match {
+              uri_path {}
             }
-            byte_match_statement {
-              field_to_match {
-                uri_path {}
+            positional_constraint = "STARTS_WITH"
+            search_string         = "/sign-in"
+            text_transformation = [
+              {
+                type     = "NONE"
+                priority = 0
               }
-              positional_constraint = "STARTS_WITH"
-              search_string         = "/register"
-              text_transformation = [
-                {
-                  type     = "NONE"
-                  priority = 1
-                }
-              ]
-            }
-            byte_match_statement {
-              field_to_match {
-                uri_path {}
-              }
-              positional_constraint = "STARTS_WITH"
-              search_string         = "/forgot-password"
-              text_transformation = [
-                {
-                  type     = "NONE"
-                  priority = 2
-                }
-              ]
-            }
+            ]
           }
         }
       }
