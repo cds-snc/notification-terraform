@@ -171,12 +171,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             }
             positional_constraint = "STARTS_WITH"
             search_string         = "/sign-in"
-            text_transformation = [
-              {
-                type     = "NONE"
-                priority = 0
-              }
-            ]
+            text_transformation {
+              type     = "NONE"
+              priority = 0
+            }
           }
         }
       }
