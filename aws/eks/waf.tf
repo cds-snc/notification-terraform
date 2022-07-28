@@ -141,7 +141,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "UriBasedRateLimitRule"
+    name     = "SigninRateLimitRule"
     priority = 7
 
     action {
@@ -157,7 +157,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "UriBasedRule"
+      metric_name                = "SigninRule"
       sampled_requests_enabled   = true
     }
     statement {
