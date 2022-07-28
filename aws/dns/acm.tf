@@ -3,6 +3,7 @@ resource "aws_acm_certificate" "notification-canada-ca" {
   subject_alternative_names = [
     "*.${var.domain}",
     "*.api.${var.domain}",
+    "api.${var.domain}",
     "*.document.${var.domain}"
   ]
   validation_method = "DNS"
@@ -23,6 +24,7 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
   subject_alternative_names = [
     "*.${var.alt_domain}",
     "*.api.${var.alt_domain}",
+    "api.${var.alt_domain}",
     "*.document.${var.alt_domain}"
   ]
   validation_method = "DNS"
