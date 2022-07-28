@@ -165,8 +165,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         limit              = 100
         aggregate_key_type = "IP"
         scope_down_statement {
-          statement {
-            or_statement {
+
+          or_statement {
+
+            statement {
               byte_match_statement {
                 field_to_match {
                   uri_path {}
@@ -178,7 +180,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                   priority = 0
                 }
               }
-
+            }
+            statement {
               byte_match_statement {
                 field_to_match {
                   uri_path {}
@@ -190,7 +193,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                   priority = 1
                 }
               }
-
+            }
+            statement {
               byte_match_statement {
                 field_to_match {
                   uri_path {}
