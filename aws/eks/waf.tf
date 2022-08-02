@@ -162,7 +162,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       sampled_requests_enabled   = true
     }
 
-
     statement {
       rate_based_statement {
         limit              = 500
@@ -193,10 +192,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       }
     }
   }
-
-
-
-
 
   rule {
     name     = "document_download_invalid_path"
