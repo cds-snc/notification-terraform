@@ -167,8 +167,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         limit              = 500
         aggregate_key_type = "IP"
         scope_down_statement {
-          statement {
-            not_statement {
+          not_statement {
+            statement {
               byte_match_statement {
                 positional_constraint = "STARTS_WITH"
                 field_to_match {
