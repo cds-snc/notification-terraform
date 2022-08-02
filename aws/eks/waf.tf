@@ -194,6 +194,86 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
+    name     = "rate_limit_document-download-api"
+    priority = 110
+
+    action {
+      block {
+        custom_response {
+          response_code = 403
+          response_header {
+            name  = "waf-block"
+            value = "RateLimitRestriction"
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "GeneralRateLimit"
+      sampled_requests_enabled   = true
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = 100
+        aggregate_key_type = "IP"
+        scope_down_statement {
+
+          byte_match_statement {
+            positional_constraint = "STARTS_WITH"
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+            search_string = "api.document."
+            text_transformation {
+              priority = 1
+              type     = "COMPRESS_WHITE_SPACE"
+            }
+            text_transformation {
+              priority = 2
+              type     = "LOWERCASE"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  rule {
+    name     = "rate_limit_api"
+    priority = 120
+
+    action {
+      block {
+        custom_response {
+          response_code = 403
+          response_header {
+            name  = "waf-block"
+            value = "RateLimitRestriction"
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "GeneralRateLimit"
+      sampled_requests_enabled   = true
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = 30000
+        aggregate_key_type = "IP"
+      }
+    }
+  }
+
+  rule {
     name     = "document_download_invalid_path"
     priority = 10
 
