@@ -142,7 +142,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
   rule {
     name     = "rate_limit_all_except_api"
-    priority = 11
+    priority = 100
 
     action {
       block {
