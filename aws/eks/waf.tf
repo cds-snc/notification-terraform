@@ -101,13 +101,21 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 5
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAnonymousIpList"
         vendor_name = "AWS"
+      }
+
+      excluded_rule {
+        name = "AnonymousIPList"
+      }
+
+      excluded_rule {
+        name = "HostingProviderIPList"
       }
     }
 
