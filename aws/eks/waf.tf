@@ -108,14 +108,14 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAnonymousIpList"
         vendor_name = "AWS"
-      }
 
-      excluded_rule {
-        name = "AnonymousIPList"
-      }
+        excluded_rule {
+          name = "AnonymousIPList"
+        }
 
-      excluded_rule {
-        name = "HostingProviderIPList"
+        excluded_rule {
+          name = "HostingProviderIPList"
+        }
       }
     }
 
