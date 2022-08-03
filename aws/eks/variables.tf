@@ -83,6 +83,11 @@ variable "eks_node_ami_version" {
   type        = string
 }
 
+variable "api_waf_rate_limit" {
+  description = "Rate limit for api and document download api"
+  type        = number
+}
+
 variable "fall_back_non_api_waf_rate_limit" {
   description = "Fall back rate limit for everything except api and document download api"
   type        = number
