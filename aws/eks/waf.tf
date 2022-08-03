@@ -164,7 +164,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     statement {
       rate_based_statement {
-        limit              = 500
+        limit              = var.fall_back_non_api_waf_rate_limit
         aggregate_key_type = "IP"
         scope_down_statement {
           not_statement {
