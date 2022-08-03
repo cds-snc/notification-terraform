@@ -140,6 +140,69 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
+  rule {
+    name     = "document_download_invalid_path"
+    priority = 10
+
+    action {
+      block {
+        custom_response {
+          response_code = 204
+        }
+      }
+    }
+
+    statement {
+      and_statement {
+        statement {
+          byte_match_statement {
+            positional_constraint = "STARTS_WITH"
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+            search_string = "api.document"
+            text_transformation {
+              priority = 1
+              type     = "COMPRESS_WHITE_SPACE"
+            }
+            text_transformation {
+              priority = 2
+              type     = "LOWERCASE"
+            }
+          }
+        }
+
+        statement {
+          not_statement {
+            statement {
+              regex_pattern_set_reference_statement {
+                arn = aws_wafv2_regex_pattern_set.re_document_download.arn
+                field_to_match {
+                  uri_path {}
+                }
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "document_download_api_invalid_path"
+      sampled_requests_enabled   = true
+    }
+  }
 
   rule {
     name     = "rate_limit_document_download_api"
@@ -242,7 +305,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
   rule {
     name     = "rate_limit_all_except_api"
-    priority = 500
+    priority = 200
 
     action {
       block {
@@ -267,70 +330,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         limit              = var.fall_back_non_api_waf_rate_limit
         aggregate_key_type = "IP"
       }
-    }
-  }
-
-  rule {
-    name     = "document_download_invalid_path"
-    priority = 10
-
-    action {
-      block {
-        custom_response {
-          response_code = 204
-        }
-      }
-    }
-
-    statement {
-      and_statement {
-        statement {
-          byte_match_statement {
-            positional_constraint = "STARTS_WITH"
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-            search_string = "api.document"
-            text_transformation {
-              priority = 1
-              type     = "COMPRESS_WHITE_SPACE"
-            }
-            text_transformation {
-              priority = 2
-              type     = "LOWERCASE"
-            }
-          }
-        }
-
-        statement {
-          not_statement {
-            statement {
-              regex_pattern_set_reference_statement {
-                arn = aws_wafv2_regex_pattern_set.re_document_download.arn
-                field_to_match {
-                  uri_path {}
-                }
-                text_transformation {
-                  priority = 1
-                  type     = "COMPRESS_WHITE_SPACE"
-                }
-                text_transformation {
-                  priority = 2
-                  type     = "LOWERCASE"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "document_download_api_invalid_path"
-      sampled_requests_enabled   = true
     }
   }
 
