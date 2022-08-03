@@ -176,7 +176,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                 positional_constraint = "STARTS_WITH"
                 search_string         = "/sign-in"
                 text_transformation {
-                  type     = "NONE"
+                  type     = "LOWERCASE"
                   priority = 0
                 }
               }
@@ -189,7 +189,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                 positional_constraint = "STARTS_WITH"
                 search_string         = "/register"
                 text_transformation {
-                  type     = "NONE"
+                  type     = "LOWERCASE"
                   priority = 1
                 }
               }
@@ -202,7 +202,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                 positional_constraint = "STARTS_WITH"
                 search_string         = "/forgot-password"
                 text_transformation {
-                  type     = "NONE"
+                  type     = "LOWERCASE"
                   priority = 2
                 }
               }
