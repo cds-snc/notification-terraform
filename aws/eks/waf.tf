@@ -291,105 +291,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "rate_limit_document_download_api"
-    priority = 100
-
-    action {
-      block {
-        custom_response {
-          response_code = 429
-          response_header {
-            name  = "waf-block"
-            value = "RateLimitRestriction"
-          }
-        }
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "DocumentDownloadApiRateLimit"
-      sampled_requests_enabled   = true
-    }
-
-    statement {
-      rate_based_statement {
-        limit              = var.document_download_api_waf_rate_limit
-        aggregate_key_type = "IP"
-        scope_down_statement {
-          byte_match_statement {
-            positional_constraint = "STARTS_WITH"
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-            search_string = "api.document"
-            text_transformation {
-              priority = 1
-              type     = "COMPRESS_WHITE_SPACE"
-            }
-            text_transformation {
-              priority = 2
-              type     = "LOWERCASE"
-            }
-          }
-        }
-      }
-    }
-  }
-
-
-  rule {
-    name     = "rate_limit_api"
-    priority = 110
-
-    action {
-      block {
-        custom_response {
-          response_code = 429
-          response_header {
-            name  = "waf-block"
-            value = "RateLimitRestriction"
-          }
-        }
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "ApiRateLimit"
-      sampled_requests_enabled   = true
-    }
-
-    statement {
-      rate_based_statement {
-        limit              = var.api_waf_rate_limit
-        aggregate_key_type = "IP"
-        scope_down_statement {
-          byte_match_statement {
-            positional_constraint = "STARTS_WITH"
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-            search_string = "api."
-            text_transformation {
-              priority = 1
-              type     = "COMPRESS_WHITE_SPACE"
-            }
-            text_transformation {
-              priority = 2
-              type     = "LOWERCASE"
-            }
-          }
-        }
-      }
-    }
-  }
-
-  rule {
     name     = "rate_limit_all_except_api"
     priority = 200
 
@@ -407,7 +308,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "GeneralRateLimit"
+      metric_name                = "NonApiRateLimit"
       sampled_requests_enabled   = true
     }
 
@@ -415,6 +316,29 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       rate_based_statement {
         limit              = var.fall_back_non_api_waf_rate_limit
         aggregate_key_type = "IP"
+        scope_down_statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                positional_constraint = "STARTS_WITH"
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                search_string = "api."
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
