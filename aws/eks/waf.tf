@@ -147,7 +147,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     action {
       block {
         custom_response {
-          response_code = 403
+          response_code = 429
           response_header {
             name  = "waf-block"
             value = "RateLimitRestriction"
@@ -297,7 +297,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     action {
       block {
         custom_response {
-          response_code = 403
+          response_code = 429
           response_header {
             name  = "waf-block"
             value = "RateLimitRestriction"
@@ -347,7 +347,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     action {
       block {
         custom_response {
-          response_code = 403
+          response_code = 429
           response_header {
             name  = "waf-block"
             value = "RateLimitRestriction"
@@ -396,7 +396,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     action {
       block {
         custom_response {
-          response_code = 403
+          response_code = 429
           response_header {
             name  = "waf-block"
             value = "RateLimitRestriction"
