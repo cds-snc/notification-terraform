@@ -22,38 +22,37 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       }
     }
 
-    scope_down_statement {
-      and_statement {
-        statement {
-          byte_match_statement {
-            positional_constraint = "STARTS_WITH"
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-            search_string = "api."
-            text_transformation {
-              priority = 1
-              type     = "COMPRESS_WHITE_SPACE"
-            }
-            text_transformation {
-              priority = 2
-              type     = "LOWERCASE"
+    and_statement {
+      statement {
+        byte_match_statement {
+          positional_constraint = "STARTS_WITH"
+          field_to_match {
+            single_header {
+              name = "host"
             }
           }
+          search_string = "api."
+          text_transformation {
+            priority = 1
+            type     = "COMPRESS_WHITE_SPACE"
+          }
+          text_transformation {
+            priority = 2
+            type     = "LOWERCASE"
+          }
         }
-        statement {
-          not_statement {
-            statement {
-              geo_match_statement {
-                country_codes = ["CA"]
-              }
+      }
+      statement {
+        not_statement {
+          statement {
+            geo_match_statement {
+              country_codes = ["CA"]
             }
           }
         }
       }
     }
+
 
     visibility_config {
       cloudwatch_metrics_enabled = true
