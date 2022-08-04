@@ -207,6 +207,19 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                 }
               }
             }
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  uri_path {}
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "/forced-password-reset"
+                text_transformation {
+                  type     = "LOWERCASE"
+                  priority = 2
+                }
+              }
+            }
           }
         }
       }
