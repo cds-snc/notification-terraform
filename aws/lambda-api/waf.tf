@@ -47,6 +47,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
           name = "CrossSiteScripting_BODY"
         }
 
+        # TODO: apply a label for future rule processing that will exclude traffic from outside Canada.
         excluded_rule {
           name = "EC2MetaDataSSRF_BODY"
         }
