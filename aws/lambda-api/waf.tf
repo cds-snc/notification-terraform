@@ -6,6 +6,30 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     allow {}
   }
 
+  rule {
+    name     = "CanadaOnlyGeoRestriction"
+    priority = 0
+
+    action {
+      count {}
+    }
+    statement {
+      not_statement {
+        statement {
+          geo_match_statement {
+            country_codes = ["CA"]
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "CanadaOnlyGeoRestriction"
+      sampled_requests_enabled   = true
+    }
+  }
+
   # Use a bunch of AWS managed rules
   # See https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   rule {
