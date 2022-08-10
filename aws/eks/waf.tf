@@ -295,15 +295,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 200
 
     action {
-      block {
-        custom_response {
-          response_code = 429
-          response_header {
-            name  = "waf-block"
-            value = "RateLimitRestriction"
-          }
-        }
-      }
+      count {}
     }
 
     visibility_config {
