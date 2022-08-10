@@ -11,7 +11,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 0
 
     action {
-      block {
+      count {
         custom_response {
           response_code = 403
           response_header {
