@@ -147,7 +147,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     action {
       block {
         custom_response {
-          response_code = 403
+          response_code = 429
           response_header {
             name  = "waf-block"
             value = "RateLimitRestriction"
@@ -334,6 +334,51 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       cloudwatch_metrics_enabled = true
       metric_name                = "CanadaOnlyGeoRestriction"
       sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "rate_limit_all_except_api"
+    priority = 200
+
+    action {
+      count {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "NonApiRateLimit"
+      sampled_requests_enabled   = true
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = var.fall_back_non_api_waf_rate_limit
+        aggregate_key_type = "IP"
+        scope_down_statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                positional_constraint = "STARTS_WITH"
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                search_string = "api."
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 
