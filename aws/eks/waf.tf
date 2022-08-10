@@ -11,15 +11,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 0
 
     action {
-      count {
-        custom_response {
-          response_code = 403
-          response_header {
-            name  = "waf-block"
-            value = "CanadaOnlyGeoRestriction"
-          }
-        }
-      }
+      count {}
     }
     statement {
       and_statement {
