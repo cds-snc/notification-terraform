@@ -140,6 +140,30 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     }
   }
 
+  rule {
+    name     = "CanadaOnlyGeoRestriction"
+    priority = 20
+
+    action {
+      count {}
+    }
+    statement {
+      not_statement {
+        statement {
+          geo_match_statement {
+            country_codes = ["CA"]
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "CanadaOnlyGeoRestriction"
+      sampled_requests_enabled   = true
+    }
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }

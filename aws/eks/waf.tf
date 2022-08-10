@@ -291,6 +291,53 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
+    name     = "CanadaOnlyGeoRestriction"
+    priority = 20
+
+    action {
+      count {}
+    }
+    statement {
+      and_statement {
+        statement {
+          byte_match_statement {
+            positional_constraint = "STARTS_WITH"
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+            search_string = "api."
+            text_transformation {
+              priority = 1
+              type     = "COMPRESS_WHITE_SPACE"
+            }
+            text_transformation {
+              priority = 2
+              type     = "LOWERCASE"
+            }
+          }
+        }
+        statement {
+          not_statement {
+            statement {
+              geo_match_statement {
+                country_codes = ["CA"]
+              }
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "CanadaOnlyGeoRestriction"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
     name     = "rate_limit_all_except_api"
     priority = 200
 
