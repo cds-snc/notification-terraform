@@ -330,7 +330,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       }
     }
 
-
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "CanadaOnlyGeoRestriction"
