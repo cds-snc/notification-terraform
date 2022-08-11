@@ -68,7 +68,7 @@ resource "aws_athena_named_query" "create_table_waf_logs_api_lambda" {
   })
 }
 
-resource "aws_athena_named_query" "create_table_waf_logs_api_lambda" {
+resource "aws_athena_named_query" "create_table_all_waf_logs" {
   name      = "WAF: create table waf_logs"
   workgroup = aws_athena_workgroup.primary.name
   database  = aws_athena_database.notification_athena.name
