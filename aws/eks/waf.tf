@@ -384,7 +384,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "document_download_api_invalid_path"
+      metric_name                = "admin_invalid_path"
       sampled_requests_enabled   = true
     }
   }
