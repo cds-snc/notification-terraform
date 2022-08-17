@@ -43,7 +43,7 @@ inputs = {
   eks_addon_kube_proxy_version           = "v1.22.6-eksbuild.1"
   eks_addon_vpc_cni_version              = "v1.11.0-eksbuild.1"  
   eks_node_ami_version                   = "1.22.9-20220725"
-  fall_back_non_api_waf_rate_limit       = 500
+  non_api_waf_rate_limit                 = 500
   api_waf_rate_limit                     = 30000
   sign_in_waf_rate_limit                 = 100
 }
