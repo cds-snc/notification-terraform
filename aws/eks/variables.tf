@@ -101,6 +101,7 @@ variable "sign_in_waf_rate_limit" {
 variable "waf_secret" {
   description = "secret the admin sends in the header so the WAF does not rate limit"
   type        = string
+  default     = "waf-secret"
 }
 
 locals {
