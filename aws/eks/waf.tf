@@ -426,7 +426,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     positional_constraint = "EXACTLY"
                     field_to_match {
                       single_header {
-                        name = "WAF-secret"
+                        name = "waf-secret"
                       }
                     }
                     search_string = var.waf_secret
