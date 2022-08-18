@@ -430,6 +430,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                       }
                     }
                     search_string = var.waf_secret
+                    text_transformation {
+                      priority = 1
+                      type     = "NONE"
+                    }
                   }
                 }
               }
