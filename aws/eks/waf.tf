@@ -291,7 +291,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "CanadaOnlyGeoRestriction"
+    name     = "CanadaUSOnlyGeoRestriction"
     priority = 20
 
     action {
@@ -321,8 +321,17 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         statement {
           not_statement {
             statement {
-              geo_match_statement {
-                country_codes = ["CA"]
+              or_statement {
+                statement {
+                  geo_match_statement {
+                    country_codes = ["CA"]
+                  }
+                }
+                statement {
+                  geo_match_statement {
+                    country_codes = ["US"]
+                  }
+                }
               }
             }
           }
