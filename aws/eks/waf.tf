@@ -291,7 +291,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "CanadaOnlyGeoRestriction"
+    name     = "CanadaUSOnlyGeoRestriction"
     priority = 20
 
     action {
@@ -322,7 +322,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           not_statement {
             statement {
               geo_match_statement {
-                country_codes = ["CA"]
+                country_codes = ["CA", "US"]
               }
             }
           }
@@ -332,7 +332,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "CanadaOnlyGeoRestriction"
+      metric_name                = "CanadaUSOnlyGeoRestriction"
       sampled_requests_enabled   = true
     }
   }

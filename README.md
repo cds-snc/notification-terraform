@@ -14,6 +14,25 @@ The directory structure inside `aws` reflects the split into independent modules
 
 Terragrunt scripts are found in `env`, which defines all the environment specific variables. Contained are subdirectories that define all the Terraform modules that should exist in each environment.
 
+### How do we run terragrunt plan locally?
+
+Running `terragrunt plan` locally (as opposed to through the GitHub actions) can speed up development, in particular to see if your new terraform code is horribly broken. You will need two things:
+- AWS credentials: easiest is to have sso and a `notify-staging` aws profile set up.
+- the input variables: copy the LastPass file "Notify - terraform.tfvars - Staging" to a local `terraform.tfvars` file, preferable not in a git repo.
+
+Now:
+- log into staging sso through your terminal
+- go to the module you are interested in, ex: `/env/staging/eks` (note: in `/env/staging`, not `/aws`)
+- run
+```
+AWS_PROFILE=notify-staging terragrunt init
+AWS_PROFILE=notify-staging terragrunt plan --var-file ~/TEMP/terraform.tfvars
+```
+
+**Important notes**:
+- you probably shouldn't run `terragrunt apply` from your laptop
+- don't plan or apply to production. Don't even bring the variables locally.
+
 ### How are changes applied to the different environments?
 Changes are applied through Git merges to this repository. Terragrunt supports the idea of [remote Terraform configurations based on tags](https://terragrunt.gruntwork.io/docs/features/keep-your-terraform-code-dry/#remote-terraform-configurations). This mean we can setup the following continuous integration workflows:
 
