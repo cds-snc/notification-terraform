@@ -321,17 +321,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         statement {
           not_statement {
             statement {
-              or_statement {
-                statement {
-                  geo_match_statement {
-                    country_codes = ["CA"]
-                  }
-                }
-                statement {
-                  geo_match_statement {
-                    country_codes = ["US"]
-                  }
-                }
+              geo_match_statement {
+                country_codes = ["CA", "US"]
               }
             }
           }
