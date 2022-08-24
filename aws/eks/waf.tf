@@ -35,7 +35,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 2
 
     override_action {
-      none {}
+      count {}
     }
 
     statement {
@@ -58,6 +58,9 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
         excluded_rule {
           name = "SizeRestrictions_BODY"
+        }
+        excluded_rule {
+          name = "GenericLFI_Body"
         }
       }
     }
