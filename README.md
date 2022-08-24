@@ -18,7 +18,7 @@ Terragrunt scripts are found in `env`, which defines all the environment specifi
 
 Running `terragrunt plan` locally (as opposed to through the GitHub actions) can speed up development, in particular to see if your new terraform code is horribly broken. You will need two things:
 - AWS credentials: easiest is to have sso and a `notify-staging` aws profile set up.
-- the input variables: copy the LastPass file "Notify - Terraform.tfvars - Staging" to a local `terraform.tfvars` file, preferable not in a git repo.
+- the input variables: copy the LastPass file "Notify - terraform.tfvars - Staging" to a local `terraform.tfvars` file, preferable not in a git repo.
 
 Now:
 - log into staging sso through your terminal
