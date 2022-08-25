@@ -384,7 +384,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
   rule {
     name     = "ip_blocklist"
-    priority = 1
+    priority = 8
 
     action {
       block {}

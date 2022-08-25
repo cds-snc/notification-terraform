@@ -166,7 +166,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
 
   rule {
     name     = "ip_blocklist"
-    priority = 1
+    priority = 8
 
     action {
       block {}
