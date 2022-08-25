@@ -382,6 +382,27 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
+  rule {
+    name     = "ip_blocklist"
+    priority = 1
+
+    action {
+      block {}
+    }
+
+    statement {
+      ip_set_reference_statement {
+        arn = aws_wafv2_ip_set.ip_blocklist.arn
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockedIP"
+      sampled_requests_enabled   = true
+    }
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
@@ -463,5 +484,16 @@ resource "aws_wafv2_web_acl_logging_configuration" "firehose-waf-logs" {
     single_header {
       name = "authorization"
     }
+  }
+}
+
+resource "aws_wafv2_ip_set" "ip_blocklist" {
+  name               = "ip_blocklist"
+  scope              = "REGIONAL"
+  ip_address_version = "IPV4"
+  addresses          = ["40.50.60.70/32"]
+
+  lifecycle {
+    ignore_changes = all
   }
 }
