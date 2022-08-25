@@ -104,3 +104,7 @@ variable "new_relic_account_id" {
 variable "ff_cloudwatch_metrics_enabled" {
   type = bool
 }
+
+variable "ip_blocklist_arn" {
+  type = string
+}
