@@ -392,7 +392,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     statement {
       ip_set_reference_statement {
-        arn = var.ip_blocklist
+        arn = var.ip_blocklist_arn
       }
     }
 

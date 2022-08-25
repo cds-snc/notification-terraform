@@ -54,6 +54,6 @@ output "firehose_waf_logs_iam_role_arn" {
   value = aws_iam_role.firehose_waf_logs.arn
 }
 
-output "ip_blocklist" {
+output "ip_blocklist_arn" {
   value = aws_wafv2_ip_set.ip_blocklist.arn
 }

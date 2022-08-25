@@ -45,4 +45,5 @@ inputs = {
   eks_node_ami_version                   = "1.22.9-20220725"
   fall_back_non_api_waf_rate_limit       = 500
   sign_in_waf_rate_limit                 = 100
+  ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
 }

@@ -23,7 +23,7 @@ dependency "common" {
     sns_alert_critical_arn         = ""
     sns_alert_general_arn          = ""
     firehose_waf_logs_iam_role_arn = ""
-    ip_blocklist                   = []
+    ip_blocklist_arn               = []
   }
 }
 
@@ -76,6 +76,7 @@ inputs = {
   eks_node_ami_version                   = "1.22.9-20220725"
   fall_back_non_api_waf_rate_limit       = 500
   sign_in_waf_rate_limit                 = 100
+  ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
 }
 
 terraform {
