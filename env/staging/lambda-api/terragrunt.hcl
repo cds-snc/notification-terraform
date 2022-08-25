@@ -21,6 +21,7 @@ dependency "common" {
     sns_alert_critical_arn          = ""
     s3_bucket_csv_upload_bucket_arn = ""
     firehose_waf_logs_iam_role_arn  = ""
+    ip_blocklist                    = []
   }
 }
 
