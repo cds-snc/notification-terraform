@@ -141,7 +141,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
   }
 
   rule {
-    name     = "CanadaOnlyGeoRestriction"
+    name     = "CanadaUSOnlyGeoRestriction"
     priority = 20
 
     action {
@@ -159,7 +159,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "CanadaOnlyGeoRestriction"
+      metric_name                = "CanadaUSOnlyGeoRestriction"
       sampled_requests_enabled   = true
     }
   }
