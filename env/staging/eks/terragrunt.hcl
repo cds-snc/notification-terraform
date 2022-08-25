@@ -23,7 +23,7 @@ dependency "common" {
     sns_alert_critical_arn         = ""
     sns_alert_general_arn          = ""
     firehose_waf_logs_iam_role_arn = ""
-    ip_blocklist_arn               = []
+    ip_blocklist_arn               = ""
   }
 }
 

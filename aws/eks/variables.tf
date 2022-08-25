@@ -98,5 +98,5 @@ locals {
 }
 
 variable "ip_blocklist_arn" {
-  type = list(any)
+  type = string
 }
