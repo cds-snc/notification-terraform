@@ -151,7 +151,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
       not_statement {
         statement {
           geo_match_statement {
-            country_codes = ["CA"]
+            country_codes = ["CA", "US"]
           }
         }
       }
