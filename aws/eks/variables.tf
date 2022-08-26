@@ -98,5 +98,6 @@ locals {
 }
 
 variable "ip_blocklist_arn" {
-  type = string
+  description = "Block all the IPs on this list from accessing admin and api"
+  type        = string
 }
