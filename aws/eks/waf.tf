@@ -399,6 +399,27 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
+  rule {
+    name     = "ip_blocklist"
+    priority = 8
+
+    action {
+      block {}
+    }
+
+    statement {
+      ip_set_reference_statement {
+        arn = var.ip_blocklist_arn
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockedIP"
+      sampled_requests_enabled   = true
+    }
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }

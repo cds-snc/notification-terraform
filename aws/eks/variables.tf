@@ -96,3 +96,8 @@ variable "sign_in_waf_rate_limit" {
 locals {
   eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
 }
+
+variable "ip_blocklist_arn" {
+  description = "Block all the IPs on this list from accessing admin and api"
+  type        = string
+}
