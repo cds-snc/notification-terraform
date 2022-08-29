@@ -295,7 +295,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 20
 
     action {
-      count {}
+      block {}
     }
     statement {
       and_statement {
