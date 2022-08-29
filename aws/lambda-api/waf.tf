@@ -35,7 +35,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     priority = 2
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
