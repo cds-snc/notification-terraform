@@ -7,7 +7,8 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
   mock_outputs = {
     vpc_private_subnets = [
       "subnet-001e585d12cce4d1e",
@@ -23,6 +24,7 @@ dependency "common" {
     sns_alert_critical_arn         = ""
     sns_alert_general_arn          = ""
     firehose_waf_logs_iam_role_arn = ""
+    ip_blocklist_arn               = ""
   }
 }
 
@@ -75,6 +77,7 @@ inputs = {
   eks_node_ami_version                   = "1.22.9-20220725"
   fall_back_non_api_waf_rate_limit       = 500
   sign_in_waf_rate_limit                 = 100
+  ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
 }
 
 terraform {
