@@ -21,6 +21,7 @@ dependency "common" {
     sns_alert_critical_arn          = ""
     s3_bucket_csv_upload_bucket_arn = ""
     firehose_waf_logs_iam_role_arn  = ""
+    ip_blocklist_arn                = ""
   }
 }
 
@@ -73,6 +74,7 @@ inputs = {
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   ff_cloudwatch_metrics_enabled          = "true"
+  ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
 }
 
 terraform {
