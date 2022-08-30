@@ -9,25 +9,34 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
 
   regular_expression {
-    regex_string = "/.well-known|/_email|/_letter|/_status|/_styleguide|/a11y|/accounts|/accounts-or-dashboard|/activity|/add-service|/agreement|/callbacks|/contact|/design-patterns-content-guidance|/documentation|/email"
+    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/agreement.*|/callbacks.*|/contact.*|/design-patterns-content-guidance.*|/documentation.*|/email.*"
   }
 
   regular_expression {
-    regex_string = "/email-branding|/email-not-received|/error|/features|/find-services-by-name|/find-users-by-email|/forced-password-reset|/forgot-password|/format|/inbound-sms-admin|/invitation|/letter-branding"
+    regex_string = "/email-branding.*|/email-not-received.*|/error.*|/features.*|/find-services-by-name.*|/find-users-by-email.*|/forced-password-reset.*|/forgot-password.*|/format.*|/inbound-sms-admin.*|/invitation.*|/letter-branding.*"
   }
 
   regular_expression {
-    regex_string = "/letters|/messages-status|/new-password|/organisation-invitation|/organisations|/personalise|/platform-admin|/preview|/pricing|/provider|/providers|/register|/register-from-invite"
-
-  }
-
-  regular_expression {
-    regex_string = "/register-from-org-invite|/registration-continue|/resend-email-verification|/roadmap|/robots.txt|/send-new-code|/send-new-email-token|/services|/services-or-dashboard|/set-lang|/sign-in|/sign-out|/sms"
+    regex_string = "/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*|/register-from-invite.*"
 
   }
 
   regular_expression {
-    regex_string = "/static|/support|/templates|/text-not-received|/two-factor-email-sent|/two-factor-sms-sent|/user-profile|/users|/verify|/verify-email|/verify-mobile|/welcome|/why-notify"
+    regex_string = "/register-from-org-invite.*|/registration-continue.*|/resend-email-verification.*|/roadmap.*|/robots.txt.*|/send-new-code.*|/send-new-email-token.*|/services.*|/services-or-dashboard.*|/set-lang.*|/sign-in.*|/sign-out.*|/sms.*"
+  }
+
+  regular_expression {
+    regex_string = "/static.*|/support.*|/templates.*|/text-not-received.*|/two-factor-email-sent.*|/two-factor-sms-sent.*|/user-profile.*|/users.*|/verify.*|/verify-email.*|/verify-mobile.*|/welcome.*|/why-notify.*"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/security|/securite|/privacy|/confidentialite|/accessibility|/accessibilite"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/message-delivery-status|/etat-livraison-messages|/formatting-guide|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu"
   }
 
   tags = {
