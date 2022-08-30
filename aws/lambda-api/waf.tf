@@ -162,7 +162,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     priority = 20
 
     action {
-      count {}
+      block {}
     }
     statement {
       not_statement {
