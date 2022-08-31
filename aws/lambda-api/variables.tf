@@ -104,3 +104,8 @@ variable "new_relic_account_id" {
 variable "ff_cloudwatch_metrics_enabled" {
   type = bool
 }
+
+variable "ip_blocklist_arn" {
+  description = "Block all the IPs on this list from accessing admin and api"
+  type        = string
+}
