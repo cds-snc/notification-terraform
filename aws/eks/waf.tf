@@ -59,6 +59,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         excluded_rule {
           name = "GenericLFI_Body"
         }
+
+        excluded_rule {
+          name = "GenericRFI_Body"
+        }
       }
     }
 
