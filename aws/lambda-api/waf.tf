@@ -57,11 +57,11 @@ resource "aws_wafv2_web_acl" "api_lambda" {
           name = "SizeRestrictions_BODY"
         }
         excluded_rule {
-          name = "GenericLFI_Body"
+          name = "GenericLFI_BODY"
         }
 
         excluded_rule {
-          name = "GenericRFI_Body"
+          name = "GenericRFI_BODY"
         }
       }
     }
