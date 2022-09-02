@@ -350,7 +350,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     name = "host"
                   }
                 }
-                search_string = var.alt_domain
+                search_string = var.alt_domain != "" ? var.alt_domain : var.domain
                 text_transformation {
                   priority = 1
                   type     = "COMPRESS_WHITE_SPACE"
