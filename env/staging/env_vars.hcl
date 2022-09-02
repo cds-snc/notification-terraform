@@ -1,6 +1,6 @@
 inputs = {
   account_id = "239043911459"
   domain     = "staging.notification.cdssandbox.xyz"
-  alt_domain = ""
+  alt_domain = "staging.notification.cdssandbox.xyz"
   env        = "staging"
 }
