@@ -1280,8 +1280,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-sms-created-warning" {
   threshold           = var.alarm_warning_expired_sms_created_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 
   metric_query {
     id          = "expired_sms_created"
@@ -1340,8 +1339,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-email-created-warning" {
   threshold           = var.alarm_warning_expired_email_created_threshold
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 
   metric_query {
     id          = "expired_email_created"
