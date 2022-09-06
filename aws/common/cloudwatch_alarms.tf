@@ -1334,7 +1334,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-sms-created-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "expired-email-created-warning" {
   alarm_name          = "expired-email-created-warning"
-  alarm_description   = "Email inflights are expiring at > ${var.alarm_warning_expired_sms_created_threshold} for 5 minutes"
+  alarm_description   = "Email inflights are expiring at > ${var.alarm_warning_expired_email_created_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_warning_expired_email_created_threshold
