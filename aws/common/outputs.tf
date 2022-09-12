@@ -53,3 +53,7 @@ output "s3_bucket_csv_upload_bucket_arn" {
 output "firehose_waf_logs_iam_role_arn" {
   value = aws_iam_role.firehose_waf_logs.arn
 }
+
+output "ip_blocklist_arn" {
+  value = aws_wafv2_ip_set.ip_blocklist.arn
+}

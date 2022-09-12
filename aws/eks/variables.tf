@@ -83,6 +83,11 @@ variable "eks_node_ami_version" {
   type        = string
 }
 
+variable "fall_back_non_api_waf_rate_limit" {
+  description = "Fall back rate limit for everything except api and document download api"
+  type        = number
+}
+
 variable "sign_in_waf_rate_limit" {
   description = "Rate limit for /register, /sigh-in, and /forgot-password"
   type        = number
@@ -90,4 +95,9 @@ variable "sign_in_waf_rate_limit" {
 
 locals {
   eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
+}
+
+variable "ip_blocklist_arn" {
+  description = "Block all the IPs on this list from accessing admin and api"
+  type        = string
 }

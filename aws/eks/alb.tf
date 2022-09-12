@@ -186,7 +186,7 @@ resource "aws_lb_listener_rule" "document-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-document.arn
+    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
   }
 
   condition {
