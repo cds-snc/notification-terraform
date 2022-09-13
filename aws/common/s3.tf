@@ -229,7 +229,7 @@ resource "aws_s3_bucket" "document_bucket" {
   # Those are stored in a `tmp/` folder.
   # See https://github.com/cds-snc/notification-document-download-api
   lifecycle_rule {
-    id      = "tf-s3-lifecycle-20210324115309091500000001"
+    id      = "tf-s3-lifecycle-attached-files"
     enabled = true
     prefix  = "tmp/"
 
