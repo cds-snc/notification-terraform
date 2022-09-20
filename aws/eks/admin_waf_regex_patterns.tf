@@ -33,12 +33,18 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/security|/securite|/privacy|/confidentialite|/accessibility|/accessibilite"
+    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/securit.+|/privacy.*|/confidentialite.*|/accessibility|/accessibilite"
   }
 
   # GCA routes
   regular_expression {
     regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/message-delivery-status|/etat-livraison-messages|/formatting-guide|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu"
+  }
+
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/other-services|/autres-services"
   }
 
   tags = {
