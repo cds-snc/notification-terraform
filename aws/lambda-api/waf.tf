@@ -211,7 +211,11 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     priority = 11
 
     action {
-      count {}
+      block {
+        custom_response {
+          response_code = 204
+        }
+      }
     }
 
     statement {

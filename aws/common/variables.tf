@@ -170,3 +170,23 @@ variable "alarm_critical_bulk_bulk_processed_created_delta_threshold" {
   description = "Critical alarm threshold for the difference between processed and created bulk sends"
   type        = number
 }
+
+variable "alarm_warning_expired_sms_created_threshold" {
+  description = "Warning alarm threshold for expired sms batches created"
+  type        = number
+}
+
+variable "alarm_critical_expired_sms_created_threshold" {
+  description = "Critical alarm threshold for expired sms batches created"
+  type        = number
+}
+
+variable "alarm_warning_expired_email_created_threshold" {
+  description = "Warning alarm threshold for expired email batches created"
+  type        = number
+}
+
+variable "alarm_critical_expired_email_created_threshold" {
+  description = "Critical alarm threshold for expired email batches created"
+  type        = number
+}
