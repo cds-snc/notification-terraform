@@ -109,3 +109,9 @@ variable "ip_blocklist_arn" {
   description = "Block all the IPs on this list from accessing admin and api"
   type        = string
 }
+
+variable "waf_secret" {
+  description = "secret the admin sends in the header so the WAF does not rate limit"
+  type        = string
+  sensitive   = true
+}
