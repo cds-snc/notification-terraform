@@ -102,6 +102,7 @@ variable "waf_secret" {
   description = "secret the admin sends in the header so the WAF does not rate limit"
   type        = string
   default     = "waf-secret"
+  sensitive   = true
 }
 
 locals {
