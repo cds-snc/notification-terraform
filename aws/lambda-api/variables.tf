@@ -10,6 +10,10 @@ variable "api_lambda_domain_name" {
   type = string
 }
 
+variable "api_lambda_alt_domain_name" {
+  type = string
+}
+
 variable "csv_upload_bucket_arn" {
   type = string
 }

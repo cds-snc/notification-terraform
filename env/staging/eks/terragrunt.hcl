@@ -36,6 +36,7 @@ dependency "dns" {
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     aws_acm_notification_canada_ca_arn = ""
+    aws_acm_alt_notification_canada_ca_arn = ""
   }
 }
 

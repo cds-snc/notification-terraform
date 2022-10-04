@@ -50,6 +50,7 @@ dependency "dns" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs = {
     aws_acm_notification_canada_ca_arn = ""
+    aws_acm_alt_notification_canada_ca_arn = ""
   }
 }
 
@@ -62,6 +63,7 @@ inputs = {
   admin_base_url                         = "https://notification.canada.ca"
   api_domain_name                        = "api.notification.canada.ca"
   api_lambda_domain_name                 = "api-lambda.notification.canada.ca"
+  api_lambda_alt_domain_name             = "api.notification.alpha.canada.ca"
   api_image_tag                          = "release"
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
@@ -77,6 +79,7 @@ inputs = {
   notification_queue_prefix              = "eks-notification-canada-ca"
   redis_enabled                          = 1
   certificate_arn                        = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
+  certificate_alt_arn                    = dependency.dns.outputs.aws_acm_alt_notification_canada_ca_arn
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   ff_cloudwatch_metrics_enabled          = "true"
