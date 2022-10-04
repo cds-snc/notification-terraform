@@ -81,4 +81,5 @@ inputs = {
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   ff_cloudwatch_metrics_enabled          = "true"
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
+  api_waf_rate_limit                     = 30000
 }

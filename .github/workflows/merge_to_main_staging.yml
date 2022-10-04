@@ -39,6 +39,7 @@ env:
   TF_VAR_perf_test_email: ${{ secrets.PERF_TEST_EMAIL }}
   TF_VAR_perf_test_domain: ${{ secrets.PERF_TEST_DOMAIN }}
   TF_VAR_perf_test_auth_header: ${{ secrets.PERF_TEST_AUTH_HEADER }}
+  TF_VAR_waf_secret: ${{secrets.STAGING_WAF_SECRET}}
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false

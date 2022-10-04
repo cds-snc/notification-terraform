@@ -267,6 +267,67 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     }
   }
 
+  rule {
+    name     = "ApiRateLimit"
+    priority = 210
+
+    action {
+      count {}
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ApiRateLimit"
+      sampled_requests_enabled   = true
+    }
+    statement {
+      rate_based_statement {
+        limit              = var.api_waf_rate_limit
+        aggregate_key_type = "IP"
+        scope_down_statement {
+          and_statement {
+            statement {
+              byte_match_statement {
+                positional_constraint = "STARTS_WITH"
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                search_string = "api."
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+            statement {
+              not_statement {
+                statement {
+                  byte_match_statement {
+                    positional_constraint = "EXACTLY"
+                    field_to_match {
+                      single_header {
+                        name = "waf-secret"
+                      }
+                    }
+                    search_string = var.waf_secret
+                    text_transformation {
+                      priority = 1
+                      type     = "NONE"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
