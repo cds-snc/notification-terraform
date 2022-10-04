@@ -89,6 +89,10 @@ variable "certificate_arn" {
   type = string
 }
 
+variable "certificate_alt_arn" {
+  type = string
+}
+
 variable "sns_alert_warning_arn" {
   type = string
 }
