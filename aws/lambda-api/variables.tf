@@ -10,6 +10,10 @@ variable "api_lambda_domain_name" {
   type = string
 }
 
+variable "api_lambda_alt_domain_name" {
+  type = string
+}
+
 variable "csv_upload_bucket_arn" {
   type = string
 }
@@ -82,6 +86,10 @@ variable "high_demand_max_concurrency" {
 }
 
 variable "certificate_arn" {
+  type = string
+}
+
+variable "certificate_alt_arn" {
   type = string
 }
 
