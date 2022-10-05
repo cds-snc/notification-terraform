@@ -122,7 +122,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 5
 
     override_action {
-      count {}
+      none {}
     }
 
     statement {
