@@ -129,6 +129,29 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAnonymousIpList"
         vendor_name = "AWS"
+
+        scope_down_statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                search_string = "github.com"
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
       }
     }
 
