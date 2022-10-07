@@ -28,14 +28,6 @@ resource "aws_security_group" "notification-canada-ca-alb" {
     cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
-  egress {
-    description = "Access to RDS Postgresql"
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = var.vpc_private_subnets
-  }
-
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
