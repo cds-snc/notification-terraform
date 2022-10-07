@@ -113,11 +113,6 @@ jobs:
           cd env/staging/heartbeat
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/database-tools
-        run: |
-          cd env/staging/database-tools
-          terragrunt apply --terragrunt-non-interactive -auto-approve
-
       - name: Bump version and push tag
         if: github.event_name != 'workflow_dispatch' # We don't want to tag new versions when launched via workflow_dispatch since only environment variables changed
         uses: mathieudutour/github-tag-action@v4.6

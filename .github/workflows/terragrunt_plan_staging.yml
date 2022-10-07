@@ -93,9 +93,6 @@ jobs:
             heartbeat:
               - 'aws/heartbeat/**'
               - 'env/staging/heartbeat/**'
-            database-tools:
-              - 'aws/database-tools/**'
-              - 'env/staging/database-tools/**'
       
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
@@ -194,15 +191,5 @@ jobs:
           directory: "env/staging/heartbeat"
           comment-delete: "true"
           comment-title: "Staging: heartbeat"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
-
-      - name: Terragrunt plan database-tools
-        if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
-        with:
-          directory: "env/staging/database-tools"
-          comment-delete: "true"
-          comment-title: "Staging: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
