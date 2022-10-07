@@ -196,3 +196,13 @@ jobs:
           comment-title: "Staging: heartbeat"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan database-tools
+        if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/database-tools"
+          comment-delete: "true"
+          comment-title: "Staging: database-tools"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
