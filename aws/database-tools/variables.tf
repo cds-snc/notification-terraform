@@ -6,11 +6,6 @@ variable "vpc_id" {
   type = string
 }
 
-variable "sqlalchemy_database_reader_uri" {
-  type      = string
-  sensitive = true
-}
-
 variable "billing_tag_value" {
   type        = string
   description = "Identifies the billing code."
