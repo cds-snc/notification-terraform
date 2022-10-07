@@ -93,6 +93,9 @@ jobs:
             heartbeat:
               - 'aws/heartbeat/**'
               - 'env/staging/heartbeat/**'
+            database-tools:
+              - 'aws/database-tools/**'
+              - 'env/staging/database-tools/**'
       
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
