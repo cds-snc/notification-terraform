@@ -14,3 +14,8 @@ variable "billing_tag_value" {
 variable "billing_tag_key" {
   type = string
 }
+
+variable "sqlalchemy_database_reader_uri" {
+  type      = string
+  sensitive = true
+}

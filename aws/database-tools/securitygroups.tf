@@ -1,3 +1,8 @@
+data "aws_subnet" "private_subnet" {
+  for_each = toset(var.vpc_private_subnets)
+  id       = each.value
+}
+
 resource "aws_security_group" "blazer" {
   name        = "blazer"
   description = "Allow inbound traffic to internal service"
@@ -20,11 +25,18 @@ resource "aws_security_group" "blazer" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {
-    description = "Access to RDS Postgresql"
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = var.vpc_private_subnets
+  dynamic "egress" {
+    for_each = [for s in data.aws_subnet.private_subnet : {
+      cidr = s.cidr_block
+      zone = s.availability_zone
+    }]
+
+    content {
+      protocol    = "tcp"
+      from_port   = 5432
+      to_port     = 5432
+      cidr_blocks = [egress.value.cidr]
+      description = "Traffic to ECS cluster"
+    }
   }
 }

@@ -21,6 +21,17 @@ resource "aws_ecs_service" "blazer" {
   }
 }
 
+resource "aws_ssm_parameter" "sqlalchemy_database_reader_uri" {
+  name  = "sqlalchemy_database_reader_uri"
+  type  = "SecureString"
+  value = var.sqlalchemy_database_reader_uri
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = true
+  }
+}
+
 resource "aws_ecs_task_definition" "blazer" {
   family                   = "blazer"
   network_mode             = "awsvpc"
@@ -41,8 +52,8 @@ resource "aws_ecs_task_definition" "blazer" {
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
-          "awslogs-group" : aws_cloudwatch_log_group.blazer.name,
-          "awslogs-region" : var.region,
+          "awslogs-group" : "${aws_cloudwatch_log_group.blazer.name}",
+          "awslogs-region" : "${var.region}",
           "awslogs-stream-prefix" : "blazer"
         }
       },
@@ -55,7 +66,7 @@ resource "aws_ecs_task_definition" "blazer" {
       ],
       "secrets" : [{
         "name" : "DATABASE_URL",
-        "value" : aws_ssm_parameter.sqlalchemy_database_reader_uri.arn
+        "valueFrom" : "${aws_ssm_parameter.sqlalchemy_database_reader_uri.arn}"
       }]
     }
   ])
