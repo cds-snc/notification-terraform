@@ -14,3 +14,8 @@ variable "billing_tag_value" {
 variable "billing_tag_key" {
   type = string
 }
+
+variable "DATABASE_URL" {
+  type      = string
+  sensitive = true
+}
