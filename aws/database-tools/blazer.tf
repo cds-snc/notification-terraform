@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "blazer" {
       ],
       "secrets" : [{
         "name" : "DATABASE_URL",
-        "value" : "${DATABASE_URL}",
+        "value" : var.DATABASE_URL,
       }]
     }
   ])

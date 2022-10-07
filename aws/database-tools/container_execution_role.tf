@@ -34,4 +34,18 @@ data "aws_iam_policy_document" "blazer_execution_role" {
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
+
+  statement {
+
+    effect = "Allow"
+
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel"
+    ]
+    resources = ["*"]
+  }
+
 }
