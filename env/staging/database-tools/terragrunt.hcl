@@ -29,6 +29,7 @@ inputs = {
   aws_pinpoint_region       = "ca-central-1"
   billing_tag_key           = "CostCenter"
   billing_tag_value         = "notification-canada-ca-staging"
+  database_url              = aws_ssm_parameter.sqlalchemy_database_reader_uri.arn
 }
 
 terraform {

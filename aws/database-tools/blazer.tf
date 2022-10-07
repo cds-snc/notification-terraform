@@ -26,10 +26,6 @@ resource "aws_ecs_task_definition" "blazer" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
-  vars = {
-    DATABASE_URL = aws_ssm_parameter.sqlalchemy_database_reader_uri.arn
-  }
-
   cpu    = 256
   memory = 512
 
@@ -59,7 +55,7 @@ resource "aws_ecs_task_definition" "blazer" {
       ],
       "secrets" : [{
         "name" : "DATABASE_URL",
-        "value" : var.DATABASE_URL,
+        "value" : var.database_url,
       }]
     }
   ])
