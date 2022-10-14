@@ -34,7 +34,20 @@ data "aws_iam_policy_document" "blazer_execution_role" {
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
+}
 
+resource "aws_iam_policy" "blazer_execution_role_policy" {
+  name   = "blazer_execution_role_policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.blazer_execution_role_actions.json
+}
+
+resource "aws_iam_role_policy_attachment" "blazer_execution_role_actions" {
+  role       = aws_iam_role.blazer_execution_role.name
+  policy_arn = aws_iam_policy.blazer_execution_role_policy.arn
+}
+
+data "aws_iam_policy_document" "blazer_execution_role_actions" {
   statement {
 
     effect = "Allow"
