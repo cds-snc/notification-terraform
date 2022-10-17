@@ -28,6 +28,14 @@ resource "aws_security_group" "notification-canada-ca-alb" {
     cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
+  ingress {
+    description     = "Access to database-tools access through its security group"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [var.database-tools-securitygroup]
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
