@@ -19,3 +19,9 @@ variable "sqlalchemy_database_reader_uri" {
   type      = string
   sensitive = true
 }
+
+variable "eks-cluster-securitygroup" {
+  type        = string
+  sensitive   = true
+  description = "EKS security group ID"
+}

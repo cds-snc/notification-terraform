@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../eks"]
 }
 
 dependency "common" {
@@ -18,6 +18,17 @@ dependency "common" {
   }
 }
 
+dependency "eks" {
+  config_path = "../eks"
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs = {
+    eks-cluster-securitygroup = ""
+  }
+}
+
 
 include {
   path = find_in_parent_folders()
@@ -29,6 +40,7 @@ inputs = {
   aws_pinpoint_region       = "ca-central-1"
   billing_tag_key           = "CostCenter"
   billing_tag_value         = "notification-canada-ca-staging"
+  eks-cluster-securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
 }
 
 terraform {

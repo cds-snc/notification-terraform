@@ -39,4 +39,12 @@ resource "aws_security_group" "blazer" {
       description = "Traffic to ECS cluster"
     }
   }
+
+  egress {
+    description     = "Access to RDS DB through the EKS Security Group"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [var.eks-cluster-securitygroup]
+  }
 }

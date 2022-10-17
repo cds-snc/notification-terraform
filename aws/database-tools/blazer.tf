@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "blazer" {
 
   container_definitions = jsonencode([
     {
-      "name" : "httpd",
+      "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
       "image" : "ankane/blazer:latest",
