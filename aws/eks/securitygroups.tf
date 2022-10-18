@@ -74,7 +74,7 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-in
   from_port                = 5432
   to_port                  = 5432
   protocol                 = "tcp"
-  source_security_group_id = [aws_security_group.blazer.arn]
+  source_security_group_id = aws_security_group.blazer.arn
   security_group_id        = aws_security_group.notification-canada-ca-alb.arn
 }
 

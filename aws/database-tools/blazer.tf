@@ -16,7 +16,7 @@ resource "aws_ecs_service" "blazer" {
   enable_execute_command = true
 
   network_configuration {
-    security_groups = [aws_security_group.blazer.id]
+    security_groups = [var.database-tools-securitygroup]
     subnets         = var.vpc_private_subnets
   }
 }
