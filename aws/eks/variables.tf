@@ -112,9 +112,3 @@ variable "ip_blocklist_arn" {
   description = "Block all the IPs on this list from accessing admin and api"
   type        = string
 }
-
-variable "database-tools-securitygroup" {
-  type        = string
-  sensitive   = true
-  description = "Database Tools security group arn"
-}

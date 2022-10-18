@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../dns", "../cloudfront", "../database-tools"]
+  paths = ["../common", "../dns", "../cloudfront"]
 }
 
 dependency "common" {
@@ -51,14 +51,6 @@ dependency "cloudfront" {
   }
 }
 
-dependency "database-tools" {
-  config_path = "../database-tools"
-  mock_outputs_allowed_terraform_commands = ["validate"]
-  mock_outputs = {
-    database-tools-securitygroup = ""
-  }
-}
-
 include {
   path = find_in_parent_folders()
 }
@@ -88,7 +80,6 @@ inputs = {
   api_waf_rate_limit                     = 5000
   sign_in_waf_rate_limit                 = 100
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
-  database-tools-securitygroup           = dependency.database-tools.outputs.database-tools-securitygroup
 }
 
 terraform {

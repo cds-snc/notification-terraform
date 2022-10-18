@@ -28,17 +28,54 @@ resource "aws_security_group" "notification-canada-ca-alb" {
     cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
-  ingress {
-    description     = "Access to database-tools access through its security group"
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [var.database-tools-securitygroup]
-  }
-
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+}
+
+###
+# Blazer Security group. Due to a circular dependency, it cannot be added to the blazer folder
+###
+
+resource "aws_security_group" "blazer" {
+  name        = "blazer"
+  description = "Allow inbound traffic to internal service"
+  vpc_id      = var.vpc_id
+
+  egress {
+    description = "Access to internet"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Access to internal service"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    self        = true
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description     = "Access to RDS DB through the EKS Security Group"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.notification-canada-ca-alb.arn]
+  }
+}
+
+resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-ingress" {
+  description              = "Access to database-tools (blazer) access through its security group"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = [aws_security_group.blazer.arn]
+  security_group_id        = aws_security_group.notification-canada-ca-alb.arn
 }
 
 ###
