@@ -7,19 +7,19 @@ resource "random_string" "random" {
 
 resource "aws_db_instance" "database-tools" {
   allocated_storage   = 10
-  db_name             = "database-tools"
+  name                = "database_tools"
   engine              = "postgresql"
   engine_version      = "14.3"
   instance_class      = "db.t3.micro"
   username            = "postgres"
   password            = var.dbtools_password
   skip_final_snapshot = true
-  #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
+
   storage_encrypted   = true
   deletion_protection = true
 
-  security_group_names = [var.database-tools-securitygroup]
-  db_subnet_group_name = var.vpc_private_subnets
+  vpc_security_group_ids = [var.database-tools-db-securitygroup]
+  db_subnet_group_name   = var.vpc_private_subnets[0]
 
   lifecycle {
     ignore_changes = [
@@ -34,20 +34,4 @@ resource "aws_db_instance" "database-tools" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
-}
-
-resource "aws_db_event_subscription" "database-tools" {
-  name      = "database-tools"
-  sns_topic = var.sns_alert_general_arn
-
-  source_type = "db-instance"
-
-  # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html
-  event_categories = [
-    "availability",
-    "failover",
-    "failure",
-    "low storage",
-    "maintenance",
-  ]
 }

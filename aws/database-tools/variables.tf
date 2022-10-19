@@ -29,6 +29,11 @@ variable "database-tools-securitygroup" {
   description = "Database tools security group ID"
 }
 
+variable "database-tools-db-securitygroup" {
+  type        = string
+  description = "Security group for the DB within Database tool"
+}
+
 ## Variables for RDS
 
 variable "eks_cluster_securitygroup" {
@@ -36,25 +41,8 @@ variable "eks_cluster_securitygroup" {
   description = "EKS cluster security group"
 }
 
-variable "kms_arn" {
-  type = string
-}
-
 variable "dbtools_password" {
   type        = string
   sensitive   = true
   description = "Pass for database-tools psql db"
-}
-
-variable "rds_instance_count" {
-  type    = number
-  default = 1
-}
-
-variable "rds_instance_type" {
-  type = string
-}
-
-variable "sns_alert_general_arn" {
-  type = string
 }
