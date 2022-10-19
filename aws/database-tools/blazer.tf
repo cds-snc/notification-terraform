@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : "ankane/blazer:latest",
+      "image" : "ankane/blazer:v2.6.5",
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {

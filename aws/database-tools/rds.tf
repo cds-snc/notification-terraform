@@ -8,8 +8,8 @@ resource "random_string" "random" {
 resource "aws_db_instance" "database-tools" {
   allocated_storage   = 10
   db_name             = "database-tools"
-  engine              = "aurora-postgresql"
-  engine_version      = "11.9"
+  engine              = "postgresql"
+  engine_version      = "14.3"
   instance_class      = "db.t3.micro"
   username            = "postgres"
   password            = var.dbtools_password
@@ -50,14 +50,4 @@ resource "aws_db_event_subscription" "database-tools" {
     "low storage",
     "maintenance",
   ]
-}
-
-resource "aws_db_event_subscription" "database-tools" {
-  name      = "database-tool"
-  sns_topic = var.sns_alert_general_arn
-
-  source_type = "db-cluster"
-
-  # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html
-  # We are interested in all events so leaving out the event_categories parameter
 }

@@ -1,9 +1,11 @@
 variable "vpc_private_subnets" {
-  type = list(any)
+  type        = list(any)
+  description = "List of the notify private subnets"
 }
 
 variable "vpc_id" {
-  type = string
+  type        = string
+  description = "Notify vpc id"
 }
 
 variable "billing_tag_value" {
@@ -12,24 +14,26 @@ variable "billing_tag_value" {
 }
 
 variable "billing_tag_key" {
-  type = string
+  type        = string
+  description = "Identifies the billing key"
 }
 
 variable "sqlalchemy_database_reader_uri" {
-  type      = string
-  sensitive = true
+  type        = string
+  sensitive   = true
+  description = "PSQL connection to notify db"
 }
 
 variable "database-tools-securitygroup" {
   type        = string
-  sensitive   = true
   description = "Database tools security group ID"
 }
 
 ## Variables for RDS
 
 variable "eks_cluster_securitygroup" {
-  type = string
+  type        = string
+  description = "EKS cluster security group"
 }
 
 variable "kms_arn" {
@@ -37,8 +41,9 @@ variable "kms_arn" {
 }
 
 variable "dbtools_password" {
-  type      = string
-  sensitive = true
+  type        = string
+  sensitive   = true
+  description = "Pass for database-tools psql db"
 }
 
 variable "rds_instance_count" {
