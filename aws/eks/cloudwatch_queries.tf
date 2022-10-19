@@ -30,17 +30,3 @@ fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "services-over-daily-rate-limit" {
-  name = "Services going over daily rate limits"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-fields @timestamp, log, @logStream
-| filter strcontains(@message, 'has been rate limited for daily use sent')
-| sort @timestamp desc
-| limit 20
-QUERY
-}

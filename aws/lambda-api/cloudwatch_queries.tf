@@ -12,3 +12,18 @@ fields @timestamp, @message, @logStream
 | limit 20
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "services-over-daily-rate-limit" {
+  name = "Services going over daily rate limits"
+
+  log_group_names = [
+    local.api_lambda_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, @logStream
+| filter strcontains(@message, 'has been rate limited')
+| sort @timestamp desc
+| limit 20
+QUERY
+}
