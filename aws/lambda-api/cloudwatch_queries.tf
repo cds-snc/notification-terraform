@@ -21,8 +21,8 @@ resource "aws_cloudwatch_query_definition" "services-over-daily-rate-limit" {
   ]
 
   query_string = <<QUERY
-fields @timestamp, log, @logStream
-| filter strcontains(@message, 'has been rate limited')
+fields @timestamp, message, @logStream
+| filter strcontains(message, 'has been rate limited')
 | sort @timestamp desc
 | limit 20
 QUERY
