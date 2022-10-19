@@ -34,6 +34,14 @@ resource "aws_security_group" "notification-canada-ca-alb" {
 }
 
 ###
+# Find the automatically created security group for RDS
+###
+
+data "aws_security_group" "eks-securitygroup-rds" {
+  id = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
+}
+
+###
 # Blazer Security group. Due to a circular dependency, it cannot be added to the blazer folder
 ###
 
@@ -64,8 +72,41 @@ resource "aws_security_group" "blazer" {
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = [aws_security_group.notification-canada-ca-alb.arn]
+    security_groups = [data.aws_security_group.eks-securitygroup-rds, aws_security_group.database-tools-db-securitygroup]
   }
+}
+
+resource "aws_security_group" "database-tools-db-securitygroup" {
+  name        = "Database tools Database Security Group"
+  description = "Security group for database in database-tools. Needs access to notify's main DB and blazer task"
+  vpc_id      = var.vpc_id
+
+  egress {
+    description = "Access to internet"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Access to internal service"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    self        = true
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group_rule" "database-tools-db-ingress" {
+  description              = "Access Blazer task security group"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.blazer.arn
+  security_group_id        = aws_security_group.database-tools-db-securitygroup
 }
 
 resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-ingress" {
@@ -75,7 +116,7 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-in
   to_port                  = 5432
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.blazer.arn
-  security_group_id        = aws_security_group.notification-canada-ca-alb.arn
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds
 }
 
 ###
