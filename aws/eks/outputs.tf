@@ -27,3 +27,16 @@ output "documentation_target_group_arn" {
 output "eks-cluster-securitygroup" {
   value = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }
+
+###
+# Databasetools Security group
+###
+output "database-tools-securitygroup" {
+  value       = aws_security_group.blazer.id
+  description = "database tools security group id"
+}
+
+output "database-tools-db-securitygroup" {
+  value       = aws_security_group.database-tools-db-securitygroup.id
+  description = "database tools DATABASE security group id"
+}
