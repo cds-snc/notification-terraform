@@ -36,11 +36,6 @@ variable "database-tools-db-securitygroup" {
 
 ## Variables for RDS
 
-variable "eks_cluster_securitygroup" {
-  type        = string
-  description = "EKS cluster security group"
-}
-
 variable "dbtools_password" {
   type        = string
   sensitive   = true
