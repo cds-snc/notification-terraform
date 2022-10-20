@@ -78,7 +78,7 @@ resource "aws_security_group" "blazer" {
 
 resource "aws_security_group" "database-tools-db-securitygroup" {
   name        = "Database tools Database Security Group"
-  description = "Security group for database in database-tools"
+  description = "Security group for database in database-tools. Needs access to notify's main DB and blazer task"
   vpc_id      = var.vpc_id
 }
 
