@@ -32,11 +32,11 @@ output "eks-cluster-securitygroup" {
 # Databasetools Security group
 ###
 output "database-tools-securitygroup" {
-  value       = aws_security_group.blazer.arn
-  description = "database tools security group"
+  value       = aws_security_group.blazer.id
+  description = "database tools security group id"
 }
 
 output "database-tools-db-securitygroup" {
-  value       = aws_security_group.database-tools-db-securitygroup.arn
-  description = "database tools DATABASE security group"
+  value       = aws_security_group.database-tools-db-securitygroup.id
+  description = "database tools DATABASE security group id"
 }

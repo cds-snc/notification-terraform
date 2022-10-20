@@ -4,6 +4,14 @@ resource "random_string" "random" {
   upper   = false
 }
 
+resource "aws_db_subnet_group" "database-tools-rds-subnet" {
+  name       = "database-tools-rds-subnet"
+  subnet_ids = [var.vpc_private_subnets[0]]
+
+  tags = {
+    Name = "My DB subnet group"
+  }
+}
 
 resource "aws_db_instance" "database-tools" {
   allocated_storage   = 10
@@ -19,7 +27,7 @@ resource "aws_db_instance" "database-tools" {
   deletion_protection = true
 
   vpc_security_group_ids = [var.database-tools-db-securitygroup]
-  db_subnet_group_name   = var.vpc_private_subnets[0]
+  db_subnet_group_name   = aws_db_subnet_group.database-tools-rds-subnet.name
 
   lifecycle {
     ignore_changes = [

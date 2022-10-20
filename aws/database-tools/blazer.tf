@@ -69,7 +69,7 @@ resource "aws_ecs_task_definition" "blazer" {
         "valueFrom" : "${aws_ssm_parameter.sqlalchemy_database_reader_uri.arn}"
         }, {
         "name" : "BLAZER_DATABASE_URL",
-        "valueFrom" : "${aws_ssm_paramter.db_tools_environment_variables.arn}"
+        "valueFrom" : "${aws_ssm_parameter.db_tools_environment_variables.arn}"
       }]
     }
   ])
