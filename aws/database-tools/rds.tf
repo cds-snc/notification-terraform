@@ -16,7 +16,7 @@ resource "aws_db_subnet_group" "database-tools-rds-subnet" {
 resource "aws_db_instance" "database-tools" {
   allocated_storage   = 10
   name                = "database_tools"
-  engine              = "postgresql"
+  engine              = "postgres"
   engine_version      = "14.3"
   instance_class      = "db.t3.micro"
   username            = "postgres"
