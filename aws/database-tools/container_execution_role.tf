@@ -34,18 +34,4 @@ data "aws_iam_policy_document" "blazer_execution_role" {
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
-
-  statement {
-
-    effect = "Allow"
-
-    actions = [
-      "ssm:DescribeParameters",
-      "ssm:GetParameters",
-    ]
-    resources = [
-      aws_ssm_parameter.sqlalchemy_database_reader_uri.arn,
-      aws_ssm_parameter.db_tools_environment_variables.arn
-    ]
-  }
 }
