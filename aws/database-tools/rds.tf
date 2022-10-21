@@ -6,7 +6,7 @@ resource "random_string" "random" {
 
 resource "aws_db_subnet_group" "database-tools-rds-subnet" {
   name       = "database-tools-rds-subnet"
-  subnet_ids = [var.vpc_private_subnets[0]]
+  subnet_ids = var.vpc_private_subnets
 
   tags = {
     Name = "My DB subnet group"
