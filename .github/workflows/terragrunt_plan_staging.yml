@@ -16,6 +16,7 @@ env:
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: 0.35.13
+  TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.STAGING_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
@@ -93,6 +94,9 @@ jobs:
             heartbeat:
               - 'aws/heartbeat/**'
               - 'env/staging/heartbeat/**'
+            database-tools:
+              - 'aws/database-tools/**'
+              - 'env/staging/database-tools/**'
       
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
@@ -191,5 +195,15 @@ jobs:
           directory: "env/staging/heartbeat"
           comment-delete: "true"
           comment-title: "Staging: heartbeat"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan database-tools
+        if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/database-tools"
+          comment-delete: "true"
+          comment-title: "Staging: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
