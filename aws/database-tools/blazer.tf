@@ -21,17 +21,6 @@ resource "aws_ecs_service" "blazer" {
   }
 }
 
-resource "aws_ssm_parameter" "sqlalchemy_database_reader_uri" {
-  name  = "sqlalchemy_database_reader_uri"
-  type  = "SecureString"
-  value = var.sqlalchemy_database_reader_uri
-
-  tags = {
-    (var.billing_tag_key) = var.billing_tag_value
-    Terraform             = true
-  }
-}
-
 resource "aws_ecs_task_definition" "blazer" {
   family                   = "blazer"
   network_mode             = "awsvpc"

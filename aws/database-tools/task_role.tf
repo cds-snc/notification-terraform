@@ -56,6 +56,7 @@ data "aws_iam_policy_document" "blazer_task_role_actions" {
     ]
     resources = [
       aws_ssm_parameter.sqlalchemy_database_reader_uri.arn,
+      aws_ssm_parameter.db_tools_environment_variables.arn
     ]
   }
 }
