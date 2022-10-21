@@ -37,6 +37,7 @@ dependency "eks" {
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
   mock_outputs = {
     eks-cluster-securitygroup = ""
     eks_application_log_group = ""
