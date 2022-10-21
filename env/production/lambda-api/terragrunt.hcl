@@ -39,6 +39,7 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs = {
     eks-cluster-securitygroup = ""
+    eks_application_log_group = ""
   }
 }
 
@@ -85,4 +86,5 @@ inputs = {
   ff_cloudwatch_metrics_enabled          = "true"
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
   api_waf_rate_limit                     = 30000
+  eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
 }
