@@ -12,6 +12,7 @@ env:
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: 0.35.13
+  TF_VAR_dbtools_password: ${{ secrets.PRODUCTION_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.PRODUCTION_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
@@ -122,5 +123,15 @@ jobs:
           directory: "env/production/heartbeat"
           comment-delete: "true"
           comment-title: "Production: heartbeat"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan database-tools
+        if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/database-tools"
+          comment-delete: "true"
+          comment-title: "Staging: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
