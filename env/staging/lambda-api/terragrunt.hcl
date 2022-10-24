@@ -34,7 +34,7 @@ dependency "eks" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     eks-cluster-securitygroup = ""
-    eks_application_log_group = ""
+    eks_application_log_group = "eks_application_log_group_name"
   }
 }
 
