@@ -28,6 +28,10 @@ output "eks-cluster-securitygroup" {
   value = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }
 
+output "eks_application_log_group" {
+  value = local.eks_application_log_group
+}
+
 ###
 # Databasetools Security group
 ###

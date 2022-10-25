@@ -128,3 +128,8 @@ variable "waf_secret" {
   type        = string
   sensitive   = true
 }
+
+variable "eks_application_log_group" {
+  description = "log group of the k8s cluster applications"
+  type        = string
+}
