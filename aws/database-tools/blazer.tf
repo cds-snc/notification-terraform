@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : "ankane/blazer:v2.6.5",
+      "image" : "${aws_ecr_repository.blazer.repository_url}:v2.6.5",
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
@@ -54,10 +54,10 @@ resource "aws_ecs_task_definition" "blazer" {
         }
       ],
       "secrets" : [{
-        "name" : "DATABASE_URL",
+        "name" : "BLAZER_DATABASE_URL",
         "valueFrom" : "${aws_ssm_parameter.sqlalchemy_database_reader_uri.arn}"
         }, {
-        "name" : "BLAZER_DATABASE_URL",
+        "name" : "DATABASE_URL",
         "valueFrom" : "${aws_ssm_parameter.db_tools_environment_variables.arn}"
       }]
     }
