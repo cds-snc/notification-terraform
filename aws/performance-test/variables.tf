@@ -67,3 +67,13 @@ variable "perf_test_email_with_link_template_id" {
   type        = string
   description = "Identifies email with link template id."
 }
+
+variable "private-links-vpc-endpoints-securitygroup" {
+  type        = string
+  description = "Security group for vpc endpoints to enable private link"
+}
+
+variable "private-links-gateway" {
+  type        = list(any)
+  description = "private links gateway"
+}

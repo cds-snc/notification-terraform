@@ -57,3 +57,13 @@ output "firehose_waf_logs_iam_role_arn" {
 output "ip_blocklist_arn" {
   value = aws_wafv2_ip_set.ip_blocklist.arn
 }
+
+output "private-links-vpc-endpoints-securitygroup" {
+  value       = aws_security_group.vpc_endpoints.id
+  description = "private links vpc endpoint security group id"
+}
+
+output "private-links-gateway" {
+  value       = aws_vpc_endpoint.gateway
+  description = "private links gateway vc endpoint"
+}
