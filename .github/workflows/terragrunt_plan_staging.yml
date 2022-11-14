@@ -3,7 +3,7 @@ name: "Terragrunt plan STAGING"
 on:
   pull_request:
     paths:
-      - ".env"    
+      - ".env"
       - "aws/**"
       - "env/staging/**"
       - "env/terragrunt.hcl"
@@ -25,6 +25,8 @@ env:
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID }}
+  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET }}
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
@@ -45,7 +47,6 @@ jobs:
   terragrunt-plan-staging:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -97,7 +98,7 @@ jobs:
             database-tools:
               - 'aws/database-tools/**'
               - 'env/staging/database-tools/**'
-      
+
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v2
@@ -176,7 +177,7 @@ jobs:
           comment-delete: "true"
           comment-title: "Staging: lambda-admin-pr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"          
+          terragrunt: "true"
 
       - name: Terragrunt plan performance-test
         if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}

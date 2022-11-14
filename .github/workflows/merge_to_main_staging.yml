@@ -7,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - ".env"     
+      - ".env"
       - "aws/**"
       - "env/staging/**"
       - ".github/workflows/merge_to_main_staging.yml"
@@ -28,6 +28,8 @@ env:
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID }}
+  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET }}
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
@@ -102,7 +104,7 @@ jobs:
       - name: Apply aws/lambda-admin-pr
         run: |
           cd env/staging/lambda-admin-pr
-          terragrunt apply --terragrunt-non-interactive -auto-approve          
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/performance-test
         run: |
@@ -130,4 +132,4 @@ jobs:
         if: ${{ failure() }}
         run: |
           json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/workflows/merge_to_main_staging.yml|Merge to main (Staging)>"}}]}'
-          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}          
+          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
