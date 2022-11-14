@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : "${aws_ecr_repository.blazer.repository_url}:v2.6.5",
+      "image" : "${aws_ecr_repository.blazer.repository_url}:v2.6.5-google-auth",
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
@@ -59,6 +59,12 @@ resource "aws_ecs_task_definition" "blazer" {
         }, {
         "name" : "DATABASE_URL",
         "valueFrom" : "${aws_ssm_parameter.db_tools_environment_variables.arn}"
+        }, {
+        "name" : "GOOGLE_OAUTH_CLIENT_ID",
+        "valueFrom" : "${aws_ssm_parameter.notify_o11y_google_oauth_client_id.arn}"
+        }, {
+        "name" : "GOOGLE_OAUTH_CLIENT_SECRET",
+        "valueFrom" : "${aws_ssm_parameter.notify_o11y_google_oauth_client_secret.arn}"
       }]
     }
   ])
