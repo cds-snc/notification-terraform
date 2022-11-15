@@ -8,6 +8,7 @@ dependency "common" {
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
   mock_outputs = {
     vpc_id = ""
     vpc_public_subnets = [
@@ -15,6 +16,8 @@ dependency "common" {
       "",
       "",
     ]
+    private-links-vpc-endpoints-securitygroup = ""
+    private-links-gateway-prefix-list-ids = []
   }
 }
 
@@ -49,6 +52,8 @@ inputs = {
   perf_test_email_template_id                 = "fa759679-30f2-4666-94e2-bd4921329c46"
   perf_test_email_with_attachment_template_id = "fa759679-30f2-4666-94e2-bd4921329c46"
   perf_test_email_with_link_template_id       = "9fb324a5-821d-4b54-9d52-d9ba1fa8373a"
+  private-links-vpc-endpoints-securitygroup   = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
+  private-links-gateway-prefix-list-ids       = dependency.common.outputs.private-links-gateway-prefix-list-ids
 }
 
 terraform {

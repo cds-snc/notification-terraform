@@ -112,3 +112,13 @@ variable "ip_blocklist_arn" {
   description = "Block all the IPs on this list from accessing admin and api"
   type        = string
 }
+
+variable "private-links-vpc-endpoints-securitygroup" {
+  type        = string
+  description = "Security group for vpc endpoints to enable private link"
+}
+
+variable "private-links-gateway-prefix-list-ids" {
+  type        = list(any)
+  description = "private links gateway"
+}
