@@ -67,6 +67,28 @@ resource "aws_security_group" "blazer" {
   }
 }
 
+resource "aws_ec2_managed_prefix_list" "google_cidrs" {
+  name           = "Google Service CIDRs"
+  address_family = "IPv4"
+  max_entries    = 100
+
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_security_group_rule" "blazer-egress-google-cidrs" {
+  description       = "Access Google Services from Blazer"
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  security_group_id = aws_security_group.blazer.id
+  prefix_list_ids = [
+    aws_ec2_managed_prefix_list.google_cidrs.id
+  ]
+}
+
 resource "aws_security_group" "database-tools-db-securitygroup" {
   name        = "Database tools Database Security Group"
   description = "Security group for database in database-tools"

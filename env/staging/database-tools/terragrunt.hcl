@@ -26,8 +26,9 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    database-tools-securitygroup = ""
+    database-tools-securitygroup    = ""
     database-tools-db-securitygroup = ""
+    google_cidr_prefix_list_id      = ""
   }
 }
 
@@ -44,6 +45,7 @@ inputs = {
   billing_tag_value               = "notification-canada-ca-staging"
   database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
+  google_cidr_prefix_list_id      = dependency.eks.outputs.google_cidr_prefix_list_id
 }
 
 terraform {

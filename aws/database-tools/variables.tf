@@ -18,6 +18,11 @@ variable "billing_tag_key" {
   description = "Identifies the billing key"
 }
 
+variable "google_cidr_prefix_list_id" {
+  type        = string
+  description = "The prefix list id for the Google service CIDR ranges"
+}
+
 variable "notify_o11y_google_oauth_client_id" {
   type        = string
   sensitive   = true

@@ -44,3 +44,8 @@ output "database-tools-db-securitygroup" {
   value       = aws_security_group.database-tools-db-securitygroup.id
   description = "database tools DATABASE security group id"
 }
+
+output "google_cidr_prefix_list_id" {
+  value       = aws_ec2_managed_prefix_list.google_cidrs.id
+  description = "Google CIDR managed prefix list ID"
+}
