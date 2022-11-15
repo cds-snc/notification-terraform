@@ -18,6 +18,18 @@ variable "billing_tag_key" {
   description = "Identifies the billing key"
 }
 
+variable "notify_o11y_google_oauth_client_id" {
+  type        = string
+  sensitive   = true
+  description = "Google OAuth client ID for Notify observability tools"
+}
+
+variable "notify_o11y_google_oauth_client_secret" {
+  type        = string
+  sensitive   = true
+  description = "Google OAuth client secret for Notify observability tools"
+}
+
 variable "sqlalchemy_database_reader_uri" {
   type        = string
   sensitive   = true
