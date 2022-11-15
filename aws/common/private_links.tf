@@ -1,9 +1,10 @@
+
+# TODO: add these later - "lambda", "elasticache", "elasticache-fips", "email-smtp", "sns", "sqs",
 locals {
   endpoints_interface = toset([
     "ecr.dkr", "ecr.api", "logs", "events",
     "evidently", "evidently-dataplane", "monitoring", "rum", "rum-dataplane", "synthetics",
-    "rds", "lambda", "elasticache", "elasticache-fips",
-    "secretsmanager", "email-smtp", "sns", "sqs",
+    "rds", "secretsmanager"
   ])
   endpoints_gateway = toset(["s3"])
 }
