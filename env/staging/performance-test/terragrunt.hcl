@@ -17,7 +17,7 @@ dependency "common" {
       "",
     ]
     private-links-vpc-endpoints-securitygroup = ""
-    private-links-gateway = []
+    private-links-gateway-prefix-list-ids = []
   }
 }
 
@@ -53,7 +53,7 @@ inputs = {
   perf_test_email_with_attachment_template_id = "fa759679-30f2-4666-94e2-bd4921329c46"
   perf_test_email_with_link_template_id       = "9fb324a5-821d-4b54-9d52-d9ba1fa8373a"
   private-links-vpc-endpoints-securitygroup   = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
-  private-links-gateway                       = dependency.common.outputs.private-links-gateway
+  private-links-gateway-prefix-list-ids       = dependency.common.outputs.private-links-gateway-prefix-list-ids
 }
 
 terraform {

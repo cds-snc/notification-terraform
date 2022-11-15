@@ -27,7 +27,11 @@ resource "aws_vpc_endpoint" "gateway" {
   vpc_id            = aws_vpc.notification-canada-ca.id
   vpc_endpoint_type = "Gateway"
   service_name      = "com.amazonaws.${var.region}.${each.value}"
-  route_table_ids   = [aws_route_table.notification-canada-ca-public_subnet.id]
+  route_table_ids = [
+    aws_route_table.notification-canada-ca-private_subnet[0].id,
+    aws_route_table.notification-canada-ca-private_subnet[1].id,
+    aws_route_table.notification-canada-ca-private_subnet[2].id
+  ]
 }
 
 resource "aws_security_group" "vpc_endpoints" {

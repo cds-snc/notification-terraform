@@ -134,17 +134,13 @@ resource "aws_security_group_rule" "private-endpoints-ingress-loadbalancer" {
 }
 
 resource "aws_security_group_rule" "notify-lb-egress-endpoints-gateway" {
-  for_each = toset(var.private-links-gateway)
-
   description       = "Security group rule for notification loadbalancer to S3 gateway"
   type              = "egress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.notification-canada-ca-alb.id
-  prefix_list_ids = [
-    each.value.prefix_list_id
-  ]
+  prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 }
 
 # eks-securitygroup
@@ -170,17 +166,13 @@ resource "aws_security_group_rule" "private-endpoints-ingress-eks" {
 }
 
 resource "aws_security_group_rule" "eks-egress-endpoints-gateway" {
-  for_each = toset(var.private-links-gateway)
-
   description       = "Security group rule for eks securitygroup to S3 gateway"
   type              = "egress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
   security_group_id = data.aws_security_group.eks-securitygroup-rds.id
-  prefix_list_ids = [
-    each.value.prefix_list_id
-  ]
+  prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 }
 
 # blazer
@@ -206,17 +198,13 @@ resource "aws_security_group_rule" "private-endpoints-ingress-blazer" {
 }
 
 resource "aws_security_group_rule" "blazer-egress-endpoints-gateway" {
-  for_each = toset(var.private-links-gateway)
-
   description       = "Security group rule for blazer to S3 gateway"
   type              = "egress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.blazer.id
-  prefix_list_ids = [
-    each.value.prefix_list_id
-  ]
+  prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 }
 
 # Database-tools
@@ -242,17 +230,13 @@ resource "aws_security_group_rule" "private-endpoints-ingress-dbtools-db" {
 }
 
 resource "aws_security_group_rule" "dbtools-egress-endpoints-gateway" {
-  for_each = toset(var.private-links-gateway)
-
   description       = "Security group rule for dbtools to S3 gateway"
   type              = "egress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.database-tools-db-securitygroup.id
-  prefix_list_ids = [
-    each.value.prefix_list_id
-  ]
+  prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 }
 
 # Notification worker
@@ -278,15 +262,11 @@ resource "aws_security_group_rule" "private-endpoints-ingress-notification-worke
 }
 
 resource "aws_security_group_rule" "notification-worker-egress-endpoints-gateway" {
-  for_each = toset(var.private-links-gateway)
-
   description       = "Security group rule for notification worker to S3 gateway"
   type              = "egress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
   security_group_id = aws_security_group.notification-canada-ca-worker.id
-  prefix_list_ids = [
-    each.value.prefix_list_id
-  ]
+  prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 }

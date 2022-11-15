@@ -73,7 +73,7 @@ variable "private-links-vpc-endpoints-securitygroup" {
   description = "Security group for vpc endpoints to enable private link"
 }
 
-variable "private-links-gateway" {
+variable "private-links-gateway-prefix-list-ids" {
   type        = list(any)
   description = "private links gateway"
 }

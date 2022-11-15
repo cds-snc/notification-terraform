@@ -26,7 +26,7 @@ dependency "common" {
     firehose_waf_logs_iam_role_arn = ""
     ip_blocklist_arn               = ""
     private-links-vpc-endpoints-securitygroup = ""
-    private-links-gateway = []
+    private-links-gateway-prefix-list-ids = []
   }
 }
 
@@ -83,7 +83,7 @@ inputs = {
   sign_in_waf_rate_limit                 = 100
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
-  private-links-gateway = dependency.common.outputs.private-links-gateway
+  private-links-gateway-prefix-list-ids = dependency.common.outputs.private-links-gateway-prefix-list-ids
 }
 
 terraform {

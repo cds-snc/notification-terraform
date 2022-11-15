@@ -63,7 +63,9 @@ output "private-links-vpc-endpoints-securitygroup" {
   description = "private links vpc endpoint security group id"
 }
 
-output "private-links-gateway" {
-  value       = aws_vpc_endpoint.gateway
-  description = "private links gateway vc endpoint"
+output "private-links-gateway-prefix-list-ids" {
+  value = [
+    for gateway in aws_vpc_endpoint.gateway : gateway.prefix_list_id
+  ]
+  description = "The prefix list IDs for the gateway private links"
 }
