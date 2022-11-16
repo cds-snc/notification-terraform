@@ -51,17 +51,6 @@ resource "aws_security_group" "blazer" {
   vpc_id      = var.vpc_id
 }
 
-resource "aws_security_group_rule" "blazer-internet-access" {
-  description       = "Access to internet"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  type              = "egress"
-  security_group_id = aws_security_group.blazer.id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-
 resource "aws_security_group_rule" "blazer-access-rds-eks" {
   description              = "Access to RDS DB through the EKS Security Group"
   from_port                = 5432
