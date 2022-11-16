@@ -72,7 +72,7 @@ resource "aws_security_group_rule" "blazer-access-rds-eks" {
   source_security_group_id = data.aws_security_group.eks-securitygroup-rds.id
 }
 
-resource "aws_security_group_rule" "blazer-acess-rds-eks" {
+resource "aws_security_group_rule" "blazer-access-dbtools-db" {
   description              = "Access to the Database tool DB"
   from_port                = 5432
   to_port                  = 5432
