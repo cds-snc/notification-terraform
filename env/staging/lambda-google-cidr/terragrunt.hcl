@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../eks"]
 }
 
 dependency "common" {
