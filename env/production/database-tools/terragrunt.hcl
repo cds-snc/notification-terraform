@@ -1,3 +1,7 @@
+terraform {
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/database-tools?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+}
+
 dependencies {
   paths = ["../common", "../eks"]
 }
@@ -43,8 +47,4 @@ inputs = {
   billing_tag_value               = "notification-canada-ca-staging"
   database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
-}
-
-terraform {
-  source = "../../../aws//database-tools"
 }

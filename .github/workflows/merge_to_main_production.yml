@@ -17,6 +17,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
+  TF_VAR_dbtools_password: ${{ secrets.PRODUCTION_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
   TF_VAR_heartbeat_base_url: ${{ secrets.PRODUCTION_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
@@ -24,6 +25,8 @@ env:
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID }}
+  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET }}
   TF_VAR_slack_channel_warning_topic: "notification-ops"
   TF_VAR_slack_channel_critical_topic: "notification-ops"
   TF_VAR_slack_channel_general_topic: "notification-ops"
@@ -103,6 +106,16 @@ jobs:
       - name: Apply aws/heartbeat
         run: |
           cd env/production/heartbeat
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/database-tools
+        run: |
+          cd env/production/database-tools
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/lambda-google-cidr
+        run: |
+          cd env/production/lambda-google-cidr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Slack message on failure
