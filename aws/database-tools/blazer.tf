@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : "ankane/blazer:v2.6.5",
+      "image" : "${aws_ecr_repository.blazer.repository_url}:v2.6.5-google-auth",
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
