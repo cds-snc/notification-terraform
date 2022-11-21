@@ -21,6 +21,8 @@ env:
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID }}
+  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET }}
   TF_VAR_slack_channel_warning_topic: notification-ops
   TF_VAR_slack_channel_critical_topic: notification-ops
   TF_VAR_slack_channel_general_topic: notification-ops
@@ -130,9 +132,9 @@ jobs:
         if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
-          directory: "env/staging/database-tools"
+          directory: "env/production/database-tools"
           comment-delete: "true"
-          comment-title: "Staging: database-tools"
+          comment-title: "Production: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -140,8 +142,8 @@ jobs:
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
-          directory: "env/staging/lambda-google-cidr"
+          directory: "env/production/lambda-google-cidr"
           comment-delete: "true"
-          comment-title: "Staging: lambda-google-cidr"
+          comment-title: "Production: lambda-google-cidr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"

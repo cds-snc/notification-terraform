@@ -37,9 +37,6 @@ include {
 }
 
 inputs = {
-  vpc_private_subnets             = dependency.common.outputs.vpc_private_subnets
-  vpc_id                          = dependency.common.outputs.vpc_id
-  aws_pinpoint_region             = "ca-central-1"
   billing_tag_key                 = "CostCenter"
   billing_tag_value               = "notification-canada-ca-staging"
   database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
