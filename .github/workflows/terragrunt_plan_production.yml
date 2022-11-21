@@ -39,7 +39,6 @@ jobs:
   terragrunt-plan-production:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -129,7 +128,6 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan database-tools
-        if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/database-tools"
@@ -139,7 +137,6 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
-        if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v1
         with:
           directory: "env/production/lambda-google-cidr"
