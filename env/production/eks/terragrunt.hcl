@@ -15,6 +15,8 @@ dependency "common" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     ip_blocklist_arn               = ""
+    private-links-vpc-endpoints-securitygroup = ""
+    private-links-gateway-prefix-list-ids = []
   }
 }
 
@@ -55,4 +57,6 @@ inputs = {
   api_waf_rate_limit                     = 30000
   sign_in_waf_rate_limit                 = 100
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
+  private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
+  private-links-gateway-prefix-list-ids = dependency.common.outputs.private-links-gateway-prefix-list-ids
 }
