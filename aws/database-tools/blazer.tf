@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : "${aws_ecr_repository.blazer.repository_url}:v2.6.5-google-auth",
+      "image" : "${aws_ecr_repository.blazer.repository_url}:${var.blazer_image_tag}",
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
@@ -53,6 +53,10 @@ resource "aws_ecs_task_definition" "blazer" {
           "Protocol" : "tcp"
         }
       ],
+      "environment" : [{
+        "name" : "LOG_LEVEL",
+        "value" : "info"
+      }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",
         "valueFrom" : "${aws_ssm_parameter.sqlalchemy_database_reader_uri.arn}"

@@ -41,6 +41,7 @@ inputs = {
   vpc_id                          = dependency.common.outputs.vpc_id
   billing_tag_key                 = "CostCenter"
   billing_tag_value               = "notification-canada-ca-staging"
+  blazer_image_tag                = "latest"
   database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
 }
