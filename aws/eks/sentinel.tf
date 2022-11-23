@@ -15,7 +15,7 @@ module "sentinel_forwarder" {
 
 
 resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
-  name            = local.scan_verdict_suspicious
+  name            = "Admin API request"
   log_group_name  = local.eks_application_log_group
   filter_pattern  = "Admin API request"
   destination_arn = module.sentinel_forwarder.lambda_arn
