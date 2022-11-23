@@ -18,6 +18,11 @@ variable "billing_tag_key" {
   description = "Identifies the billing key"
 }
 
+variable "blazer_image_tag" {
+  type        = string
+  description = "The Blazer Docker image tag to deploy"
+}
+
 variable "notify_o11y_google_oauth_client_id" {
   type        = string
   sensitive   = true
