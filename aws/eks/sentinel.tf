@@ -5,7 +5,7 @@ locals {
 module "sentinel_forwarder" {
   source            = "github.com/cds-snc/terraform-modules?ref=v4.0.2//sentinel_forwarder"
   function_name     = "sentinel-cloud-watch-forwarder"
-  billing_tag_value = var.billing_code
+  billing_tag_value = "notification-canada-ca-${var.env}"
 
   customer_id = var.sentinel_customer_id
   shared_key  = var.sentinel_shared_key
