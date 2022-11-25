@@ -122,3 +122,16 @@ variable "private-links-gateway-prefix-list-ids" {
   type        = list(any)
   description = "private links gateway"
 }
+
+variable "sentinel_customer_id" {
+  type        = string
+  description = "sentinel customer id"
+  sensitive   = true
+}
+
+variable "sentinel_shared_key" {
+  type        = string
+  description = "sentinel shared key"
+  sensitive   = true
+}
+
