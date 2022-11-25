@@ -196,7 +196,7 @@ jobs:
 
       - name: Terragrunt plan heartbeat
         if: ${{ steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@1519c0074bc5bee9e949c7d1d4d7636a75c2479e # v1.0.10
         with:
           directory: "env/staging/heartbeat"
           comment-delete: "true"
@@ -206,7 +206,7 @@ jobs:
 
       - name: Terragrunt plan database-tools
         if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@1519c0074bc5bee9e949c7d1d4d7636a75c2479e # v1.0.10
         with:
           directory: "env/staging/database-tools"
           comment-delete: "true"
@@ -216,7 +216,7 @@ jobs:
 
       - name: Terragrunt plan lambda-google-cidr
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@1519c0074bc5bee9e949c7d1d4d7636a75c2479e # v1.0.10
         with:
           directory: "env/staging/lambda-google-cidr"
           comment-delete: "true"

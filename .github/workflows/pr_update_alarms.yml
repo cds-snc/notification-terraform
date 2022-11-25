@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: 'Comment PR'
-        uses: actions/github-script@v3.1.0
+        uses: actions/github-script@f05a81df23035049204b043b50c3322045ce7eb3 # v3.1.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
