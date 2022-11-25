@@ -21,3 +21,12 @@ resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
   destination_arn = module.sentinel_forwarder.lambda_arn
   distribution    = "Random"
 }
+
+
+resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
+  name            = "Blazer logging"
+  log_group_name  = "blazer"
+  filter_pattern  = "Audit "
+  destination_arn = module.sentinel_forwarder.lambda_arn
+  distribution    = "Random"
+}
