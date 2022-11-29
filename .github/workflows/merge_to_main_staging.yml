@@ -55,7 +55,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # v2
         with:
           # Fetches entire history, so we can analyze commits since last tag
           fetch-depth: 0
@@ -130,7 +130,7 @@ jobs:
 
       - name: Bump version and push tag
         if: github.event_name != 'workflow_dispatch' # We don't want to tag new versions when launched via workflow_dispatch since only environment variables changed
-        uses: mathieudutour/github-tag-action@v4.6
+        uses: mathieudutour/github-tag-action@bcb832838e1612ff92089d914bccc0fd39458223 # v4.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: main
