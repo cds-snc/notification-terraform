@@ -1,5 +1,5 @@
 module "ses_receiving_emails" {
-  source                 = "github.com/cds-snc/terraform-modules?ref=v5.0.0//lambda"
+  source                 = "github.com/cds-snc/terraform-modules?ref=v4.0.3//lambda"
   name                   = "ses_receiving_emails"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = aws_ecr_repository.ses_receiving_emails.arn
