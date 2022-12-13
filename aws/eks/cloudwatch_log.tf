@@ -7,6 +7,11 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
   retention_in_days = 14
 }
 
+resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-application-logs" {
+  name              = local.eks_application_log_group
+  retention_in_days = 30
+}
+
 ###
 # AWS EKS Cloudwatch log metric filters
 ###
