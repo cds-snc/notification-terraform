@@ -32,7 +32,6 @@ inputs = {
   alarm_critical_expired_sms_created_threshold                       = 200
   alarm_warning_expired_email_created_threshold                      = 100
   alarm_critical_expired_email_created_threshold                     = 200
-  billing_tag_value                                                  = "notification-canada-ca-production"
   sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
   sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
   sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"

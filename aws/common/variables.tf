@@ -1,8 +1,3 @@
-variable "billing_tag_value" {
-  type        = string
-  description = "Identifies the billing code."
-}
-
 variable "cloudwatch_opsgenie_alarm_webhook" {
   description = "OpsGenie webhook used to trigger a page when there is a critical alarm."
   type        = string
