@@ -21,7 +21,8 @@ variable "celery_queue_prefix" {
 
 variable "gc_notify_service_email" {
   type        = string
-  description = "Sevice email for GC Notify."
+  sensitive   = true
+  description = "Service email for GC Notify."
 }
 
 variable "schedule_expression" {
