@@ -24,11 +24,13 @@ resource "aws_lambda_function_event_invoke_config" "ses_receiving_emails_invoke_
   function_name                = module.ses_receiving_emails.function_name
   maximum_event_age_in_seconds = 60
   maximum_retry_attempts       = 0
+  provider                     = aws.us-east-1
 }
 
 resource "aws_cloudwatch_event_target" "ses_receiving_emails" {
-  arn  = module.ses_receiving_emails.function_arn
-  rule = aws_cloudwatch_event_rule.ses_receiving_emails_testing.id
+  arn      = module.ses_receiving_emails.function_arn
+  rule     = aws_cloudwatch_event_rule.ses_receiving_emails_testing.id
+  provider = aws.us-east-1
 }
 
 resource "aws_cloudwatch_event_rule" "ses_receiving_emails_testing" {
@@ -36,6 +38,7 @@ resource "aws_cloudwatch_event_rule" "ses_receiving_emails_testing" {
   description         = "ses_receiving_emails_testing event rule"
   schedule_expression = var.schedule_expression
   depends_on          = [module.ses_receiving_emails]
+  provider            = aws.us-east-1
 }
 
 resource "aws_lambda_permission" "ses_receiving_emails_allow_cloudwatch" {
@@ -44,4 +47,5 @@ resource "aws_lambda_permission" "ses_receiving_emails_allow_cloudwatch" {
   function_name = module.ses_receiving_emails.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.ses_receiving_emails_testing.arn
+  provider      = aws.us-east-1
 }
