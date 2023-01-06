@@ -297,7 +297,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
                     name = "host"
                   }
                 }
-                search_string = "api."
+                search_string = "api"
                 text_transformation {
                   priority = 1
                   type     = "COMPRESS_WHITE_SPACE"
