@@ -4,7 +4,6 @@ variable "billing_tag_value" {
 }
 
 variable "notify_sending_domain" {
-  sensitive   = true
   type        = string
   description = "Sending domain for notify."
 }
@@ -21,7 +20,6 @@ variable "celery_queue_prefix" {
 
 variable "gc_notify_service_email" {
   type        = string
-  sensitive   = true
   description = "Service email for GC Notify."
 }
 
