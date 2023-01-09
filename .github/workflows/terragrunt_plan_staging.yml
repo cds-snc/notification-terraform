@@ -103,6 +103,9 @@ jobs:
             lambda-google-cidr:
               - 'aws/lambda-google-cidr/**'
               - 'env/staging/lambda-google-cidr/**'
+            ses_receiving_emails:
+              - 'aws/ses_receiving_emails/**'
+              - 'env/staging/ses_receiving_emails/**'
 
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
@@ -221,5 +224,15 @@ jobs:
           directory: "env/staging/lambda-google-cidr"
           comment-delete: "true"
           comment-title: "Staging: lambda-google-cidr"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan ses_receiving_emails
+        if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/staging/ses_receiving_emails"
+          comment-delete: "true"
+          comment-title: "Staging: ses_receiving_emails"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
