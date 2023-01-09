@@ -65,6 +65,10 @@ variable "document_download_api_host" {
   type = string
 }
 
+variable "document_download_api_key" {
+  type = string
+}
+
 variable "api_image_tag" {
   type = string
 }
