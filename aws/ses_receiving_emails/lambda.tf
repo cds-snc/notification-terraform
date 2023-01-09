@@ -15,9 +15,7 @@ module "ses_receiving_emails" {
     GC_NOTIFY_SERVICE_EMAIL = var.gc_notify_service_email
   }
 
-  providers = {
-    aws = aws.us-east-1
-  }
+  provider = aws.us-east-1
 }
 
 resource "aws_lambda_function_event_invoke_config" "ses_receiving_emails_invoke_config" {
