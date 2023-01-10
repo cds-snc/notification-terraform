@@ -35,3 +35,11 @@ variable "sns_alert_warning_arn" {
 variable "sns_alert_critical_arn" {
   type = string
 }
+
+variable "sns_alert_warning_arn_us_east_1" {
+  type = string
+}
+
+variable "sns_alert_critical_arn_us_east_1" {
+  type = string
+}

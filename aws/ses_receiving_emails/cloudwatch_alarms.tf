@@ -14,8 +14,8 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_re
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_warning_arn]
+  alarm_actions       = [var.sns_alert_warning_arn_us_east_1]
+  ok_actions          = [var.sns_alert_warning_arn_us_east_1]
 }
 
 # Will uncomment this after testing the warning alarm first

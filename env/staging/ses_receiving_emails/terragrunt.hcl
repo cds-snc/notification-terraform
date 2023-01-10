@@ -12,6 +12,8 @@ dependency "common" {
   mock_outputs = {
     sns_alert_warning_arn  = ""
     sns_alert_critical_arn = ""
+    sns_alert_warning_arn_us_east_1 = ""
+    sns_alert_critical_arn_us_east_1 = ""
   }
 }
 
@@ -24,6 +26,8 @@ inputs = {
   schedule_expression    = "rate(1 minute)"
   sns_alert_warning_arn  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_warning_arn_us_east_1 = dependency.common.outputs.sns_alert_warning_arn_us_east_1
+  sns_alert_critical_arn_us_east_1 = dependency.common.outputs.sns_alert_critical_arn_us_east_1
   notify_sending_domain  = "staging.notification.cdssandbox.xyz"
   sqs_region             = "ca-central-1"
   celery_queue_prefix    = "eks-notification-canada-ca"

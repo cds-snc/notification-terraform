@@ -69,3 +69,11 @@ output "private-links-gateway-prefix-list-ids" {
   ]
   description = "The prefix list IDs for the gateway private links"
 }
+
+output "sns_alert_warning_arn_us_east_1" {
+  value = aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn
+}
+
+output "sns_alert_critical_arn_us_east_1" {
+  value = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
+}
