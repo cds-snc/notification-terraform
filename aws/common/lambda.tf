@@ -155,16 +155,24 @@ resource "aws_lambda_permission" "ses_receiving_emails" {
 ##
 # SNS topics for CloudWatch alarms in us-east-1
 ##
+
+resource "aws_lambda_permission" "sns_ok_us_east_1_to_slack_lambda" {
+  action        = "lambda:InvokeFunction"
+  function_name = module.notify_slack_ok_us_east_1.notify_slack_lambda_function_arn
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
+}
+
 resource "aws_lambda_permission" "sns_warning_us_east_1_to_slack_lambda" {
   action        = "lambda:InvokeFunction"
-  function_name = module.notify_slack_warning.notify_slack_lambda_function_arn
+  function_name = module.notify_slack_warning_us_east_1.notify_slack_lambda_function_arn
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn
 }
 
 resource "aws_lambda_permission" "sns_critical_us_east_1_to_slack_lambda" {
   action        = "lambda:InvokeFunction"
-  function_name = module.notify_slack_critical.notify_slack_lambda_function_arn
+  function_name = module.notify_slack_critical_us_east_1.notify_slack_lambda_function_arn
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
 }

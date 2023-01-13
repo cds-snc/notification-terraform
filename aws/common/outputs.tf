@@ -77,3 +77,7 @@ output "sns_alert_warning_arn_us_east_1" {
 output "sns_alert_critical_arn_us_east_1" {
   value = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
 }
+
+output "sns_alert_ok_arn_us_east_1" {
+  value = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
+}
