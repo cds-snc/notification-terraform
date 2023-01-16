@@ -212,7 +212,7 @@ resource "aws_sns_topic_subscription" "sns_alert_ok_us_east_1_to_lambda" {
 
   topic_arn = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
   protocol  = "lambda"
-  endpoint  = module.notify_slack_ok_us_east_1.notify_slack_lambda_function_arn
+  endpoint  = module.notify_slack_ok.notify_slack_lambda_function_arn
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_warning_us_east_1_to_lambda" {
@@ -220,7 +220,7 @@ resource "aws_sns_topic_subscription" "sns_alert_warning_us_east_1_to_lambda" {
 
   topic_arn = aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn
   protocol  = "lambda"
-  endpoint  = module.notify_slack_warning_us_east_1.notify_slack_lambda_function_arn
+  endpoint  = module.notify_slack_warning.notify_slack_lambda_function_arn
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_critical_us_east_1_to_lambda" {
@@ -228,7 +228,7 @@ resource "aws_sns_topic_subscription" "sns_alert_critical_us_east_1_to_lambda" {
 
   topic_arn = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
   protocol  = "lambda"
-  endpoint  = module.notify_slack_critical_us_east_1.notify_slack_lambda_function_arn
+  endpoint  = module.notify_slack_critical.notify_slack_lambda_function_arn
 }
 
 resource "aws_sns_topic_subscription" "alert_critical_us_east_1_to_opsgenie" {
