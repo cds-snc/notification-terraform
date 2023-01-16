@@ -69,3 +69,58 @@ module "notify_slack_general" {
   lambda_function_name                   = "notify-slack-general"
   cloudwatch_log_group_retention_in_days = 90
 }
+
+# Setup slack notifications for us-east-1
+module "notify_slack_warning_us_east_1" {
+  source  = "terraform-aws-modules/notify-slack/aws"
+  version = "~> 4.24.0"
+
+  create_sns_topic = false
+  sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.name
+
+  slack_webhook_url = var.cloudwatch_slack_webhook_warning_topic
+  slack_channel     = var.slack_channel_warning_topic
+  slack_username    = "[WARNING] AWS Cloudwatch"
+  slack_emoji       = ":warning:"
+
+  lambda_function_name                   = "notify-slack-warning_us_east_1"
+  cloudwatch_log_group_retention_in_days = 90
+
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1]
+}
+
+module "notify_slack_ok_us_east_1" {
+  source  = "terraform-aws-modules/notify-slack/aws"
+  version = "~> 4.24.0"
+
+  create_sns_topic = false
+  sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.name
+
+  slack_webhook_url = var.cloudwatch_slack_webhook_general_topic
+  slack_channel     = var.slack_channel_general_topic
+  slack_username    = "[OK] AWS Cloudwatch"
+  slack_emoji       = ":green:"
+
+  lambda_function_name                   = "notify-slack-ok_us_east_1"
+  cloudwatch_log_group_retention_in_days = 90
+
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-ok-us-east-1]
+}
+
+module "notify_slack_critical_us_east_1" {
+  source  = "terraform-aws-modules/notify-slack/aws"
+  version = "~> 4.24.0"
+
+  create_sns_topic = false
+  sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.name
+
+  slack_webhook_url = var.cloudwatch_slack_webhook_critical_topic
+  slack_channel     = var.slack_channel_critical_topic
+  slack_username    = "[CRITICAL] AWS Cloudwatch"
+  slack_emoji       = ":rotating_light:"
+
+  lambda_function_name                   = "notify-slack-critical_us_east_1"
+  cloudwatch_log_group_retention_in_days = 90
+
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-critical-us-east-1]
+}
