@@ -118,7 +118,7 @@ resource "aws_kms_key" "notification-canada-ca-us-east-1" {
 
   policy = <<EOF
 {
-   "Version":"2022-01-10",
+   "Version":"2012-10-17",
    "Id":"key-default-us-east-1",
    "Statement":[
       {
