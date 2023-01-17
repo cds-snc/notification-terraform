@@ -14,6 +14,10 @@ module "ses_receiving_emails" {
     CELERY_QUEUE_PREFIX     = var.celery_queue_prefix
     GC_NOTIFY_SERVICE_EMAIL = var.gc_notify_service_email
   }
+
+  policies = [
+    data.aws_iam_policy_document.ses_recieving_emails_sqs_send.json
+  ]
 }
 
 resource "aws_lambda_function_event_invoke_config" "ses_receiving_emails_invoke_config" {
@@ -50,16 +54,5 @@ data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
     ]
     effect    = "Allow"
     resources = ["*"]
-  }
-}
-
-resource "aws_iam_policy" "ses_recieving_emails_sqs_send" {
-  name        = "ses_recieving_email_sqs_send"
-  description = "IAM policy for sending messages to SQS from Lambda"
-  policy      = data.aws_iam_policy_document.ses_recieving_emails_sqs_send.json
-
-  tags = {
-    CostCentre = var.billing_tag_value
-    Terraform  = true
   }
 }
