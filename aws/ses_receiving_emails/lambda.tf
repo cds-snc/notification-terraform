@@ -14,6 +14,10 @@ module "ses_receiving_emails" {
     CELERY_QUEUE_PREFIX     = var.celery_queue_prefix
     GC_NOTIFY_SERVICE_EMAIL = var.gc_notify_service_email
   }
+
+  policies = [
+    data.aws_iam_policy_document.ses_recieving_emails_sqs_send.json
+  ]
 }
 
 resource "aws_lambda_function_event_invoke_config" "ses_receiving_emails_invoke_config" {
@@ -40,4 +44,15 @@ resource "aws_lambda_permission" "ses_receiving_emails_allow_cloudwatch" {
   function_name = module.ses_receiving_emails.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.ses_receiving_emails_testing.arn
+}
+
+data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
+  statement {
+    actions = [
+      "sqs:Get*",
+      "sqs:SendMessage"
+    ]
+    effect    = "Allow"
+    resources = ["*"]
+  }
 }
