@@ -65,6 +65,6 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "ses_recieving_emails_sqs_send" {
-  role       = module.ses_receiving_emails.role.name
+  role       = module.ses_receiving_emails.function_role_arn
   policy_arn = aws_iam_policy.ses_recieving_emails_sqs_send.arn
 }
