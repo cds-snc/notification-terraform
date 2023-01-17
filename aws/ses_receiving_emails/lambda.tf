@@ -42,29 +42,13 @@ resource "aws_lambda_permission" "ses_receiving_emails_allow_cloudwatch" {
   source_arn    = aws_cloudwatch_event_rule.ses_receiving_emails_testing.arn
 }
 
-resource "aws_iam_policy" "ses_recieving_emails_sqs_send" {
-  name        = "ses_recieving_email_sqs_send"
-  path        = "/"
-  description = "IAM policy for sending messages to SQS from Lambda"
-
-  policy = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "sqs:Get*",
-                "sqs:SendMessage"
-            ],
-            "Effect": "Allow",
-            "Resource": "*"
-        }
+data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
+  statement {
+    actions = [
+      "sqs:Get*",
+      "sqs:SendMessage"
     ]
-}
-POLICY
-}
-
-resource "aws_iam_role_policy_attachment" "ses_recieving_emails_sqs_send" {
-  role       = module.ses_receiving_emails.function_role_arn
-  policy_arn = aws_iam_policy.ses_recieving_emails_sqs_send.arn
+    effect    = "Allow"
+    resources = ["*"]
+  }
 }
