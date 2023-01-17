@@ -52,3 +52,14 @@ data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
     resources = ["*"]
   }
 }
+
+resource "aws_iam_policy" "ses_recieving_emails_sqs_send" {
+  name        = "ses_recieving_email_sqs_send"
+  description = "IAM policy for sending messages to SQS from Lambda"
+  policy      = data.aws_iam_policy_document.ses_recieving_emails_sqs_send.json
+
+  tags = {
+    CostCentre = var.billing_tag_value
+    Terraform  = true
+  }
+}
