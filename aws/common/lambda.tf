@@ -66,7 +66,7 @@ resource "aws_lambda_function" "ses_receiving_emails" {
       CELERY_QUEUE_PREFIX     = var.celery_queue_prefix
       NOTIFY_SENDING_DOMAIN   = var.domain
       SQS_REGION              = var.region
-      GC_NOTIFY_SERVICE_EMAIL = "gc.notify.gc.notification@${var.domain}"
+      GC_NOTIFY_SERVICE_EMAIL = "gc.notify.notification.gc@${var.domain}"
     }
   }
 
