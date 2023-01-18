@@ -14,7 +14,7 @@ module "notify_slack_warning" {
   lambda_function_name                   = "notify-slack-warning"
   cloudwatch_log_group_retention_in_days = 90
 
-  depends_on = [aws_sns_topic.notification-canada-ca-alert-warning]
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-warning, aws_sns_topic.notification-canada-ca-alert-warning-us-east-1]
 }
 
 module "notify_slack_ok" {
@@ -32,7 +32,7 @@ module "notify_slack_ok" {
   lambda_function_name                   = "notify-slack-ok"
   cloudwatch_log_group_retention_in_days = 90
 
-  depends_on = [aws_sns_topic.notification-canada-ca-alert-ok]
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-ok, aws_sns_topic.notification-canada-ca-alert-ok-us-east-1]
 }
 
 module "notify_slack_critical" {
@@ -50,7 +50,7 @@ module "notify_slack_critical" {
   lambda_function_name                   = "notify-slack-critical"
   cloudwatch_log_group_retention_in_days = 90
 
-  depends_on = [aws_sns_topic.notification-canada-ca-alert-critical]
+  depends_on = [aws_sns_topic.notification-canada-ca-alert-critical, aws_sns_topic.notification-canada-ca-alert-critical-us-east-1]
 }
 
 # Shared generic slack webhook & topic.

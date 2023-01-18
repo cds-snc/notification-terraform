@@ -108,3 +108,48 @@ EOF
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+
+resource "aws_kms_key" "notification-canada-ca-us-east-1" {
+  provider = aws.us-east-1
+
+  description         = "notification-canada-ca ${var.env} encryption key in us-east-1"
+  enable_key_rotation = true
+
+  policy = <<EOF
+{
+   "Version":"2012-10-17",
+   "Id":"key-default-us-east-1",
+   "Statement":[
+      {
+         "Sid":"Enable IAM User Permissions",
+         "Effect":"Allow",
+         "Principal":{
+            "AWS":"arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+         },
+         "Action":"kms:*",
+         "Resource":"*"
+      },
+      {
+         "Sid":"Allow_CloudWatch_for_CMK",
+         "Effect":"Allow",
+         "Principal":{
+            "Service":[
+               "cloudwatch.amazonaws.com"
+            ]
+         },
+         "Action":[
+            "kms:Decrypt",
+            "kms:GenerateDataKey"
+         ],
+         "Resource":"*"
+      }
+   ]
+}
+EOF
+
+  tags = {
+    Name       = "notification-canada-ca"
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}

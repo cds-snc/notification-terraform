@@ -169,3 +169,88 @@ resource "aws_sns_topic_subscription" "alert_critical_us_west_2_to_opsgenie_ok" 
   raw_message_delivery   = false
   endpoint_auto_confirms = true
 }
+
+# SNS creation for us-east-1
+
+resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-east-1" {
+  provider = aws.us-east-1
+
+  name              = "alert-ok-us-east-1"
+  kms_master_key_id = aws_kms_key.notification-canada-ca-us-east-1.arn
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-east-1" {
+  provider = aws.us-east-1
+
+  name              = "alert-warning-us-east-1"
+  kms_master_key_id = aws_kms_key.notification-canada-ca-us-east-1.arn
+
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-east-1" {
+  provider = aws.us-east-1
+
+  name              = "alert-critical-us-east-1"
+  kms_master_key_id = aws_kms_key.notification-canada-ca-us-east-1.arn
+
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_sns_topic_subscription" "sns_alert_ok_us_east_1_to_lambda" {
+  provider = aws.us-east-1
+
+  topic_arn = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
+  protocol  = "lambda"
+  endpoint  = module.notify_slack_ok.notify_slack_lambda_function_arn
+}
+
+resource "aws_sns_topic_subscription" "sns_alert_warning_us_east_1_to_lambda" {
+  provider = aws.us-east-1
+
+  topic_arn = aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn
+  protocol  = "lambda"
+  endpoint  = module.notify_slack_warning.notify_slack_lambda_function_arn
+}
+
+resource "aws_sns_topic_subscription" "sns_alert_critical_us_east_1_to_lambda" {
+  provider = aws.us-east-1
+
+  topic_arn = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
+  protocol  = "lambda"
+  endpoint  = module.notify_slack_critical.notify_slack_lambda_function_arn
+}
+
+resource "aws_sns_topic_subscription" "alert_critical_us_east_1_to_opsgenie" {
+  provider = aws.us-east-1
+
+  count = var.env == "production" ? 1 : 0
+
+  topic_arn              = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
+  protocol               = "https"
+  endpoint               = var.cloudwatch_opsgenie_alarm_webhook
+  raw_message_delivery   = false
+  endpoint_auto_confirms = true
+}
+
+resource "aws_sns_topic_subscription" "alert_critical_us_east_1_to_opsgenie_ok" {
+  provider = aws.us-east-1
+
+  count = var.env == "production" ? 1 : 0
+
+  topic_arn              = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
+  protocol               = "https"
+  endpoint               = var.cloudwatch_opsgenie_alarm_webhook
+  raw_message_delivery   = false
+  endpoint_auto_confirms = true
+}
