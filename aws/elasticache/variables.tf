@@ -7,6 +7,12 @@ variable "elasticache_node_count" {
   default = 1
 }
 
+variable "elasticache_node_number_cache_clusters" {
+  description = "defines the total number of nodes in a cluster"
+  type        = number
+  default     = 3
+}
+
 variable "elasticache_node_type" {
   type = string
 }
