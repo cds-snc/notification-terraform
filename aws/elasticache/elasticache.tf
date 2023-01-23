@@ -45,9 +45,13 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   replication_group_description = "Redis multiaz cluster with replication group"
   node_type                     = var.elasticache_node_type
   number_cache_clusters         = var.elasticache_node_number_cache_clusters
-  parameter_group_name          = "default.redis6.x"
-  port                          = 6379
-  maintenance_window            = "thu:04:00-thu:05:00"
+  engine                        = "redis"
+  # AWS automatically supports the Redis minor version management since version 6.
+  # https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/supported-engine-versions.html#redis-version-6.x
+  engine_version       = "6.x"
+  parameter_group_name = "default.redis6.x"
+  port                 = 6379
+  maintenance_window   = "thu:04:00-thu:05:00"
 
   security_group_ids = [
     var.eks_cluster_securitygroup
