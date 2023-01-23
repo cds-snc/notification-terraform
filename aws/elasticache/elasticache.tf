@@ -45,6 +45,8 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   replication_group_description = "Redis multiaz cluster with replication group"
   node_type                     = var.elasticache_node_type
   number_cache_clusters         = var.elasticache_node_number_cache_clusters
+  engine                        = "redis"
+  engine_version                = "6.x"
   parameter_group_name          = "default.redis6.x"
   port                          = 6379
   maintenance_window            = "thu:04:00-thu:05:00"
