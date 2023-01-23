@@ -7,6 +7,11 @@ variable "elasticache_node_count" {
   default = 1
 }
 
+variable "elasticache_node_replicas_count" {
+  type    = number
+  default = 2
+}
+
 variable "elasticache_node_type" {
   type = string
 }
