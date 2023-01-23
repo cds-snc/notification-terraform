@@ -6,7 +6,6 @@ locals {
 # The sentinel_forwarder module fails to Terraform apply if the layer_arn being used is not the most recently published layer version
 # see https://github.com/cds-snc/terraform-modules/issues/203 
 # and https://docs.google.com/document/d/16LLelZ7WEKrnbocrl0Az74JqkCv5DBZ9QILRBUFJQt8/edit#heading=h.z87ipkd84djw
-
 module "sentinel_forwarder" {
   source            = "github.com/cds-snc/terraform-modules?ref=v4.0.2//sentinel_forwarder"
   function_name     = "sentinel-cloud-watch-forwarder"
