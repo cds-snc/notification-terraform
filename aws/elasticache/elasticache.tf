@@ -52,6 +52,7 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   parameter_group_name = "default.redis6.x"
   port                 = 6379
   maintenance_window   = "thu:04:00-thu:05:00"
+  multi_az_enabled     = true
 
   security_group_ids = [
     var.eks_cluster_securitygroup
