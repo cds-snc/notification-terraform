@@ -11,7 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-medium-cpu-warning" {
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "breaching"
   dimensions = {
-    CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
+    ReplicationGroupId = aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.id
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-cpu-warning" {
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "breaching"
   dimensions = {
-    CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
+    ReplicationGroupId = aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.id
   }
 }
 
@@ -44,7 +44,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning
   threshold           = 60
   alarm_actions       = [var.sns_alert_warning_arn]
   dimensions = {
-    CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
+    ReplicationGroupId = aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.id
   }
 }
 
@@ -60,6 +60,6 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warnin
   threshold           = 1000
   alarm_actions       = [var.sns_alert_warning_arn]
   dimensions = {
-    CacheClusterId = aws_elasticache_cluster.notification-cluster-cache.cluster_id
+    ReplicationGroupId = aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.id
   }
 }
