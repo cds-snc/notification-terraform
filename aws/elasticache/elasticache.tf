@@ -43,12 +43,3 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
     ignore_changes = [number_cache_clusters]
   }
 }
-
-# We created a node-4 which doesnt have the same naming convention as the rest of the nodes
-# In order to rename the node we would have to delete the old one on the live cluster, we are going to chose not to do this
-# We shouldn't have created the below node
-resource "aws_elasticache_cluster" "notification-cluster-cache-multiaz-group-replica" {
-  # This will be the primary cluster
-  cluster_id           = "notification-canada-ca-${var.env}-cluster-cache-az"
-  replication_group_id = aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.id
-}
