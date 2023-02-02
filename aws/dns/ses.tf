@@ -159,7 +159,7 @@ resource "aws_ses_domain_mail_from" "custom_sending_domains" {
 }
 
 
-### SES recieving emails lambda image
+### SES receiving emails lambda image
 
 resource "aws_ses_receipt_rule" "ses_receiving_emails_inbound-to-lambda-arn" {
   provider = aws.us-east-1

@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../ses_receiving_emails"]
 }
 
 dependency "common" {
