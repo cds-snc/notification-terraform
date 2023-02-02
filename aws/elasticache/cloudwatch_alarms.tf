@@ -17,6 +17,8 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-medium-cpu-warning" {
   }
 }
 
+# We created a node-4 which doesnt have the same naming convention as the rest of the nodes,
+# In order to rename the node we would have to delete the old one on the live cluster, we are going to chose not to do this
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-medium-cpu-warning-node4" {
   alarm_name          = "redis-elasticache-medium-cpu-warning-CacheClustermultiaz-group-replicaCPUUtilization"
   alarm_description   = "Average CPU of Redis ElastiCache >= 50% during 1 minute"
@@ -52,6 +54,9 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-cpu-warning" {
   }
 }
 
+
+# We created a node-4 which doesnt have the same naming convention as the rest of the nodes,
+# In order to rename the node we would have to delete the old one on the live cluster, we are going to chose not to do this
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-cpu-warning-node4" {
   alarm_name          = "redis-elasticache-high-cpu-warning-CacheClustermultiaz-group-replicaCPUUtilization"
   alarm_description   = "Average CPU of Redis ElastiCache >= 70% during 1 minute"
@@ -86,6 +91,9 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning
   }
 }
 
+
+# We created a node-4 which doesnt have the same naming convention as the rest of the nodes,
+# In order to rename the node we would have to delete the old one on the live cluster, we are going to chose not to do this
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning-node4" {
   alarm_name          = "redis-elasticache-high-db-memory-warning-CacheClustermultiaz-group-replica"
   alarm_description   = "Average DB Memory on Redis ElastiCache >= 60% during 1 minute"
@@ -119,6 +127,9 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warnin
   }
 }
 
+
+# We created a node-4 which doesnt have the same naming convention as the rest of the nodes,
+# In order to rename the node we would have to delete the old one on the live cluster, we are going to chose not to do this
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warning-node4" {
   alarm_name          = "redis-elasticache-high-connection-warning-CacheClustermultiaz-group-replica"
   alarm_description   = "Average Number of Connections on Redis ElastiCache >= 1000 connections during 1 minute"
