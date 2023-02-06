@@ -249,51 +249,31 @@ resource "aws_s3_bucket" "document_bucket" {
   }
 }
 
-resource "aws_s3_bucket" "scan_files_document_bucket" {
-  bucket = "notification-canada-ca-${var.env}-document-download-scan-files"
-  acl    = "private"
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
+module "scan_files_document_bucket" {
+  source      = "github.com/cds-snc/terraform-modules?ref=v3.0.20//S3"
+  bucket_name = "notification-canada-ca-${var.env}-document-download-scan-files"
+  lifecycle_rule = [
+    {
+      id      = "tf-s3-lifecycle-linked-files"
+      enabled = true
+      expiration {
+        days = 7
+      }
+    },
+    {
+      id      = "tf-s3-lifecycle-attached-files"
+      enabled = true
+      prefix  = "tmp/"
+      expiration {
+        days = 3
       }
     }
-  }
-
-  # expire linked files after 7 days
-  lifecycle_rule {
-    id      = "tf-s3-lifecycle-linked-files"
-    enabled = true
-
-    expiration {
-      days = 7
-    }
-  }
-
-  # Expire files attached directly to emails after a few days.
-  # Those are stored in a `tmp/` folder.
-  # See https://github.com/cds-snc/notification-document-download-api
-  lifecycle_rule {
-    id      = "tf-s3-lifecycle-attached-files"
-    enabled = true
-    prefix  = "tmp/"
-
-    expiration {
-      days = 3
-    }
-  }
-
-  #tfsec:ignore:AWS077 - Versioning is not enabled
-  logging {
+  ]
+  billing_tag_value = "notification-canada-ca-${var.env}"
+  logging = {
     target_bucket = aws_s3_bucket.document_bucket_logs.bucket
   }
-
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
 }
-
 resource "aws_s3_bucket_public_access_block" "document_bucket" {
   bucket = aws_s3_bucket.document_bucket.id
 
