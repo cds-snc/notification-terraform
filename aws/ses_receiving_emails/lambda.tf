@@ -20,26 +20,6 @@ module "ses_receiving_emails" {
   ]
 }
 
-resource "aws_cloudwatch_event_target" "ses_receiving_emails" {
-  arn  = module.ses_receiving_emails.function_arn
-  rule = aws_cloudwatch_event_rule.ses_receiving_emails_testing.id
-}
-
-resource "aws_cloudwatch_event_rule" "ses_receiving_emails_testing" {
-  name                = "ses_receiving_emails_testing"
-  description         = "ses_receiving_emails_testing event rule"
-  schedule_expression = var.schedule_expression
-  depends_on          = [module.ses_receiving_emails]
-}
-
-resource "aws_lambda_permission" "ses_receiving_emails_allow_cloudwatch" {
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ses_receiving_emails.function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.ses_receiving_emails_testing.arn
-}
-
 data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
   statement {
     actions = [
