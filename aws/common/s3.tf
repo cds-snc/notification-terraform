@@ -261,23 +261,10 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
     }
   }
 
-  # expire linked files after 7 days
+  # expire all files after 1 day
   lifecycle_rule {
-    id      = "tf-s3-lifecycle-linked-files"
+    id      = "tf-s3-lifecycle-all-files"
     enabled = true
-
-    expiration {
-      days = 1
-    }
-  }
-
-  # Expire files attached directly to emails after a few days.
-  # Those are stored in a `tmp/` folder.
-  # See https://github.com/cds-snc/notification-document-download-api
-  lifecycle_rule {
-    id      = "tf-s3-lifecycle-attached-files"
-    enabled = true
-    prefix  = "tmp/"
 
     expiration {
       days = 1
