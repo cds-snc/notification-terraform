@@ -157,22 +157,3 @@ resource "aws_ses_domain_mail_from" "custom_sending_domains" {
   domain           = aws_ses_domain_identity.custom_sending_domains[each.value].domain
   mail_from_domain = "bounce.${aws_ses_domain_identity.custom_sending_domains[each.value].domain}"
 }
-
-
-### SES receiving emails lambda image
-
-resource "aws_ses_receipt_rule" "ses_receiving_emails_inbound-to-lambda-arn" {
-  provider = aws.us-east-1
-
-  name          = "ses_receiving_emails_inbound-to-lambda"
-  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-  recipients    = [var.domain]
-  enabled       = true
-  scan_enabled  = true
-
-  lambda_action {
-    function_arn    = var.lambda_ses_receiving_emails_image_arn
-    invocation_type = "Event"
-    position        = 1
-  }
-}
