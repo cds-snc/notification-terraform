@@ -283,15 +283,6 @@ resource "aws_s3_bucket_public_access_block" "document_bucket" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
-  bucket = aws_s3_bucket.scan_files_document_bucket.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
 resource "aws_s3_bucket" "document_bucket_logs" {
   bucket = "notification-canada-ca-${var.env}-document-download-logs"
   acl    = "log-delivery-write"
