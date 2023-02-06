@@ -143,16 +143,16 @@ resource "aws_lambda_permission" "sns_critical_us_west_2_to_slack_lambda" {
 ##
 
 # We will delete this once we have the lambda working in production
-# resource "aws_lambda_permission" "ses_receiving_emails" {
-#   provider = aws.us-east-1
+resource "aws_lambda_permission" "ses_receiving_emails" {
+  provider = aws.us-east-1
 
-#   action        = "lambda:InvokeFunction"
-#   function_name = aws_lambda_function.ses_receiving_emails.function_name
-#   principal     = "ses.amazonaws.com"
-#   # tfsec:ignore:AWS058 Ensure that lambda function permission has a source arn specified
-#   # can ignore this because we specify `source_account` instead of `source_arn`
-#   source_account = var.account_id
-# }
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ses_receiving_emails.function_name
+  principal     = "ses.amazonaws.com"
+  # tfsec:ignore:AWS058 Ensure that lambda function permission has a source arn specified
+  # can ignore this because we specify `source_account` instead of `source_arn`
+  source_account = var.account_id
+}
 
 ##
 # SNS topics for CloudWatch alarms in us-east-1

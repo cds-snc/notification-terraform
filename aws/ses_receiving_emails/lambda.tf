@@ -31,11 +31,12 @@ data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
   }
 }
 
-resource "aws_lambda_permission" "ses_receiving_emails" {
-  action        = "lambda:InvokeFunction"
-  function_name = module.ses_receiving_emails.function_name
-  principal     = "ses.amazonaws.com"
-  # tfsec:ignore:AWS058 Ensure that lambda function permission has a source arn specified
-  # can ignore this because we specify `source_account` instead of `source_arn`
-  source_account = var.account_id
-}
+# Only commenting this out till its ready to go live in production
+# resource "aws_lambda_permission" "ses_receiving_emails" {
+#   action        = "lambda:InvokeFunction"
+#   function_name = module.ses_receiving_emails.function_name
+#   principal     = "ses.amazonaws.com"
+#   # tfsec:ignore:AWS058 Ensure that lambda function permission has a source arn specified
+#   # can ignore this because we specify `source_account` instead of `source_arn`
+#   source_account = var.account_id
+# }
