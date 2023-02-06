@@ -256,7 +256,7 @@ module "scan_files_document_bucket" {
     {
       id      = "tf-s3-lifecycle-linked-files"
       enabled = true
-      expiration {
+      expiration = {
         days = 7
       }
     },
@@ -264,7 +264,7 @@ module "scan_files_document_bucket" {
       id      = "tf-s3-lifecycle-attached-files"
       enabled = true
       prefix  = "tmp/"
-      expiration {
+      expiration = {
         days = 3
       }
     }
