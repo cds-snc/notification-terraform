@@ -727,7 +727,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
+resource "aws_cloudwatch_metric_alarm" "scan-files-document-download-bucket-size-warning" {
   alarm_name          = "scan-files-document-download-bucket-size-warning"
   alarm_description   = "Scan files document download S3 bucket size is larger than ${var.alarm_warning_document_download_bucket_size_gb} GB"
   comparison_operator = "GreaterThanOrEqualToThreshold"
