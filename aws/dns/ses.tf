@@ -57,22 +57,22 @@ resource "aws_ses_active_receipt_rule_set" "main" {
   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
 }
 
-# We will delete this ruleset when ready to go live to production
-resource "aws_ses_receipt_rule" "inbound-to-lambda" {
-  provider = aws.us-east-1
+# We will delete this ruleset when we delete all the previous lambda code
+# resource "aws_ses_receipt_rule" "inbound-to-lambda" {
+#   provider = aws.us-east-1
 
-  name          = "inbound-to-lambda"
-  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-  recipients    = [var.domain]
-  enabled       = true
-  scan_enabled  = true
+#   name          = "inbound-to-lambda"
+#   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+#   recipients    = [var.domain]
+#   enabled       = true
+#   scan_enabled  = true
 
-  lambda_action {
-    function_arn    = var.lambda_ses_receiving_emails_arn
-    invocation_type = "Event"
-    position        = 1
-  }
-}
+#   lambda_action {
+#     function_arn    = var.lambda_ses_receiving_emails_arn
+#     invocation_type = "Event"
+#     position        = 1
+#   }
+# }
 
 ###
 # Additional custom sending domains for emails
@@ -161,19 +161,18 @@ resource "aws_ses_domain_mail_from" "custom_sending_domains" {
 
 
 ### SES receiving emails lambda image
-# Only commenting this out before we go to production
-# resource "aws_ses_receipt_rule" "ses_receiving_emails_inbound-to-lambda-arn" {
-#   provider = aws.us-east-1
+resource "aws_ses_receipt_rule" "ses_receiving_emails_inbound-to-lambda-arn" {
+  provider = aws.us-east-1
 
-#   name          = "ses_receiving_emails_inbound-to-lambda"
-#   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-#   recipients    = [var.domain]
-#   enabled       = true
-#   scan_enabled  = true
+  name          = "ses_receiving_emails_inbound-to-lambda"
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+  recipients    = [var.domain]
+  enabled       = true
+  scan_enabled  = true
 
-#   lambda_action {
-#     function_arn    = var.lambda_ses_receiving_emails_image_arn
-#     invocation_type = "Event"
-#     position        = 1
-#   }
-# }
+  lambda_action {
+    function_arn    = var.lambda_ses_receiving_emails_image_arn
+    invocation_type = "Event"
+    position        = 1
+  }
+}
