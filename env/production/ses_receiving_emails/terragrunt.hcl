@@ -1,3 +1,9 @@
+# Uses GitHub tags for release management
+terraform {
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/ses_receiving_emails?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+}
+
+
 dependencies {
   paths = ["../common"]
 }
@@ -49,8 +55,4 @@ provider "aws" {
   allowed_account_ids = [var.account_id]
 }
 EOF
-}
-
-terraform {
-  source = "../../../aws//ses_receiving_emails"
 }
