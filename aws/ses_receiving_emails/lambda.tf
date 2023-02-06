@@ -20,12 +20,6 @@ module "ses_receiving_emails" {
   ]
 }
 
-resource "aws_lambda_function_event_invoke_config" "ses_receiving_emails_invoke_config" {
-  function_name                = module.ses_receiving_emails.function_name
-  maximum_event_age_in_seconds = 60
-  maximum_retry_attempts       = 0
-}
-
 resource "aws_cloudwatch_event_target" "ses_receiving_emails" {
   arn  = module.ses_receiving_emails.function_arn
   rule = aws_cloudwatch_event_rule.ses_receiving_emails_testing.id
