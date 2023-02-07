@@ -146,3 +146,12 @@ jobs:
           comment-title: "Production: lambda-google-cidr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan ses_receiving_emails
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/production/ses_receiving_emails"
+          comment-delete: "true"
+          comment-title: "Production: ses_receiving_emails"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
