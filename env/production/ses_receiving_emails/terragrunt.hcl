@@ -1,3 +1,9 @@
+# Uses GitHub tags for release management
+terraform {
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/ses_receiving_emails?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+}
+
+
 dependencies {
   paths = ["../common"]
 }
@@ -26,10 +32,10 @@ inputs = {
   sns_alert_warning_arn_us_east_1 = dependency.common.outputs.sns_alert_warning_arn_us_east_1
   sns_alert_critical_arn_us_east_1 = dependency.common.outputs.sns_alert_critical_arn_us_east_1
   sns_alert_ok_arn_us_east_1 = dependency.common.outputs.sns_alert_ok_arn_us_east_1
-  notify_sending_domain  = "staging.notification.cdssandbox.xyz"
+  notify_sending_domain  = "notification.canada.ca"
   sqs_region             = "ca-central-1"
   celery_queue_prefix    = "eks-notification-canada-ca"
-  gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
+  gc_notify_service_email = "gc.notify.notification.gc@notification.canada.ca"
 }
 
 generate "provider" {
@@ -49,8 +55,4 @@ provider "aws" {
   allowed_account_ids = [var.account_id]
 }
 EOF
-}
-
-terraform {
-  source = "../../../aws//ses_receiving_emails"
 }

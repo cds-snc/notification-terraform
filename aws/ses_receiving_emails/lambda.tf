@@ -30,7 +30,6 @@ data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
     resources = ["*"]
   }
 }
-
 resource "aws_lambda_permission" "ses_receiving_emails" {
   action        = "lambda:InvokeFunction"
   function_name = module.ses_receiving_emails.function_name
