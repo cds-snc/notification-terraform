@@ -727,6 +727,23 @@ resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "scan-files-document-download-bucket-size-warning" {
+  alarm_name          = "scan-files-document-download-bucket-size-warning"
+  alarm_description   = "Scan files document download S3 bucket size is larger than ${var.alarm_warning_document_download_bucket_size_gb} GB"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "BucketSizeBytes"
+  namespace           = "AWS/S3"
+  period              = 24 * 60 * 60
+  statistic           = "Average"
+  threshold           = var.alarm_warning_document_download_bucket_size_gb * 1024 * 1024 * 1024 # Convert the GB variable to bytes
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    StorageType = "StandardStorage"
+    BucketName  = aws_s3_bucket.scan_files_document_bucket.bucket
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warning" {
   alarm_name          = "live-service-over-daily-rate-limit-warning"
   alarm_description   = "A live service reached its daily rate limit and has been blocked from sending more notifications"

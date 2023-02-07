@@ -75,6 +75,11 @@ jobs:
           cd env/production/common
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/ses_receiving_emails
+        run: |
+          cd env/production/ses_receiving_emails
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/dns
         run: |
           cd env/production/dns
@@ -118,11 +123,6 @@ jobs:
       - name: Apply aws/lambda-google-cidr
         run: |
           cd env/production/lambda-google-cidr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
-
-      - name: Apply aws/ses_receiving_emails
-        run: |
-          cd env/production/ses_receiving_emails
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Slack message on failure
