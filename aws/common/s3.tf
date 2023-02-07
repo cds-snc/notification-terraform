@@ -249,8 +249,49 @@ resource "aws_s3_bucket" "document_bucket" {
   }
 }
 
+resource "aws_s3_bucket" "scan_files_document_bucket" {
+  bucket = "notification-canada-ca-${var.env}-document-download-scan-files"
+  acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  # expire all files after 1 day
+  lifecycle_rule {
+    id      = "tf-s3-lifecycle-all-files"
+    enabled = true
+
+    expiration {
+      days = 1
+    }
+  }
+
+  #tfsec:ignore:AWS077 - Versioning is not enabled
+  logging {
+    target_bucket = aws_s3_bucket.document_bucket_logs.bucket
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "document_bucket" {
   bucket = aws_s3_bucket.document_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
+  bucket = aws_s3_bucket.scan_files_document_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
