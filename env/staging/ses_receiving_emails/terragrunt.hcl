@@ -29,7 +29,7 @@ inputs = {
   notify_sending_domain  = "staging.notification.cdssandbox.xyz"
   sqs_region             = "ca-central-1"
   celery_queue_prefix    = "eks-notification-canada-ca"
-  gc_notify_service_email = "gc.notify.gc.notification@staging.notification.cdssandbox.xyz"
+  gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
 }
 
 generate "provider" {
