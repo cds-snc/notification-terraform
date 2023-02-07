@@ -73,6 +73,11 @@ jobs:
           cd env/staging/common
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/ses_receiving_emails
+        run: |
+          cd env/staging/ses_receiving_emails
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/dns
         run: |
           cd env/staging/dns
@@ -126,11 +131,6 @@ jobs:
       - name: Apply aws/lambda-google-cidr
         run: |
           cd env/staging/lambda-google-cidr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
-
-      - name: Apply aws/ses_receiving_emails
-        run: |
-          cd env/staging/ses_receiving_emails
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Bump version and push tag
