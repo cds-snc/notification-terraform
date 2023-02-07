@@ -34,10 +34,6 @@ output "kms_arn" {
   value = aws_kms_key.notification-canada-ca.arn
 }
 
-output "lambda_ses_receiving_emails_arn" {
-  value = aws_lambda_function.ses_receiving_emails.arn
-}
-
 output "s3_bucket_asset_bucket_id" {
   value = aws_s3_bucket.asset_bucket.id
 }
