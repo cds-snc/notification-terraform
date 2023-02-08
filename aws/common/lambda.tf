@@ -80,12 +80,12 @@ resource "aws_lambda_function" "ses_receiving_emails" {
 ##
 # CloudWatch log groups for SNS deliveries in ca-central-1
 ##
-# resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
-#   action        = "lambda:InvokeFunction"
-#   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
-#   principal     = "logs.${var.region}.amazonaws.com"
-#   source_arn    = "${aws_cloudwatch_log_group.sns_deliveries.arn}:*"
-# }
+resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
+  principal     = "logs.${var.region}.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries.arn}:*"
+}
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures" {
   action        = "lambda:InvokeFunction"
@@ -114,13 +114,13 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures_us_west_2" 
 ##
 # SNS topic for SES deliveries
 ##
-# TO DO: delete once the ses_to_sqs_email is moved to lambda
-resource "aws_lambda_permission" "allow_sns_ses_callbacks" {
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.ses_to_sqs_email_callbacks.function_name
-  principal     = "sns.amazonaws.com"
-  source_arn    = aws_sns_topic.notification-canada-ca-ses-callback.arn
-}
+# # TO DO: delete once the ses_to_sqs_email is moved to lambda
+# resource "aws_lambda_permission" "allow_sns_ses_callbacks" {
+#   action        = "lambda:InvokeFunction"
+#   function_name = aws_lambda_function.ses_to_sqs_email_callbacks.function_name
+#   principal     = "sns.amazonaws.com"
+#   source_arn    = aws_sns_topic.notification-canada-ca-ses-callback.arn
+# }
 
 ##
 # SNS topics for CloudWatch alarms in us-west-2
