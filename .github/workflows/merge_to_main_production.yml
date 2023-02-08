@@ -80,6 +80,11 @@ jobs:
           cd env/production/ses_receiving_emails
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/ses_to_sqs_email_callbacks
+        run: |
+          cd env/production/ses_to_sqs_email_callbacks
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/dns
         run: |
           cd env/production/dns

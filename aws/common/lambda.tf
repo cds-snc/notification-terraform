@@ -80,12 +80,12 @@ resource "aws_lambda_function" "ses_receiving_emails" {
 ##
 # CloudWatch log groups for SNS deliveries in ca-central-1
 ##
-resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
-  principal     = "logs.${var.region}.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries.arn}:*"
-}
+# resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
+#   action        = "lambda:InvokeFunction"
+#   function_name = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
+#   principal     = "logs.${var.region}.amazonaws.com"
+#   source_arn    = "${aws_cloudwatch_log_group.sns_deliveries.arn}:*"
+# }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures" {
   action        = "lambda:InvokeFunction"
