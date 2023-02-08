@@ -8,6 +8,20 @@ module "ses_to_sqs_email_callbacks" {
   timeout                = 60
   memory                 = 1024
 
+  policies = [
+    data.aws_iam_policy_document.ses_to_sqs_email_callbacks.json
+  ]
+}
+
+data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
+  statement {
+    actions = [
+      "sqs:Get*",
+      "sqs:SendMessage"
+    ]
+    effect    = "Allow"
+    resources = ["*"]
+  }
 }
 
 resource "aws_lambda_permission" "allow_sns_ses_callbacks" {
