@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     queue = sqs.get_queue_by_name(
         QueueName='eks-notification-canada-cadelivery-receipts'
     )
-
+    print("Task has begun")
     for record in event["Records"]:
         task = {
             "task": "process-ses-result",
@@ -53,6 +53,8 @@ def lambda_handler(event, context):
         }
         msg = base64.b64encode(bytes(json.dumps(envelope), 'utf-8')).decode("utf-8")
         queue.send_message(MessageBody=msg)
+        print("Record has moved")
+    print("Task has ended")
 
     return {
         'statusCode': 200

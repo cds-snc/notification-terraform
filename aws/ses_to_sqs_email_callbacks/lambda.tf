@@ -16,3 +16,9 @@ resource "aws_lambda_permission" "allow_sns_ses_callbacks" {
   principal     = "sns.amazonaws.com"
   source_arn    = var.notification_canada_ca_ses_callback_arn
 }
+
+resource "aws_sns_topic_subscription" "ses_sns_to_lambda" {
+  topic_arn = var.notification_canada_ca_ses_callback_arn
+  protocol  = "lambda"
+  endpoint  = module.ses_to_sqs_email_callbacks.function_name
+}
