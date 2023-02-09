@@ -49,3 +49,20 @@ resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warn
     FunctionName = module.ses_to_sqs_email_callbacks.function_name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-critical" {
+  alarm_name          = "lambda-ses-delivery-receipts-errors-critical"
+  alarm_description   = "10 errors on Lambda ses-to-sqs-email-callbacks in 10 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 60 * 10
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
+  dimensions = {
+    FunctionName = module.ses_to_sqs_email_callbacks.function_name
+  }
+}
