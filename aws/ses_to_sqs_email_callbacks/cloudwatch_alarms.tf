@@ -18,18 +18,34 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_to
   ok_actions          = [var.sns_alert_warning_arn]
 }
 
-# I will switch this on after testing
-# resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses_receiving_emails-api" {
-#   alarm_name          = "logs-10-500-error-5-minutes-critical-ses_receiving_emails-api"
-#   alarm_description   = "Ten 500 errors in 5 minutes for ses_receiving_emails api"
-#   comparison_operator = "GreaterThanOrEqualToThreshold"
-#   evaluation_periods  = "1"
-#   metric_name         = aws_cloudwatch_log_metric_filter.ses_receiving_emails-500-errors-api.metric_transformation[0].name
-#   namespace           = aws_cloudwatch_log_metric_filter.ses_receiving_emails-500-errors-api.metric_transformation[0].namespace
-#   period              = "300"
-#   statistic           = "Sum"
-#   threshold           = 10
-#   treat_missing_data  = "notBreaching"
-#   alarm_actions       = [var.sns_alert_critical_arn]
-#   ok_actions          = [var.sns_alert_critical_arn]
-# }
+resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api" {
+  alarm_name          = "logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api"
+  alarm_description   = "Ten 500 errors in 5 minutes for ses_to_sqs_email_callbacks-500-errors api"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api.metric_transformation[0].namespace
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = 10
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warning" {
+  alarm_name          = "lambda-ses-delivery-receipts-errors-warning"
+  alarm_description   = "5 errors on Lambda ses-to-sqs-email-callbacks in 10 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 60 * 10
+  statistic           = "Sum"
+  threshold           = 5
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
+  dimensions = {
+    FunctionName = module.ses_to_sqs_email_callbacks.function_name
+  }
+}
