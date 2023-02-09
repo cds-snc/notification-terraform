@@ -10,11 +10,11 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
-variable "sns_deliveries_ca_cental_arn" {
+variable "sns_deliveries_ca_central_arn" {
   type = string
 }
 
-variable "sns_deliveries_failures_ca_cental_arn" {
+variable "sns_deliveries_failures_ca_central_arn" {
   type = string
 }
 
