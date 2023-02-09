@@ -57,23 +57,6 @@ resource "aws_ses_active_receipt_rule_set" "main" {
   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
 }
 
-# We will delete this ruleset when we delete all the previous lambda code
-# resource "aws_ses_receipt_rule" "inbound-to-lambda" {
-#   provider = aws.us-east-1
-
-#   name          = "inbound-to-lambda"
-#   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-#   recipients    = [var.domain]
-#   enabled       = true
-#   scan_enabled  = true
-
-#   lambda_action {
-#     function_arn    = var.lambda_ses_receiving_emails_arn
-#     invocation_type = "Event"
-#     position        = 1
-#   }
-# }
-
 ###
 # Additional custom sending domains for emails
 # trvapply-vrtdemande.apps.cic.gc.ca is alone for historic reasons
