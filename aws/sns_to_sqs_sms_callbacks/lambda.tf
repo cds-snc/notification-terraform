@@ -24,15 +24,36 @@ data "aws_iam_policy_document" "sns_to_sqs_sms_callbacks" {
   }
 }
 
-resource "aws_lambda_permission" "sns_to_sqs_sms_callbacks" {
+##
+# CloudWatch log groups for SNS deliveries in ca-central-1
+##
+resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
   action        = "lambda:InvokeFunction"
-  function_name = module.ses_to_sqs_email_callbacks.function_name
-  principal     = "sns.amazonaws.com"
-  source_arn    = var.notification_canada_ca_ses_callback_arn
+  function_name = module.sns_to_sqs_sms_callbacks.function_name
+  principal     = "logs.${var.region}.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries.arn}:*"
 }
 
-resource "aws_sns_topic_subscription" "sns_to_sqs_sms_callbacks_to_lambda" {
-  topic_arn = var.notification_canada_ca_ses_callback_arn
-  protocol  = "lambda"
-  endpoint  = module.ses_to_sqs_email_callbacks.function_arn
+resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures" {
+  action        = "lambda:InvokeFunction"
+  function_name = module.sns_to_sqs_sms_callbacks.function_name
+  principal     = "logs.${var.region}.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries_failures.arn}:*"
+}
+
+##
+# CloudWatch log groups for SNS deliveries in us-west-2
+##
+resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes_us_west_2" {
+  action        = "lambda:InvokeFunction"
+  function_name = module.sns_to_sqs_sms_callbacks.function_name
+  principal     = "logs.us-west-2.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries_us_west_2.arn}:*"
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures_us_west_2" {
+  action        = "lambda:InvokeFunction"
+  function_name = module.sns_to_sqs_sms_callbacks.function_name
+  principal     = "logs.us-west-2.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.arn}:*"
 }
