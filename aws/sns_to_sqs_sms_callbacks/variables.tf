@@ -10,18 +10,18 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
-variable "sns_deliveries_ca_cental" {
+variable "sns_deliveries_ca_cental_arn" {
   type = string
 }
 
-variable "sns_deliveries_failures_ca_cental" {
+variable "sns_deliveries_failures_ca_cental_arn" {
   type = string
 }
 
-variable "sns_deliveries_us_west_2" {
+variable "sns_deliveries_us_west_2_arn" {
   type = string
 }
 
-variable "sns_deliveries_failures_us_west_2" {
+variable "sns_deliveries_failures_us_west_2_arn" {
   type = string
 }
