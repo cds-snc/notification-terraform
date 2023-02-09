@@ -10,7 +10,6 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
-    lambda_ses_receiving_emails_arn         = ""
   }
 }
 
@@ -33,7 +32,6 @@ include {
 
 inputs = {
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
-  lambda_ses_receiving_emails_arn         = dependency.common.outputs.lambda_ses_receiving_emails_arn
   ses_custom_sending_domains              = ["custom-sending-domain.staging.notification.cdssandbox.xyz"]
   lambda_ses_receiving_emails_image_arn   = dependency.ses_receiving_emails.outputs.lambda_ses_receiving_emails_image_arn
 }
