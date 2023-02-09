@@ -10,10 +10,10 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    sns_deliveries_ca_cental          = ""
-    sns_deliveries_failures_ca_cental = ""
-    sns_deliveries_us_west_2          = ""
-    sns_deliveries_failures_us_west_2 = ""
+    sns_deliveries_ca_cental          = "arn:aws:logs:ca-central-1:111111111111:log-group:sns/ca-central-1/111111111111/DirectPublishToPhoneNumber"
+    sns_deliveries_failures_ca_cental = "arn:aws:logs:ca-central-1:111111111111:log-group:sns/ca-central-1/111111111111/DirectPublishToPhoneNumber/Failure"
+    sns_deliveries_us_west_2          = "arn:aws:logs:us-west-2:111111111111:log-group:sns/us-west-2/111111111111/DirectPublishToPhoneNumber"
+    sns_deliveries_failures_us_west_2 = "arn:aws:logs:us-west-2:111111111111:log-group:sns/us-west-2/111111111111/DirectPublishToPhoneNumber/Failure"
     sns_alert_warning_arn             = ""
     sns_alert_critical_arn            = ""
   }
