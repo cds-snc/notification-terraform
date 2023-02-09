@@ -1,5 +1,5 @@
 #
-# SES Receiving Emails CloudWatch logging
+# SNS Receiving SMS CloudWatch logging
 #
 
 resource "aws_cloudwatch_log_group" "sns_to_sqs_sms_callbacks_log_group" {

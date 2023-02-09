@@ -95,5 +95,5 @@ output "sns_deliveries_us_west_2" {
 }
 
 output "sns_deliveries_failures_us_west_2" {
-  value = aws_cloudwatch_log_groups.sns_deliveries_failures_us_west_2
+  value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2
 }
