@@ -77,3 +77,19 @@ output "sns_alert_critical_arn_us_east_1" {
 output "sns_alert_ok_arn_us_east_1" {
   value = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
 }
+
+output "sns_deliveries_ca_central_arn" {
+  value = aws_cloudwatch_log_group.sns_deliveries.arn
+}
+
+output "sns_deliveries_failures_ca_central_arn" {
+  value = aws_cloudwatch_log_group.sns_deliveries_failures.arn
+}
+
+output "sns_deliveries_us_west_2_arn" {
+  value = aws_cloudwatch_log_group.sns_deliveries_us_west_2.arn
+}
+
+output "sns_deliveries_failures_us_west_2_arn" {
+  value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.arn
+}

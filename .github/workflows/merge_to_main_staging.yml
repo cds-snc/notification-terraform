@@ -138,6 +138,11 @@ jobs:
           cd env/staging/ses_to_sqs_email_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/sns_to_sqs_sms_callbacks
+        run: |
+          cd env/staging/sns_to_sqs_sms_callbacks
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Bump version and push tag
         if: github.event_name != 'workflow_dispatch' # We don't want to tag new versions when launched via workflow_dispatch since only environment variables changed
         uses: mathieudutour/github-tag-action@v4.6
