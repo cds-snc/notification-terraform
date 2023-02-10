@@ -34,11 +34,25 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
   source_arn    = "${var.sns_deliveries_ca_central_arn}:*"
 }
 
+resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_ca_central_to_lambda" {
+  name            = "sns_deliveries_ca_central"
+  log_group_name  = var.sns_deliveries_ca_central_name
+  filter_pattern  = ""
+  destination_arn = module.sns_to_sqs_sms_callbacks.function_arn
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures" {
   action        = "lambda:InvokeFunction"
   function_name = module.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.${var.region}.amazonaws.com"
   source_arn    = "${var.sns_deliveries_failures_ca_central_arn}:*"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_failures_ca_central_to_lambda" {
+  name            = "sns_deliveries_failures_ca_central"
+  log_group_name  = var.sns_deliveries_failures_ca_central_name
+  filter_pattern  = ""
+  destination_arn = module.sns_to_sqs_sms_callbacks.function_arn
 }
 
 ##
@@ -51,9 +65,23 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes_us_west_2"
   source_arn    = "${var.sns_deliveries_us_west_2_arn}:*"
 }
 
+resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_us_west_2_to_lambda" {
+  name            = "sns_deliveries_us_west_2_to_lambda"
+  log_group_name  = var.sns_deliveries_us_west_2_name
+  filter_pattern  = ""
+  destination_arn = module.sns_to_sqs_sms_callbacks.function_arn
+}
+
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures_us_west_2" {
   action        = "lambda:InvokeFunction"
   function_name = module.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.us-west-2.amazonaws.com"
   source_arn    = "${var.sns_deliveries_failures_us_west_2_arn}:*"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_failures_us_west_2_to_lambda" {
+  name            = "sns_deliveries_failures_us_west_2_to_lambda"
+  log_group_name  = var.sns_deliveries_failures_us_west_2_name
+  filter_pattern  = ""
+  destination_arn = module.sns_to_sqs_sms_callbacks.function_arn
 }
