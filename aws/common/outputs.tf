@@ -82,14 +82,30 @@ output "sns_deliveries_ca_central_arn" {
   value = aws_cloudwatch_log_group.sns_deliveries.arn
 }
 
+output "sns_deliveries_ca_central_name" {
+  value = aws_cloudwatch_log_group.sns_deliveries.name
+}
+
 output "sns_deliveries_failures_ca_central_arn" {
   value = aws_cloudwatch_log_group.sns_deliveries_failures.arn
+}
+
+output "sns_deliveries_failures_ca_central_name" {
+  value = aws_cloudwatch_log_group.sns_deliveries_failures.name
 }
 
 output "sns_deliveries_us_west_2_arn" {
   value = aws_cloudwatch_log_group.sns_deliveries_us_west_2.arn
 }
 
+output "sns_deliveries_us_west_2_name" {
+  value = aws_cloudwatch_log_group.sns_deliveries_us_west_2.name
+}
+
 output "sns_deliveries_failures_us_west_2_arn" {
   value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.arn
+}
+
+output "sns_deliveries_failures_us_west_2_name" {
+  value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
 }
