@@ -143,38 +143,3 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
     default_value = "0"
   }
 }
-
-###
-# AWS CloudWatch Logs Subscriptions
-###
-resource "aws_cloudwatch_log_subscription_filter" "sns_to_lambda" {
-  name            = "sns_to_lambda"
-  log_group_name  = aws_cloudwatch_log_group.sns_deliveries.name
-  filter_pattern  = ""
-  destination_arn = aws_lambda_function.sns_to_sqs_sms_callbacks.arn
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "sns_failures_to_lambda" {
-  name            = "sns_failures_to_lambda"
-  log_group_name  = aws_cloudwatch_log_group.sns_deliveries_failures.name
-  filter_pattern  = ""
-  destination_arn = aws_lambda_function.sns_to_sqs_sms_callbacks.arn
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "sns_sms_us_west_2_to_lambda" {
-  provider = aws.us-west-2
-
-  name            = "sns_sms_us_west_2_to_lambda"
-  log_group_name  = aws_cloudwatch_log_group.sns_deliveries_us_west_2.name
-  filter_pattern  = ""
-  destination_arn = aws_lambda_function.sns_to_sqs_sms_callbacks.arn
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "sns_sms_failures_us_west_2_to_lambda" {
-  provider = aws.us-west-2
-
-  name            = "sns_sms_failures_us_west_2_to_lambda"
-  log_group_name  = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
-  filter_pattern  = ""
-  destination_arn = aws_lambda_function.sns_to_sqs_sms_callbacks.arn
-}

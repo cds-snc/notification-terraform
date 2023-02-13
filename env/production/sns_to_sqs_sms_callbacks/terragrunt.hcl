@@ -24,6 +24,7 @@ dependency "common" {
     sns_deliveries_failures_us_west_2_name  = ""
     sns_alert_warning_arn                   = ""
     sns_alert_critical_arn                  = ""
+    sns_alert_ok_arn                        = ""
   }
 }
 
@@ -43,4 +44,5 @@ inputs = {
   sns_deliveries_failures_us_west_2_name   = dependency.common.outputs.sns_deliveries_failures_us_west_2_name
   sns_alert_warning_arn                    = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                   = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                         = dependency.common.outputs.sns_alert_ok_arn
 }
