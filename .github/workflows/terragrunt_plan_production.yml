@@ -84,6 +84,15 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+      - name: Terragrunt plan sns_to_sqs_sms_callbacks
+        uses: cds-snc/terraform-plan@v1
+        with:
+          directory: "env/production/sns_to_sqs_sms_callbacks"
+          comment-delete: "true"
+          comment-title: "Production: sns_to_sqs_sms_callbacks"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
       - name: Terragrunt plan dns
         uses: cds-snc/terraform-plan@v2
         with:
