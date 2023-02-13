@@ -648,22 +648,6 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "lambda-sns-delivery-receipts-errors-warning" {
-  alarm_name          = "lambda-sns-delivery-receipts-errors-warning"
-  alarm_description   = "5 errors on Lambda sns-to-sqs-sms-callbacks in 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "Errors"
-  namespace           = "AWS/Lambda"
-  period              = 60 * 10
-  statistic           = "Sum"
-  threshold           = 5
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  dimensions = {
-    FunctionName = aws_lambda_function.sns_to_sqs_sms_callbacks.function_name
-  }
-}
-
 resource "aws_cloudwatch_metric_alarm" "sign-in-3-500-error-15-minutes-critical" {
   alarm_name          = "sign-in-3-500-error-15-minutes-critical"
   alarm_description   = "Three 500 errors in 15 minutes for sign-in"
