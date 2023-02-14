@@ -25,5 +25,5 @@ resource "aws_sqs_queue" "bulk_db_tasks_queue" {
 # We are doing this here as it is required for ses_receiving_emails lambda
 # That folder is configured to use us-east-1, but the below queue is in ca-central-1
 data "aws_sqs_queue" "notify-internal-tasks" {
-  name     = "${var.celery_queue_prefix}notify-internal-tasks"
+  name = "${var.celery_queue_prefix}notify-internal-tasks"
 }
