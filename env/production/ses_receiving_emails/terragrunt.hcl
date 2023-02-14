@@ -19,6 +19,7 @@ dependency "common" {
     sns_alert_warning_arn_us_east_1 = ""
     sns_alert_critical_arn_us_east_1 = ""
     sns_alert_ok_arn_us_east_1 = ""
+    sqs_notify_internal_tasks_arn = ""
   }
 }
 
@@ -36,6 +37,7 @@ inputs = {
   sqs_region                              = "ca-central-1"
   celery_queue_prefix                     = "eks-notification-canada-ca"
   gc_notify_service_email                 = "gc.notify.notification.gc@notification.canada.ca"
+  sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
 }
 
 generate "provider" {

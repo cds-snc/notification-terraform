@@ -113,3 +113,7 @@ output "sns_deliveries_failures_us_west_2_arn" {
 output "sns_deliveries_failures_us_west_2_name" {
   value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
 }
+
+output "sqs_notify_internal_tasks_arn" {
+  value = aws_sqs_queue.notify-internal-tasks.arn
+}
