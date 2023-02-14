@@ -15,7 +15,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_to
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api" {
@@ -30,7 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warning" {
@@ -44,7 +44,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warn
   statistic           = "Sum"
   threshold           = 5
   alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   dimensions = {
     FunctionName = module.ses_to_sqs_email_callbacks.function_name
   }
@@ -61,7 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-crit
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   dimensions = {
     FunctionName = module.ses_to_sqs_email_callbacks.function_name
   }

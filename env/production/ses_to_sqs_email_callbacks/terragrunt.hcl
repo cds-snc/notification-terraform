@@ -18,6 +18,7 @@ dependency "common" {
     notification_canada_ca_ses_callback_arn = ""
     sns_alert_warning_arn          = ""
     sns_alert_critical_arn         = ""
+    sns_alert_ok_arn               = ""
   }
 }
 
@@ -30,4 +31,5 @@ inputs = {
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
   sns_alert_warning_arn                   = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                  = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                        = dependency.common.outputs.sns_alert_ok_arn
 }

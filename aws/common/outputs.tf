@@ -22,6 +22,10 @@ output "sns_alert_critical_arn" {
   value = aws_sns_topic.notification-canada-ca-alert-critical.arn
 }
 
+output "sns_alert_ok_arn" {
+  value = aws_sns_topic.notification-canada-ca-alert-ok.arn
+}
+
 output "sns_alert_general_arn" {
   value = aws_sns_topic.notification-canada-ca-alert-general.arn
 }
