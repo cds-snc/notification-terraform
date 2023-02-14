@@ -21,3 +21,13 @@ resource "aws_sqs_queue" "bulk_db_tasks_queue" {
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
   # AWS managed encryption is good enough for us
 }
+
+resource "aws_sqs_queue" "notify-internal-tasks" {
+  name                    = "${var.celery_queue_prefix}notify-internal-tasks"
+  sqs_managed_sse_enabled = true
+}
+
+resource "aws_sqs_queue" "delivery-receipts" {
+  name                    = "${var.celery_queue_prefix}delivery-receipts"
+  sqs_managed_sse_enabled = true
+}
