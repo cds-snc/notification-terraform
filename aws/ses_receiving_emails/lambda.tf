@@ -20,7 +20,10 @@ module "ses_receiving_emails" {
   ]
 }
 
-data "aws_sqs_queue" "notify-internal-tasks" { name = "${var.celery_queue_prefix}notify-internal-tasks" }
+data "aws_sqs_queue" "notify-internal-tasks" {
+  provider = aws.ca-central-1
+  name     = "${var.celery_queue_prefix}notify-internal-tasks"
+}
 
 data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
   statement {

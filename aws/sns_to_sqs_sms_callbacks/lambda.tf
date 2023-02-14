@@ -13,7 +13,9 @@ module "sns_to_sqs_sms_callbacks" {
   ]
 }
 
-data "aws_sqs_queue" "delivery-receipts" { name = "${var.celery_queue_prefix}delivery-receipts" }
+data "aws_sqs_queue" "delivery-receipts" {
+  name = "eks-notification-canada-cadelivery-receipts"
+}
 
 data "aws_iam_policy_document" "sns_to_sqs_sms_callbacks" {
   statement {
@@ -22,7 +24,8 @@ data "aws_iam_policy_document" "sns_to_sqs_sms_callbacks" {
       "sqs:SendMessage"
     ]
     effect    = "Allow"
-    resources = [aws_sqs_queue.delivery-receipts.arn]
+    resources = [data.aws_sqs_queue.delivery-receipts.arn]
+  }
 }
 
 ##

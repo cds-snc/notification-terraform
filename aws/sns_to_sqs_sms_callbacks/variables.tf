@@ -45,7 +45,3 @@ variable "sns_deliveries_failures_us_west_2_arn" {
 variable "sns_deliveries_failures_us_west_2_name" {
   type = string
 }
-
-variable "sqs_delivery_receipts_arn" {
-  type = string
-}
