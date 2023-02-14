@@ -119,5 +119,5 @@ output "sqs_notify_internal_tasks_arn" {
 }
 
 output "sqs_delivery_receipts_arn" {
-  value = aws_sqs_queue.sqs_delivery_receipts.arn
+  value = aws_sqs_queue.delivery_receipts.arn
 }
