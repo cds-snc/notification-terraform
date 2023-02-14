@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
       "sqs:SendMessage"
     ]
     effect    = "Allow"
-    resources = [var.sqs_notify_internal_tasks_arn]
+    resources = [format("%s/%s", var.celery_queue_prefix, "notify-internal-tasks")]
   }
 }
 resource "aws_lambda_permission" "ses_receiving_emails" {

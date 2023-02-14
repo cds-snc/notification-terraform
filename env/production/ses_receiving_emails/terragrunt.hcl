@@ -19,7 +19,6 @@ dependency "common" {
     sns_alert_warning_arn_us_east_1 = ""
     sns_alert_critical_arn_us_east_1 = ""
     sns_alert_ok_arn_us_east_1 = ""
-    sqs_notify_internal_tasks_arn = ""
   }
 }
 
@@ -28,16 +27,15 @@ include {
 }
 
 inputs = {
-  billing_tag_value                       = "notification-canada-ca-production"
-  schedule_expression                     = "rate(1 minute)"
-  sns_alert_warning_arn_us_east_1         = dependency.common.outputs.sns_alert_warning_arn_us_east_1
-  sns_alert_critical_arn_us_east_1        = dependency.common.outputs.sns_alert_critical_arn_us_east_1
-  sns_alert_ok_arn_us_east_1              = dependency.common.outputs.sns_alert_ok_arn_us_east_1
-  notify_sending_domain                   = "notification.canada.ca"
-  sqs_region                              = "ca-central-1"
-  celery_queue_prefix                     = "eks-notification-canada-ca"
-  gc_notify_service_email                 = "gc.notify.notification.gc@notification.canada.ca"
-  sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
+  billing_tag_value      = "notification-canada-ca-staging"
+  schedule_expression    = "rate(1 minute)"
+  sns_alert_warning_arn_us_east_1 = dependency.common.outputs.sns_alert_warning_arn_us_east_1
+  sns_alert_critical_arn_us_east_1 = dependency.common.outputs.sns_alert_critical_arn_us_east_1
+  sns_alert_ok_arn_us_east_1 = dependency.common.outputs.sns_alert_ok_arn_us_east_1
+  notify_sending_domain  = "notification.canada.ca"
+  sqs_region             = "ca-central-1"
+  celery_queue_prefix    = "eks-notification-canada-ca"
+  gc_notify_service_email = "gc.notify.notification.gc@notification.canada.ca"
 }
 
 generate "provider" {
