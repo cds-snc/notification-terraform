@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
       "sqs:SendMessage"
     ]
     effect    = "Allow"
-    resources = ["*"]
+    resources = ["eks-notification-canada-cadelivery-receipts", ]
   }
 }
 
