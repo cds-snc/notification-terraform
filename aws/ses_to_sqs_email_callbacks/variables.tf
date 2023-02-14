@@ -17,7 +17,3 @@ variable "sns_alert_ok_arn" {
 variable "notification_canada_ca_ses_callback_arn" {
   type = string
 }
-
-variable "sqs_delivery_receipts_arn" {
-  type = string
-}

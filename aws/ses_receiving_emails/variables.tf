@@ -39,7 +39,3 @@ variable "sns_alert_critical_arn_us_east_1" {
 variable "sns_alert_ok_arn_us_east_1" {
   type = string
 }
-
-variable "sqs_notify_internal_tasks_arn" {
-  type = string
-}

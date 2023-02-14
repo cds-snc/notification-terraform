@@ -19,7 +19,6 @@ dependency "common" {
     sns_alert_warning_arn          = ""
     sns_alert_critical_arn         = ""
     sns_alert_ok_arn               = ""
-    sqs_delivery_receipts_arn      = ""
   }
 }
 
@@ -33,5 +32,4 @@ inputs = {
   sns_alert_warning_arn                   = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                  = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_ok_arn                        = dependency.common.outputs.sns_alert_ok_arn
-  sqs_delivery_receipts_arn               = dependency.common.outputs.sqs_delivery_receipts_arn
 }
