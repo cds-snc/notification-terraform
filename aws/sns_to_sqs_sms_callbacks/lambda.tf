@@ -13,6 +13,10 @@ module "sns_to_sqs_sms_callbacks" {
   ]
 }
 
+data "aws_sqs_queue" "delivery-receipts" {
+  name = "eks-notification-canada-cadelivery-receipts"
+}
+
 data "aws_iam_policy_document" "sns_to_sqs_sms_callbacks" {
   statement {
     actions = [
@@ -20,7 +24,7 @@ data "aws_iam_policy_document" "sns_to_sqs_sms_callbacks" {
       "sqs:SendMessage"
     ]
     effect    = "Allow"
-    resources = ["*"]
+    resources = [data.aws_sqs_queue.delivery-receipts.arn]
   }
 }
 
