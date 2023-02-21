@@ -33,3 +33,15 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "malware-detected" {
+  name           = "malware-detected"
+  pattern        = "?\"ERROR/Worker\" ?\"ERROR/ForkPoolWorker\" ?\"WorkerLostError\""
+  log_group_name = local.eks_application_log_group
+
+  metric_transformation {
+    name      = "celery-error"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
