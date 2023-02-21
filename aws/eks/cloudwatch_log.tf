@@ -36,11 +36,11 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error" {
 
 resource "aws_cloudwatch_log_metric_filter" "malware-detected" {
   name           = "malware-detected"
-  pattern        = "?\"ERROR/Worker\" ?\"ERROR/ForkPoolWorker\" ?\"WorkerLostError\""
+  pattern        = "Malicious content detected"
   log_group_name = local.eks_application_log_group
 
   metric_transformation {
-    name      = "celery-error"
+    name      = "malware-detected"
     namespace = "LogMetrics"
     value     = "1"
   }
