@@ -252,7 +252,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "document_download_invalid_path"
+    name     = "invalid_paths"
     priority = 10
 
     action {
@@ -265,26 +265,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     statement {
       and_statement {
-        statement {
-          byte_match_statement {
-            positional_constraint = "STARTS_WITH"
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-            search_string = "api.document"
-            text_transformation {
-              priority = 1
-              type     = "COMPRESS_WHITE_SPACE"
-            }
-            text_transformation {
-              priority = 2
-              type     = "LOWERCASE"
-            }
-          }
-        }
-
+        # invalid paths for document download api
         statement {
           not_statement {
             statement {
@@ -305,72 +286,8 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             }
           }
         }
-      }
-    }
 
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "document_download_api_invalid_path"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  rule {
-    name     = "admin_invalid_path"
-    priority = 11
-
-    action {
-      block {
-        custom_response {
-          response_code = 204
-        }
-      }
-    }
-
-    statement {
-      and_statement {
-        statement {
-          or_statement {
-            statement {
-              byte_match_statement {
-                positional_constraint = "EXACTLY"
-                field_to_match {
-                  single_header {
-                    name = "host"
-                  }
-                }
-                search_string = var.domain
-                text_transformation {
-                  priority = 1
-                  type     = "COMPRESS_WHITE_SPACE"
-                }
-                text_transformation {
-                  priority = 2
-                  type     = "LOWERCASE"
-                }
-              }
-            }
-            statement {
-              byte_match_statement {
-                positional_constraint = "EXACTLY"
-                field_to_match {
-                  single_header {
-                    name = "host"
-                  }
-                }
-                search_string = var.alt_domain != "" ? var.alt_domain : var.domain
-                text_transformation {
-                  priority = 1
-                  type     = "COMPRESS_WHITE_SPACE"
-                }
-                text_transformation {
-                  priority = 2
-                  type     = "LOWERCASE"
-                }
-              }
-            }
-          }
-        }
+        # invalid paths for admin
         statement {
           not_statement {
             statement {
