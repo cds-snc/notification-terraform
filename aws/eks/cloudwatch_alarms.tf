@@ -93,8 +93,8 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
-  alarm_name          = "logs-1-celery-error-1-minute-warning"
+resource "aws_cloudwatch_metric_alarm" "logs-5-celery-error-1-minute-warning" {
+  alarm_name          = "logs-5-celery-error-1-minute-warning"
   alarm_description   = "Five Celery error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
