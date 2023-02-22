@@ -95,14 +95,14 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
   alarm_name          = "logs-1-celery-error-1-minute-warning"
-  alarm_description   = "One Celery error in 1 minute"
+  alarm_description   = "Five Celery error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].namespace
   period              = "60"
   statistic           = "Sum"
-  threshold           = 1
+  threshold           = 5
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
