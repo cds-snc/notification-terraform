@@ -51,7 +51,7 @@ dependency "dns" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs = {
-    aws_acm_notification_canada_ca_arn = ""
+    aws_acm_notification_canada_ca_arn     = ""
     aws_acm_alt_notification_canada_ca_arn = ""
   }
 }
@@ -86,6 +86,7 @@ inputs = {
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   ff_cloudwatch_metrics_enabled          = "true"
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
+  re_api_arn                             = dependency.common.outputs.re_api_arn
   api_waf_rate_limit                     = 30000
   eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
 }

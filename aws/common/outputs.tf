@@ -58,6 +58,18 @@ output "ip_blocklist_arn" {
   value = aws_wafv2_ip_set.ip_blocklist.arn
 }
 
+output "re_api_arn" {
+  value = aws_wafv2_regex_pattern_set.re_api.arn
+}
+
+output "re_admin_arn" {
+  value = aws_wafv2_regex_pattern_set.re_admin.arn
+}
+
+output "re_document_download_arn" {
+  value = aws_wafv2_regex_pattern_set.re_document_download.arn
+}
+
 output "private-links-vpc-endpoints-securitygroup" {
   value       = aws_security_group.vpc_endpoints.id
   description = "private links vpc endpoint security group id"
