@@ -252,7 +252,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "invalid_paths"
+    name     = "valid_paths"
     priority = 10
 
     action {
@@ -265,7 +265,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     statement {
       and_statement {
-        # invalid paths for document download api
+        # filter out non-matching paths for document download api
         statement {
           not_statement {
             statement {
@@ -287,7 +287,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           }
         }
 
-        # invalid paths for admin
+        # filter out non-matching paths for admin
         statement {
           not_statement {
             statement {
@@ -330,7 +330,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "admin_invalid_path"
+      metric_name                = "valid_paths"
       sampled_requests_enabled   = true
     }
   }
