@@ -51,7 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-sns-delivery-receipts-error
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-image-sns-delivery-receipts-errors-critical" {
-  alarm_name          = "lambda-image-sns-delivery-receipts-errors-warning"
+  alarm_name          = "lambda-image-sns-delivery-receipts-errors-critical"
   alarm_description   = "20 errors on Lambda sns-to-sqs-sms-callbacks in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
