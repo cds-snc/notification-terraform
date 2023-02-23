@@ -344,7 +344,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warning" {
-  alarm_name          = "logs-1-malware-detected-1-minute-warning"
+  alarm_name          = "logs-1-scanfiles-timeout-1-minute-warning"
   alarm_description   = "One malware detected error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
