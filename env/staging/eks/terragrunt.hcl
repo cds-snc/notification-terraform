@@ -25,6 +25,9 @@ dependency "common" {
     sns_alert_general_arn                     = ""
     firehose_waf_logs_iam_role_arn            = ""
     ip_blocklist_arn                          = ""
+    re_admin_arn                              = ""
+    re_api_arn                                = ""
+    re_document_download_arn                  = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
   }
