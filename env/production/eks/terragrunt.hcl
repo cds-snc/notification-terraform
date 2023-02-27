@@ -15,6 +15,9 @@ dependency "common" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     ip_blocklist_arn                          = ""
+    re_admin_arn                              = ""
+    re_api_arn                                = ""
+    re_document_download_arn                  = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
   }

@@ -59,15 +59,18 @@ output "ip_blocklist_arn" {
 }
 
 output "re_api_arn" {
-  value = aws_wafv2_regex_pattern_set.re_api.arn
+  value       = aws_wafv2_regex_pattern_set.re_api.arn
+  description = "The ARN of the regex pattern set for the allowed URLs of the API"
 }
 
 output "re_admin_arn" {
-  value = aws_wafv2_regex_pattern_set.re_admin.arn
+  value       = aws_wafv2_regex_pattern_set.re_admin.arn
+  description = "The ARN of the regex pattern set for the allowed URLs of the admin"
 }
 
 output "re_document_download_arn" {
-  value = aws_wafv2_regex_pattern_set.re_document_download.arn
+  value       = aws_wafv2_regex_pattern_set.re_document_download.arn
+  description = "The ARN of the regex pattern set for the allowed URLs of the document download API"
 }
 
 output "private-links-vpc-endpoints-securitygroup" {
