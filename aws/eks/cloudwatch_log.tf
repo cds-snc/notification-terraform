@@ -45,3 +45,15 @@ resource "aws_cloudwatch_log_metric_filter" "malware-detected" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "scanfiles-timeout" {
+  name           = "scanfiles-timeout"
+  pattern        = "Malware scan timed out for notification.id"
+  log_group_name = local.eks_application_log_group
+
+  metric_transformation {
+    name      = "scanfiles-timeout"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
