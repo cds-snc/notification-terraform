@@ -118,6 +118,11 @@ variable "ip_blocklist_arn" {
   type        = string
 }
 
+variable "re_api_arn" {
+  description = "Regular expression to match the api urls"
+  type        = string
+}
+
 variable "api_waf_rate_limit" {
   description = "Fall back rate limit for api and document download api"
   type        = number
