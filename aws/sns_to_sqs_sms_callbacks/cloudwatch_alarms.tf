@@ -43,6 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-sns-delivery-receipts-error
   period              = 60 * 10
   statistic           = "Sum"
   threshold           = 5
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_ok_arn]
   dimensions = {
@@ -60,6 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-sns-delivery-receipts-error
   period              = 60 * 10
   statistic           = "Sum"
   threshold           = 20
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_ok_arn]
   dimensions = {

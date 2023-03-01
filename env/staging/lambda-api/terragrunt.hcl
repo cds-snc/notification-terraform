@@ -22,6 +22,7 @@ dependency "common" {
     s3_bucket_csv_upload_bucket_arn = ""
     firehose_waf_logs_iam_role_arn  = ""
     ip_blocklist_arn                = ""
+    re_api_arn                      = ""
   }
 }
 
@@ -79,6 +80,7 @@ inputs = {
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   ff_cloudwatch_metrics_enabled          = "true"
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
+  re_api_arn                             = dependency.common.outputs.re_api_arn
   api_waf_rate_limit                     = 5000
   eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
 }

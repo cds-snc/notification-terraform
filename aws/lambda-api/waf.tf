@@ -211,7 +211,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
   }
 
   rule {
-    name     = "api_invalid_path"
+    name     = "api_valid_paths"
     priority = 11
 
     action {
@@ -228,7 +228,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
           not_statement {
             statement {
               regex_pattern_set_reference_statement {
-                arn = aws_wafv2_regex_pattern_set.re_api.arn
+                arn = var.re_api_arn
                 field_to_match {
                   uri_path {}
                 }
@@ -266,7 +266,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "api_invalid_path"
+      metric_name                = "api_valid_paths"
       sampled_requests_enabled   = true
     }
   }
