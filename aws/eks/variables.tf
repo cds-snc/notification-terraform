@@ -128,6 +128,11 @@ variable "re_document_download_arn" {
   type        = string
 }
 
+variable "re_documentation_arn" {
+  description = "Regular expression to match the documentation website"
+  type        = string
+}
+
 variable "private-links-vpc-endpoints-securitygroup" {
   type        = string
   description = "Security group for vpc endpoints to enable private link"
