@@ -97,6 +97,35 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-in
   security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
 }
 
+# Quicksight security groups
+# following https://cloudcompiled.com/tutorials/amazon-quicksight-rds-vpc/
+
+resource "aws_security_group" "quicksight" {
+  name        = "quicksight"
+  description = "Allow Quicksight to connect to RDS"
+  vpc_id      = var.vpc_id
+}
+
+resource "aws_security_group_rule" "quicksight-access-rds-eks" {
+  description              = "Connect Quicksight to RDS"
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = 5432
+  to_port                  = 5432
+  security_group_id        = aws_security_group.quicksight.id
+  source_security_group_id = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+resource "aws_security_group_rule" "notification-canada-ca-alb-quicksight-ingress" {
+  description              = "Access to Quicksight access through its security group"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.quicksight.id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
 # Google CIDR security groups
 
 resource "aws_ec2_managed_prefix_list" "google_cidrs" {
