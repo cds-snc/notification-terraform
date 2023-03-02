@@ -113,6 +113,21 @@ variable "ip_blocklist_arn" {
   type        = string
 }
 
+variable "re_api_arn" {
+  description = "Regular expression to match the api urls"
+  type        = string
+}
+
+variable "re_admin_arn" {
+  description = "Regular expression to match the admin urls"
+  type        = string
+}
+
+variable "re_document_download_arn" {
+  description = "Regular expression to match the document download api urls"
+  type        = string
+}
+
 variable "private-links-vpc-endpoints-securitygroup" {
   type        = string
   description = "Security group for vpc endpoints to enable private link"

@@ -252,7 +252,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "document_download_invalid_path"
+    name     = "valid_paths"
     priority = 10
 
     action {
@@ -265,31 +265,12 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     statement {
       and_statement {
-        statement {
-          byte_match_statement {
-            positional_constraint = "STARTS_WITH"
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-            search_string = "api.document"
-            text_transformation {
-              priority = 1
-              type     = "COMPRESS_WHITE_SPACE"
-            }
-            text_transformation {
-              priority = 2
-              type     = "LOWERCASE"
-            }
-          }
-        }
-
+        # filter out non-matching paths for document download api
         statement {
           not_statement {
             statement {
               regex_pattern_set_reference_statement {
-                arn = aws_wafv2_regex_pattern_set.re_document_download.arn
+                arn = var.re_api_arn
                 field_to_match {
                   uri_path {}
                 }
@@ -305,60 +286,15 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             }
           }
         }
-      }
-    }
 
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "document_download_api_invalid_path"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  rule {
-    name     = "admin_invalid_path"
-    priority = 11
-
-    action {
-      block {
-        custom_response {
-          response_code = 204
-        }
-      }
-    }
-
-    statement {
-      and_statement {
         statement {
-          or_statement {
+          not_statement {
             statement {
-              byte_match_statement {
-                positional_constraint = "EXACTLY"
+              regex_pattern_set_reference_statement {
+                arn = var.re_document_download_arn
                 field_to_match {
-                  single_header {
-                    name = "host"
-                  }
+                  uri_path {}
                 }
-                search_string = var.domain
-                text_transformation {
-                  priority = 1
-                  type     = "COMPRESS_WHITE_SPACE"
-                }
-                text_transformation {
-                  priority = 2
-                  type     = "LOWERCASE"
-                }
-              }
-            }
-            statement {
-              byte_match_statement {
-                positional_constraint = "EXACTLY"
-                field_to_match {
-                  single_header {
-                    name = "host"
-                  }
-                }
-                search_string = var.alt_domain != "" ? var.alt_domain : var.domain
                 text_transformation {
                   priority = 1
                   type     = "COMPRESS_WHITE_SPACE"
@@ -371,11 +307,13 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             }
           }
         }
+
+        # filter out non-matching paths for admin
         statement {
           not_statement {
             statement {
               regex_pattern_set_reference_statement {
-                arn = aws_wafv2_regex_pattern_set.re_admin.arn
+                arn = var.re_admin_arn
                 field_to_match {
                   uri_path {}
                 }
@@ -413,7 +351,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "admin_invalid_path"
+      metric_name                = "valid_paths"
       sampled_requests_enabled   = true
     }
   }
@@ -609,40 +547,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     cloudwatch_metrics_enabled = true
     metric_name                = "wafv2"
     sampled_requests_enabled   = false
-  }
-}
-
-resource "aws_wafv2_regex_pattern_set" "re_document_download" {
-  name        = "re_document_download"
-  description = "Regex matching valid document download endpoints"
-  scope       = "REGIONAL"
-
-  # WAF Regex blocks are combined with OR logic. 
-  # Regex support is limited, please see: 
-  # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
-
-  # GET /_status
-  regular_expression {
-    regex_string = "/_status"
-  }
-
-  # GET /services/<uuid:service_id>/documents/<uuid:document_id>
-  regular_expression {
-    regex_string = "/services/[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}/documents/[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}"
-  }
-
-  # GET /d/<base64_uuid:service_id>/<base64_uuid:document_id>
-  regular_expression {
-    regex_string = "/d/[\\S]{22}/[\\S]{22}"
-  }
-
-  # POST /services/<uuid:service_id>/documents
-  regular_expression {
-    regex_string = "/services/[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}/documents"
-  }
-
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 

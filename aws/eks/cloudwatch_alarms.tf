@@ -353,6 +353,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warnin
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
-  treat_missing_data  = "ignore"
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
