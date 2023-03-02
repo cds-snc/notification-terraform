@@ -106,16 +106,6 @@ resource "aws_security_group" "quicksight" {
   vpc_id      = var.vpc_id
 }
 
-resource "aws_security_group_rule" "quicksight-db-ingress" {
-  description              = "Connect RDS to Quicksight"
-  type                     = "ingress"
-  protocol                 = "tcp"
-  from_port                = 5432
-  to_port                  = 5432
-  source_security_group_id = data.aws_security_group.eks-securitygroup-rds.id
-  security_group_id        = aws_security_group.quicksight.id
-}
-
 resource "aws_security_group_rule" "quicksight-access-rds-eks" {
   description              = "Connect Quicksight to RDS"
   type                     = "egress"
