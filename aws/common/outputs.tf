@@ -73,6 +73,11 @@ output "re_document_download_arn" {
   description = "The ARN of the regex pattern set for the allowed URLs of the document download API"
 }
 
+output "re_documentation_arn" {
+  value       = aws_wafv2_regex_pattern_set.re_documentation.arn
+  description = "The ARN of the regex pattern set for the allowed URLs of the documentation website"
+}
+
 output "private-links-vpc-endpoints-securitygroup" {
   value       = aws_security_group.vpc_endpoints.id
   description = "private links vpc endpoint security group id"

@@ -308,6 +308,27 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           }
         }
 
+        statement {
+          not_statement {
+            statement {
+              regex_pattern_set_reference_statement {
+                arn = var.re_documentation_arn
+                field_to_match {
+                  uri_path {}
+                }
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
+
         # filter out non-matching paths for admin
         statement {
           not_statement {
