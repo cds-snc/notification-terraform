@@ -125,6 +125,10 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
+    regex_string = "/assets/img/|/assets/js/|/assets/css/"
+  }
+
+  regular_expression {
     regex_string = "/en|/en/|/en/start.*|/en/send|/en/status.*|/en/testing.*|/en/keys.*|/en/limits.*|/en/callbacks.*|/en/architecture.*|/en/clients.*"
   }
 
@@ -132,4 +136,7 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
     regex_string = "/fr|/fr/|/fr/commencer.*|/fr/envoyer.*|/fr/etat.*|/fr/cles.*|/fr/limites.*|/fr/rappel.*|/fr/architecture.*|/fr/clients.*"
   }
 
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
 }
