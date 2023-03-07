@@ -30,12 +30,8 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   maintenance_window   = "thu:04:00-thu:05:00"
   multi_az_enabled     = true
 
-  # Lambda PR review env security group is only included in Staging
-  security_group_ids = compact([
-    var.eks_cluster_securitygroup,
-    var.env == "staging" ? aws_security_group.lambda_admin_pr_review[0].id : ""
-  ])
-  subnet_group_name = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
+  security_group_ids = local.cluster_security_group_ids
+  subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
