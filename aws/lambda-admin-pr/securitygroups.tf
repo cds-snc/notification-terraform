@@ -31,7 +31,6 @@ resource "aws_security_group_rule" "lambda_egress_to_cluster" {
   from_port                = 6379
   to_port                  = 6379
   protocol                 = "tcp"
-  self                     = true
   source_security_group_id = var.redis_cluster_security_group_id
   security_group_id        = aws_security_group.lambda_admin_pr_review[0].id
 }
