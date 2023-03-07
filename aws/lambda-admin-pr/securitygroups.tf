@@ -55,7 +55,7 @@ resource "aws_security_group_rule" "vpc_endpoints_ingress_from_lambda" {
   to_port                  = 443
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.lambda_admin_pr_review[0].id
-  security_group_id        = var.private-links-vpc-endpoints-securitygroup
+  security_group_id        = var.vpc_endpoint_security_group_id
 }
 
 resource "aws_security_group_rule" "lambda_egress_to_vpc_gateway_endpoints" {
