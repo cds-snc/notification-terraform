@@ -115,3 +115,28 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
   }
 }
 
+resource "aws_wafv2_regex_pattern_set" "re_documentation" {
+  name        = "re_documentation"
+  description = "Regex matching valid documentation website endpoints"
+  scope       = "REGIONAL"
+
+  # WAF Regex blocks are combined with OR logic. 
+  # Regex support is limited, please see: 
+  # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
+
+  regular_expression {
+    regex_string = "/assets/img/|/assets/js/|/assets/css/"
+  }
+
+  regular_expression {
+    regex_string = "/en|/en/|/en/start.*|/en/send|/en/status.*|/en/testing.*|/en/keys.*|/en/limits.*|/en/callbacks.*|/en/architecture.*|/en/clients.*"
+  }
+
+  regular_expression {
+    regex_string = "/fr|/fr/|/fr/commencer.*|/fr/envoyer.*|/fr/etat.*|/fr/cles.*|/fr/limites.*|/fr/rappel.*|/fr/architecture.*|/fr/clients.*"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
