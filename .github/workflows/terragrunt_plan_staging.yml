@@ -115,7 +115,7 @@ jobs:
 
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/common"
           comment-delete: "true"
@@ -125,7 +125,7 @@ jobs:
 
       - name: Terragrunt plan ses_receiving_emails
         if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/ses_receiving_emails"
           comment-delete: "true"
@@ -135,7 +135,7 @@ jobs:
 
       - name: Terragrunt plan dns
         if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/dns"
           comment-delete: "true"
@@ -145,7 +145,7 @@ jobs:
 
       - name: Terragrunt plan eks
         if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/eks"
           comment-delete: "true"
@@ -155,7 +155,7 @@ jobs:
 
       - name: Terragrunt plan elasticache
         if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/elasticache"
           comment-delete: "true"
@@ -165,7 +165,7 @@ jobs:
 
       - name: Terragrunt plan rds
         if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/rds"
           comment-delete: "true"
@@ -175,7 +175,7 @@ jobs:
 
       - name: Terragrunt plan cloudfront
         if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/cloudfront"
           comment-delete: "true"
@@ -185,7 +185,7 @@ jobs:
 
       - name: Terragrunt plan lambda-api
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/lambda-api"
           comment-delete: "true"
@@ -195,7 +195,7 @@ jobs:
 
       - name: Terragrunt plan lambda-admin-pr
         if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/lambda-admin-pr"
           comment-delete: "true"
@@ -205,7 +205,7 @@ jobs:
 
       - name: Terragrunt plan performance-test
         if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/performance-test"
           comment-delete: "true"
@@ -215,7 +215,7 @@ jobs:
 
       - name: Terragrunt plan heartbeat
         if: ${{ steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/heartbeat"
           comment-delete: "true"
@@ -225,7 +225,7 @@ jobs:
 
       - name: Terragrunt plan database-tools
         if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/database-tools"
           comment-delete: "true"
@@ -235,7 +235,7 @@ jobs:
 
       - name: Terragrunt plan lambda-google-cidr
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/lambda-google-cidr"
           comment-delete: "true"
@@ -245,7 +245,7 @@ jobs:
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
         if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/ses_to_sqs_email_callbacks"
           comment-delete: "true"
@@ -255,7 +255,7 @@ jobs:
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
         if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/sns_to_sqs_sms_callbacks"
           comment-delete: "true"

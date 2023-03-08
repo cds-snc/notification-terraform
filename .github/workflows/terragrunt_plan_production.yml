@@ -58,7 +58,7 @@ jobs:
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
       - name: Terragrunt plan common
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/common"
           comment-delete: "true"
@@ -67,7 +67,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_receiving_emails
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/ses_receiving_emails"
           comment-delete: "true"
@@ -76,7 +76,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/ses_to_sqs_email_callbacks"
           comment-delete: "true"
@@ -85,7 +85,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/sns_to_sqs_sms_callbacks"
           comment-delete: "true"
@@ -94,7 +94,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan dns
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/dns"
           comment-delete: "true"
@@ -103,7 +103,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan eks
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/eks"
           comment-delete: "true"
@@ -112,7 +112,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan elasticache
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/elasticache"
           comment-delete: "true"
@@ -121,7 +121,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan rds
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/rds"
           comment-delete: "true"
@@ -130,7 +130,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan cloudfront
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/cloudfront"
           comment-delete: "true"
@@ -139,7 +139,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-api
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/lambda-api"
           comment-delete: "true"
@@ -148,7 +148,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan heartbeat
-        uses: cds-snc/terraform-plan@v2
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/heartbeat"
           comment-delete: "true"
@@ -157,7 +157,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan database-tools
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/database-tools"
           comment-delete: "true"
@@ -166,7 +166,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
-        uses: cds-snc/terraform-plan@v1
+        uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/lambda-google-cidr"
           comment-delete: "true"
