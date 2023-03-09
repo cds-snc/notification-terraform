@@ -135,7 +135,8 @@ resource "aws_iam_user" "bulk_send" {
 }
 
 resource "aws_iam_access_key" "bulk_send" {
-  user = aws_iam_user.bulk_send.name
+  user   = aws_iam_user.bulk_send.name
+  status = "Inactive"
 }
 
 resource "aws_iam_user_policy" "write_s3_bulk_send" {
