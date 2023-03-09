@@ -74,3 +74,8 @@ resource "aws_iam_role_policy_attachment" "notify_admin_pr" {
   role       = aws_iam_role.notify_admin_pr.name
   policy_arn = aws_iam_policy.notify_admin_pr.arn
 }
+
+resource "aws_iam_role_policy_attachment" "notify_admin_pr_vpc_access" {
+  role       = aws_iam_role.notify_admin_pr.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}

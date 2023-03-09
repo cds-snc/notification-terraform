@@ -9,6 +9,7 @@ dependency "common" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
+    vpc_id = ""
     vpc_private_subnets = [
       "subnet-001e585d12cce4d1e",
       "subnet-08de34a9e1a7458dc",
@@ -39,6 +40,7 @@ inputs = {
   elasticache_node_type                   = "cache.t3.micro"
   vpc_private_subnets                     = dependency.common.outputs.vpc_private_subnets
   sns_alert_warning_arn                   = dependency.common.outputs.sns_alert_warning_arn
+  vpc_id                                  = dependency.common.outputs.vpc_id
 }
 
 terraform {
