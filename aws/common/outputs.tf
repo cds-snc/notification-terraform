@@ -135,5 +135,12 @@ output "sns_deliveries_failures_us_west_2_name" {
 }
 
 output "sqs_notify_internal_tasks_arn" {
-  value = data.aws_sqs_queue.notify-internal-tasks.arn
+  value = aws_sqs_queue.notifify_internal_tasks_queue.arn
+}
+output "cbs_satellite_bucket_name" {
+  value = aws_s3_bucket.satellite_bucket.bucket
+}
+
+output "cbs_satellite_bucket_arn" {
+  value = aws_s3_bucket.satellite_bucket.arn
 }

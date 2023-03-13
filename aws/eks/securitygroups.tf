@@ -131,7 +131,9 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-quicksight-ingres
 resource "aws_ec2_managed_prefix_list" "google_cidrs" {
   name           = "Google Service CIDRs"
   address_family = "IPv4"
-  max_entries    = 100
+  # This had to be reduced in scratch account due to max entries quota on account
+  #max_entries    = 100
+  max_entries    = 20
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"

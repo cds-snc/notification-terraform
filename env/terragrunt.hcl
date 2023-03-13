@@ -10,9 +10,9 @@ inputs = {
   region     = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
   elb_account_ids = {
-    "ca-central-1" = "985666609251"
+    "ca-central-1" = ""
   }
-  new_relic_account_id      = "2691974"
+  new_relic_account_id      = ""
   cbs_satellite_bucket_name = "cbs-satellite-${local.vars.inputs.account_id}"
 }
 
@@ -32,18 +32,21 @@ terraform {
 provider "aws" {
   region              = var.region
   allowed_account_ids = [var.account_id]
+  profile                  = "ben-scratch"
 }
 
 provider "aws" {
   alias               = "us-west-2"
   region              = "us-west-2"
   allowed_account_ids = [var.account_id]
+  profile                  = "ben-scratch"
 }
 
 provider "aws" {
   alias               = "us-east-1"
   region              = "us-east-1"
   allowed_account_ids = [var.account_id]
+  profile                  = "ben-scratch"
 }
 EOF
 }
@@ -104,5 +107,6 @@ remote_state {
     key                 = "${path_relative_to_include()}/terraform.tfstate"
     s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.vars.inputs.env}" }
     dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.vars.inputs.env}" }
+    profile             = "ben-scratch"
   }
 }

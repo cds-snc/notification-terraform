@@ -105,7 +105,7 @@ variable "waf_secret" {
 }
 
 locals {
-  eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
+  eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}"
 }
 
 variable "ip_blocklist_arn" {
@@ -143,6 +143,7 @@ variable "private-links-gateway-prefix-list-ids" {
   description = "private links gateway"
 }
 
+/*
 variable "sentinel_customer_id" {
   type        = string
   description = "sentinel customer id"
@@ -154,4 +155,4 @@ variable "sentinel_shared_key" {
   description = "sentinel shared key"
   sensitive   = true
 }
-
+*/

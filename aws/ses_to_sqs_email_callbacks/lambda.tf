@@ -13,7 +13,13 @@ module "ses_to_sqs_email_callbacks" {
   ]
 }
 
-data "aws_sqs_queue" "delivery-receipts" { name = "eks-notification-canada-cadelivery-receipts" }
+
+resource "aws_sqs_queue" "delivery_receipts" {
+  name = "eks-notification-canada-cadelivery-receipts"
+  sqs_managed_sse_enabled = true
+  # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
+  # AWS managed encryption is good enough for us
+}
 
 data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
   statement {
@@ -22,7 +28,7 @@ data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
       "sqs:SendMessage"
     ]
     effect    = "Allow"
-    resources = [data.aws_sqs_queue.delivery-receipts.arn]
+    resources = [aws_sqs_queue.delivery_receipts.arn]
   }
 }
 

@@ -138,3 +138,8 @@ variable "eks_application_log_group" {
   description = "log group of the k8s cluster applications"
   type        = string
 }
+
+variable "cbs_satellite_bucket_arn" {
+  description = "s3 bucket for the cloud based sensor"
+  type        = string
+}

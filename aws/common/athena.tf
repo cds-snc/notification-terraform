@@ -12,7 +12,7 @@ resource "aws_athena_database" "notification_athena" {
 }
 
 resource "aws_athena_workgroup" "primary" {
-  name = "primary"
+  name = "primary2"
 
   configuration {
     enforce_workgroup_configuration    = true

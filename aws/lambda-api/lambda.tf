@@ -29,7 +29,7 @@ resource "aws_lambda_function" "api" {
       SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
       NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
       NOTIFY_EMAIL_DOMAIN                   = var.domain
-      NOTIFY_ENVIRONMENT                    = var.env
+      NOTIFY_ENVIRONMENT                    = "staging"
       REDIS_ENABLED                         = var.redis_enabled
       NEW_RELIC_CONFIG_FILE                 = "/app/newrelic.ini"
       NEW_RELIC_ENVIRONMENT                 = var.env

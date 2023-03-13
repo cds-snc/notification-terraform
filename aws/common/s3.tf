@@ -2,6 +2,8 @@
 # AWS S3 Buckets for Notification application
 ###
 
+data "aws_elb_service_account" "main" {}
+
 resource "aws_s3_bucket" "csv_bucket" {
   bucket = "notification-canada-ca-${var.env}-csv-upload"
   acl    = "private"
@@ -477,4 +479,96 @@ resource "aws_s3_bucket" "athena_bucket_logs" {
 
   #tfsec:ignore:AWS002 - Ignore log of logs
   #tfsec:ignore:AWS077 - Versioning is not enabled
+}
+
+## Satellite bucket stub
+resource "aws_s3_bucket" "satellite_bucket" {
+  bucket = "notification-canada-ca-${var.env}-satellite"
+  acl    = "private"
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  lifecycle_rule {
+    id      = "expire"
+    enabled = true
+
+    expiration {
+      days = 7
+    }
+  }
+
+  #tfsec:ignore:AWS077 - Versioning is not enabled
+  logging {
+    target_bucket = aws_s3_bucket.satellite_bucket_logs.bucket
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "satellite_bucket" {
+  bucket = aws_s3_bucket.satellite_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket" "satellite_bucket_logs" {
+  bucket = "notification-canada-ca-${var.env}-satellite-logs"
+  acl    = "log-delivery-write"
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  lifecycle_rule {
+    enabled = true
+
+    expiration {
+      days = 90
+    }
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+
+  #tfsec:ignore:AWS002 - Ignore log of logs
+  #tfsec:ignore:AWS077 - Versioning is not enabled
+}
+
+resource "aws_s3_bucket_policy" "alb_log_bucket_satellite_s3" {
+  bucket = aws_s3_bucket.satellite_bucket.id
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "${data.aws_elb_service_account.main.arn}"
+        ]
+      },
+      "Action":[
+        "s3:PutObject"  
+      ],      
+      
+    "Resource": "arn:aws:s3:::${aws_s3_bucket.satellite_bucket.bucket}/*"
+    }
+  ]
+}
+POLICY
 }

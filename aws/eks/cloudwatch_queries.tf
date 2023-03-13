@@ -2,7 +2,7 @@ resource "aws_cloudwatch_query_definition" "admin-api-50X-errors" {
   name = "ADMIN & API - 50X errors"
 
   log_group_names = [
-    local.eks_application_log_group
+    aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs.name
   ]
 
   query_string = <<QUERY
@@ -18,7 +18,7 @@ resource "aws_cloudwatch_query_definition" "celery-errors" {
   name = "Celery errors"
 
   log_group_names = [
-    local.eks_application_log_group
+    aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs.name
   ]
 
   query_string = <<QUERY
