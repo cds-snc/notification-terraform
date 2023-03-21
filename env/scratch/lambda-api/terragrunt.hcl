@@ -60,7 +60,6 @@ inputs = {
   api_domain_name                        = "api.scratch.notification.cdssandbox.xyz"
   api_lambda_domain_name                 = "api-lambda.scratch.notification.cdssandbox.xyz"
   api_lambda_alt_domain_name             = "api.scratch.notification.cdssandbox.xyz"
-  api_image_tag                          = "latest"
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   redis_enabled                          = "1"

@@ -12,7 +12,6 @@ inputs = {
   elb_account_ids = {
     "ca-central-1" = ""
   }
-  new_relic_account_id      = ""
   cbs_satellite_bucket_name = "cbs-satellite-${local.vars.inputs.account_id}"
 }
 

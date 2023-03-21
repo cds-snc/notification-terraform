@@ -29,10 +29,10 @@ resource "aws_lambda_function" "api" {
       SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
       NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
       NOTIFY_EMAIL_DOMAIN                   = var.domain
-      NOTIFY_ENVIRONMENT                    = "staging"
+      NOTIFY_ENVIRONMENT                    = "scratch"
       REDIS_ENABLED                         = var.redis_enabled
       NEW_RELIC_CONFIG_FILE                 = "/app/newrelic.ini"
-      NEW_RELIC_ENVIRONMENT                 = var.env
+      NEW_RELIC_ENVIRONMENT                 = "staging"
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
       NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
@@ -40,12 +40,13 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
       FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
+      FLASK_APP                             = "application"
     }
   }
 
   lifecycle {
     ignore_changes = [
-      image_uri,
+
       description, # Will be updated outside TF to force cold start existing lambdas. Primarily when common envs are updated
     ]
   }
