@@ -1,4 +1,3 @@
-
 resource "aws_secretsmanager_secret" "new-relic-license-key" {
   name        = "NEW_RELIC_LICENSE_KEY"
   description = "The New Relic license key, for sending telemetry"
