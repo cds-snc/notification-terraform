@@ -40,7 +40,6 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
       NEW_RELIC_LICENSE_KEY                 = data.aws_secretsmanager_secret_version.new-relic-license-key.secret_string
-
       FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
     }
   }
