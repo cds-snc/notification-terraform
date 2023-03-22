@@ -8,10 +8,3 @@ resource "aws_secretsmanager_secret_version" "new-relic-license-key" {
   secret_id     = aws_secretsmanager_secret.new-relic-license-key.id
   secret_string = var.new_relic_license_key
 }
-data "aws_secretsmanager_secret_version" "new-relic-license-key" {
-  secret_id = data.aws_secretsmanager_secret.new-relic-license-key.id
-}
-
-data "aws_secretsmanager_secret" "new-relic-license-key" {
-  name = aws_secretsmanager_secret.new-relic-license-key.name
-}
