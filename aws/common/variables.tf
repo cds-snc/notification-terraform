@@ -54,11 +54,32 @@ variable "celery_queue_prefix" {
   default = "eks-notification-canada-ca"
 }
 
+variable "sqs_email_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-tasks"
+}
+
 variable "sqs_sms_queue_name" {
   type = string
   # See QueueNames in
   # https://github.com/cds-snc/notification-api/blob/master/app/config.py
   default = "send-sms-tasks"
+}
+
+variable "sqs_priority_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "priority-tasks"
+}
+
+variable "sqs_bulk_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "bulk-tasks"
 }
 
 variable "sqs_throttled_sms_queue_name" {
