@@ -370,7 +370,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
   threshold           = 20
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${sqs_priority_queue_name}"
+    QueueName = "${var.celery_queue_prefix}${var.sqs_priority_queue_name}"
   }
 }
 
@@ -387,7 +387,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${sqs_priority_queue_name}"
+    QueueName = "${var.celery_queue_prefix}${var.sqs_priority_queue_name}"
   }
 }
 
@@ -403,7 +403,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
   threshold           = 60 * 30
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${sqs_email_queue_name}"
+    QueueName = "${var.celery_queue_prefix}${var.sqs_email_queue_name}"
   }
 }
 
@@ -420,7 +420,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${sqs_email_queue_name}"
+    QueueName = "${var.celery_queue_prefix}${var.sqs_email_queue_name}"
   }
 }
 
@@ -436,7 +436,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
   threshold           = 60 * 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${sqs_bulk_queue_name}"
+    QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_queue_name}"
   }
 }
 
@@ -453,7 +453,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}${sqs_bulk_queue_name}"
+    QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_queue_name}"
   }
 }
 
@@ -472,7 +472,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
-    QueueName = "${var.celery_queue_prefix}send-throttled-sms-tasks"
+    QueueName = "${var.celery_queue_prefix}${var.sqs_throttled_sms_queue_name}"
   }
 }
 
