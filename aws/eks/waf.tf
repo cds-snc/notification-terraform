@@ -482,7 +482,15 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 210
 
     action {
-      count {}
+      block {
+        custom_response {
+          response_code = 429
+          response_header {
+            name  = "waf-block"
+            value = "RateLimitRestriction"
+          }
+        }
+      }
     }
     visibility_config {
       cloudwatch_metrics_enabled = true
