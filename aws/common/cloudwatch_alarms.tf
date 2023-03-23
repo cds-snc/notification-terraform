@@ -360,9 +360,9 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
   alarm_name          = "sqs-priority-queue-delay-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in email queue >= 20 minutes for 1 minute"
+  alarm_description   = "ApproximateAgeOfOldestMessage in high priority queue >= 20 seconds for 3 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = "3"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
