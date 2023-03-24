@@ -294,7 +294,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
   alarm_name          = "sqs-sms-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 10 minutes in a 5 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 10 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "5"
   metric_name         = "ApproximateAgeOfOldestMessage"
