@@ -34,6 +34,7 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_CONFIG_FILE                 = "/app/newrelic.ini"
       NEW_RELIC_ENVIRONMENT                 = "staging"
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
+      NEW_RELIC_LICENSE_KEY                 = var.new_relic_license_key
       NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
       NEW_RELIC_APP_NAME                    = var.new_relic_app_name
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
@@ -41,6 +42,12 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
       FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
       FLASK_APP                             = "application"
+      VAULT_ADDR                            = "https://vault-public-vault-5a23ae6a.a2139e52.z1.hashicorp.cloud:8200"
+      VAULT_AUTH_ROLE                       = "vault-role-for-aws-lambdarole"
+      VAULT_AUTH_PROVIDER                   = "aws"
+      VAULT_SECRET_PATH_DB                  = "secret/data/kubernetes/config"
+      VAULT_SECRET_FILE_DB                  = "/tmp/vault_secret.json"
+      VAULT_NAMESPACE                       = "admin"
     }
   }
 
@@ -51,6 +58,20 @@ resource "aws_lambda_function" "api" {
     ]
   }
 }
+output "lambda" {
+  value = <<EOF
+
+The lambda function is ready to run.
+
+    aws lambda invoke --function-name ${aws_lambda_function.api.function_name} /dev/null \
+        --log-type Tail \
+        --region ca-central-1 \
+        | jq -r '.LogResult' \
+        | base64 --decode
+
+EOF
+}
+
 
 resource "aws_lambda_alias" "api_latest" {
   name             = "latest"

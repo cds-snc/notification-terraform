@@ -26,6 +26,7 @@ resource "aws_iam_role_policy_attachment" "lambda_insights" {
 }
 
 data "aws_iam_policy_document" "api_policies" {
+
   statement {
     effect = "Allow"
     actions = [
@@ -36,6 +37,7 @@ data "aws_iam_policy_document" "api_policies" {
   }
 
   statement {
+   
     effect = "Allow"
     actions = [
       "ecr:GetDownloadUrlForlayer",
@@ -111,4 +113,77 @@ resource "aws_iam_role_policy_attachment" "api" {
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
   role       = aws_iam_role.api.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+#### VAULT
+
+# Vault Client (Lambda function) IAM Config
+resource "aws_iam_instance_profile" "lambda" {
+  name = "${var.env}-lambda-instance-profile"
+  role = aws_iam_role.api.name
+}
+
+## Vault Server IAM Config
+resource "aws_iam_instance_profile" "vault-server" {
+  name = "${var.env}-vault-server-instance-profile"
+  role = aws_iam_role.vault-server.name
+}
+
+resource "aws_iam_role" "vault-server" {
+  name               = "${var.env}-vault-server-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_ec2.json
+}
+
+resource "aws_iam_role_policy" "vault-server" {
+  name   = "${var.env}-vault-server-role-policy"
+  role   = aws_iam_role.vault-server.id
+  policy = data.aws_iam_policy_document.vault-server.json
+}
+data "aws_iam_policy_document" "assume_role_ec2" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+
+data "aws_iam_policy_document" "vault-server" {
+  statement {
+    sid    = "ConsulAutoJoin"
+    effect = "Allow"
+
+    actions = ["ec2:DescribeInstances"]
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "VaultAWSAuthMethod"
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstances",
+      "iam:GetInstanceProfile",
+      "iam:GetUser",
+      "iam:GetRole",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "VaultKMSUnseal"
+    effect = "Allow"
+
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+    ]
+
+    resources = ["*"]
+  }
 }
