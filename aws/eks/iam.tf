@@ -50,6 +50,19 @@ resource "aws_iam_role" "eks-worker-role" {
         "Service": "ec2.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::419291849580:oidc-provider/oidc.eks.ca-central-1.amazonaws.com/id/EF450287595BB1AD420F81784AEDBA8E"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.eks.ca-central-1.amazonaws.com/id/EF450287595BB1AD420F81784AEDBA8E:aud": "sts.amazonaws.com",
+          "oidc.eks.ca-central-1.amazonaws.com/id/EF450287595BB1AD420F81784AEDBA8E:sub": "system:serviceaccount:default:secret-manager-reader"
+        }
+      }
     }
   ]
 }
@@ -111,6 +124,11 @@ resource "aws_iam_policy" "notification-worker-policy" {
         "s3:*"
       ],
       "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "secretsmanager:GetSecretValue",
       "Resource": "*"
     }
   ]
