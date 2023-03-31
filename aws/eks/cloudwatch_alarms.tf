@@ -352,7 +352,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-3-scanfiles-timeout-5-minutes-warni
   namespace           = aws_cloudwatch_log_metric_filter.scanfiles-timeout.metric_transformation[0].namespace
   period              = "300"
   statistic           = "Sum"
-  threshold           = 3
+  threshold           = 4
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
