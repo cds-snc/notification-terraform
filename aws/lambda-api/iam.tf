@@ -84,6 +84,17 @@ data "aws_iam_policy_document" "api_policies" {
     effect = "Allow"
     actions = [
       "secretsmanager:GetSecretValue",
+      "cloudwatch:GetMetricStatistics",
+      "cloudwatch:ListMetrics",
+      "cloudwatch:GetMetricData",
+      "config:BatchGetResourceConfig",
+      "config:ListDiscoveredResources",
+      "tag:GetResources",
+      "lambda:GetAccountSettings",
+      "lambda:ListFunctions",
+      "lambda:ListAliases",
+      "lambda:ListTags",
+      "lambda:ListEventSourceMappings"
     ]
     resources = [
       aws_secretsmanager_secret_version.new-relic-license-key.arn
