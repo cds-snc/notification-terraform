@@ -32,6 +32,12 @@ terraform {
 provider "aws" {
   region              = var.region
   allowed_account_ids = [var.account_id]
+  default_tags {
+    tags = {
+      CostCentre = "notification-canada-ca-${var.env}"
+      Terraform  = true
+    }
+  }
 }
 
 provider "aws" {
