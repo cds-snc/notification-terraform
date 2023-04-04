@@ -374,10 +374,10 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-api-lambda-waf-logs" {
     buffer_size = 5
   }
 
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-    Terraform  = true
-  }
+  # tags = {
+  #   CostCenter = "notification-canada-ca-${var.env}"
+  #   Terraform  = true
+  # }
 }
 
 resource "aws_wafv2_web_acl_logging_configuration" "firehose-api-lambda-waf-logs" {

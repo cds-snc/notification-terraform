@@ -133,9 +133,9 @@ resource "aws_ec2_managed_prefix_list" "google_cidrs" {
   address_family = "IPv4"
   max_entries    = 100
 
-  tags = {
-    CostCentre = "notification-canada-ca-${var.env}"
-  }
+  # tags = {
+  #   CostCentre = "notification-canada-ca-${var.env}"
+  # }
 }
 
 resource "aws_security_group_rule" "blazer-egress-google-cidrs" {
