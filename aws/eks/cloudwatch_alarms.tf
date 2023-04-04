@@ -356,3 +356,37 @@ resource "aws_cloudwatch_metric_alarm" "logs-3-scanfiles-timeout-5-minutes-warni
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
+
+
+resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
+  alarm_name                = "kubernetes-failed-nodes"
+  comparison_operator       = "GreaterThanUpperThreshold"
+  evaluation_periods        = 1
+  threshold_metric_id       = "ad1"
+  alarm_description         = "Kubernetes failed node anomalies"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions             = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "ad1"
+    expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
+    label       = "cluster_failed_node_count (expected)"
+    return_data = "true"
+  }
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "cluster_failed_node_count"
+      namespace   = "ContainerInsights"
+      period      = 300
+      stat        = "Average"
+      unit        = "Count"
+
+      dimensions = {
+        Name = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+      }
+    }
+  }
+}
