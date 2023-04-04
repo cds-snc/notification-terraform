@@ -7,6 +7,7 @@ resource "aws_cloudwatch_log_group" "ses_to_sqs_email_callbacks_log_group" {
   retention_in_days = 90
   tags = {
     CostCentre  = "notification-canada-ca-${var.env}"
+    Terraform   = true
     Environment = var.env
     Application = "lambda"
   }
@@ -21,5 +22,9 @@ resource "aws_cloudwatch_log_metric_filter" "ses_to_sqs_email_callbacks-500-erro
     name      = "500-errors-ses_to_sqs_email_callbacks-api"
     namespace = "LogMetrics"
     value     = "1"
+  }
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
