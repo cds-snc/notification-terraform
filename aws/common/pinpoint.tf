@@ -8,6 +8,7 @@ resource "aws_pinpoint_app" "notification-canada-ca" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

@@ -55,6 +55,7 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS071 - Access logging disabled

@@ -10,6 +10,7 @@ resource "aws_db_subnet_group" "notification-canada-ca" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -34,6 +35,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -64,6 +66,7 @@ resource "aws_rds_cluster_parameter_group" "default" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -100,6 +103,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

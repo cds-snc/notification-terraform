@@ -12,6 +12,7 @@ resource "aws_secretsmanager_secret" "database_user" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -76,8 +77,10 @@ module "rds_proxy" {
 
   proxy_tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }

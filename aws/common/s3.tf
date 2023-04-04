@@ -29,6 +29,7 @@ resource "aws_s3_bucket" "csv_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -63,6 +64,7 @@ resource "aws_s3_bucket" "csv_bucket_logs" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
@@ -96,6 +98,7 @@ resource "aws_s3_bucket" "bulk_send" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -129,6 +132,7 @@ resource "aws_s3_bucket" "bulk_send_logs" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
@@ -156,6 +160,7 @@ resource "aws_s3_bucket" "asset_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS002 - No logging enabled
@@ -187,6 +192,7 @@ resource "aws_s3_bucket" "legacy_asset_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS002 - No logging enabled
@@ -246,6 +252,7 @@ resource "aws_s3_bucket" "document_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -278,6 +285,7 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -320,6 +328,7 @@ resource "aws_s3_bucket" "document_bucket_logs" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
@@ -357,6 +366,7 @@ resource "aws_s3_bucket" "alb_log_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs
@@ -440,6 +450,7 @@ resource "aws_s3_bucket" "athena_bucket" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -473,6 +484,7 @@ resource "aws_s3_bucket" "athena_bucket_logs" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   #tfsec:ignore:AWS002 - Ignore log of logs

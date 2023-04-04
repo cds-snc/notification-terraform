@@ -24,6 +24,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -78,6 +79,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -112,6 +114,7 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -138,5 +141,6 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }

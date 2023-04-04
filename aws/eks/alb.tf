@@ -23,6 +23,7 @@ resource "aws_alb" "notification-canada-ca" {
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

@@ -10,6 +10,7 @@ resource "aws_security_group" "lambda_admin_pr_review" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

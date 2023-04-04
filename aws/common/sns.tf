@@ -4,6 +4,7 @@ resource "aws_sns_topic" "notification-canada-ca-ses-callback" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -13,6 +14,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -22,6 +24,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -34,6 +37,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-west-2" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -43,6 +47,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -54,6 +59,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-west-2" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -66,6 +72,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -79,6 +86,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-general" {
   # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html#USER_Events.Subscribing
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -174,6 +182,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-east-1" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -186,6 +195,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-east-1" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -198,6 +208,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-east-1" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

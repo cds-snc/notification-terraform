@@ -8,6 +8,7 @@ resource "aws_route53_resolver_query_log_config" "dns_query_log_config" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

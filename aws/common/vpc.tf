@@ -13,6 +13,7 @@ resource "aws_vpc" "notification-canada-ca" {
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -34,6 +35,7 @@ resource "aws_internet_gateway" "notification-canada-ca" {
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -50,6 +52,7 @@ resource "aws_eip" "notification-canada-ca-natgw" {
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -63,6 +66,7 @@ resource "aws_nat_gateway" "notification-canada-ca" {
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -116,6 +120,7 @@ resource "aws_route_table" "notification-canada-ca-public_subnet" {
   tags = {
     Name       = "Public Subnet Route Table"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -139,6 +144,7 @@ resource "aws_route_table" "notification-canada-ca-private_subnet" {
   tags = {
     Name       = "Private Subnet Route Table ${count.index}"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -199,6 +205,7 @@ resource "aws_default_network_acl" "notification-canada-ca" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -211,6 +218,7 @@ resource "aws_flow_log" "cloud-based-sensor" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
     Terraform  = true
   }
 }

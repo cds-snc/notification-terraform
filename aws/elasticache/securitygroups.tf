@@ -10,5 +10,6 @@ resource "aws_security_group" "redis_cluster" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }

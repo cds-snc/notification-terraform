@@ -343,6 +343,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   visibility_config {
@@ -376,6 +377,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-api-lambda-waf-logs" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
     Terraform  = true
   }
 }

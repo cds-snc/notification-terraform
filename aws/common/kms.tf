@@ -62,6 +62,7 @@ EOF
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -106,6 +107,7 @@ EOF
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -151,5 +153,6 @@ EOF
   tags = {
     Name       = "notification-canada-ca"
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }

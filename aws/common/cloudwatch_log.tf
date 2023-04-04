@@ -6,6 +6,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -14,6 +15,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -24,6 +26,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_us_west_2" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -34,6 +37,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -44,6 +48,7 @@ resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

@@ -41,5 +41,6 @@ resource "aws_db_instance" "database-tools" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }

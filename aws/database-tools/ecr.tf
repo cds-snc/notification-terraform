@@ -8,5 +8,6 @@ resource "aws_ecr_repository" "blazer" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }

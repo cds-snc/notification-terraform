@@ -35,6 +35,7 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   lifecycle {

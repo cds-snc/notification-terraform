@@ -12,6 +12,7 @@ resource "aws_wafv2_web_acl" "assets_cdn" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 
   visibility_config {

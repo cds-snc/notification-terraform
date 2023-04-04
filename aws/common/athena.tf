@@ -29,6 +29,7 @@ resource "aws_athena_workgroup" "primary" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

@@ -30,6 +30,7 @@ resource "aws_security_group" "notification-canada-ca-alb" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -135,6 +136,7 @@ resource "aws_ec2_managed_prefix_list" "google_cidrs" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -161,6 +163,7 @@ resource "aws_security_group" "notification-canada-ca-worker" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 

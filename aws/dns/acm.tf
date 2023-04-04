@@ -14,6 +14,7 @@ resource "aws_acm_certificate" "notification-canada-ca" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -35,6 +36,7 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -50,5 +52,6 @@ resource "aws_acm_certificate" "assets-notification-canada-ca" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
