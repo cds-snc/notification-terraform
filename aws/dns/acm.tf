@@ -13,7 +13,7 @@ resource "aws_acm_certificate" "notification-canada-ca" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -49,6 +49,6 @@ resource "aws_acm_certificate" "assets-notification-canada-ca" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }

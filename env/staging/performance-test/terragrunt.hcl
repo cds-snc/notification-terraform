@@ -42,7 +42,7 @@ inputs = {
   vpc_id                    = dependency.common.outputs.vpc_id
   aws_pinpoint_region       = "ca-central-1"
 
-  billing_tag_key                             = "CostCenter"
+  billing_tag_key                             = "CostCentre"
   billing_tag_value                           = "notification-canada-ca-staging"
   schedule_expression                         = "cron(0 0 * * ? *)"
   perf_test_aws_s3_bucket                     = "notify-performance-test-results-staging"

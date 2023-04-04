@@ -3,7 +3,7 @@ resource "aws_sns_topic" "notification-canada-ca-ses-callback" {
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok" {
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -21,7 +21,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning" {
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-west-2" {
 
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical" {
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -53,7 +53,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-west-2" {
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-west-2.arn
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -65,7 +65,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
 
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -78,7 +78,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-general" {
   #
   # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html#USER_Events.Subscribing
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -173,7 +173,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-east-1" {
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-east-1.arn
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -185,7 +185,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-east-1" {
 
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -197,7 +197,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-east-1" {
 
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 

@@ -6,7 +6,7 @@ resource "aws_cloudwatch_log_group" "ses_to_sqs_email_callbacks_log_group" {
   name              = "ses_to_sqs_email_callbacks_log_group"
   retention_in_days = 90
   tags = {
-    CostCenter  = "notification-canada-ca-${var.env}"
+    CostCentre  = "notification-canada-ca-${var.env}"
     Environment = var.env
     Application = "lambda"
   }

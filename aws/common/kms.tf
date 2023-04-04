@@ -61,7 +61,7 @@ EOF
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -105,7 +105,7 @@ EOF
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -150,6 +150,6 @@ EOF
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }

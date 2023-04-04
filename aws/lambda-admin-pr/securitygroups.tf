@@ -9,7 +9,7 @@ resource "aws_security_group" "lambda_admin_pr_review" {
   vpc_id      = var.vpc_id
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 

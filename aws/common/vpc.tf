@@ -12,7 +12,7 @@ resource "aws_vpc" "notification-canada-ca" {
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_internet_gateway" "notification-canada-ca" {
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -49,7 +49,7 @@ resource "aws_eip" "notification-canada-ca-natgw" {
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -62,7 +62,7 @@ resource "aws_nat_gateway" "notification-canada-ca" {
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -79,7 +79,7 @@ resource "aws_subnet" "notification-canada-ca-private" {
 
   tags = {
     Name                                                                  = "Private Subnet 0${count.index + 1}"
-    CostCenter                                                            = "notification-canada-ca-${var.env}"
+    CostCentre                                                            = "notification-canada-ca-${var.env}"
     Access                                                                = "private"
     "kubernetes.io/role/internal-elb"                                     = 1
     "kubernetes.io/cluster/notification-canada-ca-${var.env}-eks-cluster" = "shared"
@@ -95,7 +95,7 @@ resource "aws_subnet" "notification-canada-ca-public" {
 
   tags = {
     Name                     = "Public Subnet 0${count.index + 1}"
-    CostCenter               = "notification-canada-ca-${var.env}"
+    CostCentre               = "notification-canada-ca-${var.env}"
     Access                   = "public"
     "kubernetes.io/role/elb" = 1
   }
@@ -115,7 +115,7 @@ resource "aws_route_table" "notification-canada-ca-public_subnet" {
 
   tags = {
     Name       = "Public Subnet Route Table"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -138,7 +138,7 @@ resource "aws_route_table" "notification-canada-ca-private_subnet" {
 
   tags = {
     Name       = "Private Subnet Route Table ${count.index}"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -198,7 +198,7 @@ resource "aws_default_network_acl" "notification-canada-ca" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -210,7 +210,7 @@ resource "aws_flow_log" "cloud-based-sensor" {
   log_format           = "$${vpc-id} $${version} $${account-id} $${interface-id} $${srcaddr} $${dstaddr} $${srcport} $${dstport} $${protocol} $${packets} $${bytes} $${start} $${end} $${action} $${log-status} $${subnet-id} $${instance-id}"
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
     Terraform  = true
   }
 }

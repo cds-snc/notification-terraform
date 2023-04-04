@@ -569,7 +569,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 
   visibility_config {
@@ -602,7 +602,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
     Terraform  = true
   }
 }

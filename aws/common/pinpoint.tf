@@ -7,7 +7,7 @@ resource "aws_pinpoint_app" "notification-canada-ca" {
   name     = "notification-canada-ca-${var.env}"
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
