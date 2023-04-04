@@ -357,15 +357,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-3-scanfiles-timeout-5-minutes-warni
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
-  alarm_name                = "kubernetes-failed-nodes"
-  comparison_operator       = "GreaterThanUpperThreshold"
-  evaluation_periods        = 1
-  threshold_metric_id       = "ad1"
-  alarm_description         = "Kubernetes failed node anomalies"
+  alarm_name          = "kubernetes-failed-nodes"
+  comparison_operator = "GreaterThanUpperThreshold"
+  evaluation_periods  = 1
+  threshold_metric_id = "ad1"
+  alarm_description   = "Kubernetes failed node anomalies"
   #Setting to warn until we verify that it is working as expected
-  alarm_actions             = [var.sns_alert_warning_arn]
+  alarm_actions = [var.sns_alert_warning_arn]
 
   metric_query {
     id          = "ad1"
