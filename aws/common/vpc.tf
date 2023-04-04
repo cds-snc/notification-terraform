@@ -209,8 +209,8 @@ resource "aws_flow_log" "cloud-based-sensor" {
   vpc_id               = aws_vpc.notification-canada-ca.id
   log_format           = "$${vpc-id} $${version} $${account-id} $${interface-id} $${srcaddr} $${dstaddr} $${srcport} $${dstport} $${protocol} $${packets} $${bytes} $${start} $${end} $${action} $${log-status} $${subnet-id} $${instance-id}"
 
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-    Terraform  = true
-  }
+  # tags = {
+  #   CostCenter = "notification-canada-ca-${var.env}"
+  #   Terraform  = true
+  # }
 }
