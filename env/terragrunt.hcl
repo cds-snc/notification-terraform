@@ -34,7 +34,6 @@ provider "aws" {
   allowed_account_ids = [var.account_id]
   default_tags {
     tags = {
-      Environment = var.env
       CostCentre = "notification-canada-ca-${local.vars.inputs.env}"
       Terraform  = true
     }
