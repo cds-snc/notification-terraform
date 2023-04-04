@@ -54,6 +54,10 @@ resource "aws_cloudwatch_metric_alarm" "priority-inflights-not-being-processed-w
     label       = "Delta"
     return_data = "true"
   }
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
+  }
 }
 
 
@@ -108,6 +112,10 @@ resource "aws_cloudwatch_metric_alarm" "priority_inflights-not-being-processed-c
     label       = "Delta"
     return_data = "true"
   }
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-warning" {
@@ -159,6 +167,10 @@ resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-war
     expression  = "ABS(inflight_created - inflight_processed)"
     label       = "Delta"
     return_data = "true"
+  }
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -213,6 +225,10 @@ resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-cri
     label       = "Delta"
     return_data = "true"
   }
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-warning" {
@@ -264,6 +280,10 @@ resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-warni
     expression  = "ABS(inflight_created - inflight_processed)"
     label       = "Delta"
     return_data = "true"
+  }
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
 
@@ -317,5 +337,9 @@ resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-criti
     expression  = "ABS(inflight_created - inflight_processed)"
     label       = "Delta"
     return_data = "true"
+  }
+  tags = {
+    CostCentre = "notification-canada-ca-${var.env}"
+    Terraform  = true
   }
 }
