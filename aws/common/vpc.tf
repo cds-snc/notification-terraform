@@ -84,6 +84,7 @@ resource "aws_subnet" "notification-canada-ca-private" {
   tags = {
     Name                                                                  = "Private Subnet 0${count.index + 1}"
     CostCentre                                                            = "notification-canada-ca-${var.env}"
+    Terraform                                                             = true
     Access                                                                = "private"
     "kubernetes.io/role/internal-elb"                                     = 1
     "kubernetes.io/cluster/notification-canada-ca-${var.env}-eks-cluster" = "shared"
@@ -100,6 +101,7 @@ resource "aws_subnet" "notification-canada-ca-public" {
   tags = {
     Name                     = "Public Subnet 0${count.index + 1}"
     CostCentre               = "notification-canada-ca-${var.env}"
+    Terraform                = true
     Access                   = "public"
     "kubernetes.io/role/elb" = 1
   }
@@ -218,7 +220,6 @@ resource "aws_flow_log" "cloud-based-sensor" {
 
   tags = {
     CostCentre = "notification-canada-ca-${var.env}"
-    Terraform  = true
     Terraform  = true
   }
 }
