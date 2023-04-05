@@ -28,7 +28,7 @@ resource "aws_athena_workgroup" "primary" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 

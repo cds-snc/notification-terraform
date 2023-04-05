@@ -11,7 +11,7 @@ resource "aws_secretsmanager_secret" "database_user" {
   description = "Database superuser ${local.db_user}, database connection values"
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -75,9 +75,9 @@ module "rds_proxy" {
   db_cluster_identifier = aws_rds_cluster.notification-canada-ca.cluster_identifier
 
   proxy_tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }

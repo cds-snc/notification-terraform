@@ -22,7 +22,7 @@ resource "aws_alb" "notification-canada-ca" {
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 

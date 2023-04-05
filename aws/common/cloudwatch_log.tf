@@ -5,7 +5,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries" {
   name = "sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber"
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -13,7 +13,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
   name = "sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure"
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -23,7 +23,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_us_west_2" {
   name = "sns/us-west-2/${var.account_id}/DirectPublishToPhoneNumber"
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
   name = "sns/us-west-2/${var.account_id}/DirectPublishToPhoneNumber/Failure"
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -43,7 +43,7 @@ resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
   retention_in_days = 14
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 

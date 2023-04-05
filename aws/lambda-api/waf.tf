@@ -342,7 +342,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 
   visibility_config {
@@ -375,7 +375,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-api-lambda-waf-logs" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
     Terraform  = true
   }
 }

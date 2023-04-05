@@ -34,7 +34,7 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 
   lifecycle {

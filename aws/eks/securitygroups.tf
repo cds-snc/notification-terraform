@@ -29,7 +29,7 @@ resource "aws_security_group" "notification-canada-ca-alb" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -160,7 +160,7 @@ resource "aws_security_group" "notification-canada-ca-worker" {
   vpc_id      = var.vpc_id
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 

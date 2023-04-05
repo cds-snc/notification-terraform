@@ -40,6 +40,6 @@ resource "aws_db_instance" "database-tools" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }

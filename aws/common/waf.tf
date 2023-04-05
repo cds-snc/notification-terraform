@@ -23,7 +23,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -77,7 +77,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -111,7 +111,7 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -137,6 +137,6 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }

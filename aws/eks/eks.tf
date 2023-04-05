@@ -34,7 +34,7 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -72,7 +72,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
 
   tags = {
     Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
 

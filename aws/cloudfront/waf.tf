@@ -11,7 +11,7 @@ resource "aws_wafv2_web_acl" "assets_cdn" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 
   visibility_config {

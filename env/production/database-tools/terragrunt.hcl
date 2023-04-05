@@ -43,7 +43,7 @@ include {
 inputs = {
   vpc_private_subnets             = dependency.common.outputs.vpc_private_subnets
   vpc_id                          = dependency.common.outputs.vpc_id
-  billing_tag_key                 = "CostCenter"
+  billing_tag_key                 = "CostCentre"
   billing_tag_value               = "notification-canada-ca-production"
   blazer_image_tag                = "53254711eb1da91f834d933e9663c87bc5974d3d"
   database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup

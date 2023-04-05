@@ -7,6 +7,6 @@ resource "aws_ecr_repository" "blazer" {
   }
 
   tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
+    CostCentre = "notification-canada-ca-${var.env}"
   }
 }
