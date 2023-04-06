@@ -94,6 +94,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
+  count               = var.env == "production" ? 1 : 0
   alarm_name          = "logs-1-celery-error-1-minute-warning"
   alarm_description   = "One Celery error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
