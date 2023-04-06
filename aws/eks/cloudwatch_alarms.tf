@@ -381,3 +381,165 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
     }
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
+  alarm_name          = "celery-replicas-unavailable"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  alarm_description   = "Celery Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "celery_deployment_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Average"
+      unit        = "Count"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
+  alarm_name          = "celery-sms-replicas-unavailable"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  alarm_description   = "Celery SMS Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Average"
+      unit        = "Count"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-sms"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
+  alarm_name          = "admin-replicas-unavailable"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  alarm_description   = "Notify Admin Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Average"
+      unit        = "Count"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "admin"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
+  alarm_name          = "api-replicas-unavailable"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  alarm_description   = "Notify K8S API Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Average"
+      unit        = "Count"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "api"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
+  alarm_name          = "documentation-replicas-unavailable"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  alarm_description   = "Notify Documentation Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Average"
+      unit        = "Count"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "documentation"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailable" {
+  alarm_name          = "document-download-api-replicas-unavailable"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  alarm_description   = "Notify Document Download API Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Average"
+      unit        = "Count"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "document-download-api"
+      }
+    }
+  }
+}

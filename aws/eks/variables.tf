@@ -155,3 +155,9 @@ variable "sentinel_shared_key" {
   sensitive   = true
 }
 
+variable "notify_k8s_namespace" {
+  type        = string
+  description = "Kubernetes namespace where GC Notify is installed"
+  sensitive   = true
+  default     = "notification-canada-ca"
+}
