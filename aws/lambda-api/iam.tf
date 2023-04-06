@@ -89,6 +89,24 @@ data "aws_iam_policy_document" "api_policies" {
       aws_secretsmanager_secret_version.new-relic-license-key.arn
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "cloudwatch:GetMetricStatistics",
+      "cloudwatch:ListMetrics",
+      "cloudwatch:GetMetricData",
+      "config:BatchGetResourceConfig",
+      "config:ListDiscoveredResources",
+      "tag:GetResources",
+      "lambda:GetAccountSettings",
+      "lambda:ListFunctions",
+      "lambda:ListAliases",
+      "lambda:ListTags",
+      "lambda:ListEventSourceMappings"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "api" {
