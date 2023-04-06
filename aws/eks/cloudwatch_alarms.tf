@@ -359,19 +359,12 @@ resource "aws_cloudwatch_metric_alarm" "logs-3-scanfiles-timeout-5-minutes-warni
 
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   alarm_name          = "kubernetes-failed-nodes"
-  comparison_operator = "GreaterThanUpperThreshold"
+  comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
-  threshold_metric_id = "ad1"
   alarm_description   = "Kubernetes failed node anomalies"
   #Setting to warn until we verify that it is working as expected
   alarm_actions = [var.sns_alert_warning_arn]
-
-  metric_query {
-    id          = "ad1"
-    expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
-    label       = "cluster_failed_node_count (expected)"
-    return_data = "true"
-  }
+  treat_missing_data  = "notBreaching"
 
   metric_query {
     id          = "m1"
