@@ -363,8 +363,8 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   evaluation_periods  = 1
   alarm_description   = "Kubernetes failed node anomalies"
   #Setting to warn until we verify that it is working as expected
-  alarm_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "notBreaching"
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
 
   metric_query {
     id          = "m1"
@@ -375,7 +375,6 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
       period      = 300
       stat        = "Average"
       unit        = "Count"
-
       dimensions = {
         Name = aws_eks_cluster.notification-canada-ca-eks-cluster.name
       }
