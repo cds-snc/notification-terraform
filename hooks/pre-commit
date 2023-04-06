@@ -1,0 +1,18 @@
+#!/bin/bash
+RED='\033[0;31m'
+echo "checking terraform formatting"
+for D in $(find ./aws -mindepth 1 -maxdepth 1 -type d); do
+    pushd $D 
+        if $(terraform fmt); then
+            echo "Formatting Check Passed"
+        else
+            printf "${RED}Formatting Check for $D Failed"
+            exit 1
+        fi
+    popd
+done
+
+
+
+
+
