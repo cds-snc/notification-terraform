@@ -1,5 +1,6 @@
 locals {
-  db_user = "postgres"
+  db_user  = "postgres"
+  db_user1 = "user1"
 }
 
 ################################################################################
@@ -21,7 +22,23 @@ resource "aws_secretsmanager_secret_version" "database_user" {
     username = local.db_user
     password = var.rds_cluster_password
   })
+}
 
+resource "aws_secretsmanager_secret" "database_user1" {
+  name        = local.db_user1
+  description = "Database superuser ${local.db_user1}, database connection values"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "database_user1" {
+  secret_id = aws_secretsmanager_secret.database_user1.id
+  secret_string = jsonencode({
+    username = local.db_user1
+    password = var.rds_user1_password
+  })
 }
 
 ################################################################################
