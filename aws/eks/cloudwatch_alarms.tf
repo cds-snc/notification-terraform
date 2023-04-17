@@ -373,7 +373,7 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
       metric_name = "cluster_failed_node_count"
       namespace   = "ContainerInsights"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         Name = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -398,7 +398,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
       metric_name = "celery_deployment_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -425,7 +425,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -452,7 +452,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -479,7 +479,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -506,7 +506,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -533,7 +533,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
