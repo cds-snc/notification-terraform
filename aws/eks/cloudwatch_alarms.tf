@@ -365,6 +365,7 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -390,6 +391,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -417,6 +419,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -444,6 +447,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -471,6 +475,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -498,6 +503,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -525,6 +531,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
