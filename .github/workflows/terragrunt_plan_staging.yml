@@ -144,6 +144,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan eks
+        if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/eks"
