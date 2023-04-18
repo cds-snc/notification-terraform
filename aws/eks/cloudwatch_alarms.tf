@@ -485,7 +485,6 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
