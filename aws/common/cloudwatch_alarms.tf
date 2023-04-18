@@ -239,61 +239,66 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
-  alarm_name          = "ses-bounce-rate-warning"
-  alarm_description   = "Bounce rate >=5% over the last 12 hours"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "Reputation.BounceRate"
-  namespace           = "AWS/SES"
-  period              = 60 * 60 * 12
-  statistic           = "Average"
-  threshold           = 5 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  treat_missing_data  = "missing"
+  alarm_name                = "ses-bounce-rate-warning"
+  alarm_description         = "Bounce rate >=5% over the last 12 hours"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Reputation.BounceRate"
+  namespace                 = "AWS/SES"
+  period                    = 60 * 60 * 12
+  statistic                 = "Average"
+  threshold                 = 5 / 100
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data        = "missing"
+
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
-  alarm_name          = "ses-bounce-rate-critical"
-  alarm_description   = "Bounce rate >=7% over the last 12 hours"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "Reputation.BounceRate"
-  namespace           = "AWS/SES"
-  period              = 60 * 60 * 12
-  statistic           = "Average"
-  threshold           = 7 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  treat_missing_data  = "notBreaching"
+  alarm_name                = "ses-bounce-rate-critical"
+  alarm_description         = "Bounce rate >=7% over the last 12 hours"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Reputation.BounceRate"
+  namespace                 = "AWS/SES"
+  period                    = 60 * 60 * 12
+  statistic                 = "Average"
+  threshold                 = 7 / 100
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data        = "missing"
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
-  alarm_name          = "ses-complaint-rate-warning"
-  alarm_description   = "Complaint rate >=0.3% over the last 12 hours"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "Reputation.ComplaintRate"
-  namespace           = "AWS/SES"
-  period              = 60 * 60 * 12
-  statistic           = "Average"
-  threshold           = 0.3 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  treat_missing_data  = "missing"
+  alarm_name                = "ses-complaint-rate-warning"
+  alarm_description         = "Complaint rate >=0.3% over the last 12 hours"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Reputation.ComplaintRate"
+  namespace                 = "AWS/SES"
+  period                    = 60 * 60 * 12
+  statistic                 = "Average"
+  threshold                 = 0.3 / 100
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data        = "missing"
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
-  alarm_name          = "ses-complaint-rate-critical"
-  alarm_description   = "Complaint rate >=0.4% over the last 12 hours"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "Reputation.ComplaintRate"
-  namespace           = "AWS/SES"
-  period              = 60 * 60 * 12
-  statistic           = "Average"
-  threshold           = 0.4 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  treat_missing_data  = "notBreaching"
+  alarm_name                = "ses-complaint-rate-critical"
+  alarm_description         = "Complaint rate >=0.4% over the last 12 hours"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Reputation.ComplaintRate"
+  namespace                 = "AWS/SES"
+  period                    = 60 * 60 * 12
+  statistic                 = "Average"
+  threshold                 = 0.4 / 100
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data        = "missing"
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
