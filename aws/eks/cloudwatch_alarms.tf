@@ -162,6 +162,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "admin"
@@ -180,6 +181,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "api"
@@ -198,6 +200,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery"
@@ -216,6 +219,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery-sms"
@@ -235,6 +239,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "admin"
@@ -253,6 +258,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "api"
@@ -271,6 +277,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery"
@@ -289,6 +296,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
   statistic           = "Average"
   threshold           = 50
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery-sms"
