@@ -152,18 +152,18 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
-  alarm_name          = "admin-pods-high-cpu-warning"
-  alarm_description   = "Average CPU of admin pods >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_cpu_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "admin-pods-high-cpu-warning"
+  alarm_description         = "Average CPU of admin pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_cpu_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "admin"
@@ -172,18 +172,18 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
-  alarm_name          = "api-pods-high-cpu-warning"
-  alarm_description   = "Average CPU of API pods >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_cpu_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "api-pods-high-cpu-warning"
+  alarm_description         = "Average CPU of API pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_cpu_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "api"
@@ -192,18 +192,18 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
-  alarm_name          = "celery-pods-high-cpu-warning"
-  alarm_description   = "Average CPU of Celery pods >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_cpu_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "celery-pods-high-cpu-warning"
+  alarm_description         = "Average CPU of Celery pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_cpu_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery"
@@ -212,18 +212,18 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
-  alarm_name          = "celery-sms-pods-high-cpu-warning"
-  alarm_description   = "Average CPU of celery-sms pods >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_cpu_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "celery-sms-pods-high-cpu-warning"
+  alarm_description         = "Average CPU of celery-sms pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_cpu_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery-sms"
@@ -233,18 +233,18 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
 
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
-  alarm_name          = "admin-pods-high-memory-warning"
-  alarm_description   = "Average memory of admin pods >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_memory_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "admin-pods-high-memory-warning"
+  alarm_description         = "Average memory of admin pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_memory_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "admin"
@@ -253,18 +253,18 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
-  alarm_name          = "api-pods-high-memory-warning"
-  alarm_description   = "Average memory of API pods >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_memory_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "api-pods-high-memory-warning"
+  alarm_description         = "Average memory of API pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_memory_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "api"
@@ -273,18 +273,18 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
-  alarm_name          = "celery-pods-high-memory-warning"
-  alarm_description   = "Average memory of Celery pods >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_memory_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "celery-pods-high-memory-warning"
+  alarm_description         = "Average memory of Celery pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_memory_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery"
@@ -293,18 +293,18 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
-  alarm_name          = "celery-sms-pods-high-memory-warning"
-  alarm_description   = "Average memory of celery-sms >=50% during 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "pod_memory_utilization"
-  namespace           = "ContainerInsights"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = 50
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_name                = "celery-sms-pods-high-memory-warning"
+  alarm_description         = "Average memory of celery-sms >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_memory_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = "300"
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-  treat_missing_data  = "missing"
+  treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
     Service     = "celery-sms"
@@ -444,9 +444,8 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
       stat        = "Average"
       unit        = "Count"
       dimensions = {
-        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-        namespace   = var.notify_k8s_namespace
-        deployment  = "celery-sms"
+        namespace  = var.notify_k8s_namespace
+        deployment = "celery-sms"
       }
     }
   }
