@@ -359,12 +359,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-3-scanfiles-timeout-5-minutes-warni
 
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   alarm_name          = "kubernetes-failed-nodes"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   alarm_description   = "Kubernetes failed node anomalies"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -373,7 +374,7 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
       metric_name = "cluster_failed_node_count"
       namespace   = "ContainerInsights"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         Name = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -384,12 +385,13 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
 
 resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
   alarm_name          = "celery-replicas-unavailable"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   alarm_description   = "Celery Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -398,7 +400,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
       metric_name = "celery_deployment_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -411,12 +413,13 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
   alarm_name          = "celery-sms-replicas-unavailable"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   alarm_description   = "Celery SMS Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -425,7 +428,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -438,12 +441,13 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
 
 resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
   alarm_name          = "admin-replicas-unavailable"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   alarm_description   = "Notify Admin Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -452,7 +456,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -465,12 +469,13 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
 
 resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
   alarm_name          = "api-replicas-unavailable"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   alarm_description   = "Notify K8S API Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -479,7 +484,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -492,12 +497,13 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
 
 resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
   alarm_name          = "documentation-replicas-unavailable"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   alarm_description   = "Notify Documentation Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -506,7 +512,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -519,12 +525,13 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
 
 resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailable" {
   alarm_name          = "document-download-api-replicas-unavailable"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   alarm_description   = "Notify Document Download API Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
+  threshold          = 1
 
   metric_query {
     id          = "m1"
@@ -533,7 +540,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Maximum"
       unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
