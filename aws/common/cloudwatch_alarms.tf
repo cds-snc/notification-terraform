@@ -302,6 +302,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
   period              = 60
   statistic           = "Average"
   threshold           = 60 * 10
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_sms_queue_name}"
@@ -318,6 +319,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   period              = 60
   statistic           = "Average"
   threshold           = 60 * 15
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -335,6 +337,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning
   period              = 60 * 5
   statistic           = "Average"
   threshold           = 60 * 5
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_throttled_sms_queue_name}"
@@ -351,6 +354,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
   period              = 60 * 10
   statistic           = "Average"
   threshold           = 60 * 10
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -368,6 +372,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 20
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_priority_queue_name}"
@@ -384,6 +389,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -401,6 +407,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 30
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_email_queue_name}"
@@ -417,6 +424,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 45
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -434,6 +442,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 60
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_queue_name}"
@@ -450,6 +459,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 60 * 3
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -468,9 +478,10 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
   statistic           = "Sum"
   # Maximum rate is supposed to be 1 SMS per second, so 60 messages
   # per minute, but giving it a 10% room.
-  threshold     = 60 * 1.1
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  threshold          = 60 * 1.1
+  treat_missing_data = "missing"
+  alarm_actions      = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions         = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_throttled_sms_queue_name}"
   }
@@ -486,7 +497,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
@@ -503,7 +514,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -521,7 +532,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-war
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = aws_sqs_queue.priority_db_tasks_queue.name
@@ -538,7 +549,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-cri
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -556,7 +567,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warni
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = aws_sqs_queue.normal_db_tasks_queue.name
@@ -573,7 +584,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-criti
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
@@ -591,7 +602,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 5
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
     QueueName = aws_sqs_queue.bulk_db_tasks_queue.name
@@ -608,7 +619,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critica
   period              = 60
   statistic           = "Maximum"
   threshold           = 60 * 15
-  treat_missing_data  = "notBreaching"
+  treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
