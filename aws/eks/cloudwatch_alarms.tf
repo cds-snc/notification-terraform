@@ -444,8 +444,9 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
       stat        = "Average"
       unit        = "Count"
       dimensions = {
-        namespace  = var.notify_k8s_namespace
-        deployment = "celery-sms"
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-sms"
       }
     }
   }
