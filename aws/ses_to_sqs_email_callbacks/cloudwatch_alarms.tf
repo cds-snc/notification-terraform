@@ -45,6 +45,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warn
   threshold           = 5
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_ok_arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     FunctionName = module.ses_to_sqs_email_callbacks.function_name
   }
@@ -62,6 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-crit
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_ok_arn]
+  treat_missing_data  = "notBreaching"
   dimensions = {
     FunctionName = module.ses_to_sqs_email_callbacks.function_name
   }

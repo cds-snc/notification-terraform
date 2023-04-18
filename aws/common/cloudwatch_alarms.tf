@@ -249,6 +249,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
   statistic           = "Average"
   threshold           = 5 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "missing"
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
@@ -263,6 +264,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
   threshold           = 7 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  treat_missing_data  = "notBreaching"
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
@@ -276,6 +278,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
   statistic           = "Average"
   threshold           = 0.3 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "missing"
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
@@ -290,6 +293,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
   threshold           = 0.4 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  treat_missing_data  = "notBreaching"
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
