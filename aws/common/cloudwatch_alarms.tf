@@ -366,7 +366,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = 20
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -382,7 +382,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
@@ -399,7 +399,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = 60 * 30
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -415,7 +415,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = 60 * 45
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
@@ -432,7 +432,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = 60 * 60
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -448,7 +448,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = 60 * 60 * 3
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
