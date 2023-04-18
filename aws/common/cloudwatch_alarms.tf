@@ -381,7 +381,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = 20
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
@@ -398,7 +398,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
   period                    = 60
-  statistic                 = "Maximum"
+  statistic                 = "Average"
   threshold                 = 60
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
