@@ -390,8 +390,7 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
       metric_name = "cluster_failed_node_count"
       namespace   = "ContainerInsights"
       period      = 300
-      stat        = "Maximum"
-      unit        = "Count"
+      stat        = "Average"
       dimensions = {
         Name = aws_eks_cluster.notification-canada-ca-eks-cluster.name
       }
@@ -413,15 +412,41 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
     id          = "m1"
     return_data = "true"
     metric {
-      metric_name = "celery_deployment_replicas_unavailable"
+      metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Maximum"
-      unit        = "Count"
+      stat        = "Average"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
         deployment  = "celery"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
+  alarm_name          = "celery-beat-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  alarm_description   = "Celery Beat Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+  threshold          = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Average"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-beat"
       }
     }
   }
@@ -444,8 +469,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Maximum"
-      unit        = "Count"
+      stat        = "Average"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -472,8 +496,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Maximum"
-      unit        = "Count"
+      stat        = "Average"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -500,8 +523,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Maximum"
-      unit        = "Count"
+      stat        = "Average"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -528,8 +550,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Maximum"
-      unit        = "Count"
+      stat        = "Average"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -556,8 +577,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Maximum"
-      unit        = "Count"
+      stat        = "Average"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
