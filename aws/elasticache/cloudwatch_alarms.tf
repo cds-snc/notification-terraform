@@ -47,6 +47,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning
   statistic           = "Average"
   threshold           = 60
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     CacheClusterId = "${aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.id}-00${count.index + 1}"
   }
@@ -64,6 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warnin
   statistic           = "Average"
   threshold           = 1000
   alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "missing"
   dimensions = {
     CacheClusterId = "${aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.id}-00${count.index + 1}"
   }
