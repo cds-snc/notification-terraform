@@ -375,7 +375,6 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
       namespace   = "ContainerInsights"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         Name = aws_eks_cluster.notification-canada-ca-eks-cluster.name
       }
@@ -401,7 +400,6 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -456,7 +454,6 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -484,7 +481,6 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -512,7 +508,6 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -540,7 +535,6 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
@@ -568,7 +562,6 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
