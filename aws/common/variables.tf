@@ -211,3 +211,9 @@ variable "alarm_critical_expired_email_created_threshold" {
   description = "Critical alarm threshold for expired email batches created"
   type        = number
 }
+
+variable "athena_workgroup_name" {
+  description = "The name of the athena workgroup. This resource seems to be created by default in new environments and thus needs to be overridden. For prod and staging, the default primary is sufficient"
+  type        = string
+  default     = "primary"
+}

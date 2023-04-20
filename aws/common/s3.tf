@@ -43,7 +43,6 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket" {
 
 resource "aws_s3_bucket" "csv_bucket_logs" {
   bucket = "notification-canada-ca-${var.env}-csv-upload-logs"
-  acl    = "log-delivery-write"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -67,6 +66,32 @@ resource "aws_s3_bucket" "csv_bucket_logs" {
 
   #tfsec:ignore:AWS002 - Ignore log of logs
   #tfsec:ignore:AWS077 - Versioning is not enabled
+}
+
+resource "aws_s3_bucket_public_access_block" "csv_bucket_logs" {
+  bucket = aws_s3_bucket.csv_bucket_logs.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "csv_bucket_logs" {
+  bucket = aws_s3_bucket.csv_bucket_logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "csv_bucket_logs" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.csv_bucket_logs,
+    aws_s3_bucket_ownership_controls.csv_bucket_logs,
+  ]
+
+  bucket = aws_s3_bucket.csv_bucket_logs.id
+  acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket" "bulk_send" {
@@ -110,7 +135,6 @@ resource "aws_s3_bucket_public_access_block" "bulk_send" {
 
 resource "aws_s3_bucket" "bulk_send_logs" {
   bucket = "notification-canada-ca-${var.env}-bulk-send-logs"
-  acl    = "log-delivery-write"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -135,14 +159,32 @@ resource "aws_s3_bucket" "bulk_send_logs" {
   #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
-resource "aws_s3_bucket_public_access_block" "csv_bucket_logs" {
-  bucket = aws_s3_bucket.csv_bucket_logs.id
+resource "aws_s3_bucket_public_access_block" "bulk_send_logs" {
+  bucket = aws_s3_bucket.bulk_send_logs.id
 
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_s3_bucket_ownership_controls" "bulk_send_logs" {
+  bucket = aws_s3_bucket.bulk_send_logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "bulk_send_logs" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.bulk_send_logs,
+    aws_s3_bucket_ownership_controls.bulk_send_logs,
+  ]
+
+  bucket = aws_s3_bucket.bulk_send_logs.id
+  acl    = "log-delivery-write"
+}
+
 
 resource "aws_s3_bucket" "asset_bucket" {
   bucket = "notification-canada-ca-${var.env}-asset-upload"
@@ -301,7 +343,6 @@ resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
 
 resource "aws_s3_bucket" "document_bucket_logs" {
   bucket = "notification-canada-ca-${var.env}-document-download-logs"
-  acl    = "log-delivery-write"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -333,6 +374,23 @@ resource "aws_s3_bucket_public_access_block" "document_bucket_logs" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "document_bucket_logs" {
+  bucket = aws_s3_bucket.document_bucket_logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "document_bucket_logs" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.document_bucket_logs,
+    aws_s3_bucket_ownership_controls.document_bucket_logs,
+  ]
+
+  bucket = aws_s3_bucket.document_bucket_logs.id
+  acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket" "alb_log_bucket" {
@@ -454,7 +512,6 @@ resource "aws_s3_bucket_public_access_block" "athena_bucket" {
 
 resource "aws_s3_bucket" "athena_bucket_logs" {
   bucket = "notification-canada-ca-${var.env}-athena-logs"
-  acl    = "log-delivery-write"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -477,4 +534,82 @@ resource "aws_s3_bucket" "athena_bucket_logs" {
 
   #tfsec:ignore:AWS002 - Ignore log of logs
   #tfsec:ignore:AWS077 - Versioning is not enabled
+}
+
+resource "aws_s3_bucket_public_access_block" "athena_bucket_logs" {
+  bucket = aws_s3_bucket.athena_bucket_logs.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "athena_bucket_logs" {
+  bucket = aws_s3_bucket.athena_bucket_logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "athena_bucket_logs" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.athena_bucket_logs,
+    aws_s3_bucket_ownership_controls.athena_bucket_logs,
+  ]
+
+  bucket = aws_s3_bucket.athena_bucket_logs.id
+  acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket" "cbs_sensor_bucket" {
+  bucket = "cbs-satellite-${var.account_id}"
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  lifecycle_rule {
+    enabled = true
+
+    expiration {
+      days = 14
+    }
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+
+  #tfsec:ignore:AWS002 - Ignore log of logs
+  #tfsec:ignore:AWS077 - Versioning is not enabled
+}
+
+resource "aws_s3_bucket_public_access_block" "cbs_sensor_bucket" {
+  bucket = aws_s3_bucket.cbs_sensor_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "cbs_sensor_bucket" {
+  bucket = aws_s3_bucket.cbs_sensor_bucket.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "cbs_sensor_bucket" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.cbs_sensor_bucket,
+    aws_s3_bucket_ownership_controls.cbs_sensor_bucket,
+  ]
+
+  bucket = aws_s3_bucket.cbs_sensor_bucket.id
+  acl    = "log-delivery-write"
 }

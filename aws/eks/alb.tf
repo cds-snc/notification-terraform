@@ -13,7 +13,7 @@ resource "aws_alb" "notification-canada-ca" {
   subnets = var.vpc_public_subnets
 
   access_logs {
-    bucket  = var.cbs_satellite_bucket_name
+    bucket  = aws_s3_bucket.cbs_sensor_bucket.bucket
     prefix  = "lb_logs"
     enabled = true
   }
