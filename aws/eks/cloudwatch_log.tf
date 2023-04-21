@@ -59,9 +59,9 @@ resource "aws_cloudwatch_log_metric_filter" "scanfiles-timeout" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
-  name            = "bounce-rate-critical"
-  pattern         = "critical bounce rate threshold of 10%"
-  log_group_name  = local.eks_application_log_group
+  name           = "bounce-rate-critical"
+  pattern        = "critical bounce rate threshold of 10%"
+  log_group_name = local.eks_application_log_group
 
   metric_transformation {
     name      = "bounce-rate-critical"
@@ -71,11 +71,11 @@ resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "bounce-rate-warning" {
-  name            = "bounce-rate-warning"
-  pattern         = "warning bounce rate threshold of 5%"
-  log_group_name  = local.eks_application_log_group
+  name           = "bounce-rate-warning"
+  pattern        = "warning bounce rate threshold of 5%"
+  log_group_name = local.eks_application_log_group
 
-    metric_transformation {
+  metric_transformation {
     name      = "bounce-rate-warning"
     namespace = "LogMetrics"
     value     = "1"
