@@ -30,7 +30,7 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
-resource "aws_cloudwsatch_query_definition" "bounce-rate-critical" {
+resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
   name = "Critical bounces"
 
   log_group_names = [
@@ -46,7 +46,7 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
-resource "aws_cloudwsatch_query_definition" "bounce-rate-warning" {
+resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
   name = "Warning bounces"
 
   log_group_names = [
