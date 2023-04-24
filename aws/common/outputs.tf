@@ -135,5 +135,5 @@ output "sns_deliveries_failures_us_west_2_name" {
 }
 
 output "sqs_notify_internal_tasks_arn" {
-  value = data.aws_sqs_queue.notify-internal-tasks.arn
+  value = aws_sqs_queue.notify_internal_tasks_queue.arn
 }
