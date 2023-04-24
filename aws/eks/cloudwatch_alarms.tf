@@ -387,7 +387,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-critical-bounce-rate-1-minute-war
   alarm_actions       = [var.sns_alert_critical_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-warning-bounce-rate-1-minute-warning" {
+resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-warning" {
   alarm_name          = "logs-1-warning-bounce-rate-1-minute-warning"
   alarm_description   = "One service exceeding 5% bounce rate in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
