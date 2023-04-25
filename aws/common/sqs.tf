@@ -22,8 +22,10 @@ resource "aws_sqs_queue" "bulk_db_tasks_queue" {
   # AWS managed encryption is good enough for us
 }
 
-# We are doing this here as it is required for ses_receiving_emails lambda
-# That folder is configured to use us-east-1, but the below queue is in ca-central-1
-data "aws_sqs_queue" "notify-internal-tasks" {
+resource "aws_sqs_queue" "notify_internal_tasks_queue" {
   name = "${var.celery_queue_prefix}notify-internal-tasks"
+  # This queue was created outside of terraform and has this value set to false in staging and production.
+  sqs_managed_sse_enabled = false
+  # This queue was created outside of terraform and has this value set to 310 in staging and production.
+  visibility_timeout_seconds = 310
 }
