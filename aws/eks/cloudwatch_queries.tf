@@ -40,7 +40,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /admin|api/
-| filter @message like "critical bounce rate threshold of 10%"
+| filter @message like "critical bounce rate threshold of 10"
 | sort @timestamp desc
 | limit 20
 QUERY
@@ -56,7 +56,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /admin|api/
-| filter @message like "warning bounce rate threshold of 5%"
+| filter @message like "warning bounce rate threshold of 5"
 | sort @timestamp desc
 | limit 20
 QUERY
