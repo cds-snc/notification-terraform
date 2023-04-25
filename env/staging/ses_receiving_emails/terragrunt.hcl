@@ -34,25 +34,6 @@ inputs = {
   sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
 }
 
-generate "provider" {
-  path      = "provider.tf"
-  if_exists = "overwrite"
-  contents  = <<EOF
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.0"
-    }
-  }
-}
-provider "aws" {
-  region              = "us-east-1"
-  allowed_account_ids = [var.account_id]
-}
-EOF
-}
-
 terraform {
   source = "../../../aws//ses_receiving_emails"
 }
