@@ -3,8 +3,9 @@
 ###
 
 resource "aws_s3_bucket" "csv_bucket" {
-  bucket = "notification-canada-ca-${var.env}-csv-upload"
-  acl    = "private"
+  bucket        = "notification-canada-ca-${var.env}-csv-upload"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -24,7 +25,7 @@ resource "aws_s3_bucket" "csv_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = aws_s3_bucket.csv_bucket_logs.bucket
+    target_bucket = regex("^[^.]*", module.csv_bucket_logs.s3_bucket_domain_name)
   }
 
   tags = {
@@ -41,37 +42,25 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket" "csv_bucket_logs" {
-  bucket = "notification-canada-ca-${var.env}-csv-upload-logs"
-  acl    = "log-delivery-write"
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
+module "csv_bucket_logs" {
+  source            = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
 
+  bucket_name       = "notification-canada-ca-${var.env}-csv-upload-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
 
-  lifecycle_rule {
-    enabled = true
-
-    expiration {
-      days = 90
-    }
-  }
+  lifecycle_rule = {"lifecycle_rule": { "enabled": "true","expiration": { "days": "90"} } }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
-
-  #tfsec:ignore:AWS002 - Ignore log of logs
-  #tfsec:ignore:AWS077 - Versioning is not enabled
 }
 
+
 resource "aws_s3_bucket" "bulk_send" {
-  bucket = "notification-canada-ca-${var.env}-bulk-send"
-  acl    = "private"
+  bucket        = "notification-canada-ca-${var.env}-bulk-send"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -91,7 +80,7 @@ resource "aws_s3_bucket" "bulk_send" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = aws_s3_bucket.bulk_send_logs.bucket
+    target_bucket = regex("^[^.]*", module.bulk_send_logs.s3_bucket_domain_name)
   }
 
   tags = {
@@ -108,44 +97,23 @@ resource "aws_s3_bucket_public_access_block" "bulk_send" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket" "bulk_send_logs" {
-  bucket = "notification-canada-ca-${var.env}-bulk-send-logs"
-  acl    = "log-delivery-write"
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
+module "bulk_send_logs" {
+  source            = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
 
-  lifecycle_rule {
-    enabled = true
+  bucket_name       = "notification-canada-ca-${var.env}-bulk-send-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
 
-    expiration {
-      days = 90
-    }
-  }
+  lifecycle_rule = {"lifecycle_rule": { "enabled": "true","expiration": { "days": "90"} } }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
-
-  #tfsec:ignore:AWS002 - Ignore log of logs
-  #tfsec:ignore:AWS077 - Versioning is not enabled
-}
-
-resource "aws_s3_bucket_public_access_block" "csv_bucket_logs" {
-  bucket = aws_s3_bucket.csv_bucket_logs.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "asset_bucket" {
-  bucket = "notification-canada-ca-${var.env}-asset-upload"
+  bucket        = "notification-canada-ca-${var.env}-asset-upload"
+  force_destroy = var.force_destroy_s3
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -172,10 +140,10 @@ resource "aws_s3_bucket_public_access_block" "asset_bucket" {
 }
 
 resource "aws_s3_bucket" "legacy_asset_bucket" {
-  count = var.env == "production" ? 1 : 0
-
-  bucket = "notification-alpha-canada-ca-asset-upload"
-  acl    = "private"
+  count         = var.env == "production" ? 1 : 0
+  bucket        = "notification-alpha-canada-ca-asset-upload"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
 
   server_side_encryption_configuration {
     rule {
@@ -205,8 +173,9 @@ resource "aws_s3_bucket_public_access_block" "legacy_asset_bucket" {
 }
 
 resource "aws_s3_bucket" "document_bucket" {
-  bucket = "notification-canada-ca-${var.env}-document-download"
-  acl    = "private"
+  bucket        = "notification-canada-ca-${var.env}-document-download"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
 
   server_side_encryption_configuration {
     rule {
@@ -241,7 +210,7 @@ resource "aws_s3_bucket" "document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = aws_s3_bucket.document_bucket_logs.bucket
+    target_bucket = regex("^[^.]*", module.document_download_logs.s3_bucket_domain_name)
   }
 
   tags = {
@@ -250,8 +219,9 @@ resource "aws_s3_bucket" "document_bucket" {
 }
 
 resource "aws_s3_bucket" "scan_files_document_bucket" {
-  bucket = "notification-canada-ca-${var.env}-document-download-scan-files"
-  acl    = "private"
+  bucket        = "notification-canada-ca-${var.env}-document-download-scan-files"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
 
   server_side_encryption_configuration {
     rule {
@@ -273,7 +243,7 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = aws_s3_bucket.document_bucket_logs.bucket
+    target_bucket = regex("^[^.]*", module.document_download_logs.s3_bucket_domain_name)
   }
 
   tags = {
@@ -299,46 +269,24 @@ resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket" "document_bucket_logs" {
-  bucket = "notification-canada-ca-${var.env}-document-download-logs"
-  acl    = "log-delivery-write"
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
+module "document_download_logs" {
+  source            = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
 
-  lifecycle_rule {
-    enabled = true
+  bucket_name       = "notification-canada-ca-${var.env}-document-download-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
 
-    expiration {
-      days = 90
-    }
-  }
+  lifecycle_rule = {"lifecycle_rule": { "enabled": "true","expiration": { "days": "90"} } }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
-
-  #tfsec:ignore:AWS002 - Ignore log of logs
-  #tfsec:ignore:AWS077 - Versioning is not enabled
-}
-
-resource "aws_s3_bucket_public_access_block" "document_bucket_logs" {
-  bucket = aws_s3_bucket.document_bucket_logs.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "alb_log_bucket" {
-  bucket = "notification-canada-ca-${var.env}-alb-logs"
-  acl    = "private"
-
+  bucket        = "notification-canada-ca-${var.env}-alb-logs"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -414,8 +362,9 @@ POLICY
 }
 
 resource "aws_s3_bucket" "athena_bucket" {
-  bucket = "notification-canada-ca-${var.env}-athena"
-  acl    = "private"
+  bucket        = "notification-canada-ca-${var.env}-athena"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -435,7 +384,7 @@ resource "aws_s3_bucket" "athena_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = aws_s3_bucket.athena_bucket_logs.bucket
+    target_bucket = regex("^[^.]*", module.athena_logs_bucket.s3_bucket_domain_name)
   }
 
   tags = {
@@ -452,29 +401,31 @@ resource "aws_s3_bucket_public_access_block" "athena_bucket" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket" "athena_bucket_logs" {
-  bucket = "notification-canada-ca-${var.env}-athena-logs"
-  acl    = "log-delivery-write"
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
+module "athena_logs_bucket" {
+  source            = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
 
-  lifecycle_rule {
-    enabled = true
+  bucket_name       = "notification-canada-ca-${var.env}-athena-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
 
-    expiration {
-      days = 90
-    }
-  }
+  lifecycle_rule    = {"lifecycle_rule": { "enabled": "true","expiration": { "days": "90"} } }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+}
 
-  #tfsec:ignore:AWS002 - Ignore log of logs
-  #tfsec:ignore:AWS077 - Versioning is not enabled
+module "cbs_logs_bucket" {
+  source            = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
+  count             = var.create_cbs_bucket ? 1 : 0
+
+  bucket_name       = var.cbs_satellite_bucket_name
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  lifecycle_rule    = {"lifecycle_rule": { "enabled": "true","expiration": { "days": "90"} } }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
 }
