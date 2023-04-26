@@ -224,7 +224,7 @@ variable "athena_workgroup_name" {
   default     = "primary"
 }
 
-variable "create_cbs_bucket"  {
+variable "create_cbs_bucket" {
   description = "Create the CBS bucket. Useful if this is a scratch deployment."
   type        = bool
   default     = false
