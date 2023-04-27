@@ -25,7 +25,7 @@ resource "aws_s3_bucket" "csv_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = regex("^[^.]*", module.csv_bucket_logs.s3_bucket_domain_name)
+    target_bucket = module.csv_bucket_logs.s3_bucket_id
   }
 
   tags = {
@@ -80,7 +80,7 @@ resource "aws_s3_bucket" "bulk_send" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = regex("^[^.]*", module.bulk_send_logs.s3_bucket_domain_name)
+    target_bucket = module.bulk_send_logs.s3_bucket_id
   }
 
   tags = {
@@ -210,7 +210,7 @@ resource "aws_s3_bucket" "document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = regex("^[^.]*", module.document_download_logs.s3_bucket_domain_name)
+    target_bucket = module.document_download_logs.s3_bucket_id
   }
 
   tags = {
@@ -243,7 +243,7 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = regex("^[^.]*", module.document_download_logs.s3_bucket_domain_name)
+    target_bucket = module.document_download_logs.s3_bucket_id
   }
 
   tags = {
@@ -384,7 +384,7 @@ resource "aws_s3_bucket" "athena_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
-    target_bucket = regex("^[^.]*", module.athena_logs_bucket.s3_bucket_domain_name)
+    target_bucket = module.athena_logs_bucket.s3_bucket_id
   }
 
   tags = {
