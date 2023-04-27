@@ -211,3 +211,21 @@ variable "alarm_critical_expired_email_created_threshold" {
   description = "Critical alarm threshold for expired email batches created"
   type        = number
 }
+
+variable "force_destroy_s3" {
+  description = "Destroy S3 buckets even if there are files in them when running terraform destroy"
+  type        = bool
+  default     = false
+}
+
+variable "athena_workgroup_name" {
+  description = "Set the name for the athena workgroup"
+  type        = string
+  default     = "primary"
+}
+
+variable "create_cbs_bucket" {
+  description = "Create the CBS bucket. Useful if this is a scratch deployment."
+  type        = bool
+  default     = false
+}
