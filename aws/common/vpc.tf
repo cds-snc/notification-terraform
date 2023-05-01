@@ -203,6 +203,9 @@ resource "aws_default_network_acl" "notification-canada-ca" {
 }
 
 resource "aws_flow_log" "cloud-based-sensor" {
+  depends_on = [
+    module.cbs_logs_bucket
+  ]
   log_destination      = "arn:aws:s3:::${var.cbs_satellite_bucket_name}/vpc_flow_logs/"
   log_destination_type = "s3"
   traffic_type         = "ALL"
