@@ -443,7 +443,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Minimum"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
