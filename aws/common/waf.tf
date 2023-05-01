@@ -70,10 +70,14 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
     regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/message-delivery-status|/etat-livraison-messages|/formatting-guide|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu"
   }
 
-
   # GCA routes
   regular_expression {
     regex_string = "/other-services|/autres-services|/service-level-agreement|/accord-niveaux-de-service|/service-level-objectives|/objectifs-niveau-de-service|/pourquoi-notification-gc"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/keep-accurate-contact-information|/maintenez-a-jour-les-coordonnees|/delivery-and-failure|/livraison-reussie-et-echec"
   }
 
   tags = {
