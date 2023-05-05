@@ -3,6 +3,7 @@ resource "aws_ecr_repository" "heartbeat" {
 
   name                 = "notify/heartbeat"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
@@ -12,6 +13,7 @@ resource "aws_ecr_repository" "heartbeat" {
 resource "aws_ecr_repository" "notify_admin" {
   name                 = "notify/admin"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
@@ -24,6 +26,7 @@ resource "aws_ecr_repository" "api-lambda" {
 
   name                 = "notify/api-lambda"
   image_tag_mutability = "IMMUTABLE"
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
@@ -35,6 +38,7 @@ resource "aws_ecr_repository" "google-cidr" {
 
   name                 = "lambda/google-cidr"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
@@ -47,6 +51,7 @@ resource "aws_ecr_repository" "performance-test" {
 
   name                 = "notify/performance-test"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
@@ -58,6 +63,7 @@ resource "aws_ecr_repository" "ses_receiving_emails" {
 
   name                 = "notify/ses_receiving_emails"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
@@ -69,6 +75,7 @@ resource "aws_ecr_repository" "ses_to_sqs_email_callbacks" {
 
   name                 = "notify/ses_to_sqs_email_callbacks"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
@@ -80,10 +87,9 @@ resource "aws_ecr_repository" "sns_to_sqs_sms_callbacks" {
 
   name                 = "notify/sns_to_sqs_sms_callbacks"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
     scan_on_push = true
   }
 }
-
-
