@@ -4,7 +4,7 @@ resource "aws_lambda_function" "api" {
   publish       = true
 
   package_type = "Image"
-  image_uri    = "${aws_ecr_repository.api-lambda.repository_url}:${var.api_image_tag}"
+  image_uri    = "${var.api_lambda_ecr_repository_url}:${var.api_image_tag}"
 
   timeout                        = 60
   reserved_concurrent_executions = 850

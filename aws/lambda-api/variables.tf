@@ -66,7 +66,8 @@ variable "document_download_api_host" {
 }
 
 variable "api_image_tag" {
-  type = string
+  type    = string
+  default = "bootstrap"
 }
 
 variable "low_demand_min_concurrency" {

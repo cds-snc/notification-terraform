@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../eks", "../dns"]
+  paths = ["../common", "../eks", "../dns", "../ecr"]
 }
 
 dependency "common" {
@@ -50,6 +50,11 @@ dependency "dns" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+}
+
+
 include {
   path = find_in_parent_folders()
 }
@@ -83,6 +88,7 @@ inputs = {
   re_api_arn                             = dependency.common.outputs.re_api_arn
   api_waf_rate_limit                     = 5000
   eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
+  api_lambda_ecr_repository_url          = dependency.ecr.outputs.api_lambda_ecr_repository_url
 }
 
 terraform {
