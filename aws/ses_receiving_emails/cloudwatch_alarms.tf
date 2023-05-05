@@ -4,6 +4,7 @@
 #
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_receiving_emails-api" {
+  provider            = aws.us-east-1
   alarm_name          = "logs-1-500-error-1-minute-warning-ses_receiving_emails-api"
   alarm_description   = "One 500 error in 1 minute for ses_receiving_emails api"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -19,6 +20,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_re
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses_receiving_emails-api" {
+  provider            = aws.us-east-1
   alarm_name          = "logs-10-500-error-5-minutes-critical-ses_receiving_emails-api"
   alarm_description   = "Ten 500 errors in 5 minutes for ses_receiving_emails api"
   comparison_operator = "GreaterThanOrEqualToThreshold"

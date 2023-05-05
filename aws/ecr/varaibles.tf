@@ -3,3 +3,9 @@ variable "force_delete_ecr" {
   type        = bool
   default     = false
 }
+
+variable "build_images" {
+  description = "Boolean value to decide whether or not to build images"
+  type        = bool
+  default     = false
+}
