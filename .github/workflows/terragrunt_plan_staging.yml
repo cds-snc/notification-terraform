@@ -74,6 +74,9 @@ jobs:
             dns:
               - 'aws/dns/**'
               - 'env/staging/dns/**'
+            ecr:
+              - 'aws/ecr/**'
+              - 'env/staging/ecr/**'
             eks:
               - 'aws/eks/**'
               - 'env/staging/eks/**'
@@ -121,6 +124,16 @@ jobs:
           directory: "env/staging/common"
           comment-delete: "true"
           comment-title: "Staging: common"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan ECR
+        if: ${{ steps.filter.outputs.ecr == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/ecr"
+          comment-delete: "true"
+          comment-title: "Staging: ecr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 

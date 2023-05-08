@@ -67,6 +67,15 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+      - name: Terragrunt plan ECR
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/ecr"
+          comment-delete: "true"
+          comment-title: "Production: ECR"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
       - name: Terragrunt plan ses_receiving_emails
         uses: cds-snc/terraform-plan@v3
         with:
