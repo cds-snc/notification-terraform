@@ -83,12 +83,13 @@ resource "aws_route53_record" "api-lambda-staging-notification-sandbox-A" {
   name    = "api-lambda.staging.notification.cdssandbox.xyz"
   type    = "A"
   ttl     = "300"
+
   alias {
     name                   = "d-087bebwcdc.execute-api.ca-central-1.amazonaws.com."
     zone_id                = "Z19DQILCV0OWEC"
     evaluate_target_health = false
   }
-  records = ["d-087bebwcdc.execute-api.ca-central-1.amazonaws.com"]
+
 }
 
 resource "aws_route53_record" "api-weighted-100-staging-notification-sandbox-A" {
