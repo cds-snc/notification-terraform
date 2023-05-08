@@ -3,7 +3,6 @@ resource "aws_route53_record" "staging-notification-sandbox" {
   zone_id = aws_route53_zone.notification-sandbox[0].zone_id
   name    = "staging.notification.cdssandbox.xyz"
   type    = "A"
-  ttl     = "300"
 
   alias {
     name                   = "dualstack.notification-staging-alb-1878361959.ca-central-1.elb.amazonaws.com"
@@ -38,7 +37,6 @@ resource "aws_route53_record" "staging-notification-sandbox-WC" {
   name    = "*.staging.notification.cdssandbox.xyz"
   zone_id = aws_route53_zone.notification-sandbox[0].zone_id
   type    = "A"
-  ttl     = "300"
 
   alias {
     name                   = "dualstack.notification-staging-alb-1878361959.ca-central-1.elb.amazonaws.com"
@@ -82,7 +80,6 @@ resource "aws_route53_record" "api-lambda-staging-notification-sandbox-A" {
   zone_id = aws_route53_zone.notification-sandbox[0].zone_id
   name    = "api-lambda.staging.notification.cdssandbox.xyz"
   type    = "A"
-  ttl     = "300"
 
   alias {
     name                   = "d-087bebwcdc.execute-api.ca-central-1.amazonaws.com."
@@ -94,10 +91,11 @@ resource "aws_route53_record" "api-lambda-staging-notification-sandbox-A" {
 
 resource "aws_route53_record" "api-weighted-100-staging-notification-sandbox-A" {
   # Send all API traffic to Lambda
-  count   = var.env == "staging" ? 1 : 0
-  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
-  name    = "api.staging.notification.cdssandbox.xyz"
-  type    = "A"
+  count          = var.env == "staging" ? 1 : 0
+  zone_id        = aws_route53_zone.notification-sandbox[0].zone_id
+  name           = "api.staging.notification.cdssandbox.xyz"
+  type           = "A"
+  set_identifier = "lambda"
 
   alias {
     name                   = "d-cmqtfgeja3.execute-api.ca-central-1.amazonaws.com"
@@ -108,17 +106,15 @@ resource "aws_route53_record" "api-weighted-100-staging-notification-sandbox-A" 
   weighted_routing_policy {
     weight = 100
   }
-
-  set_identifier = "lambda"
-  ttl            = "300"
 }
 
 resource "aws_route53_record" "api-weighted-0-staging-notification-sandbox-A" {
   # Send no API traffic to K8s
-  count   = var.env == "staging" ? 1 : 0
-  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
-  name    = "api.staging.notification.cdssandbox.xyz"
-  type    = "A"
+  count          = var.env == "staging" ? 1 : 0
+  zone_id        = aws_route53_zone.notification-sandbox[0].zone_id
+  name           = "api.staging.notification.cdssandbox.xyz"
+  type           = "A"
+  set_identifier = "loadbalancer"
 
   alias {
     name                   = "notification-staging-alb-1878361959.ca-central-1.elb.amazonaws.com"
@@ -129,8 +125,6 @@ resource "aws_route53_record" "api-weighted-0-staging-notification-sandbox-A" {
   weighted_routing_policy {
     weight = 0
   }
-  set_identifier = "loadbalancer"
-  ttl            = "300"
 }
 
 resource "aws_route53_record" "assets-staging-notification-sandbox-CNAME" {
