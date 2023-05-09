@@ -5,7 +5,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../eks", "../dns"]
+  paths = ["../common", "../eks"]
 }
 
 dependency "common" {
@@ -45,18 +45,6 @@ dependency "eks" {
   }
 }
 
-dependency "dns" {
-  config_path = "../dns"
-
-  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
-  mock_outputs = {
-    aws_acm_notification_canada_ca_arn     = ""
-    aws_acm_alt_notification_canada_ca_arn = ""
-  }
-}
-
 include {
   path = find_in_parent_folders()
 }
@@ -81,8 +69,6 @@ inputs = {
   new_relic_distribution_tracing_enabled = "true"
   notification_queue_prefix              = "eks-notification-canada-ca"
   redis_enabled                          = 1
-  certificate_arn                        = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
-  certificate_alt_arn                    = dependency.dns.outputs.aws_acm_alt_notification_canada_ca_arn
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   ff_cloudwatch_metrics_enabled          = "true"
@@ -90,4 +76,6 @@ inputs = {
   re_api_arn                             = dependency.common.outputs.re_api_arn
   api_waf_rate_limit                     = 30000
   eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
+  certificate_arn                        = dependency.eks.outputs.aws_acm_notification_canada_ca_arn
+  certificate_alt_arn                    = dependency.eks.outputs.aws_acm_alt_notification_canada_ca_arn
 }
