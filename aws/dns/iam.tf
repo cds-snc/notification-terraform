@@ -86,10 +86,10 @@ resource "aws_iam_role" "staging_dns_manager" {
 EOF
 }
 
-resource "aws_iam_role_policy" "prod_dns_manager_policy" {
+resource "aws_iam_role_policy" "production_dns_manager_policy" {
   count = var.env == "staging" ? 1 : 0
-  name  = "prod_dns_manager_policy"
-  role  = aws_iam_role.prod_dns_manager[0].id
+  name  = "production_dns_manager_policy"
+  role  = aws_iam_role.production_dns_manager[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -109,9 +109,9 @@ resource "aws_iam_role_policy" "prod_dns_manager_policy" {
   })
 }
 
-resource "aws_iam_role" "prod_dns_manager" {
+resource "aws_iam_role" "production_dns_manager" {
   count = var.env == "staging" ? 1 : 0
-  name  = "prod_dns_manager_role"
+  name  = "production_dns_manager_role"
 
   assume_role_policy = <<EOF
 {
