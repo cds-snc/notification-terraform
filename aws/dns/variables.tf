@@ -9,3 +9,9 @@ variable "ses_custom_sending_domains" {
 variable "lambda_ses_receiving_emails_image_arn" {
   type = string
 }
+
+variable "scratch_account_ids" {
+  type        = string
+  description = "Used by staging DNS zone to set up cross account IAM"
+  default     = "\"AWS\": \"419291849580\", \"AWS\": \"239043911459\""
+}

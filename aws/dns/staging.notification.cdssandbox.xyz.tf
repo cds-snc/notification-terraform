@@ -1,16 +1,3 @@
-resource "aws_route53_record" "staging-notification-sandbox" {
-  count   = var.env == "staging" ? 1 : 0
-  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
-  name    = "staging.notification.cdssandbox.xyz"
-  type    = "A"
-
-  alias {
-    name                   = "dualstack.notification-staging-alb-1878361959.ca-central-1.elb.amazonaws.com"
-    zone_id                = "ZQSVJUPU6J1EY"
-    evaluate_target_health = false
-  }
-
-}
 
 resource "aws_route53_record" "staging-notification-sandbox-MX" {
   count   = var.env == "staging" ? 1 : 0
@@ -30,20 +17,6 @@ resource "aws_route53_record" "staging-notification-sandbox-TXT" {
   records = ["v=spf1 include:amazonses.com ~all",
     "google-site-verification=u0zkO-jbYi1qW2G65mfXbuNl14BCO1O9uk-BV2wTlD8"
   ]
-}
-
-resource "aws_route53_record" "staging-notification-sandbox-WC" {
-  count   = var.env == "staging" ? 1 : 0
-  name    = "*.staging.notification.cdssandbox.xyz"
-  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
-  type    = "A"
-
-  alias {
-    name                   = "dualstack.notification-staging-alb-1878361959.ca-central-1.elb.amazonaws.com"
-    zone_id                = "ZQSVJUPU6J1EY"
-    evaluate_target_health = false
-  }
-
 }
 
 resource "aws_route53_record" "ses-staging-notification-sandbox-TXT" {

@@ -30,7 +30,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
   load_balancer_arn = aws_alb.notification-canada-ca.id
   port              = 443
   protocol          = "HTTPS"
-  certificate_arn   = var.aws_acm_notification_canada_ca_arn
+  certificate_arn   = aws_acm_certificate.notification-canada-ca.arn
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies
   # And https://cyber.gc.ca/en/guidance/guidance-securely-configuring-network-protocols-itsp40062
   ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
@@ -42,9 +42,9 @@ resource "aws_alb_listener" "notification-canada-ca" {
 }
 
 resource "aws_lb_listener_certificate" "alt_domain_certificate" {
-  count           = var.aws_acm_alt_notification_canada_ca_arn != "" ? 1 : 0
+  depends_on      = [aws_acm_certificate.notification-canada-ca-alt]
   listener_arn    = aws_alb_listener.notification-canada-ca.arn
-  certificate_arn = var.aws_acm_alt_notification_canada_ca_arn
+  certificate_arn = aws_acm_certificate.notification-canada-ca-alt[0].arn
 }
 
 resource "aws_lb_listener" "notification-canada-ca-80" {
@@ -69,7 +69,7 @@ resource "aws_lb_listener" "notification-canada-ca-legacy-tls" {
   load_balancer_arn = aws_alb.notification-canada-ca.id
   port              = 4444
   protocol          = "HTTPS"
-  certificate_arn   = var.aws_acm_notification_canada_ca_arn
+  certificate_arn   = aws_acm_certificate.notification-canada-ca.arn
   #tfsec:ignore:AWS010 Outdated SSL policy
   ssl_policy = "ELBSecurityPolicy-2016-08"
 
