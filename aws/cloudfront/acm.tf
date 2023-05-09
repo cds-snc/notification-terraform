@@ -25,8 +25,11 @@ resource "aws_route53_record" "assets-notification-canada-ca" {
   ttl             = 60
 }
 
+
+/*
 resource "aws_acm_certificate_validation" "assets-notification-canada-ca" {
   count                   = var.env != "production" ? 1 : 0
   certificate_arn         = aws_acm_certificate.assets-notification-canada-ca.arn
   validation_record_fqdns = [aws_route53_record.assets-notification-canada-ca[0].fqdn]
 }
+*/
