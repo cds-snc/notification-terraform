@@ -1,11 +1,3 @@
-variable "aws_acm_notification_canada_ca_arn" {
-  type = string
-}
-
-variable "aws_acm_alt_notification_canada_ca_arn" {
-  type = string
-}
-
 variable "primary_worker_desired_size" {
   type = number
 }
@@ -159,4 +151,10 @@ variable "notify_k8s_namespace" {
   type        = string
   description = "Kubernetes namespace where GC Notify is installed"
   default     = "notification-canada-ca"
+}
+
+variable "route_53_zone_arn" {
+  type        = string
+  description = "Used by the scratch environment to reference cdssandbox in staging"
+  default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
 }

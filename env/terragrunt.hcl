@@ -45,6 +45,14 @@ provider "aws" {
   region              = "us-east-1"
   allowed_account_ids = [var.account_id]
 }
+
+provider "aws" {
+  alias  = "staging"
+  region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::239043911459:role/scratch_dns_manager_role"
+  }
+}
 EOF
 }
 

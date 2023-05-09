@@ -50,3 +50,13 @@ output "google_cidr_prefix_list_id" {
   value       = aws_ec2_managed_prefix_list.google_cidrs.id
   description = "Google CIDR managed prefix list ID"
 }
+
+output "aws_acm_notification_canada_ca_arn" {
+  value       = aws_acm_certificate.notification-canada-ca.arn
+  description = "Shared DNS certificate between lambda and k8s"
+}
+
+output "aws_acm_alt_notification_canada_ca_arn" {
+  value       = var.alt_domain != "" ? aws_acm_certificate.notification-canada-ca-alt[0].arn : ""
+  description = "Shared DNS certificate between lambda and k8s"
+}
