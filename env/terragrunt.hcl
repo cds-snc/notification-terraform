@@ -50,7 +50,7 @@ provider "aws" {
   alias  = "staging"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::239043911459:role/scratch_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.vars.inputs.account_id}:role/${local.vars.inputs.env}_dns_manager_role"
   }
 }
 EOF

@@ -1,4 +1,5 @@
 resource "aws_route53_record" "notification-root" {
+  count   = var.env != "production" ? 1 : 0
   zone_id = var.route_53_zone_arn
   name    = var.domain
   type    = "A"
@@ -11,6 +12,7 @@ resource "aws_route53_record" "notification-root" {
 }
 
 resource "aws_route53_record" "notificatio-root-WC" {
+  count   = var.env != "production" ? 1 : 0
   name    = "*.${var.domain}"
   zone_id = var.route_53_zone_arn
   type    = "A"
