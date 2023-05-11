@@ -118,6 +118,15 @@ resource "aws_route53_record" "bounce-staging-notification-sandbox-MX" {
   records = ["10 feedback-smtp.ca-central-1.amazonses.com"]
 }
 
+resource "aws_route53_record" "bounce-staging-custom-notification-sandbox-MX" {
+  count   = var.env == "staging" ? 1 : 0
+  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
+  name    = "bounce.custom-sending-domain.staging.notification.cdssandbox.xyz"
+  type    = "MX"
+  ttl     = "300"
+  records = ["10 feedback-smtp.ca-central-1.amazonses.com"]
+}
+
 resource "aws_route53_record" "bounce-staging-notification-sandbox-TXT" {
   count   = var.env == "staging" ? 1 : 0
   zone_id = aws_route53_zone.notification-sandbox[0].zone_id
