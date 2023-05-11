@@ -39,59 +39,39 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
 }
 
 resource "aws_route53_record" "notification-canada-ca" {
-
+  count    = var.env != "production" ? 1 : 0
   provider = aws.staging
 
-  for_each = {
-    for dvo in aws_acm_certificate.notification-canada-ca.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
-    }
-  }
-
   allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  type            = each.value.type
-  ttl             = 60
+  name            = tolist(aws_acm_certificate.notification-canada-ca.domain_validation_options)[0].resource_record_name
+  records         = [tolist(aws_acm_certificate.notification-canada-ca.domain_validation_options)[0].resource_record_value]
+  type            = tolist(aws_acm_certificate.notification-canada-ca.domain_validation_options)[0].resource_record_type
   zone_id         = var.route_53_zone_arn
-
+  ttl             = 60
 }
 
 resource "aws_acm_certificate_validation" "notification-canada-ca" {
-
-  for_each = aws_route53_record.notification-canada-ca
+  count = var.env != "production" ? 1 : 0
 
   certificate_arn         = aws_acm_certificate.notification-canada-ca.arn
-  validation_record_fqdns = [each.value.fqdn]
+  validation_record_fqdns = [aws_route53_record.notification-canada-ca[0].fqdn]
 }
 
 resource "aws_route53_record" "notification-canada-ca-alt" {
-
+  count    = var.env != "production" ? 1 : 0
   provider = aws.staging
 
-  for_each = {
-    for dvo in aws_acm_certificate.notification-canada-ca-alt[0].domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
-    }
-  }
-
   allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  type            = each.value.type
-  ttl             = 60
+  name            = tolist(aws_acm_certificate.notification-canada-ca-alt[0].domain_validation_options)[0].resource_record_name
+  records         = [tolist(aws_acm_certificate.notification-canada-ca-alt[0].domain_validation_options)[0].resource_record_value]
+  type            = tolist(aws_acm_certificate.notification-canada-ca-alt[0].domain_validation_options)[0].resource_record_type
   zone_id         = var.route_53_zone_arn
-
+  ttl             = 60
 }
 
 resource "aws_acm_certificate_validation" "notification-canada-ca-alt" {
-
-  for_each = aws_route53_record.notification-canada-ca-alt
+  count = var.env != "production" ? 1 : 0
 
   certificate_arn         = aws_acm_certificate.notification-canada-ca-alt[0].arn
-  validation_record_fqdns = [each.value.fqdn]
+  validation_record_fqdns = [aws_route53_record.notification-canada-ca-alt[0].fqdn]
 }
