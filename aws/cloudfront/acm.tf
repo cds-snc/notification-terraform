@@ -15,19 +15,30 @@ resource "aws_acm_certificate" "assets-notification-canada-ca" {
 }
 
 resource "aws_route53_record" "assets-notification-canada-ca" {
-  count           = var.env != "production" ? 1 : 0
-  provider        = aws.staging
+
+  provider = aws.staging
+
+  for_each = {
+    for dvo in aws_acm_certificate.assets-notification-canada-ca.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
   allow_overwrite = true
-  name            = tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_name
-  records         = [tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_value]
-  type            = tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_type
-  zone_id         = var.route_53_zone_arn
+  name            = each.value.name
+  records         = [each.value.record]
+  type            = each.value.type
   ttl             = 60
+  zone_id         = var.route_53_zone_arn
+
 }
 
 
 resource "aws_acm_certificate_validation" "assets-notification-canada-ca" {
-  count                   = var.env != "production" ? 1 : 0
+  for_each = aws_route53_record.assets-notification-canada-ca
+
   certificate_arn         = aws_acm_certificate.assets-notification-canada-ca.arn
-  validation_record_fqdns = [aws_route53_record.assets-notification-canada-ca[0].fqdn]
+  validation_record_fqdns = [each.value.fqdn]
 }
