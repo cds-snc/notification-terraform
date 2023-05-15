@@ -419,9 +419,11 @@ module "cbs_logs_bucket" {
   source = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
   count  = var.create_cbs_bucket ? 1 : 0
 
-  bucket_name       = var.cbs_satellite_bucket_name
-  force_destroy     = var.force_destroy_s3
-  billing_tag_value = "notification-canada-ca-${var.env}"
+  bucket_name                    = var.cbs_satellite_bucket_name
+  force_destroy                  = var.force_destroy_s3
+  billing_tag_value              = "notification-canada-ca-${var.env}"
+  attach_lb_log_delivery_policy  = true
+  attach_elb_log_delivery_policy = true
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 

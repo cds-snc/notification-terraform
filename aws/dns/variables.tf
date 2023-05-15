@@ -15,3 +15,9 @@ variable "scratch_account_ids" {
   description = "Used by staging DNS zone to set up cross account IAM"
   default     = "\"AWS\": \"419291849580\", \"AWS\": \"239043911459\", \"AWS\": \"296255494825\""
 }
+
+variable "route53_zone_arn" {
+  type        = string
+  description = "Used in non-staging environments to provide the DNS Zone ARN"
+  default     = ""
+}

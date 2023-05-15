@@ -6,6 +6,8 @@ resource "aws_ses_domain_dkim" "notification-canada-ca" {
   domain = var.domain
 }
 
+# TODO: SES Domain Validation Records Programmatically
+
 resource "aws_ses_identity_notification_topic" "notification-canada-ca-bounce-topic" {
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Bounce"

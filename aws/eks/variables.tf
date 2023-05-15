@@ -158,3 +158,14 @@ variable "route_53_zone_arn" {
   description = "Used by the scratch environment to reference cdssandbox in staging"
   default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
 }
+
+variable "enable_sentinel_forwarding" {
+  type        = bool
+  description = "Flag to enable or disable log forwarding to sentinel."
+  default     = true
+}
+variable "enable_delete_protection" {
+  type        = bool
+  description = "Flag to enable or disable delete protection on resources."
+  default     = true
+}
