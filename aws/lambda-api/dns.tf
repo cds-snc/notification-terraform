@@ -1,5 +1,5 @@
-resource "aws_route53_record" "api-lambda-scratch-notification-sandbox-A" {
-  count   = var.env == "scratch" ? 1 : 0
+resource "aws_route53_record" "api-lambda-notification-sandbox-A" {
+  count   = var.env != "production" ? 1 : 0
   zone_id = var.route_53_zone_arn
   name    = "api-lambda.${var.domain}"
   type    = "A"
@@ -12,9 +12,9 @@ resource "aws_route53_record" "api-lambda-scratch-notification-sandbox-A" {
 
 }
 
-resource "aws_route53_record" "api-weighted-100-scratch-notification-sandbox-A" {
+resource "aws_route53_record" "api-weighted-100-notification-sandbox-A" {
   # Send all API traffic to Lambda
-  count          = var.env == "scratch" ? 1 : 0
+  count          = var.env != "production" ? 1 : 0
   zone_id        = var.route_53_zone_arn
   name           = "api.${var.domain}"
   type           = "A"
