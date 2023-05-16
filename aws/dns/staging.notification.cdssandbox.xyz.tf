@@ -39,67 +39,6 @@ resource "aws_route53_record" "dmarc-staging-notification-sandbox-TXT" {
   records = ["v=DMARC1; p=reject; sp=reject; pct=100; rua=mailto:dmarc@cyber.gc.ca; ruf=mailto:dmarc@cyber.gc.ca"]
 }
 
-resource "aws_route53_record" "api-k8s-staging-notification-sandbox-CNAME" {
-  count   = var.env == "staging" ? 1 : 0
-  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
-  name    = "api-k8s.staging.notification.cdssandbox.xyz"
-  type    = "CNAME"
-  ttl     = "60"
-  records = ["notification-staging-alb-1878361959.ca-central-1.elb.amazonaws.com"]
-}
-
-resource "aws_route53_record" "api-lambda-staging-notification-sandbox-A" {
-  count   = var.env == "staging" ? 1 : 0
-  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
-  name    = "api-lambda.staging.notification.cdssandbox.xyz"
-  type    = "A"
-
-  alias {
-    name                   = "d-087bebwcdc.execute-api.ca-central-1.amazonaws.com."
-    zone_id                = "Z19DQILCV0OWEC"
-    evaluate_target_health = false
-  }
-
-}
-
-resource "aws_route53_record" "api-weighted-100-staging-notification-sandbox-A" {
-  # Send all API traffic to Lambda
-  count          = var.env == "staging" ? 1 : 0
-  zone_id        = aws_route53_zone.notification-sandbox[0].zone_id
-  name           = "api.staging.notification.cdssandbox.xyz"
-  type           = "A"
-  set_identifier = "lambda"
-
-  alias {
-    name                   = "d-cmqtfgeja3.execute-api.ca-central-1.amazonaws.com"
-    zone_id                = "Z19DQILCV0OWEC"
-    evaluate_target_health = false
-  }
-
-  weighted_routing_policy {
-    weight = 100
-  }
-}
-
-resource "aws_route53_record" "api-weighted-0-staging-notification-sandbox-A" {
-  # Send no API traffic to K8s
-  count          = var.env == "staging" ? 1 : 0
-  zone_id        = aws_route53_zone.notification-sandbox[0].zone_id
-  name           = "api.staging.notification.cdssandbox.xyz"
-  type           = "A"
-  set_identifier = "loadbalancer"
-
-  alias {
-    name                   = "notification-staging-alb-1878361959.ca-central-1.elb.amazonaws.com"
-    zone_id                = "ZQSVJUPU6J1EY"
-    evaluate_target_health = false
-  }
-
-  weighted_routing_policy {
-    weight = 0
-  }
-}
-
 resource "aws_route53_record" "assets-staging-notification-sandbox-CNAME" {
   count   = var.env == "staging" ? 1 : 0
   zone_id = aws_route53_zone.notification-sandbox[0].zone_id

@@ -18,7 +18,7 @@ resource "aws_alb" "notification-canada-ca" {
     enabled = true
   }
 
-  enable_deletion_protection = true
+  enable_deletion_protection = var.enable_delete_protection
 
   tags = {
     Name       = "notification-canada-ca"
@@ -27,6 +27,9 @@ resource "aws_alb" "notification-canada-ca" {
 }
 
 resource "aws_alb_listener" "notification-canada-ca" {
+
+  depends_on = [aws_acm_certificate_validation.notification-canada-ca, aws_acm_certificate_validation.notification-canada-ca-alt]
+
   load_balancer_arn = aws_alb.notification-canada-ca.id
   port              = 443
   protocol          = "HTTPS"

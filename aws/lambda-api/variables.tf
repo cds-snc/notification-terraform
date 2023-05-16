@@ -138,3 +138,9 @@ variable "eks_application_log_group" {
   description = "log group of the k8s cluster applications"
   type        = string
 }
+
+variable "route_53_zone_arn" {
+  type        = string
+  description = "Used by the scratch environment to reference cdssandbox in staging"
+  default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
+}

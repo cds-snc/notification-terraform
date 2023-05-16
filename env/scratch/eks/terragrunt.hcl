@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../dns", "../cloudfront"]
+  paths = ["../common", "../cloudfront"]
 }
 
 dependency "common" {
@@ -34,18 +34,6 @@ dependency "common" {
   }
 }
 
-dependency "dns" {
-  config_path = "../dns"
-
-  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
-  mock_outputs = {
-    aws_acm_notification_canada_ca_arn     = ""
-    aws_acm_alt_notification_canada_ca_arn = ""
-  }
-}
-
 dependency "cloudfront" {
   config_path = "../cloudfront"
 
@@ -62,8 +50,6 @@ include {
 }
 
 inputs = {
-  aws_acm_notification_canada_ca_arn        = dependency.dns.outputs.aws_acm_notification_canada_ca_arn
-  aws_acm_alt_notification_canada_ca_arn    = dependency.dns.outputs.aws_acm_alt_notification_canada_ca_arn
   primary_worker_desired_size               = 5
   primary_worker_instance_types             = ["m5.large"]
   primary_worker_max_size                   = 7
