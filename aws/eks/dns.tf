@@ -27,7 +27,7 @@ resource "aws_route53_record" "notificatio-root-WC" {
 
 }
 
-resource "aws_route53_record" "api-k8s-scratch-notification-sandbox-CNAME" {
+resource "aws_route53_record" "api-k8s-scratch-notification-CNAME" {
   count    = var.env != "production" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route_53_zone_arn
@@ -37,7 +37,7 @@ resource "aws_route53_record" "api-k8s-scratch-notification-sandbox-CNAME" {
   records  = [aws_alb.notification-canada-ca.dns_name]
 }
 
-resource "aws_route53_record" "api-weighted-0-scratch-notification-sandbox-A" {
+resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
   # Send no API traffic to K8s
   count          = var.env != "production" ? 1 : 0
   provider       = aws.staging

@@ -1,4 +1,4 @@
-resource "aws_route53_record" "api-lambda-notification-sandbox-A" {
+resource "aws_route53_record" "api-lambda-notification-A" {
   count   = var.env != "production" ? 1 : 0
   zone_id = var.route_53_zone_arn
   name    = "api-lambda.${var.domain}"
@@ -12,7 +12,7 @@ resource "aws_route53_record" "api-lambda-notification-sandbox-A" {
 
 }
 
-resource "aws_route53_record" "api-weighted-100-notification-sandbox-A" {
+resource "aws_route53_record" "api-weighted-100-notification-A" {
   # Send all API traffic to Lambda
   count          = var.env != "production" ? 1 : 0
   zone_id        = var.route_53_zone_arn
