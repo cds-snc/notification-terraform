@@ -30,3 +30,17 @@ resource "aws_route53_record" "api-weighted-100-notification-A" {
     weight = 100
   }
 }
+
+resource "aws_route53_record" "api-notification-alt-A" {
+  count   = var.env != "production" ? 1 : 0
+  zone_id = var.route_53_zone_arn
+  name    = "api.${var.alt_domain}"
+  type    = "A"
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_lambda.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_lambda.regional_zone_id
+    evaluate_target_health = false
+  }
+
+}
