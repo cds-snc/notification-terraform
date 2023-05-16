@@ -9,7 +9,7 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-application-logs" {
   name              = "/aws/containerinsights/${var.eks_cluster_name}/application"
-  retention_in_days = 14
+  retention_in_days = 30
 }
 
 
