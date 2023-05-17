@@ -74,6 +74,9 @@ jobs:
             dns:
               - 'aws/dns/**'
               - 'env/staging/dns/**'
+            ses_validation_dns_entries:
+              - 'aws/ses_validation_dns_entries/**'
+              - 'env/staging/ses_validation_dns_entries/**'
             eks:
               - 'aws/eks/**'
               - 'env/staging/eks/**'
@@ -141,6 +144,16 @@ jobs:
           directory: "env/staging/dns"
           comment-delete: "true"
           comment-title: "Staging: dns"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan ses_validation_dns_entries
+        if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/ses_validation_dns_entries"
+          comment-delete: "true"
+          comment-title: "Staging: ses_validation_dns_entries"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 

@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../ses_receiving_emails"]
+  paths = ["../common", "../dns"]
 }
 
 dependency "common" {
@@ -13,8 +13,8 @@ dependency "common" {
   }
 }
 
-dependency "ses_receiving_emails" {
-  config_path = "../ses_receiving_emails"
+dependency "dns" {
+  config_path = "../dns"
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
@@ -31,13 +31,12 @@ include {
 }
 
 inputs = {
-  notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
-  ses_custom_sending_domains              = ["custom-sending-domain.staging.notification.cdssandbox.xyz"]
-  lambda_ses_receiving_emails_image_arn   = dependency.ses_receiving_emails.outputs.lambda_ses_receiving_emails_image_arn
+  custom_sending_domains_dkim   = dependency.dns.outputs.custom_sending_domains_dkim
+  cic_trvapply_vrtdemande_dkim  = dependency.dns.outputs.cic_trvapply_vrtdemande_dkim
+  notification_canada_ca_dkim   = dependency.dns.outputs.notification_canada_ca_dkim
 }
 
 terraform {
-  source = "../../../aws//dns"
+  source = "../../../aws//ses_validation_dns_entries"
 
 }
-
