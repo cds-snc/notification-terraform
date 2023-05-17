@@ -18,6 +18,6 @@ variable "scratch_account_ids" {
 
 variable "route53_zone_arn" {
   type        = string
-  description = "Used in non-staging environments to provide the DNS Zone ARN"
-  default     = ""
+  description = "Used by the scratch environment to reference cdssandbox in staging"
+  default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
 }

@@ -1,3 +1,24 @@
+locals {
+  custom_sending_domain_dkim_records = distinct(flatten([
+    for cd in aws_ses_domain_dkim.custom_sending_domains : [
+      for token in cd.dkim_tokens : {
+        domain = cd.domain
+        token  = token
+      }
+    ]
+  ]))
+
+  ses_cic_trvapply_vrtdemande_dkim_records = distinct(flatten([
+    for cd in aws_ses_domain_dkim.cic-trvapply-vrtdemande : [
+      for token in cd.dkim_tokens : {
+        domain = cd.domain
+        token  = token
+      }
+    ]
+  ]))
+
+}
+
 resource "aws_ses_domain_identity" "notification-canada-ca" {
   domain = var.domain
 }

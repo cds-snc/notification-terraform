@@ -84,6 +84,11 @@ jobs:
           cd env/staging/dns
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/ses_validation_dns_entries
+        run: |
+          cd env/staging/ses_validation_dns_entries
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/eks
         run: |
           cd env/staging/eks
