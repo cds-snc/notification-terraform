@@ -1,4 +1,9 @@
 module "ses_receiving_emails" {
+
+  providers = {
+    aws = aws.us-east-1
+  }
+
   source                 = "github.com/cds-snc/terraform-modules?ref=v4.0.3//lambda"
   name                   = "ses_receiving_emails"
   billing_tag_value      = var.billing_tag_value

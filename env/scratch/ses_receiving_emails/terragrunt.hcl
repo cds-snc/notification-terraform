@@ -22,35 +22,16 @@ include {
 }
 
 inputs = {
-  billing_tag_value                       = "notification-canada-ca-staging"
+  billing_tag_value                       = "notification-canada-ca-scratch"
   schedule_expression                     = "rate(1 minute)"
   sns_alert_warning_arn_us_east_1         = dependency.common.outputs.sns_alert_warning_arn_us_east_1
   sns_alert_critical_arn_us_east_1        = dependency.common.outputs.sns_alert_critical_arn_us_east_1
   sns_alert_ok_arn_us_east_1              = dependency.common.outputs.sns_alert_ok_arn_us_east_1
-  notify_sending_domain                   = "staging.notification.cdssandbox.xyz"
+  notify_sending_domain                   = "scratch.notification.cdssandbox.xyz"
   sqs_region                              = "ca-central-1"
   celery_queue_prefix                     = "eks-notification-canada-ca"
-  gc_notify_service_email                 = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
+  gc_notify_service_email                 = "gc.notify.notification.gc@scratch.notification.cdssandbox.xyz"
   sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
-}
-
-generate "provider" {
-  path      = "provider.tf"
-  if_exists = "overwrite"
-  contents  = <<EOF
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.0"
-    }
-  }
-}
-provider "aws" {
-  region              = "us-east-1"
-  allowed_account_ids = [var.account_id]
-}
-EOF
 }
 
 terraform {

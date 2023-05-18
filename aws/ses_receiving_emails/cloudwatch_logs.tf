@@ -3,6 +3,8 @@
 #
 
 resource "aws_cloudwatch_log_metric_filter" "ses_receiving_emails-500-errors-api" {
+  provider = aws.us-east-1
+
   name           = "ses_receiving_emails-500-errors-api"
   pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\""
   log_group_name = "/aws/lambda/${module.ses_receiving_emails.function_name}"

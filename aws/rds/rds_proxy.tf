@@ -7,8 +7,18 @@ locals {
 # Secrets - DB user passwords
 ################################################################################
 
+resource "random_string" "app_db_user" {
+  length           = 8
+  special          = false
+}
+
+resource "random_string" "db_user" {
+  length           = 8
+  special          = false
+}
+
 resource "aws_secretsmanager_secret" "database_user" {
-  name        = local.db_user
+  name        = var.env == "production" || var.env == "staging" ? local.db_user : "${local.db_user}_${random_string.db_user.result}"
   description = "Database superuser ${local.db_user}, database connection values"
 
   tags = {
@@ -25,7 +35,7 @@ resource "aws_secretsmanager_secret_version" "database_user" {
 }
 
 resource "aws_secretsmanager_secret" "app_db_user" {
-  name        = local.app_db_user
+  name        = var.env == "production" || var.env == "staging" ? local.app_db_user : "${local.app_db_user}_${random_string.app_db_user.result}"
   description = "Database superuser ${local.app_db_user}, database connection values"
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
