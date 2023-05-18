@@ -8,13 +8,13 @@ locals {
 ################################################################################
 
 resource "random_string" "app_db_user" {
-  length           = 8
-  special          = false
+  length  = 8
+  special = false
 }
 
 resource "random_string" "db_user" {
-  length           = 8
-  special          = false
+  length  = 8
+  special = false
 }
 
 resource "aws_secretsmanager_secret" "database_user" {

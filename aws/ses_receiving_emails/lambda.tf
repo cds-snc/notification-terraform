@@ -36,6 +36,7 @@ data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
   }
 }
 resource "aws_lambda_permission" "ses_receiving_emails" {
+  provider      = aws.us-east-1
   action        = "lambda:InvokeFunction"
   function_name = module.ses_receiving_emails.function_name
   principal     = "ses.amazonaws.com"
