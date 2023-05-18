@@ -2,6 +2,7 @@ resource "aws_cloudfront_origin_access_identity" "default" {
 }
 
 resource "aws_cloudfront_distribution" "asset_bucket" {
+
   origin {
     domain_name = var.asset_bucket_regional_domain_name
     origin_id   = "asset-cloudfront-${var.env}"
@@ -38,7 +39,7 @@ resource "aws_cloudfront_distribution" "asset_bucket" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.aws_acm_assets_notification_canada_ca_arn
+    acm_certificate_arn      = aws_acm_certificate.assets-notification-canada-ca.arn
     minimum_protocol_version = "TLSv1.2_2019"
     ssl_support_method       = "sni-only"
   }

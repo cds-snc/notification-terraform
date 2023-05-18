@@ -373,6 +373,34 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warnin
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
+resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
+  alarm_name          = "logs-1-critical-bounce-rate-1-minute-warning"
+  alarm_description   = "One service exceeding 10% bounce rate in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-critical.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-critical.metric_transformation[0].namespace
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-warning" {
+  alarm_name          = "logs-1-warning-bounce-rate-1-minute-warning"
+  alarm_description   = "One service exceeding 5% bounce rate in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-warning.metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-warning.metric_transformation[0].namespace
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   alarm_name          = "kubernetes-failed-nodes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -415,7 +443,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
       metric_name = "kube_deployment_status_replicas_unavailable"
       namespace   = "ContainerInsights/Prometheus"
       period      = 300
-      stat        = "Average"
+      stat        = "Minimum"
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace

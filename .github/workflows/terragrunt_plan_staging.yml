@@ -21,6 +21,7 @@ env:
   TF_VAR_heartbeat_base_url: ${{ secrets.STAGING_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
+  TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
   TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
@@ -73,6 +74,9 @@ jobs:
             dns:
               - 'aws/dns/**'
               - 'env/staging/dns/**'
+            ses_validation_dns_entries:
+              - 'aws/ses_validation_dns_entries/**'
+              - 'env/staging/ses_validation_dns_entries/**'
             eks:
               - 'aws/eks/**'
               - 'env/staging/eks/**'
@@ -140,6 +144,16 @@ jobs:
           directory: "env/staging/dns"
           comment-delete: "true"
           comment-title: "Staging: dns"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan ses_validation_dns_entries
+        if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/ses_validation_dns_entries"
+          comment-delete: "true"
+          comment-title: "Staging: ses_validation_dns_entries"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 

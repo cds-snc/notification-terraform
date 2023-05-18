@@ -33,6 +33,20 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   security_group_ids = local.cluster_security_group_ids
   subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
 
+  log_delivery_configuration {
+    destination      = aws_cloudwatch_log_group.notification-canada-ca-elasticache-slow-logs.name
+    destination_type = "cloudwatch-logs"
+    log_format       = "json"
+    log_type         = "slow-log"
+  }
+
+  log_delivery_configuration {
+    destination      = aws_cloudwatch_log_group.notification-canada-ca-elasticache-engine-logs.name
+    destination_type = "cloudwatch-logs"
+    log_format       = "json"
+    log_type         = "engine-log"
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }

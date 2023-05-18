@@ -392,14 +392,15 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
   alarm_name                = "sqs-priority-queue-delay-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in high priority queue >= 60 seconds for 1 minute"
+  alarm_description         = "ApproximateAgeOfOldestMessage in high priority queue >= 60 seconds for 5 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
+  evaluation_periods        = "5"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
   period                    = 60
   statistic                 = "Average"
   threshold                 = 60
+  datapoints_to_alarm       = 5
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]

@@ -25,6 +25,7 @@ env:
   TF_VAR_heartbeat_base_url: ${{ secrets.STAGING_HEARTBEAT_BASE_URL }}
   TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
+  TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
@@ -81,6 +82,11 @@ jobs:
       - name: Apply aws/dns
         run: |
           cd env/staging/dns
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/ses_validation_dns_entries
+        run: |
+          cd env/staging/ses_validation_dns_entries
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
