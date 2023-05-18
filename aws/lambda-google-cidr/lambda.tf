@@ -2,9 +2,9 @@ module "lambda-google-cidr" {
   source                 = "github.com/cds-snc/terraform-modules?ref=v4.0.1//lambda"
   name                   = "google-cidr"
   billing_tag_value      = var.billing_tag_value
-  ecr_arn                = aws_ecr_repository.google-cidr.arn
+  ecr_arn                = var.google_cidr_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${aws_ecr_repository.google-cidr.repository_url}:latest"
+  image_uri              = "${var.google_cidr_ecr_repository_url}:${var.google_cidr_docker_tag}"
   timeout                = 60
   memory                 = 1024
 

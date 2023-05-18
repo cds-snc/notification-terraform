@@ -2,9 +2,9 @@ module "heartbeat" {
   source                 = "github.com/cds-snc/terraform-modules?ref=v0.0.45//lambda"
   name                   = "heartbeat"
   billing_tag_value      = var.billing_tag_value
-  ecr_arn                = aws_ecr_repository.heartbeat.arn
+  ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${aws_ecr_repository.heartbeat.repository_url}:latest"
+  image_uri              = "${var.heartbeat_ecr_repository_url}:${var.heartbeat_docker_tag}"
   timeout                = 60
   memory                 = 1024
 

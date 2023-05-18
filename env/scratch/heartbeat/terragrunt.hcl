@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../ecr"]
 }
 
 dependency "common" {
@@ -13,6 +13,10 @@ dependency "common" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -22,6 +26,8 @@ inputs = {
   schedule_expression    = "rate(1 minute)"
   sns_alert_warning_arn  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn = dependency.common.outputs.sns_alert_critical_arn
+  heartbeat_ecr_repository_url = dependency.ecr.outputs.heartbeat_ecr_repository_url
+  heartbeat_ecr_arn            = dependency.ecr.outputs.heartbeat_ecr_arn
 }
 
 terraform {

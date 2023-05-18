@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "notify_admin_pr" {
       "ecr:GetDownloadUrlForlayer",
       "ecr:BatchGetImage"
     ]
-    resources = [aws_ecr_repository.notify_admin.arn]
+    resources = [var.notify_admin_ecr_arn]
   }
 
   statement {

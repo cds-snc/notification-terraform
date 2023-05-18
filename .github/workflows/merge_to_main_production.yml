@@ -75,6 +75,11 @@ jobs:
         run: |
           cd env/production/common
           terragrunt apply --terragrunt-non-interactive -auto-approve
+      
+      - name: Apply aws/ecr
+        run: |
+          cd env/production/ecr
+          terragrunt apply --terragrunt-non-interactive -auto-approve          
 
       - name: Apply aws/ses_receiving_emails
         run: |

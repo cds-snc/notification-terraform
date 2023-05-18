@@ -4,7 +4,6 @@
 #
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_receiving_emails-api" {
-
   provider            = aws.us-east-1
   alarm_name          = "logs-1-500-error-1-minute-warning-ses_receiving_emails-api"
   alarm_description   = "One 500 error in 1 minute for ses_receiving_emails api"
