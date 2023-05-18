@@ -1,4 +1,5 @@
 resource "aws_acm_certificate" "notification-canada-ca" {
+
   domain_name = var.domain
   subject_alternative_names = [
     "*.${var.domain}",
@@ -61,6 +62,8 @@ resource "aws_route53_record" "notification-canada-ca" {
 
 resource "aws_acm_certificate_validation" "notification-canada-ca" {
 
+  count = var.env != "production" ? 1 : 0
+
   depends_on = [aws_route53_record.notification-canada-ca]
 
   certificate_arn         = aws_acm_certificate.notification-canada-ca.arn
@@ -90,6 +93,8 @@ resource "aws_route53_record" "notification-canada-ca-alt" {
 }
 
 resource "aws_acm_certificate_validation" "notification-canada-ca-alt" {
+
+  count = var.env != "production" ? 1 : 0
 
   depends_on = [aws_route53_record.notification-canada-ca-alt]
 
