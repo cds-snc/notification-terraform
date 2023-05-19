@@ -28,10 +28,6 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   auto_minor_version_upgrade   = false
 
-  lifecycle {
-    prevent_destroy = true
-  }
-
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
@@ -81,7 +77,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
   storage_encrypted               = true
-  deletion_protection             = true
+  deletion_protection             = var.enable_delete_protection
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.default.name
 
   vpc_security_group_ids = [
@@ -95,7 +91,6 @@ resource "aws_rds_cluster" "notification-canada-ca" {
       tags,
       engine_version
     ]
-    prevent_destroy = true
   }
 
   tags = {
