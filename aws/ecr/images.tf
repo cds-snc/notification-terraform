@@ -1,7 +1,7 @@
 #Notify Admin Build and Push
 
 resource "null_resource" "admin_repo_clone" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   triggers = {
     always_run = "${timestamp()}"
   }
@@ -12,7 +12,7 @@ resource "null_resource" "admin_repo_clone" {
 }
 
 resource "null_resource" "build_admin_docker_image" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   depends_on = [
     null_resource.admin_repo_clone
   ]
@@ -24,7 +24,7 @@ resource "null_resource" "build_admin_docker_image" {
 }
 
 resource "null_resource" "push_admin_docker_image" {
-  count      = var.build_images ? 1 : 0
+  count      = var.bootstrap ? 1 : 0
   depends_on = [null_resource.build_admin_docker_image]
 
   provisioner "local-exec" {
@@ -37,7 +37,7 @@ resource "null_resource" "push_admin_docker_image" {
 #API Lambda Build and Push
 
 resource "null_resource" "api_repo_clone" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   triggers = {
     always_run = "${timestamp()}"
   }
@@ -48,7 +48,7 @@ resource "null_resource" "api_repo_clone" {
 }
 
 resource "null_resource" "build_api_docker_image" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   depends_on = [
     null_resource.api_repo_clone
   ]
@@ -60,7 +60,7 @@ resource "null_resource" "build_api_docker_image" {
 }
 
 resource "null_resource" "push_api_docker_image" {
-  count      = var.build_images ? 1 : 0
+  count      = var.bootstrap ? 1 : 0
   depends_on = [null_resource.build_api_docker_image]
 
   provisioner "local-exec" {
@@ -71,7 +71,7 @@ resource "null_resource" "push_api_docker_image" {
 
 # Clone Lambda Repository
 resource "null_resource" "lambda_repo_clone" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   triggers = {
     always_run = "${timestamp()}"
   }
@@ -84,7 +84,7 @@ resource "null_resource" "lambda_repo_clone" {
 #Heartbeat Build and Push
 
 resource "null_resource" "build_heartbeat_docker_image" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   depends_on = [
     null_resource.lambda_repo_clone
   ]
@@ -96,7 +96,7 @@ resource "null_resource" "build_heartbeat_docker_image" {
 }
 
 resource "null_resource" "push_heartbeat_docker_image" {
-  count      = var.build_images ? 1 : 0
+  count      = var.bootstrap ? 1 : 0
   depends_on = [null_resource.build_heartbeat_docker_image]
 
   provisioner "local-exec" {
@@ -108,7 +108,7 @@ resource "null_resource" "push_heartbeat_docker_image" {
 #Google-Cidr Build and Push
 
 resource "null_resource" "build_google_cidr_docker_image" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   depends_on = [
     null_resource.lambda_repo_clone
   ]
@@ -120,7 +120,7 @@ resource "null_resource" "build_google_cidr_docker_image" {
 }
 
 resource "null_resource" "push_google_cidr_docker_image" {
-  count      = var.build_images ? 1 : 0
+  count      = var.bootstrap ? 1 : 0
   depends_on = [null_resource.build_google_cidr_docker_image]
 
   provisioner "local-exec" {
@@ -132,7 +132,7 @@ resource "null_resource" "push_google_cidr_docker_image" {
 # SES Receiving Emails Build and Push
 
 resource "null_resource" "build_ses_receiving_emails_docker_image" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   depends_on = [
     null_resource.lambda_repo_clone
   ]
@@ -144,7 +144,7 @@ resource "null_resource" "build_ses_receiving_emails_docker_image" {
 }
 
 resource "null_resource" "push_ses_receiving_emails_docker_image" {
-  count      = var.build_images ? 1 : 0
+  count      = var.bootstrap ? 1 : 0
   depends_on = [null_resource.build_ses_receiving_emails_docker_image]
 
   provisioner "local-exec" {
@@ -156,7 +156,7 @@ resource "null_resource" "push_ses_receiving_emails_docker_image" {
 # SES Receiving Emails Build and Push
 
 resource "null_resource" "build_ses_to_sqs_email_callbacks_docker_image" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   depends_on = [
     null_resource.lambda_repo_clone
   ]
@@ -168,7 +168,7 @@ resource "null_resource" "build_ses_to_sqs_email_callbacks_docker_image" {
 }
 
 resource "null_resource" "push_ses_to_sqs_email_callbacks_docker_image" {
-  count      = var.build_images ? 1 : 0
+  count      = var.bootstrap ? 1 : 0
   depends_on = [null_resource.build_ses_to_sqs_email_callbacks_docker_image]
 
   provisioner "local-exec" {
@@ -180,7 +180,7 @@ resource "null_resource" "push_ses_to_sqs_email_callbacks_docker_image" {
 # SNS to SQS Queue Build and Push
 
 resource "null_resource" "build_sns_to_sqs_sms_callbacks_docker_image" {
-  count = var.build_images ? 1 : 0
+  count = var.bootstrap ? 1 : 0
   depends_on = [
     null_resource.lambda_repo_clone
   ]
@@ -192,7 +192,7 @@ resource "null_resource" "build_sns_to_sqs_sms_callbacks_docker_image" {
 }
 
 resource "null_resource" "push_sns_to_sqs_sms_callbacks_docker_image" {
-  count      = var.build_images ? 1 : 0
+  count      = var.bootstrap ? 1 : 0
   depends_on = [null_resource.build_sns_to_sqs_sms_callbacks_docker_image]
 
   provisioner "local-exec" {

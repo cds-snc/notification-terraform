@@ -12,6 +12,18 @@ resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "api_lambda_log_group" {
+  name              = "/aws/lambda/${aws_lambda_function.api.function_name}"
+  retention_in_days = 90
+  tags = {
+    CostCenter  = "notification-canada-ca-${var.env}"
+    Environment = var.env
+    Application = "lambda"
+  }
+}
+
+
+
 # This account will be used by all API Gateway resources in the account and region
 resource "aws_api_gateway_account" "api_cloudwatch" {
   cloudwatch_role_arn = aws_iam_role.api_cloudwatch.arn
@@ -43,7 +55,7 @@ data "aws_iam_policy_document" "api_assume" {
 resource "aws_cloudwatch_log_metric_filter" "errors-lambda-api" {
   name           = "errors-lambda-api"
   pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\""
-  log_group_name = "/aws/lambda/${aws_lambda_function.api.function_name}"
+  log_group_name = aws_cloudwatch_log_group.api_lambda_log_group.name
 
   metric_transformation {
     name      = "errors-lambda-api"

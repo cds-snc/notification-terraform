@@ -145,3 +145,18 @@ variable "route_53_zone_arn" {
   description = "Used by the scratch environment to reference cdssandbox in staging"
   default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
 }
+
+variable "api_lambda_ecr_arn" {
+  type        = string
+  description = "ARN of Lambda ECR from ECR TF folder"
+}
+
+variable "api_lambda_ecr_repository_url" {
+  type        = string
+  description = "Docker Repo URL for API Lambda from ECR TF Folder"
+}
+variable "bootstrap" {
+  description = "Boolean value to decide whether or not to build images"
+  type        = bool
+  default     = false
+}

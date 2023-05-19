@@ -4,7 +4,7 @@ variable "force_delete_ecr" {
   default     = false
 }
 
-variable "build_images" {
+variable "bootstrap" {
   description = "Boolean value to decide whether or not to build images"
   type        = bool
   default     = false
