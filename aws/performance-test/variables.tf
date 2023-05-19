@@ -77,3 +77,7 @@ variable "private-links-gateway-prefix-list-ids" {
   type        = list(any)
   description = "private links gateway"
 }
+variable "performance_test_ecr_repository_url" {
+  type        = string
+  description = "The ECR repo URL for performance test for the ecr dependency"
+}

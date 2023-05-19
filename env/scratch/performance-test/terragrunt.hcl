@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../eks"]
+  paths = ["../common", "../eks", "../ecr"]
 }
 
 dependency "common" {
@@ -32,6 +32,10 @@ dependency "eks" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -54,6 +58,7 @@ inputs = {
   perf_test_email_with_link_template_id       = "9fb324a5-821d-4b54-9d52-d9ba1fa8373a"
   private-links-vpc-endpoints-securitygroup   = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids       = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  performance_test_ecr_repository_url         = dependency.ecr.outputs.performance_test_ecr_repository_url
 }
 
 terraform {
