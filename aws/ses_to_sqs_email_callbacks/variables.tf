@@ -31,3 +31,8 @@ variable "ses_to_sqs_email_callbacks_ecr_arn" {
   type        = string
   description = "Inherited from ecr dependency"
 }
+
+variable "sqs_eks_notification_canada_cadelivery_receipts_arn" {
+  type        = string
+  description = "Inherited from common dependency - sqs queue arn"
+}

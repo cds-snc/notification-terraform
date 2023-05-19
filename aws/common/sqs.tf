@@ -29,3 +29,17 @@ resource "aws_sqs_queue" "notify_internal_tasks_queue" {
   # This queue was created outside of terraform and has this value set to 310 in staging and production.
   visibility_timeout_seconds = 310
 }
+
+resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
+  name             = "eks-notification-canada-cadelivery-receipts"
+  delay_seconds    = 0
+  max_message_size = 262144
+  #4 Days
+  message_retention_seconds  = 345600
+  receive_wait_time_seconds  = 0
+  visibility_timeout_seconds = 310
+
+  tags = {
+    Environment = var.env
+  }
+}
