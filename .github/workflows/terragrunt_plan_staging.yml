@@ -148,7 +148,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_validation_dns_entries
-        if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/ses_validation_dns_entries"
