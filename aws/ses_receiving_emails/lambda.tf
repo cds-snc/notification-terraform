@@ -1,4 +1,9 @@
 module "ses_receiving_emails" {
+
+  providers = {
+    aws = aws.us-east-1
+  }
+
   source                 = "github.com/cds-snc/terraform-modules?ref=v4.0.3//lambda"
   name                   = "ses_receiving_emails"
   billing_tag_value      = var.billing_tag_value
@@ -31,6 +36,7 @@ data "aws_iam_policy_document" "ses_recieving_emails_sqs_send" {
   }
 }
 resource "aws_lambda_permission" "ses_receiving_emails" {
+  provider      = aws.us-east-1
   action        = "lambda:InvokeFunction"
   function_name = module.ses_receiving_emails.function_name
   principal     = "ses.amazonaws.com"
