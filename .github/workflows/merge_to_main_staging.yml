@@ -94,6 +94,11 @@ jobs:
           cd env/staging/ses_validation_dns_entries
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/cloudfront
+        run: |
+          cd env/staging/cloudfront
+          terragrunt apply --terragrunt-non-interactive -auto-approve          
+
       - name: Apply aws/eks
         run: |
           cd env/staging/eks
@@ -107,11 +112,6 @@ jobs:
       - name: Apply aws/rds
         run: |
           cd env/staging/rds
-          terragrunt apply --terragrunt-non-interactive -auto-approve
-
-      - name: Apply aws/cloudfront
-        run: |
-          cd env/staging/cloudfront
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-api

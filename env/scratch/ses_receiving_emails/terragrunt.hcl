@@ -1,3 +1,7 @@
+terraform {
+  source = "../../../aws//ses_receiving_emails"
+}
+
 dependencies {
   paths = ["../common", "../ecr"]
 }
@@ -41,6 +45,3 @@ inputs = {
 
 }
 
-terraform {
-  source = "../../../aws//ses_receiving_emails"
-}

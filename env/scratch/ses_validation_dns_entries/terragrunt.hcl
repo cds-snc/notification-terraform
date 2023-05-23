@@ -38,5 +38,4 @@ inputs = {
 
 terraform {
   source = "../../../aws//ses_validation_dns_entries"
-
 }
