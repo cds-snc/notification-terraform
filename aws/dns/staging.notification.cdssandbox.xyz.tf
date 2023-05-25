@@ -19,6 +19,24 @@ resource "aws_route53_record" "staging-notification-sandbox-TXT" {
   ]
 }
 
+resource "aws_route53_record" "staging-custom-domain-aws-ses-sandbox-TXT" {
+  count   = var.env == "staging" ? 1 : 0
+  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
+  name    = "_amazonses.custom-sending-domain.staging.notification.cdssandbox.xyz"
+  type    = "TXT"
+  ttl     = "300"
+  records = ["fXT/J45wZcUoBSnJAwPyfnHVf5E2b7aNayCC5PeQltg="]
+}
+
+resource "aws_route53_record" "staging-custom-domain-ses-sandbox-TXT" {
+  count   = var.env == "staging" ? 1 : 0
+  zone_id = aws_route53_zone.notification-sandbox[0].zone_id
+  name    = "custom-sending-domain.staging.notification.cdssandbox.xyz"
+  type    = "TXT"
+  ttl     = "300"
+  records = ["amazonses:fXT/J45wZcUoBSnJAwPyfnHVf5E2b7aNayCC5PeQltg="]
+}
+
 resource "aws_route53_record" "ses-staging-notification-sandbox-TXT" {
   count   = var.env == "staging" ? 1 : 0
   zone_id = aws_route53_zone.notification-sandbox[0].zone_id
