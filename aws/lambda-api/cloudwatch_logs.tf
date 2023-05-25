@@ -4,7 +4,7 @@
 
 resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
   name              = "api_gateway_log_group"
-  retention_in_days = 90
+  retention_in_days = 0
   tags = {
     CostCenter  = "notification-canada-ca-${var.env}"
     Environment = var.env
@@ -14,7 +14,7 @@ resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
 
 resource "aws_cloudwatch_log_group" "api_lambda_log_group" {
   name              = "/aws/lambda/${aws_lambda_function.api.function_name}"
-  retention_in_days = 90
+  retention_in_days = 0
   tags = {
     CostCenter  = "notification-canada-ca-${var.env}"
     Environment = var.env

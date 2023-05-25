@@ -1,3 +1,10 @@
+/*
+This is a dirty hack and exists only to bootstrap new environments. 
+Lambda Functions will not build unless the docker image is specified before hand. 
+In a new environment, these images would not exist in the ECR yet and thus the build fails.
+This code pulls the source code of the other repositories, builds the images, and pushes to ECR if the bootstrap variable is set to true.
+*/
+
 #Notify Admin Build and Push
 
 resource "null_resource" "admin_repo_clone" {

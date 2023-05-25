@@ -26,15 +26,17 @@ resource "aws_lambda_function" "api" {
   }
   environment {
     variables = {
-      ADMIN_BASE_URL                        = var.admin_base_url
-      API_HOST_NAME                         = "https://${var.api_domain_name}"
-      DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
-      SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
-      SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
-      NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
-      NOTIFY_EMAIL_DOMAIN                   = var.domain
-      NOTIFY_ENVIRONMENT                    = var.env
-      REDIS_ENABLED                         = var.redis_enabled
+      ADMIN_BASE_URL                 = var.admin_base_url
+      API_HOST_NAME                  = "https://${var.api_domain_name}"
+      DOCUMENT_DOWNLOAD_API_HOST     = var.document_download_api_host
+      SQLALCHEMY_DATABASE_URI        = var.sqlalchemy_database_uri
+      SQLALCHEMY_DATABASE_READER_URI = var.sqlalchemy_database_reader_uri
+      NOTIFICATION_QUEUE_PREFIX      = var.notification_queue_prefix
+      NOTIFY_EMAIL_DOMAIN            = var.domain
+      NOTIFY_ENVIRONMENT             = var.env
+      REDIS_ENABLED                  = var.redis_enabled
+      FF_CLOUDWATCH_METRICS_ENABLED  = var.ff_cloudwatch_metrics_enabled
+
       NEW_RELIC_CONFIG_FILE                 = "/app/newrelic.ini"
       NEW_RELIC_ENVIRONMENT                 = var.env
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
@@ -43,7 +45,7 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
       NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
-      FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
+
     }
   }
 

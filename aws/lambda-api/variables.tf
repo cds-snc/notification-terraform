@@ -160,3 +160,9 @@ variable "bootstrap" {
   type        = bool
   default     = false
 }
+
+variable "api_enable_new_relic" {
+  description = "Boolean value to decide whether or not new relic is enabled"
+  type        = bool
+  default     = true
+}
