@@ -30,6 +30,14 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
     aws_cloudwatch_log_group.notification-canada-ca-eks-cluster-logs,
     aws_iam_role_policy_attachment.eks-AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks-AmazonEKSVPCResourceController,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.eks-worker-CloudWatchAgentServerPolicy,
+    aws_iam_role_policy_attachment.eks-worker-AWSLoadBalancerControllerIAMPolicy,
+    aws_iam_role_policy_attachment.notification-worker-policy,
+    aws_iam_role_policy_attachment.eks-fargate-worker-AmazonEKSFargatePodExecutionRolePolicy,
+    aws_iam_role_policy_attachment.notification-fargate-worker-policy
   ]
 
   tags = {

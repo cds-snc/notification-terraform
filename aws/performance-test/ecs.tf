@@ -38,7 +38,7 @@ data "template_file" "perf_test_container_definition" {
     AWS_LOGS_GROUP         = aws_cloudwatch_log_group.perf_test_ecs_logs.name
     AWS_LOGS_REGION        = var.region
     AWS_LOGS_STREAM_PREFIX = "${aws_ecs_cluster.perf_test.name}-task"
-    ECR_REPOSITORY_URL     = aws_ecr_repository.performance-test.repository_url
+    ECR_REPOSITORY_URL     = var.performance_test_ecr_repository_url
 
     PERF_TEST_AWS_S3_BUCKET                     = var.perf_test_aws_s3_bucket
     PERF_TEST_CSV_DIRECTORY_PATH                = var.perf_test_csv_directory_path
@@ -48,10 +48,10 @@ data "template_file" "perf_test_container_definition" {
     PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID = var.perf_test_email_with_attachment_template_id
     PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID       = var.perf_test_email_with_link_template_id
 
-    PERF_TEST_PHONE_NUMBER_ARN = aws_secretsmanager_secret_version.perf_test_phone_number.arn
-    PERF_TEST_EMAIL_ARN        = aws_secretsmanager_secret_version.perf_test_email.arn
-    PERF_TEST_DOMAIN_ARN       = aws_secretsmanager_secret_version.perf_test_domain.arn
-    PERF_TEST_AUTH_HEADER_ARN  = aws_secretsmanager_secret_version.perf_test_auth_header.arn
+    PERF_TEST_PHONE_NUMBER_ARN = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_phone_number[0].arn
+    PERF_TEST_EMAIL_ARN        = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn
+    PERF_TEST_DOMAIN_ARN       = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_domain[0].arn
+    PERF_TEST_AUTH_HEADER_ARN  = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_auth_header[0].arn
   }
 }
 

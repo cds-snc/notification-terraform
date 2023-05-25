@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../elasticache"]
+  paths = ["../common", "../elasticache", "../ecr"]
 }
 
 dependency "common" {
@@ -24,6 +24,10 @@ dependency "elasticache" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -33,6 +37,7 @@ inputs = {
   vpc_id                               = dependency.common.outputs.vpc_id
   vpc_endpoint_gateway_prefix_list_ids = dependency.common.outputs.private-links-gateway-prefix-list-ids
   vpc_endpoint_security_group_id       = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
+  notify_admin_ecr_arn                 = dependency.ecr.outputs.notify_admin_ecr_arn
 }
 
 terraform {

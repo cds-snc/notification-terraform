@@ -58,3 +58,9 @@ variable "dbtools_password" {
   sensitive   = true
   description = "Pass for database-tools psql db"
 }
+
+variable "enable_delete_protection" {
+  type        = bool
+  description = "Sets whether or not to enable delete protection."
+  default     = true
+}

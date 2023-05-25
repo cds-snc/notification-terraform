@@ -1,10 +1,14 @@
+locals {
+  image_tag = var.bootstrap ? "bootstrap" : var.api_image_tag
+}
+
 resource "aws_lambda_function" "api" {
   function_name = "api-lambda"
   role          = aws_iam_role.api.arn
   publish       = true
 
   package_type = "Image"
-  image_uri    = "${aws_ecr_repository.api-lambda.repository_url}:${var.api_image_tag}"
+  image_uri    = "${var.api_lambda_ecr_repository_url}:${local.image_tag}"
 
   timeout                        = 60
   reserved_concurrent_executions = 850
@@ -22,15 +26,17 @@ resource "aws_lambda_function" "api" {
   }
   environment {
     variables = {
-      ADMIN_BASE_URL                        = var.admin_base_url
-      API_HOST_NAME                         = "https://${var.api_domain_name}"
-      DOCUMENT_DOWNLOAD_API_HOST            = var.document_download_api_host
-      SQLALCHEMY_DATABASE_URI               = var.sqlalchemy_database_uri
-      SQLALCHEMY_DATABASE_READER_URI        = var.sqlalchemy_database_reader_uri
-      NOTIFICATION_QUEUE_PREFIX             = var.notification_queue_prefix
-      NOTIFY_EMAIL_DOMAIN                   = var.domain
-      NOTIFY_ENVIRONMENT                    = var.env
-      REDIS_ENABLED                         = var.redis_enabled
+      ADMIN_BASE_URL                 = var.admin_base_url
+      API_HOST_NAME                  = "https://${var.api_domain_name}"
+      DOCUMENT_DOWNLOAD_API_HOST     = var.document_download_api_host
+      SQLALCHEMY_DATABASE_URI        = var.sqlalchemy_database_uri
+      SQLALCHEMY_DATABASE_READER_URI = var.sqlalchemy_database_reader_uri
+      NOTIFICATION_QUEUE_PREFIX      = var.notification_queue_prefix
+      NOTIFY_EMAIL_DOMAIN            = var.domain
+      NOTIFY_ENVIRONMENT             = var.env
+      REDIS_ENABLED                  = var.redis_enabled
+      FF_CLOUDWATCH_METRICS_ENABLED  = var.ff_cloudwatch_metrics_enabled
+
       NEW_RELIC_CONFIG_FILE                 = "/app/newrelic.ini"
       NEW_RELIC_ENVIRONMENT                 = var.env
       NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
@@ -39,7 +45,7 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
       NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
-      FF_CLOUDWATCH_METRICS_ENABLED         = var.ff_cloudwatch_metrics_enabled
+
     }
   }
 

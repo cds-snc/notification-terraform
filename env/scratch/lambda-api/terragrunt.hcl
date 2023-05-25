@@ -1,5 +1,9 @@
+terraform {
+  source = "../../../aws//lambda-api"
+}
+
 dependencies {
-  paths = ["../common", "../eks"]
+  paths = ["../common", "../eks", "../ecr"]
 }
 
 dependency "common" {
@@ -39,16 +43,20 @@ dependency "eks" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+}
+
 include {
   path = find_in_parent_folders()
 }
 
 inputs = {
-  env                                    = "staging"
-  admin_base_url                         = "https://staging.notification.cdssandbox.xyz"
-  api_domain_name                        = "api.staging.notification.cdssandbox.xyz"
-  api_lambda_domain_name                 = "api-lambda.staging.notification.cdssandbox.xyz"
-  api_lambda_alt_domain_name             = "api.staging.notification.alpha.cdssandbox.xyz"
+  env                                    = "scratch"
+  admin_base_url                         = "https://scratch.notification.cdssandbox.xyz"
+  api_domain_name                        = "api.scratch.notification.cdssandbox.xyz"
+  api_lambda_domain_name                 = "api-lambda.scratch.notification.cdssandbox.xyz"
+  api_lambda_alt_domain_name             = "api.alpha.scratch.notification.cdssandbox.xyz"
   api_image_tag                          = "latest"
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
@@ -59,7 +67,7 @@ inputs = {
   high_demand_max_concurrency            = 10
   csv_upload_bucket_arn                  = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
-  new_relic_app_name                     = "notification-lambda-api-staging"
+  new_relic_app_name                     = "notification-lambda-api-scratch"
   new_relic_distribution_tracing_enabled = "true"
   notification_queue_prefix              = "eks-notification-canada-ca"
   redis_enabled                          = 1
@@ -72,8 +80,6 @@ inputs = {
   re_api_arn                             = dependency.common.outputs.re_api_arn
   api_waf_rate_limit                     = 5000
   eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
-}
-
-terraform {
-  source = "../../../aws//lambda-api"
+  api_lambda_ecr_repository_url          = dependency.ecr.outputs.api_lambda_ecr_repository_url
+  api_lambda_ecr_arn                     = dependency.ecr.outputs.api_lambda_ecr_arn
 }

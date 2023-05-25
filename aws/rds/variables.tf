@@ -33,3 +33,8 @@ variable "sns_alert_general_arn" {
   type = string
 }
 
+variable "enable_delete_protection" {
+  type        = bool
+  description = "Sets whether or not to enable delete protection."
+  default     = true
+}

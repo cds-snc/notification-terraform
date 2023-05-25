@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "api_policies" {
       "ecr:GetDownloadUrlForlayer",
       "ecr:BatchGetImage"
     ]
-    resources = [aws_ecr_repository.api-lambda.arn]
+    resources = [var.api_lambda_ecr_arn]
   }
 
   statement {

@@ -24,7 +24,7 @@ resource "aws_db_instance" "database-tools" {
   skip_final_snapshot = true
 
   storage_encrypted   = true
-  deletion_protection = true
+  deletion_protection = var.enable_delete_protection
 
   vpc_security_group_ids = [var.database-tools-db-securitygroup]
   db_subnet_group_name   = aws_db_subnet_group.database-tools-rds-subnet.name
@@ -36,7 +36,6 @@ resource "aws_db_instance" "database-tools" {
       tags,
       engine_version
     ]
-    prevent_destroy = true
   }
 
   tags = {

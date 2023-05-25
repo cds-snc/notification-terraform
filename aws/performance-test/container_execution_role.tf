@@ -54,10 +54,10 @@ data "aws_iam_policy_document" "perf_test_secretsmanager" {
       "secretsmanager:GetSecretValue",
     ]
     resources = [
-      aws_secretsmanager_secret_version.perf_test_phone_number.arn,
-      aws_secretsmanager_secret_version.perf_test_email.arn,
-      aws_secretsmanager_secret_version.perf_test_domain.arn,
-      aws_secretsmanager_secret_version.perf_test_auth_header.arn
+      var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_phone_number[0].arn,
+      var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn,
+      var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_domain[0].arn,
+      var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_auth_header[0].arn
     ]
   }
 }

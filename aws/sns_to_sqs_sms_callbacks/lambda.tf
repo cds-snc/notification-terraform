@@ -2,9 +2,9 @@ module "sns_to_sqs_sms_callbacks" {
   source                 = "github.com/cds-snc/terraform-modules?ref=v4.0.3//lambda"
   name                   = "sns_to_sqs_sms_callbacks"
   billing_tag_value      = var.billing_tag_value
-  ecr_arn                = aws_ecr_repository.sns_to_sqs_sms_callbacks.arn
+  ecr_arn                = var.sns_to_sqs_sms_callbacks_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:latest"
+  image_uri              = "${var.sns_to_sqs_sms_callbacks_ecr_repository_url}:${var.sns_to_sqs_sms_callbacks_docker_tag}"
   timeout                = 60
   memory                 = 1024
 

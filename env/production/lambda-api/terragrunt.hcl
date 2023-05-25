@@ -5,7 +5,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../eks"]
+  paths = ["../common", "../eks", "../ecr"]
 }
 
 dependency "common" {
@@ -45,6 +45,10 @@ dependency "eks" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -78,4 +82,6 @@ inputs = {
   eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
   certificate_arn                        = dependency.eks.outputs.aws_acm_notification_canada_ca_arn
   certificate_alt_arn                    = dependency.eks.outputs.aws_acm_alt_notification_canada_ca_arn
+  api_lambda_ecr_repository_url          = dependency.ecr.outputs.api_lambda_ecr_repository_url
+  api_lambda_ecr_arn                     = dependency.ecr.outputs.api_lambda_ecr_arn
 }
