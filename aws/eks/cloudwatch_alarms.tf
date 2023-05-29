@@ -384,7 +384,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_critical_arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-warning" {
