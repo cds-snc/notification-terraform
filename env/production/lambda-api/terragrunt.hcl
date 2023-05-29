@@ -42,11 +42,21 @@ dependency "eks" {
   mock_outputs = {
     eks-cluster-securitygroup = ""
     eks_application_log_group = "eks_application_log_group_name"
+    certificate_arn = ""
+    certificate_alt_arn = ""
   }
 }
 
 dependency "ecr" {
   config_path = "../ecr"
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    api_lambda_ecr_repository_url = ""
+    api_lambda_ecr_arn = ""
+  }
 }
 
 include {
