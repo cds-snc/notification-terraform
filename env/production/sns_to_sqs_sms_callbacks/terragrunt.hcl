@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../ecr"]
 }
 
 dependency "common" {
@@ -28,6 +28,10 @@ dependency "common" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -45,4 +49,6 @@ inputs = {
   sns_alert_warning_arn                    = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                   = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_ok_arn                         = dependency.common.outputs.sns_alert_ok_arn
+  sns_to_sqs_sms_callbacks_ecr_repository_url   = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_repository_url
+  sns_to_sqs_sms_callbacks_ecr_arn              = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_arn
 }
