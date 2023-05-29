@@ -7,7 +7,7 @@ locals {
 }
 
 terraform {
-  source = "../../../aws//ecr"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/ecr?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 
   after_hook "cleanup-admin" {
     commands     = ["apply"]
