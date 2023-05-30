@@ -11,6 +11,7 @@ resource "aws_ecr_repository" "heartbeat" {
 }
 
 resource "aws_ecr_repository" "notify_admin" {
+  count                = var.env == "production" ? 0 : 1
   name                 = "notify/admin"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
   force_delete         = var.force_delete_ecr
@@ -49,6 +50,7 @@ resource "aws_ecr_repository" "performance-test" {
   # The :latest tag is used in Staging
   #tfsec:ignore:AWS078
 
+  count                = var.env == "production" ? 0 : 1
   name                 = "notify/performance-test"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
   force_delete         = var.force_delete_ecr
