@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../ecr"]
 }
 
 dependency "common" {
@@ -28,6 +28,18 @@ dependency "common" {
   }
 }
 
+dependency "ecr" {
+  config_path = "../ecr"
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    sns_to_sqs_sms_callbacks_ecr_repository_url = ""
+    sns_to_sqs_sms_callbacks_ecr_arn = ""
+  }
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -45,4 +57,6 @@ inputs = {
   sns_alert_warning_arn                    = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                   = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_ok_arn                         = dependency.common.outputs.sns_alert_ok_arn
+  sns_to_sqs_sms_callbacks_ecr_repository_url   = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_repository_url
+  sns_to_sqs_sms_callbacks_ecr_arn              = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_arn
 }

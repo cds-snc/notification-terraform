@@ -112,6 +112,15 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+      - name: Terragrunt plan ses_validation_dns_entries
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/ses_validation_dns_entries"
+          comment-delete: "true"
+          comment-title: "Production: ses_validation_dns_entries"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
       - name: Terragrunt plan eks
         uses: cds-snc/terraform-plan@v3
         with:

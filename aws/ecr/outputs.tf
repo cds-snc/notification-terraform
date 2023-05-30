@@ -32,11 +32,11 @@ output "heartbeat_ecr_repository_url" {
 }
 output "notify_admin_ecr_arn" {
   description = "arn of notify_admin ECR"
-  value       = aws_ecr_repository.notify_admin.arn
+  value       = var.env == "production" ? "" : aws_ecr_repository.notify_admin[0].arn
 }
 output "notify_admin_ecr_repository_url" {
   description = "Repository URL of notify_admin ECR"
-  value       = aws_ecr_repository.notify_admin.repository_url
+  value       = var.env == "production" ? "" : aws_ecr_repository.notify_admin[0].repository_url
 }
 output "api_lambda_ecr_arn" {
   description = "arn of api_lambda ECR"
@@ -56,9 +56,9 @@ output "google_cidr_ecr_repository_url" {
 }
 output "performance_test_ecr_arn" {
   description = "arn of performance-test ECR"
-  value       = aws_ecr_repository.performance-test.arn
+  value       = var.env == "production" ? "" : aws_ecr_repository.performance-test[0].arn
 }
 output "performance_test_ecr_repository_url" {
   description = "Repository URL of performance-test ECR"
-  value       = aws_ecr_repository.performance-test.repository_url
+  value       = var.env == "production" ? "" : aws_ecr_repository.performance-test[0].repository_url
 }
