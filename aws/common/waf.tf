@@ -80,6 +80,11 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
     regex_string = "/keep-accurate-contact-information|/maintenez-a-jour-les-coordonnees|/delivery-and-failure|/livraison-reussie-et-echec|/system-status|/etat-du-systeme"
   }
 
+# GCA routes
+  regular_expression {
+    regex_string = "/archive-autres-services.*|/archived-version-other-services.*"
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
