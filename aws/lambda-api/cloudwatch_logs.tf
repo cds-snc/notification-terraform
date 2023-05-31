@@ -63,3 +63,15 @@ resource "aws_cloudwatch_log_metric_filter" "errors-lambda-api" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "errors-salesforce-api" {
+  name           = "errors-salesforce-api"
+  pattern        = "SF_ERR"
+  log_group_name = aws_cloudwatch_log_group.api_lambda_log_group.name
+
+  metric_transformation {
+    name      = "errors-salesforce-api"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}

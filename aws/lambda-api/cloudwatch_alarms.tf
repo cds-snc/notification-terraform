@@ -35,3 +35,19 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-error-5-minutes-critical-lambda-
   ok_actions                = [var.sns_alert_critical_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-salesforce-api" {
+  alarm_name                = "logs-1-error-1-minute-warning-salesforce-api"
+  alarm_description         = "One Salesforce API error in 1 minute"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = aws_cloudwatch_log_metric_filter.errors-salesforce-api.metric_transformation[0].name
+  namespace                 = aws_cloudwatch_log_metric_filter.errors-salesforce-api.metric_transformation[0].namespace
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+}
