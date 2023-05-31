@@ -57,7 +57,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*"
+    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*"
   }
 
   # GCA routes
