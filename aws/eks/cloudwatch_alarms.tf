@@ -359,9 +359,9 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
   ok_actions          = [var.sns_alert_critical_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warning" {
-  alarm_name          = "logs-3-scanfiles-timeout-5-minutes-warning"
-  alarm_description   = "Three scanfiles timeout detected error in 5 minutes"
+resource "aws_cloudwatch_metric_alarm" "logs-4-scanfiles-timeout-5-minutes-warning" {
+  alarm_name          = "logs-4-scanfiles-timeout-5-minutes-warning"
+  alarm_description   = "Four scanfiles timeout detected error in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.scanfiles-timeout.metric_transformation[0].name
