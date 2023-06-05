@@ -59,7 +59,7 @@ resource "aws_rds_cluster_parameter_group" "default" {
   }
 
   parameter {
-    name  = "log_retention_period"
+    name  = "rds.log_retention_period"
     value = "4320" # 3 days (in minutes)
   }
 

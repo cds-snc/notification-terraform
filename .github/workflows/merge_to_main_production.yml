@@ -149,5 +149,5 @@ jobs:
       - name: Slack message on failure
         if: ${{ failure() }}
         run: |
-          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/workflows/merge_to_main_production.yml|Merge to main (Production)>"}}]}'
+          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|Merge to main (Production)>"}}]}'
           curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
