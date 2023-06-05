@@ -28,3 +28,7 @@ variable "vpc_private_subnets" {
 variable "sns_alert_warning_arn" {
   type = string
 }
+
+variable "sns_alert_critical_arn" {
+  type = string
+}
