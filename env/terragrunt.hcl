@@ -107,7 +107,7 @@ remote_state {
   }
   config = {
     encrypt             = true
-    bucket              = "notification-canada-ca-${local.vars.inputs.env}-tf"
+    bucket              = "notification-canada-ca-${local.vars.inputs.env}-sja-tf"
     dynamodb_table      = "terraform-state-lock-dynamo"
     region              = "ca-central-1"
     key                 = "${path_relative_to_include()}/terraform.tfstate"
