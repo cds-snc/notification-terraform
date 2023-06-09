@@ -35,12 +35,6 @@ variable "notify_o11y_google_oauth_client_secret" {
   description = "Google OAuth client secret for Notify observability tools"
 }
 
-variable "sqlalchemy_database_reader_uri" {
-  type        = string
-  sensitive   = true
-  description = "PSQL connection to notify db"
-}
-
 variable "database-tools-securitygroup" {
   type        = string
   description = "Database tools security group ID"
@@ -63,4 +57,14 @@ variable "enable_delete_protection" {
   type        = bool
   description = "Sets whether or not to enable delete protection."
   default     = true
+}
+
+variable "database_proxy_endpoint" {
+  type        = string
+  description = "Base endpoint for rds proxy"
+}
+variable "rds_cluster_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for rds cluster"
 }

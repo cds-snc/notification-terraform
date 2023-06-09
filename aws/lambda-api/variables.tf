@@ -39,16 +39,6 @@ variable "redis_enabled" {
   type = string
 }
 
-variable "sqlalchemy_database_reader_uri" {
-  type      = string
-  sensitive = true
-}
-
-variable "sqlalchemy_database_uri" {
-  type      = string
-  sensitive = true
-}
-
 variable "vpc_private_subnets" {
   type = list(any)
 }
@@ -165,4 +155,15 @@ variable "api_enable_new_relic" {
   description = "Boolean value to decide whether or not new relic is enabled"
   type        = bool
   default     = true
+}
+
+variable "database_proxy_endpoint" {
+  type        = string
+  description = "Base endpoint for rds proxy"
+}
+
+variable "rds_cluster_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for rds cluster"
 }

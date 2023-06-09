@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../eks", "../ecr"]
+  paths = ["../common", "../eks", "../ecr", "../rds"]
 }
 
 dependency "common" {
@@ -47,6 +47,11 @@ dependency "ecr" {
   config_path = "../ecr"
 }
 
+dependency "rds" {
+  config_path = "../rds"
+}
+
+
 include {
   path = find_in_parent_folders()
 }
@@ -82,4 +87,5 @@ inputs = {
   eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
   api_lambda_ecr_repository_url          = dependency.ecr.outputs.api_lambda_ecr_repository_url
   api_lambda_ecr_arn                     = dependency.ecr.outputs.api_lambda_ecr_arn
+  database_proxy_endpoint                = dependency.rds.outputs.database_proxy_endpoint
 }
