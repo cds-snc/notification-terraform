@@ -51,7 +51,6 @@ dependency "rds" {
   config_path = "../rds"
 }
 
-
 include {
   path = find_in_parent_folders()
 }
