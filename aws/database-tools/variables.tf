@@ -59,7 +59,7 @@ variable "enable_delete_protection" {
   default     = true
 }
 
-variable "database_proxy_endpoint" {
+variable "database_read_only_proxy_endpoint" {
   type        = string
   description = "Base endpoint for rds proxy"
 }

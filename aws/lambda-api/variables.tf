@@ -157,9 +157,14 @@ variable "api_enable_new_relic" {
   default     = true
 }
 
-variable "database_proxy_endpoint" {
+variable "database_read_only_proxy_endpoint" {
   type        = string
-  description = "Base endpoint for rds proxy"
+  description = "Base read only endpoint for rds proxy"
+}
+
+variable "database_read_write_proxy_endpoint" {
+  type        = string
+  description = "Base read write endpoint for rds proxy"
 }
 
 variable "app_db_user_password" {
