@@ -99,5 +99,5 @@ inputs = {
   api_lambda_ecr_repository_url             = dependency.ecr.outputs.api_lambda_ecr_repository_url
   api_lambda_ecr_arn                        = dependency.ecr.outputs.api_lambda_ecr_arn
   database_read_only_proxy_endpoint         = dependency.rds.outputs.database_read_only_proxy_endpoint
-  database_read_write_proxy_endpoint         = dependency.rds.outputs.database_read_write_proxy_endpoint
+  database_read_write_proxy_endpoint        = dependency.rds.outputs.database_read_write_proxy_endpoint
 }
