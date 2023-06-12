@@ -47,7 +47,6 @@ inputs = {
   blazer_image_tag                          = "latest"
   database-tools-securitygroup              = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup           = dependency.eks.outputs.database-tools-db-securitygroup
-  database_proxy_endpoint                   = dependency.rds.outputs.database_proxy_endpoint
   database_read_only_proxy_endpoint         = dependency.rds.outputs.database_read_only_proxy_endpoint
 }
 
