@@ -29,8 +29,8 @@ resource "aws_lambda_function" "api" {
       ADMIN_BASE_URL                 = var.admin_base_url
       API_HOST_NAME                  = "https://${var.api_domain_name}"
       DOCUMENT_DOWNLOAD_API_HOST     = var.document_download_api_host
-      SQLALCHEMY_DATABASE_URI        = "postgresql://app_db_user:${var.app_db_user_password}@read-write-endpoint.${var.database_proxy_endpoint}/NotificationCanadaCa${var.env}"
-      SQLALCHEMY_DATABASE_READER_URI = "postgresql://app_db_user:${var.app_db_user_password}@read-only-endpoint.${var.database_proxy_endpoint}/NotificationCanadaCa${var.env}"
+      SQLALCHEMY_DATABASE_URI        = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/NotificationCanadaCa${var.env}"
+      SQLALCHEMY_DATABASE_READER_URI = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
       NOTIFICATION_QUEUE_PREFIX      = var.notification_queue_prefix
       NOTIFY_EMAIL_DOMAIN            = var.domain
       NOTIFY_ENVIRONMENT             = var.env

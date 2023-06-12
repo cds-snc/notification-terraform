@@ -44,12 +44,13 @@ include {
 }
 
 inputs = {
-  vpc_private_subnets             = dependency.common.outputs.vpc_private_subnets
-  vpc_id                          = dependency.common.outputs.vpc_id
-  billing_tag_key                 = "CostCenter"
-  billing_tag_value               = "notification-canada-ca-production"
-  blazer_image_tag                = "53254711eb1da91f834d933e9663c87bc5974d3d"
-  database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
-  database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
-  database_proxy_endpoint         = dependency.rds.outputs.database_proxy_endpoint
+  vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
+  vpc_id                                    = dependency.common.outputs.vpc_id
+  billing_tag_key                           = "CostCenter"
+  billing_tag_value                         = "notification-canada-ca-production"
+  blazer_image_tag                          = "53254711eb1da91f834d933e9663c87bc5974d3d"
+  database-tools-securitygroup              = dependency.eks.outputs.database-tools-securitygroup
+  database-tools-db-securitygroup           = dependency.eks.outputs.database-tools-db-securitygroup
+  database_proxy_endpoint                   = dependency.rds.outputs.database_proxy_endpoint
+  database_read_only_proxy_endpoint         = dependency.rds.outputs.database_read_only_proxy_endpoint
 }
