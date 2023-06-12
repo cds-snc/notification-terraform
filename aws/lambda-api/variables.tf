@@ -162,7 +162,7 @@ variable "database_proxy_endpoint" {
   description = "Base endpoint for rds proxy"
 }
 
-variable "rds_cluster_password" {
+variable "app_db_user_password" {
   type        = string
   sensitive   = true
   description = "Password for rds cluster"
