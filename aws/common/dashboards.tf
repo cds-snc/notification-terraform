@@ -211,13 +211,13 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "properties": {
                 "title": "Email alarms",
                 "alarms": [
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-bounce-rate-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-bounce-rate-warning",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-complaint-rate-warning",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-complaint-rate-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-email-stuck-in-queue-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:no-emails-sent-5-minutes-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:no-emails-sent-1-minute-warning"
+                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical.arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning.arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning.arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-critical.arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-email-queue-delay-critical.arn}",
+                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical.arn}",
+                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning.arn}"
                 ]
             }
         },
@@ -513,12 +513,12 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "properties": {
                 "title": "Alarms",
                 "alarms": [
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-sms-success-rate-canadian-numbers-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-sms-success-rate-canadian-numbers-warning",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-sms-stuck-in-queue-warning",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-sms-stuck-in-queue-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-spending-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-spending-warning"
+                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical.arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning.arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-warning.arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-critical.arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-spending-critical.arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-spending-warning.arn}"
                 ]
             }
         },
@@ -894,8 +894,8 @@ EOF
 }
 
 
-resource "aws_cloudwatch_dashboard" "sms" {
-  dashboard_name = "SMS"
+resource "aws_cloudwatch_dashboard" "sensitive" {
+  dashboard_name = "Temp_admin_views_of_sensitive_services"
   dashboard_body = <<EOF
 {
     "widgets": [
