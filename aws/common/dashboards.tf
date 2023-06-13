@@ -17,7 +17,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Added to email inboxes"
@@ -37,7 +37,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Added to sms inboxes"
@@ -57,7 +57,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Priority email inflights"
@@ -77,7 +77,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Normal email inflights"
@@ -97,7 +97,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Bulk email inflights"
@@ -117,7 +117,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Priority sms inflights"
@@ -137,7 +137,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Normal sms inflights"
@@ -157,7 +157,7 @@ resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Bulk sms inflights"
@@ -195,7 +195,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Sent emails per 5mn",
@@ -211,13 +211,13 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "properties": {
                 "title": "Email alarms",
                 "alarms": [
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:ses-bounce-rate-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:ses-bounce-rate-warning",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:ses-complaint-rate-warning",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:ses-complaint-rate-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:sqs-email-stuck-in-queue-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:no-emails-sent-5-minutes-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:no-emails-sent-1-minute-warning"
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-bounce-rate-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-bounce-rate-warning",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-complaint-rate-warning",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-complaint-rate-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-email-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:no-emails-sent-5-minutes-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:no-emails-sent-1-minute-warning"
                 ]
             }
         },
@@ -233,7 +233,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 900,
                 "title": "Bounces per 15mn"
@@ -251,7 +251,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "p90",
                 "period": 300,
                 "liveData": false,
@@ -276,7 +276,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
                 "title": "Average approximate age of oldest message in send-email-tasks"
@@ -289,7 +289,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n# Sending emails\n\nEmails are sent with [SES](https://ca-central-1.console.aws.amazon.com/ses/home?region=ca-central-1#dashboard:).\n\nOur limits are:\n- 1,000,000 emails per 24 hour period\n- 100 emails/second\n\nEmails are sent by Celery through the `deliver_email` task through the [send-email-tasks](https://ca-central-1.console.aws.amazon.com/sqs/v2/home?region=ca-central-1#/queues/https%3A%2F%2Fsqs.ca-central-1.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-email-tasks) queue.\n\n## Message flow\n\nAfter a notification has been created in the database, Celery sends the email to the provider using the deliver_email Celery task. This Celery task is assigned to the SQS queue eks-notification-canada-casend-email-tasks, unless a specific queue has been assigned to the queue (for example: eks-notification-canada-capriority-tasks for priority notifications or eks-notification-canada-cabulk-tasks through the API REST service). This task calls the AWS SES API to send a text message.\n\n## Delivery receipts\n\nReceipts from SES are dispatched to SNS -> [Lambda](https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions/ses-to-sqs-email-callbacks) -> [SQS](https://ca-central-1.console.aws.amazon.com/sqs/v2/home?region=ca-central-1#/queues/https%3A%2F%2Fsqs.ca-central-1.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-cadelivery-receipts) in the `delivery-receipts` queue.\n\nA delay in this queue means that we are slow to process delivery receipts (delivered, bounce, complaints).\n"
+                "markdown": "\n# Sending emails\n\nEmails are sent with [SES](https://${var.region}.console.aws.amazon.com/ses/home?region=${var.region}#dashboard:).\n\nOur limits are:\n- 1,000,000 emails per 24 hour period\n- 100 emails/second\n\nEmails are sent by Celery through the `deliver_email` task through the [send-email-tasks](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-email-tasks) queue.\n\n## Message flow\n\nAfter a notification has been created in the database, Celery sends the email to the provider using the deliver_email Celery task. This Celery task is assigned to the SQS queue eks-notification-canada-casend-email-tasks, unless a specific queue has been assigned to the queue (for example: eks-notification-canada-capriority-tasks for priority notifications or eks-notification-canada-cabulk-tasks through the API REST service). This task calls the AWS SES API to send a text message.\n\n## Delivery receipts\n\nReceipts from SES are dispatched to SNS -> [Lambda](https://${var.region}.console.aws.amazon.com/lambda/home?region=${var.region}#/functions/ses-to-sqs-email-callbacks) -> [SQS](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-cadelivery-receipts) in the `delivery-receipts` queue.\n\nA delay in this queue means that we are slow to process delivery receipts (delivered, bounce, complaints).\n"
             }
         },
         {
@@ -304,7 +304,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
                 "title": "Approximate age of oldest message in delivery-receipts"
@@ -322,7 +322,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "title": "Approximate number of messages in send-email-tasks",
                 "period": 60,
                 "stat": "Average"
@@ -341,7 +341,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 "view": "timeSeries",
                 "stacked": true,
                 "title": "Number of deliver_emails Celery tasks per 5m",
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300
             }
@@ -358,7 +358,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Celery: Number of SES delivery receipts processed"
@@ -376,7 +376,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Average",
                 "period": 300,
                 "title": "Number of messages visible in bulk-tasks"
@@ -394,7 +394,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "title": "Number of messages visible in priority-tasks",
                 "stat": "Average",
                 "period": 300
@@ -412,484 +412,10 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Average",
                 "period": 300,
                 "title": "Number of messages visible in retry-tasks"
-            }
-        }
-    ]
-}
-EOF
-}
-
-
-
-
-
-
-
-
-resource "aws_cloudwatch_dashboard" "errors" {
-  dashboard_name = "Errors"
-  dashboard_body = <<EOF
-{
-    "widgets": [
-        {
-            "height": 6,
-            "width": 24,
-            "y": 3,
-            "x": 0,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.labels.app like /admin|api/\n| filter strcontains(@message, 'HTTP/1.1\\\" 500')\n| sort @timestamp desc\n| limit 20",
-                "region": "ca-central-1",
-                "title": "Admin and API 500 errors",
-                "view": "table"
-            }
-        },
-        {
-            "height": 3,
-            "width": 24,
-            "y": 0,
-            "x": 0,
-            "type": "alarm",
-            "properties": {
-                "title": "Error alarms",
-                "alarms": [
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:logs-1-500-error-1-minute-warning",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:logs-1-celery-error-1-minute-warning",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:logs-10-500-error-5-minutes-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:logs-10-celery-error-1-minute-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:logs-1-error-1-minute-warning-lambda-api",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:logs-10-error-5-minutes-critical-lambda-api"
-                ]
-            }
-        },
-        {
-            "height": 6,
-            "width": 24,
-            "y": 9,
-            "x": 0,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.labels.app like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
-                "region": "ca-central-1",
-                "title": "Celery errors",
-                "view": "table"
-            }
-        },
-        {
-            "height": 6,
-            "width": 24,
-            "y": 15,
-            "x": 0,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | SOURCE '/aws/lambda/api-lambda' | filter (ispresent(application) or ispresent(kubernetes.host)) and @message like /has been rate limited/\n| parse @message /service (?<service>.*?) has been rate limited for (?<limit_type>..........).*/\n| stats count(*) by service, limit_type\n",
-                "region": "ca-central-1",
-                "stacked": false,
-                "title": "Services going over the daily limit",
-                "view": "table"
-            }
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_cloudwatch_dashboard" "kubernetes" {
-  dashboard_name = "Kubernetes"
-  dashboard_body = <<EOF
-{
-    "widgets": [
-        {
-            "height": 15,
-            "width": 24,
-            "y": 14,
-            "x": 0,
-            "type": "explorer",
-            "properties": {
-                "metrics": [
-                    {
-                        "metricName": "node_cpu_limit",
-                        "resourceType": "AWS::EKS::Cluster",
-                        "stat": "Maximum"
-                    },
-                    {
-                        "metricName": "node_cpu_usage_total",
-                        "resourceType": "AWS::EKS::Cluster",
-                        "stat": "Maximum"
-                    },
-                    {
-                        "metricName": "node_memory_limit",
-                        "resourceType": "AWS::EKS::Cluster",
-                        "stat": "Maximum"
-                    },
-                    {
-                        "metricName": "node_memory_working_set",
-                        "resourceType": "AWS::EKS::Cluster",
-                        "stat": "Maximum"
-                    },
-                    {
-                        "metricName": "cluster_failed_node_count",
-                        "resourceType": "AWS::EKS::Cluster",
-                        "stat": "Sum"
-                    },
-                    {
-                        "metricName": "cluster_node_count",
-                        "resourceType": "AWS::EKS::Cluster",
-                        "stat": "Sum"
-                    }
-                ],
-                "aggregateBy": {
-                    "key": "Name",
-                    "func": "MAX"
-                },
-                "labels": [
-                    {
-                        "key": "Name",
-                        "value": "notification-canada-ca"
-                    }
-                ],
-                "widgetOptions": {
-                    "legend": {
-                        "position": "bottom"
-                    },
-                    "view": "timeSeries",
-                    "stacked": false,
-                    "rowsPerPage": 50,
-                    "widgetsPerRow": 2
-                },
-                "period": 300,
-                "splitBy": "Name",
-                "region": "ca-central-1"
-            }
-        },
-        {
-            "height": 7,
-            "width": 24,
-            "y": 0,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "ContainerInsights", "pod_memory_utilization_over_pod_limit", "PodName", "admin", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
-                    [ "...", "api", ".", ".", ".", "." ],
-                    [ "...", "celery", ".", ".", ".", "." ],
-                    [ "...", "document-download-api", ".", ".", ".", "." ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "yAxis": {
-                    "left": {
-                        "label": "pod_memory_utilization_over_pod_limit",
-                        "min": 0,
-                        "max": 100
-                    },
-                    "right": {
-                        "label": "",
-                        "min": 0
-                    }
-                },
-                "title": "Pod mem utilization over limit",
-                "period": 300,
-                "stat": "Maximum"
-            }
-        },
-        {
-            "height": 7,
-            "width": 24,
-            "y": 7,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "ContainerInsights", "pod_cpu_utilization", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Service", "api", "Namespace", "notification-canada-ca", { "yAxis": "right", "stat": "Average" } ],
-                    [ "...", "celery", ".", ".", { "yAxis": "right", "stat": "Average" } ],
-                    [ "...", "admin", ".", ".", { "stat": "Average", "yAxis": "right" } ],
-                    [ ".", "service_number_of_running_pods", ".", ".", ".", "celery", ".", ".", { "yAxis": "left" } ],
-                    [ "...", "api", ".", ".", { "yAxis": "left" } ],
-                    [ "...", "admin", ".", "." ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "yAxis": {
-                    "left": {
-                        "min": 0,
-                        "label": "Running Pods: Max",
-                        "showUnits": false
-                    },
-                    "right": {
-                        "min": 0,
-                        "label": "Pod Instances CPU: Average"
-                    }
-                },
-                "title": "Pods Running VS Pod CPU"
-            }
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_cloudwatch_dashboard" "new-slo" {
-  dashboard_name = "New-SLO"
-  dashboard_body = <<EOF
-{
-    "start": "-PT720H",
-    "widgets": [
-        {
-            "height": 6,
-            "width": 6,
-            "y": 0,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ { "expression": "100 - FILL(admin_errors,0)/FILL(admin_requests, 1)*100", "label": "Success rate", "id": "e1", "period": 86400, "stat": "Sum", "color": "#1f77b4", "region": "ca-central-1" } ],
-                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "admin_errors", "visible": false } ],
-                    [ ".", "RequestCount", ".", ".", ".", ".", { "id": "admin_requests", "visible": false } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Sum",
-                "period": 86400,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "99%",
-                            "value": 99,
-                            "fill": "below"
-                        }
-                    ]
-                },
-                "liveData": false,
-                "yAxis": {
-                    "left": {
-                        "showUnits": false
-                    }
-                },
-                "title": "Admin success rate"
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ { "expression": "100 - 100 * m2 / m1", "label": "Success rate", "id": "e1", "region": "ca-central-1", "color": "#1f77b4" } ],
-                    [ "AWS/ApiGateway", "Count", "ApiName", "api-lambda", { "visible": false, "id": "m1" } ],
-                    [ ".", "5XXError", ".", ".", { "id": "m2", "visible": false } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Sum",
-                "period": 86400,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "99%",
-                            "value": 99,
-                            "fill": "below"
-                        }
-                    ]
-                },
-                "title": "Api lambda success rate",
-                "yAxis": {
-                    "left": {
-                        "showUnits": false
-                    }
-                }
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 0,
-            "x": 6,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "m1", "visible": false } ],
-                    [ ".", "HTTPCode_Target_5XX_Count", ".", ".", ".", ".", { "id": "m2", "visible": false } ],
-                    [ { "expression": "100 - m2/m1*100", "label": "Success rate", "id": "e1", "period": 86400, "stat": "Sum", "color": "#1f77b4", "region": "ca-central-1" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Sum",
-                "period": 86400,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "99%",
-                            "value": 99,
-                            "fill": "below"
-                        }
-                    ]
-                },
-                "liveData": false,
-                "yAxis": {
-                    "left": {
-                        "showUnits": false
-                    }
-                },
-                "title": "API k8s success rate",
-                "timezone": "Local"
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 6,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "stat": "p90", "label": "Latency p90" } ],
-                    [ "...", { "label": "Latency p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p99",
-                "period": 86400,
-                "title": "Admin latency",
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "200 ms",
-                            "value": 0.2
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "400 ms",
-                            "value": 0.4,
-                            "fill": "above"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 6,
-            "x": 6,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "stat": "p90", "label": "Admin p90", "visible": false } ],
-                    [ "...", { "label": "Admin p99", "visible": false } ],
-                    [ "...", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", ".", ".", { "stat": "p90", "label": "Latency p90", "color": "#1f77b4" } ],
-                    [ "...", { "label": "Latency p99", "color": "#ff7f0e" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p99",
-                "period": 86400,
-                "title": "Api k8s latency",
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "200 ms",
-                            "value": 0.2
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "400 ms",
-                            "value": 0.4,
-                            "fill": "above"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 6,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "stat": "p90", "label": "Admin p90", "visible": false } ],
-                    [ "...", { "label": "Admin p99", "visible": false } ],
-                    [ "...", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", ".", ".", { "stat": "p90", "label": "Api k8s p90", "visible": false } ],
-                    [ "...", { "label": "Api k8s p99", "visible": false } ],
-                    [ "AWS/ApiGateway", "Latency", "ApiName", "api-lambda", { "stat": "p90", "color": "#1f77b4" } ],
-                    [ "...", { "color": "#ff7f0e" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p99",
-                "period": 86400,
-                "title": "Api lambda latency",
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "200 ms",
-                            "value": 200
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "400 ms",
-                            "value": 400,
-                            "fill": "above"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 0,
-            "x": 18,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_email_with-attachments_process_type-normal", "metric_type", "timing", { "stat": "p90", "label": "Send time p90" } ],
-                    [ "...", { "label": "Send time p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p99",
-                "period": 86400,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "color": "#d62728",
-                            "label": "More than 60s",
-                            "value": 60
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "More than 300s",
-                            "value": 300,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Time to send emails with attachments (seconds)",
-                "yAxis": {
-                    "left": {
-                        "showUnits": false
-                    }
-                }
             }
         }
     ]
@@ -914,7 +440,7 @@ resource "aws_cloudwatch_dashboard" "queues" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "setPeriodToTimeRange": true,
                 "stat": "Sum",
                 "period": 300,
@@ -933,7 +459,7 @@ resource "aws_cloudwatch_dashboard" "queues" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 3600,
                 "title": "eks-notification-canada-cacelery: NumberOfMessagesSent"
@@ -957,444 +483,15 @@ resource "aws_cloudwatch_dashboard" "queues" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "NumberOfMessagesSent", "QueueName", "eks-notification-canada-ca-priority-database-tasks.fifo", { "region": "ca-central-1" } ],
-                    [ "...", "eks-notification-canada-ca-normal-database-tasks", { "region": "ca-central-1" } ]
+                    [ "AWS/SQS", "NumberOfMessagesSent", "QueueName", "eks-notification-canada-ca-priority-database-tasks.fifo", { "region": "${var.region}" } ],
+                    [ "...", "eks-notification-canada-ca-normal-database-tasks", { "region": "${var.region}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "period": 300,
                 "stat": "Sum",
                 "title": "Normal / Priority"
-            }
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_cloudwatch_dashboard" "slos" {
-  dashboard_name = "SLOs"
-  dashboard_body = <<EOF
-{
-    "start": "-P3D",
-    "widgets": [
-        {
-            "height": 6,
-            "width": 12,
-            "y": 37,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ { "expression": "FILL(admin_errors,0)/FILL(admin_requests, 1)*100", "label": "API error rate", "id": "e1", "period": 3600, "stat": "Sum", "color": "#d62728", "region": "ca-central-1" } ],
-                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "admin_errors", "visible": false } ],
-                    [ ".", "RequestCount", ".", ".", ".", ".", { "id": "admin_requests", "visible": false } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Sum",
-                "period": 3600,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "Above 1% error rate",
-                            "value": 1,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "liveData": false,
-                "yAxis": {
-                    "left": {
-                        "showUnits": true
-                    }
-                },
-                "title": "Admin error rate per hour"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 4,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "m1", "visible": false } ],
-                    [ ".", "HTTPCode_Target_5XX_Count", ".", ".", ".", ".", { "id": "m2", "visible": false } ],
-                    [ { "expression": "m2/m1*100", "label": "API error rate", "id": "e1", "period": 3600, "stat": "Sum", "color": "#d62728", "region": "ca-central-1" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Sum",
-                "period": 3600,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "Above 1% error rate",
-                            "value": 1,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "liveData": false,
-                "yAxis": {
-                    "left": {
-                        "showUnits": true
-                    }
-                },
-                "title": "API error rate per hour"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 4,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ { "expression": "(m2+m3)/m1*100", "label": "Load balancer error rate", "id": "e1", "color": "#d62728", "period": 3600, "region": "ca-central-1" } ],
-                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "m1", "visible": false } ],
-                    [ ".", "HTTPCode_ELB_5XX_Count", ".", ".", { "id": "m2", "visible": false } ],
-                    [ ".", "HTTPCode_Target_5XX_Count", ".", ".", { "id": "m3", "visible": false } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Sum",
-                "period": 3600,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "1% error rate",
-                            "value": 1,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Load balancer error rate per hour"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 30,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_sms_process_type-normal", "metric_type", "timing", { "label": "p90" } ],
-                    [ "...", { "label": "p99", "stat": "p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p90",
-                "period": 900,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "color": "#ff7f0e",
-                            "label": "More than 10s",
-                            "value": 10,
-                            "fill": "above"
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "More than 60s",
-                            "value": 60,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Delay to send SMS in seconds, per 15 minutes"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 17,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_email_no-attachments_process_type-normal", "metric_type", "timing", { "label": "p90" } ],
-                    [ "...", { "stat": "p99", "label": "p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p90",
-                "period": 900,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "color": "#ff7f0e",
-                            "label": "More than 10s",
-                            "value": 10,
-                            "fill": "above"
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "More than 60s",
-                            "value": 60,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Delay to send normal emails without attachments in seconds, per 15 minutes"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 17,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_email_no-attachments_process_type-bulk", "metric_type", "timing", { "stat": "p90", "label": "p90" } ],
-                    [ "...", { "label": "p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p99",
-                "period": 900,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "color": "#ff7f0e",
-                            "label": "More than 300s",
-                            "value": 300,
-                            "fill": "above"
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "More than 600s",
-                            "value": 600,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Delay to send bulk emails in seconds, per 15 minutes"
-            }
-        },
-        {
-            "height": 1,
-            "width": 24,
-            "y": 36,
-            "x": 0,
-            "type": "text",
-            "properties": {
-                "markdown": "\n# Admin\n"
-            }
-        },
-        {
-            "height": 1,
-            "width": 24,
-            "y": 3,
-            "x": 0,
-            "type": "text",
-            "properties": {
-                "markdown": "\n# API\n"
-            }
-        },
-        {
-            "height": 1,
-            "width": 24,
-            "y": 16,
-            "x": 0,
-            "type": "text",
-            "properties": {
-                "markdown": "\n# Emails\n"
-            }
-        },
-        {
-            "height": 1,
-            "width": 24,
-            "y": 29,
-            "x": 0,
-            "type": "text",
-            "properties": {
-                "markdown": "\n# SMS\n"
-            }
-        },
-        {
-            "height": 3,
-            "width": 24,
-            "y": 0,
-            "x": 0,
-            "type": "text",
-            "properties": {
-                "markdown": "\n# Service Level Objectives\n\nSee our SLOs on [Google Sheets](https://docs.google.com/spreadsheets/d/1fU-FJ7THfWEqNhbpQ4r22MQipFwC7SP851ZQnOf68cM/edit#gid=0).\n\nYou can use the [public URL](https://cloudwatch.amazonaws.com/dashboard.html?dashboard=SLOs&context=eyJSIjoidXMtZWFzdC0xIiwiRCI6ImN3LWRiLTI5NjI1NTQ5NDgyNSIsIlUiOiJ1cy1lYXN0LTFfRGY5R0xRU3RnIiwiQyI6IjYya2k0cDMxOGhoN2ZzcmxjMms0bDBsbzhzIiwiSSI6InVzLWVhc3QtMTo1N2U5ZmZjMC00ZTlkLTQzM2ItYmMyYy1iZWE4NTVkZTdmOWQiLCJPIjoiYXJuOmF3czppYW06OjI5NjI1NTQ5NDgyNTpyb2xlL3NlcnZpY2Utcm9sZS9DbG91ZFdhdGNoRGFzaGJvYXJkLVB1YmxpYy1SZWFkT25seUFjY2Vzcy1TTE9zLUNZTU5QVDg3IiwiTSI6IlB1YmxpYyJ9) to share this dashboard.\n"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 10,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "stat": "p90" } ],
-                    [ "..." ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p99",
-                "period": 900,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "More than 400ms",
-                            "value": 0.4,
-                            "fill": "above"
-                        },
-                        {
-                            "label": "More than 200ms",
-                            "value": 0.2,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "API HTTP response time, per 15 minutes"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 30,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e" ],
-                    [ "...", { "stat": "p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p90",
-                "period": 900,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "More than 400ms",
-                            "value": 0.4,
-                            "fill": "above"
-                        },
-                        {
-                            "label": "More than 200ms",
-                            "value": 0.2,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Admin HTTP response time, per 15 minutes"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 43,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_job_processing-start-delay", "metric_type", "timing", { "label": "p90" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p90",
-                "period": 3600,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "More than 10min",
-                            "value": 600,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Delay to send notifications with a spreadsheet, per hour"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 10,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_api_POST_v2_notifications_post_notification_201", "metric_type", "timing" ],
-                    [ "...", { "stat": "p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p90",
-                "period": 900,
-                "start": "-PT12H",
-                "end": "P0D",
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "More than 400ms",
-                            "value": 0.4,
-                            "fill": "above"
-                        },
-                        {
-                            "label": "More than 200ms",
-                            "value": 0.2,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "title": "Response time when posting a notification through the API, per 15 minutes"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 23,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_callback_ses_elapsed-time", "metric_type", "timing" ],
-                    [ "...", { "stat": "p99" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "p90",
-                "period": 900,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "More than 180 seconds",
-                            "value": 180,
-                            "fill": "above"
-                        },
-                        {
-                            "label": "More than 60 seconds",
-                            "value": 60,
-                            "fill": "above"
-                        }
-                    ]
-                },
-                "start": "-PT72H",
-                "end": "P0D",
-                "title": "Time to process email delivery receipts, per 15 minutes"
             }
         }
     ]
@@ -1416,12 +513,12 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "properties": {
                 "title": "Alarms",
                 "alarms": [
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:sns-sms-success-rate-canadian-numbers-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:sns-sms-success-rate-canadian-numbers-warning",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:sqs-sms-stuck-in-queue-warning",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:sqs-sms-stuck-in-queue-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:sns-spending-critical",
-                    "arn:aws:cloudwatch:ca-central-1:${var.account_id}:alarm:sns-spending-warning"
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-sms-success-rate-canadian-numbers-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-sms-success-rate-canadian-numbers-warning",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-sms-stuck-in-queue-warning",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-sms-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-spending-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-spending-warning"
                 ]
             }
         },
@@ -1437,7 +534,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "SMS delivered per 5m"
@@ -1455,7 +552,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "SMS failures per 5m"
@@ -1473,7 +570,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "title": "Approximate age of oldest message in delivery-receipts",
                 "stat": "Average",
                 "period": 60,
@@ -1507,7 +604,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
                 "title": "Number of messages visible in delivery-receipts"
@@ -1525,7 +622,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
                 "title": "p90 SNS request time in ms",
@@ -1557,7 +654,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Celery: Number of SNS delivery receipts processed"
@@ -1596,7 +693,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Lambda invocations per 5m"
@@ -1609,7 +706,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n## Limits\n- SNS [maximum sending rate](https://docs.aws.amazon.com/general/latest/gr/sns.html#limits_sns): 20 SMS/second\n- [Spending limit](https://ca-central-1.console.aws.amazon.com/sns/v3/home?region=ca-central-1#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [eks-notification-canada-casend-sms-tasks](#/queues/https%3A%2F%2Fsqs.ca-central-1.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-sms-tasks), unless a specific queue has been assigned to the queue (for example priority templates, SMS sent by the Notify service etc.). This task calls the SNS API to send a text message.\n\n## SNS IDs\nSNS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252Fca-central-1$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252Fca-central-1$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `ca-central-1` use random phone numbers managed by AWS.\n\n### ⚠️  SNS in `us-west-2`\nIf a Notify service has an inbound number attached, SMS will be sent with SNS using a long code phone number ordered on Pinpoint in the `us-west-2` region. Statistics for this region and alarms are **not visible on this dashboard**.\n"
+                "markdown": "\n## Limits\n- SNS [maximum sending rate](https://docs.aws.amazon.com/general/latest/gr/sns.html#limits_sns): 20 SMS/second\n- [Spending limit](https://${var.region}.console.aws.amazon.com/sns/v3/home?region=${var.region}#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [eks-notification-canada-casend-sms-tasks](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-sms-tasks), unless a specific queue has been assigned to the queue (for example priority templates, SMS sent by the Notify service etc.). This task calls the SNS API to send a text message.\n\n## SNS IDs\nSNS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `${var.region}` use random phone numbers managed by AWS.\n\n### ⚠️  SNS in `us-west-2`\nIf a Notify service has an inbound number attached, SMS will be sent with SNS using a long code phone number ordered on Pinpoint in the `us-west-2` region. Statistics for this region and alarms are **not visible on this dashboard**.\n"
             }
         },
         {
@@ -1624,7 +721,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Number of deliver_sms Celery tasks per 5m"
@@ -1637,7 +734,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n## Message flow\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252Fca-central-1$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252Fca-central-1$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\nThe log groups are subscribed the Lambda function [sns-to-sqs-sms-callbacks](#/functions/sns-to-sqs-sms-callbacks?tab=configuration). This Lambda adds messages to the SQS queue `delivery-receipts` to trigger the Celery task in charge of updating notifications in the database, `process-sns-result`.\n\nSee the relevant [AWS documentation](https://docs.aws.amazon.com/sns/latest/dg/sms_stats_cloudwatch.html#sns-viewing-cloudwatch-logs) for these messages.\n"
+                "markdown": "\n## Message flow\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\nThe log groups are subscribed the Lambda function [sns-to-sqs-sms-callbacks](#/functions/sns-to-sqs-sms-callbacks?tab=configuration). This Lambda adds messages to the SQS queue `delivery-receipts` to trigger the Celery task in charge of updating notifications in the database, `process-sns-result`.\n\nSee the relevant [AWS documentation](https://docs.aws.amazon.com/sns/latest/dg/sms_stats_cloudwatch.html#sns-viewing-cloudwatch-logs) for these messages.\n"
             }
         },
         {
@@ -1652,7 +749,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
                 "title": "Number of messages visible in send-sms-tasks"
@@ -1670,7 +767,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "title": "Approximate age of oldest message in send-sms-tasks",
                 "stat": "Average",
                 "period": 60,
@@ -1713,11 +810,11 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber/Failure' | fields @timestamp as Timestamp, notification.messageId as MessageID, status, delivery.destination as Destination, delivery.providerResponse as ProviderResponse\n| sort @timestamp desc\n| limit 20",
-                "region": "ca-central-1",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | fields @timestamp as Timestamp, notification.messageId as MessageID, status, delivery.destination as Destination, delivery.providerResponse as ProviderResponse\n| sort @timestamp desc\n| limit 20",
+                "region": "${var.region}",
                 "stacked": false,
                 "view": "table",
-                "title": "SMS Errors Log / ca-central-1"
+                "title": "SMS Errors Log / ${var.region}"
             }
         },
         {
@@ -1734,7 +831,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
                 "title": "p90 SMS sending time in seconds",
@@ -1771,8 +868,8 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber/Failure' | SOURCE 'sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes, count(*) as Number by delivery.phoneCarrier as Carrier",
-                "region": "ca-central-1",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes, count(*) as Number by delivery.phoneCarrier as Carrier",
+                "region": "${var.region}",
                 "title": "Carrier Dwell Times",
                 "view": "table"
             }
@@ -1784,8 +881,8 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber' | SOURCE 'sns/ca-central-1/${var.account_id}/DirectPublishToPhoneNumber/Failure' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes by bin(30s)",
-                "region": "ca-central-1",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber' | SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes by bin(30s)",
+                "region": "${var.region}",
                 "stacked": false,
                 "view": "timeSeries",
                 "title": "dwellTimeMsUntilDeviceAck"
@@ -1810,7 +907,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "type": "log",
             "properties": {
                 "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /(?<url>\\/service\\/.*) (?<admin>.*)\\|.*/\n| display @timestamp, admin, url\n| sort @timestamp desc\n| limit 5000\n",
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stacked": false,
                 "view": "table",
                 "title": "Details"
@@ -1824,7 +921,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "type": "log",
             "properties": {
                 "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /service\\/(?<service>[0-9a-f\\-]*)\\/.* (?<admin>.*)\\|.*/\n| stats count(*) as total by service, admin\n| sort total desc\n",
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "title": "Summary ordered by total",
                 "view": "table"
             }
