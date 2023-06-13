@@ -96,6 +96,7 @@ inputs = {
   eks_application_log_group                 = dependency.eks.outputs.eks_application_log_group
   certificate_arn                           = dependency.eks.outputs.aws_acm_notification_canada_ca_arn
   certificate_alt_arn                       = dependency.eks.outputs.aws_acm_alt_notification_canada_ca_arn
+  alb_arn_suffix                            = dependency.eks.outputs.alb_arn_suffix
   api_lambda_ecr_repository_url             = dependency.ecr.outputs.api_lambda_ecr_repository_url
   api_lambda_ecr_arn                        = dependency.ecr.outputs.api_lambda_ecr_arn
   database_read_only_proxy_endpoint         = dependency.rds.outputs.database_read_only_proxy_endpoint
