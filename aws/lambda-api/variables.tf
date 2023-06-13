@@ -172,3 +172,8 @@ variable "app_db_user_password" {
   sensitive   = true
   description = "Password for rds cluster"
 }
+
+variable "alb_arn_suffix" {
+  type        = string
+  description = "Suffix of the EKS ALB ARN. Used for dashboards."
+}
