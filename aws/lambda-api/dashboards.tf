@@ -12,7 +12,7 @@ resource "aws_cloudwatch_dashboard" "api-lambda" {
             "properties": {
                 "metrics": [
                     [ "AWS/ApiGateway", "Count" ],
-                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "yAxis": "right" } ]
+                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "yAxis": "right" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
