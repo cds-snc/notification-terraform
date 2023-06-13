@@ -12,7 +12,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "Request Count Sum",
                 "copilot": true,
@@ -30,7 +30,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "HTTP 5XX Count",
                 "copilot": true,
@@ -48,7 +48,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "Active Connection Count Sum",
                 "copilot": true,
@@ -66,7 +66,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "ClientTLSNegotiationErrorCount", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "ClientTLSNegotiationErrorCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "Client TLS Negotiation Error Count Sum",
                 "copilot": true,
@@ -84,7 +84,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "ConsumedLCUs", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Average", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "ConsumedLCUs", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Average", "id": "m0r0" } ]
                 ],
                 "title": "Consumed LC Us Average",
                 "copilot": true,
@@ -102,7 +102,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "HTTP_Fixed_Response_Count", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "HTTP_Fixed_Response_Count", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "HTTP Fixed Response Count Sum",
                 "copilot": true,
@@ -120,7 +120,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "HTTP_Redirect_Count", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "HTTP_Redirect_Count", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "HTTP Redirect Count Sum",
                 "copilot": true,
@@ -138,7 +138,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "HTTP_Redirect_Url_Limit_Exceeded_Count", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "HTTP_Redirect_Url_Limit_Exceeded_Count", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "HTTP Redirect Url Limit Exceeded Count Sum",
                 "copilot": true,
@@ -156,7 +156,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "HTTPCode_ELB_3XX_Count", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "HTTPCode_ELB_3XX_Count", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "HTTP Code ELB 3 XX Count Sum",
                 "copilot": true,
@@ -174,7 +174,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "HTTP 4XX Count",
                 "copilot": true,
@@ -192,7 +192,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "IPv6ProcessedBytes", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "IPv6ProcessedBytes", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "I Pv 6 Processed Bytes Sum",
                 "copilot": true,
@@ -210,7 +210,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "IPv6RequestCount", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "IPv6RequestCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "I Pv 6 Request Count Sum",
                 "copilot": true,
@@ -228,7 +228,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "NewConnectionCount", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "NewConnectionCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "New Connection Count Sum",
                 "copilot": true,
@@ -246,7 +246,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "ProcessedBytes", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "ProcessedBytes", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "Processed Bytes Sum",
                 "copilot": true,
@@ -264,7 +264,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "RejectedConnectionCount", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "RejectedConnectionCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "Rejected Connection Count Sum",
                 "copilot": true,
@@ -282,7 +282,7 @@ resource "aws_cloudwatch_dashboard" "elb" {
             "properties": {
                 "region": "${var.region}",
                 "metrics": [
-                    [ "AWS/ApplicationELB", "RuleEvaluations", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
+                    [ "AWS/ApplicationELB", "RuleEvaluations", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "Sum", "id": "m0r0" } ]
                 ],
                 "title": "Rule Evaluations Sum",
                 "copilot": true,
@@ -518,7 +518,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "properties": {
                 "metrics": [
                     [ { "expression": "100 - FILL(admin_errors,0)/FILL(admin_requests, 1)*100", "label": "Success rate", "id": "e1", "period": 86400, "stat": "Sum", "color": "#1f77b4", "region": "${var.region}" } ],
-                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
+                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
                     [ ".", "RequestCount", ".", ".", ".", ".", { "id": "admin_requests", "visible": false } ]
                 ],
                 "view": "timeSeries",
@@ -586,7 +586,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
+                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
                     [ ".", "HTTPCode_Target_5XX_Count", ".", ".", ".", ".", { "id": "m2", "visible": false } ],
                     [ { "expression": "100 - m2/m1*100", "label": "Success rate", "id": "e1", "period": 86400, "stat": "Sum", "color": "#1f77b4", "region": "${var.region}" } ]
                 ],
@@ -622,7 +622,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Latency p90" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Latency p90" } ],
                     [ "...", { "label": "Latency p99" } ]
                 ],
                 "view": "timeSeries",
@@ -655,7 +655,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Admin p90", "visible": false } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Admin p90", "visible": false } ],
                     [ "...", { "label": "Admin p99", "visible": false } ],
                     [ "...", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", ".", ".", { "stat": "p90", "label": "Latency p90", "color": "#1f77b4" } ],
                     [ "...", { "label": "Latency p99", "color": "#ff7f0e" } ]
@@ -690,7 +690,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Admin p90", "visible": false } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Admin p90", "visible": false } ],
                     [ "...", { "label": "Admin p99", "visible": false } ],
                     [ "...", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", ".", ".", { "stat": "p90", "label": "Api k8s p90", "visible": false } ],
                     [ "...", { "label": "Api k8s p99", "visible": false } ],
@@ -778,7 +778,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "properties": {
                 "metrics": [
                     [ { "expression": "FILL(admin_errors,0)/FILL(admin_requests, 1)*100", "label": "API error rate", "id": "e1", "period": 3600, "stat": "Sum", "color": "#d62728", "region": "${var.region}" } ],
-                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
+                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
                     [ ".", "RequestCount", ".", ".", ".", ".", { "id": "admin_requests", "visible": false } ]
                 ],
                 "view": "timeSeries",
@@ -812,7 +812,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
+                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
                     [ ".", "HTTPCode_Target_5XX_Count", ".", ".", ".", ".", { "id": "m2", "visible": false } ],
                     [ { "expression": "m2/m1*100", "label": "API error rate", "id": "e1", "period": 3600, "stat": "Sum", "color": "#d62728", "region": "${var.region}" } ]
                 ],
@@ -848,7 +848,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "properties": {
                 "metrics": [
                     [ { "expression": "(m2+m3)/m1*100", "label": "Load balancer error rate", "id": "e1", "color": "#d62728", "period": 3600, "region": "${var.region}" } ],
-                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
+                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
                     [ ".", "HTTPCode_ELB_5XX_Count", ".", ".", { "id": "m2", "visible": false } ],
                     [ ".", "HTTPCode_Target_5XX_Count", ".", ".", { "id": "m3", "visible": false } ]
                 ],
@@ -1032,7 +1032,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90" } ],
                     [ "..." ]
                 ],
                 "view": "timeSeries",
@@ -1065,7 +1065,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "app/notification-${var.env}-alb/${aws_alb.notification-canada-ca.arn_suffix}" ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}" ],
                     [ "...", { "stat": "p99" } ]
                 ],
                 "view": "timeSeries",
