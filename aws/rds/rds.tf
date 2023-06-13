@@ -59,8 +59,9 @@ resource "aws_rds_cluster_parameter_group" "default" {
   }
 
   parameter {
-    name  = "rds.log_retention_period"
-    value = "4320" # 3 days (in minutes)
+    name         = "rds.log_retention_period"
+    value        = "4320" # 3 days (in minutes)
+    apply_method = "pending-reboot"
   }
 
   tags = {
