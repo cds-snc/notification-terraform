@@ -179,7 +179,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "emails" {
-  dashboard_name = "emails"
+  dashboard_name = "Emails"
   dashboard_body = <<EOF
 {
     "widgets": [
