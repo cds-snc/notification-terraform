@@ -35,6 +35,11 @@ variable "notify_o11y_google_oauth_client_secret" {
   description = "Google OAuth client secret for Notify observability tools"
 }
 
+variable "notify_url" {
+  type        = string
+  description = "The URL of the Notify service for Blazer to connect to, given proper environment"
+}
+
 variable "sqlalchemy_database_reader_uri" {
   type        = string
   sensitive   = true

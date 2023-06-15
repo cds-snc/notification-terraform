@@ -26,7 +26,7 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    database-tools-securitygroup = ""
+    database-tools-securitygroup    = ""
     database-tools-db-securitygroup = ""
   }
 }
@@ -44,6 +44,7 @@ inputs = {
   blazer_image_tag                = "latest"
   database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
+  notify_url                      = "https://staging.notification.cdssandbox.xyz/"
 }
 
 terraform {
