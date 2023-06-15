@@ -56,6 +56,9 @@ resource "aws_ecs_task_definition" "blazer" {
       "environment" : [{
         "name" : "LOG_LEVEL",
         "value" : "info"
+        }, {
+        "name" : "NOTIFY_URL",
+        "value" : "${var.notify_url}"
       }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",
