@@ -1342,49 +1342,50 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-sms-created-warning" {
-  alarm_name          = "expired-sms-created-warning"
-  alarm_description   = "SMS inflights are expiring at > ${var.alarm_warning_expired_sms_created_threshold} for 5 minutes"
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
+  alarm_name          = "expired-inflight-warning"
+  alarm_description   = "An inflight has expired. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
-  threshold           = var.alarm_warning_expired_sms_created_threshold
+  threshold           = 1
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 
   metric_query {
-    id          = "expired_sms_created"
-    label       = "Expired SMS created"
+    id          = "expired_inflights_1_minute"
+    label       = "Expired inflights in one minute"
     return_data = "true"
 
     metric {
       metric_name = "batch_saving_inflight"
       namespace   = "NotificationCanadaCa"
-      period      = "300"
+      period      = "60"
       stat        = "Sum"
       unit        = "Count"
       dimensions = {
         expired           = "True"
-        notification_type = "sms"
+        notification_type = "any"
+        priority          = "any"
       }
     }
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-sms-created-critical" {
-  alarm_name          = "expired-sms-created-critical"
-  alarm_description   = "SMS inflights are expiring at > ${var.alarm_critical_expired_sms_created_threshold} for 5 minutes"
+resource "aws_cloudwatch_metric_alarm" "expired-in-flight-critical" {
+  alarm_name          = "expired-inflight-critical"
+  alarm_description   = "SMS inflights are expiring at > ${var.alarm_critical_expired_inflights_threshold} in 5 minutes, check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
-  threshold           = var.alarm_critical_expired_sms_created_threshold
+  threshold           = var.alarm_critical_expired_inflights_threshold
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
-    id          = "expired_sms_created"
-    label       = "Expired SMS created"
+    id          = "expired_inflights_5_minutes"
+    label       = "Expired inflights in 5 minutes"
     return_data = "true"
 
     metric {
@@ -1395,66 +1396,8 @@ resource "aws_cloudwatch_metric_alarm" "expired-sms-created-critical" {
       unit        = "Count"
       dimensions = {
         expired           = "True"
-        notification_type = "sms"
-      }
-    }
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "expired-email-created-warning" {
-  alarm_name          = "expired-email-created-warning"
-  alarm_description   = "Email inflights are expiring at > ${var.alarm_warning_expired_email_created_threshold} for 5 minutes"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "1"
-  threshold           = var.alarm_warning_expired_email_created_threshold
-  treat_missing_data  = "notBreaching"
-
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-
-  metric_query {
-    id          = "expired_email_created"
-    label       = "Expired Email created"
-    return_data = "true"
-
-    metric {
-      metric_name = "batch_saving_inflight"
-      namespace   = "NotificationCanadaCa"
-      period      = "300"
-      stat        = "Sum"
-      unit        = "Count"
-      dimensions = {
-        expired           = "True"
-        notification_type = "email"
-      }
-    }
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "expired-email-created-critical" {
-  alarm_name          = "expired-email-created-critical"
-  alarm_description   = "Email inflights are expiring at > ${var.alarm_critical_expired_email_created_threshold} for 5 minutes"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "1"
-  threshold           = var.alarm_critical_expired_email_created_threshold
-  treat_missing_data  = "notBreaching"
-
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-
-  metric_query {
-    id          = "expired_email_created"
-    label       = "Expired email created"
-    return_data = "true"
-
-    metric {
-      metric_name = "batch_saving_inflight"
-      namespace   = "NotificationCanadaCa"
-      period      = "300"
-      stat        = "Sum"
-      unit        = "Count"
-      dimensions = {
-        expired           = "True"
-        notification_type = "email"
+        notification_type = "any"
+        priority          = "any"
       }
     }
   }
