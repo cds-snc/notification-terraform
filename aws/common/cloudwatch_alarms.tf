@@ -1374,7 +1374,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "expired-in-flight-critical" {
   alarm_name          = "expired-inflight-critical"
-  alarm_description   = "SMS inflights are expiring at > ${var.alarm_critical_expired_inflights_threshold} in 5 minutes, check the Redis-batch-saving dashboard"
+  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes, check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_critical_expired_inflights_threshold
