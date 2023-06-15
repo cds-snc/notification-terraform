@@ -1345,7 +1345,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
   alarm_name          = "expired-inflight-warning"
   alarm_description   = "An inflight has expired. Check the Redis-batch-saving dashboard"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -1375,7 +1375,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
   alarm_name          = "expired-inflight-critical"
   alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes, check the Redis-batch-saving dashboard"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = var.alarm_critical_expired_inflights_threshold
   treat_missing_data  = "notBreaching"
