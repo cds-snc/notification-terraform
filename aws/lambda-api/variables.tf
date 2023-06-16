@@ -1,16 +1,4 @@
-variable "admin_base_url" {
-  type = string
-}
-
-variable "api_domain_name" {
-  type = string
-}
-
-variable "api_lambda_domain_name" {
-  type = string
-}
-
-variable "api_lambda_alt_domain_name" {
+variable "alt_base_domain" {
   type = string
 }
 
@@ -51,7 +39,7 @@ variable "firehose_waf_logs_iam_role_arn" {
   type = string
 }
 
-variable "document_download_api_host" {
+variable "base_domain" {
   type = string
 }
 

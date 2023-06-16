@@ -57,10 +57,6 @@ include {
 
 inputs = {
   env                                    = "staging"
-  admin_base_url                         = "https://staging.notification.cdssandbox.xyz"
-  api_domain_name                        = "api.staging.notification.cdssandbox.xyz"
-  api_lambda_domain_name                 = "api-lambda.staging.notification.cdssandbox.xyz"
-  api_lambda_alt_domain_name             = "api.staging.notification.alpha.cdssandbox.xyz"
   api_image_tag                          = "latest"
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   redis_enabled                          = "1"

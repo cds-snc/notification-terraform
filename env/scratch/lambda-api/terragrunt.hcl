@@ -57,10 +57,6 @@ include {
 
 inputs = {
   env                                    = "scratch"
-  admin_base_url                         = "https://scratch.notification.cdssandbox.xyz"
-  api_domain_name                        = "api.scratch.notification.cdssandbox.xyz"
-  api_lambda_domain_name                 = "api-lambda.scratch.notification.cdssandbox.xyz"
-  api_lambda_alt_domain_name             = "api.alpha.scratch.notification.cdssandbox.xyz"
   api_image_tag                          = "latest"
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   redis_enabled                          = "1"
