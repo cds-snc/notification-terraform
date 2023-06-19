@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../eks"]
+  paths = ["../common", "../eks", "../rds"]
 }
 
 dependency "common" {
@@ -31,20 +31,24 @@ dependency "eks" {
   }
 }
 
+dependency "rds" {
+  config_path = "../rds"
+}
 
 include {
   path = find_in_parent_folders()
 }
 
 inputs = {
-  vpc_private_subnets             = dependency.common.outputs.vpc_private_subnets
-  vpc_id                          = dependency.common.outputs.vpc_id
-  billing_tag_key                 = "CostCenter"
-  billing_tag_value               = "notification-canada-ca-staging"
-  blazer_image_tag                = "latest"
-  database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
-  database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
-  notify_url                      = "https://staging.notification.cdssandbox.xyz/"
+  vpc_private_subnets               = dependency.common.outputs.vpc_private_subnets
+  vpc_id                            = dependency.common.outputs.vpc_id
+  billing_tag_key                   = "CostCenter"
+  billing_tag_value                 = "notification-canada-ca-scratch"
+  blazer_image_tag                  = "latest"
+  database-tools-securitygroup      = dependency.eks.outputs.database-tools-securitygroup
+  database-tools-db-securitygroup   = dependency.eks.outputs.database-tools-db-securitygroup
+  database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
+  notify_url                        = "https://scratch.notification.cdssandbox.xyz/"
 }
 
 terraform {

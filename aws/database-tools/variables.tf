@@ -69,3 +69,13 @@ variable "enable_delete_protection" {
   description = "Sets whether or not to enable delete protection."
   default     = true
 }
+
+variable "database_read_only_proxy_endpoint" {
+  type        = string
+  description = "Base endpoint for rds proxy"
+}
+variable "app_db_user_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for app_db_user rds cluster"
+}

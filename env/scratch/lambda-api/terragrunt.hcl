@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../eks", "../ecr"]
+  paths = ["../common", "../eks", "../ecr", "../rds"]
 }
 
 dependency "common" {
@@ -47,18 +47,17 @@ dependency "ecr" {
   config_path = "../ecr"
 }
 
+dependency "rds" {
+  config_path = "../rds"
+}
+
 include {
   path = find_in_parent_folders()
 }
 
 inputs = {
   env                                    = "scratch"
-  admin_base_url                         = "https://scratch.notification.cdssandbox.xyz"
-  api_domain_name                        = "api.scratch.notification.cdssandbox.xyz"
-  api_lambda_domain_name                 = "api-lambda.scratch.notification.cdssandbox.xyz"
-  api_lambda_alt_domain_name             = "api.alpha.scratch.notification.cdssandbox.xyz"
   api_image_tag                          = "latest"
-  eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   redis_enabled                          = "1"
   low_demand_min_concurrency             = 1
@@ -73,13 +72,17 @@ inputs = {
   redis_enabled                          = 1
   certificate_arn                        = dependency.eks.outputs.aws_acm_notification_canada_ca_arn
   certificate_alt_arn                    = dependency.eks.outputs.aws_acm_alt_notification_canada_ca_arn
+  alb_arn_suffix                         = dependency.eks.outputs.alb_arn_suffix
+  eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
+  eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   ff_cloudwatch_metrics_enabled          = "true"
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
   re_api_arn                             = dependency.common.outputs.re_api_arn
   api_waf_rate_limit                     = 5000
-  eks_application_log_group              = dependency.eks.outputs.eks_application_log_group
   api_lambda_ecr_repository_url          = dependency.ecr.outputs.api_lambda_ecr_repository_url
   api_lambda_ecr_arn                     = dependency.ecr.outputs.api_lambda_ecr_arn
+  database_read_only_proxy_endpoint      = dependency.rds.outputs.database_read_only_proxy_endpoint
+  database_read_write_proxy_endpoint     = dependency.rds.outputs.database_read_write_proxy_endpoint
 }
