@@ -58,7 +58,7 @@ resource "aws_ecs_task_definition" "blazer" {
         "value" : "info"
         }, {
         "name" : "NOTIFY_URL",
-        "value" : "${var.notify_url}"
+        "value" : "https://${var.base_url}"
       }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",
