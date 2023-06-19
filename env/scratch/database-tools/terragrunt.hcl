@@ -44,7 +44,7 @@ inputs = {
   blazer_image_tag                = "latest"
   database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
-  notify_url                      = "https://staging.notification.cdssandbox.xyz/"
+  notify_url                      = "https://scratch.notification.cdssandbox.xyz/"
 }
 
 terraform {
