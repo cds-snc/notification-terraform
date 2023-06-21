@@ -11,7 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warni
   evaluation_periods  = "1"
   metric_name         = "HTTPCode_ELB_500_Count"
   namespace           = "AWS/ApplicationELB"
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [var.sns_alert_warning_arn]
@@ -28,7 +28,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
   evaluation_periods  = "1"
   metric_name         = "HTTPCode_ELB_500_Count"
   namespace           = "AWS/ApplicationELB"
-  period              = "300"
+  period              = 300
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
@@ -47,7 +47,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warni
   evaluation_periods  = "1"
   metric_name         = "HTTPCode_ELB_502_Count"
   namespace           = "AWS/ApplicationELB"
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   alarm_actions       = [var.sns_alert_warning_arn]
@@ -64,7 +64,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
   evaluation_periods  = "1"
   metric_name         = "HTTPCode_ELB_502_Count"
   namespace           = "AWS/ApplicationELB"
-  period              = "300"
+  period              = 300
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
@@ -100,7 +100,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -114,7 +114,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 10
   treat_missing_data  = "notBreaching"
@@ -129,7 +129,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -143,7 +143,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].namespace
-  period              = "300"
+  period              = 300
   statistic           = "Sum"
   threshold           = 10
   treat_missing_data  = "notBreaching"
@@ -158,7 +158,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -178,7 +178,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -198,7 +198,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -218,7 +218,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -239,7 +239,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_memory_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -259,7 +259,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_memory_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -279,7 +279,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_memory_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -299,7 +299,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
   evaluation_periods        = "2"
   metric_name               = "pod_memory_utilization"
   namespace                 = "ContainerInsights"
-  period                    = "300"
+  period                    = 300
   statistic                 = "Average"
   threshold                 = 50
   alarm_actions             = [var.sns_alert_warning_arn]
@@ -319,7 +319,7 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
   evaluation_periods  = "2"
   metric_name         = "DDoSDetected"
   namespace           = "AWS/DDoSProtection"
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -337,7 +337,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-malware-detected-1-minute-warning
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -351,7 +351,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 10
   treat_missing_data  = "notBreaching"
@@ -366,7 +366,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warnin
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.scanfiles-timeout.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.scanfiles-timeout.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -380,7 +380,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-critical.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-critical.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -388,13 +388,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-warning" {
-  alarm_name          = "logs-1-warning-bounce-rate-1-minute-warning"
-  alarm_description   = "One service exceeding 5% bounce rate in 1 minute"
+  alarm_name          = "logs-1-warning-bounce-rate-3-minutes-warning"
+  alarm_description   = "One service exceeding 5% bounce rate in 3 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = "3"
   metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-warning.metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-warning.metric_transformation[0].namespace
-  period              = "60"
+  period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
