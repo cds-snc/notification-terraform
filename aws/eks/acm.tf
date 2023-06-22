@@ -1,11 +1,11 @@
 resource "aws_acm_certificate" "notification-canada-ca" {
 
-  domain_name = var.domain
+  domain_name = var.base_domain
   subject_alternative_names = [
-    "*.${var.domain}",
-    "*.api.${var.domain}",
-    "api.${var.domain}",
-    "*.document.${var.domain}"
+    "*.${var.base_domain}",
+    "*.api.${var.base_domain}",
+    "api.${var.base_domain}",
+    "*.document.${var.base_domain}"
   ]
   validation_method = "DNS"
 
@@ -19,14 +19,14 @@ resource "aws_acm_certificate" "notification-canada-ca" {
 }
 
 resource "aws_acm_certificate" "notification-canada-ca-alt" {
-  count = var.alt_domain != "" ? 1 : 0
+  count = var.alt_base_domain != "" ? 1 : 0
 
-  domain_name = var.alt_domain
+  domain_name = var.alt_base_domain
   subject_alternative_names = [
-    "*.${var.alt_domain}",
-    "*.api.${var.alt_domain}",
-    "api.${var.alt_domain}",
-    "*.document.${var.alt_domain}"
+    "*.${var.alt_base_domain}",
+    "*.api.${var.alt_base_domain}",
+    "api.${var.alt_base_domain}",
+    "*.document.${var.alt_base_domain}"
   ]
   validation_method = "DNS"
 

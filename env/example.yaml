@@ -1,0 +1,125 @@
+inputs:
+  # Account Setup
+  account_id: "changeme"
+  staging_account_id: "changeme"
+  new_relic_account_id: "changeme"  
+
+  # Global Environment Setup
+  env: "example"  
+  region: "ca-central-1"
+  base_domain: "example.notification.cdssandbox.xyz"
+  alt_base_domain: "alpha.example.notification.cdssandbox.xyz"
+  ses_custom_sending_domains:
+    - custom-sending-domain.example.notification.cdssandbox.xyz
+  route53_zone_arn: "changeme"    
+  sentinel_customer_id: "changeme"
+  sentinel_shared_key: "changeme"  
+  billing_tag_value: "notification-canada-ca-example"  
+  athena_workgroup_name: "athenawg"  
+  
+  # Environment Configuration Options
+  bootstrap: true
+  create_cbs_bucket: true
+  cbs_satellite_bucket_name: "example-cbs-satellite-419291849580"  
+  enable_sentinel_forwarding: false
+  enable_delete_protection: false
+  force_destroy_s3: true
+  force_delete_ecr: true
+
+  # Slack Configuration
+  slack_channel_warning_topic: "notification-example-ops"
+  slack_channel_critical_topic: "notification-example-ops"
+  slack_channel_general_topic: "notification-example-ops"  
+  cloudwatch_slack_webhook_warning_topic: "changeme"
+  cloudwatch_slack_webhook_critical_topic: "changeme"
+  cloudwatch_slack_webhook_general_topic: "changeme"  
+  cloudwatch_opsgenie_alarm_webhook: ""
+  RECREATE_MISSING_LAMBDA_PACKAGE: "false"
+
+  # WAF Configuration
+  waf_secret: "changeme"
+  non_api_waf_rate_limit: 500
+  api_waf_rate_limit: 5000
+  sign_in_waf_rate_limit: 100
+
+  # Lambda API Configuration  
+  api_image_tag: "latest"
+  api_enable_new_relic: true
+  new_relic_license_key: "changeme"
+  new_relic_app_name: "notification-lambda-api-example"
+  new_relic_distribution_tracing_enabled: "true"  
+  dangerous_salt: "changeme"
+  ff_cloudwatch_metrics_enabled: "true"
+  redis_enabled: "1"
+  notification_queue_prefix: "eks-notification-canada-ca"
+  low_demand_min_concurrency: 1
+  low_demand_max_concurrency: 5
+  high_demand_min_concurrency: 1
+  high_demand_max_concurrency: 10
+
+  # RDS Configuration  
+  rds_cluster_password: "changeme"
+  app_db_user: "example"
+  app_db_user_password: "changeme"
+  dbtools_password: "changeme"
+  rds_instance_count: 3
+  rds_instance_type: "db.r6g.large"
+
+  # Elasticache (Redis) Configuration
+  elasticache_node_count: 1
+  elasticache_node_number_cache_clusters: 3
+  elasticache_node_type: "cache.t3.micro"
+
+  # EKS Configuration
+  eks_cluster_name: "notification-canada-ca-example-eks-cluster"
+  eks_cluster_version: "1.25"
+  eks_addon_coredns_version: "v1.9.3-eksbuild.3"
+  eks_addon_kube_proxy_version: "v1.25.9-eksbuild.1"
+  eks_addon_vpc_cni_version: "v1.12.6-eksbuild.2"
+  eks_node_ami_version: "1.25.9-20230513"
+
+  primary_worker_desired_size: 5
+  primary_worker_instance_types: 
+    - "m5.large"
+  primary_worker_max_size: 7
+  primary_worker_min_size : 4
+
+  # SES Receiving Emails Configuration
+  sqs_region: "ca-central-1"
+  celery_queue_prefix: "eks-notification-canada-ca"
+  gc_notify_service_email: "gc.notify.notification.gc@example.notification.cdssandbox.xyz"
+
+  # Heartbeat Configuration
+  heartbeat_api_key: "changeme"
+  heartbeat_template_id: "a897e52c-0e32-432b-a354-33e3cfaf9eea"  
+  schedule_expression: "rate(1 minute)"
+
+  # Blazer Configuration
+  notify_o11y_google_oauth_client_id: "changeme"
+  notify_o11y_google_oauth_client_secret: "changeme"
+
+  # Google CIDR Lambda Configuration
+  google_cidr_schedule_expression: "rate(1 day)"
+
+  # Performance Test
+  aws_pinpoint_region: "ca-central-1"
+  billing_tag_key: "CostCenter"
+  billing_tag_value: "notification-canada-ca-example"
+  perf_test_domain: "https://api.example.notification.cdssandbox.xyz"
+  perf_test_phone_number: "16132532222"
+  perf_test_email: "success@simulator.amazonses.com"
+  perf_test_auth_header: "changeme"
+  perf_test_schedule_expression: "cron(0 0 * * ? *)"
+  perf_test_aws_s3_bucket: "notify-performance-test-results-example"
+  perf_test_csv_directory_path: "/tmp/notify_performance_test"
+  perf_test_sms_template_id: "d5fea9f3-f69d-481e-9186-b7f4eaa5cf63"
+  perf_test_bulk_email_template_id: "fa759679-30f2-4666-94e2-bd4921329c46"
+  perf_test_email_template_id: "fa759679-30f2-4666-94e2-bd4921329c46"
+  perf_test_email_with_attachment_template_id: "fa759679-30f2-4666-94e2-bd4921329c46"
+  perf_test_email_with_link_template_id: "9fb324a5-821d-4b54-9d52-d9ba1fa8373a"
+
+  
+
+  
+  
+

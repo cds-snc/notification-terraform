@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "event_rule" {
   name                = "perf_test_event_rule"
-  schedule_expression = var.schedule_expression
+  schedule_expression = var.perf_test_schedule_expression
   tags = {
     Name                  = "perf_test_cw_event_rule"
     (var.billing_tag_key) = var.billing_tag_value

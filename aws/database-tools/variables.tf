@@ -35,11 +35,6 @@ variable "notify_o11y_google_oauth_client_secret" {
   description = "Google OAuth client secret for Notify observability tools"
 }
 
-variable "base_domain" {
-  type        = string
-  description = "The URL of the Notify service for Blazer to connect to, given proper environment"
-}
-
 variable "database-tools-securitygroup" {
   type        = string
   description = "Database tools security group ID"

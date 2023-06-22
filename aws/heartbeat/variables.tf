@@ -9,12 +9,6 @@ variable "heartbeat_api_key" {
   description = "Identifies the heartbeat api key."
 }
 
-variable "base_domain" {
-  sensitive   = true
-  type        = string
-  description = "Identifies the base url to trigger the heartbeat function with. This is a string in the secrets and parsed in the lambda"
-}
-
 variable "heartbeat_template_id" {
   type        = string
   description = "Identifies the template id on the ."

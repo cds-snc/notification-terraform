@@ -57,7 +57,7 @@ output "aws_acm_notification_canada_ca_arn" {
 }
 
 output "aws_acm_alt_notification_canada_ca_arn" {
-  value       = var.alt_domain != "" ? aws_acm_certificate.notification-canada-ca-alt[0].arn : ""
+  value       = var.alt_base_domain != "" ? aws_acm_certificate.notification-canada-ca-alt[0].arn : ""
   description = "Shared DNS certificate between lambda and k8s"
 }
 

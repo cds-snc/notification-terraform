@@ -14,7 +14,7 @@ module "ses_receiving_emails" {
   memory                 = 1024
 
   environment_variables = {
-    NOTIFY_SENDING_DOMAIN   = var.notify_sending_domain
+    NOTIFY_SENDING_DOMAIN   = var.base_domain
     SQS_REGION              = var.sqs_region
     CELERY_QUEUE_PREFIX     = var.celery_queue_prefix
     GC_NOTIFY_SERVICE_EMAIL = var.gc_notify_service_email

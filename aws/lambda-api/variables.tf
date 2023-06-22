@@ -1,7 +1,3 @@
-variable "alt_base_domain" {
-  type = string
-}
-
 variable "csv_upload_bucket_arn" {
   type = string
 }
@@ -36,10 +32,6 @@ variable "eks_cluster_securitygroup" {
 }
 
 variable "firehose_waf_logs_iam_role_arn" {
-  type = string
-}
-
-variable "base_domain" {
   type = string
 }
 

@@ -4,7 +4,7 @@ resource "aws_route53_record" "scratch-notification-sandbox-MX" {
   count    = var.env == "scratch" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route53_zone_arn
-  name     = var.domain
+  name     = var.base_domain
   type     = "MX"
   ttl      = "300"
   records  = ["10 inbound-smtp.us-east-1.amazonaws.com"]
@@ -14,7 +14,7 @@ resource "aws_route53_record" "bounce-scratch-notification-sandbox-MX" {
   count    = var.env == "scratch" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route53_zone_arn
-  name     = "bounce.${var.domain}"
+  name     = "bounce.${var.base_domain}"
   type     = "MX"
   ttl      = "300"
   records  = ["10 feedback-smtp.ca-central-1.amazonses.com"]
@@ -24,7 +24,7 @@ resource "aws_route53_record" "bounce-scratch-custom-notification-sandbox-MX" {
   count    = var.env == "scratch" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route53_zone_arn
-  name     = "bounce.custom-sending-domain.${var.domain}"
+  name     = "bounce.custom-sending-domain.${var.base_domain}"
   type     = "MX"
   ttl      = "300"
   records  = ["10 feedback-smtp.ca-central-1.amazonses.com"]
@@ -36,7 +36,7 @@ resource "aws_route53_record" "ses-scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route53_zone_arn
-  name     = "_amazonses.${var.domain}"
+  name     = "_amazonses.${var.base_domain}"
   type     = "TXT"
   ttl      = "300"
   records = ["vJFwJM0wnPRWKFXsoiVl9/gLXFP4RL5Xfl4C9JTp3VI=",
@@ -48,7 +48,7 @@ resource "aws_route53_record" "dmarc-scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route53_zone_arn
-  name     = "_dmarc.${var.domain}"
+  name     = "_dmarc.${var.base_domain}"
   type     = "TXT"
   ttl      = "300"
   records  = ["v=DMARC1; p=reject; sp=reject; pct=100; rua=mailto:dmarc@cyber.gc.ca; ruf=mailto:dmarc@cyber.gc.ca"]
@@ -60,7 +60,7 @@ resource "aws_route53_record" "scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route53_zone_arn
-  name     = var.domain
+  name     = var.base_domain
   type     = "TXT"
   ttl      = "300"
   records = ["v=spf1 include:amazonses.com ~all",
@@ -72,7 +72,7 @@ resource "aws_route53_record" "bounce-scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route53_zone_arn
-  name     = "bounce.${var.domain}"
+  name     = "bounce.${var.base_domain}"
   type     = "TXT"
   ttl      = "300"
   records  = ["v=spf1 include:amazonses.com ~all"]

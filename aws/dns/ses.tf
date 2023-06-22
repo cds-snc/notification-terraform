@@ -20,11 +20,11 @@ locals {
 }
 
 resource "aws_ses_domain_identity" "notification-canada-ca" {
-  domain = var.domain
+  domain = var.base_domain
 }
 
 resource "aws_ses_domain_dkim" "notification-canada-ca" {
-  domain = var.domain
+  domain = var.base_domain
 }
 
 # TODO: SES Domain Validation Records Programmatically
@@ -65,7 +65,7 @@ resource "aws_ses_domain_identity" "notification-canada-ca-receiving" {
   # https://docs.aws.amazon.com/general/latest/gr/ses.html
   provider = aws.us-east-1
 
-  domain = var.domain
+  domain = var.base_domain
 }
 
 resource "aws_ses_receipt_rule_set" "main" {
@@ -172,7 +172,7 @@ resource "aws_ses_receipt_rule" "ses_receiving_emails_inbound-to-lambda-arn" {
 
   name          = "ses_receiving_emails_inbound-to-lambda"
   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-  recipients    = [var.domain]
+  recipients    = [var.base_domain]
   enabled       = true
   scan_enabled  = true
 

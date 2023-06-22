@@ -2,7 +2,7 @@
 resource "aws_acm_certificate" "assets-notification-canada-ca" {
   # Cloudfront requires client certificate to be created in us-east-1
   provider          = aws.us-east-1
-  domain_name       = "assets.${var.domain}"
+  domain_name       = "assets.${var.base_domain}"
   validation_method = "DNS"
 
   lifecycle {

@@ -14,7 +14,7 @@ resource "aws_route53_record" "notification_canada_ca_dkim_record" {
   for_each        = { for s in jsondecode(var.notification_canada_ca_dkim) : "${s}" => s }
   provider        = aws.staging
   zone_id         = var.route53_zone_arn
-  name            = "${each.value}._domainkey.${var.domain}"
+  name            = "${each.value}._domainkey.${var.base_domain}"
   type            = "CNAME"
   ttl             = "600"
   allow_overwrite = true

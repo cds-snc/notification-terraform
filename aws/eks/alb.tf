@@ -103,7 +103,7 @@ resource "aws_alb_target_group" "notification-canada-ca-document-api" {
 }
 
 resource "aws_lb_listener_rule" "alt-domain-document-api-host-route" {
-  count        = var.alt_domain != "" ? 1 : 0
+  count        = var.alt_base_domain != "" ? 1 : 0
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 10
 
@@ -114,7 +114,7 @@ resource "aws_lb_listener_rule" "alt-domain-document-api-host-route" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-      host        = "api.document.${var.domain}"
+      host        = "api.document.${var.base_domain}"
       path        = "/#{path}"
       query       = "#{query}"
     }
@@ -122,7 +122,7 @@ resource "aws_lb_listener_rule" "alt-domain-document-api-host-route" {
 
   condition {
     host_header {
-      values = ["api.document.${var.alt_domain}"]
+      values = ["api.document.${var.alt_base_domain}"]
     }
   }
 }
@@ -159,7 +159,7 @@ resource "aws_alb_target_group" "notification-canada-ca-document" {
 }
 
 resource "aws_lb_listener_rule" "alt-domain-document-host-route" {
-  count        = var.alt_domain != "" ? 1 : 0
+  count        = var.alt_base_domain != "" ? 1 : 0
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 20
 
@@ -170,7 +170,7 @@ resource "aws_lb_listener_rule" "alt-domain-document-host-route" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-      host        = "document.${var.domain}"
+      host        = "document.${var.base_domain}"
       path        = "/#{path}"
       query       = "#{query}"
     }
@@ -178,7 +178,7 @@ resource "aws_lb_listener_rule" "alt-domain-document-host-route" {
 
   condition {
     host_header {
-      values = ["document.${var.alt_domain}"]
+      values = ["document.${var.alt_base_domain}"]
     }
   }
 }
@@ -235,7 +235,7 @@ resource "aws_lb_listener_rule" "api-host-route" {
 ###
 
 resource "aws_lb_listener_rule" "alt-domain-host-route" {
-  count        = var.alt_domain != "" ? 1 : 0
+  count        = var.alt_base_domain != "" ? 1 : 0
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 40
 
@@ -246,7 +246,7 @@ resource "aws_lb_listener_rule" "alt-domain-host-route" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-      host        = var.domain
+      host        = var.base_domain
       path        = "/#{path}"
       query       = "#{query}"
     }
@@ -254,7 +254,7 @@ resource "aws_lb_listener_rule" "alt-domain-host-route" {
 
   condition {
     host_header {
-      values = [var.alt_domain]
+      values = [var.alt_base_domain]
     }
   }
 }
@@ -285,7 +285,7 @@ resource "aws_lb_listener_rule" "www-domain-host-route" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-      host        = var.domain
+      host        = var.base_domain
       path        = "/#{path}"
       query       = "#{query}"
     }
@@ -293,7 +293,7 @@ resource "aws_lb_listener_rule" "www-domain-host-route" {
 
   condition {
     host_header {
-      values = ["www.${var.domain}"]
+      values = ["www.${var.base_domain}"]
     }
   }
 }
@@ -340,7 +340,7 @@ resource "aws_lb_listener_rule" "documentation-host-redirect" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-      host        = "documentation.${var.domain}"
+      host        = "documentation.${var.base_domain}"
       path        = "/#{path}"
       query       = "#{query}"
     }

@@ -50,10 +50,7 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 5
-  primary_worker_instance_types             = ["m5.large"]
-  primary_worker_max_size                   = 7
-  primary_worker_min_size                   = 4
+
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
@@ -62,15 +59,6 @@ inputs = {
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn
   firehose_waf_logs_iam_role_arn            = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                     = dependency.cloudfront.outputs.cloudfront_assets_arn
-  eks_cluster_name                          = "notification-canada-ca-scratch-eks-cluster"
-  eks_cluster_version                       = "1.25"
-  eks_addon_coredns_version                 = "v1.9.3-eksbuild.3"
-  eks_addon_kube_proxy_version              = "v1.25.9-eksbuild.1"
-  eks_addon_vpc_cni_version                 = "v1.12.6-eksbuild.2"
-  eks_node_ami_version                      = "1.25.9-20230513"
-  non_api_waf_rate_limit                    = 500
-  api_waf_rate_limit                        = 5000
-  sign_in_waf_rate_limit                    = 100
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
   re_api_arn                                = dependency.common.outputs.re_api_arn

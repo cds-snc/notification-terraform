@@ -3,11 +3,6 @@ variable "billing_tag_value" {
   description = "Identifies the billing code."
 }
 
-variable "notify_sending_domain" {
-  type        = string
-  description = "Sending domain for notify."
-}
-
 variable "sqs_region" {
   type        = string
   description = "SQS region"

@@ -3,7 +3,7 @@ resource "aws_route53_record" "api-lambda-notification-A" {
   provider = aws.staging
 
   zone_id = var.route_53_zone_arn
-  name    = "api-lambda.${var.domain}"
+  name    = "api-lambda.${var.base_domain}"
   type    = "A"
 
   alias {
@@ -20,7 +20,7 @@ resource "aws_route53_record" "api-weighted-100-notification-A" {
   provider = aws.staging
 
   zone_id        = var.route_53_zone_arn
-  name           = "api.${var.domain}"
+  name           = "api.${var.base_domain}"
   type           = "A"
   set_identifier = "lambda"
 
@@ -40,7 +40,7 @@ resource "aws_route53_record" "api-notification-alt-A" {
   provider = aws.staging
 
   zone_id = var.route_53_zone_arn
-  name    = "api.${var.alt_domain}"
+  name    = "api.${var.alt_base_domain}"
   type    = "A"
 
   alias {

@@ -1,6 +1,11 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Environment Files stored as YAML
+*.yaml
+*.yml
+!example.yaml
+
 # .tfstate files
 *.tfstate
 *.tfstate.*

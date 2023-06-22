@@ -2,7 +2,7 @@ resource "aws_route53_record" "notification-root" {
   count    = var.env != "production" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route_53_zone_arn
-  name     = var.domain
+  name     = var.base_domain
   type     = "A"
 
   alias {
@@ -15,7 +15,7 @@ resource "aws_route53_record" "notification-root" {
 resource "aws_route53_record" "notificatio-root-WC" {
   count    = var.env != "production" ? 1 : 0
   provider = aws.staging
-  name     = "*.${var.domain}"
+  name     = "*.${var.base_domain}"
   zone_id  = var.route_53_zone_arn
   type     = "A"
 
@@ -31,7 +31,7 @@ resource "aws_route53_record" "notification-alt-root" {
   count    = var.env != "production" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route_53_zone_arn
-  name     = var.alt_domain
+  name     = var.alt_base_domain
   type     = "A"
 
   alias {
@@ -44,7 +44,7 @@ resource "aws_route53_record" "notification-alt-root" {
 resource "aws_route53_record" "notification-alt-root-WC" {
   count    = var.env != "production" ? 1 : 0
   provider = aws.staging
-  name     = "*.${var.alt_domain}"
+  name     = "*.${var.alt_base_domain}"
   zone_id  = var.route_53_zone_arn
   type     = "A"
 
@@ -61,7 +61,7 @@ resource "aws_route53_record" "api-k8s-scratch-notification-CNAME" {
   count    = var.env != "production" ? 1 : 0
   provider = aws.staging
   zone_id  = var.route_53_zone_arn
-  name     = "api-k8s.${var.domain}"
+  name     = "api-k8s.${var.base_domain}"
   type     = "CNAME"
   ttl      = "60"
   records  = [aws_alb.notification-canada-ca.dns_name]
@@ -72,7 +72,7 @@ resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
   count          = var.env != "production" ? 1 : 0
   provider       = aws.staging
   zone_id        = var.route_53_zone_arn
-  name           = "api.${var.domain}"
+  name           = "api.${var.base_domain}"
   type           = "A"
   set_identifier = "loadbalancer"
 
