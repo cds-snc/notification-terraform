@@ -14,25 +14,25 @@ inputs = {
   new_relic_account_id      = local.environment.account.new_relic_account_id
   
   # Global Environment Setup
-  env        = local.environment.environment.env
-  region     = local.environment.environment.region  
-  base_domain = local.environment.environment.base_domain
-  alt_base_domain = local.environment.environment.alt_base_domain
-  ses_custom_sending_domains = local.environment.environment.ses_custom_sending_domains
-  route53_zone_arn = local.environment.environment.route53_zone_arn
-  sentinel_customer_id = local.environment.environment.sentinel_customer_id
-  sentinel_shared_key = local.environment.environment.sentinel_shared_key
-  athena_workgroup_name = local.environment.environment.athena_workgroup_name
-  billing_tag_value = local.environment.environment.billing_tag_value
+  env        = local.environment.global.env
+  region     = local.environment.global.region  
+  base_domain = local.environment.global.base_domain
+  alt_base_domain = local.environment.global.alt_base_domain
+  ses_custom_sending_domains = local.environment.global.ses_custom_sending_domains
+  route53_zone_arn = local.environment.global.route53_zone_arn
+  sentinel_customer_id = local.environment.global.sentinel_customer_id
+  sentinel_shared_key = local.environment.global.sentinel_shared_key
+  athena_workgroup_name = local.environment.global.athena_workgroup_name
+  billing_tag_value = local.environment.global.billing_tag_value
   
   # Environment Configuration Options
-  bootstrap = local.environment.environment.configuration.bootstrap
-  create_cbs_bucket = local.environment.environment.configuration.create_cbs_bucket
-  cbs_satellite_bucket_name = local.environment.environment.configuration.cbs_satellite_bucket_name
-  enable_sentinel_forwarding = local.environment.environment.configuration.enable_sentinel_forwarding
-  enable_delete_protection = local.environment.environment.configuration.enable_delete_protection
-  force_destroy_s3 = local.environment.environment.configuration.force_destroy_s3
-  force_delete_ecr = local.environment.environment.configuration.force_delete_ecr
+  bootstrap = local.environment.global.configuration.bootstrap
+  create_cbs_bucket = local.environment.global.configuration.create_cbs_bucket
+  cbs_satellite_bucket_name = local.environment.global.configuration.cbs_satellite_bucket_name
+  enable_sentinel_forwarding = local.environment.global.configuration.enable_sentinel_forwarding
+  enable_delete_protection = local.environment.global.configuration.enable_delete_protection
+  force_destroy_s3 = local.environment.global.configuration.force_destroy_s3
+  force_delete_ecr = local.environment.global.configuration.force_delete_ecr
 
 # Alarm Configuration
   alarm_warning_document_download_bucket_size_gb                     = local.environment.alarms.thresholds.alarm_warning_document_download_bucket_size_gb
@@ -209,7 +209,7 @@ provider "aws" {
   alias  = "staging"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.environment.account.staging_account_id}:role/${local.environment.environment.env}_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.environment.account.staging_account_id}:role/${local.environment.global.env}_dns_manager_role"
   }
 }
 EOF
@@ -265,12 +265,12 @@ remote_state {
   }
   config = {
     encrypt             = true
-    bucket              = "notification-canada-ca-${local.environment.environment.env}-tf"
+    bucket              = "notification-canada-ca-${local.environment.global.env}-tf"
     dynamodb_table      = "terraform-state-lock-dynamo"
     region              = "ca-central-1"
     key                 = "${path_relative_to_include()}/terraform.tfstate"
-    s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.environment.environment.env}" }
-    dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.environment.environment.env}" }
+    s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.environment.global.env}" }
+    dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.environment.global.env}" }
   }
 }
 
