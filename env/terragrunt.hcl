@@ -1,5 +1,5 @@
 locals {
-  environment = yamldecode(file(find_in_parent_folders(get_env("TG_VAR_FILE", "env_vars.yaml"))))
+  environment = yamldecode(file(find_in_parent_folders(get_env("TG_VAR_FILE"))))
 }
 
 inputs = {
@@ -159,6 +159,22 @@ inputs = {
   
 }
 
+terraform {
+
+  before_hook "checkTFVars" {
+    commands     = ["apply", "plan"]
+    execute      = ["${get_parent_terragrunt_dir()}/scripts/checkVarFile.sh", "${get_parent_terragrunt_dir()}"]
+    run_on_error = true
+  }
+
+  after_hook "syncTFVars" {
+    commands     = ["apply"]
+    execute      = ["${get_parent_terragrunt_dir()}/scripts/syncVarFile.sh", "${get_parent_terragrunt_dir()}"]
+    run_on_error = false
+  }
+
+}
+
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite"
@@ -257,3 +273,4 @@ remote_state {
     dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.environment.environment.env}" }
   }
 }
+
