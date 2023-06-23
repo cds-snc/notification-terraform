@@ -9,7 +9,7 @@ inputs = {
   }
 
   # Account Setup
-  account_id         = "${local.environment.account.account_id}"
+  account_id         = local.environment.account.account_id
   staging_account_id = local.environment.account.staging_account_id
   new_relic_account_id      = local.environment.account.new_relic_account_id
   
