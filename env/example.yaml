@@ -5,7 +5,7 @@ account:
   new_relic_account_id: "changeme"  
 
 # Global Environment Setup
-environment:
+global:
   env: "example"  
   region: "ca-central-1"
   base_domain: "example.notification.cdssandbox.xyz"
