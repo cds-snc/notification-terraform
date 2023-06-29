@@ -8,7 +8,7 @@ regions:
 # Only delete resources from accounts that do not match LandingZone filters
 
 accounts:
-  "419291849580": 
+  "131154131660": 
       filters:
         IAMPolicy:
         - type: glob
