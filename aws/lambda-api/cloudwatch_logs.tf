@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "api_assume" {
 
 resource "aws_cloudwatch_log_metric_filter" "errors-lambda-api" {
   name           = "errors-lambda-api"
-  pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\""
+  pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\" -\"SF_ERR\""
   log_group_name = aws_cloudwatch_log_group.api_lambda_log_group.name
 
   metric_transformation {
