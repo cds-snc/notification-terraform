@@ -10,7 +10,7 @@ module "heartbeat" {
 
   environment_variables = {
     heartbeat_api_key     = var.heartbeat_api_key
-    heartbeat_base_url    = var.heartbeat_base_url
+    heartbeat_base_url    = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
     heartbeat_template_id = var.heartbeat_template_id
   }
 }

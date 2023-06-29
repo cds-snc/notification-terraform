@@ -1,16 +1,4 @@
-variable "admin_base_url" {
-  type = string
-}
-
-variable "api_domain_name" {
-  type = string
-}
-
-variable "api_lambda_domain_name" {
-  type = string
-}
-
-variable "api_lambda_alt_domain_name" {
+variable "alt_base_domain" {
   type = string
 }
 
@@ -39,16 +27,6 @@ variable "redis_enabled" {
   type = string
 }
 
-variable "sqlalchemy_database_reader_uri" {
-  type      = string
-  sensitive = true
-}
-
-variable "sqlalchemy_database_uri" {
-  type      = string
-  sensitive = true
-}
-
 variable "vpc_private_subnets" {
   type = list(any)
 }
@@ -61,7 +39,7 @@ variable "firehose_waf_logs_iam_role_arn" {
   type = string
 }
 
-variable "document_download_api_host" {
+variable "base_domain" {
   type = string
 }
 
@@ -165,4 +143,25 @@ variable "api_enable_new_relic" {
   description = "Boolean value to decide whether or not new relic is enabled"
   type        = bool
   default     = true
+}
+
+variable "database_read_only_proxy_endpoint" {
+  type        = string
+  description = "Base read only endpoint for rds proxy"
+}
+
+variable "database_read_write_proxy_endpoint" {
+  type        = string
+  description = "Base read write endpoint for rds proxy"
+}
+
+variable "app_db_user_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for rds cluster"
+}
+
+variable "alb_arn_suffix" {
+  type        = string
+  description = "Suffix of the EKS ALB ARN. Used for dashboards."
 }

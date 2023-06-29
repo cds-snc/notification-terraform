@@ -60,3 +60,8 @@ output "aws_acm_alt_notification_canada_ca_arn" {
   value       = var.alt_domain != "" ? aws_acm_certificate.notification-canada-ca-alt[0].arn : ""
   description = "Shared DNS certificate between lambda and k8s"
 }
+
+output "alb_arn_suffix" {
+  value       = aws_alb.notification-canada-ca.arn_suffix
+  description = "Suffix of the EKS ALB ARN. Used for dashboards."
+}

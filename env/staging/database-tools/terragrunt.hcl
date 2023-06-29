@@ -1,5 +1,5 @@
 dependencies {
-  paths = ["../common", "../eks"]
+  paths = ["../common", "../eks", "../rds"]
 }
 
 dependency "common" {
@@ -26,24 +26,28 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    database-tools-securitygroup = ""
+    database-tools-securitygroup    = ""
     database-tools-db-securitygroup = ""
   }
 }
 
+dependency "rds" {
+  config_path = "../rds"
+}
 
 include {
   path = find_in_parent_folders()
 }
 
 inputs = {
-  vpc_private_subnets             = dependency.common.outputs.vpc_private_subnets
-  vpc_id                          = dependency.common.outputs.vpc_id
-  billing_tag_key                 = "CostCenter"
-  billing_tag_value               = "notification-canada-ca-staging"
-  blazer_image_tag                = "latest"
-  database-tools-securitygroup    = dependency.eks.outputs.database-tools-securitygroup
-  database-tools-db-securitygroup = dependency.eks.outputs.database-tools-db-securitygroup
+  vpc_private_subnets               = dependency.common.outputs.vpc_private_subnets
+  vpc_id                            = dependency.common.outputs.vpc_id
+  billing_tag_key                   = "CostCenter"
+  billing_tag_value                 = "notification-canada-ca-staging"
+  blazer_image_tag                  = "9a1636eda8beda45cb66ab35df931821353c80d0"
+  database-tools-securitygroup      = dependency.eks.outputs.database-tools-securitygroup
+  database-tools-db-securitygroup   = dependency.eks.outputs.database-tools-db-securitygroup
+  database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
 }
 
 terraform {

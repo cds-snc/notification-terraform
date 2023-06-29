@@ -38,7 +38,7 @@ resource "aws_ssm_parameter" "notify_o11y_google_oauth_client_secret" {
 resource "aws_ssm_parameter" "sqlalchemy_database_reader_uri" {
   name  = "sqlalchemy_database_reader_uri"
   type  = "SecureString"
-  value = var.sqlalchemy_database_reader_uri
+  value = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value

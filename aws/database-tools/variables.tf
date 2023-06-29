@@ -35,10 +35,9 @@ variable "notify_o11y_google_oauth_client_secret" {
   description = "Google OAuth client secret for Notify observability tools"
 }
 
-variable "sqlalchemy_database_reader_uri" {
+variable "base_domain" {
   type        = string
-  sensitive   = true
-  description = "PSQL connection to notify db"
+  description = "The URL of the Notify service for Blazer to connect to, given proper environment"
 }
 
 variable "database-tools-securitygroup" {
@@ -63,4 +62,14 @@ variable "enable_delete_protection" {
   type        = bool
   description = "Sets whether or not to enable delete protection."
   default     = true
+}
+
+variable "database_read_only_proxy_endpoint" {
+  type        = string
+  description = "Base endpoint for rds proxy"
+}
+variable "app_db_user_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for app_db_user rds cluster"
 }
