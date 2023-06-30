@@ -36,12 +36,8 @@ include {
 }
 
 inputs = {
-  env                                    = "staging"  
-  database_name                          = dependency.rds.outputs.database_name
-  vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
-  sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
-  database_read_only_proxy_endpoint      = dependency.rds.outputs.database_read_only_proxy_endpoint
-  database_read_write_proxy_endpoint     = dependency.rds.outputs.database_read_write_proxy_endpoint
-
+  env                   = "staging"  
+  database_name         = dependency.rds.outputs.database_name
+  vpc_private_subnets   = dependency.common.outputs.vpc_private_subnets
+  sns_alert_warning_arn = dependency.common.outputs.sns_alert_warning_arn
 }
