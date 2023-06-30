@@ -24,6 +24,11 @@ dependency "common" {
 
 dependency "rds" {
   config_path = "../rds"
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    database_name = "database"
+  }
 }
 
 include {
