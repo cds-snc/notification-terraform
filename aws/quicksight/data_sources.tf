@@ -6,8 +6,8 @@ resource "aws_quicksight_data_source" "default" {
 
   credentials {
     credential_pair {
-      username = local.quicksight_user_name
-      password = var.quicksight_user_password
+      username = local.quicksight_db_user_name
+      password = var.quicksight_db_user_password
     }
   }
   vpc_connection_properties {

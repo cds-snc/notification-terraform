@@ -23,6 +23,7 @@ env:
   TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
+  TF_VAR_quicksight_db_user_password: ${{ secrets.STAGING_QUICKSIGHT_DB_USER_PASSWORD }}
   TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
@@ -105,6 +106,9 @@ jobs:
             database-tools:
               - 'aws/database-tools/**'
               - 'env/staging/database-tools/**'
+            quicksight:
+              - 'aws/quicksight/**'
+              - 'env/staging/quicksight/**'
             lambda-google-cidr:
               - 'aws/lambda-google-cidr/**'
               - 'env/staging/lambda-google-cidr/**'
@@ -255,6 +259,16 @@ jobs:
           directory: "env/staging/database-tools"
           comment-delete: "true"
           comment-title: "Staging: database-tools"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan quicksight
+        if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/quicksight"
+          comment-delete: "true"
+          comment-title: "Staging: quicksight"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 

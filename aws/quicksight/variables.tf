@@ -1,12 +1,12 @@
 locals {
-  quicksight_user_name = "quicksight_db_user"
+  quicksight_db_user_name = "quicksight_db_user"
 }
 
 variable "database_name" {
   type = string
 }
 
-variable "quicksight_user_password" {
+variable "quicksight_db_user_password" {
   type      = string
   sensitive = true
 }
