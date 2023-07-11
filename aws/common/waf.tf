@@ -15,7 +15,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
   scope       = "REGIONAL"
 
   regular_expression {
-    regex_string = "/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*"
+    regex_string = "/_status.*|_debug|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*"
   }
 
   regular_expression {
@@ -37,7 +37,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/agreement.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
+    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|_debug|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/agreement.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
   }
 
   regular_expression {
@@ -97,6 +97,11 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
   # GET /_status
   regular_expression {
     regex_string = "/_status"
+  }
+
+  # GET /_debug
+  regular_expression {
+    regex_string = "/_debug"
   }
 
   # GET /services/<uuid:service_id>/documents/<uuid:document_id>
