@@ -51,3 +51,12 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-salesforce
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
 }
+
+module "lambda_no_log_detection" {
+  source                = "github.com/cds-snc/terraform-modules/empty_log_group_alarm"
+  alarm_sns_topic_arn   = var.sns_alert_warning_arn
+  log_group_names       = ["/aws/lambda/api-lambda"]
+  time_period_minutes   = 10
+  use_anomaly_detection = false
+  billing_tag_value     = "notification-canada-ca-${var.env}"
+}
