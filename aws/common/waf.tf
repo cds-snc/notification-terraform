@@ -15,7 +15,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
   scope       = "REGIONAL"
 
   regular_expression {
-    regex_string = var.env = "production" ? "/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*" : "/_status.*|_debug|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*"
+    regex_string = var.env == "production" ? "/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*" : "/_debug|/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*"
   }
 
   regular_expression {
@@ -45,7 +45,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = var.env = "production" ? "/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*" : "_debug|/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*"
+    regex_string = var.env == "production" ? "/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*" : "/_debug|/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*"
   }
 
   regular_expression {
@@ -94,14 +94,9 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
   # Regex support is limited, please see: 
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
-  # GET /_status
+  # GET /_status and /_debug
   regular_expression {
-    regex_string = "/_status"
-  }
-
-  # GET /_debug
-  regular_expression {
-    regex_string = "/_debug"
+    regex_string = var.env == "production" ? "/_status" : "/_status|/_debug"
   }
 
   # GET /services/<uuid:service_id>/documents/<uuid:document_id>
