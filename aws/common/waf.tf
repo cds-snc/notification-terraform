@@ -37,7 +37,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|_debug|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/agreement.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
+    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/agreement.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
   }
 
   regular_expression {
@@ -45,7 +45,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = "/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*"
+    regex_string = "_debug|/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*"
   }
 
   regular_expression {
