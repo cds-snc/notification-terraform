@@ -12,6 +12,11 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-application-logs
   retention_in_days = var.env == "production" ? 0 : 30
 }
 
+resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-prometheus-logs" {
+  name              = "/aws/containerinsights/${var.eks_cluster_name}/prometheus"
+  retention_in_days = 0
+}
+
 
 ###
 # AWS EKS Cloudwatch log metric filters
@@ -83,6 +88,66 @@ resource "aws_cloudwatch_log_metric_filter" "bounce-rate-warning" {
 
   metric_transformation {
     name      = "bounce-rate-warning"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
+  name           = "api-evicted-pods"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"api-*\") }"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs.name
+
+  metric_transformation {
+    name      = "api-evicted-pods"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-evicted-pods" {
+  name           = "celery-evicted-pods"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"celery-*\") }"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs.name
+
+  metric_transformation {
+    name      = "celery-evicted-pods"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "admin-evicted-pods" {
+  name           = "admin-evicted-pods"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"admin-*\") }"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs.name
+
+  metric_transformation {
+    name      = "admin-evicted-pods"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "document-download-evicted-pods" {
+  name           = "document-download-evicted-pods"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"document-download-*\") }"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs.name
+
+  metric_transformation {
+    name      = "document-download-evicted-pods"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "documentation-evicted-pods" {
+  name           = "documentation-evicted-pods"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"documentation-*\") }"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs.name
+
+  metric_transformation {
+    name      = "documentation-evicted-pods"
     namespace = "LogMetrics"
     value     = "1"
   }
