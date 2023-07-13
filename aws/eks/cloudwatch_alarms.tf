@@ -614,3 +614,83 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
     }
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
+  alarm_name                = "evicted-api-pods-detected"
+  alarm_description         = "One or more Kubernetes API Pods is reporting as Evicted"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = aws_cloudwatch_log_metric_filter.api-evicted-pods.name
+  namespace                 = aws_cloudwatch_log_metric_filter.api-evicted-pods.metric_transformation[0].namespace
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
+  alarm_name                = "evicted-celery-pods-detected"
+  alarm_description         = "One or more Kubernetes Celery Pods is reporting as Evicted"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = aws_cloudwatch_log_metric_filter.celery-evicted-pods.name
+  namespace                 = aws_cloudwatch_log_metric_filter.celery-evicted-pods.metric_transformation[0].namespace
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
+  alarm_name                = "evicted-admin-pods-detected"
+  alarm_description         = "One or more Kubernetes Admin Pods is reporting as Evicted"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = aws_cloudwatch_log_metric_filter.admin-evicted-pods.name
+  namespace                 = aws_cloudwatch_log_metric_filter.admin-evicted-pods.metric_transformation[0].namespace
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
+  alarm_name                = "evicted-document-download-pods-detected"
+  alarm_description         = "One or more Kubernetes Document Download Pods is reporting as Evicted"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = aws_cloudwatch_log_metric_filter.document-download-evicted-pods.name
+  namespace                 = aws_cloudwatch_log_metric_filter.document-download-evicted-pods.metric_transformation[0].namespace
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
+  alarm_name                = "evicted-documentation-pods-detected"
+  alarm_description         = "One or more Kubernetes Documentation Pods is reporting as Evicted"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = aws_cloudwatch_log_metric_filter.documentation-evicted-pods.name
+  namespace                 = aws_cloudwatch_log_metric_filter.documentation-evicted-pods.metric_transformation[0].namespace
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+}
