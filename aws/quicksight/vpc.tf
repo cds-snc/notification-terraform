@@ -36,7 +36,6 @@ resource "aws_quicksight_vpc_connection" "example" {
   vpc_connection_id  = "example-connection-id"
   name               = "Example Connection"
   role_arn           = aws_iam_role.vpc_connection_role.arn
-  security_group_ids = [aws_security_group.quicksight.id]
-  subnet_ids         = [aws_subnet.private.id, aws_subnet.database.id]
-
+  security_group_ids = [var.quicksight_security_group_id]
+  subnet_ids         = var.database_subnet_ids
 }

@@ -18,3 +18,11 @@ variable "vpc_private_subnets" {
 variable "sns_alert_warning_arn" {
   type = string
 }
+
+variable "database_subnet_ids" {
+  type = list(string)
+}
+
+variable "quicksight_security_group_id" {
+  type = string
+}

@@ -7,3 +7,6 @@ output "database_read_write_proxy_endpoint" {
 output "database_name" {
   value = aws_rds_cluster.notification-canada-ca.database_name
 }
+output "database_subnet_ids" {
+  value = aws_db_subnet_group.notification-canada-ca.subnet_ids
+}
