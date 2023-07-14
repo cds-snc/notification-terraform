@@ -1,8 +1,8 @@
 
-resource "aws_quicksight_data_source" "default" {
+resource "aws_quicksight_data_source" "rds" {
   depends_on     = [aws_iam_role_policy_attachment.rds-qs-attach]
   data_source_id = var.database_name
-  name           = "datas source"
+  name           = "Quicksight RDS data source"
 
   credentials {
     credential_pair {
@@ -16,7 +16,7 @@ resource "aws_quicksight_data_source" "default" {
   parameters {
     rds {
       database    = var.database_name
-      instance_id = "test"
+      instance_id = var.cluster_identifier
     }
   }
   type = "POSTGRESQL"

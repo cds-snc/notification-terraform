@@ -14,6 +14,7 @@ dependency "common" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     kms_arn = ""
+    vpc_id = ""
     vpc_private_subnets = [
       "",
       "",
@@ -27,6 +28,7 @@ dependency "rds" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
+    cluster_identifier = "id"
     database_name = "database"
     database_subnet_ids = ["subnet-1", "subnet-2"]
   }
@@ -52,4 +54,6 @@ inputs = {
   sns_alert_warning_arn        = dependency.common.outputs.sns_alert_warning_arn
   quicksight_security_group_id = dependency.eks.outputs.quicksight_security_group_id
   database_subnet_ids          = dependency.rds.outputs.database_subnet_ids
+  vpc_id                       = dependency.common.outputs.vpc_id
+  cluster_identifier           = dependency.rds.outputs.cluster_identifier
 }
