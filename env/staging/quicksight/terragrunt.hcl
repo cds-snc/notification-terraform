@@ -28,7 +28,7 @@ dependency "rds" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     database_name = "database"
-    database_subnet_ids = []
+    database_subnet_ids = ["subnet-1", "subnet-2"]
   }
 }
 
@@ -37,7 +37,7 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    quicksight_security_group_id = ""
+    quicksight_security_group_id = "sg-1"
   }
 }
 

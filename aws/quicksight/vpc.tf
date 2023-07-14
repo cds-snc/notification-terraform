@@ -32,7 +32,7 @@ resource "aws_iam_role" "vpc_connection_role" {
   }
 }
 
-resource "aws_quicksight_vpc_connection" "example" {
+resource "aws_quicksight_vpc_connection" "rds" {
   vpc_connection_id  = "example-connection-id"
   name               = "Example Connection"
   role_arn           = aws_iam_role.vpc_connection_role.arn
