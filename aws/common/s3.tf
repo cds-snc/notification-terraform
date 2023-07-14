@@ -43,7 +43,7 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket" {
 }
 
 module "csv_bucket_logs" {
-  source = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v5.1.8"
 
   bucket_name       = "notification-canada-ca-${var.env}-csv-upload-logs"
   force_destroy     = var.force_destroy_s3
@@ -98,7 +98,7 @@ resource "aws_s3_bucket_public_access_block" "bulk_send" {
 }
 
 module "bulk_send_logs" {
-  source = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v5.1.8"
 
   bucket_name       = "notification-canada-ca-${var.env}-bulk-send-logs"
   force_destroy     = var.force_destroy_s3
@@ -270,7 +270,7 @@ resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
 }
 
 module "document_download_logs" {
-  source = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v5.1.8"
 
   bucket_name       = "notification-canada-ca-${var.env}-document-download-logs"
   force_destroy     = var.force_destroy_s3
@@ -402,7 +402,7 @@ resource "aws_s3_bucket_public_access_block" "athena_bucket" {
 }
 
 module "athena_logs_bucket" {
-  source = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v5.1.8"
 
   bucket_name       = "notification-canada-ca-${var.env}-athena-logs"
   force_destroy     = var.force_destroy_s3
@@ -416,7 +416,7 @@ module "athena_logs_bucket" {
 }
 
 module "cbs_logs_bucket" {
-  source = "github.com/cds-snc/terraform-modules?ref=v5.1.8//S3_log_bucket"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v5.1.8"
   count  = var.create_cbs_bucket ? 1 : 0
 
   bucket_name                    = var.cbs_satellite_bucket_name
