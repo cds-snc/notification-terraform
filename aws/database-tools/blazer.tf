@@ -59,6 +59,9 @@ resource "aws_ecs_task_definition" "blazer" {
         }, {
         "name" : "NOTIFY_URL",
         "value" : "https://${var.base_domain}"
+        },{
+        "name" : "BLAZER_SLACK_WEBHOOK_URL",
+        "value" : var.cloudwatch_slack_webhook_general_topic
       }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",
@@ -72,9 +75,6 @@ resource "aws_ecs_task_definition" "blazer" {
         }, {
         "name" : "GOOGLE_OAUTH_CLIENT_SECRET",
         "valueFrom" : "${aws_ssm_parameter.notify_o11y_google_oauth_client_secret.arn}"
-        }, {
-        "name" : "BLAZER_SLACK_WEBHOOK_URL",
-        "valueFrom" : "${aws_ssm_parameter.cloudwatch_slack_webhook_general_topic.arn}"
       }]
     }
   ])
