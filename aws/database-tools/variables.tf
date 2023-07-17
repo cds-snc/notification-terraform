@@ -73,3 +73,9 @@ variable "app_db_user_password" {
   sensitive   = true
   description = "Password for app_db_user rds cluster"
 }
+
+variable "cloudwatch_slack_webhook_general_topic" {
+  description = "Slack webhook used to post general alarm notifications."
+  type        = string
+  sensitive   = true
+}
