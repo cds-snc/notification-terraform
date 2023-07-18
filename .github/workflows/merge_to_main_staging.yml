@@ -49,11 +49,8 @@ env:
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
 
 jobs:
-
-
   terraform-apply:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
