@@ -63,6 +63,9 @@ jobs:
         id: filter
         with:
           filters: |
+            prereqs:
+              - 'aws/prereqs'
+              - 'env/staging/prereqs/**'
             common:
               - '.github/workflows/terragrunt-plan-staging.yml'
               - 'aws/common/**'
@@ -118,8 +121,18 @@ jobs:
               - 'aws/sns_to_sqs_sms_callbacks/**'
               - 'env/staging/sns_to_sqs_sms_callbacks/**'
 
+      - name: Terragrunt plan pre-requisites
+        if: ${{ steps.filter.outputs.prereqs == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/prereqs"
+          comment-delete: "true"
+          comment-title: "Staging: prereqs"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
       - name: Terragrunt plan common
-        if: ${{ steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.common == 'true' && steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/common"
@@ -129,7 +142,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ECR
-        if: ${{ steps.filter.outputs.ecr == 'true' }}
+        if: ${{ steps.filter.outputs.ecr == 'true' && steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/ecr"
@@ -139,7 +152,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_receiving_emails
-        if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.ses_receiving_emails == 'true'  || steps.filter.outputs.common == 'true')  }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/ses_receiving_emails"
@@ -149,7 +162,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan dns
-        if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/dns"
@@ -159,7 +172,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_validation_dns_entries
-        if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.ses_validation_dns_entries == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/ses_validation_dns_entries"
@@ -169,7 +182,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan eks
-        if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/eks"
@@ -179,7 +192,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan elasticache
-        if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/elasticache"
@@ -189,7 +202,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan rds
-        if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/rds"
@@ -199,7 +212,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan cloudfront
-        if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/cloudfront"
@@ -209,7 +222,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-api
-        if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/lambda-api"
@@ -219,7 +232,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-admin-pr
-        if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/lambda-admin-pr"
@@ -229,7 +242,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan performance-test
-        if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/performance-test"
@@ -239,7 +252,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan heartbeat
-        if: ${{ steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/heartbeat"
@@ -249,7 +262,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan database-tools
-        if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/database-tools"
@@ -259,7 +272,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
-        if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/lambda-google-cidr"
@@ -269,7 +282,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/ses_to_sqs_email_callbacks"
@@ -279,7 +292,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
+        if: ${{ steps.filter.outputs.prereqs == 'false' && (steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true') }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/sns_to_sqs_sms_callbacks"

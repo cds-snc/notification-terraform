@@ -69,77 +69,107 @@ jobs:
         run: |
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
+      - name: PreReq Check
+        uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
+        id: filter
+        with:
+          filters: |
+            prereqs:
+              - 'aws/prereqs'
+              - 'env/production/prereqs/**'          
+
+      - name: Apply aws/prereqs
+        if: ${{ steps.filter.outputs.prereqs == 'true' }}
+        run: |
+          cd env/production/prereqs
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/common
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/common
           terragrunt apply --terragrunt-non-interactive -auto-approve
       
       - name: Apply aws/ecr
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/ecr
           terragrunt apply --terragrunt-non-interactive -auto-approve          
 
       - name: Apply aws/ses_receiving_emails
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/ses_receiving_emails
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/ses_to_sqs_email_callbacks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/ses_to_sqs_email_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/sns_to_sqs_sms_callbacks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/sns_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/dns
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/ses_validation_dns_entries
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/ses_validation_dns_entries
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/cloudfront
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/eks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/eks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/elasticache
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/elasticache
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/rds
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-api
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/lambda-api
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/heartbeat
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/heartbeat
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/database-tools
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-google-cidr
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/production/lambda-google-cidr
           terragrunt apply --terragrunt-non-interactive -auto-approve
