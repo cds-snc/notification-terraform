@@ -51,7 +51,6 @@ env:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
@@ -67,87 +66,119 @@ jobs:
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
 
+      - name: PreReq Check
+        uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
+        id: filter
+        with:
+          filters: |
+            prereqs:
+              - 'aws/prereqs'
+              - 'env/staging/prereqs/**'
+
+      - name: Apply aws/prereqs
+        if: ${{ steps.filter.outputs.prereqs == 'true' }}
+        run: |
+          cd env/staging/prereqs
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/common
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/common
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/ecr
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/ecr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/ses_receiving_emails
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/ses_receiving_emails
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/dns
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/dns
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/ses_validation_dns_entries
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/ses_validation_dns_entries
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/cloudfront
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/cloudfront
           terragrunt apply --terragrunt-non-interactive -auto-approve          
 
       - name: Apply aws/eks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/eks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/elasticache
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/elasticache
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/rds
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/rds
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-api
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/lambda-api
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-admin-pr
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/lambda-admin-pr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/performance-test
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/performance-test
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/heartbeat
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/heartbeat
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/database-tools
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-google-cidr
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/lambda-google-cidr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/ses_to_sqs_email_callbacks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/ses_to_sqs_email_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/sns_to_sqs_sms_callbacks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         run: |
           cd env/staging/sns_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
