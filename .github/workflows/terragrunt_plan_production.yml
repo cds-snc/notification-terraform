@@ -56,7 +56,27 @@ jobs:
           INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
+     -  name: PreReq Check
+        uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
+        id: filter
+        with:
+          filters: |
+            prereqs:
+              - 'aws/prereqs'
+              - 'env/production/prereqs/**'  
+
+      - name: Terragrunt plan pre-requisites
+        if: ${{ steps.filter.outputs.prereqs == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/prereqs"
+          comment-delete: "true"
+          comment-title: "Production: prereqs"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
       - name: Terragrunt plan common
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/common"
@@ -66,6 +86,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ECR
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/ecr"
@@ -75,6 +96,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_receiving_emails
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/ses_receiving_emails"
@@ -84,6 +106,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/ses_to_sqs_email_callbacks"
@@ -93,6 +116,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/sns_to_sqs_sms_callbacks"
@@ -102,6 +126,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan dns
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/dns"
@@ -111,6 +136,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_validation_dns_entries
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/ses_validation_dns_entries"
@@ -120,6 +146,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan eks
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/eks"
@@ -129,6 +156,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan elasticache
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/elasticache"
@@ -138,6 +166,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan rds
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/rds"
@@ -147,6 +176,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan cloudfront
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/cloudfront"
@@ -156,6 +186,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-api
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/lambda-api"
@@ -165,6 +196,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan heartbeat
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/heartbeat"
@@ -174,6 +206,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan database-tools
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/database-tools"
@@ -183,6 +216,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
+        if: ${{ steps.filter.outputs.prereqs == 'false' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/production/lambda-google-cidr"
