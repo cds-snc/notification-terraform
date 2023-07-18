@@ -7,7 +7,7 @@ inputs = {
   domain             = "${local.vars.inputs.domain}"
   alt_domain         = "${local.vars.inputs.alt_domain}"
   env                = "${local.vars.inputs.env}"
-  staging_account_id = "${local.vars.inputs.staging_account_id}"
+  dns_account_id     = "${local.vars.inputs.dns_account_id}"
   region             = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
   elb_account_ids = {
@@ -48,14 +48,23 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "dns"
+  region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role"
+  }
+}
+
+provider "aws" {
   alias  = "staging"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.vars.inputs.staging_account_id}:role/${local.vars.inputs.env}_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role"
   }
 }
 EOF
 }
+
 
 generate "common_variables" {
   path      = "common_variables.tf"
