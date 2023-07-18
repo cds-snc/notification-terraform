@@ -87,7 +87,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "production_dns_manager_policy" {
-  count = var.env == "staging" ? 1 : 0
+  count = var.env == "production" ? 1 : 0
   name  = "production_dns_manager_policy"
   role  = aws_iam_role.production_dns_manager[0].id
 
@@ -110,7 +110,7 @@ resource "aws_iam_role_policy" "production_dns_manager_policy" {
 }
 
 resource "aws_iam_role" "production_dns_manager" {
-  count = var.env == "staging" ? 1 : 0
+  count = var.env == "production" ? 1 : 0
   name  = "production_dns_manager_role"
 
   assume_role_policy = <<EOF
