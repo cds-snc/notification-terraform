@@ -66,7 +66,7 @@ jobs:
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
 
-     -  name: PreReq Check
+      - name: PreReq Check
         uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
         id: filter
         with:

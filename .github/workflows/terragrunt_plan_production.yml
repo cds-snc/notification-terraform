@@ -56,7 +56,7 @@ jobs:
           INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
-     -  name: PreReq Check
+      - name: PreReq Check
         uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
         id: filter
         with:
