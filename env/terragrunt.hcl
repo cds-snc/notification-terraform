@@ -1,6 +1,8 @@
 locals {
   vars = read_terragrunt_config("../env_vars.hcl")
   # dns_role is very fragile - if not set exactly as below, terraform fmt will fail in github actions.
+  # This is required for the dynamic provider for DNS configuration. In staging and production, no role assumption is required,
+  # so this will be empty. In scratch/dynamic environments, role assumption is required.
   dns_role           = local.vars.inputs.env == "production" || local.vars.inputs.env == "staging" ? "" : "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }"
 }
 
@@ -104,11 +106,6 @@ variable "elb_account_ids" {
 variable "cbs_satellite_bucket_name" {
   description = "Name of the Cloud Based Sensor S3 satellite bucket"
   type        = string
-}
-variable "cross_account_dns" {
-  description = "Set to true if the DNS zone is not in the same account as the target aws account"
-  type        = bool
-  default     = true
 }
 EOF
 }
