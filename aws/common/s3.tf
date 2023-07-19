@@ -219,7 +219,7 @@ resource "aws_s3_bucket" "document_bucket" {
 }
 
 resource "aws_s3_bucket" "scan_files_document_bucket" {
-  bucket        = "notification-canada-ca-${var.env}-document-download-scan-files"
+  bucket        = "notification-canada-ca-${var.env}-dd-scan-files"
   acl           = "private"
   force_destroy = var.force_destroy_s3
 
