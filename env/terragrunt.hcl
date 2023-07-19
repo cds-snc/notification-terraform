@@ -1,5 +1,9 @@
 locals {
   vars = read_terragrunt_config("../env_vars.hcl")
+  # dns_role is very fragile - if not set exactly as below, terraform fmt will fail in github actions.
+  # This is required for the dynamic provider for DNS configuration. In staging and production, no role assumption is required,
+  # so this will be empty. In scratch/dynamic environments, role assumption is required.
+  dns_role           = local.vars.inputs.env == "production" || local.vars.inputs.env == "staging" ? "" : "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }"
 }
 
 inputs = {
@@ -8,6 +12,7 @@ inputs = {
   alt_domain         = "${local.vars.inputs.alt_domain}"
   env                = "${local.vars.inputs.env}"
   dns_account_id     = "${local.vars.inputs.dns_account_id}"
+  
   region             = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
   elb_account_ids = {
@@ -49,10 +54,7 @@ provider "aws" {
 
 provider "aws" {
   alias  = "dns"
-  region = "ca-central-1"
-  assume_role {
-    role_arn = "arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role"
-  }
+  region = "ca-central-1"${local.dns_role}
 }
 
 provider "aws" {
