@@ -52,8 +52,7 @@ provider "aws" {
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
-  ${local.dns_role}
-}
+  ${local.dns_role}}
 
 provider "aws" {
   alias  = "staging"
