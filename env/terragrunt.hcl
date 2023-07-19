@@ -1,6 +1,7 @@
 locals {
   vars = read_terragrunt_config("../env_vars.hcl")
-  dns_role           = local.vars.inputs.env == "production" || local.vars.inputs.env == "staging" ? "" : "assume_role { role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\" }"
+  # dns_role is very fragile - if not set exactly as below, terraform fmt will fail in github actions.
+  dns_role           = local.vars.inputs.env == "production" || local.vars.inputs.env == "staging" ? "" : "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }"
 }
 
 inputs = {
@@ -51,8 +52,8 @@ provider "aws" {
 
 provider "aws" {
   alias  = "dns"
-  region = "ca-central-1"
-  ${local.dns_role}}
+  region = "ca-central-1"${local.dns_role}
+}
 
 provider "aws" {
   alias  = "staging"
