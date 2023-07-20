@@ -2,7 +2,7 @@
 
 resource "aws_route53_record" "scratch-notification-sandbox-MX" {
   count    = var.env == "scratch" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
   zone_id  = var.route_53_zone_arn
   name     = var.domain
   type     = "MX"
@@ -12,7 +12,7 @@ resource "aws_route53_record" "scratch-notification-sandbox-MX" {
 
 resource "aws_route53_record" "bounce-scratch-notification-sandbox-MX" {
   count    = var.env == "scratch" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
   zone_id  = var.route_53_zone_arn
   name     = "bounce.${var.domain}"
   type     = "MX"
@@ -22,7 +22,7 @@ resource "aws_route53_record" "bounce-scratch-notification-sandbox-MX" {
 
 resource "aws_route53_record" "bounce-scratch-custom-notification-sandbox-MX" {
   count    = var.env == "scratch" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
   zone_id  = var.route_53_zone_arn
   name     = "bounce.custom-sending-domain.${var.domain}"
   type     = "MX"
@@ -34,7 +34,7 @@ resource "aws_route53_record" "bounce-scratch-custom-notification-sandbox-MX" {
 
 resource "aws_route53_record" "ses-scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
   zone_id  = var.route_53_zone_arn
   name     = "_amazonses.${var.domain}"
   type     = "TXT"
@@ -46,7 +46,7 @@ resource "aws_route53_record" "ses-scratch-notification-sandbox-TXT" {
 
 resource "aws_route53_record" "dmarc-scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
   zone_id  = var.route_53_zone_arn
   name     = "_dmarc.${var.domain}"
   type     = "TXT"
@@ -58,7 +58,7 @@ resource "aws_route53_record" "dmarc-scratch-notification-sandbox-TXT" {
 
 resource "aws_route53_record" "scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
   zone_id  = var.route_53_zone_arn
   name     = var.domain
   type     = "TXT"
@@ -70,7 +70,7 @@ resource "aws_route53_record" "scratch-notification-sandbox-TXT" {
 
 resource "aws_route53_record" "bounce-scratch-notification-sandbox-TXT" {
   count    = var.env == "scratch" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
   zone_id  = var.route_53_zone_arn
   name     = "bounce.${var.domain}"
   type     = "TXT"

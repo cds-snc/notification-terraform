@@ -37,7 +37,7 @@ resource "aws_route53_record" "api-weighted-100-notification-A" {
 resource "aws_route53_record" "api-notification-alt-A" {
   #TODO: Alt DNS for Prod
   count    = var.env != "production" ? 1 : 0
-  provider = aws.staging
+  provider = aws.dns
 
   zone_id = var.route_53_zone_arn
   name    = "api.${var.alt_domain}"
