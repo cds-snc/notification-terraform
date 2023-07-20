@@ -11,7 +11,7 @@ resource "aws_route53_record" "notification-canada-ca-ACM-cname" {
   records = [
     "_aaacd89cd470de0970c70c7ab1b7d4d5.wggjkglgrm.acm-validations.aws."
   ]
-  ttl = "300"
+  ttl = "60"
 }
 
 resource "aws_route53_record" "document-notification-canada-ca-ACM-cname" {
@@ -22,7 +22,7 @@ resource "aws_route53_record" "document-notification-canada-ca-ACM-cname" {
   records = [
     "_130ea19fa1fdd9e59b7632fbac0d7e00.wggjkglgrm.acm-validations.aws."
   ]
-  ttl = "300"
+  ttl = "60"
 }
 
 resource "aws_route53_record" "api-notification-canada-ca-ACM-cname" {
@@ -33,7 +33,7 @@ resource "aws_route53_record" "api-notification-canada-ca-ACM-cname" {
   records = [
     "_ac309158c158035bfb929da1617e2b16.mqzgcdqkwq.acm-validations.aws."
   ]
-  ttl = "300"
+  ttl = "60"
 }
 
 resource "aws_route53_record" "assets-notification-canada-ca-ACM-cname" {
