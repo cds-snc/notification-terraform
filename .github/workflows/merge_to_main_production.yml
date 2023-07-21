@@ -41,6 +41,7 @@ env:
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
+  TF_VAR_blazer_slack_webhook_general_topic: ${{ secrets.PRODUCTION_BLAZER_SLACK_WEBHOOK }}
 
 jobs:
   terraform-apply:
