@@ -16,7 +16,7 @@ resource "aws_acm_certificate" "assets-notification-canada-ca" {
 
 resource "aws_route53_record" "assets-notification-canada-ca" {
   count           = var.env != "production" ? 1 : 0
-  provider        = aws.staging
+  provider        = aws.dns
   allow_overwrite = true
   name            = tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_name
   records         = [tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_value]

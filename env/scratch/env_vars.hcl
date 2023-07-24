@@ -4,5 +4,5 @@ inputs = {
   domain     = "scratch.notification.cdssandbox.xyz"
   alt_domain = "alpha.scratch.notification.cdssandbox.xyz"
   env        = "scratch"
-  staging_account_id = "239043911459"
+  dns_account_id = "239043911459"
 }

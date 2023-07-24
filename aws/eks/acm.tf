@@ -41,7 +41,7 @@ resource "aws_acm_certificate" "notification-canada-ca-alt" {
 
 resource "aws_route53_record" "notification-canada-ca" {
 
-  provider = aws.staging
+  provider = aws.dns
 
   for_each = {
     for dvo in aws_acm_certificate.notification-canada-ca.domain_validation_options : dvo.domain_name => {
@@ -73,7 +73,7 @@ resource "aws_acm_certificate_validation" "notification-canada-ca" {
 
 resource "aws_route53_record" "notification-canada-ca-alt" {
 
-  provider = aws.staging
+  provider = aws.dns
 
   for_each = {
     for dvo in aws_acm_certificate.notification-canada-ca-alt[0].domain_validation_options : dvo.domain_name => {
