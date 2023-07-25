@@ -61,7 +61,7 @@ resource "aws_ecs_task_definition" "blazer" {
         "value" : "https://${var.base_domain}"
         }, {
         "name" : "BLAZER_SLACK_WEBHOOK_URL",
-        "value" : var.cloudwatch_slack_webhook_general_topic
+        "value" : var.blazer_slack_webhook_general_topic
       }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",

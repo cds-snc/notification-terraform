@@ -79,3 +79,9 @@ variable "cloudwatch_slack_webhook_general_topic" {
   type        = string
   sensitive   = true
 }
+
+variable "blazer_slack_webhook_general_topic" {
+  description = "Slack webhook used to post blazer checks."
+  type        = string
+  sensitive   = true
+}
