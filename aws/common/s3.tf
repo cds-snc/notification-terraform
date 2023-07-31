@@ -60,7 +60,7 @@ module "csv_bucket_logs" {
 resource "aws_s3_bucket" "bulk_send" {
   bucket        = "notification-canada-ca-${var.env}-bulk-send"
   acl           = "private"
-  force_destroy = var.force_destroy_s3
+  force_destroy = true
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -101,7 +101,7 @@ module "bulk_send_logs" {
   source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v5.1.8"
 
   bucket_name       = "notification-canada-ca-${var.env}-bulk-send-logs"
-  force_destroy     = var.force_destroy_s3
+  force_destroy     = true
   billing_tag_value = "notification-canada-ca-${var.env}"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
