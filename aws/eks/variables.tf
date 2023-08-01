@@ -6,6 +6,16 @@ variable "primary_worker_instance_types" {
   type = list(any)
 }
 
+variable "secondary_worker_instance_types" {
+  type = list(any)
+}
+
+variable "nodeUpgrade" {
+  type        = bool
+  description = "Set to true when wanting to upgrade Node sizes"
+  default     = false
+}
+
 variable "primary_worker_max_size" {
   type = number
 }
