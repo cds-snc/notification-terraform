@@ -10,7 +10,7 @@ done <<< "$NODES"
 echo "All nodes cordoned"
 echo "Begin draining nodes"
 while IFS= read -r node; do
-    echo "Cordoning node $node"
+    echo "Draining node $node"
     kubectl drain $node --ignore-daemonsets  --delete-emptydir-data
     echo "Done."
 done <<< "$NODES"
