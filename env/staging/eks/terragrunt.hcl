@@ -51,7 +51,7 @@ include {
 
 inputs = {
   primary_worker_desired_size               = 7
-  primary_worker_instance_types             = ["m5.large"]
+  primary_worker_instance_types             = ["m6i.large"]
   secondary_worker_instance_types           = ["m6i.large"]
   nodeUpgrade                               = true  
   primary_worker_max_size                   = 7
