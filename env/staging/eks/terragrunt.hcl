@@ -52,8 +52,8 @@ include {
 inputs = {
   primary_worker_desired_size               = 7
   primary_worker_instance_types             = ["m5.large"]
-  secondary_worker_instance_types           = ["m5.large"]
-  nodeUpgrade                               = false  
+  secondary_worker_instance_types           = ["m6i.large"]
+  nodeUpgrade                               = true  
   primary_worker_max_size                   = 7
   primary_worker_min_size                   = 4
   vpc_id                                    = dependency.common.outputs.vpc_id
