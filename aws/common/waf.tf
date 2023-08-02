@@ -67,7 +67,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/message-delivery-status|/etat-livraison-messages|/formatting-guide|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu"
+    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/.*-delivery-.*|/etat-livraison-messages|/formatting-.*|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu"
   }
 
   # GCA routes
@@ -77,7 +77,12 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/keep-accurate-contact-information|/maintenez-a-jour-les-coordonnees|/delivery-and-failure|/livraison-reussie-et-echec|/system-status|/etat-du-systeme"
+    regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-reussie-et-echec|/system-status|/etat-du-systeme|/comprendre-statut-de-livraison"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/sending-custom-content|/envoyer-contenu-personnalise|/using-a-spreadsheet|/utiliser-une-feuille-de-calcul"
   }
 
   tags = {
