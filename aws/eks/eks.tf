@@ -59,6 +59,8 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   release_version = var.eks_node_ami_version
   instance_types  = var.primary_worker_instance_types
 
+  disk_size = 80
+
   scaling_config {
     desired_size = var.primary_worker_desired_size
     max_size     = var.primary_worker_max_size
@@ -93,6 +95,8 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
 
   release_version = var.eks_node_ami_version
   instance_types  = var.secondary_worker_instance_types
+
+  disk_size = 80
 
   scaling_config {
     # Since we are just using this node group as an interim group while we upgrade primary, 
