@@ -65,3 +65,18 @@ output "alb_arn_suffix" {
   value       = aws_alb.notification-canada-ca.arn_suffix
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
 }
+
+# Karpenter
+output "karpenter_iam_role_arn" {
+  value       = module.iam_assumable_role_karpenter.iam_role_arn
+  description = "ARN of Karpenter IAM Role for EKS."
+}
+
+output "eks_cluster_endpoint" {
+  value = data.aws_eks_cluster.example.endpoint
+}
+
+
+output "karpenter_instance_profile" {
+  value = aws_iam_instance_profile.karpenter.name
+}

@@ -214,3 +214,8 @@ variable "create_cbs_bucket" {
   type        = bool
   default     = false
 }
+
+variable "eks_cluster_name" {
+  description = "Name of EKS Cluster"
+  type        = string
+}
