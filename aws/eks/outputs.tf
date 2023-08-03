@@ -73,7 +73,7 @@ output "karpenter_iam_role_arn" {
 }
 
 output "eks_cluster_endpoint" {
-  value = data.aws_eks_cluster.example.endpoint
+  value = data.aws_eks_cluster.notify_cluster.endpoint
 }
 
 
