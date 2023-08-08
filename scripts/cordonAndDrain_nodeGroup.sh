@@ -2,7 +2,6 @@
 NODE_GROUP=$1
 NODES=$(kubectl get nodes -l eks.amazonaws.com/nodegroup=$NODE_GROUP | awk 'NR>1{print $1}')
 
-echo "Begin cordoning nodes: $NODES"
 for node in $NODES; do
     echo "Cordoning node $node"
     kubectl cordon $node
