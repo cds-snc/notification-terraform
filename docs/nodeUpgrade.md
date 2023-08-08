@@ -37,7 +37,7 @@ When upgrading a node group instance type, the node group must be destroyed and 
 
 - From a local machine with administrator account access to AWS, run the cordonAndDrain.sh script in the scripts directory, passing in the name of the **primary** node group  
     Example:
-    ``` ./cordonAndDrain.sh notification-canada-ca-scratch-eks-primary-node-group ```
+    ``` ./cordonAndDrain_nodeGroup.sh notification-canada-ca-scratch-eks-primary-node-group ```
 - Verify that the script has run successfully:
     - Check that the old nodes are marked as "Ready, Scheduling Disabled"
     - Check that all pods in notification-canada-ca are newly created and running on the **secondary** node group (kubectl describe pod ...)
@@ -54,7 +54,7 @@ When upgrading a node group instance type, the node group must be destroyed and 
 
 - From a local machine with administrator account access to AWS, run the cordonAndDrain.sh script in the scripts directory, passing in the name of the **secondary** node group  
     Example:
-    ``` ./cordonAndDrain.sh notification-canada-ca-scratch-eks-secondary-node-group ```
+    ``` ./cordonAndDrain_nodeGroup.sh notification-canada-ca-scratch-eks-secondary-node-group ```
 - Verify that the script has run successfully:
     - Check that the old nodes are marked as "Ready, Scheduling Disabled"
     - Check that all pods in notification-canada-ca are newly created and running on the **primary** node group (kubectl describe pod ...)
