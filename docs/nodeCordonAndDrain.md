@@ -12,4 +12,4 @@ Sometimes we want to move all work off a node so that we can replace it with one
     ``` ./cordonAndDrain_node.sh ip-10-0-0-70.ca-central-1.compute.internal ```
 - Verify that the script has run successfully:
     - Check that the node is marked as "Ready, Scheduling Disabled"
-    - Check that all pods in notification-canada-ca are newly created and running on another node. Effectively, no notification-canada-ca pods should be running on the node, but the total number of pods in the system should stay the same.
+    - Check that all pods in notification-canada-ca are newly created and running on another node. Effectively, no notification-canada-ca pods should be running on the node, but the total number of pods in the system should stay the same (assuming the system is in a steady state throughout).

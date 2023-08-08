@@ -5,5 +5,5 @@ kubectl cordon $NODE
 echo "Done."
 
 echo "Begin draining $NODE"
-kubectl drain $NODE --ignore-daemonsets  --delete-emptydir-data
+kubectl drain $NODE --ignore-daemonsets --delete-emptydir-data
 echo "Done."
