@@ -179,3 +179,8 @@ variable "enable_delete_protection" {
   description = "Flag to enable or disable delete protection on resources."
   default     = true
 }
+
+variable "notification_base_url_regex_arn" {
+  type        = string
+  description = "The ARN of the regex for the notify base URL"
+}
