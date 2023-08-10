@@ -144,3 +144,21 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
+  name        = "notification_base_url"
+  description = "Regex matching the root domain of notify"
+  scope       = "REGIONAL"
+
+  # WAF Regex blocks are combined with OR logic. 
+  # Regex support is limited, please see: 
+  # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
+
+  regular_expression {
+    regex_string = "${var.domain}$"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
