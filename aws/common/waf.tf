@@ -155,7 +155,7 @@ resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = var.domain
+    regex_string = "${var.domain}$"
   }
 
   tags = {
