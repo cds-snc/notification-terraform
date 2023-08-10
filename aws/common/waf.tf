@@ -57,7 +57,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*"
+    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*|/using-a-spreadsheet"
   }
 
   # GCA routes
@@ -67,17 +67,17 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/message-delivery-status|/etat-livraison-messages|/formatting-guide|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu"
+    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/.*-delivery-.*|/etat-livraison-messages|/formatting-.*|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu"
   }
 
   # GCA routes
   regular_expression {
-    regex_string = "/other-services|/autres-services|/service-level-agreement|/accord-niveaux-de-service|/service-level-objectives|/objectifs-niveau-de-service|/pourquoi-notification-gc"
+    regex_string = "/other-services|/autres-services|/service-level-agreement|/accord-niveaux-de-service|/service-level-objectives|/objectifs-niveau-de-service|/pourquoi-notification-gc|/envoyer-.*-personnalise"
   }
 
   # GCA routes
   regular_expression {
-    regex_string = "/keep-accurate-contact-information|/maintenez-a-jour-les-coordonnees|/delivery-and-failure|/livraison-reussie-et-echec|/system-status|/etat-du-systeme"
+    regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul"
   }
 
   tags = {
