@@ -27,6 +27,7 @@ dependency "common" {
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
     re_api_arn                                = ""
+    notification_base_url_regex_arn           = ""
     re_document_download_arn                  = ""
     re_documentation_arn                      = ""
     private-links-vpc-endpoints-securitygroup = ""

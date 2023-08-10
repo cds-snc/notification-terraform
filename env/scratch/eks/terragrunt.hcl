@@ -29,6 +29,7 @@ dependency "common" {
     re_api_arn                                = ""
     re_document_download_arn                  = ""
     re_documentation_arn                      = ""
+    notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
   }
