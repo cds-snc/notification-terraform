@@ -65,3 +65,7 @@ output "alb_arn_suffix" {
   value       = aws_alb.notification-canada-ca.arn_suffix
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
 }
+
+output "quicksight_security_group_id" {
+  value = aws_security_group.quicksight.id
+}
