@@ -378,6 +378,43 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
+    name     = "PreventHostInjections"
+    priority = 11
+
+    statement {
+      not_statement {
+        statement {
+          regex_pattern_set_reference_statement {
+
+            arn = var.notification_base_url_regex_arn
+
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+          }
+        }
+      }
+    }
+
+    action {
+      block {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "PreventHostInjections"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
     name     = "CanadaUSOnlyGeoRestriction"
     priority = 20
 
@@ -617,3 +654,4 @@ resource "aws_wafv2_web_acl_logging_configuration" "firehose-waf-logs" {
     }
   }
 }
+

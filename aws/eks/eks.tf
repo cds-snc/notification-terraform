@@ -84,6 +84,45 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   }
 }
 
+resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" {
+  count           = var.nodeUpgrade ? 1 : 0
+  cluster_name    = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name = "notification-canada-ca-${var.env}-eks-secondary-node-group"
+  node_role_arn   = aws_iam_role.eks-worker-role.arn
+  subnet_ids      = var.vpc_private_subnets
+
+  disk_size = 80
+
+  release_version = var.eks_node_ami_version
+  instance_types  = var.secondary_worker_instance_types
+
+  scaling_config {
+    # Since we are just using this node group as an interim group while we upgrade primary, 
+    # we will leverage primary settings here.
+    desired_size = var.primary_worker_desired_size
+    max_size     = var.primary_worker_max_size
+    min_size     = var.primary_worker_min_size
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
+  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+  depends_on = [
+    aws_iam_role_policy_attachment.eks-worker-AWSLoadBalancerControllerIAMPolicy,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEKS_CNI_Policy
+  ]
+
+  tags = {
+    Name       = "notification-canada-ca"
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 ###
 # AWS EKS addons
 ###

@@ -6,6 +6,16 @@ variable "primary_worker_instance_types" {
   type = list(any)
 }
 
+variable "secondary_worker_instance_types" {
+  type = list(any)
+}
+
+variable "nodeUpgrade" {
+  type        = bool
+  description = "Set to true when wanting to upgrade Node sizes"
+  default     = false
+}
+
 variable "primary_worker_max_size" {
   type = number
 }
@@ -168,4 +178,9 @@ variable "enable_delete_protection" {
   type        = bool
   description = "Flag to enable or disable delete protection on resources."
   default     = true
+}
+
+variable "notification_base_url_regex_arn" {
+  type        = string
+  description = "The ARN of the regex for the notify base URL"
 }
