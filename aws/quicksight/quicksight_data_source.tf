@@ -2,7 +2,9 @@ resource "aws_quicksight_data_source" "rds" {
   depends_on     = [aws_iam_role_policy_attachment.rds-qs-attach]
   data_source_id = var.database_name
   name           = "Quicksight RDS data source"
-
+  ssl_properties {
+    disable_ssl = false
+  }
   credentials {
     credential_pair {
       username = local.quicksight_db_user_name
