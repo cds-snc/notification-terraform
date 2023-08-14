@@ -336,6 +336,115 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-warning" {
+  alarm_name          = "sqs-send-sms-high-queue-delay-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send sms high priority queue >= 20 seconds for 3 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "3"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 20
+  treat_missing_data  = "missing"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-critical" {
+  alarm_name                = "sqs-send-sms-high-queue-delay-critical"
+  alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-high queue >= 60 seconds for 5 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "5"
+  metric_name               = "ApproximateAgeOfOldestMessage"
+  namespace                 = "AWS/SQS"
+  period                    = 60
+  statistic                 = "Average"
+  threshold                 = 60
+  datapoints_to_alarm       = 5
+  treat_missing_data        = "missing"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-warning" {
+  alarm_name          = "sqs-send-sms-medium-queue-delay-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-medium queue is >= 10 minutes for 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "5"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 60 * 10
+  treat_missing_data  = "missing"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-critical" {
+  alarm_name                = "sqs-send-sms-medium-queue-delay-critical"
+  alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-medium queue is >= 15 minutes for 5 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "5"
+  metric_name               = "ApproximateAgeOfOldestMessage"
+  namespace                 = "AWS/SQS"
+  period                    = 60
+  statistic                 = "Average"
+  threshold                 = 60 * 15
+  treat_missing_data        = "missing"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-warning" {
+  alarm_name          = "sqs-send-sms-low-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 60 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 60 * 60
+  treat_missing_data  = "missing"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-critical" {
+  alarm_name                = "sqs-send-sms-low-queue-critical"
+  alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 3 hours"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "ApproximateAgeOfOldestMessage"
+  namespace                 = "AWS/SQS"
+  period                    = 60
+  statistic                 = "Maximum"
+  threshold                 = 60 * 60 * 3
+  treat_missing_data        = "missing"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning" {
   alarm_name          = "sqs-throttled-sms-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in throttled SMS queue >= 5 minutes for 5 minutes"
