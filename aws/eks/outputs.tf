@@ -80,3 +80,7 @@ output "eks_cluster_endpoint" {
 output "karpenter_instance_profile" {
   value = aws_iam_instance_profile.karpenter.name
 }
+
+output "quicksight_security_group_id" {
+  value = aws_security_group.quicksight.id
+}
