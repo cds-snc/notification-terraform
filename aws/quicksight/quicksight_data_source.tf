@@ -15,7 +15,7 @@ resource "aws_quicksight_data_source" "rds" {
   parameters {
     rds {
       database    = var.database_name
-      instance_id = var.cluster_identifier
+      instance_id = var.rds_instance_id
     }
   }
   type = "POSTGRESQL"

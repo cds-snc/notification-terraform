@@ -2,7 +2,7 @@ locals {
   quicksight_db_user_name = "quicksight_db_user"
 }
 
-variable "cluster_identifier" {
+variable "rds_instance_id" {
   type = string
 }
 
