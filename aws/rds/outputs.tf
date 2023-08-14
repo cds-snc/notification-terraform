@@ -10,6 +10,6 @@ output "database_name" {
 output "database_subnet_ids" {
   value = aws_db_subnet_group.notification-canada-ca.subnet_ids
 }
-output "cluster_identifier" {
-  value = aws_rds_cluster.notification-canada-ca.cluster_identifier
+output "rds_instance_id" {
+  value = aws_rds_cluster_instance.notification-canada-ca-instances[0].identifier
 }
