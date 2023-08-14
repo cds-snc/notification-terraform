@@ -14,11 +14,12 @@ A valid node instance type and size to upgrade to needs to be known. This can be
 - Navigate to the EKS (Elastic Kubernetes Service) Page
 - Click on the existing cluster
 - Click on the "Compute" tab
-- Scroll down to Node Groups and click "Add Node Grouop"
+- Scroll down to Node Groups and click "Add Node Group"
 - Provide a dummy name - ex: "Test"
 - Select the existing eks-worker-role under Node IAM role
 - Click Next
 - You will then be able to click the drop down box on "instance types" to see the available node instance types. Choose the one most appropriate for the upgrade [Go Here for Instance Descriptions](https://aws.amazon.com/ec2/instance-types/)
+- Cancel out of your changes
 
 ## Procedure Steps
 
@@ -35,9 +36,11 @@ When upgrading a node group instance type, the node group must be destroyed and 
 
 #### Migrate Workload to Secondary Node Group
 
+- Set your Kubernetes context to the correct environment
 - From a local machine with administrator account access to AWS, run the cordonAndDrain.sh script in the scripts directory, passing in the name of the **primary** node group  
     Example:
-    ``` ./cordonAndDrain.sh notification-canada-ca-scratch-eks-primary-node-group ```
+    ``` ./cordonAndDrain_nodeGroup.sh notification-canada-ca-scratch-eks-primary-node-group ```
+- Allow each drain to finished spinning up the new jobs before allowing the next drain to start
 - Verify that the script has run successfully:
     - Check that the old nodes are marked as "Ready, Scheduling Disabled"
     - Check that all pods in notification-canada-ca are newly created and running on the **secondary** node group (kubectl describe pod ...)
@@ -48,13 +51,15 @@ When upgrading a node group instance type, the node group must be destroyed and 
 - Commit these changes, and create a PR
 - Validate in the PR that the primary node group will be re-created (1 to create, 1 to destroy)
 - Merge the PR
-- Verify that the primary nodes are removed then re-created (kubectl get nodes)
+- Verify that the primary nodes are removed then re-created (kubectl get nodes) **nodes are status "Ready"**
 
 #### Migrate Workload back to Primary Node Group
 
+- Set your Kubernetes context to the correct environment
 - From a local machine with administrator account access to AWS, run the cordonAndDrain.sh script in the scripts directory, passing in the name of the **secondary** node group  
     Example:
-    ``` ./cordonAndDrain.sh notification-canada-ca-scratch-eks-secondary-node-group ```
+    ``` ./cordonAndDrain_nodeGroup.sh notification-canada-ca-scratch-eks-secondary-node-group ```
+- Allow each drain to finished spinning up the new jobs before allowing the next drain to start
 - Verify that the script has run successfully:
     - Check that the old nodes are marked as "Ready, Scheduling Disabled"
     - Check that all pods in notification-canada-ca are newly created and running on the **primary** node group (kubectl describe pod ...)

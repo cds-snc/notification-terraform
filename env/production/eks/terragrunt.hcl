@@ -17,6 +17,7 @@ dependency "common" {
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
     re_api_arn                                = ""
+    notification_base_url_regex_arn           = ""
     re_document_download_arn                  = ""
     re_documentation_arn                      = ""
     private-links-vpc-endpoints-securitygroup = ""
@@ -61,6 +62,7 @@ inputs = {
   re_api_arn                                = dependency.common.outputs.re_api_arn
   re_document_download_arn                  = dependency.common.outputs.re_document_download_arn
   re_documentation_arn                      = dependency.common.outputs.re_documentation_arn
+  notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn  
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
 }
