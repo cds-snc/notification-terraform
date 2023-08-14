@@ -51,7 +51,7 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 5
+  primary_worker_desired_size               = 1
   primary_worker_instance_types             = ["m5.large"]
   secondary_worker_instance_types           = ["m5.large"]
   nodeUpgrade                               = false
@@ -70,7 +70,7 @@ inputs = {
   eks_addon_coredns_version                 = "v1.10.1-eksbuild.2"
   eks_addon_kube_proxy_version              = "v1.27.1-eksbuild.1"
   eks_addon_vpc_cni_version                 = "v1.13.2-eksbuild.1"
-  eks_node_ami_version                      = "1.27.1-20230703"
+  eks_node_ami_version                      = "1.27.3-20230728"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 5000
   sign_in_waf_rate_limit                    = 100
