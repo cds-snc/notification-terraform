@@ -76,7 +76,11 @@ output "eks_cluster_endpoint" {
   value = data.aws_eks_cluster.notify_cluster.endpoint
 }
 
-
 output "karpenter_instance_profile" {
   value = aws_iam_instance_profile.karpenter.name
+}
+
+# Quicksight
+output "quicksight_security_group_id" {
+  value = aws_security_group.quicksight.id
 }
