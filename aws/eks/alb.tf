@@ -39,15 +39,8 @@ resource "aws_alb_listener" "notification-canada-ca" {
   ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
 
   default_action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.notification-canada-ca-admin.arn
-      }
-      target_group {
-        arn = aws_alb_target_group.admin_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-admin.arn
   }
 }
 
@@ -139,15 +132,8 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
   priority     = 100
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.notification-canada-ca-document-api.arn
-      }
-      target_group {
-        arn = aws_alb_target_group.doc_api_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
   }
 
   condition {
@@ -202,15 +188,8 @@ resource "aws_lb_listener_rule" "document-host-route" {
   priority     = 200
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.notification-canada-ca-document-api.arn
-      }
-      target_group {
-        arn = aws_alb_target_group.document_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
   }
 
   condition {
@@ -240,15 +219,8 @@ resource "aws_lb_listener_rule" "api-host-route" {
   priority     = 300
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.notification-canada-ca-api.arn
-      }
-      target_group {
-        arn = aws_alb_target_group.api_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-api.arn
   }
 
   condition {
@@ -346,15 +318,8 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
   priority     = 60
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.notification-canada-ca-documentation.arn
-      }
-      target_group {
-        arn = aws_alb_target_group.document_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.notification-canada-ca-documentation.arn
   }
 
   condition {
@@ -395,52 +360,4 @@ resource "aws_lb_listener_rule" "documentation-host-redirect" {
 resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
   resource_arn = aws_alb.notification-canada-ca.arn
   web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
-}
-
-###
-# Secondary Target Groups for EKS Load Balancer Migration
-###
-
-resource "aws_alb_target_group" "doc_api_secondary" {
-  name     = "doc-api-secondary"
-  port     = 7000
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status"
-    matcher = "200"
-  }
-}
-
-resource "aws_alb_target_group" "document_secondary" {
-  name     = "document-secondary"
-  port     = 7001
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status"
-    matcher = "200"
-  }
-}
-
-resource "aws_alb_target_group" "api_secondary" {
-  name     = "k8s-api-secondary"
-  port     = 6011
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status?simple=true"
-    matcher = "200"
-  }
-}
-
-resource "aws_alb_target_group" "admin_secondary" {
-  name     = "admin-secondary"
-  port     = 6012
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status?simple=true"
-    matcher = "200"
-  }
 }
