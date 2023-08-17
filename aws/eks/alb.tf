@@ -39,12 +39,8 @@ resource "aws_alb_listener" "notification-canada-ca" {
   ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
 
   default_action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.admin_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.admin_secondary.arn
   }
 }
 
@@ -136,12 +132,8 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
   priority     = 100
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.doc_api_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.doc_api_secondary.arn
   }
 
   condition {
@@ -196,12 +188,8 @@ resource "aws_lb_listener_rule" "document-host-route" {
   priority     = 200
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.document_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.doc_api_secondary.arn
   }
 
   condition {
@@ -231,12 +219,8 @@ resource "aws_lb_listener_rule" "api-host-route" {
   priority     = 300
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.api_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.api_secondary.arn
   }
 
   condition {
@@ -334,12 +318,8 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
   priority     = 60
 
   action {
-    type = "forward"
-    forward {
-      target_group {
-        arn = aws_alb_target_group.document_secondary.arn
-      }
-    }
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.document_secondary.arn
   }
 
   condition {
