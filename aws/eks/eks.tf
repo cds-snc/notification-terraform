@@ -56,7 +56,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   node_role_arn   = aws_iam_role.eks-worker-role.arn
   subnet_ids      = var.vpc_private_subnets
 
-  disk_size = var.env == "production" ? 20 : 80
+  disk_size = 80
 
   release_version = var.eks_node_ami_version
   instance_types  = var.primary_worker_instance_types
