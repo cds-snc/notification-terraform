@@ -15,10 +15,6 @@ resource "aws_quicksight_data_set" "notifications" {
         type = "STRING"
       }
       input_columns {
-        name = "id"
-        type = "STRING"
-      }
-      input_columns {
         name = "template_id"
         type = "STRING"
       }
@@ -51,7 +47,7 @@ resource "aws_quicksight_data_set" "notifications" {
         type = "DATETIME"
       }
       input_columns {
-        name = "upDATETIMEd_at"
+        name = "updated_at"
         type = "DATETIME"
       }
     }
