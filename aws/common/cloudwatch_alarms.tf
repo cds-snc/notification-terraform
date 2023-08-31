@@ -338,14 +338,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-warning" {
   alarm_name          = "sqs-send-sms-high-queue-delay-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in send sms high priority queue >= 20 seconds for 3 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send sms high priority queue >= 10 seconds for 3 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Average"
-  threshold           = 20
+  threshold           = 10
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -411,14 +411,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-critical
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-warning" {
   alarm_name          = "sqs-send-sms-low-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 60 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 10 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = "5"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
-  statistic           = "Maximum"
-  threshold           = 60 * 60
+  statistic           = "Average"
+  threshold           = 60 * 10
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
