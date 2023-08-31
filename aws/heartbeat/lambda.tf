@@ -1,5 +1,5 @@
 module "heartbeat" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v0.0.45"
+  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v0.0.49"
   name                   = "heartbeat"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn
