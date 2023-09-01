@@ -20,7 +20,7 @@ resource "aws_quicksight_data_set" "notifications" {
       }
       input_columns {
         name = "template_version"
-        type = "STRING"
+        type = "INTEGER"
       }
       input_columns {
         name = "service_id"
@@ -51,5 +51,15 @@ resource "aws_quicksight_data_set" "notifications" {
         type = "DATETIME"
       }
     }
+  }
+  permissions {
+    actions = [
+      "quicksight:DescribeDataSet",
+      "quicksight:DescribeDataSetPermissions",
+      "quicksight:PassDataSet",
+      "quicksight:DescribeIngestion",
+      "quicksight:ListIngestions",
+    ]
+    principal = aws_quicksight_group.dataset_full.arn
   }
 }
