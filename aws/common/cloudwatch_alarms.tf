@@ -357,13 +357,13 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-critical" 
   alarm_name                = "sqs-send-sms-high-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-high queue >= 60 seconds for 5 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "5"
+  evaluation_periods        = "6"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
   period                    = 60
   statistic                 = "Average"
   threshold                 = 60
-  datapoints_to_alarm       = 5
+  datapoints_to_alarm       = 6
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
