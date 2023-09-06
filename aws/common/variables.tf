@@ -235,9 +235,3 @@ variable "create_cbs_bucket" {
   type        = bool
   default     = false
 }
-
-variable "cloudwatch_enabled" {
-  type        = bool
-  default     = true
-  description = "Use this flag to enable/disable cloudwatch logs. Useful for saving money on scratch accounts"
-}
