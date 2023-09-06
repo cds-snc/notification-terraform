@@ -103,35 +103,35 @@ output "sns_alert_ok_arn_us_east_1" {
 }
 
 output "sns_deliveries_ca_central_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].arn : ""
 }
 
 output "sns_deliveries_ca_central_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].name : ""
 }
 
 output "sns_deliveries_failures_ca_central_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].arn : ""
 }
 
 output "sns_deliveries_failures_ca_central_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].name : ""
 }
 
 output "sns_deliveries_us_west_2_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries_us_west_2.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].arn : ""
 }
 
 output "sns_deliveries_us_west_2_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries_us_west_2.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].name : ""
 }
 
 output "sns_deliveries_failures_us_west_2_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].arn : ""
 }
 
 output "sns_deliveries_failures_us_west_2_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].name : ""
 }
 
 output "sqs_notify_internal_tasks_arn" {
