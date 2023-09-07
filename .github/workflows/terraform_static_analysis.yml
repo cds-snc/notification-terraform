@@ -21,4 +21,4 @@ jobs:
           quiet: true
           soft_fail: true
           download_external_modules: true
-          output: cli
+          output_format: cli
