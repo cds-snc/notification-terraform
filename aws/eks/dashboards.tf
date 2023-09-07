@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "elb" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Elastic-Load-Balancers"
   dashboard_body = <<EOF
 {
@@ -297,6 +298,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "errors" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Errors"
   dashboard_body = <<EOF
 {
@@ -365,6 +367,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "kubernetes" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Kubernetes"
   dashboard_body = <<EOF
 {
@@ -504,6 +507,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "new-slo" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "New-SLO"
   dashboard_body = <<EOF
 {
@@ -764,6 +768,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "slos" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SLOs"
   dashboard_body = <<EOF
 {

@@ -32,6 +32,7 @@ data "aws_iam_policy_document" "sns_to_sqs_sms_callbacks" {
 # CloudWatch log groups for SNS deliveries in ca-central-1
 ##
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
+  count         = var.cloudwatch_enabled ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = module.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.${var.region}.amazonaws.com"
@@ -39,6 +40,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_ca_central_to_lambda" {
+  count           = var.cloudwatch_enabled ? 1 : 0
   name            = "sns_deliveries_ca_central"
   log_group_name  = var.sns_deliveries_ca_central_name
   filter_pattern  = ""
@@ -46,6 +48,7 @@ resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_ca_central_to_
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures" {
+  count         = var.cloudwatch_enabled ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = module.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.${var.region}.amazonaws.com"
@@ -53,6 +56,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_failures_ca_central_to_lambda" {
+  count           = var.cloudwatch_enabled ? 1 : 0
   name            = "sns_deliveries_failures_ca_central"
   log_group_name  = var.sns_deliveries_failures_ca_central_name
   filter_pattern  = ""
@@ -63,6 +67,7 @@ resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_failures_ca_ce
 # CloudWatch log groups for SNS deliveries in us-west-2
 ##
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes_us_west_2" {
+  count         = var.cloudwatch_enabled ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = module.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.us-west-2.amazonaws.com"
@@ -70,6 +75,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes_us_west_2"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_us_west_2_to_lambda" {
+  count           = var.cloudwatch_enabled ? 1 : 0
   provider        = aws.us-west-2
   name            = "sns_deliveries_us_west_2_to_lambda"
   log_group_name  = var.sns_deliveries_us_west_2_name
@@ -78,6 +84,7 @@ resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_us_west_2_to_l
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures_us_west_2" {
+  count         = var.cloudwatch_enabled ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = module.sns_to_sqs_sms_callbacks.function_name
   principal     = "logs.us-west-2.amazonaws.com"
@@ -85,6 +92,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures_us_west_2" 
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_failures_us_west_2_to_lambda" {
+  count           = var.cloudwatch_enabled ? 1 : 0
   provider        = aws.us-west-2
   name            = "sns_deliveries_failures_us_west_2_to_lambda"
   log_group_name  = var.sns_deliveries_failures_us_west_2_name

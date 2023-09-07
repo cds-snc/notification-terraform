@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Redis-batch-saving"
   dashboard_body = <<EOF
 {
@@ -179,6 +180,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "emails" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Emails"
   dashboard_body = <<EOF
 {
@@ -211,13 +213,13 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "properties": {
                 "title": "Email alarms",
                 "alarms": [
-                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-email-queue-delay-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning.arn}"
+                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-email-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning[0].arn}"
                 ]
             }
         },
@@ -424,6 +426,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "queues" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Queues"
   dashboard_body = <<EOF
 {
@@ -500,6 +503,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "sms" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SMS"
   dashboard_body = <<EOF
 {
@@ -513,12 +517,12 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "properties": {
                 "title": "Alarms",
                 "alarms": [
-                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-spending-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-spending-warning.arn}"
+                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-spending-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-spending-warning[0].arn}"
                 ]
             }
         },
@@ -895,6 +899,7 @@ EOF
 
 
 resource "aws_cloudwatch_dashboard" "sensitive" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Platform-admin-access-of-sensitive-services"
   dashboard_body = <<EOF
 {

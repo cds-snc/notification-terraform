@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_query_definition" "admin-api-50X-errors" {
-  name = "ADMIN & API - 50X errors"
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "ADMIN & API - 50X errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -15,7 +16,8 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-errors" {
-  name = "Celery errors"
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Celery errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -31,7 +33,8 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
-  name = "Critical bounces"
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Critical bounces"
 
   log_group_names = [
     local.eks_application_log_group
@@ -47,7 +50,8 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
-  name = "Warning bounces"
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Warning bounces"
 
   log_group_names = [
     local.eks_application_log_group
