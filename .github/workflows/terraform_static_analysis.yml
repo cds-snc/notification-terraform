@@ -16,7 +16,7 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: ./
+          directory: notification-terraform
           framework: terraform 
           soft_fail: true
           download_external_modules: true
