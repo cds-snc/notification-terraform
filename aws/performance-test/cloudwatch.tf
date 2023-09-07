@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_event_rule" "event_rule" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   name                = "perf_test_event_rule"
   schedule_expression = var.schedule_expression
   tags = {
@@ -9,8 +10,9 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
 
 
 resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
-  rule           = aws_cloudwatch_event_rule.event_rule.name
-  event_bus_name = aws_cloudwatch_event_rule.event_rule.event_bus_name
+  count          = var.cloudwatch_enabled ? 1 : 0
+  rule           = aws_cloudwatch_event_rule.event_rule[0].name
+  event_bus_name = aws_cloudwatch_event_rule.event_rule[0].event_bus_name
   arn            = aws_ecs_cluster.perf_test.arn
   role_arn       = aws_iam_role.scheduled_task_perf_test_event_role.arn
 

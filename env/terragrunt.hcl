@@ -107,6 +107,12 @@ variable "cbs_satellite_bucket_name" {
   description = "Name of the Cloud Based Sensor S3 satellite bucket"
   type        = string
 }
+
+variable "cloudwatch_enabled" {
+  type        = bool
+  default     = true
+  description = "Use this flag to enable/disable cloudwatch logs. Useful for saving money on scratch accounts"
+}
 EOF
 }
 

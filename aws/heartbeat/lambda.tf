@@ -22,11 +22,13 @@ resource "aws_lambda_function_event_invoke_config" "heartbeat_invoke_config" {
 }
 
 resource "aws_cloudwatch_event_target" "heartbeat" {
-  arn  = module.heartbeat.function_arn
-  rule = aws_cloudwatch_event_rule.heartbeat_testing.id
+  count = var.cloudwatch_enabled ? 1 : 0
+  arn   = module.heartbeat.function_arn
+  rule  = aws_cloudwatch_event_rule.heartbeat_testing[0].id
 }
 
 resource "aws_cloudwatch_event_rule" "heartbeat_testing" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   name                = "heartbeat_testing"
   description         = "heartbeat_testing event rule"
   schedule_expression = var.schedule_expression
@@ -34,9 +36,10 @@ resource "aws_cloudwatch_event_rule" "heartbeat_testing" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
+  count         = var.cloudwatch_enabled ? 1 : 0
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = module.heartbeat.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.heartbeat_testing.arn
+  source_arn    = aws_cloudwatch_event_rule.heartbeat_testing[0].arn
 }
