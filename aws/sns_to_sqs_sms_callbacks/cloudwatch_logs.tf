@@ -3,6 +3,7 @@
 #
 
 resource "aws_cloudwatch_log_group" "sns_to_sqs_sms_callbacks_log_group" {
+  count             = var.cloudwatch_enabled ? 1 : 0
   name              = "sns_to_sqs_sms_callbacks_log_group"
   retention_in_days = 90
   tags = {
@@ -13,6 +14,7 @@ resource "aws_cloudwatch_log_group" "sns_to_sqs_sms_callbacks_log_group" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns_to_sqs_sms_callbacks-500-errors-api" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   name           = "sns_to_sqs_sms_callbacks-500-errors-api"
   pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\""
   log_group_name = "/aws/lambda/${module.sns_to_sqs_sms_callbacks.function_name}"

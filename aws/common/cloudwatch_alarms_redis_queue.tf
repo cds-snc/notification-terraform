@@ -5,6 +5,7 @@
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "priority-inflights-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "priority-inflights-not-being-processed-warning"
   alarm_description   = "Batch saving priority inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_priority_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -58,6 +59,7 @@ resource "aws_cloudwatch_metric_alarm" "priority-inflights-not-being-processed-w
 
 
 resource "aws_cloudwatch_metric_alarm" "priority_inflights-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "priority-inflights-not-being-processed-critical"
   alarm_description   = "Batch saving priority inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_priority_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -111,6 +113,7 @@ resource "aws_cloudwatch_metric_alarm" "priority_inflights-not-being-processed-c
 }
 
 resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "normal-inflights-not-being-processed-warning"
   alarm_description   = "Batch saving normal inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_normal_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -163,6 +166,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-war
 }
 
 resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "normal-inflights-not-being-processed-critical"
   alarm_description   = "Batch saving normal inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_normal_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -216,6 +220,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-inflights-not-being-processed-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-inflights-not-being-processed-warning"
   alarm_description   = "Batch saving bulk inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -268,6 +273,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-inflights-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-inflights-not-being-processed-critical"
   alarm_description   = "Batch saving bulk inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"

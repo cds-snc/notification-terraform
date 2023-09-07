@@ -4,12 +4,13 @@
 #
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_to_sqs_email_callbacks-api" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning-ses_to_sqs_email_callbacks-api"
   alarm_description   = "One 500 error in 1 minute for ses_to_sqs_email_callbacks api"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api[0].metric_transformation[0].namespace
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
@@ -19,12 +20,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_to
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api"
   alarm_description   = "Ten 500 errors in 5 minutes for ses_to_sqs_email_callbacks-500-errors api"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.ses_to_sqs_email_callbacks-500-errors-api[0].metric_transformation[0].namespace
   period              = "300"
   statistic           = "Sum"
   threshold           = 10
@@ -34,6 +36,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "lambda-ses-delivery-receipts-errors-warning"
   alarm_description   = "5 errors on Lambda ses-to-sqs-email-callbacks in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -52,6 +55,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warn
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "lambda-ses-delivery-receipts-errors-critical"
   alarm_description   = "10 errors on Lambda ses-to-sqs-email-callbacks in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
