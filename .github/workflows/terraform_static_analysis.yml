@@ -21,4 +21,5 @@ jobs:
           quiet: true
           soft_fail: true
           download_external_modules: true
-          output_format: cli
+          output_format: cli,sarif
+          output_file_path: console,results.sarif
