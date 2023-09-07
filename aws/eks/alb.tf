@@ -40,7 +40,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-admin.arn
+    target_group_arn = aws_alb_target_group.admin_secondary.arn
   }
 }
 
@@ -133,7 +133,7 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
+    target_group_arn = aws_alb_target_group.doc_api_secondary.arn
   }
 
   condition {
@@ -189,7 +189,7 @@ resource "aws_lb_listener_rule" "document-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
+    target_group_arn = aws_alb_target_group.doc_api_secondary.arn
   }
 
   condition {
@@ -220,7 +220,7 @@ resource "aws_lb_listener_rule" "api-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-api.arn
+    target_group_arn = aws_alb_target_group.api_secondary.arn
   }
 
   condition {
@@ -319,7 +319,7 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-documentation.arn
+    target_group_arn = aws_alb_target_group.document_secondary.arn
   }
 
   condition {
