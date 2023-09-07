@@ -16,7 +16,7 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: notification-terraform
+          directory: ./notification-terraform
           framework: terraform 
           soft_fail: true
           download_external_modules: true
@@ -27,4 +27,4 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         
         with:
-          sarif_file: results.sarif          
+          sarif_file: ./notification-terraform/results.sarif          
