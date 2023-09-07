@@ -43,6 +43,7 @@ jobs:
 
     - name: Post to slack
       if: steps.latest.outputs.ami != steps.current.outputs.ami
+      #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available: <https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html|${{ steps.latest.outputs.ami }}>"}}]}'
         curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 

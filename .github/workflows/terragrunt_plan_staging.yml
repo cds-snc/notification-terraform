@@ -302,3 +302,10 @@ jobs:
           comment-title: "Staging: sns_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./
+          framework: terraform 
