@@ -6,6 +6,7 @@
 *.tfstate.*
 *.tfvars
 *.yaml
+!.checkov.yaml
 
 # Crash log files
 crash.log
