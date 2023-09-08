@@ -60,6 +60,21 @@ resource "aws_quicksight_data_set" "notifications" {
       "quicksight:DescribeIngestion",
       "quicksight:ListIngestions",
     ]
+    principal = aws_quicksight_group.dataset_viewer.arn
+  }
+  permissions {
+    actions = [
+      "quicksight:ListIngestions",
+      "quicksight:DeleteDataSet",
+      "quicksight:UpdateDataSetPermissions",
+      "quicksight:CancelIngestion",
+      "quicksight:UpdateDataSet",
+      "quicksight:DescribeDataSetPermissions",
+      "quicksight:DescribeDataSet",
+      "quicksight:PassDataSet",
+      "quicksight:CreateIngestion",
+      "quicksight:DescribeIngestion"
+    ]
     principal = aws_quicksight_group.dataset_full.arn
   }
 }
