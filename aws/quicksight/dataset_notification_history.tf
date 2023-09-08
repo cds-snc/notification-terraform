@@ -53,28 +53,11 @@ resource "aws_quicksight_data_set" "notification_history" {
     }
   }
   permissions {
-    actions = [
-      "quicksight:DescribeDataSet",
-      "quicksight:DescribeDataSetPermissions",
-      "quicksight:PassDataSet",
-      "quicksight:DescribeIngestion",
-      "quicksight:ListIngestions",
-    ]
+    actions   = local.dataset_viewer_permissions
     principal = aws_quicksight_group.dataset_viewer.arn
   }
   permissions {
-    actions = [
-      "quicksight:ListIngestions",
-      "quicksight:DeleteDataSet",
-      "quicksight:UpdateDataSetPermissions",
-      "quicksight:CancelIngestion",
-      "quicksight:UpdateDataSet",
-      "quicksight:DescribeDataSetPermissions",
-      "quicksight:DescribeDataSet",
-      "quicksight:PassDataSet",
-      "quicksight:CreateIngestion",
-      "quicksight:DescribeIngestion"
-    ]
-    principal = aws_quicksight_group.dataset_full.arn
+    actions   = local.dataset_owner_permissions
+    principal = aws_quicksight_group.dataset_owner.arn
   }
 }
