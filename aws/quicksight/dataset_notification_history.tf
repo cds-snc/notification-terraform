@@ -6,7 +6,7 @@ resource "aws_quicksight_data_set" "notification_history" {
   import_mode = "SPICE"
 
   physical_table_map {
-    physical_table_map_id = "notification_history"
+    physical_table_map_id = "notification-history"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "notification_history"
