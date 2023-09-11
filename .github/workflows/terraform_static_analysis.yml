@@ -15,9 +15,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
-      - name: Terraform security scan
-        uses: aquasecurity/tfsec-action@v1.0.0
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
         with:
-          version: 'v0.39.26'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          directory: ./
+          framework: terraform 
+          soft_fail: true
+          quiet: true
+          download_external_modules: true
+          output_format: cli,sarif
+          output_file_path: console,results.sarif
+          config_file: ./aws/.checkov.yml
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
