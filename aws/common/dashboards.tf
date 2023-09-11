@@ -900,9 +900,10 @@ EOF
 
 resource "aws_cloudwatch_dashboard" "sensitive" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  dashboard_name = "Temp_admin_views_of_sensitive_services"
+  dashboard_name = "Platform-admin-access-of-sensitive-services"
   dashboard_body = <<EOF
 {
+    "start": "-PT168H",
     "widgets": [
         {
             "height": 17,
@@ -911,11 +912,11 @@ resource "aws_cloudwatch_dashboard" "sensitive" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /(?<url>\\/service\\/.*) (?<admin>.*)\\|.*/\n| display @timestamp, admin, url\n| sort @timestamp desc\n| limit 5000\n",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /(?<url>\\/service\\/.*) (?<admin>.*)\\|.*/\n| parse log \"Sensitive Admin API request * \" as request_type\n| display @timestamp, admin, url, request_type\n| sort request_type desc, @timestamp desc\n| limit 5000\n",
                 "region": "${var.region}",
                 "stacked": false,
-                "view": "table",
-                "title": "Details"
+                "title": "Details",
+                "view": "table"
             }
         },
         {
@@ -925,8 +926,9 @@ resource "aws_cloudwatch_dashboard" "sensitive" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /service\\/(?<service>[0-9a-f\\-]*)\\/.* (?<admin>.*)\\|.*/\n| stats count(*) as total by service, admin\n| sort total desc\n",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log \n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /service\\/(?<service>[0-9a-f\\-]*)\\/.* (?<admin>.*)\\|.*/\n| parse log \"Sensitive Admin API request * \" as request_type\n| stats count(*) as total by service, admin, request_type\n| sort request_type desc, total desc\n",
                 "region": "${var.region}",
+                "stacked": false,
                 "title": "Summary ordered by total",
                 "view": "table"
             }
