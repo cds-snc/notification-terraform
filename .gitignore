@@ -7,6 +7,10 @@
 *.tfvars
 *.yaml
 !.checkov.yaml
+!.checkov.yml
+
+# Checkov dependencies
+.external_modules
 
 # Crash log files
 crash.log
