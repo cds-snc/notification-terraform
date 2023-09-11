@@ -53,13 +53,11 @@ resource "aws_quicksight_data_set" "notifications" {
     }
   }
   permissions {
-    actions = [
-      "quicksight:DescribeDataSet",
-      "quicksight:DescribeDataSetPermissions",
-      "quicksight:PassDataSet",
-      "quicksight:DescribeIngestion",
-      "quicksight:ListIngestions",
-    ]
-    principal = aws_quicksight_group.dataset_full.arn
+    actions   = local.dataset_viewer_permissions
+    principal = aws_quicksight_group.dataset_viewer.arn
+  }
+  permissions {
+    actions   = local.dataset_owner_permissions
+    principal = aws_quicksight_group.dataset_owner.arn
   }
 }
