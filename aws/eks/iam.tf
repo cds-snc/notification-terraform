@@ -226,8 +226,8 @@ data "aws_iam_policy" "ssm_managed_instance" {
 
 
 module "iam_assumable_role_karpenter" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.28.0"
+  source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc?ref=8af6d28"
+  #version                       = "5.28.0"
   create_role                   = true
   role_name                     = "karpenter-controller-${var.eks_cluster_name}"
   provider_url                  = data.aws_eks_cluster.notify_cluster.identity[0].oidc[0].issuer
@@ -261,6 +261,11 @@ resource "aws_iam_role_policy_attachment" "karpenter-cluster-managed-instance-co
 }
 
 resource "aws_iam_role_policy" "karpenter_controller" {
+  #checkov:skip=CKV_AWS_290:The Karpenter IAM requires blanket access
+  #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilge escalation
+  #checkov:skip=CKV_AWS_289:The Karpenter IAM requires wide scale permissions management
+  #checkov:skip=CKV_AWS_355:The Karpenter IAM requires blanket access
+  #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilge escalation
   name = "karpenter-policy-${var.eks_cluster_name}"
   role = module.iam_assumable_role_karpenter.iam_role_name
   policy = jsonencode({
