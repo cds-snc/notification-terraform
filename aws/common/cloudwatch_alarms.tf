@@ -433,9 +433,9 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-critical
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-warning" {
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-send-sms-low-queue-warning"
+  alarm_name          = "sqs-send-sms-low-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 10 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "5"
@@ -451,9 +451,9 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-critical" {
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-critical" {
   count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-send-sms-low-queue-critical"
+  alarm_name                = "sqs-send-sms-low-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 3 hours"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
