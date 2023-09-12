@@ -148,6 +148,7 @@ jobs:
 
       - name: Slack message on failure
         if: ${{ failure() }}
+        #checkov:skip=CKV_GHA_3:This is an expected use of curl
         run: |
           json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|Merge to main (Production)>"}}]}'
           curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}

@@ -5,6 +5,7 @@
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-warning"
   alarm_description   = "SNS spending reached 80% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -21,6 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
 resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-warning" {
   provider = aws.us-west-2
 
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-us-west-2-warning"
   alarm_description   = "SNS spending reached 80% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -35,6 +37,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-critical"
   alarm_description   = "SNS spending reached 90% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -52,6 +55,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
 resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
   provider = aws.us-west-2
 
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-us-west-2-critical"
   alarm_description   = "SNS spending reached 90% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -67,6 +71,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
   alarm_description   = "SMS success rate to Canadian numbers is below 60% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
@@ -88,6 +93,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-warning" {
   provider = aws.us-west-2
 
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-warning"
   alarm_description   = "SMS success rate to Canadian numbers is below 85% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
@@ -107,6 +113,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
   alarm_description   = "SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
@@ -129,6 +136,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-critical" {
   provider = aws.us-west-2
 
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-critical"
   alarm_description   = "SMS success rate to Canadian numbers is below 75% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
@@ -149,12 +157,13 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-blocked-as-spam-warning"
   alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam[0].metric_transformation[0].namespace
   period              = 60 * 60 * 12
   statistic           = "Sum"
   threshold           = 10
@@ -165,12 +174,13 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warning" {
   provider = aws.us-west-2
 
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-blocked-as-spam-us-west-2-warning"
   alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2[0].metric_transformation[0].namespace
   period              = 60 * 60 * 12
   statistic           = "Sum"
   threshold           = 10
@@ -179,12 +189,13 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-phone-carrier-unavailable-warning"
   alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable[0].metric_transformation[0].namespace
   period              = 60 * 60 * 3
   statistic           = "Sum"
   threshold           = 100
@@ -195,12 +206,13 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warnin
 resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-west-2-warning" {
   provider = aws.us-west-2
 
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-phone-carrier-unavailable-us-west-2-warning"
   alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2[0].metric_transformation[0].namespace
   period              = 60 * 60 * 3
   statistic           = "Sum"
   threshold           = 100
@@ -209,12 +221,13 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-rate-exceeded-warning"
   alarm_description   = "At least 1 SNS SMS rate exceeded error in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded[0].metric_transformation[0].namespace
   period              = 60 * 5
   statistic           = "Sum"
   threshold           = 1
@@ -225,12 +238,13 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-warning" {
 resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning" {
   provider = aws.us-west-2
 
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-rate-exceeded-us-west-2-warning"
   alarm_description   = "At least 1 SNS SMS rate exceeded error in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2[0].metric_transformation[0].namespace
   period              = 60 * 5
   statistic           = "Sum"
   threshold           = 1
@@ -239,6 +253,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-bounce-rate-warning"
   alarm_description         = "Bounce rate >=5% over the last 12 hours"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -254,6 +269,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-bounce-rate-critical"
   alarm_description         = "Bounce rate >=7% over the last 12 hours"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -270,6 +286,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-complaint-rate-warning"
   alarm_description         = "Complaint rate >=0.3% over the last 12 hours"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -285,6 +302,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-complaint-rate-critical"
   alarm_description         = "Complaint rate >=0.4% over the last 12 hours"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -301,6 +319,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-sms-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 10 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -318,6 +337,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-sms-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in SMS queue is older than 15 minutes for 5 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -336,7 +356,123 @@ resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "sqs-send-sms-high-queue-delay-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send sms high priority queue >= 10 seconds for 3 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "3"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 10
+  treat_missing_data  = "missing"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "sqs-send-sms-high-queue-delay-critical"
+  alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-high queue >= 60 seconds for 5 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "6"
+  metric_name               = "ApproximateAgeOfOldestMessage"
+  namespace                 = "AWS/SQS"
+  period                    = 60
+  statistic                 = "Average"
+  threshold                 = 60
+  datapoints_to_alarm       = 6
+  treat_missing_data        = "missing"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "sqs-send-sms-medium-queue-delay-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-medium queue is >= 10 minutes for 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "5"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 60 * 10
+  treat_missing_data  = "missing"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "sqs-send-sms-medium-queue-delay-critical"
+  alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-medium queue is >= 15 minutes for 5 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "5"
+  metric_name               = "ApproximateAgeOfOldestMessage"
+  namespace                 = "AWS/SQS"
+  period                    = 60
+  statistic                 = "Average"
+  threshold                 = 60 * 15
+  treat_missing_data        = "missing"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "sqs-send-sms-low-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 10 minutes for 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "5"
+  metric_name         = "ApproximateAgeOfOldestMessage"
+  namespace           = "AWS/SQS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 60 * 10
+  treat_missing_data  = "missing"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "sqs-send-sms-low-queue-critical"
+  alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 3 hours"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "ApproximateAgeOfOldestMessage"
+  namespace                 = "AWS/SQS"
+  period                    = 60
+  statistic                 = "Maximum"
+  threshold                 = 60 * 60 * 3
+  treat_missing_data        = "missing"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  dimensions = {
+    QueueName = "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-throttled-sms-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in throttled SMS queue >= 5 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -354,6 +490,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-throttled-sms-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in throttled SMS queue >= 10 minute for 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -373,6 +510,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-priority-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in high priority queue >= 20 seconds for 3 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -390,6 +528,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-priority-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in high priority queue >= 60 seconds for 5 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -410,6 +549,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-email-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in email queue >= 30 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -427,6 +567,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-email-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in email queue >= 45 minutes for 5 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -446,6 +587,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-bulk-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in bulk queue reached 60 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -463,6 +605,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-bulk-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in bulk queue reached 3 hours"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -482,6 +625,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rate-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-throttled-sms-tasks-receive-rate-warning"
   alarm_description   = "NumberOfMessagesReceived is more than the expected maximum rate for send-throttled-sms-tasks SQS queue"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -502,6 +646,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rate-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-throttled-sms-tasks-receive-rate-critical"
   alarm_description   = "NumberOfMessagesReceived is more than the expected maximum rate for send-throttled-sms-tasks SQS queue"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -524,6 +669,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-db-tasks-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 5 minutes in a 1-minute period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -541,6 +687,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-db-tasks-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 15 minute for 1 minute"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -560,6 +707,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-priority-db-tasks-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 5 minutes in a 1-minute period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -577,6 +725,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-war
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-priority-db-tasks-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 15 minute for 1 minute"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -596,6 +745,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-normal-db-tasks-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 5 minutes in a 1-minute period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -613,6 +763,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-normal-db-tasks-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 15 minute for 1 minute"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -632,6 +783,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-criti
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-bulk-db-tasks-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 5 minutes in a 1-minute period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -649,6 +801,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-bulk-db-tasks-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 15 minute for 1 minute"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -669,6 +822,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critica
 
 
 resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "healtheck-page-slow-response-warning"
   alarm_description   = "Healthcheck page response time is above 100ms for 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -686,6 +840,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "healtheck-page-slow-response-critical"
   alarm_description         = "Healthcheck page response time is above 200ms for 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -705,6 +860,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "no-emails-sent-1-minute-warning"
   alarm_description   = "SES sending rate is less than 1 per minute"
   comparison_operator = "LessThanThreshold"
@@ -719,6 +875,7 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "no-emails-sent-5-minutes-critical"
   alarm_description         = "No emails delivered with SES in 5 minutes"
   comparison_operator       = "LessThanThreshold"
@@ -735,6 +892,7 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sign-in-3-500-error-15-minutes-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sign-in-3-500-error-15-minutes-critical"
   alarm_description   = "Three 500 errors in 15 minutes for sign-in"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -750,6 +908,7 @@ resource "aws_cloudwatch_metric_alarm" "sign-in-3-500-error-15-minutes-critical"
 }
 
 resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "contact-3-500-error-15-minutes-critical"
   alarm_description   = "Three 500 errors in 15 minutes for contact us"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -765,6 +924,7 @@ resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical"
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-bucket-size-warning"
   alarm_description   = "Document download S3 bucket size is larger than ${var.alarm_warning_document_download_bucket_size_gb} GB"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -782,6 +942,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scan-files-document-download-bucket-size-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "scan-files-document-download-bucket-size-warning"
   alarm_description   = "Scan files document download S3 bucket size is larger than ${var.alarm_warning_document_download_bucket_size_gb} GB"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -799,6 +960,7 @@ resource "aws_cloudwatch_metric_alarm" "scan-files-document-download-bucket-size
 }
 
 resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "live-service-over-daily-rate-limit-warning"
   alarm_description   = "A live service reached its daily rate limit and has been blocked from sending more notifications"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -816,6 +978,7 @@ resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "inflights-not-being-processed-warning"
   alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -867,6 +1030,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "inflights-not-being-processed-critical"
   alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_inflight_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -918,6 +1082,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-buffer-not-being-processed-warning"
   alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -970,6 +1135,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-buffer-not-being-processed-critical"
   alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -1021,6 +1187,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "priority-bulk-buffer-not-being-processed-warning"
   alarm_description   = "Priority bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -1074,6 +1241,7 @@ resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "priority_bulk-buffer-not-being-processed-critical"
   alarm_description   = "Priority bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -1128,6 +1296,7 @@ resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critic
 }
 
 resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "normal-bulk-buffer-not-being-processed-warning"
   alarm_description   = "Normal bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -1181,6 +1350,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "normal_bulk-buffer-not-being-processed-critical"
   alarm_description   = "Normal bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -1235,6 +1405,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-critical
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-bulk-buffer-not-being-processed-warning"
   alarm_description   = "Bulk bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -1288,6 +1459,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk_bulk-buffer-not-being-processed-critical"
   alarm_description   = "Bulk bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
   comparison_operator = "GreaterThanThreshold"
@@ -1342,6 +1514,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "expired-inflight-warning"
   alarm_description   = "An inflight has expired. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1372,6 +1545,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "expired-inflight-critical"
   alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes, check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"

@@ -5,6 +5,7 @@
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-1-500-error-1-minute-warning"
   alarm_description   = "One 500 error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -22,6 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-10-500-error-5-minutes-critical"
   alarm_description   = "Ten 500 errors in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -41,6 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-1-502-error-1-minute-warning"
   alarm_description   = "One 502 error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -58,6 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-10-502-error-5-minutes-critical"
   alarm_description   = "Ten 502 errors in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -76,6 +80,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-high-request-count-warning"
   alarm_description   = "More than 300 4XX requests in 10 minutes on ${aws_alb_target_group.notification-canada-ca-document-api.name} target group"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -94,12 +99,13 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-celery-error-1-minute-warning"
   alarm_description   = "One Celery error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
@@ -108,12 +114,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-celery-error-1-minute-critical"
   alarm_description   = "Ten Celery errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 10
@@ -123,12 +130,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning"
   alarm_description   = "One 500 error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.web-500-errors[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.web-500-errors[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
@@ -137,12 +145,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical"
   alarm_description   = "Ten 500 errors in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.web-500-errors.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.web-500-errors[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.web-500-errors[0].metric_transformation[0].namespace
   period              = 300
   statistic           = "Sum"
   threshold           = 10
@@ -152,6 +161,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "admin-pods-high-cpu-warning"
   alarm_description         = "Average CPU of admin pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -172,6 +182,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-pods-high-cpu-warning"
   alarm_description         = "Average CPU of API pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -192,6 +203,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-pods-high-cpu-warning"
   alarm_description         = "Average CPU of Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -212,6 +224,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-sms-pods-high-cpu-warning"
   alarm_description         = "Average CPU of celery-sms pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -233,6 +246,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
 
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "admin-pods-high-memory-warning"
   alarm_description         = "Average memory of admin pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -253,6 +267,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-pods-high-memory-warning"
   alarm_description         = "Average memory of API pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -273,6 +288,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-pods-high-memory-warning"
   alarm_description         = "Average memory of Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -293,6 +309,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-sms-pods-high-memory-warning"
   alarm_description         = "Average memory of celery-sms >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -313,6 +330,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "ddos-detected-load-balancer-critical"
   alarm_description   = "DDoS has been detected on the load balancer"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -331,12 +349,13 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-malware-detected-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-malware-detected-1-minute-warning"
   alarm_description   = "One malware detected error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.malware-detected[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.malware-detected[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
@@ -345,12 +364,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-malware-detected-1-minute-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-malware-detected-1-minute-critical"
   alarm_description   = "Ten malware detected errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.malware-detected.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.malware-detected[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.malware-detected[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 10
@@ -360,12 +380,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-scanfiles-timeout-5-minutes-warning"
   alarm_description   = "One scanfiles timeout detected error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.scanfiles-timeout.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.scanfiles-timeout.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.scanfiles-timeout[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.scanfiles-timeout[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
@@ -374,12 +395,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-critical-bounce-rate-1-minute-warning"
   alarm_description   = "One service exceeding 10% bounce rate in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-critical.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-critical.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
@@ -388,12 +410,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-warning-bounce-rate-3-minutes-warning"
   alarm_description   = "One service exceeding 5% bounce rate in 3 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
-  metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-warning.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-warning.metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-warning[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-warning[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
@@ -402,6 +425,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "kubernetes-failed-nodes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -427,6 +451,7 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -454,6 +479,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-beat-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -481,6 +507,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -508,6 +535,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "admin-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -535,6 +563,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -562,6 +591,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "documentation-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -589,6 +619,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -616,12 +647,13 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-api-pods-detected"
   alarm_description         = "One or more Kubernetes API Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
-  metric_name               = aws_cloudwatch_log_metric_filter.api-evicted-pods.name
-  namespace                 = aws_cloudwatch_log_metric_filter.api-evicted-pods.metric_transformation[0].namespace
+  metric_name               = aws_cloudwatch_log_metric_filter.api-evicted-pods[0].name
+  namespace                 = aws_cloudwatch_log_metric_filter.api-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
@@ -632,12 +664,13 @@ resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-celery-pods-detected"
   alarm_description         = "One or more Kubernetes Celery Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
-  metric_name               = aws_cloudwatch_log_metric_filter.celery-evicted-pods.name
-  namespace                 = aws_cloudwatch_log_metric_filter.celery-evicted-pods.metric_transformation[0].namespace
+  metric_name               = aws_cloudwatch_log_metric_filter.celery-evicted-pods[0].name
+  namespace                 = aws_cloudwatch_log_metric_filter.celery-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
@@ -648,12 +681,13 @@ resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-admin-pods-detected"
   alarm_description         = "One or more Kubernetes Admin Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
-  metric_name               = aws_cloudwatch_log_metric_filter.admin-evicted-pods.name
-  namespace                 = aws_cloudwatch_log_metric_filter.admin-evicted-pods.metric_transformation[0].namespace
+  metric_name               = aws_cloudwatch_log_metric_filter.admin-evicted-pods[0].name
+  namespace                 = aws_cloudwatch_log_metric_filter.admin-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
@@ -664,12 +698,13 @@ resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-document-download-pods-detected"
   alarm_description         = "One or more Kubernetes Document Download Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
-  metric_name               = aws_cloudwatch_log_metric_filter.document-download-evicted-pods.name
-  namespace                 = aws_cloudwatch_log_metric_filter.document-download-evicted-pods.metric_transformation[0].namespace
+  metric_name               = aws_cloudwatch_log_metric_filter.document-download-evicted-pods[0].name
+  namespace                 = aws_cloudwatch_log_metric_filter.document-download-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
@@ -680,12 +715,13 @@ resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-documentation-pods-detected"
   alarm_description         = "One or more Kubernetes Documentation Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
-  metric_name               = aws_cloudwatch_log_metric_filter.documentation-evicted-pods.name
-  namespace                 = aws_cloudwatch_log_metric_filter.documentation-evicted-pods.metric_transformation[0].namespace
+  metric_name               = aws_cloudwatch_log_metric_filter.documentation-evicted-pods[0].name
+  namespace                 = aws_cloudwatch_log_metric_filter.documentation-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1

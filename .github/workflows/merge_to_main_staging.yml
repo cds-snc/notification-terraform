@@ -139,10 +139,10 @@ jobs:
           cd env/staging/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/quicksight
-        run: |
-          cd env/staging/quicksight
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+      # - name: Apply aws/quicksight
+      #   run: |
+      #     cd env/staging/quicksight
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-google-cidr
         run: |
@@ -168,6 +168,7 @@ jobs:
 
       - name: Slack message on failure
         if: ${{ failure() }}
+        #checkov:skip=CKV_GHA_3:This is an expected use of curl
         run: |
           json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|Merge to main (Staging)>"}}]}'
           curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}

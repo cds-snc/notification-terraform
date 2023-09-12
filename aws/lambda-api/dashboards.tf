@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "api-lambda" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "API-Lambda"
   dashboard_body = <<EOF
 {
