@@ -69,22 +69,3 @@ output "alb_arn_suffix" {
 output "quicksight_security_group_id" {
   value = aws_security_group.quicksight.id
 }
-
-###
-# Secondary Target groups
-###
-output "doc_api_secondary" {
-  value = aws_alb_target_group.doc_api_secondary.arn
-}
-
-output "document_secondary" {
-  value = aws_alb_target_group.document_secondary.arn
-}
-
-output "api_secondary" {
-  value = aws_alb_target_group.api_secondary.arn
-}
-
-output "admin_secondary" {
-  value = aws_alb_target_group.admin_secondary.arn
-}
