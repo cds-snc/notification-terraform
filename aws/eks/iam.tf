@@ -265,7 +265,7 @@ resource "aws_iam_role_policy" "karpenter_controller" {
   #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilge escalation
   #checkov:skip=CKV_AWS_289:The Karpenter IAM requires wide scale permissions management
   #checkov:skip=CKV_AWS_355:The Karpenter IAM requires blanket access
-  #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilge escalation
+  #checkov:skip=CKV_AWS_288:The Karpenter IAM requires the ability to read pricing info
   name = "karpenter-policy-${var.eks_cluster_name}"
   role = module.iam_assumable_role_karpenter.iam_role_name
   policy = jsonencode({
