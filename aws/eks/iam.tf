@@ -2,6 +2,8 @@
 # AWS EKS IAM cluster roles
 ###
 
+
+
 resource "aws_iam_role" "eks-cluster-role" {
   name = "eks-cluster-role"
 
@@ -13,6 +15,13 @@ resource "aws_iam_role" "eks-cluster-role" {
       "Effect": "Allow",
       "Principal": {
         "Service": "eks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
@@ -158,6 +167,7 @@ resource "aws_iam_role_policy_attachment" "notification-fargate-worker-policy" {
 }
 
 
+
 ###
 # AWS EKS Service account
 ###
@@ -198,4 +208,93 @@ resource "aws_iam_role" "notification-service-account-role" {
 resource "aws_iam_role_policy_attachment" "notification-service-worker-policy" {
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.notification-service-account-role.name
+}
+
+###
+# Karpenter IAM
+###
+
+data "aws_eks_cluster" "notify_cluster" {
+  # This is required for fetching the oidc provider
+  name       = var.eks_cluster_name
+  depends_on = [aws_eks_cluster.notification-canada-ca-eks-cluster]
+}
+
+data "aws_iam_policy" "ssm_managed_instance" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+
+module "iam_assumable_role_karpenter" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "5.28.0"
+  create_role                   = true
+  role_name                     = "karpenter-controller-${var.eks_cluster_name}"
+  provider_url                  = data.aws_eks_cluster.notify_cluster.identity[0].oidc[0].issuer
+  oidc_fully_qualified_subjects = ["system:serviceaccount:karpenter:karpenter"]
+}
+
+resource "aws_iam_instance_profile" "karpenter" {
+  name = "KarpenterNodeInstanceProfile-${var.eks_cluster_name}"
+  role = aws_iam_role.eks-worker-role.name
+}
+
+resource "aws_iam_role_policy_attachment" "karpenter_ssm_policy" {
+  role       = aws_iam_role.eks-worker-role.name
+  policy_arn = data.aws_iam_policy.ssm_managed_instance.arn
+}
+resource "aws_iam_role_policy_attachment" "karpenter-cluster-worker-node" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  role       = module.iam_assumable_role_karpenter.iam_role_name
+}
+resource "aws_iam_role_policy_attachment" "karpenter-cluster-cni" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = module.iam_assumable_role_karpenter.iam_role_name
+}
+resource "aws_iam_role_policy_attachment" "karpenter-cluster-ecr" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  role       = module.iam_assumable_role_karpenter.iam_role_name
+}
+resource "aws_iam_role_policy_attachment" "karpenter-cluster-managed-instance-core" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  role       = module.iam_assumable_role_karpenter.iam_role_name
+}
+
+resource "aws_iam_role_policy" "karpenter_controller" {
+  #checkov:skip=CKV_AWS_290:The Karpenter IAM requires blanket access
+  #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilege escalation
+  #checkov:skip=CKV_AWS_289:The Karpenter IAM requires wide scale permissions management
+  #checkov:skip=CKV_AWS_355:The Karpenter IAM requires blanket access
+  #checkov:skip=CKV_AWS_288:The Karpenter IAM requires the ability to read pricing info
+  name = "karpenter-policy-${var.eks_cluster_name}"
+  role = module.iam_assumable_role_karpenter.iam_role_name
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ssm:GetParameter",
+          "iam:PassRole",
+          "ec2:DescribeImages",
+          "ec2:RunInstances",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DescribeLaunchTemplates",
+          "ec2:DescribeInstances",
+          "ec2:DescribeInstanceTypes",
+          "ec2:DescribeInstanceTypeOfferings",
+          "ec2:DescribeAvailabilityZones",
+          "ec2:DeleteLaunchTemplate",
+          "ec2:CreateTags",
+          "ec2:CreateLaunchTemplate",
+          "ec2:CreateFleet",
+          "ec2:TerminateInstances",
+          "ec2:DescribeSpotPriceHistory",
+          "pricing:GetProducts"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
 }

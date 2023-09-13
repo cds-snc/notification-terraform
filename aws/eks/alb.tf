@@ -361,3 +361,4 @@ resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
   resource_arn = aws_alb.notification-canada-ca.arn
   web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
 }
+

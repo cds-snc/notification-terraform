@@ -31,6 +31,7 @@ inputs = {
   sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
   sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
   sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
+  eks_cluster_name                                                   = "notification-canada-ca-scratch-eks-cluster"  
 }
 
 # See QueueNames in
