@@ -262,7 +262,7 @@ resource "aws_iam_role_policy_attachment" "karpenter-cluster-managed-instance-co
 
 resource "aws_iam_role_policy" "karpenter_controller" {
   #checkov:skip=CKV_AWS_290:The Karpenter IAM requires blanket access
-  #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilge escalation
+  #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilege escalation
   #checkov:skip=CKV_AWS_289:The Karpenter IAM requires wide scale permissions management
   #checkov:skip=CKV_AWS_355:The Karpenter IAM requires blanket access
   #checkov:skip=CKV_AWS_288:The Karpenter IAM requires the ability to read pricing info
