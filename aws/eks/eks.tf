@@ -81,8 +81,9 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   ]
 
   tags = {
-    Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    Name                     = "notification-canada-ca"
+    CostCenter               = "notification-canada-ca-${var.env}"
+    "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
 
@@ -120,8 +121,9 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
   ]
 
   tags = {
-    Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    Name                     = "notification-canada-ca"
+    CostCenter               = "notification-canada-ca-${var.env}"
+    "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
 
