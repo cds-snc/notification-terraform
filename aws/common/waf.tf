@@ -77,7 +77,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul"
+    regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul|/new-features|/nouvelles-fonctionnalites"
   }
 
   tags = {
