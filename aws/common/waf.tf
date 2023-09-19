@@ -57,12 +57,12 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*|/using-a-spreadsheet"
+    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*|/using-a-spreadsheet|/new-f.*"
   }
 
   # GCA routes
   regular_expression {
-    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/securit.+|/privacy.*|/confidentialite.*|/accessibility|/accessibilite"
+    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/securit.+|/privacy.*|/confidentialite.*|/accessibility|/accessibilite|/nouvelles-fonc.*"
   }
 
   # GCA routes
