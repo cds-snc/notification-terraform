@@ -151,3 +151,4 @@ resource "aws_eks_addon" "vpc_cni" {
   addon_version     = var.eks_addon_vpc_cni_version
   resolve_conflicts = "OVERWRITE"
 }
+
