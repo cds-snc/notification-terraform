@@ -454,7 +454,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   alarm_description   = "Celery Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
@@ -482,7 +482,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-beat-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   alarm_description   = "Celery Beat Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
@@ -510,7 +510,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   alarm_description   = "Celery SMS Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
@@ -538,7 +538,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "admin-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   alarm_description   = "Notify Admin Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
@@ -566,7 +566,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   alarm_description   = "Notify K8S API Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
@@ -594,7 +594,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "documentation-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   alarm_description   = "Notify Documentation Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
@@ -622,7 +622,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 2
   alarm_description   = "Notify Document Download API Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
