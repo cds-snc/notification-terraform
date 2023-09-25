@@ -47,7 +47,7 @@ resource "aws_quicksight_data_set" "services" {
         type = "INTEGER"
       }
       input_columns {
-        name = "sms_limit"
+        name = "sms_daily_limit"
         type = "INTEGER"
       }
     }
