@@ -39,6 +39,10 @@ resource "aws_quicksight_data_set" "notification_history" {
         type = "STRING"
       }
       input_columns {
+        name = "queue_name"
+        type = "STRING"
+      }
+      input_columns {
         name = "created_at"
         type = "DATETIME"
       }
@@ -52,6 +56,10 @@ resource "aws_quicksight_data_set" "notification_history" {
       }
       input_columns {
         name = "feedback_type"
+        type = "STRING"
+      }
+      input_columns {
+        name = "feedback_subtype"
         type = "STRING"
       }
     }
@@ -151,21 +159,17 @@ resource "aws_quicksight_data_set" "notification_history" {
           "phone_prefix",
           "rate_multiplier",
           "notification_status",
-          "created_by_id",
-          "postage",
           "queue_name",
           "feedback_type",
           "feedback_subtype",
-          "ses_feedback_id",
-          "ses_feedback_date",
           "created_at[Services]",
-          "active",
-          "count_as_live",
-          "go_live_at",
-          "name",
-          "message_limit",
-          "rate_limit",
-          "sms_daily_limit"
+          "service_active",
+          "service_count_as_live",
+          "service_go_live_at",
+          "service_name",
+          "service_message_limit",
+          "service_rate_limit",
+          "service_sms_daily_limit"
         ]
       }
     }
