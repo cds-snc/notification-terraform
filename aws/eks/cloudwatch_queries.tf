@@ -66,3 +66,20 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "bounce-rate-warnings-and-criticals" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Bounce warnings and criticals grouped by type"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @service_id, @bounce_type
+| filter kubernetes.container_name like /^celery/
+| filter @message like /bounce rate threshold of/
+| parse @message "Service: * has met or exceeded a * bounce rate" as @service_id, @bounce_type
+| stats count(*) by @service_id, @bounce_type
+| limit 100
+QUERY
+}
