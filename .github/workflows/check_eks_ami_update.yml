@@ -30,7 +30,8 @@ jobs:
         LATEST_AMI="$(aws ssm get-parameter \
           --name /aws/service/eks/optimized-ami/$CLUSTER_VERSION/amazon-linux-2/recommended/release_version \
           --query 'Parameter.Value' --output text)"
-        echo "::set-output name=ami::${LATEST_AMI}"
+        echo "ami=${LATEST_AMI}" >> "$GITHUB_OUTPUT"
+
 
     - name: Get Staging cluster node group AMI image release version
       id: current
@@ -39,7 +40,8 @@ jobs:
           --cluster-name ${{ env.EKS_CLUSTER_NAME }} \
           --nodegroup-name ${{ env.EKS_CLUSTER_NODE_GROUP_NAME }} \
           --query 'nodegroup.releaseVersion' --output text)"
-        echo "::set-output name=ami::${CURRENT_AMI}"
+        echo "ami=${CURRENT_AMI}" >> "$GITHUB_OUTPUT"
+
 
     - name: Post to slack
       if: steps.latest.outputs.ami != steps.current.outputs.ami

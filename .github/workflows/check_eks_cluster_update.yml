@@ -27,7 +27,8 @@ jobs:
           | jq -r ".addons[] | .addonVersions[] | .compatibilities[] | .clusterVersion" \
           | sort -r \
           | head -1)"
-        echo "::set-output name=version::${LATEST_VERSION}"
+        echo "version=${LATEST_VERSION}" >> "$GITHUB_OUTPUT"
+
 
     - name: Get Staging cluster version
       id: current
@@ -35,7 +36,8 @@ jobs:
         CLUSTER_VERSION="$(aws eks describe-cluster \
           --name ${{ env.EKS_CLUSTER_NAME }} \
           --query 'cluster.version' --output text)"
-        echo "::set-output name=version::${CLUSTER_VERSION}"
+        echo "version=${CLUSTER_VERSION}" >> "$GITHUB_OUTPUT"
+
 
     - name: Post to slack
       if: steps.latest.outputs.version != steps.current.outputs.version
