@@ -50,6 +50,10 @@ resource "aws_quicksight_data_set" "notifications" {
         name = "updated_at"
         type = "DATETIME"
       }
+      input_columns {
+        name = "feedback_type"
+        type = "STRING"
+      }
     }
   }
   permissions {

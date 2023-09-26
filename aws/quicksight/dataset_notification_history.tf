@@ -50,6 +50,140 @@ resource "aws_quicksight_data_set" "notification_history" {
         name = "updated_at"
         type = "DATETIME"
       }
+      input_columns {
+        name = "feedback_type"
+        type = "STRING"
+      }
+    }
+  }
+
+  logical_table_map {
+    logical_table_map_id = "nh-services"
+    alias                = "Services"
+    data_transforms {
+      rename_column_operation {
+        column_name     = "id"
+        new_column_name = "id[Services]"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "updated_at"
+        new_column_name = "service_updated_at"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "created_at"
+        new_column_name = "service_created_at"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "active"
+        new_column_name = "service_active"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "count_as_live"
+        new_column_name = "service_count_as_live"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "go_live_at"
+        new_column_name = "service_go_live_at"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "name"
+        new_column_name = "service_name"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "message_limit"
+        new_column_name = "service_message_limit"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "rate_limit"
+        new_column_name = "service_rate_limit"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "sms_daily_limit"
+        new_column_name = "service_sms_daily_limit"
+      }
+    }
+    source {
+      data_set_arn = aws_quicksight_data_set.services.arn
+    }
+  }
+
+  logical_table_map {
+    logical_table_map_id = "nh-services-joined"
+    alias                = "Intermediate Table"
+    data_transforms {
+      project_operation {
+        projected_columns = [
+          "id",
+          "job_id",
+          "job_row_number",
+          "service_id",
+          "template_id",
+          "template_version",
+          "api_key_id",
+          "key_type",
+          "notification_type",
+          "created_at",
+          "sent_at",
+          "sent_by",
+          "updated_at",
+          "reference",
+          "billable_units",
+          "client_reference",
+          "international",
+          "phone_prefix",
+          "rate_multiplier",
+          "notification_status",
+          "created_by_id",
+          "postage",
+          "queue_name",
+          "feedback_type",
+          "feedback_subtype",
+          "ses_feedback_id",
+          "ses_feedback_date",
+          "created_at[Services]",
+          "active",
+          "count_as_live",
+          "go_live_at",
+          "name",
+          "message_limit",
+          "rate_limit",
+          "sms_daily_limit"
+        ]
+      }
+    }
+    source {
+      join_instruction {
+        left_operand  = "notification-history"
+        right_operand = "nh-services"
+        type          = "INNER"
+        on_clause     = "{service_id} = {id[Services]}"
+      }
+    }
+  }
+
+  logical_table_map {
+    logical_table_map_id = "notification-history"
+    alias                = "notification_history"
+    source {
+      physical_table_id = "notification-history"
     }
   }
   permissions {
