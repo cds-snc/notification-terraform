@@ -38,3 +38,9 @@ variable "enable_delete_protection" {
   description = "Sets whether or not to enable delete protection."
   default     = true
 }
+
+variable "rds_database_name" {
+  type = string
+  description = "Set the name of the database"
+
+}

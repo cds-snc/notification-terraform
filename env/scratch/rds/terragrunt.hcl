@@ -41,6 +41,7 @@ inputs = {
   rds_instance_type         = "db.t3.medium"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
   sns_alert_general_arn     = dependency.common.outputs.sns_alert_general_arn
+  rds_database_name         = "notificationcanadacascratch"
 }
 
 terraform {
