@@ -40,7 +40,7 @@ variable "enable_delete_protection" {
 }
 
 variable "rds_database_name" {
-  type = string
+  type        = string
   description = "Set the name of the database"
 
 }
