@@ -6,7 +6,7 @@ resource "aws_quicksight_data_set" "services_history" {
   import_mode = "SPICE"
 
   physical_table_map {
-    physical_table_map_id = "services_history"
+    physical_table_map_id = "services-history"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "services_history"
@@ -51,7 +51,7 @@ resource "aws_quicksight_data_set" "services_history" {
         type = "INTEGER"
       }
       input_columns {
-        name = "sms_limit"
+        name = "sms_daily_limit"
         type = "INTEGER"
       }
     }

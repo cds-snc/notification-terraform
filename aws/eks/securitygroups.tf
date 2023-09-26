@@ -328,3 +328,10 @@ resource "aws_security_group_rule" "notification-worker-egress-endpoints-gateway
   security_group_id = aws_security_group.notification-canada-ca-worker.id
   prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 }
+
+# Tag EKS Security Group for Karpenter
+resource "aws_ec2_tag" "eks_created_security_group_tag" {
+  resource_id = data.aws_security_group.eks-securitygroup-rds.id
+  key         = "karpenter.sh/discovery"
+  value       = var.eks_cluster_name
+}

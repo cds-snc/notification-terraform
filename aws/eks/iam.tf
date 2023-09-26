@@ -229,13 +229,13 @@ module "iam_assumable_role_karpenter" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "5.28.0"
   create_role                   = true
-  role_name                     = "karpenter-controller-${var.eks_cluster_name}"
+  role_name                     = "karpenter-controller-eks"
   provider_url                  = data.aws_eks_cluster.notify_cluster.identity[0].oidc[0].issuer
   oidc_fully_qualified_subjects = ["system:serviceaccount:karpenter:karpenter"]
 }
 
 resource "aws_iam_instance_profile" "karpenter" {
-  name = "KarpenterNodeInstanceProfile-${var.eks_cluster_name}"
+  name = "KarpenterNodeInstanceProfile-karpenter-controller-eks"
   role = aws_iam_role.eks-worker-role.name
 }
 
