@@ -43,6 +43,10 @@ resource "aws_quicksight_data_set" "notification_history" {
         type = "STRING"
       }
       input_columns {
+        name = "billable_units"
+        type = "INTEGER"
+      }
+      input_columns {
         name = "created_at"
         type = "DATETIME"
       }
@@ -152,12 +156,7 @@ resource "aws_quicksight_data_set" "notification_history" {
           "sent_at",
           "sent_by",
           "updated_at",
-          "reference",
           "billable_units",
-          "client_reference",
-          "international",
-          "phone_prefix",
-          "rate_multiplier",
           "notification_status",
           "queue_name",
           "feedback_type",
