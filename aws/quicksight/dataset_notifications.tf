@@ -39,6 +39,14 @@ resource "aws_quicksight_data_set" "notifications" {
         type = "STRING"
       }
       input_columns {
+        name = "queue_name"
+        type = "STRING"
+      }
+      input_columns {
+        name = "billable_units"
+        type = "INTEGER"
+      }
+      input_columns {
         name = "created_at"
         type = "DATETIME"
       }
@@ -49,6 +57,14 @@ resource "aws_quicksight_data_set" "notifications" {
       input_columns {
         name = "updated_at"
         type = "DATETIME"
+      }
+      input_columns {
+        name = "feedback_type"
+        type = "STRING"
+      }
+      input_columns {
+        name = "feedback_subtype"
+        type = "STRING"
       }
     }
   }
