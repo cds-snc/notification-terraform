@@ -24,7 +24,7 @@ inputs = {
 
 generate "provider" {
   path      = "provider.tf"
-  if_exists = "overwrite"
+  if_exists = "skip"
   contents  = <<EOF
 terraform {
   required_providers {
