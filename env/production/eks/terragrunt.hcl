@@ -34,12 +34,12 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 7
+  primary_worker_desired_size               = 4
   primary_worker_instance_types             = ["r5.large"]
   secondary_worker_instance_types           = ["r5.large"]
   nodeUpgrade                               = false  
   primary_worker_max_size                   = 7
-  primary_worker_min_size                   = 4
+  primary_worker_min_size                   = 3
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
@@ -52,7 +52,7 @@ inputs = {
   eks_cluster_version                       = "1.27"
   eks_addon_coredns_version                 = "v1.10.1-eksbuild.2"
   eks_addon_kube_proxy_version              = "v1.27.1-eksbuild.1"
-  eks_addon_vpc_cni_version                 = "v1.13.2-eksbuild.1"
+  eks_addon_vpc_cni_version                 = "v1.14.1-eksbuild.1"
   eks_node_ami_version                      = "1.27.5-20230919"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
