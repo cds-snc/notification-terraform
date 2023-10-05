@@ -1,9 +1,9 @@
 # MX Records - To Be Automated
 
 resource "aws_route53_record" "dev-notification-sandbox-MX" {
-  count    = var.env == "dev" ? 1 : 0¨
+  count    = var.env == "dev" ? 1 : 0
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn¨
+  zone_id  = var.route_53_zone_arn
   name     = var.domain
   type     = "MX"
   ttl      = "300"
