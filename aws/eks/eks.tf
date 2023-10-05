@@ -145,7 +145,6 @@ resource "aws_eks_addon" "kube_proxy" {
   addon_version               = var.eks_addon_kube_proxy_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-
 }
 
 resource "aws_eks_addon" "vpc_cni" {
@@ -154,5 +153,4 @@ resource "aws_eks_addon" "vpc_cni" {
   addon_version               = var.eks_addon_vpc_cni_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-
 }
