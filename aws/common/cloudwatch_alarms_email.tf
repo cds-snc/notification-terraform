@@ -113,14 +113,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-high-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-email-high-queue-delay-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in send email high priority queue >= 10 seconds for 3 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send email high priority queue >= 20 seconds for 3 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "3"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Average"
-  threshold           = 10
+  threshold           = 20
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -152,14 +152,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-high-queue-delay-critical
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-email-medium-queue-delay-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in send-email-medium queue is >= 10 minutes for 5 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send-email-medium queue is >= 30 minutes for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "5"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Average"
-  threshold           = 60 * 10
+  threshold           = 60 * 30
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -170,14 +170,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-warnin
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-critical" {
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-send-email-medium-queue-delay-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in send-email-medium queue is >= 15 minutes for 5 minutes"
+  alarm_description         = "ApproximateAgeOfOldestMessage in send-email-medium queue is >= 45 minutes for 5 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "5"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
   period                    = 60
   statistic                 = "Average"
-  threshold                 = 60 * 15
+  threshold                 = 60 * 45
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
@@ -190,14 +190,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-critic
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-low-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-email-low-queue-delay-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in send-email-low queue is >= 10 minutes for 5 minutes"
+  alarm_description   = "ApproximateAgeOfOldestMessage in send-email-low queue is >= 1 hour for 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "5"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Average"
-  threshold           = 60 * 10
+  threshold           = 60 * 60
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
