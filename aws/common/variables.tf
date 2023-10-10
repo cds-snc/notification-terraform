@@ -61,6 +61,27 @@ variable "sqs_email_queue_name" {
   default = "send-email-tasks"
 }
 
+variable "sqs_send_email_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-high"
+}
+
+variable "sqs_send_email_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-medium"
+}
+
+variable "sqs_send_email_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-low"
+}
+
 variable "sqs_sms_queue_name" {
   type = string
   # See QueueNames in
