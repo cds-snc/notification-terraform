@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [review_requested]
     paths:
-      - "**alarms.tf"
+      - "**alarms**.tf"
 
 defaults:
   run:
