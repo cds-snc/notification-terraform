@@ -2,7 +2,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Notify-System-Overview"
   dashboard_body = <<EOF
-{
+{{
     "widgets": [
         {
             "height": 6,
@@ -47,8 +47,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "view": "singleValue",
                 "region": "${var.region}",
                 "title": "Celery Replicas",
-                "period": 300,
-                "stat": "Average"
+                "period": 60,
+                "stat": "Maximum"
             }
         },
         {
@@ -65,8 +65,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "view": "singleValue",
                 "region": "${var.region}",
                 "title": "API Lambda Invocations",
-                "period": 300,
-                "stat": "Average"
+                "period": 60,
+                "stat": "Maximum"
             }
         },
         {
@@ -142,8 +142,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "view": "singleValue",
                 "region": "${var.region}",
                 "title": "Admin Replicas",
-                "period": 300,
-                "stat": "Average"
+                "period": 60,
+                "stat": "Maximum"
             }
         },
         {
@@ -212,13 +212,13 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights", "cluster_node_count", "ClusterName", "notification-canada-ca-staging-eks-cluster", { "color": "#dfb52c", "label": "Node Count" } ]
+                    [ "ContainerInsights", "cluster_node_count", "ClusterName", "notification-canada-ca-staging-eks-cluster", { "color": "#dfb52c", "label": "Node Count", "region": "${var.region}" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
                 "region": "${var.region}",
-                "stat": "Average",
-                "period": 300,
+                "stat": "Maximum",
+                "period": 60,
                 "title": "Cluster Node Count"
             }
         },
