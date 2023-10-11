@@ -2,7 +2,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Notify-System-Overview"
   dashboard_body = <<EOF
-{{
+{
     "widgets": [
         {
             "height": 6,
