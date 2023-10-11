@@ -54,6 +54,7 @@ variable "celery_queue_prefix" {
   default = "eks-notification-canada-ca"
 }
 
+# TODO: delete this variable once we verify that we've transitioned to the new queues
 variable "sqs_email_queue_name" {
   type = string
   # See QueueNames in

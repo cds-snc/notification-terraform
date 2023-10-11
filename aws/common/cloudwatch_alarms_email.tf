@@ -71,6 +71,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
   treat_missing_data        = "notBreaching"
 }
 
+# TODO: delete this alarm and queue once we verify that we've transitioned to the new ones
 resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-email-queue-delay-warning"
@@ -89,6 +90,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
   }
 }
 
+# TODO: delete this alarm and queue once we verify that we've transitioned to the new ones
 resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-email-queue-delay-critical"
