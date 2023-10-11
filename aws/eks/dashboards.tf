@@ -11,7 +11,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-eks-cluster/application' | fields kubernetes.namespace_name as Namespace\n| stats count(*) by Namespace\n| display Namespace\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields kubernetes.namespace_name as Namespace\n| stats count(*) by Namespace\n| display Namespace\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Namespaces",
@@ -25,7 +25,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 3,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-eks-cluster/prometheus' | fields deployment as Deployment\n| filter ispresent(Deployment)\n| stats count(*) by Deployment\n| display Deployment",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/prometheus' | fields deployment as Deployment\n| filter ispresent(Deployment)\n| stats count(*) by Deployment\n| display Deployment",
                 "region": "${var.region}",
                 "stacked": false,
                 "view": "table",
@@ -40,7 +40,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-eks-cluster", "deployment", "celery", { "region": "${var.region}" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery", { "region": "${var.region}" } ],
                     [ "...", "celery-sms-send", { "region": "${var.region}" } ]
                 ],
                 "sparkline": true,
@@ -76,7 +76,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 6,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-eks-cluster/application' | fields @timestamp as Time, kubernetes.pod_name as PodName, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.pod_name as PodName, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Celery Errors",
@@ -136,7 +136,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-eks-cluster", "deployment", "admin", { "label": "Admin Replicas Available", "region": "${var.region}", "color": "#69ae34" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "admin", { "label": "Admin Replicas Available", "region": "${var.region}", "color": "#69ae34" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -212,7 +212,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights", "cluster_node_count", "ClusterName", "notification-canada-ca-${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-eks-cluster", { "color": "#dfb52c", "label": "Node Count", "region": "${var.region}" } ]
+                    [ "ContainerInsights", "cluster_node_count", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", { "color": "#dfb52c", "label": "Node Count", "region": "${var.region}" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
