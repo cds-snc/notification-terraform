@@ -83,6 +83,7 @@ variable "sqs_send_email_low_queue_name" {
   default = "send-email-low"
 }
 
+# TODO: delete this variable once we verify that we've transitioned to the new queues
 variable "sqs_sms_queue_name" {
   type = string
   # See QueueNames in
