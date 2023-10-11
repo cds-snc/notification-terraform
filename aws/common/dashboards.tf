@@ -1,3 +1,335 @@
+resource "aws_cloudwatch_dashboard" "notify_system" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  dashboard_name = "Notify-System-Overview"
+  dashboard_body = <<EOF
+{
+    "widgets": [
+        {
+            "height": 6,
+            "width": 3,
+            "y": 12,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-staging-eks-cluster/application' | fields kubernetes.namespace_name as Namespace\n| stats count(*) by Namespace\n| display Namespace\n",
+                "region": "ca-central-1",
+                "stacked": false,
+                "title": "Namespaces",
+                "view": "table"
+            }
+        },
+        {
+            "height": 6,
+            "width": 3,
+            "y": 12,
+            "x": 3,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-staging-eks-cluster/prometheus' | fields deployment as Deployment\n| filter ispresent(Deployment)\n| stats count(*) by Deployment\n| display Deployment",
+                "region": "ca-central-1",
+                "stacked": false,
+                "view": "table",
+                "title": "Deployments"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 6,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-staging-eks-cluster", "deployment", "celery", { "region": "ca-central-1" } ],
+                    [ "...", "celery-sms-send", { "region": "ca-central-1" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "ca-central-1",
+                "title": "Celery Replicas",
+                "period": 300,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 6,
+            "width": 3,
+            "y": 6,
+            "x": 9,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/Lambda", "Invocations", "FunctionName", "api-lambda", { "region": "ca-central-1", "color": "#b088f5" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "ca-central-1",
+                "title": "API Lambda Invocations",
+                "period": 300,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 6,
+            "width": 13,
+            "y": 12,
+            "x": 6,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-staging-eks-cluster/application' | fields @timestamp as Time, kubernetes.pod_name as PodName, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
+                "region": "ca-central-1",
+                "stacked": false,
+                "title": "Celery Errors",
+                "view": "table"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 0,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SES", "Send", { "region": "ca-central-1" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ca-central-1",
+                "period": 300,
+                "stat": "Sum",
+                "title": "Email Send Rate",
+                "legend": {
+                    "position": "hidden"
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 0,
+            "x": 6,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SNS", "NumberOfNotificationsDelivered", "PhoneNumber", "PhoneNumberDirect", { "region": "ca-central-1", "color": "#f89256" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ca-central-1",
+                "period": 300,
+                "stat": "Sum",
+                "title": "SMS Send Rate",
+                "legend": {
+                    "position": "hidden"
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 3,
+            "y": 6,
+            "x": 6,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-staging-eks-cluster", "deployment", "admin", { "label": "Admin Replicas Available", "region": "ca-central-1", "color": "#69ae34" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "ca-central-1",
+                "title": "Admin Replicas",
+                "period": 300,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 18,
+            "width": 3,
+            "y": 0,
+            "x": 19,
+            "type": "alarm",
+            "properties": {
+                "title": "Critical Alarms",
+                "alarms": [
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-priority-queue-delay-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-10-celery-error-1-minute-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-send-sms-low-queue-delay-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:expired-inflight-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-priority-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-send-sms-medium-queue-delay-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-10-error-5-minutes-critical-lambda-api",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-send-sms-high-queue-delay-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:no-emails-sent-5-minutes-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:healtheck-page-slow-response-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:load-balancer-10-502-error-5-minutes-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-10-500-error-5-minutes-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-1-critical-bounce-rate-1-minute-warning",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:ses-bounce-rate-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:ses-complaint-rate-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:redis-elasticache-high-db-memory-critical-CacheCluster002",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:redis-elasticache-high-db-memory-critical-CacheCluster001",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:redis-elasticache-high-db-memory-critical-CacheCluster003",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-send-throttled-sms-tasks-receive-rate-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sns-spending-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-10-malware-detected-1-minute-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:lambda-image-sns-delivery-receipts-errors-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-10-500-error-5-minutes-critical-sns_to_sqs_sms_callbacks-api",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:lambda-ses-delivery-receipts-errors-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-sms-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-email-queue-delay-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sns-sms-success-rate-canadian-numbers-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:ddos-detected-load-balancer-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-bulk-queue-delay-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:normal-inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:bulk-inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:priority-inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:normal_bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:priority_bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:bulk_bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-bulk-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-normal-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:logs-10-500-error-5-minutes-critical-heartbeat-api",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sqs-throttled-sms-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:sign-in-3-500-error-15-minutes-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:contact-3-500-error-15-minutes-critical",
+                    "arn:aws:cloudwatch:ca-central-1:239043911459:alarm:load-balancer-10-500-error-5-minutes-critical"
+                ]
+            }
+        },
+        {
+            "height": 6,
+            "width": 3,
+            "y": 0,
+            "x": 12,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights", "cluster_node_count", "ClusterName", "notification-canada-ca-staging-eks-cluster", { "color": "#dfb52c", "label": "Node Count" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "ca-central-1",
+                "stat": "Average",
+                "period": 300,
+                "title": "Cluster Node Count"
+            }
+        },
+        {
+            "height": 6,
+            "width": 4,
+            "y": 0,
+            "x": 15,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(node_cpu_utilization) FROM SCHEMA(ContainerInsights, ClusterName) GROUP BY NodeName", "label": "Node CPU Usage", "id": "q1", "region": "ca-central-1" } ]
+                ],
+                "view": "gauge",
+                "region": "ca-central-1",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 100
+                    }
+                },
+                "stat": "Average",
+                "period": 60,
+                "legend": {
+                    "position": "hidden"
+                },
+                "title": "Average Node CPU Usage",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "color": "#fe6e73",
+                            "label": "High Usage",
+                            "value": 80,
+                            "fill": "above"
+                        },
+                        {
+                            "color": "#dfb52c",
+                            "label": "Low Usage",
+                            "value": 25,
+                            "fill": "below"
+                        },
+                        [
+                            {
+                                "color": "#69ae34",
+                                "label": "Normal Usage",
+                                "value": 80
+                            },
+                            {
+                                "value": 25,
+                                "label": "Normal Usage"
+                            }
+                        ]
+                    ]
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 4,
+            "y": 6,
+            "x": 15,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(node_memory_utilization) FROM SCHEMA(ContainerInsights, ClusterName) GROUP BY NodeName", "label": "Node CPU Usage", "id": "q1", "region": "ca-central-1" } ]
+                ],
+                "view": "gauge",
+                "region": "ca-central-1",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 100
+                    }
+                },
+                "stat": "Average",
+                "period": 60,
+                "legend": {
+                    "position": "hidden"
+                },
+                "title": "Average Node Memory Usage",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "color": "#fe6e73",
+                            "label": "High Usage",
+                            "value": 80,
+                            "fill": "above"
+                        },
+                        {
+                            "color": "#dfb52c",
+                            "label": "Low Usage",
+                            "value": 25,
+                            "fill": "below"
+                        },
+                        [
+                            {
+                                "color": "#69ae34",
+                                "label": "Normal Usage",
+                                "value": 80
+                            },
+                            {
+                                "value": 25,
+                                "label": "Normal Usage"
+                            }
+                        ]
+                    ]
+                }
+            }
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Redis-batch-saving"
