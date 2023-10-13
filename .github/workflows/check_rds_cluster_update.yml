@@ -42,7 +42,17 @@ jobs:
           --engine-version ${{ steps.current.outputs.version }} \
           --output text \
           --no-paginate)"
-        echo "versions=${AVAILABLE_VERSIONS}" >> "$GITHUB_OUTPUT"
+
+        # Get the latest version for each major version
+        LATEST_MAJOR_VERSIONS="$(echo $AVAILABLE_VERSIONS | awk -F. 'BEGIN {ORS="\\n"}{
+              major[$1] = $2 > major[$1] ? $2 : major[$1]
+          }
+          END {
+              for (m in major) {
+                  print m"."major[m]
+              }
+          }' | sort -t. -k1,1n -k2,2n)"
+        echo "versions=${LATEST_MAJOR_VERSIONS}" >> "$GITHUB_OUTPUT"
 
     - name: Post to slack
       if: steps.available.outputs.versions != ''
