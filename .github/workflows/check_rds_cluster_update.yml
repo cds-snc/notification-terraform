@@ -27,15 +27,6 @@ jobs:
         role-session-name: RDSClusterUpdateCheck
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
-    - name: Get RDS cluster current version
-      id: current
-      run: |
-        CLUSTER_VERSION="$(aws rds describe-db-clusters \
-          --db-cluster-identifier ${{ env.RDS_CLUSTER_NAME }} \
-          --query 'DBClusters[0].EngineVersion' \
-          --output text)"
-        echo "version=${CLUSTER_VERSION}" >> "$GITHUB_OUTPUT"
-
     - name: Get RDS cluster available updates
       id: available
       run: |
@@ -46,5 +37,5 @@ jobs:
       if: steps.available.outputs.versions != ''
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
-        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":mr-data: RDS Aurora Postgres ${{ steps.current.outputs.version }} updates are available: <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraPostgreSQLReleaseNotes/AuroraPostgreSQL.Updates.html|RDS Updates>\n```${{ steps.available.outputs.versions }}```"}}]}'
+        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":mr-data: RDS Aurora Postgres updates are available: <https://docs.aws.amazon.com/AmazonRDS/latest/AuroraPostgreSQLReleaseNotes/AuroraPostgreSQL.Updates.html|RDS Updates>\n```${{ steps.available.outputs.versions }}```"}}]}'
         curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
