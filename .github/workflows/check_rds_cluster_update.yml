@@ -7,15 +7,18 @@ on:
 env:
   AWS_DEFAULT_REGION: ca-central-1
   RDS_CLUSTER_NAME: notification-canada-ca-staging-cluster
-  RDS_ENGINE: aurora-postgresql
 
 permissions:
+  contents: read
   id-token: write
 
 jobs:
   check-rds-cluster-update:
     runs-on: ubuntu-latest
     steps:
+
+    - name: Checkout
+      uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
     - name: Configure AWS credentials using OIDC
       uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
@@ -36,22 +39,7 @@ jobs:
     - name: Get RDS cluster available updates
       id: available
       run: |
-        AVAILABLE_VERSIONS="$(aws rds describe-db-engine-versions \
-          --engine ${{ env.RDS_ENGINE }} \
-          --query 'DBEngineVersions[*].ValidUpgradeTarget[*].{EngineVersion:EngineVersion}' \
-          --engine-version ${{ steps.current.outputs.version }} \
-          --output text \
-          --no-paginate)"
-
-        # Get the latest version for each major version
-        LATEST_MAJOR_VERSIONS="$(echo $AVAILABLE_VERSIONS | awk -F. 'BEGIN {ORS="\\n"}{
-              major[$1] = $2 > major[$1] ? $2 : major[$1]
-          }
-          END {
-              for (m in major) {
-                  print m"."major[m]
-              }
-          }' | sort -t. -k1,1n -k2,2n)"
+        LATEST_MAJOR_VERSIONS="$(./scripts/get_rds_cluster_updates.sh ${{ env.RDS_CLUSTER_NAME }})"
         echo "versions=${LATEST_MAJOR_VERSIONS}" >> "$GITHUB_OUTPUT"
 
     - name: Post to slack
