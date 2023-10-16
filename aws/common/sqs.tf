@@ -52,3 +52,4 @@ resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
   tags = {
     Environment = var.env
   }
+}
