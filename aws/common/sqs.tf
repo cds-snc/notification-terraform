@@ -27,7 +27,7 @@ resource "aws_sqs_queue" "notify_internal_tasks_queue" {
   # This queue was created outside of terraform and has this value set to false in staging and production.
   sqs_managed_sse_enabled = false
   # This queue was created outside of terraform and has this value set to default in staging and production.
-  visibility_timeout_seconds = ${var.sqs_visibility_timeout_default}
+  visibility_timeout_seconds = var.sqs_visibility_timeout_default
 }
 
 resource "aws_sqs_queue" "eks_notification_canada_ca_sms_high_queue" {
