@@ -47,7 +47,7 @@ resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
   #4 Days
   message_retention_seconds  = 345600
   receive_wait_time_seconds  = 0
-  visibility_timeout_seconds = ${var.sqs_visibility_timeout_default}
+  visibility_timeout_seconds = var.sqs_visibility_timeout_default
 
   tags = {
     Environment = var.env
