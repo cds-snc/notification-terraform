@@ -31,7 +31,7 @@ resource "aws_sqs_queue" "notify_internal_tasks_queue" {
 }
 
 resource "aws_sqs_queue" "eks_notification_canada_ca_sms_high_queue" {
-  name             = "${var.celery_queue_prefix}send-sms-high"
+  name                    = "${var.celery_queue_prefix}send-sms-high"
   sqs_managed_sse_enabled = true
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
   # AWS managed encryption is good enough for us
