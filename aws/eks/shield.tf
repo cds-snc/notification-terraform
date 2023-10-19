@@ -1,11 +1,11 @@
 resource "aws_shield_protection" "notification-canada-ca" {
-  depends_on = [null_resource.aws_shield_subscription]
+  depends_on   = [null_resource.aws_shield_subscription]
   name         = "notification-canada-ca"
   resource_arn = aws_alb.notification-canada-ca.arn
 }
 
 resource "aws_shield_protection" "assets-notification-canada-ca" {
-  depends_on = [null_resource.aws_shield_subscription]
+  depends_on   = [null_resource.aws_shield_subscription]
   name         = "notification-canada-ca"
   resource_arn = var.cloudfront_assets_arn
 }
