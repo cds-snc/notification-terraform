@@ -66,6 +66,8 @@ jobs:
           comment-title: "Production: common"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ECR
         uses: cds-snc/terraform-plan@v3
@@ -75,6 +77,8 @@ jobs:
           comment-title: "Production: ECR"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ses_receiving_emails
         uses: cds-snc/terraform-plan@v3
@@ -84,6 +88,8 @@ jobs:
           comment-title: "Production: ses_receiving_emails"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
         uses: cds-snc/terraform-plan@v3
@@ -93,6 +99,8 @@ jobs:
           comment-title: "Production: ses_to_sqs_email_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
         uses: cds-snc/terraform-plan@v3
@@ -102,6 +110,8 @@ jobs:
           comment-title: "Production: sns_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan dns
         uses: cds-snc/terraform-plan@v3
@@ -111,6 +121,8 @@ jobs:
           comment-title: "Production: dns"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ses_validation_dns_entries
         uses: cds-snc/terraform-plan@v3
@@ -120,6 +132,8 @@ jobs:
           comment-title: "Production: ses_validation_dns_entries"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan eks
         uses: cds-snc/terraform-plan@v3
@@ -129,6 +143,8 @@ jobs:
           comment-title: "Production: eks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan elasticache
         uses: cds-snc/terraform-plan@v3
@@ -138,6 +154,8 @@ jobs:
           comment-title: "Production: elasticache"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan rds
         uses: cds-snc/terraform-plan@v3
@@ -147,6 +165,8 @@ jobs:
           comment-title: "Production: rds"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan cloudfront
         uses: cds-snc/terraform-plan@v3
@@ -156,6 +176,8 @@ jobs:
           comment-title: "Production: cloudfront"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan lambda-api
         uses: cds-snc/terraform-plan@v3
@@ -165,6 +187,8 @@ jobs:
           comment-title: "Production: lambda-api"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan heartbeat
         uses: cds-snc/terraform-plan@v3
@@ -174,6 +198,8 @@ jobs:
           comment-title: "Production: heartbeat"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan database-tools
         uses: cds-snc/terraform-plan@v3
@@ -183,6 +209,8 @@ jobs:
           comment-title: "Production: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan lambda-google-cidr
         uses: cds-snc/terraform-plan@v3
@@ -192,3 +220,6 @@ jobs:
           comment-title: "Production: lambda-google-cidr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
+            

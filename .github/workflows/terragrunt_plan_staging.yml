@@ -132,6 +132,8 @@ jobs:
           comment-title: "Staging: common"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ECR
         if: ${{ steps.filter.outputs.ecr == 'true' }}
@@ -142,6 +144,8 @@ jobs:
           comment-title: "Staging: ecr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ses_receiving_emails
         if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' || steps.filter.outputs.common == 'true' }}
@@ -152,6 +156,8 @@ jobs:
           comment-title: "Staging: ses_receiving_emails"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan dns
         if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
@@ -162,6 +168,8 @@ jobs:
           comment-title: "Staging: dns"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ses_validation_dns_entries
         if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' || steps.filter.outputs.common == 'true' }}
@@ -172,6 +180,8 @@ jobs:
           comment-title: "Staging: ses_validation_dns_entries"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan eks
         if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
@@ -182,6 +192,8 @@ jobs:
           comment-title: "Staging: eks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan elasticache
         if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
@@ -192,6 +204,8 @@ jobs:
           comment-title: "Staging: elasticache"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan rds
         if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
@@ -202,6 +216,8 @@ jobs:
           comment-title: "Staging: rds"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan cloudfront
         if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
@@ -212,6 +228,8 @@ jobs:
           comment-title: "Staging: cloudfront"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan lambda-api
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
@@ -222,6 +240,8 @@ jobs:
           comment-title: "Staging: lambda-api"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan lambda-admin-pr
         if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
@@ -232,6 +252,8 @@ jobs:
           comment-title: "Staging: lambda-admin-pr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan performance-test
         if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
@@ -242,6 +264,8 @@ jobs:
           comment-title: "Staging: performance-test"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan heartbeat
         if: ${{ steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true' }}
@@ -252,6 +276,8 @@ jobs:
           comment-title: "Staging: heartbeat"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan database-tools
         if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
@@ -262,6 +288,8 @@ jobs:
           comment-title: "Staging: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan quicksight
         if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
@@ -272,6 +300,8 @@ jobs:
           comment-title: "Staging: quicksight"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan lambda-google-cidr
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
@@ -282,6 +312,8 @@ jobs:
           comment-title: "Staging: lambda-google-cidr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
         if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
@@ -292,7 +324,9 @@ jobs:
           comment-title: "Staging: ses_to_sqs_email_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
-
+          terraform-init: |
+            -upgrade
+            
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
         if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v3
@@ -302,3 +336,5 @@ jobs:
           comment-title: "Staging: sns_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          terraform-init: |
+            -upgrade
