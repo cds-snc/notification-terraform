@@ -1,7 +1,6 @@
 # valid column types are [STRING INTEGER DECIMAL DATETIME BIT BOOLEAN JSON]
 
 resource "aws_quicksight_data_set" "notification_history_joined" {
-  provider    = aws.aws-5
   data_set_id = "notification_history_joined"
   name        = "Notification history_joined"
   import_mode = "SPICE"

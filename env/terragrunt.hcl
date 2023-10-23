@@ -64,14 +64,6 @@ provider "aws" {
     role_arn = "arn:aws:iam::239043911459:role/${local.vars.inputs.env}_dns_manager_role"
   }
 }
-
-provider "aws" {
-  alias               = "aws-5"
-  region              = var.region
-  allowed_account_ids = [var.account_id]
-  source              = "hashicorp/aws"
-  version             = "~> 5.0"
-}
 EOF
 }
 
