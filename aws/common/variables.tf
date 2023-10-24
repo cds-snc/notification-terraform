@@ -54,6 +54,20 @@ variable "celery_queue_prefix" {
   default = "eks-notification-canada-ca"
 }
 
+variable "sqs_visibility_timeout_default" {
+  type = number
+  # See SQS visibility timeout
+  # https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
+  default = 305
+}
+
+variable "sqs_visibility_timeout_priority_high" {
+  type = number
+  # See SQS visibility timeout
+  # https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
+  default = 26
+}
+
 variable "sqs_email_queue_name" {
   type = string
   # See QueueNames in
