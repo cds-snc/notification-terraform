@@ -132,22 +132,25 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
 ###
 
 resource "aws_eks_addon" "coredns" {
-  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  addon_name        = "coredns"
-  addon_version     = var.eks_addon_coredns_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "coredns"
+  addon_version               = var.eks_addon_coredns_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 }
 
 resource "aws_eks_addon" "kube_proxy" {
-  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  addon_name        = "kube-proxy"
-  addon_version     = var.eks_addon_kube_proxy_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "kube-proxy"
+  addon_version               = var.eks_addon_kube_proxy_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 }
 
 resource "aws_eks_addon" "vpc_cni" {
-  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  addon_name        = "vpc-cni"
-  addon_version     = var.eks_addon_vpc_cni_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "vpc-cni"
+  addon_version               = var.eks_addon_vpc_cni_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 }

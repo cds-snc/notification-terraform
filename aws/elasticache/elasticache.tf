@@ -14,14 +14,14 @@ resource "aws_elasticache_subnet_group" "notification-canada-ca-cache-subnet" {
 resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz-group" {
   # Default is false with this param, it looks counter-intuitive because
   # applied changes would only happen during maintenance window if false.
-  apply_immediately             = true
-  automatic_failover_enabled    = true
-  availability_zones            = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
-  replication_group_id          = "notify-${var.env}-cluster-cache-az"
-  replication_group_description = "Redis multiaz cluster with replication group"
-  node_type                     = var.elasticache_node_type
-  number_cache_clusters         = var.elasticache_node_number_cache_clusters
-  engine                        = "redis"
+  apply_immediately           = true
+  automatic_failover_enabled  = true
+  preferred_cache_cluster_azs = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
+  replication_group_id        = "notify-${var.env}-cluster-cache-az"
+  description                 = "Redis multiaz cluster with replication group"
+  node_type                   = var.elasticache_node_type
+  num_cache_clusters          = var.elasticache_node_number_cache_clusters
+  engine                      = "redis"
   # AWS automatically supports the Redis minor version management since version 6.
   # https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/supported-engine-versions.html#redis-version-6.x
   engine_version       = "6.x"
@@ -52,6 +52,6 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   }
 
   lifecycle {
-    ignore_changes = [number_cache_clusters]
+    ignore_changes = [num_cache_clusters]
   }
 }
