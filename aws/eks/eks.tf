@@ -94,8 +94,6 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
   node_role_arn   = aws_iam_role.eks-worker-role.arn
   subnet_ids      = var.vpc_private_subnets
 
-  disk_size = 80
-
   release_version = var.eks_node_ami_version
   instance_types  = var.secondary_worker_instance_types
 
@@ -111,6 +109,11 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
     max_unavailable = 1
   }
 
+  launch_template {
+    id      = aws_launch_template.notification-canada-ca-eks-node-group.id
+    version = aws_launch_template.notification-canada-ca-eks-node-group.default_version
+  }
+
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
   # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
   depends_on = [
@@ -124,6 +127,33 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
     Name                     = "notification-canada-ca"
     CostCenter               = "notification-canada-ca-${var.env}"
     "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  }
+}
+
+resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
+  name                   = "notification-canada-ca-${var.env}-eks-node-group"
+  update_default_version = true
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      encrypted             = true
+      delete_on_termination = true
+      volume_size           = 80
+      volume_type           = "gp3"
+    }
+  }
+
+  # Require IMDSv2
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_put_response_hop_limit = 2
+    http_tokens                 = "required"
+  }
+
+  tags = {
+    Name       = "notification-canada-ca"
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 
