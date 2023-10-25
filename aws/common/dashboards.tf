@@ -188,7 +188,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 0,
+            "y": 4,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -205,10 +205,10 @@ resource "aws_cloudwatch_dashboard" "emails" {
             }
         },
         {
-            "height": 6,
-            "width": 15,
+            "height": 4,
+            "width": 24,
             "y": 0,
-            "x": 9,
+            "x": 0,
             "type": "alarm",
             "properties": {
                 "title": "Email alarms",
@@ -226,7 +226,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 6,
+            "y": 4,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -244,7 +244,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 6,
+            "y": 10,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -268,26 +268,39 @@ resource "aws_cloudwatch_dashboard" "emails" {
         },
         {
             "height": 6,
-            "width": 9,
+            "width": 8,
             "y": 24,
             "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-high", { "color": "#1f77b4", "region": "${var.region}", "label": "Age of oldest message" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": true,
                 "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
-                "title": "Average approximate age of oldest message in send-email-tasks"
+                "title": "Average approximate age of oldest message in send-email-high",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "60 sec",
+                            "value": 60
+                        },
+                        {
+                            "label": "20 sec",
+                            "value": 20,
+                            "fill": "above"
+                        }
+                    ]
+                }
             }
         },
         {
-            "height": 15,
+            "height": 18,
             "width": 6,
-            "y": 6,
+            "y": 4,
             "x": 18,
             "type": "text",
             "properties": {
@@ -297,7 +310,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 18,
+            "y": 16,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -314,18 +327,19 @@ resource "aws_cloudwatch_dashboard" "emails" {
         },
         {
             "height": 6,
-            "width": 9,
-            "y": 18,
+            "width": 8,
+            "y": 30,
             "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-tasks" ]
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-high", { "region": "${var.region}", "label": "Messages waiting in queue" } ],
+                    [ ".", "ApproximateNumberOfMessagesNotVisible", ".", ".", { "region": "${var.region}", "label": "Messages in a celery worker" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
-                "title": "Approximate number of messages in send-email-tasks",
+                "title": "Approximate number of messages in send-email-high",
                 "period": 60,
                 "stat": "Average"
             }
@@ -333,7 +347,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 12,
+            "y": 16,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -351,7 +365,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 12,
+            "y": 10,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -369,7 +383,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 24,
+            "y": 42,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -387,7 +401,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 30,
+            "y": 48,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -405,7 +419,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 30,
+            "y": 48,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -418,6 +432,170 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 "stat": "Average",
                 "period": 300,
                 "title": "Number of messages visible in retry-tasks"
+            }
+        },
+        {
+            "height": 2,
+            "width": 24,
+            "y": 22,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Delivery Queues\n"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 42,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-tasks"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 36,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-tasks" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate number of messages in send-email-tasks",
+                "period": 60,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 36,
+            "x": 9,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-tasks"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 24,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-medium", { "color": "#1f77b4", "region": "${var.region}", "label": "Age of oldest message" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-medium",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "45 min",
+                            "value": 2700
+                        },
+                        {
+                            "label": "30 min",
+                            "value": 1800,
+                            "fill": "above"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 24,
+            "x": 16,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-low", { "color": "#1f77b4", "region": "${var.region}", "label": "Age of oldest message" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-low",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "3 hours",
+                            "value": 10800
+                        },
+                        {
+                            "label": "1 hour",
+                            "value": 3600,
+                            "fill": "above"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 30,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-medium", { "region": "${var.region}", "label": "Messages waiting in queue" } ],
+                    [ ".", "ApproximateNumberOfMessagesNotVisible", ".", ".", { "region": "${var.region}", "label": "Messages in a celery worker" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate number of messages in send-email-medium",
+                "period": 60,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 30,
+            "x": 16,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-low", { "region": "${var.region}", "label": "Messages waiting in queue" } ],
+                    [ ".", "ApproximateNumberOfMessagesNotVisible", ".", ".", { "region": "${var.region}", "label": "Messages in a celery worker" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate number of messages in send-email-low",
+                "period": 60,
+                "stat": "Average"
             }
         }
     ]
