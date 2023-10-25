@@ -153,7 +153,7 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
   # Require IMDSv2
   metadata_options {
     http_endpoint               = "enabled"
-    http_put_response_hop_limit = 2
+    http_put_response_hop_limit = 2 # checkov:skip=CKV_AWS_341:Hop count > 1 is needed for containerized environments with multiple layers of networking
     http_tokens                 = "required"
   }
 
