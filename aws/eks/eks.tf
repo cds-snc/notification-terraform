@@ -137,11 +137,17 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
-      encrypted             = true
       delete_on_termination = true
+      encrypted             = true
       volume_size           = 80
       volume_type           = "gp3"
     }
+  }
+
+  network_interfaces {
+    security_groups = [
+      aws_security_group.notification-canada-ca-worker.id
+    ]
   }
 
   # Require IMDSv2
