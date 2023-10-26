@@ -213,12 +213,12 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "properties": {
                 "title": "Email alarms",
                 "alarms": [
-                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-warning[0].arn},
-                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-critical[0].arn},
-                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-warning[0].arn},
-                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-critical[0].arn},
-                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-warning[0].arn},
-                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-critical[0].arn},
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning[0].arn}",
