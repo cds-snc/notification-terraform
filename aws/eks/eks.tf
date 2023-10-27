@@ -131,7 +131,9 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
 }
 
 resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
-  name                   = "notification-canada-ca-${var.env}-eks-node-group"
+  name        = "notification-canada-ca-${var.env}-eks-node-group"
+  description = "EKS worker node group launch template"
+
   update_default_version = true
 
   block_device_mappings {
@@ -142,12 +144,6 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
       volume_size           = 80
       volume_type           = "gp3"
     }
-  }
-
-  network_interfaces {
-    security_groups = [
-      aws_security_group.notification-canada-ca-worker.id
-    ]
   }
 
   # Require IMDSv2
