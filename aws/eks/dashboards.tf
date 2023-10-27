@@ -6,37 +6,9 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
     "widgets": [
         {
             "height": 6,
-            "width": 3,
-            "y": 12,
-            "x": 0,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields kubernetes.namespace_name as Namespace\n| stats count(*) by Namespace\n| display Namespace\n",
-                "region": "${var.region}",
-                "stacked": false,
-                "title": "Namespaces",
-                "view": "table"
-            }
-        },
-        {
-            "height": 6,
-            "width": 3,
-            "y": 12,
-            "x": 3,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/prometheus' | fields deployment as Deployment\n| filter ispresent(Deployment)\n| stats count(*) by Deployment\n| display Deployment",
-                "region": "${var.region}",
-                "stacked": false,
-                "view": "table",
-                "title": "Deployments"
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 6,
-            "x": 0,
+            "width": 5,
+            "y": 17,
+            "x": 11,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -46,7 +18,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "sparkline": true,
                 "view": "singleValue",
                 "region": "${var.region}",
-                "title": "Celery Replicas",
+                "title": "Celery Pods",
                 "period": 60,
                 "stat": "Maximum"
             }
@@ -54,8 +26,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 3,
-            "y": 6,
-            "x": 9,
+            "y": 36,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -71,9 +43,9 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 6,
-            "width": 13,
-            "y": 12,
-            "x": 6,
+            "width": 16,
+            "y": 23,
+            "x": 8,
             "type": "log",
             "properties": {
                 "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.pod_name as PodName, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
@@ -85,16 +57,16 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 6,
-            "width": 6,
-            "y": 0,
+            "width": 8,
+            "y": 3,
             "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "FILL(METRICS(), 0)", "label": "Expression1", "id": "e1" } ],
-                    [ "AWS/SES", "Send", { "region": "${var.region}", "id": "m1", "color": "#08aad2" } ]
+                    [ { "expression": "FILL(METRICS(), 0)", "label": "emails /", "id": "e1", "region": "${var.region}" } ],
+                    [ "AWS/SES", "Send", { "region": "${var.region}", "id": "m1", "color": "#08aad2", "visible": false, "label": "min" } ]
                 ],
-                "view": "timeSeries",
+                "view": "singleValue",
                 "stacked": false,
                 "region": "${var.region}",
                 "period": 60,
@@ -103,21 +75,22 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "legend": {
                     "position": "hidden"
                 },
-                "liveData": false
+                "liveData": false,
+                "sparkline": true
             }
         },
         {
             "height": 6,
-            "width": 6,
-            "y": 0,
-            "x": 6,
+            "width": 8,
+            "y": 10,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "FILL(METRICS(), 0)", "label": "Expression1", "id": "e1" } ],
-                    [ "AWS/SNS", "NumberOfNotificationsDelivered", "PhoneNumber", "PhoneNumberDirect", { "region": "${var.region}", "color": "#08aad2", "id": "m1" } ]
+                    [ { "expression": "FILL(METRICS(), 0)", "label": "SMS /", "id": "e1", "region": "${var.region}" } ],
+                    [ "AWS/SNS", "NumberOfNotificationsDelivered", "PhoneNumber", "PhoneNumberDirect", { "region": "${var.region}", "color": "#08aad2", "id": "m1", "visible": false, "label": "min" } ]
                 ],
-                "view": "timeSeries",
+                "view": "singleValue",
                 "stacked": false,
                 "region": "${var.region}",
                 "period": 60,
@@ -125,35 +98,38 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "title": "SMS Send Rate Per Minute",
                 "legend": {
                     "position": "hidden"
-                }
+                },
+                "sparkline": true
             }
         },
         {
             "height": 6,
-            "width": 3,
-            "y": 6,
-            "x": 6,
+            "width": 8,
+            "y": 17,
+            "x": 16,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "admin", { "label": "Admin Replicas Available", "region": "${var.region}", "color": "#69ae34" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "admin", { "label": "admin", "region": "${var.region}", "color": "#69ae34" } ],
+                    [ "...", "document-download-api", { "region": "${var.region}", "label": "document-download-api" } ],
+                    [ "...", "documentation", { "region": "${var.region}", "label": "documentation" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
                 "region": "${var.region}",
-                "title": "Admin Replicas",
+                "title": "Application pods",
                 "period": 60,
                 "stat": "Maximum"
             }
         },
         {
-            "height": 18,
-            "width": 3,
+            "height": 2,
+            "width": 24,
             "y": 0,
-            "x": 19,
+            "x": 0,
             "type": "alarm",
             "properties": {
-                "title": "Critical Alarms",
+                "title": "Alarms going off",
                 "alarms": [
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-priority-queue-delay-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-celery-error-1-minute-critical",
@@ -201,14 +177,17 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sign-in-3-500-error-15-minutes-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:contact-3-500-error-15-minutes-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:load-balancer-10-500-error-5-minutes-critical"
+                ],
+                "states": [
+                    "ALARM"
                 ]
             }
         },
         {
             "height": 6,
             "width": 3,
-            "y": 0,
-            "x": 12,
+            "y": 17,
+            "x": 8,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -219,14 +198,14 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "region": "${var.region}",
                 "stat": "Maximum",
                 "period": 60,
-                "title": "Cluster Node Count"
+                "title": "Nodes"
             }
         },
         {
             "height": 6,
             "width": 4,
-            "y": 0,
-            "x": 15,
+            "y": 17,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -278,8 +257,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 4,
-            "y": 6,
-            "x": 15,
+            "y": 17,
+            "x": 4,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -326,6 +305,158 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                         ]
                     ]
                 }
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 2,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Email ([Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/Emails))"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 9,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# SMS ([Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/SMS))"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 16,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Kubernetes"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 3,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", ""${var.celery_queue_prefix}${var.sqs_send_email_high_queue_name}", { "region": "${var.region}", "label": "High" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_email_medium_queue_name}", { "region": "${var.region}", "label": "Medium" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_email_low_queue_name}", { "region": "${var.region}", "label": "Low" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Queue delays",
+                "period": 60,
+                "stat": "Maximum",
+                "sparkline": true
+            }
+        },
+        {
+            "height": 6,
+            "width": 7,
+            "y": 3,
+            "x": 17,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Errors per minute",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 10,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}", { "region": "${var.region}", "label": "High" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}", { "region": "${var.region}", "label": "Medium" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}", { "region": "${var.region}", "label": "Low" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Queue delays",
+                "period": 60,
+                "stat": "Maximum",
+                "sparkline": true
+            }
+        },
+        {
+            "height": 6,
+            "width": 7,
+            "y": 10,
+            "x": 17,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms-send/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Errors per minute",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 23,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Celery errors",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 35,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Lambdas"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 29,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery/\n| fields @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/ as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "500s",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 6,
+            "width": 16,
+            "y": 29,
+            "x": 8,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /celery/\n| filter @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/\n| sort @timestamp desc\n| limit 20\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "500s",
+                "view": "table"
             }
         }
     ]
