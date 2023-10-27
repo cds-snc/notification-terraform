@@ -4,7 +4,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
   dashboard_body = <<EOF
 {
     "widgets": [
-        {
+             {
             "height": 6,
             "width": 5,
             "y": 17,
@@ -102,7 +102,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "sparkline": true
             }
         },
-        {
+          {
             "height": 6,
             "width": 8,
             "y": 17,
@@ -307,6 +307,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 }
             }
         },
+        
+        
         {
             "height": 1,
             "width": 24,
@@ -345,7 +347,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", ""${var.celery_queue_prefix}${var.sqs_send_email_high_queue_name}", { "region": "${var.region}", "label": "High" } ],
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_email_high_queue_name}", { "region": "${var.region}", "label": "High" } ],
                     [ "...", "${var.celery_queue_prefix}${var.sqs_send_email_medium_queue_name}", { "region": "${var.region}", "label": "Medium" } ],
                     [ "...", "${var.celery_queue_prefix}${var.sqs_send_email_low_queue_name}", { "region": "${var.region}", "label": "Low" } ]
                 ],
@@ -356,20 +358,6 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "period": 60,
                 "stat": "Maximum",
                 "sparkline": true
-            }
-        },
-        {
-            "height": 6,
-            "width": 7,
-            "y": 3,
-            "x": 17,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
-                "region": "${var.region}",
-                "stacked": false,
-                "title": "Errors per minute",
-                "view": "timeSeries"
             }
         },
         {
@@ -463,6 +451,16 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
 }
 EOF
 }
+
+
+
+
+
+
+
+
+
+
 
 resource "aws_cloudwatch_dashboard" "elb" {
   count          = var.cloudwatch_enabled ? 1 : 0
