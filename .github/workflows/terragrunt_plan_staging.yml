@@ -263,15 +263,15 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-      - name: Terragrunt plan quicksight
-        if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
-        with:
-          directory: "env/staging/quicksight"
-          comment-delete: "true"
-          comment-title: "Staging: quicksight"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
+      # - name: Terragrunt plan quicksight
+      #   if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
+      #   uses: cds-snc/terraform-plan@v3
+      #   with:
+      #     directory: "env/staging/quicksight"
+      #     comment-delete: "true"
+      #     comment-title: "Staging: quicksight"
+      #     github-token: "${{ secrets.GITHUB_TOKEN }}"
+      #     terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
