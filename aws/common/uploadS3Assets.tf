@@ -1,5 +1,6 @@
-# This is a bit of a hack in that we're cloning an external repo into a temp directory so that we can populate cloudfront.
-# We will have to review a better way of doing this in the future, but this will get us going in the right direction
+# This is hack'ish as we're cloning an external repo into a temp directory so that we can populate CloudFront.
+# We will have to review a better way of doing this in the future, but our long term goal of having one source of
+# truth for the assets is accomplished.
 
 resource "aws_s3_object" "assets" {
 
