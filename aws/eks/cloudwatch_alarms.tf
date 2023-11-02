@@ -715,3 +715,17 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "failed-login-count-5-minute-warning" {
+  alarm_name          = "failed-login-count-5-minute-warning"
+  alarm_description   = "One user had a failed login count of more than 10 times in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "5"
+  metric_name         = aws_cloudwatch_log_metric_filter.failed-login-count-more-than-10[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.failed-login-count-more-than-10[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
