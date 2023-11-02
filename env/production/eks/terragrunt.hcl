@@ -22,6 +22,12 @@ dependency "common" {
     re_documentation_arn                      = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    sqs_send_email_low_queue_name             = ""
+    sqs_send_email_medium_queue_name          = ""
+    sqs_send_email_high_queue_name            = ""
+    sqs_send_sms_low_queue_name               = ""
+    sqs_send_sms_medium_queue_name            = ""
+    sqs_send_sms_high_queue_name              = ""
   }
 }
 
@@ -34,7 +40,7 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 4
+  primary_worker_desired_size               = 7
   primary_worker_instance_types             = ["r5.large"]
   secondary_worker_instance_types           = ["r5.large"]
   nodeUpgrade                               = false  
@@ -65,4 +71,11 @@ inputs = {
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn  
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  sqs_send_email_low_queue_name             = dependency.common.outputs.sqs_send_email_low_queue_name
+  sqs_send_email_medium_queue_name          = dependency.common.outputs.sqs_send_email_medium_queue_name
+  sqs_send_email_high_queue_name            = dependency.common.outputs.sqs_send_email_high_queue_name
+  sqs_send_sms_low_queue_name               = dependency.common.outputs.sqs_send_sms_low_queue_name
+  sqs_send_sms_medium_queue_name            = dependency.common.outputs.sqs_send_sms_medium_queue_name
+  sqs_send_sms_high_queue_name              = dependency.common.outputs.sqs_send_sms_high_queue_name
+  celery_queue_prefix                       = "eks-notification-canada-ca"
 }
