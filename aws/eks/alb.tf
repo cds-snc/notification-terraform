@@ -66,27 +66,6 @@ resource "aws_lb_listener" "notification-canada-ca-80" {
   }
 }
 
-# An HTTPS listener with an old SSL policy
-# for some clients that cannot upgrade to TLSv1.2
-resource "aws_lb_listener" "notification-canada-ca-legacy-tls" {
-  load_balancer_arn = aws_alb.notification-canada-ca.id
-  port              = 4444
-  protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate.notification-canada-ca.arn
-  #tfsec:ignore:AWS010 Outdated SSL policy
-  ssl_policy = "ELBSecurityPolicy-2016-08"
-
-  default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Forbidden"
-      status_code  = "403"
-    }
-  }
-}
-
 ###
 # Document API Specific routing
 ###
