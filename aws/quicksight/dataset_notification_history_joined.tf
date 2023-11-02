@@ -4,7 +4,7 @@
 
 resource "aws_cloudformation_stack" "notification_history_joined" {
   name = "notification-history-joined"
-
+  notification_arns = ["arn:aws:sns:ca-central-1:${var.account_id}:aws-controltower-SecurityNotifications"]
 
   template_body = jsonencode({
 
