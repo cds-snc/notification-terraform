@@ -5,7 +5,7 @@ terraform {
   
   before_hook "get-admin" {
     commands     = ["apply", "plan"]
-    execute      = ["git", "clone","-b", "asset-update", "https://github.com/cds-snc/notification-admin.git", "/var/tmp/notification-admin"]
+    execute      = ["git", "clone", "https://github.com/cds-snc/notification-admin.git", "/var/tmp/notification-admin"]
     run_on_error = true
 
   }

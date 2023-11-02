@@ -184,3 +184,58 @@ variable "notification_base_url_regex_arn" {
   type        = string
   description = "The ARN of the regex for the notify base URL"
 }
+
+variable "sqs_send_email_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-high"
+}
+
+variable "sqs_send_email_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-medium"
+}
+
+variable "sqs_send_email_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-low"
+}
+
+# TODO: delete this variable once we verify that we've transitioned to the new queues
+variable "sqs_sms_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-tasks"
+}
+
+variable "sqs_send_sms_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-high"
+}
+
+variable "sqs_send_sms_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-medium"
+}
+
+variable "sqs_send_sms_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-low"
+}
+
+variable "celery_queue_prefix" {
+  type        = string
+  description = "Celery queue prefix"
+}
