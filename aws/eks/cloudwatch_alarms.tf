@@ -744,5 +744,5 @@ resource "aws_cloudwatch_metric_alarm" "logs-karpenter-unschedulable-pod" {
   threshold           = 1
   treat_missing_data  = "notBreaching"
   #Warning for now
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_actions = [var.sns_alert_warning_arn]
 }
