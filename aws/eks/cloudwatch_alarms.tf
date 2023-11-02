@@ -730,3 +730,19 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "logs-karpenter-unschedulable-pod" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-karpenter-unschedulable-pod-critical"
+  alarm_description   = "There are pods that were unschedulable due to karpenter constraints"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].namespace
+  period              = 120
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  #Warning for now
+  alarm_actions       = [var.sns_alert_warning_arn]
+}

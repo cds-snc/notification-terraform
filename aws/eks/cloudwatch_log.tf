@@ -166,3 +166,16 @@ resource "aws_cloudwatch_log_metric_filter" "documentation-evicted-pods" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "karpenter-error" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "karpenter-error"
+  pattern        = "Could not schedule pod"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "karpenter-error"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
