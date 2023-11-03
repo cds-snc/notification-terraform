@@ -9,5 +9,6 @@ resource "aws_s3_object" "assets" {
   for_each = fileset("/var/tmp/notification-admin/app/assets/cloudfront", "**")
   key      = each.value
   source   = "/var/tmp/notification-admin/app/assets/cloudfront/${each.value}"
+  content_type = "image/svg+xml"
 
 }
