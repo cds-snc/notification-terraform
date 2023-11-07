@@ -70,7 +70,7 @@ inputs = {
   eks_addon_coredns_version                 = "v1.10.1-eksbuild.4"
   eks_addon_kube_proxy_version              = "v1.28.1-eksbuild.1"
   eks_addon_vpc_cni_version                 = "v1.15.0-eksbuild.2"
-  eks_node_ami_version                      = "1.28.1-20230919"
+  eks_node_ami_version                      = "1.28.2-20231027"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 5000
   sign_in_waf_rate_limit                    = 100
@@ -82,6 +82,7 @@ inputs = {
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  celery_queue_prefix                       = "eks-notification-canada-ca"
 }
 
 terraform {
