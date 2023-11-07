@@ -82,6 +82,7 @@ inputs = {
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  celery_queue_prefix                       = "eks-notification-canada-ca"
 }
 
 terraform {
