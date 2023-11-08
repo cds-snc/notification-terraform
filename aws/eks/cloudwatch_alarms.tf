@@ -636,7 +636,7 @@ resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
   alarm_name                = "evicted-api-pods-detected"
   alarm_description         = "One or more Kubernetes API Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
+  evaluation_periods        = "3"
   metric_name               = aws_cloudwatch_log_metric_filter.api-evicted-pods[0].name
   namespace                 = aws_cloudwatch_log_metric_filter.api-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
@@ -653,7 +653,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
   alarm_name                = "evicted-celery-pods-detected"
   alarm_description         = "One or more Kubernetes Celery Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
+  evaluation_periods        = "3"
   metric_name               = aws_cloudwatch_log_metric_filter.celery-evicted-pods[0].name
   namespace                 = aws_cloudwatch_log_metric_filter.celery-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
@@ -670,7 +670,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
   alarm_name                = "evicted-admin-pods-detected"
   alarm_description         = "One or more Kubernetes Admin Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
+  evaluation_periods        = "3"
   metric_name               = aws_cloudwatch_log_metric_filter.admin-evicted-pods[0].name
   namespace                 = aws_cloudwatch_log_metric_filter.admin-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
@@ -687,7 +687,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
   alarm_name                = "evicted-document-download-pods-detected"
   alarm_description         = "One or more Kubernetes Document Download Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
+  evaluation_periods        = "3"
   metric_name               = aws_cloudwatch_log_metric_filter.document-download-evicted-pods[0].name
   namespace                 = aws_cloudwatch_log_metric_filter.document-download-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
@@ -704,7 +704,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
   alarm_name                = "evicted-documentation-pods-detected"
   alarm_description         = "One or more Kubernetes Documentation Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
+  evaluation_periods        = "3"
   metric_name               = aws_cloudwatch_log_metric_filter.documentation-evicted-pods[0].name
   namespace                 = aws_cloudwatch_log_metric_filter.documentation-evicted-pods[0].metric_transformation[0].namespace
   period                    = "60"
