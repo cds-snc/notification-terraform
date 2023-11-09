@@ -283,6 +283,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             name  = "Strict-Transport-Security"
             value = "max-age=63072000; includeSubDomains; preload"
           }
+          response_header {
+            name = "Cross-Origin-Resource-Policy"
+            value = "same-origin"
+          }
         }
       }
     }
