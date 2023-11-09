@@ -284,7 +284,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             value = "max-age=63072000; includeSubDomains; preload"
           }
           response_header {
-            name = "Cross-Origin-Resource-Policy"
+            name  = "Cross-Origin-Resource-Policy"
             value = "same-origin"
           }
         }
