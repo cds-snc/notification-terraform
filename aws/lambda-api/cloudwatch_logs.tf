@@ -81,3 +81,16 @@ resource "aws_cloudwatch_log_metric_filter" "errors-salesforce-api" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "failed-login-count-more-than-10" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "failed-login-count-more-than-10"
+  pattern        = jsonencode("Failed login: Incorrect password for")
+  log_group_name = aws_cloudwatch_log_group.api_lambda_log_group[0].name
+
+  metric_transformation {
+    name      = "failed-login-count"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
