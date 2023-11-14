@@ -3,7 +3,7 @@
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
 resource "aws_cloudformation_stack" "notification_history_joined" {
-  name = "notification-history-joined"
+  name              = "notification-history-joined"
   notification_arns = ["arn:aws:sns:ca-central-1:${var.account_id}:aws-controltower-SecurityNotifications"]
 
   template_body = jsonencode({
@@ -17,28 +17,11 @@ resource "aws_cloudformation_stack" "notification_history_joined" {
           Name         = "Notification history_joined"
           Permissions = [
             {
-              Actions = [
-                "quicksight:DescribeDataSet",
-                "quicksight:DescribeDataSetPermissions",
-                "quicksight:DescribeIngestion",
-                "quicksight:ListIngestions",
-                "quicksight:PassDataSet"
-              ],
+              Actions   = local.dataset_viewer_permissions,
               Principal = aws_quicksight_group.dataset_viewer.arn
             },
             {
-              Actions = [
-                "quicksight:DescribeDataSet",
-                "quicksight:DescribeDataSetPermissions",
-                "quicksight:DescribeIngestion",
-                "quicksight:ListIngestions",
-                "quicksight:PassDataSet",
-                "quicksight:DeleteDataSet",
-                "quicksight:UpdateDataSet",
-                "quicksight:UpdateDataSetPermissions",
-                "quicksight:CreateIngestion",
-                "quicksight:CancelIngestion"
-              ],
+              Actions   = local.dataset_owner_permissions,
               Principal = aws_quicksight_group.dataset_owner.arn
             }
           ],
@@ -83,7 +66,7 @@ resource "aws_cloudformation_stack" "notification_history_joined" {
                   LeftOperand  = "notification-history",
                   RightOperand = "services",
                   Type         = "INNER",
-                  OnClause     = "{service_id} = {id[Services]}"
+                  OnClause     = "{service_id} = {service_id}"
                 }
               }
             },
@@ -95,68 +78,6 @@ resource "aws_cloudformation_stack" "notification_history_joined" {
             },
             services = {
               Alias = "services",
-              DataTransforms = [
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "id",
-                    NewColumnName = "id[Services]"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "updated_at",
-                    NewColumnName = "service_updated_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "created_at",
-                    NewColumnName = "service_created_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "active",
-                    NewColumnName = "service_active"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "count_as_live",
-                    NewColumnName = "service_count_as_live"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "go_live_at",
-                    NewColumnName = "service_go_live_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "name",
-                    NewColumnName = "service_name"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "message_limit",
-                    NewColumnName = "service_message_limit"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "rate_limit",
-                    NewColumnName = "service_rate_limit"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "sms_daily_limit",
-                    NewColumnName = "service_sms_daily_limit"
-                  }
-                }
-              ],
               Source = {
                 DataSetArn = aws_quicksight_data_set.services.arn
               }
