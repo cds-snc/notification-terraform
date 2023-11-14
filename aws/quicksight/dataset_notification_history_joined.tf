@@ -26,8 +26,8 @@ resource "aws_cloudformation_stack" "notification_history_joined" {
             }
           ],
           LogicalTableMap = {
-            main-nhj = {
-              Alias = "main-nhj",
+            nh-services-joined = {
+              Alias = "Intermediate Table",
               DataTransforms = [
                 {
                   ProjectOperation = {
@@ -63,21 +63,21 @@ resource "aws_cloudformation_stack" "notification_history_joined" {
               ],
               Source = {
                 JoinInstruction = {
-                  LeftOperand  = "notification-history-nhj",
-                  RightOperand = "services-nhj",
+                  LeftOperand  = "notification-history",
+                  RightOperand = "services",
                   Type         = "INNER",
                   OnClause     = "{service_id} = {service_id}"
                 }
               }
             },
-            notification-history-nhj = {
-              Alias = "notification-history-nhj",
+            notification-history = {
+              Alias = "notification_history",
               Source = {
                 DataSetArn = aws_quicksight_data_set.notification_history.arn
               }
             },
-            services-nhj = {
-              Alias = "services-nhj",
+            services = {
+              Alias = "services",
               Source = {
                 DataSetArn = aws_quicksight_data_set.services.arn
               }
@@ -88,6 +88,7 @@ resource "aws_cloudformation_stack" "notification_history_joined" {
             DisableUseAsImportedSource    = false
           },
           ImportMode = "SPICE"
+
         }
       }
     }
