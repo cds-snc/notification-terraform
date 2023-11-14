@@ -144,10 +144,10 @@ jobs:
           cd env/staging/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      # - name: Apply aws/quicksight
-      #   run: |
-      #     cd env/staging/quicksight
-      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+      - name: Apply aws/quicksight
+        run: |
+          cd env/staging/quicksight
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-google-cidr
         run: |
