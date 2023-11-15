@@ -68,6 +68,11 @@ jobs:
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3
 
       - name: Apply aws/common
         run: |
@@ -165,10 +170,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: main
-
-      - name: Slack message on failure
-        if: ${{ failure() }}
-        #checkov:skip=CKV_GHA_3:This is an expected use of curl
-        run: |
-          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|Merge to main (Staging)>"}}]}'
-          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}

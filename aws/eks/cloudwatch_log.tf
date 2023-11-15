@@ -89,19 +89,6 @@ resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "bounce-rate-warning" {
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "bounce-rate-warning"
-  pattern        = "warning bounce rate threshold of 5"
-  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
-
-  metric_transformation {
-    name      = "bounce-rate-warning"
-    namespace = "LogMetrics"
-    value     = "1"
-  }
-}
-
 resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "api-evicted-pods"
@@ -179,3 +166,4 @@ resource "aws_cloudwatch_log_metric_filter" "karpenter-error" {
     value     = "1"
   }
 }
+

@@ -60,6 +60,11 @@ jobs:
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3           
 
       - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
         id: filter
