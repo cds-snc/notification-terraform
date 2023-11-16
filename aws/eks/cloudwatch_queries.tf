@@ -178,23 +178,6 @@ resource "aws_cloudwatch_query_definition" "celery-filter-by-job" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.labels.app like /^celery/
-| filter @message /0d58e195-d6ae-4fe3-aa73-064ff106972b/
-| sort @timestamp desc
-| limit 20
-QUERY
-}
-
-resource "aws_cloudwatch_query_definition" "celery-filter-by-job" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Filter by job"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.labels.app like /^celery/
 | filter @message like /0d58e195-d6ae-4fe3-aa73-064ff106972b/
 | sort @timestamp desc
 | limit 20
@@ -250,7 +233,7 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "celery-worker-exited-prematurely" {
+resource "aws_cloudwatch_query_definition" "celery-worker-exits-cold-vs-warm" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Worker exits, cold vs warm"
 
