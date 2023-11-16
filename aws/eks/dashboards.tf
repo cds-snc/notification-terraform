@@ -13,7 +13,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery", { "region": "${var.region}" } ],
-                    [ "...", "celery-sms-send", { "region": "${var.region}" } ]
+                    [ "...", "celery-sms-send", { "region": "${var.region}" } ],
                     [ "...", "celery-email-send", { "region": "${var.region}" } ]
                 ],
                 "sparkline": true,
