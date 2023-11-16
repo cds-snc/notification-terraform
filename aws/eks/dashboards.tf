@@ -4,16 +4,17 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
   dashboard_body = <<EOF
 {
     "widgets": [
-             {
+        {
             "height": 6,
-            "width": 5,
+            "width": 6,
             "y": 17,
             "x": 11,
             "type": "metric",
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery", { "region": "${var.region}" } ],
-                    [ "...", "celery-sms-send", { "region": "${var.region}" } ]
+                    [ "...", "celery-sms-send", { "region": "${var.region}" } ],
+                    [ "...", "celery-email-send", { "region": "${var.region}" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -102,11 +103,11 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "sparkline": true
             }
         },
-          {
+        {
             "height": 6,
-            "width": 8,
+            "width": 7,
             "y": 17,
-            "x": 16,
+            "x": 17,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -307,8 +308,6 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 }
             }
         },
-        
-        
         {
             "height": 1,
             "width": 24,
@@ -384,7 +383,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 7,
-            "y": 10,
+            "y": 3,
             "x": 17,
             "type": "log",
             "properties": {
@@ -426,7 +425,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery/\n| fields @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/ as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /^celery/\n| fields @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/ as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "500s",
@@ -451,16 +450,6 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
 }
 EOF
 }
-
-
-
-
-
-
-
-
-
-
 
 resource "aws_cloudwatch_dashboard" "elb" {
   count          = var.cloudwatch_enabled ? 1 : 0
