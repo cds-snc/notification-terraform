@@ -715,3 +715,31 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "karpenter-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  alarm_description   = "Karpenter Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+  threshold          = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = "karpenter"
+        deployment  = "karpenter"
+      }
+    }
+  }
+}
