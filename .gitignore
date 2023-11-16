@@ -43,3 +43,7 @@ override.tf.json
 
 # VSCode editor's files
 .vscode
+
+# aider AI
+.aider*
+.DS_Store
