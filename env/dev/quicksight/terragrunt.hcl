@@ -48,8 +48,6 @@ include {
 }
 
 inputs = {
-  quicksight_db_user           = "dev"
-  env                          = "dev"  
   database_name                = dependency.rds.outputs.database_name
   vpc_private_subnets          = dependency.common.outputs.vpc_private_subnets # do we need this? getting database subnets from rds
   sns_alert_warning_arn        = dependency.common.outputs.sns_alert_warning_arn
