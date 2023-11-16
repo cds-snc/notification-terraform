@@ -5,19 +5,19 @@
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/eks/${var.eks_cluster_name}/cluster"
-  retention_in_days = 14
+  retention_in_days = var.env == "production" ? 0 : 365
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-application-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/containerinsights/${var.eks_cluster_name}/application"
-  retention_in_days = var.env == "production" ? 0 : 30
+  retention_in_days = var.env == "production" ? 0 : 365
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-prometheus-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/containerinsights/${var.eks_cluster_name}/prometheus"
-  retention_in_days = 0
+  retention_in_days = var.env == "production" ? 0 : 365
 }
 
 
