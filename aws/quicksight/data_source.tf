@@ -7,7 +7,7 @@ resource "aws_quicksight_data_source" "rds" {
   }
   credentials {
     credential_pair {
-      username = local.quicksight_db_user_name
+      username = var.quicksight_db_user_name
       password = var.quicksight_db_user_password
     }
   }
