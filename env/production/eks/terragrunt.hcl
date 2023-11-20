@@ -40,12 +40,12 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 4
+  primary_worker_desired_size               = 8
   primary_worker_instance_types             = ["r5.large"]
   secondary_worker_instance_types           = ["r5.large"]
   nodeUpgrade                               = false  
-  primary_worker_max_size                   = 7
-  primary_worker_min_size                   = 3
+  primary_worker_max_size                   = 8
+  primary_worker_min_size                   = 8
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
