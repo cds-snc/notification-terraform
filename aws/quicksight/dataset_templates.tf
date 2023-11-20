@@ -6,7 +6,7 @@ resource "aws_quicksight_data_set" "templates" {
   import_mode = "SPICE"
 
   physical_table_map {
-    physical_table_map_id = "templatesv2"
+    physical_table_map_id = "templates"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "templates"
