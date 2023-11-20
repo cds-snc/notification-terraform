@@ -409,14 +409,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-critical" {
 resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-throttled-sms-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in throttled SMS queue >= 5 minutes for 5 minutes"
+  alarm_description   = "Delay in throttled SMS queue >= 30 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "5"
+  evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
-  period              = 60 * 5
+  period              = 60
   statistic           = "Average"
-  threshold           = 60 * 5
+  threshold           = 60 * 30
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -427,14 +427,14 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning
 resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critical" {
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-throttled-sms-stuck-in-queue-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in throttled SMS queue >= 10 minute for 10 minutes"
+  alarm_description         = "Delay in throttled SMS queue >= 45 minute"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "10"
+  evaluation_periods        = "1"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
-  period                    = 60 * 10
+  period                    = 60
   statistic                 = "Average"
-  threshold                 = 60 * 10
+  threshold                 = 60 * 45
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
