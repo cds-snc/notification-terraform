@@ -49,7 +49,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 8,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.pod_name as PodName, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.pod_name as PodName, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Celery Errors",
