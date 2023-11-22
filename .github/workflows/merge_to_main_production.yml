@@ -24,6 +24,7 @@ env:
   TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
   TF_VAR_rds_cluster_password: ${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.PRODUCTION_APP_DB_USER_PASSWORD }}
+  TF_VAR_quicksight_db_user_password: ${{ secrets.PRODUCTION_QUICKSIGHT_DB_USER_PASSWORD }}
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
@@ -144,6 +145,11 @@ jobs:
       - name: Apply aws/database-tools
         run: |
           cd env/production/database-tools
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/quicksight
+        run: |
+          cd env/production/quicksight
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-google-cidr
