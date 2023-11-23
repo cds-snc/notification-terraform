@@ -21,4 +21,15 @@ resource "aws_quicksight_data_source" "rds" {
     }
   }
   type = "POSTGRESQL"
+  permission {
+    actions = [
+      "quicksight:PassDataSource",
+      "quicksight:DescribeDataSourcePermissions",
+      "quicksight:UpdateDataSource",
+      "quicksight:UpdateDataSourcePermissions",
+      "quicksight:DescribeDataSource",
+      "quicksight:DeleteDataSource"
+    ]
+    principal = aws_quicksight_group.dataset_owner.arn
+  }
 }
