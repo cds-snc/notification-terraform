@@ -2,7 +2,7 @@
 
 resource "aws_cloudwatch_query_definition" "celery-errors" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery errors"
+  name  = "Celery / Errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -19,7 +19,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-filter-by-job" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Filter by job"
+  name  = "Celery / Filter by job"
 
   log_group_names = [
     local.eks_application_log_group
@@ -36,7 +36,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-filter-by-notification-id" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Filter by notification id"
+  name  = "Celery / Filter by notification id"
 
   log_group_names = [
     local.eks_application_log_group
@@ -53,7 +53,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-memory-usage-by-pod" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery Memory Usage By Pod"
+  name  = "Celery / Memory Usage By Pod"
 
   log_group_names = [
     local.eks_application_log_group
@@ -69,7 +69,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-pods-over-cpu-limit" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery Pods over CPU Limit"
+  name  = "Celery / Pods over CPU Limit"
 
   log_group_names = [
     local.eks_application_log_group
@@ -85,7 +85,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-queues" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery queues"
+  name  = "Celery / Queues"
 
   log_group_names = [
     local.eks_application_log_group
@@ -102,7 +102,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-starts" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery Starts"
+  name  = "Celery / Starts"
 
   log_group_names = [
     local.eks_application_log_group
@@ -119,7 +119,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exited-normally" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Worker exited normally"
+  name  = "Celery / Worker exited normally"
 
   log_group_names = [
     local.eks_application_log_group
@@ -135,7 +135,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exited-prematurely" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Worker exited prematurely"
+  name  = "Celery / Worker exited prematurely"
 
   log_group_names = [
     local.eks_application_log_group
@@ -151,7 +151,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exits-cold-vs-warm" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Worker exits, cold vs warm"
+  name  = "Celery / Worker exits, cold vs warm"
 
   log_group_names = [
     local.eks_application_log_group
@@ -169,7 +169,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "retry-attemps-by-duration" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Retry attempts by duration"
+  name  = "Celery / Retry attempts by duration"
 
   log_group_names = [
     local.eks_application_log_group
