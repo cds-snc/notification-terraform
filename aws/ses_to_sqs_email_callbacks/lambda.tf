@@ -1,12 +1,13 @@
 module "ses_to_sqs_email_callbacks" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v4.0.3"
-  name                   = "ses_to_sqs_email_callbacks"
-  billing_tag_value      = var.billing_tag_value
-  ecr_arn                = var.ses_to_sqs_email_callbacks_ecr_arn
-  enable_lambda_insights = true
-  image_uri              = "${var.ses_to_sqs_email_callbacks_ecr_repository_url}:${var.ses_to_sqs_callbacks_docker_tag}"
-  timeout                = 60
-  memory                 = 1024
+  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.3.3"
+  name                       = "ses_to_sqs_email_callbacks"
+  billing_tag_value          = var.billing_tag_value
+  ecr_arn                    = var.ses_to_sqs_email_callbacks_ecr_arn
+  enable_lambda_insights     = true
+  image_uri                  = "${var.ses_to_sqs_email_callbacks_ecr_repository_url}:${var.ses_to_sqs_callbacks_docker_tag}"
+  timeout                    = 60
+  memory                     = 1024
+  log_group_retention_period = var.env == "production" ? 0 : 365
 
   policies = [
     data.aws_iam_policy_document.ses_to_sqs_email_callbacks.json
