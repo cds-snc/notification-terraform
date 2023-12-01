@@ -29,6 +29,11 @@ variable "vpc_private_subnets" {
   type = list(any)
 }
 
+variable "vpc_private_subnets_separate_reader_db" {
+  type        = string
+  description = "Subnet so blazer can run on a reader instance of the DB that isn't used by the app layer"
+}
+
 variable "sns_alert_general_arn" {
   type = string
 }

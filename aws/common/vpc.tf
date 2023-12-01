@@ -87,6 +87,19 @@ resource "aws_subnet" "notification-canada-ca-private" {
   }
 }
 
+resource "aws_subnet" "notification-canada-ca-private-separate-db-reader" {
+  vpc_id            = aws_vpc.notification-canada-ca.id
+  cidr_block        = "10.0.16.0/24"
+  availability_zone = element(data.aws_availability_zones.available.names, 0)
+
+  tags = {
+    Name       = "Private Subnet for database-tools (DB Reader)"
+    CostCenter = "notification-canada-ca-${var.env}"
+    Access     = "private"
+  }
+}
+
+
 resource "aws_subnet" "notification-canada-ca-public" {
   count = 3
 

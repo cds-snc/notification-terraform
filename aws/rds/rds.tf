@@ -13,12 +13,41 @@ resource "aws_db_subnet_group" "notification-canada-ca" {
   }
 }
 
+resource "aws_db_subnet_group" "notification-canada-ca-reader-db" {
+  name       = "notification-canada-ca-separate-reader-db${var.env}"
+  subnet_ids = var.vpc_private_subnets_separate_reader_db
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   count                        = var.rds_instance_count
   identifier                   = "notification-canada-ca-${var.env}-instance-${count.index}"
   cluster_identifier           = aws_rds_cluster.notification-canada-ca.id
   instance_class               = var.rds_instance_type
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
+  engine                       = aws_rds_cluster.notification-canada-ca.engine
+  engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
+  performance_insights_enabled = true
+  # tfsec:ignore:AWS053 - Encryption for RDS Perfomance Insights should be enabled.
+  # Cannot set a custom KMS key after performance insights has been enabled
+  # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
+  preferred_maintenance_window = "wed:04:00-wed:04:30"
+  auto_minor_version_upgrade   = false
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_rds_cluster_instance" "notification-canada-ca-separate-reader-db" {
+  count                        = 1
+  identifier                   = "notification-canada-ca-${var.env}-separate-reader-db-${count.index}"
+  cluster_identifier           = aws_rds_cluster.notification-canada-ca.id
+  instance_class               = var.rds_instance_type
+  db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca-reader-db.name
   engine                       = aws_rds_cluster.notification-canada-ca.engine
   engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
   performance_insights_enabled = true
