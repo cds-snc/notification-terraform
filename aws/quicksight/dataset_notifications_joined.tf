@@ -51,23 +51,16 @@ resource "aws_cloudformation_stack" "notification_joined" {
                   ProjectOperation = {
                     ProjectedColumns = [
                       "id",
+                      "created_at",
+                      "sent_at",
+                      "updated_at",
                       "job_id",
-                      "job_row_number",
-                      "service_id",
-                      "template_id",
-                      "template_version",
                       "api_key_id",
                       "key_type",
                       "notification_type",
-                      "created_at",
-                      "sent_at",
-                      "sent_by",
-                      "updated_at",
-                      "billable_units",
                       "notification_status",
                       "queue_name",
-                      "feedback_type",
-                      "feedback_subtype",
+                      "service_id",
                       "service_active",
                       "service_count_as_live",
                       "service_go_live_at",
@@ -75,6 +68,8 @@ resource "aws_cloudformation_stack" "notification_joined" {
                       "service_message_limit",
                       "service_rate_limit",
                       "service_sms_daily_limit",
+                      "template_id",
+                      "template_version",
                       "template_name",
                       "template_created_at",
                       "template_updated_at"
@@ -86,7 +81,7 @@ resource "aws_cloudformation_stack" "notification_joined" {
                 JoinInstruction = {
                   LeftOperand  = "nj-notifications-services",
                   RightOperand = "nj-templates",
-                  Type         = "INNER",
+                  Type         = "LEFT",
                   OnClause     = "{template_id} = {id[Templates]}"
                 }
               }
@@ -94,44 +89,11 @@ resource "aws_cloudformation_stack" "notification_joined" {
 
             nj-notifications-services = {
               Alias = "nj-notifications-services",
-              DataTransforms = [
-                {
-                  ProjectOperation = {
-                    ProjectedColumns = [
-                      "id",
-                      "job_id",
-                      "job_row_number",
-                      "service_id",
-                      "template_id",
-                      "template_version",
-                      "api_key_id",
-                      "key_type",
-                      "notification_type",
-                      "created_at",
-                      "sent_at",
-                      "sent_by",
-                      "updated_at",
-                      "billable_units",
-                      "notification_status",
-                      "queue_name",
-                      "feedback_type",
-                      "feedback_subtype",
-                      "service_active",
-                      "service_count_as_live",
-                      "service_go_live_at",
-                      "service_name",
-                      "service_message_limit",
-                      "service_rate_limit",
-                      "service_sms_daily_limit"
-                    ]
-                  }
-                }
-              ],
               Source = {
                 JoinInstruction = {
                   LeftOperand  = "nj-notifications",
                   RightOperand = "nj-services",
-                  Type         = "INNER",
+                  Type         = "LEFT",
                   OnClause     = "{service_id} = {id[Services]}"
                 }
               }
@@ -264,7 +226,6 @@ resource "aws_cloudformation_stack" "notification_joined" {
             DisableUseAsImportedSource    = false
           },
           ImportMode = "SPICE"
-
         }
       }
     }
