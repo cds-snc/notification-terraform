@@ -42,6 +42,81 @@ resource "aws_cloudformation_stack" "notification_joined" {
               Principal = aws_quicksight_group.dataset_owner.arn
             }
           ],
+
+          PhysicalTableMap = {
+            nj-notifications-physical = {
+              RelationalTable = {
+                DataSourceArn = aws_quicksight_data_source.rds.arn
+                # Catalog =  "",
+                Name = "notifications"
+                InputColumns = [
+                  {
+                    Name = "id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "to",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "job_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "service_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "template_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "created_at",
+                    Type = "DATETIME"
+                  },
+                  {
+                    Name = "sent_at",
+                    Type = "DATETIME"
+                  },
+                  {
+                    Name = "sent_by",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "updated_at",
+                    Type = "DATETIME"
+                  },
+                  {
+                    Name = "template_version",
+                    Type = "INTEGER"
+                  },
+                  {
+                    Name = "api_key_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "key_type",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "notification_type",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "notification_status",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "queue_name",
+                    Type = "STRING"
+                  }
+                ]
+              }
+            }
+          }
+
+
+
           LogicalTableMap = {
 
             nj-notifications-services-templates = {
@@ -102,7 +177,7 @@ resource "aws_cloudformation_stack" "notification_joined" {
             nj-notifications = {
               Alias = "nj-notifications",
               Source = {
-                DataSetArn = aws_quicksight_data_set.notifications.arn
+                PhysicalTableId = "nj-notifications-physical"
               }
             },
 
