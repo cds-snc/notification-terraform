@@ -115,12 +115,10 @@ resource "aws_cloudformation_stack" "notification_joined" {
             }
           }
 
-
-
           LogicalTableMap = {
 
-            nj-notifications-services-templates = {
-              Alias = "nj-notifications-services-templates",
+            nj-notifications-services-org-templates = {
+              Alias = "nj-notifications-services-org-templates",
               DataTransforms = [
                 {
                   ProjectOperation = {
@@ -147,17 +145,31 @@ resource "aws_cloudformation_stack" "notification_joined" {
                       "template_version",
                       "template_name",
                       "template_created_at",
-                      "template_updated_at"
+                      "template_updated_at",
+                      "org_name",
+                      "org_id"
                     ]
                   }
                 }
               ],
               Source = {
                 JoinInstruction = {
-                  LeftOperand  = "nj-notifications-services",
+                  LeftOperand  = "nj-notifications-services-org",
                   RightOperand = "nj-templates",
                   Type         = "LEFT",
                   OnClause     = "{template_id} = {id[Templates]}"
+                }
+              }
+            },
+
+            nj-notifications-services-org = {
+              Alias = "nj-notifications-services-org",
+              Source = {
+                JoinInstruction = {
+                  LeftOperand  = "nj-notifications-services",
+                  RightOperand = "nj-organisation",
+                  Type         = "LEFT",
+                  OnClause     = "{organisation_id} = {org_id}"
                 }
               }
             },
@@ -295,6 +307,38 @@ resource "aws_cloudformation_stack" "notification_joined" {
               }
             }
 
+            nj-organisation = {
+              Alias = "nj-organisation",
+              DataTransforms = [
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "id",
+                    NewColumnName = "org_id"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "created_at",
+                    NewColumnName = "org_created_at"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "updated_at",
+                    NewColumnName = "org_updated_at"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "name",
+                    NewColumnName = "org_name"
+                  }
+                },
+              ],
+              Source = {
+                DataSetArn = aws_quicksight_data_set.organisation.arn
+              }
+            }
           },
           DataSetUsageConfiguration = {
             DisableUseAsDirectQuerySource = false,
