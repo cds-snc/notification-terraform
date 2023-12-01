@@ -123,16 +123,16 @@ resource "aws_cloudformation_stack" "notification_joined" {
                 {
                   ProjectOperation = {
                     ProjectedColumns = [
-                      "id",
-                      "created_at",
-                      "sent_at",
-                      "updated_at",
-                      "job_id",
-                      "api_key_id",
-                      "key_type",
+                      "notification_id",
+                      "notification_created_at",
+                      "notification_sent_at",
+                      "notification_updated_at",
                       "notification_type",
                       "notification_status",
-                      "queue_name",
+                      "notification_queue_name",
+                      "job_id",
+                      "api_key_id",
+                      "api_key_type",
                       "service_id",
                       "service_active",
                       "service_count_as_live",
@@ -146,8 +146,8 @@ resource "aws_cloudformation_stack" "notification_joined" {
                       "template_name",
                       "template_created_at",
                       "template_updated_at",
-                      "org_name",
-                      "org_id"
+                      "organisation_name",
+                      "organisation_id"
                     ]
                   }
                 }
@@ -169,7 +169,7 @@ resource "aws_cloudformation_stack" "notification_joined" {
                   LeftOperand  = "nj-notifications-services",
                   RightOperand = "nj-organisation",
                   Type         = "LEFT",
-                  OnClause     = "{organisation_id} = {org_id}"
+                  OnClause     = "{organisation_id} = {id[Organisation]}"
                 }
               }
             },
@@ -188,6 +188,44 @@ resource "aws_cloudformation_stack" "notification_joined" {
 
             nj-notifications = {
               Alias = "nj-notifications",
+              DataTransforms = [
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "id",
+                    NewColumnName = "notification_id"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "created_at",
+                    NewColumnName = "notification_created_at"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "sent_at",
+                    NewColumnName = "notification_sent_at"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "updated_at",
+                    NewColumnName = "notification_updated_at"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "queue_name",
+                    NewColumnName = "notification_queue_name"
+                  }
+                },
+                {
+                  RenameColumnOperation = {
+                    ColumnName    = "key_type",
+                    NewColumnName = "api_key_type"
+                  }
+                },
+              ]
               Source = {
                 PhysicalTableId = "nj-notifications-physical"
               }
@@ -274,13 +312,13 @@ resource "aws_cloudformation_stack" "notification_joined" {
                 {
                   RenameColumnOperation = {
                     ColumnName    = "version",
-                    NewColumnName = "version[Templates]"
+                    NewColumnName = "template[Templates]"
                   }
                 },
                 {
                   RenameColumnOperation = {
                     ColumnName    = "service_id",
-                    NewColumnName = "service_id[Templates]"
+                    NewColumnName = "template_service_id"
                   }
                 },
                 {
@@ -313,25 +351,25 @@ resource "aws_cloudformation_stack" "notification_joined" {
                 {
                   RenameColumnOperation = {
                     ColumnName    = "id",
-                    NewColumnName = "org_id"
+                    NewColumnName = "id[Organisation]"
                   }
                 },
                 {
                   RenameColumnOperation = {
                     ColumnName    = "created_at",
-                    NewColumnName = "org_created_at"
+                    NewColumnName = "organisation_created_at"
                   }
                 },
                 {
                   RenameColumnOperation = {
                     ColumnName    = "updated_at",
-                    NewColumnName = "org_updated_at"
+                    NewColumnName = "organisation_updated_at"
                   }
                 },
                 {
                   RenameColumnOperation = {
                     ColumnName    = "name",
-                    NewColumnName = "org_name"
+                    NewColumnName = "organisation_name"
                   }
                 },
               ],
