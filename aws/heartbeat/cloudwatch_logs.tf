@@ -5,7 +5,7 @@
 resource "aws_cloudwatch_log_group" "heartbeat_log_group" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "heartbeat_log_group"
-  retention_in_days = var.env == "production" ? 0 : 365
+  retention_in_days = var.log_retention_period_days
   tags = {
     CostCenter  = "notification-canada-ca-${var.env}"
     Environment = var.env
