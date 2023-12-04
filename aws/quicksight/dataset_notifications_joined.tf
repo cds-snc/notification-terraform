@@ -2,8 +2,8 @@
 # We have to use a cloudformation stack here because the provider has a bug in it
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
-resource "aws_cloudformation_stack" "notification_joined" {
-  name              = "notifications-joined"
+resource "aws_cloudformation_stack" "notifications" {
+  name              = "notifications"
   notification_arns = ["arn:aws:sns:ca-central-1:${var.account_id}:aws-controltower-SecurityNotifications"]
 
   template_body = jsonencode({
@@ -13,8 +13,8 @@ resource "aws_cloudformation_stack" "notification_joined" {
         Type = "AWS::QuickSight::DataSet"
         Properties = {
           AwsAccountId = var.account_id
-          DataSetId    = "notifications_joined"
-          Name         = "Notifications joined"
+          DataSetId    = "notifications"
+          Name         = "Notifications"
           Permissions = [
             {
               Actions = [
