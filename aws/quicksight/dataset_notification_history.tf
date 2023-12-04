@@ -2,19 +2,19 @@
 # We have to use a cloudformation stack here because the provider has a bug in it
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
-resource "aws_cloudformation_stack" "notifications" {
-  name              = "notifications"
+resource "aws_cloudformation_stack" "notification_history" {
+  name              = "notification-history"
   notification_arns = ["arn:aws:sns:ca-central-1:${var.account_id}:aws-controltower-SecurityNotifications"]
 
   template_body = jsonencode({
 
     Resources = {
-      notificationsJoined = {
+      notificationHistoryJoined = {
         Type = "AWS::QuickSight::DataSet"
         Properties = {
           AwsAccountId = var.account_id
-          DataSetId    = "notifications"
-          Name         = "Notifications"
+          DataSetId    = "notification-history"
+          Name         = "Notification History"
           Permissions = [
             {
               Actions = [
@@ -44,11 +44,11 @@ resource "aws_cloudformation_stack" "notifications" {
           ],
 
           PhysicalTableMap = {
-            nj-notifications-physical = {
+            nj-notification-history-physical = {
               RelationalTable = {
                 DataSourceArn = aws_quicksight_data_source.rds.arn
                 # Catalog =  "",
-                Name = "notifications"
+                Name = "notification_history"
                 InputColumns = [
                   {
                     Name = "id",
@@ -113,8 +113,8 @@ resource "aws_cloudformation_stack" "notifications" {
 
           LogicalTableMap = {
 
-            nj-notifications-services-org-templates = {
-              Alias = "nj-notifications-services-org-templates",
+            nj-notification-history-services-org-templates = {
+              Alias = "nj-notification-history-services-org-templates",
               DataTransforms = [
                 {
                   ProjectOperation = {
@@ -150,7 +150,7 @@ resource "aws_cloudformation_stack" "notifications" {
               ],
               Source = {
                 JoinInstruction = {
-                  LeftOperand  = "nj-notifications-services-org",
+                  LeftOperand  = "nj-notification-history-services-org",
                   RightOperand = "nj-templates",
                   Type         = "LEFT",
                   OnClause     = "{template_id} = {id[Templates]}"
@@ -158,11 +158,11 @@ resource "aws_cloudformation_stack" "notifications" {
               }
             },
 
-            nj-notifications-services-org = {
-              Alias = "nj-notifications-services-org",
+            nj-notification-history-services-org = {
+              Alias = "nj-notification-history-services-org",
               Source = {
                 JoinInstruction = {
-                  LeftOperand  = "nj-notifications-services",
+                  LeftOperand  = "nj-notification-history-services",
                   RightOperand = "nj-organisation",
                   Type         = "LEFT",
                   OnClause     = "{organisation_id} = {id[Organisation]}"
@@ -170,11 +170,11 @@ resource "aws_cloudformation_stack" "notifications" {
               }
             },
 
-            nj-notifications-services = {
-              Alias = "nj-notifications-services",
+            nj-notification-history-services = {
+              Alias = "nj-notification-history-services",
               Source = {
                 JoinInstruction = {
-                  LeftOperand  = "nj-notifications",
+                  LeftOperand  = "nj-notification-history",
                   RightOperand = "nj-services",
                   Type         = "LEFT",
                   OnClause     = "{service_id} = {id[Services]}"
@@ -182,8 +182,8 @@ resource "aws_cloudformation_stack" "notifications" {
               }
             },
 
-            nj-notifications = {
-              Alias = "nj-notifications",
+            nj-notification-history = {
+              Alias = "nj-notification-history",
               DataTransforms = [
                 {
                   RenameColumnOperation = {
@@ -223,7 +223,7 @@ resource "aws_cloudformation_stack" "notifications" {
                 },
               ]
               Source = {
-                PhysicalTableId = "nj-notifications-physical"
+                PhysicalTableId = "nj-notification-history-physical"
               }
             },
 
