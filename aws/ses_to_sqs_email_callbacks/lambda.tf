@@ -7,7 +7,7 @@ module "ses_to_sqs_email_callbacks" {
   image_uri                  = "${var.ses_to_sqs_email_callbacks_ecr_repository_url}:${var.ses_to_sqs_callbacks_docker_tag}"
   timeout                    = 60
   memory                     = 1024
-  log_group_retention_period = var.env == "production" ? 0 : 365
+  log_group_retention_period = var.sensitive_log_retention_period_days
 
   policies = [
     data.aws_iam_policy_document.ses_to_sqs_email_callbacks.json

@@ -12,7 +12,7 @@ module "ses_receiving_emails" {
   image_uri                  = "${var.ses_receiving_emails_ecr_repository_url}:${var.ses_receiving_emails_docker_tag}"
   timeout                    = 60
   memory                     = 1024
-  log_group_retention_period = var.env == "production" ? 0 : 365
+  log_group_retention_period = var.sensitive_log_retention_period_days
 
   environment_variables = {
     NOTIFY_SENDING_DOMAIN   = var.notify_sending_domain

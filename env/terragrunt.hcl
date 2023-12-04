@@ -113,6 +113,19 @@ variable "cloudwatch_enabled" {
   default     = true
   description = "Use this flag to enable/disable cloudwatch logs. Useful for saving money on scratch accounts"
 }
+
+variable "log_retention_period_days" {
+  description = "Log retention period in days for normal logs"
+  type        = number
+  default     = 0
+}
+
+variable "sensitive_log_retention_period_days" {
+  description = "Log retention period in days for logs with sensitive information"
+  type        = number
+  default     = 7
+}
+
 EOF
 }
 
