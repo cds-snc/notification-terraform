@@ -5,7 +5,7 @@
 resource "aws_cloudwatch_log_group" "ses_to_sqs_email_callbacks_log_group" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "ses_to_sqs_email_callbacks_log_group"
-  retention_in_days = var.env == "production" ? 0 : 365
+  retention_in_days = var.sensitive_log_retention_period_days
   tags = {
     CostCenter  = "notification-canada-ca-${var.env}"
     Environment = var.env
