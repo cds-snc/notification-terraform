@@ -308,9 +308,9 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "celeryprimary--pods-high-memory-warning" {
+resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-memory-warning" {
   count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "celeryprimary--pods-high-memory-warning"
+  alarm_name                = "celery-primary-pods-high-memory-warning"
   alarm_description         = "Average memory of Primary Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
