@@ -202,10 +202,10 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
+resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-cpu-warning" {
   count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "celery-pods-high-cpu-warning"
-  alarm_description         = "Average CPU of Celery pods >=50% during 10 minutes"
+  alarm_name                = "celery-primary-pods-high-cpu-warning"
+  alarm_description         = "Average CPU of Primary Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
@@ -218,7 +218,28 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-cpu-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "celery"
+    Service     = "celery-primary"
+    ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "celery-scalable-pods-high-cpu-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "celery-scalable-pods-high-cpu-warning"
+  alarm_description         = "Average CPU of Scalable Celery pods >=50% during 10 minutes"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  metric_name               = "pod_cpu_utilization"
+  namespace                 = "ContainerInsights"
+  period                    = 300
+  statistic                 = "Average"
+  threshold                 = 50
+  alarm_actions             = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+  treat_missing_data        = "missing"
+  dimensions = {
+    Namespace   = "notification-canada-ca"
+    Service     = "celery-scalable"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -287,10 +308,10 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
+resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-memory-warning" {
   count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "celery-pods-high-memory-warning"
-  alarm_description         = "Average memory of Celery pods >=50% during 10 minutes"
+  alarm_name                = "celery-primary-pods-high-memory-warning"
+  alarm_description         = "Average memory of Primary Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
   metric_name               = "pod_memory_utilization"
@@ -303,7 +324,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-pods-high-memory-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "celery"
+    Service     = "celery-primary"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -435,12 +456,12 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
+resource "aws_cloudwatch_metric_alarm" "celery-primary-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "celery-replicas-unavailable"
+  alarm_name          = "celery-primary-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
-  alarm_description   = "Celery Replicas Unavailable"
+  alarm_description   = "Celery Primary Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "notBreaching"
@@ -457,7 +478,36 @@ resource "aws_cloudwatch_metric_alarm" "celery-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "celery"
+        deployment  = "celery-primary"
+      }
+    }
+  }
+}
+
+
+resource "aws_cloudwatch_metric_alarm" "celery-scalable-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "celery-scalable-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 3
+  alarm_description   = "Celery Scalable Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+  threshold          = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-scalable"
       }
     }
   }
@@ -514,6 +564,120 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
         deployment  = "celery-sms"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "celery-email-send-primary-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "celery-email-send-primary-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  alarm_description   = "Celery Email Send Primary Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+  threshold          = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-email-send-primary"
+      }
+    }
+  }
+}
+
+
+resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "celery-email-send-scalable-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 3
+  alarm_description   = "Celery Email Send Scalable Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+  threshold          = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-email-send-scalable"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "celery-sms-send-primary-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "celery-sms-send-primary-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  alarm_description   = "Celery SMS Send Primary Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+  threshold          = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-sms-send-primary"
+      }
+    }
+  }
+}
+
+
+resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "celery-sms-send-scalable-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 3
+  alarm_description   = "Celery SMS Send Scalable Replicas Unavailable"
+  #Setting to warn until we verify that it is working as expected
+  alarm_actions      = [var.sns_alert_warning_arn]
+  treat_missing_data = "notBreaching"
+  threshold          = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = var.notify_k8s_namespace
+        deployment  = "celery-sms-send-scalable"
       }
     }
   }
