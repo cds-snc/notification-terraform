@@ -21,7 +21,7 @@ module "vpn" {
 }
 
 #
-# Self-signed certificate used for VPN communication
+# Certificate used for VPN communication
 #
 resource "aws_acm_certificate" "client_vpn" {
   private_key      = var.client_vpn_private_key
@@ -30,5 +30,9 @@ resource "aws_acm_certificate" "client_vpn" {
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
