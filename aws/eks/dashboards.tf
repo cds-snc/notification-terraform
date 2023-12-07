@@ -7,19 +7,18 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 6,
-            "y": 17,
-            "x": 11,
+            "y": 3,
+            "x": 18,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery", { "region": "${var.region}" } ],
-                    [ "...", "celery-sms-send", { "region": "${var.region}" } ],
-                    [ "...", "celery-email-send", { "region": "${var.region}" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-email-send-primary", { "region": "${var.region}", "label": "celery-email-send-primary" } ],
+                    [ "...", "celery-email-send-scalable", { "region": "${var.region}", "label": "celery-email-send-scalable" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
                 "region": "${var.region}",
-                "title": "Celery Pods",
+                "title": "celery-email-send",
                 "period": 60,
                 "stat": "Maximum"
             }
@@ -58,7 +57,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 6,
-            "width": 8,
+            "width": 9,
             "y": 3,
             "x": 0,
             "type": "metric",
@@ -82,7 +81,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 6,
-            "width": 8,
+            "width": 9,
             "y": 10,
             "x": 0,
             "type": "metric",
@@ -107,13 +106,14 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "height": 6,
             "width": 7,
             "y": 17,
-            "x": 17,
+            "x": 11,
             "type": "metric",
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "admin", { "label": "admin", "region": "${var.region}", "color": "#69ae34" } ],
                     [ "...", "document-download-api", { "region": "${var.region}", "label": "document-download-api" } ],
-                    [ "...", "documentation", { "region": "${var.region}", "label": "documentation" } ]
+                    [ "...", "documentation", { "region": "${var.region}", "label": "documentation" } ],
+                    [ "...", "api", { "region": "${var.region}", "label": "api-k8s" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -330,7 +330,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 1,
-            "width": 24,
+            "width": 23,
             "y": 16,
             "x": 0,
             "type": "text",
@@ -342,7 +342,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "height": 6,
             "width": 9,
             "y": 3,
-            "x": 8,
+            "x": 9,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -363,7 +363,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "height": 6,
             "width": 9,
             "y": 10,
-            "x": 8,
+            "x": 9,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -378,20 +378,6 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "period": 60,
                 "stat": "Maximum",
                 "sparkline": true
-            }
-        },
-        {
-            "height": 6,
-            "width": 7,
-            "y": 3,
-            "x": 17,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms-send/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
-                "region": "${var.region}",
-                "stacked": false,
-                "title": "Errors per minute",
-                "view": "timeSeries"
             }
         },
         {
@@ -444,6 +430,44 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "stacked": false,
                 "title": "500s",
                 "view": "table"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 17,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-primary", { "region": "${var.region}", "label": "celery-primary" } ],
+                    [ "...", "celery-scalable", { "region": "${var.region}", "label": "celery-scalable" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "celery",
+                "period": 60,
+                "stat": "Maximum"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 10,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-sms-send-primary", { "region": "${var.region}", "label": "celery-sms-send-primary" } ],
+                    [ "...", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "celery-sms-send",
+                "period": 60,
+                "stat": "Maximum"
             }
         }
     ]
