@@ -6,7 +6,7 @@ resource "aws_quicksight_data_set" "login_events" {
   import_mode = "SPICE"
 
   physical_table_map {
-    physical_table_map_id = "login_events"
+    physical_table_map_id = "login-events"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "login_events"
