@@ -32,6 +32,7 @@ dependency "common" {
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -74,6 +75,7 @@ inputs = {
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 5000
   sign_in_waf_rate_limit                    = 100
+  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
   re_api_arn                                = dependency.common.outputs.re_api_arn
