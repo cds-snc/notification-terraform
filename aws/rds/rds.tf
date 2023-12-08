@@ -15,7 +15,7 @@ resource "aws_db_subnet_group" "notification-canada-ca" {
 
 resource "aws_db_subnet_group" "notification-canada-ca-reader-db" {
   name       = "notification-canada-ca-separate-reader-db${var.env}"
-  subnet_ids = var.vpc_private_subnets_separate_reader_db
+  subnet_ids = [var.vpc_private_subnets_separate_reader_db]
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
