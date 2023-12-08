@@ -163,6 +163,26 @@ resource "aws_route_table_association" "notification-canada-ca-private" {
   route_table_id = aws_route_table.notification-canada-ca-private_subnet.*.id[count.index]
 }
 
+# Route table for Subnet for database-tools (DB Reader)
+resource "aws_route_table" "notification-canada-ca-private-db-reader_subnet" {
+  vpc_id = aws_vpc.notification-canada-ca.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.notification-canada-ca[0].id
+  }
+
+  tags = {
+    Name       = "Private Subnet Route Table for DB reader"
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_route_table_association" "notification-canada-ca-private-db-reader" {
+  subnet_id      = aws_subnet.notification-canada-ca-private-separate-db-reader.id
+  route_table_id = aws_route_table.notification-canada-ca-private-db-reader_subnet.id
+}
+
 ###
 # AWS Network ACL
 ###

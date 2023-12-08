@@ -43,15 +43,13 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 }
 
 resource "aws_rds_cluster_instance" "notification-canada-ca-separate-reader-db" {
-  count                        = 1
-  identifier                   = "notification-canada-ca-${var.env}-separate-reader-db-${count.index}"
+  identifier                   = "notification-canada-ca-${var.env}-separate-reader-db-0"
   cluster_identifier           = aws_rds_cluster.notification-canada-ca.id
   instance_class               = var.rds_instance_type
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca-reader-db.name
   engine                       = aws_rds_cluster.notification-canada-ca.engine
   engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
   performance_insights_enabled = true
-  # tfsec:ignore:AWS053 - Encryption for RDS Perfomance Insights should be enabled.
   # Cannot set a custom KMS key after performance insights has been enabled
   # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
   # checkov:skip= CKV_AWS_354:AWS KMS Is good enough for us
