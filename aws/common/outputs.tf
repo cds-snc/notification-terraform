@@ -174,3 +174,7 @@ output "sqs_send_email_medium_queue_name" {
 output "sqs_send_email_high_queue_name" {
   value = var.sqs_send_email_high_queue_name
 }
+
+output "client_vpn_security_group_id" {
+  value = module.vpn.client_vpn_security_group_id
+}

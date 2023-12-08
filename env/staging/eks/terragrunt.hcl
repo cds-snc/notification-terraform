@@ -38,6 +38,7 @@ dependency "common" {
     sqs_send_sms_low_queue_name               = ""
     sqs_send_sms_medium_queue_name            = ""
     sqs_send_sms_high_queue_name              = ""
+    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -80,6 +81,7 @@ inputs = {
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100
+  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
   re_api_arn                                = dependency.common.outputs.re_api_arn

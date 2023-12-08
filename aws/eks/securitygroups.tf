@@ -158,6 +158,27 @@ resource "aws_security_group" "notification-canada-ca-worker" {
   }
 }
 
+# Client VPN access
+
+resource "aws_security_group_rule" "client-vpn-ingress-database" {
+  description              = "Client VPN ingress to the database"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = var.client_vpn_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+resource "aws_security_group_rule" "client-vpn-ingress-redis" {
+  description              = "Client VPN ingress to the redis cluster"
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  source_security_group_id = var.client_vpn_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
 
 ###
 # Connect all security groups to go through the private link
@@ -320,6 +341,19 @@ resource "aws_security_group_rule" "notification-worker-egress-endpoints-gateway
   protocol          = "tcp"
   security_group_id = aws_security_group.notification-canada-ca-worker.id
   prefix_list_ids   = var.private-links-gateway-prefix-list-ids
+}
+
+# Client VPN
+# Only requires the ingress rule as it already allows full tcp egress on 443
+
+resource "aws_security_group_rule" "private-endpoints-ingress-client-vpn" {
+  description              = "VPC PrivateLink endpoints ingress from eks securitygroup"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = data.aws_security_group.eks-securitygroup-rds.id
+  security_group_id        = var.client_vpn_security_group_id
 }
 
 # Tag EKS Security Group for Karpenter
