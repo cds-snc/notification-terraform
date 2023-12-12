@@ -376,3 +376,61 @@ module "cbs_logs_bucket" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+## Bucket for system status info
+
+module "system_status_bucket_logs" {
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-system_status"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_s3_bucket" "system_status_bucket" {
+  bucket        = "notification-canada-ca-${var.env}-system_status"
+  acl           = "private"
+  force_destroy = var.force_destroy_s3
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  # expire all files after 1 day
+  lifecycle_rule {
+    id      = "tf-s3-lifecycle-all-files"
+    enabled = true
+
+    expiration {
+      days = 1
+    }
+  }
+
+  #tfsec:ignore:AWS077 - Versioning is not enabled
+  logging {
+    target_bucket = module.system_status_bucket_logs.s3_bucket_id
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "system_status_bucket" {
+  bucket = aws_s3_bucket.system_status_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
