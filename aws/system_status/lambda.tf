@@ -8,9 +8,17 @@ module "system_status" {
   timeout                = 60
   memory                 = 1024
 
+  vpc = {
+    security_group_ids = [
+      var.eks_cluster_securitygroup,
+    ]
+    subnet_ids = var.vpc_private_subnets
+  }
+
   environment_variables = {
-    system_status_api_key    = var.system_status_api_key
-    system_status_github_key = var.system_status_github_key
+    system_status_api_key          = var.system_status_api_key
+    system_status_github_key       = var.system_status_github_key
+    sqlalchemy_database_reader_uri = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
   }
 }
 
