@@ -43,3 +43,22 @@ variable "system_status_docker_tag" {
   description = "Set this to specify the image version"
   default     = "bootstrap"
 }
+
+variable "app_db_user_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for rds cluster"
+}
+
+variable "database_read_only_proxy_endpoint" {
+  type        = string
+  description = "Base read only endpoint for rds proxy"
+}
+
+variable "eks_cluster_securitygroup" {
+  type = string
+}
+
+variable "vpc_private_subnets" {
+  type = list(any)
+}
