@@ -25,9 +25,34 @@ module "vpn" {
 #
 # Certificate used for VPN communication
 #
-resource "aws_acm_certificate" "client_vpn" {
-  private_key      = var.client_vpn_private_key
-  certificate_body = var.client_vpn_certificate
+resource "tls_private_key" "client_vpn" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+
+resource "tls_self_signed_cert" "client_vpn" {
+  private_key_pem       = tls_private_key.client_vpn.private_key_pem
+  validity_period_hours = 43800 # 5 years
+  early_renewal_hours   = 672   # Generate new cert if Terraform is run within 4 weeks of expiry
+
+  subject {
+    common_name = "vpn.${var.env}.notification.canada.ca"
+  }
+
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+    "ipsec_end_system",
+    "ipsec_tunnel",
+    "any_extended",
+    "cert_signing",
+  ]
+}
+
+resource "aws_acm_certificate" "this" {
+  private_key      = tls_private_key.client_vpn.private_key_pem
+  certificate_body = tls_self_signed_cert.client_vpn.cert_pem
 
   tags = {
     Name       = "notification-canada-ca"

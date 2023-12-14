@@ -295,15 +295,3 @@ variable "client_vpn_self_service_saml_metadata" {
   type        = string
   sensitive   = true
 }
-
-variable "client_vpn_private_key" {
-  description = "Private key used to create the ACM certificate used by the client VPN."
-  type        = string
-  sensitive   = true
-}
-
-variable "client_vpn_certificate" {
-  description = "Public certificate used to create the ACM certificate used by the client VPN."
-  type        = string
-  sensitive   = true
-}
