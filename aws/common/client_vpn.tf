@@ -50,7 +50,7 @@ resource "tls_self_signed_cert" "client_vpn" {
   ]
 }
 
-resource "aws_acm_certificate" "this" {
+resource "aws_acm_certificate" "client_vpn" {
   private_key      = tls_private_key.client_vpn.private_key_pem
   certificate_body = tls_self_signed_cert.client_vpn.cert_pem
 
