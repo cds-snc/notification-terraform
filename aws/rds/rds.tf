@@ -15,7 +15,7 @@ resource "aws_db_subnet_group" "notification-canada-ca" {
 
 resource "aws_db_subnet_group" "notification-canada-ca-reader-db" {
   name       = "notification-canada-ca-separate-reader-db${var.env}"
-  subnet_ids = [var.vpc_private_subnets_separate_reader_db]
+  subnet_ids = var.vpc_private_subnets_separate_reader_db
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -64,7 +64,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-separate-reader-db" 
 
 resource "aws_rds_cluster_parameter_group" "default" {
   name        = "rds-cluster-pg"
-  family      = "aurora-postgresql11"
+  family      = "aurora-postgresql15"
   description = "RDS customized cluster parameter group"
 
   parameter {

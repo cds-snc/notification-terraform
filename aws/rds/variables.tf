@@ -30,7 +30,7 @@ variable "vpc_private_subnets" {
 }
 
 variable "vpc_private_subnets_separate_reader_db" {
-  type        = string
+  type        = list(any)
   description = "Subnet so blazer can run on a reader instance of the DB that isn't used by the app layer"
 }
 

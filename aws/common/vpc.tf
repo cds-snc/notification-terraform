@@ -88,12 +88,14 @@ resource "aws_subnet" "notification-canada-ca-private" {
 }
 
 resource "aws_subnet" "notification-canada-ca-private-separate-db-reader" {
+  count = 2
+
   vpc_id            = aws_vpc.notification-canada-ca.id
-  cidr_block        = "10.0.16.0/24"
-  availability_zone = element(data.aws_availability_zones.available.names, 0)
+  cidr_block        = cidrsubnet("10.0.16.0/24", 2, count.index)
+  availability_zone = element(data.aws_availability_zones.available.names, count.index)
 
   tags = {
-    Name       = "Private Subnet for database-tools (DB Reader)"
+    Name       = "Private Subnet for database-tools (DB Reader) {count.index + 1}"
     CostCenter = "notification-canada-ca-${var.env}"
     Access     = "private"
   }
@@ -165,22 +167,24 @@ resource "aws_route_table_association" "notification-canada-ca-private" {
 
 # Route table for Subnet for database-tools (DB Reader)
 resource "aws_route_table" "notification-canada-ca-private-db-reader_subnet" {
+  count  = 2
   vpc_id = aws_vpc.notification-canada-ca.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.notification-canada-ca[0].id
+    nat_gateway_id = aws_nat_gateway.notification-canada-ca.*.id[count.index]
   }
 
   tags = {
-    Name       = "Private Subnet Route Table for DB reader"
+    Name       = "Private Subnet Route Table for DB reader ${count.index}"
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 
 resource "aws_route_table_association" "notification-canada-ca-private-db-reader" {
-  subnet_id      = aws_subnet.notification-canada-ca-private-separate-db-reader.id
-  route_table_id = aws_route_table.notification-canada-ca-private-db-reader_subnet.id
+  count          = 2
+  subnet_id      = aws_subnet.notification-canada-ca-private-separate-db-reader.*.id[count.index]
+  route_table_id = aws_route_table.notification-canada-ca-private-db-reader_subnet.*.id[count.index]
 }
 
 ###

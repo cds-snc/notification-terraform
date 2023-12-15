@@ -11,7 +11,7 @@ output "vpc_private_subnets" {
 }
 
 output "vpc_private_subnets_separate_reader_db" {
-  value = aws_subnet.notification-canada-ca-private-separate-db-reader.id
+  value = aws_subnet.notification-canada-ca-private-separate-db-reader.*.id
 }
 
 output "vpc_public_subnets" {
