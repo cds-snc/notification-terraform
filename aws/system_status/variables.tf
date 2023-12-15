@@ -2,17 +2,13 @@ variable "billing_tag_value" {
   type        = string
   description = "Identifies the billing code."
 }
-
-variable "system_status_api_key" {
-  sensitive   = true
+variable "system_status_admin_url" {
   type        = string
-  description = "Identifies the system_status api key."
+  description = "Admin URL"
 }
-
-variable "system_status_github_key" {
-  sensitive   = true
+variable "system_status_api_url" {
   type        = string
-  description = "Key to git commit to the system status repo"
+  description = "API URL"
 }
 
 variable "schedule_expression" {
