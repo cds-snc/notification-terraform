@@ -1,0 +1,20 @@
+variable "billing_tag_value" {
+  type        = string
+  description = "The value of the billing tag"
+
+}
+
+module "system_status_static_site" {
+  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v8.0.0"
+
+  domain_name_source = var.env == "prd" ? "status.notification.canada.ca" : "status.${var.env}.notification.cdssandbox.xyz"
+  billing_tag_value  = var.billing_tag_value
+  hosted_zone_id     = var.route_53_zone_arn
+  s3_bucket_name     = "notification-canada-ca-${var.env}-system-status"
+
+  providers = {
+    aws           = aws
+    aws.us-east-1 = aws.us-east-1
+    aws.dns       = aws.dns
+  }
+}
