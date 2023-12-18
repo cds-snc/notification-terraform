@@ -10,6 +10,10 @@ variable "system_status_api_url" {
   type        = string
   description = "API URL"
 }
+variable "system_status_bucket_name" {
+  type        = string
+  description = "bucket name"
+}
 
 variable "schedule_expression" {
   type        = string

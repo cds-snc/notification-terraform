@@ -19,6 +19,7 @@ module "system_status" {
   environment_variables = {
     system_status_admin_url        = var.system_status_admin_url
     system_status_api_url          = var.system_status_api_url
+    system_status_bucket_name      = "notification-canada-ca-${var.env}-system-status"
     sqlalchemy_database_reader_uri = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
   }
 }
