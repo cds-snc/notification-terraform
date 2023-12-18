@@ -15,7 +15,7 @@ dependency "common" {
       "subnet-08de34a9e1a7458dc",
       "subnet-0af8b8402f1d605ff",
     ]
-    vpc_private_subnets_separate_reader_db = "subnet-0af8b8402f1d60523"
+    vpc_private_subnets_separate_reader_db = ["subnet-0af8b8402f1d60523"]
     sns_alert_general_arn = ""
   }
   mock_outputs_merge_with_state = true
