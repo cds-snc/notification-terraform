@@ -64,10 +64,10 @@ variable "enable_delete_protection" {
   default     = true
 }
 
-variable "database_read_only_proxy_endpoint" {
+/* variable "database_read_only_proxy_endpoint" {
   type        = string
   description = "Base endpoint for rds proxy"
-}
+} */
 variable "app_db_user_password" {
   type        = string
   sensitive   = true
@@ -84,4 +84,9 @@ variable "blazer_slack_webhook_general_topic" {
   description = "Slack webhook used to post blazer checks."
   type        = string
   sensitive   = true
+}
+
+variable "rds_endpoint" {
+  type        = string
+  description = "Interim direct connection endpoint to database for upgrades"
 }

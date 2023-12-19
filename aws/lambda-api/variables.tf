@@ -145,7 +145,7 @@ variable "api_enable_new_relic" {
   default     = true
 }
 
-variable "database_read_only_proxy_endpoint" {
+/* variable "database_read_only_proxy_endpoint" {
   type        = string
   description = "Base read only endpoint for rds proxy"
 }
@@ -153,7 +153,7 @@ variable "database_read_only_proxy_endpoint" {
 variable "database_read_write_proxy_endpoint" {
   type        = string
   description = "Base read write endpoint for rds proxy"
-}
+} */
 
 variable "app_db_user_password" {
   type        = string
@@ -164,4 +164,9 @@ variable "app_db_user_password" {
 variable "alb_arn_suffix" {
   type        = string
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
+}
+
+variable "rds_endpoint" {
+  type        = string
+  description = "Interim direct connection endpoint to database for upgrades"
 }
