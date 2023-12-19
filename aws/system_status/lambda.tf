@@ -8,7 +8,7 @@ module "system_status" {
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.system_status_ecr_repository_url}:${var.system_status_docker_tag}"
+  image_uri              = "${var.system_status_ecr_repository_url}:${local.image_tag}"
   timeout                = 60
   memory                 = 1024
 
