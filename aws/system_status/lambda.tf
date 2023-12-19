@@ -1,3 +1,7 @@
+locals {
+  image_tag = var.env == "production" ? var.system_status_docker_tag : "latest"
+}
+
 module "system_status" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v0.0.49"
   name                   = "system_status"
