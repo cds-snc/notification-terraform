@@ -56,7 +56,7 @@ resource "aws_secretsmanager_secret_version" "app_db_user" {
 # RDS Proxy
 ################################################################################
 
-module "rds_proxy" {
+/* module "rds_proxy" {
   source  = "clowdhaus/rds-proxy/aws"
   version = "2.0.0"
 
@@ -114,3 +114,4 @@ module "rds_proxy" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+ */
