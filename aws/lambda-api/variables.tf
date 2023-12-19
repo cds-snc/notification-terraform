@@ -165,3 +165,8 @@ variable "alb_arn_suffix" {
   type        = string
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
 }
+
+variable "rds_endpoint" {
+  type        = string
+  description = "Interim direct connection endpoint to database for upgrades"
+}

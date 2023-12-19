@@ -85,3 +85,8 @@ variable "blazer_slack_webhook_general_topic" {
   type        = string
   sensitive   = true
 }
+
+variable "rds_endpoint" {
+  type        = string
+  description = "Interim direct connection endpoint to database for upgrades"
+}

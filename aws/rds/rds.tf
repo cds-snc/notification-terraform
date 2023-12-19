@@ -35,7 +35,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 
 resource "aws_rds_cluster_parameter_group" "default" {
   name        = "rds-cluster-pg"
-  family      = "aurora-postgresql11"
+  family      = "aurora-postgresql15"
   description = "RDS customized cluster parameter group"
 
   parameter {
@@ -56,6 +56,12 @@ resource "aws_rds_cluster_parameter_group" "default" {
   parameter {
     name  = "log_statement"
     value = "ddl"
+  }
+
+  parameter {
+    name         = "rds.logical_replication"
+    value        = "1"
+    apply_method = "pending-reboot"
   }
 
   parameter {
