@@ -58,11 +58,11 @@ resource "aws_rds_cluster_parameter_group" "default" {
     value = "ddl"
   }
 
- parameter {
-   name  = "rds.logical_replication"
-   value = "1"
-   apply_method = "pending-reboot"
- }
+  parameter {
+    name         = "rds.logical_replication"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
 
   parameter {
     name         = "rds.log_retention_period"
