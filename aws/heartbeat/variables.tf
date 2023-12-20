@@ -15,9 +15,34 @@ variable "base_domain" {
   description = "Identifies the base url to trigger the heartbeat function with. This is a string in the secrets and parsed in the lambda"
 }
 
-variable "heartbeat_template_id" {
+variable "heartbeat_email_bulk_template_id" {
   type        = string
-  description = "Identifies the template id on the ."
+  description = "Identifies the bulk email template id used by the heartbeat lambda."
+}
+
+variable "heartbeat_email_normal_template_id" {
+  type        = string
+  description = "Identifies the normal email template id used by the heartbeat lambda."
+}
+
+variable "heartbeat_email_priority_template_id" {
+  type        = string
+  description = "Identifies the priority email template id used by the heartbeat lambda."
+}
+
+variable "heartbeat_sms_bulk_template_id" {
+  type        = string
+  description = "Identifies the bulk SMS template id used by the heartbeat lambda."
+}
+
+variable "heartbeat_sms_normal_template_id" {
+  type        = string
+  description = "Identifies the normal SMS template id used by the heartbeat lambda."
+}
+
+variable "heartbeat_sms_priority_template_id" {
+  type        = string
+  description = "Identifies the priority SMS template id used by the heartbeat lambda."
 }
 
 variable "schedule_expression" {

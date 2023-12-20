@@ -20,7 +20,12 @@ env:
   TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
   TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
+  TF_VAR_heartbeat_email_bulk_template_id: ${{ secrets.STAGING_HEARTBEAT_EMAIL_BULK_TEMPLATE_ID }}
+  TF_VAR_heartbeat_email_normal_template_id: ${{ secrets.STAGING_HEARTBEAT_EMAIL_NORMAL_TEMPLATE_ID }}
+  TF_VAR_heartbeat_email_priority_template_id: ${{ secrets.STAGING_HEARTBEAT_EMAIL_PRIORITY_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_bulk_template_id: ${{ secrets.STAGING_HEARTBEAT_SMS_BULK_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_normal_template_id: ${{ secrets.STAGING_HEARTBEAT_SMS_NORMAL_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_priority_template_id: ${{ secrets.STAGING_HEARTBEAT_SMS_PRIORITY_TEMPLATE_ID }}
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
   TF_VAR_quicksight_db_user_password: ${{ secrets.STAGING_QUICKSIGHT_DB_USER_PASSWORD }}
@@ -63,10 +68,10 @@ jobs:
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
         env: # In case you want to override default versions
-            CONFTEST_VERSION: 0.30.0 
-            TERRAFORM_VERSION: 1.6.2
-            TERRAGRUNT_VERSION: 0.44.4
-            TF_SUMMARIZE_VERSION: 0.2.3           
+          CONFTEST_VERSION: 0.30.0
+          TERRAFORM_VERSION: 1.6.2
+          TERRAGRUNT_VERSION: 0.44.4
+          TF_SUMMARIZE_VERSION: 0.2.3
 
       - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
         id: filter
@@ -104,7 +109,7 @@ jobs:
               - 'env/staging/lambda-api/**'
             lambda-admin-pr:
               - 'aws/lambda-admin-pr/**'
-              - 'env/staging/lambda-admin-pr/**'              
+              - 'env/staging/lambda-admin-pr/**'
             performance-test:
               - 'aws/performance-test/**'
               - 'env/staging/performance-test/**'

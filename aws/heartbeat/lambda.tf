@@ -9,9 +9,14 @@ module "heartbeat" {
   memory                 = 1024
 
   environment_variables = {
-    heartbeat_api_key     = var.heartbeat_api_key
-    heartbeat_base_url    = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
-    heartbeat_template_id = var.heartbeat_template_id
+    heartbeat_api_key                    = var.heartbeat_api_key
+    heartbeat_base_url                   = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
+    heartbeat_email_bulk_template_id     = var.heartbeat_email_bulk_template_id
+    heartbeat_email_normal_template_id   = var.heartbeat_email_normal_template_id
+    heartbeat_email_priority_template_id = var.heartbeat_email_priority_template_id
+    heartbeat_sms_bulk_template_id       = var.heartbeat_sms_bulk_template_id
+    heartbeat_sms_normal_template_id     = var.heartbeat_sms_normal_template_id
+    heartbeat_sms_priority_template_id   = var.heartbeat_sms_priority_template_id
   }
 }
 
