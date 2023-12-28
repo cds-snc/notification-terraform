@@ -415,15 +415,15 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warnin
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
+resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-per-service-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-1-critical-bounce-rate-1-minute-warning"
-  alarm_description   = "One service exceeding 10% bounce rate in 1 minute"
+  alarm_name          = "logs-1-bounce-rate-per-service-critical"
+  alarm_description   = "One service exceeding 10% bounce rate in a 12 hour period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].namespace
-  period              = 60
+  period              = 60 * 60 * 12
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
