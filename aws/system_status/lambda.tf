@@ -11,6 +11,7 @@ module "system_status" {
   image_uri              = "${var.system_status_ecr_repository_url}:${local.image_tag}"
   timeout                = 60
   memory                 = 1024
+  policies               = [data.aws_iam_policy_document.system_status_s3_permissions.json]
 
   vpc = {
     security_group_ids = [
@@ -20,8 +21,9 @@ module "system_status" {
   }
 
   environment_variables = {
-    system_status_api_key          = var.system_status_api_key
-    system_status_github_key       = var.system_status_github_key
+    system_status_admin_url        = var.system_status_admin_url
+    system_status_api_url          = var.system_status_api_url
+    system_status_bucket_name      = "notification-canada-ca-${var.env}-system-status"
     sqlalchemy_database_reader_uri = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
   }
 }
