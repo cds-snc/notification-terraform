@@ -35,8 +35,10 @@ env:
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
-  TF_VAR_system_status_api_key: ${{ secrets.STAGING_SYSTEM_STATUS_API_KEY }}
-  TF_VAR_system_status_github_key: ${{ secrets.STAGING_SYSTEM_STATUS_GITHUB_KEY }}
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_system_status_admin_url: "https://staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_api_url: "https://api.staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-staging-system-status"
   TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_waf_secret: ${{secrets.STAGING_WAF_SECRET}}
   # Prevents repeated creation of the Slack lambdas if already existing.
