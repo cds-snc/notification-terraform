@@ -134,3 +134,19 @@ variable "hasura_access_key" {
 variable "auth_tokens" {
   type = string
 }
+
+variable "api_target_group_arn" {
+  type = string
+}
+variable "admin_target_group_arn" {
+  type = string
+}
+variable "document_api_target_group_arn" {
+  type = string
+}
+variable "documentation_target_group_arn" {
+  type = string
+}
+variable "document_target_group_arn" {
+  type = string
+}

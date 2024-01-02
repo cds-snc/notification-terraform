@@ -161,7 +161,7 @@ resource "aws_secretsmanager_secret" "sql_alchemy_database_reader_uri" {
 
 resource "aws_secretsmanager_secret_version" "sql_alchemy_database_reader_uri" {
   secret_id     = aws_secretsmanager_secret.sql_alchemy_database_reader_uri.id
-  secret_string = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.database_name}"
+  secret_string = "postgresql://postgres:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.database_name}"
 }
 
 resource "aws_secretsmanager_secret" "sql_alchemy_database_writer_uri" {
@@ -170,7 +170,7 @@ resource "aws_secretsmanager_secret" "sql_alchemy_database_writer_uri" {
 
 resource "aws_secretsmanager_secret_version" "sql_alchemy_database_writer_uri" {
   secret_id     = aws_secretsmanager_secret.sql_alchemy_database_writer_uri.id
-  secret_string = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.database_name}"
+  secret_string = "postgresql://postgres:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.database_name}"
 }
 resource "aws_secretsmanager_secret" "twilio_account_sid" {
   name = "TWILIO_ACCOUNT_SID"
@@ -339,4 +339,48 @@ resource "aws_secretsmanager_secret" "auth_tokens" {
 resource "aws_secretsmanager_secret_version" "auth_tokens" {
   secret_id     = aws_secretsmanager_secret.auth_tokens.id
   secret_string = var.auth_tokens
+}
+
+
+####
+resource "aws_secretsmanager_secret" "api_target_group_arn" {
+  name = "API_TARGET_GROUP_ARN"
+}
+
+resource "aws_secretsmanager_secret_version" "api_target_group_arn" {
+  secret_id     = aws_secretsmanager_secret.api_target_group_arn.id
+  secret_string = var.api_target_group_arn
+}
+resource "aws_secretsmanager_secret" "admin_target_group_arn" {
+  name = "ADMIN_TARGET_GROUP_ARN"
+}
+
+resource "aws_secretsmanager_secret_version" "admin_target_group_arn" {
+  secret_id     = aws_secretsmanager_secret.admin_target_group_arn.id
+  secret_string = var.admin_target_group_arn
+}
+resource "aws_secretsmanager_secret" "document_api_target_group_arn" {
+  name = "DOCUMENT_API_TARGET_GROUP_ARN"
+}
+
+resource "aws_secretsmanager_secret_version" "document_api_target_group_arn" {
+  secret_id     = aws_secretsmanager_secret.document_api_target_group_arn.id
+  secret_string = var.document_api_target_group_arn
+}
+resource "aws_secretsmanager_secret" "documentation_target_group_arn" {
+  name = "DOCUMENTATION_TARGET_GROUP_ARN"
+}
+
+resource "aws_secretsmanager_secret_version" "documentation_target_group_arn" {
+  secret_id     = aws_secretsmanager_secret.documentation_target_group_arn.id
+  secret_string = var.documentation_target_group_arn
+}
+
+resource "aws_secretsmanager_secret" "document_target_group_arn" {
+  name = "DOCUMENT_TARGET_GROUP_ARN"
+}
+
+resource "aws_secretsmanager_secret_version" "document_target_group_arn" {
+  secret_id     = aws_secretsmanager_secret.document_target_group_arn.id
+  secret_string = var.document_target_group_arn
 }
