@@ -31,6 +31,9 @@ env:
   TF_VAR_slack_channel_warning_topic: notification-ops
   TF_VAR_slack_channel_critical_topic: notification-ops
   TF_VAR_slack_channel_general_topic: notification-ops
+  TF_VAR_system_status_admin_url: "https://notification.canada.ca"
+  TF_VAR_system_status_api_url: "https://api.notification.canada.ca"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-production-system-status"
   TF_VAR_new_relic_license_key: ${{ secrets.PRODUCTION_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_waf_secret: ${{secrets.PRODUCTION_WAF_SECRET}}
   TF_VAR_route_53_zone_arn: /hostedzone/Z07701011ICTZVSX5P68J
@@ -205,5 +208,14 @@ jobs:
           directory: "env/production/lambda-google-cidr"
           comment-delete: "true"
           comment-title: "Production: lambda-google-cidr"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan system_status
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/system_status"
+          comment-delete: "true"
+          comment-title: "Production: system_status"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
