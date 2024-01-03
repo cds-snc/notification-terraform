@@ -35,6 +35,7 @@ env:
   TF_VAR_slack_channel_warning_topic: "notification-ops"
   TF_VAR_slack_channel_critical_topic: "notification-ops"
   TF_VAR_slack_channel_general_topic: "notification-ops"
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.PRODUCTION_SQLALCHEMY_DATABASE_READER_URI }}
   TF_VAR_system_status_admin_url: "https://notification.canada.ca"
   TF_VAR_system_status_api_url: "https://api.notification.canada.ca"
   TF_VAR_system_status_bucket_name: "notification-canada-ca-production-system-status"
