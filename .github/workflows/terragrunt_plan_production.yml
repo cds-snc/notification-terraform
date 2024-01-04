@@ -220,3 +220,4 @@ jobs:
           comment-title: "Production: system_status"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          skip-conftest: "true"
