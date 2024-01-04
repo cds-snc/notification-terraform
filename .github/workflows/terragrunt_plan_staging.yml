@@ -119,6 +119,9 @@ jobs:
             system_status:
               - 'aws/system_status/**'
               - 'env/staging/system_status/**'
+            system_status_static_site:
+              - 'aws/system_status_static_site/**'
+              - 'env/staging/system_status_static_site/**'
             quicksight:
               - 'aws/quicksight/**'
               - 'env/staging/quicksight/**'
@@ -324,3 +327,14 @@ jobs:
           comment-title: "Staging: system_status"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan aws/system_status_static_site
+        if: ${{ steps.filter.outputs.system_status_static_site == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/system_status_static_site"
+          comment-delete: "true"
+          comment-title: "Staging: system_status_static_site"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
