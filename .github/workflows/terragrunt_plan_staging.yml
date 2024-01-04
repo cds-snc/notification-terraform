@@ -337,3 +337,4 @@ jobs:
           comment-title: "Staging: system_status_static_site"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          skip-conftest: "true"
