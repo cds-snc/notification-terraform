@@ -15,11 +15,6 @@ variable "base_domain" {
   description = "Identifies the base url to trigger the heartbeat function with. This is a string in the secrets and parsed in the lambda"
 }
 
-variable "heartbeat_template_id" {
-  type        = string
-  description = "Identifies the template id on the ."
-}
-
 variable "schedule_expression" {
   type        = string
   description = "This aws cloudwatch event rule scheule expression that specifies when the scheduler runs."
