@@ -5,19 +5,19 @@
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/eks/${var.eks_cluster_name}/cluster"
-  retention_in_days = 14
+  retention_in_days = var.log_retention_period_days
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-application-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/containerinsights/${var.eks_cluster_name}/application"
-  retention_in_days = var.env == "production" ? 0 : 30
+  retention_in_days = var.log_retention_period_days
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-prometheus-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/containerinsights/${var.eks_cluster_name}/prometheus"
-  retention_in_days = 0
+  retention_in_days = var.log_retention_period_days
 }
 
 
@@ -84,19 +84,6 @@ resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
 
   metric_transformation {
     name      = "bounce-rate-critical"
-    namespace = "LogMetrics"
-    value     = "1"
-  }
-}
-
-resource "aws_cloudwatch_log_metric_filter" "bounce-rate-warning" {
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "bounce-rate-warning"
-  pattern        = "warning bounce rate threshold of 5"
-  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
-
-  metric_transformation {
-    name      = "bounce-rate-warning"
     namespace = "LogMetrics"
     value     = "1"
   }

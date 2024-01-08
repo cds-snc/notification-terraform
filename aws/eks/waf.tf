@@ -279,6 +279,14 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
       block {
         custom_response {
           response_code = 204
+          response_header {
+            name  = "Strict-Transport-Security"
+            value = "max-age=63072000; includeSubDomains; preload"
+          }
+          response_header {
+            name  = "Cross-Origin-Resource-Policy"
+            value = "same-origin"
+          }
         }
       }
     }
@@ -674,4 +682,3 @@ resource "aws_wafv2_web_acl_logging_configuration" "firehose-waf-logs" {
     }
   }
 }
-

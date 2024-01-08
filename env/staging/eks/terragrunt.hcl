@@ -32,6 +32,12 @@ dependency "common" {
     re_documentation_arn                      = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    sqs_send_email_low_queue_name             = ""
+    sqs_send_email_medium_queue_name          = ""
+    sqs_send_email_high_queue_name            = ""
+    sqs_send_sms_low_queue_name               = ""
+    sqs_send_sms_medium_queue_name            = ""
+    sqs_send_sms_high_queue_name              = ""
   }
 }
 
@@ -51,12 +57,12 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 3
+  primary_worker_desired_size               = 4
   primary_worker_instance_types             = ["r5.large"]
   secondary_worker_instance_types           = ["r5.large"]
   nodeUpgrade                               = false
   primary_worker_max_size                   = 7
-  primary_worker_min_size                   = 3
+  primary_worker_min_size                   = 4
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
@@ -70,7 +76,7 @@ inputs = {
   eks_addon_coredns_version                 = "v1.10.1-eksbuild.4"
   eks_addon_kube_proxy_version              = "v1.28.1-eksbuild.1"
   eks_addon_vpc_cni_version                 = "v1.15.0-eksbuild.2"
-  eks_node_ami_version                      = "1.28.1-20231002"
+  eks_node_ami_version                      = "1.28.3-20231201"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100
@@ -82,7 +88,15 @@ inputs = {
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  sqs_send_email_low_queue_name             = dependency.common.outputs.sqs_send_email_low_queue_name
+  sqs_send_email_medium_queue_name          = dependency.common.outputs.sqs_send_email_medium_queue_name
+  sqs_send_email_high_queue_name            = dependency.common.outputs.sqs_send_email_high_queue_name
+  sqs_send_sms_low_queue_name               = dependency.common.outputs.sqs_send_sms_low_queue_name
+  sqs_send_sms_medium_queue_name            = dependency.common.outputs.sqs_send_sms_medium_queue_name
+  sqs_send_sms_high_queue_name              = dependency.common.outputs.sqs_send_sms_high_queue_name
+  celery_queue_prefix                       = "eks-notification-canada-ca"
 }
+
 
 terraform {
   source = "../../../aws//eks"
