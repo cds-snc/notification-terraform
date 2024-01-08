@@ -38,6 +38,10 @@ env:
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_system_status_admin_url: "https://staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_api_url: "https://api.staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-staging-system-status"
   TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
   TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_perf_test_phone_number: ${{ secrets.PERF_TEST_PHONE_NUMBER }}
@@ -68,6 +72,11 @@ jobs:
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3
 
       - name: Apply aws/common
         run: |
@@ -139,10 +148,10 @@ jobs:
           cd env/staging/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      # - name: Apply aws/quicksight
-      #   run: |
-      #     cd env/staging/quicksight
-      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+      - name: Apply aws/quicksight
+        run: |
+          cd env/staging/quicksight
+          terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/lambda-google-cidr
         run: |
@@ -159,16 +168,19 @@ jobs:
           cd env/staging/sns_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/system_status
+        run: |
+          cd env/staging/system_status
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/system_status_static_site
+        run: |
+          cd env/staging/system_status_static_site
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Bump version and push tag
         if: github.event_name != 'workflow_dispatch' # We don't want to tag new versions when launched via workflow_dispatch since only environment variables changed
         uses: mathieudutour/github-tag-action@v4.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: main
-
-      - name: Slack message on failure
-        if: ${{ failure() }}
-        #checkov:skip=CKV_GHA_3:This is an expected use of curl
-        run: |
-          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|Merge to main (Staging)>"}}]}'
-          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}

@@ -40,8 +40,8 @@ resource "aws_sqs_queue" "eks_notification_canada_ca_sms_high_queue" {
   visibility_timeout_seconds = var.sqs_visibility_timeout_priority_high
 }
 
-resource "aws_sqs_queue" "eks_notification_canada_ca_priority_task_queue" {
-  name                    = "${var.celery_queue_prefix}priority-tasks"
+resource "aws_sqs_queue" "eks_notification_canada_ca_email_high_queue" {
+  name                    = "${var.celery_queue_prefix}send-email-high"
   sqs_managed_sse_enabled = true
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
   # AWS managed encryption is good enough for us

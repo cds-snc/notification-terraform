@@ -62,3 +62,11 @@ output "performance_test_ecr_repository_url" {
   description = "Repository URL of performance-test ECR"
   value       = var.env == "production" ? "" : aws_ecr_repository.performance-test[0].repository_url
 }
+output "system_status_ecr_arn" {
+  description = "arn of system_status ECR"
+  value       = aws_ecr_repository.system_status.arn
+}
+output "system_status_ecr_repository_url" {
+  description = "Repository URL of system_status ECR"
+  value       = aws_ecr_repository.system_status.repository_url
+}
