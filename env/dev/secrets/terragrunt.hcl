@@ -22,6 +22,7 @@ dependency "eks" {
     document_api_target_group_arn =  "12345"
     documentation_target_group_arn =  "12345"
     document_target_group_arn =  "12345"
+    eks_cluster_endpoint = "endpoint"
   }
 }
 
@@ -60,5 +61,6 @@ inputs = {
   document_api_target_group_arn =  dependency.eks.outputs.document_api_target_group_arn
   documentation_target_group_arn =  dependency.eks.outputs.document_api_target_group_arn
   document_target_group_arn =  dependency.eks.outputs.document_target_group_arn
+  eks_cluster_endpoint = dependency.eks.outputs.eks_cluster_endpoint
 
 }

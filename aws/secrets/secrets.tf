@@ -341,6 +341,14 @@ resource "aws_secretsmanager_secret_version" "auth_tokens" {
   secret_string = var.auth_tokens
 }
 
+resource "aws_secretsmanager_secret" "eks_cluster_endpoint" {
+  name = "EKS_CLUSTER_ENDPOINT"
+}
+
+resource "aws_secretsmanager_secret_version" "eks_cluster_endpoint" {
+  secret_id     = aws_secretsmanager_secret.eks_cluster_endpoint.id
+  secret_string = var.eks_cluster_endpoint
+}
 
 ####
 resource "aws_secretsmanager_secret" "api_target_group_arn" {

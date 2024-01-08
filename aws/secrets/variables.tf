@@ -150,3 +150,6 @@ variable "documentation_target_group_arn" {
 variable "document_target_group_arn" {
   type = string
 }
+variable "eks_cluster_endpoint" {
+  type = string
+}
