@@ -221,3 +221,12 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
           skip-conftest: "true"
+
+      - name: Terragrunt plan system_status_static_site
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/system_status_static_site"
+          comment-delete: "true"
+          comment-title: "Production: system_status_static_site"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
