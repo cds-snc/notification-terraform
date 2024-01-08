@@ -1,10 +1,14 @@
+locals {
+  image_tag = var.env == "production" ? var.heartbeat_docker_tag : "latest"
+}
+
 module "heartbeat" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v0.0.49"
   name                   = "heartbeat"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.heartbeat_ecr_repository_url}:${var.heartbeat_docker_tag}"
+  image_uri              = "${var.heartbeat_ecr_repository_url}:${local.image_tag}"
   timeout                = 60
   memory                 = 1024
 
