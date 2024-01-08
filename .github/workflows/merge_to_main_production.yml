@@ -21,6 +21,7 @@ env:
   TF_VAR_alt_base_domain: ${{secrets.PRODUCTION_ALT_BASE_DOMAIN}}  
   TF_VAR_dbtools_password: ${{ secrets.PRODUCTION_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
+  TF_VAR_heartbeat_sms_number: ${{ secrets.PRODUCTION_HEARTBEAT_SMS_NUMBER }}
   TF_VAR_rds_cluster_password: ${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.PRODUCTION_APP_DB_USER_PASSWORD }}
   TF_VAR_quicksight_db_user_password: ${{ secrets.PRODUCTION_QUICKSIGHT_DB_USER_PASSWORD }}

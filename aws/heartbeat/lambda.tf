@@ -13,8 +13,9 @@ module "heartbeat" {
   memory                 = 1024
 
   environment_variables = {
-    heartbeat_api_key  = var.heartbeat_api_key
-    heartbeat_base_url = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
+    heartbeat_api_key    = var.heartbeat_api_key
+    heartbeat_base_url   = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
+    heartbeat_sms_number = var.heartbeat_sms_number
   }
 }
 
