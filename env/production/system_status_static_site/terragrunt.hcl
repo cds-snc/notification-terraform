@@ -5,6 +5,7 @@ include {
 inputs = {
   env                                    = "production"
   billing_tag_value                      = "notification-canada-ca-production"
+  status_cert_created                    = true    
 }
 
 terraform {
