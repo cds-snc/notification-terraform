@@ -8,5 +8,5 @@ inputs = {
 }
 
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/system_status?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/system_status_static_site?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
