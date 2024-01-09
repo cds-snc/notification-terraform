@@ -168,3 +168,8 @@ jobs:
         run: |
           cd env/production/system_status
           terragrunt apply --terragrunt-non-interactive -auto-approve
+          
+      - name: Apply aws/system_status_static_site
+        run: |
+          cd env/production/system_status_static_site
+          terragrunt apply --terragrunt-non-interactive -auto-approve
