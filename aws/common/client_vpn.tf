@@ -11,6 +11,7 @@ module "vpn" {
   vpc_id              = aws_vpc.notification-canada-ca.id
   vpc_cidr_block      = aws_vpc.notification-canada-ca.cidr_block
   subnet_cidr_blocks  = aws_subnet.notification-canada-ca-private.*.cidr_block
+  subnet_ids          = aws_subnet.notification-canada-ca-private.*.id
   acm_certificate_arn = aws_acm_certificate.client_vpn.arn
 
   # Only create a self-service portal in prod  
