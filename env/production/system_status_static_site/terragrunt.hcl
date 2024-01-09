@@ -3,8 +3,8 @@ include {
 }
 
 inputs = {
-  env                                    = "staging"
-  billing_tag_value                      = "notification-canada-ca-staging"
+  env                                    = "production"
+  billing_tag_value                      = "notification-canada-ca-production"
 }
 
 terraform {
