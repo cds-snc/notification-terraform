@@ -10,4 +10,8 @@ variable "status_cert_created" {
   default     = false
 }
 
-
+variable "force_destroy_s3" {
+  type        = bool
+  description = "Force destroy the s3 bucket. Not advised for production."
+  default     = false
+}

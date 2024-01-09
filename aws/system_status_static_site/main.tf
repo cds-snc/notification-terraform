@@ -5,15 +5,16 @@ variable "billing_tag_value" {
 }
 
 module "system_status_static_site" {
-  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.0.1"
+  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.0.2"
 
   count = var.status_cert_created ? 1 : 0
 
-  acm_certificate_arn                = aws_acm_certificate.system_status_static_site_root_certificate
+  acm_certificate_arn                = aws_acm_certificate.system_status_static_site_root_certificate.arn
   domain_name_source                 = var.env == "production" ? "status.notification.canada.ca" : "status.${var.env}.notification.cdssandbox.xyz"
   billing_tag_value                  = var.billing_tag_value
   hosted_zone_id                     = var.route_53_zone_arn
   s3_bucket_name                     = "notification-canada-ca-${var.env}-system-status"
+  force_destroy_s3_bucket            = var.force_destroy_s3
   cloudfront_query_string_forwarding = true
 
   providers = {
