@@ -38,6 +38,7 @@ dependency "common" {
     sqs_send_sms_low_queue_name               = ""
     sqs_send_sms_medium_queue_name            = ""
     sqs_send_sms_high_queue_name              = ""
+    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -95,6 +96,7 @@ inputs = {
   sqs_send_sms_medium_queue_name            = dependency.common.outputs.sqs_send_sms_medium_queue_name
   sqs_send_sms_high_queue_name              = dependency.common.outputs.sqs_send_sms_high_queue_name
   celery_queue_prefix                       = "eks-notification-canada-ca"
+  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
 }
 
 
