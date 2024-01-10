@@ -239,3 +239,8 @@ variable "celery_queue_prefix" {
   type        = string
   description = "Celery queue prefix"
 }
+
+variable "client_vpn_security_group_id" {
+  type        = string
+  description = "Client VPN security group ID"
+}
