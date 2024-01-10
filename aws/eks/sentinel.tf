@@ -20,8 +20,8 @@ module "sentinel_forwarder" {
 
   cloudwatch_log_arns = [
     local.application_log_group_arn,
-    local.client_vpn_log_group_arn,
-    local.blazer_log_group_arn
+    local.blazer_log_group_arn,
+    local.client_vpn_log_group_arn
   ]
 }
 
