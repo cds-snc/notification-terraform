@@ -328,3 +328,25 @@ resource "aws_ec2_tag" "eks_created_security_group_tag" {
   key         = "karpenter.sh/discovery"
   value       = var.eks_cluster_name
 }
+
+# Client VPN access
+
+resource "aws_security_group_rule" "client-vpn-ingress-database" {
+  description              = "Client VPN ingress to the database"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = var.client_vpn_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+resource "aws_security_group_rule" "client-vpn-ingress-redis" {
+  description              = "Client VPN ingress to the redis cluster"
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  source_security_group_id = var.client_vpn_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
