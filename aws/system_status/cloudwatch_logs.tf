@@ -16,7 +16,7 @@ resource "aws_cloudwatch_log_group" "system_status_log_group" {
 resource "aws_cloudwatch_log_metric_filter" "system_status-500-errors-api" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "system_status-500-errors-api"
-  pattern        = "[ERROR]"
+  pattern        = "\"[ERROR]\""
   log_group_name = "/aws/lambda/${module.system_status.function_name}"
 
   metric_transformation {
