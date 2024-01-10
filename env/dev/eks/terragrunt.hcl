@@ -32,6 +32,7 @@ dependency "common" {
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
     client_vpn_security_group_id              = "sg-1234"
   }
 }
@@ -84,6 +85,7 @@ inputs = {
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
   celery_queue_prefix                       = "eks-notification-canada-ca"
+  client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
   client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
   
 }
