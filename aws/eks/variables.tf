@@ -249,3 +249,8 @@ variable "client_vpn_security_group_id" {
   type        = string
   description = "Client VPN security group ID"
 }
+
+variable "eks_addon_ebs_driver_version" {
+  type        = string
+  description = "Version for EBS driver addon for EKS (Persistence)"
+}

@@ -243,6 +243,12 @@ resource "aws_iam_role_policy_attachment" "karpenter_ssm_policy" {
   role       = aws_iam_role.eks-worker-role.name
   policy_arn = data.aws_iam_policy.ssm_managed_instance.arn
 }
+
+resource "aws_iam_role_policy_attachment" "ebs_csi_policy" {
+  role       = aws_iam_role.eks-worker-role.name
+  policy_arn = aws_iam_policy.ebs_driver.arn
+}
+
 resource "aws_iam_role_policy_attachment" "karpenter-cluster-worker-node" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = module.iam_assumable_role_karpenter.iam_role_name
@@ -301,20 +307,10 @@ resource "aws_iam_role_policy" "karpenter_controller" {
 
 
 
-module "ebs_csi_controller_role" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.11.1"
-  create_role                   = true
-  role_name                     = "ebs-csi-controller"
-  provider_url                  = data.aws_eks_cluster.notify_cluster.identity[0].oidc[0].issuer
-  role_policy_arns              = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
-}
+resource "aws_iam_policy" "ebs_driver" {
 
-resource "aws_iam_policy" "ebs_csi_controller" {
-  name_prefix = "ebs-csi-controller"
-  description = "EKS ebs-csi-controller policy for cluster ${var.eks_cluster_name}"
-  policy      = <<POLICY
+  name   = "eks-ebs-csi-driver-${var.eks_cluster_name}"
+  policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -445,15 +441,6 @@ resource "aws_iam_policy" "ebs_csi_controller" {
           "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
         }
       }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-          "kms:Decrypt",
-          "kms:GenerateDataKeyWithoutPlaintext",
-          "kms:CreateGrant"
-      ],
-      "Resource": "*"
     }
   ]
 }
