@@ -295,3 +295,16 @@ variable "client_vpn_self_service_saml_metadata" {
   type        = string
   sensitive   = true
 }
+
+variable "account_budget_limit" {
+  description = "The dollar amount in USD that this AWS account should be budgeted to"
+  type        = number
+  default     = 3000
+
+}
+
+variable "account_budget_alert_emails" {
+  description = "List of people who should be alerted when budget thresholds are met"
+  type        = list(any)
+  default     = ["jimmy.royer@cds-snc.ca", "stephen.astels@cds-snc.ca", "ben.larabie@cds-snc.ca"]
+}
