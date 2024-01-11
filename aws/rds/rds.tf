@@ -59,6 +59,12 @@ resource "aws_rds_cluster_parameter_group" "default" {
   }
 
   parameter {
+    name         = "rds.logical_replication"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+
+  parameter {
     name         = "rds.log_retention_period"
     value        = "4320" # 3 days (in minutes)
     apply_method = "pending-reboot"
