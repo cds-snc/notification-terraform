@@ -1,8 +1,8 @@
 # valid column types are [STRING INTEGER DECIMAL DATETIME BIT BOOLEAN JSON]
 
 resource "aws_quicksight_data_set" "templates" {
-  data_set_id = "templates"
-  name        = "Templates"
+  data_set_id = "templatesv2"
+  name        = "TemplatesV2"
   import_mode = "SPICE"
 
   physical_table_map {

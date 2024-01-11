@@ -150,3 +150,35 @@ output "notification_base_url_regex_arn" {
   value       = aws_wafv2_regex_pattern_set.notification_base_url.arn
   description = "The ARN of the regex pattern set for the allowed base domains"
 }
+
+output "sqs_send_sms_low_queue_name" {
+  value = var.sqs_send_sms_low_queue_name
+}
+
+output "sqs_send_sms_medium_queue_name" {
+  value = var.sqs_send_sms_medium_queue_name
+}
+
+output "sqs_send_sms_high_queue_name" {
+  value = var.sqs_send_sms_high_queue_name
+}
+
+output "sqs_send_email_low_queue_name" {
+  value = var.sqs_send_email_low_queue_name
+}
+
+output "sqs_send_email_medium_queue_name" {
+  value = var.sqs_send_email_medium_queue_name
+}
+
+output "sqs_send_email_high_queue_name" {
+  value = var.sqs_send_email_high_queue_name
+}
+
+output "client_vpn_cloudwatch_log_group_name" {
+  value = module.vpn.client_vpn_cloudwatch_log_group_name
+}
+
+output "client_vpn_security_group_id" {
+  value = module.vpn.client_vpn_security_group_id
+}

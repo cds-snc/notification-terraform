@@ -7,11 +7,14 @@ locals {
 }
 
 inputs = {
-  account_id         = "${local.vars.inputs.account_id}"
-  domain             = "${local.vars.inputs.domain}"
-  alt_domain         = "${local.vars.inputs.alt_domain}"
-  env                = "${local.vars.inputs.env}"
-  dns_account_id     = "${local.vars.inputs.dns_account_id}"
+  account_id                            = local.vars.inputs.account_id
+  domain                                = local.vars.inputs.domain
+  alt_domain                            = local.vars.inputs.alt_domain
+  env                                   = local.vars.inputs.env
+  dns_account_id                        = local.vars.inputs.dns_account_id
+  log_retention_period_days             = local.vars.inputs.log_retention_period_days
+  sensitive_log_retention_period_days   = local.vars.inputs.sensitive_log_retention_period_days
+  account_budget_limit                  = local.vars.inputs.account_budget_limit
   
   region             = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
@@ -30,6 +33,10 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+    tls = {
+      source  = "hashicorp/tls"
       version = "~> 4.0"
     }
   }
@@ -113,6 +120,19 @@ variable "cloudwatch_enabled" {
   default     = true
   description = "Use this flag to enable/disable cloudwatch logs. Useful for saving money on scratch accounts"
 }
+
+variable "log_retention_period_days" {
+  description = "Log retention period in days for normal logs"
+  type        = number
+  default     = 0
+}
+
+variable "sensitive_log_retention_period_days" {
+  description = "Log retention period in days for logs with sensitive information"
+  type        = number
+  default     = 7
+}
+
 EOF
 }
 

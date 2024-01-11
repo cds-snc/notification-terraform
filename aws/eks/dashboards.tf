@@ -1,3 +1,534 @@
+resource "aws_cloudwatch_dashboard" "notify_system" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  dashboard_name = "Notify-System-Overview"
+  dashboard_body = <<EOF
+{
+    "widgets": [
+        {
+            "height": 4,
+            "width": 6,
+            "y": 3,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-email-send-primary", { "region": "${var.region}", "label": "celery-email-send-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-email-send-scalable", { "region": "${var.region}", "label": "celery-email-send-scalable" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "celery-email-send",
+                "period": 60,
+                "stat": "Maximum"
+            }
+        },
+        {
+            "height": 4,
+            "width": 4,
+            "y": 17,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/Lambda", "Invocations", "FunctionName", "api-lambda", { "region": "${var.region}", "color": "#b088f5", "label": "Calls / min" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "API Lambda Invocations",
+                "period": 60,
+                "stat": "Sum"
+            }
+        },
+        {
+            "height": 6,
+            "width": 16,
+            "y": 22,
+            "x": 8,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Celery Errors",
+                "view": "table"
+            }
+        },
+        {
+            "height": 4,
+            "width": 8,
+            "y": 3,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "FILL(METRICS(), 0)", "label": "emails /", "id": "e1", "region": "${var.region}" } ],
+                    [ "AWS/SES", "Send", { "region": "${var.region}", "id": "m1", "color": "#08aad2", "visible": false, "label": "min" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "period": 60,
+                "stat": "Sum",
+                "title": "Email Send Rate Per Minute",
+                "legend": {
+                    "position": "hidden"
+                },
+                "liveData": false,
+                "sparkline": true
+            }
+        },
+        {
+            "height": 4,
+            "width": 8,
+            "y": 8,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "FILL(METRICS(), 0)", "label": "SMS /", "id": "e1", "region": "${var.region}" } ],
+                    [ "AWS/SNS", "NumberOfNotificationsDelivered", "PhoneNumber", "PhoneNumberDirect", { "region": "${var.region}", "color": "#08aad2", "id": "m1", "visible": false, "label": "min" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "period": 60,
+                "stat": "Sum",
+                "title": "SMS Send Rate Per Minute",
+                "legend": {
+                    "position": "hidden"
+                },
+                "sparkline": true
+            }
+        },
+        {
+            "height": 4,
+            "width": 9,
+            "y": 17,
+            "x": 15,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "admin", { "label": "admin", "region": "${var.region}", "color": "#69ae34" } ],
+                    [ "...", "document-download-api", { "region": "${var.region}", "label": "document-download-api" } ],
+                    [ "...", "documentation", { "region": "${var.region}", "label": "documentation" } ],
+                    [ "...", "api", { "region": "${var.region}", "label": "api-k8s" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "Application pods",
+                "period": 60,
+                "stat": "Maximum"
+            }
+        },
+        {
+            "height": 2,
+            "width": 24,
+            "y": 0,
+            "x": 0,
+            "type": "alarm",
+            "properties": {
+                "title": "Alarms going off",
+                "alarms": [
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-priority-queue-delay-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-celery-error-1-minute-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-${var.sqs_send_sms_low_queue_name}-queue-delay-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-priority-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-${var.sqs_send_sms_medium_queue_name}-queue-delay-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-error-5-minutes-critical-lambda-api",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-${var.sqs_send_sms_high_queue_name}-queue-delay-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:no-emails-sent-5-minutes-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:healtheck-page-slow-response-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:load-balancer-10-502-error-5-minutes-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-500-error-5-minutes-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-1-critical-bounce-rate-1-minute-warning",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-bounce-rate-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-complaint-rate-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:redis-elasticache-high-db-memory-critical-CacheCluster002",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:redis-elasticache-high-db-memory-critical-CacheCluster001",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:redis-elasticache-high-db-memory-critical-CacheCluster003",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-send-throttled-sms-tasks-receive-rate-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-spending-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-malware-detected-1-minute-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:lambda-image-sns-delivery-receipts-errors-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-500-error-5-minutes-critical-sns_to_sqs_sms_callbacks-api",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:lambda-ses-delivery-receipts-errors-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-sms-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-email-queue-delay-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sns-sms-success-rate-canadian-numbers-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ddos-detected-load-balancer-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-bulk-queue-delay-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:normal-inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:bulk-inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:priority-inflights-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:normal_bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:priority_bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:bulk_bulk-buffer-not-being-processed-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-bulk-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-normal-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-db-tasks-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-500-error-5-minutes-critical-heartbeat-api",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-throttled-sms-stuck-in-queue-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sign-in-3-500-error-15-minutes-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:contact-3-500-error-15-minutes-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:load-balancer-10-500-error-5-minutes-critical"
+                ],
+                "states": [
+                    "ALARM"
+                ]
+            }
+        },
+        {
+            "height": 4,
+            "width": 3,
+            "y": 17,
+            "x": 12,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights", "cluster_node_count", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", { "color": "#dfb52c", "label": "Node Count", "region": "${var.region}" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "stat": "Maximum",
+                "period": 60,
+                "title": "Nodes"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 2,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Email ([Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/Emails))"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 7,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# SMS ([Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/SMS))"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 12,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Other"
+            }
+        },
+        {
+            "height": 4,
+            "width": 10,
+            "y": 3,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_email_high_queue_name}", { "region": "${var.region}", "label": "High" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_email_medium_queue_name}", { "region": "${var.region}", "label": "Medium" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_email_low_queue_name}", { "region": "${var.region}", "label": "Low" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Queue delays",
+                "period": 60,
+                "stat": "Maximum",
+                "sparkline": true
+            }
+        },
+        {
+            "height": 4,
+            "width": 10,
+            "y": 8,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}", { "region": "${var.region}", "label": "High" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}", { "region": "${var.region}", "label": "Medium" } ],
+                    [ "...", "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}", { "region": "${var.region}", "label": "Low" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Queue delays",
+                "period": 60,
+                "stat": "Maximum",
+                "sparkline": true
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 22,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Celery errors",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 34,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /^celery/\n| fields @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/ as is_error\n| stats sum(is_error)as errors by bin(1m)\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "500s",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 6,
+            "width": 16,
+            "y": 34,
+            "x": 8,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /celery/\n| filter @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/\n| sort @timestamp desc\n| limit 20\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "500s",
+                "view": "table"
+            }
+        },
+        {
+            "height": 4,
+            "width": 6,
+            "y": 13,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-primary", { "region": "${var.region}", "label": "celery-primary" } ],
+                    [ "...", "celery-scalable", { "region": "${var.region}", "label": "celery-scalable" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "celery",
+                "period": 60,
+                "stat": "Maximum"
+            }
+        },
+        {
+            "height": 4,
+            "width": 6,
+            "y": 8,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-sms-send-primary", { "region": "${var.region}", "label": "celery-sms-send-primary" } ],
+                    [ "...", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "celery-sms-send",
+                "period": 60,
+                "stat": "Maximum"
+            }
+        },
+        {
+            "height": 4,
+            "width": 10,
+            "y": 13,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}delivery-receipts", { "region": "${var.region}", "label": "Delay", "id": "m1" } ],
+                    [ { "expression": "m2 + m3", "label": "Number delayed", "id": "e1", "region": "${var.region}" } ],
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "${var.celery_queue_prefix}delivery-receipts", { "region": "${var.region}", "label": "ApproximateNumberOfMessagesVisible", "id": "m2", "visible": false } ],
+                    [ ".", "ApproximateNumberOfMessagesNotVisible", ".", ".", { "region": "${var.region}", "id": "m3", "visible": false } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Delivery processing delays",
+                "period": 60,
+                "stat": "Maximum",
+                "sparkline": true
+            }
+        },
+        {
+            "height": 6,
+            "width": 16,
+            "y": 28,
+            "x": 8,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/lambda/api-lambda' | fields @timestamp, @message, @logStream\n| filter levelname like /ERROR/\n| sort @timestamp desc\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "API lambda errors",
+                "view": "table"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "y": 21,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Errors"
+            }
+        },
+        {
+            "height": 4,
+            "width": 4,
+            "y": 13,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(node_cpu_utilization) FROM SCHEMA(ContainerInsights, ClusterName) GROUP BY NodeName", "label": "Node CPU Usage", "id": "q1", "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "region": "${var.region}",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 100,
+                        "showUnits": false
+                    },
+                    "right": {
+                        "showUnits": false
+                    }
+                },
+                "stat": "Average",
+                "period": 60,
+                "legend": {
+                    "position": "hidden"
+                },
+                "title": "Average Node CPU Usage",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "color": "#fe6e73",
+                            "value": 80,
+                            "fill": "above"
+                        },
+                        {
+                            "color": "#dfb52c",
+                            "value": 25,
+                            "fill": "below"
+                        },
+                        [
+                            {
+                                "color": "#69ae34",
+                                "value": 80
+                            },
+                            {
+                                "value": 25,
+                                "label": ""
+                            }
+                        ]
+                    ]
+                },
+                "setPeriodToTimeRange": false,
+                "sparkline": true,
+                "trend": true,
+                "stacked": false
+            }
+        },
+        {
+            "height": 4,
+            "width": 4,
+            "y": 13,
+            "x": 4,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ { "expression": "SELECT AVG(node_memory_utilization) FROM SCHEMA(ContainerInsights, ClusterName) GROUP BY NodeName", "label": "Node CPU Usage", "id": "q1", "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "region": "${var.region}",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 100,
+                        "showUnits": false
+                    }
+                },
+                "stat": "Average",
+                "period": 60,
+                "legend": {
+                    "position": "hidden"
+                },
+                "title": "Average Node Memory Usage",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "color": "#fe6e73",
+                            "value": 80,
+                            "fill": "above"
+                        },
+                        {
+                            "color": "#dfb52c",
+                            "value": 25,
+                            "fill": "below"
+                        },
+                        [
+                            {
+                                "color": "#69ae34",
+                                "value": 80
+                            },
+                            {
+                                "value": 25,
+                                "label": ""
+                            }
+                        ]
+                    ]
+                },
+                "stacked": false
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 28,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/lambda/api-lambda' | fields @timestamp, @message, @logStream\n| fields levelname like /ERROR/ as is_error\n| stats sum(is_error)as errors by bin(1m)",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "API lambda errors",
+                "view": "timeSeries"
+            }
+        }
+    ]
+}
+EOF
+}
+
 resource "aws_cloudwatch_dashboard" "elb" {
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Elastic-Load-Balancers"

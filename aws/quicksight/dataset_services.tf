@@ -35,7 +35,15 @@ resource "aws_quicksight_data_set" "services" {
         type = "DATETIME"
       }
       input_columns {
+        name = "restricted"
+        type = "STRING"
+      }
+      input_columns {
         name = "name"
+        type = "STRING"
+      }
+      input_columns {
+        name = "organisation_id"
         type = "STRING"
       }
       input_columns {
@@ -47,7 +55,7 @@ resource "aws_quicksight_data_set" "services" {
         type = "INTEGER"
       }
       input_columns {
-        name = "sms_limit"
+        name = "sms_daily_limit"
         type = "INTEGER"
       }
     }

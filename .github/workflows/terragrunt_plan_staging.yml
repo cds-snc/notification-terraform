@@ -20,7 +20,7 @@ env:
   TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
   TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_number: ${{ secrets.STAGING_HEARTBEAT_SMS_NUMBER }}
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
   TF_VAR_quicksight_db_user_password: ${{ secrets.STAGING_QUICKSIGHT_DB_USER_PASSWORD }}
@@ -35,6 +35,10 @@ env:
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_system_status_admin_url: "https://staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_api_url: "https://api.staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-staging-system-status"
   TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_waf_secret: ${{secrets.STAGING_WAF_SECRET}}
   # Prevents repeated creation of the Slack lambdas if already existing.
@@ -45,6 +49,9 @@ env:
   TF_VAR_perf_test_domain: ${{ secrets.PERF_TEST_DOMAIN }}
   TF_VAR_perf_test_auth_header: ${{ secrets.PERF_TEST_AUTH_HEADER }}
   TF_VAR_blazer_slack_webhook_general_topic: ${{ secrets.STAGING_BLAZER_SLACK_WEBHOOK }}
+  TF_VAR_client_vpn_access_group_id: ${{ secrets.STAGING_CLIENT_VPN_ACCESS_GROUP_ID }}
+  TF_VAR_client_vpn_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SAML_METADATA }}
+  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
 
 jobs:
   terragrunt-plan-staging:
@@ -60,6 +67,11 @@ jobs:
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3           
 
       - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
         id: filter
@@ -107,6 +119,12 @@ jobs:
             database-tools:
               - 'aws/database-tools/**'
               - 'env/staging/database-tools/**'
+            system_status:
+              - 'aws/system_status/**'
+              - 'env/staging/system_status/**'
+            system_status_static_site:
+              - 'aws/system_status_static_site/**'
+              - 'env/staging/system_status_static_site/**'
             quicksight:
               - 'aws/quicksight/**'
               - 'env/staging/quicksight/**'
@@ -263,15 +281,15 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-      # - name: Terragrunt plan quicksight
-      #   if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
-      #   uses: cds-snc/terraform-plan@v3
-      #   with:
-      #     directory: "env/staging/quicksight"
-      #     comment-delete: "true"
-      #     comment-title: "Staging: quicksight"
-      #     github-token: "${{ secrets.GITHUB_TOKEN }}"
-      #     terragrunt: "true"
+      - name: Terragrunt plan quicksight
+        if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/quicksight"
+          comment-delete: "true"
+          comment-title: "Staging: quicksight"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
@@ -302,3 +320,24 @@ jobs:
           comment-title: "Staging: sns_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan system_status
+        if: ${{ steps.filter.outputs.system_status == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/system_status"
+          comment-delete: "true"
+          comment-title: "Staging: system_status"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan aws/system_status_static_site
+        if: ${{ steps.filter.outputs.system_status_static_site == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/system_status_static_site"
+          comment-delete: "true"
+          comment-title: "Staging: system_status_static_site"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"

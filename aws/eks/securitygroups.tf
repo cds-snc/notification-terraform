@@ -21,13 +21,6 @@ resource "aws_security_group" "notification-canada-ca-alb" {
     cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
-  ingress {
-    protocol    = "tcp"
-    from_port   = 4444
-    to_port     = 4444
-    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
-  }
-
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
@@ -334,4 +327,26 @@ resource "aws_ec2_tag" "eks_created_security_group_tag" {
   resource_id = data.aws_security_group.eks-securitygroup-rds.id
   key         = "karpenter.sh/discovery"
   value       = var.eks_cluster_name
+}
+
+# Client VPN access
+
+resource "aws_security_group_rule" "client-vpn-ingress-database" {
+  description              = "Client VPN ingress to the database"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = var.client_vpn_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+resource "aws_security_group_rule" "client-vpn-ingress-redis" {
+  description              = "Client VPN ingress to the redis cluster"
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  source_security_group_id = var.client_vpn_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
 }

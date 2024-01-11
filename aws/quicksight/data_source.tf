@@ -1,5 +1,5 @@
 resource "aws_quicksight_data_source" "rds" {
-  depends_on     = [aws_iam_role_policy_attachment.rds-qs-attach]
+  depends_on     = [aws_iam_role_policy_attachment.rds-qs-attach, aws_quicksight_account_subscription.subscription]
   data_source_id = var.database_name
   name           = "Quicksight RDS data source"
   ssl_properties {
@@ -7,7 +7,7 @@ resource "aws_quicksight_data_source" "rds" {
   }
   credentials {
     credential_pair {
-      username = local.quicksight_db_user_name
+      username = var.quicksight_db_user_name
       password = var.quicksight_db_user_password
     }
   }
@@ -21,4 +21,15 @@ resource "aws_quicksight_data_source" "rds" {
     }
   }
   type = "POSTGRESQL"
+  permission {
+    actions = [
+      "quicksight:PassDataSource",
+      "quicksight:DescribeDataSourcePermissions",
+      "quicksight:UpdateDataSource",
+      "quicksight:UpdateDataSourcePermissions",
+      "quicksight:DescribeDataSource",
+      "quicksight:DeleteDataSource"
+    ]
+    principal = aws_quicksight_group.dataset_owner.arn
+  }
 }
