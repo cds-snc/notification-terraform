@@ -154,3 +154,11 @@ resource "aws_eks_addon" "vpc_cni" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 }
+
+resource "aws_eks_addon" "ebs_driver" {
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "aws-ebs-csi-driver"
+  addon_version               = var.eks_addon_ebs_driver_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+}
