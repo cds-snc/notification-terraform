@@ -306,7 +306,8 @@ resource "aws_iam_role_policy" "karpenter_controller" {
 }
 
 
-
+#checkov:skip=CKV_AWS_290:The EKS worker IAM requires the ability to create EBS
+#checkov:skip=CKV_AWS_355:The EKS worker IAM requires the ability to create EBS
 resource "aws_iam_policy" "ebs_driver" {
 
   name   = "eks-ebs-csi-driver-${var.eks_cluster_name}"
