@@ -3,7 +3,7 @@ locals {
 }
 
 module "system_status" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v0.0.49"
+  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.0.4"
   name                   = "system_status"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
@@ -12,6 +12,7 @@ module "system_status" {
   timeout                = 60
   memory                 = 1024
   policies               = [data.aws_iam_policy_document.system_status_s3_permissions.json]
+  alias_name             = "latest"
 
   vpc = {
     security_group_ids = [
