@@ -392,3 +392,14 @@ resource "aws_secretsmanager_secret_version" "document_target_group_arn" {
   secret_id     = aws_secretsmanager_secret.document_target_group_arn.id
   secret_string = var.document_target_group_arn
 }
+
+resource "aws_secretsmanager_secret" "graylog_root_password" {
+  count = var.env == "dev" ? 1 : 0
+  name  = "GRAYLOG_ROOT_PASSWORD"
+}
+
+resource "aws_secretsmanager_secret_version" "graylog_root_password" {
+  count         = var.env == "dev" ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.graylog_root_password[0].id
+  secret_string = var.graylog_root_password
+}

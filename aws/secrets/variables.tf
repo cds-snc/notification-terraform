@@ -153,3 +153,6 @@ variable "document_target_group_arn" {
 variable "eks_cluster_endpoint" {
   type = string
 }
+variable "graylog_root_password" {
+  type = string
+}
