@@ -24,6 +24,6 @@ resource "aws_route53_record" "graylog_internal_CNAME" {
   name    = "graylog.dev.notification.internal"
   type    = "CNAME"
   ttl     = "60"
-  records = ["internal-ad0d0a0d659ca4719a41403e6b7b0870-1986615662.ca-central-1.elb.amazonaws.com"]
+  records = ["internal-a82ca1c11dea44ac5a264c3615f1b2cf-1155384976.ca-central-1.elb.amazonaws.com"]
 }
 
