@@ -51,10 +51,11 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 ###
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
-  cluster_name    = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  node_group_name = "notification-canada-ca-${var.env}-eks-primary-node-group"
-  node_role_arn   = aws_iam_role.eks-worker-role.arn
-  subnet_ids      = var.vpc_private_subnets
+  cluster_name          = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name       = "notification-canada-ca-${var.env}-eks-primary-node-group"
+  node_role_arn         = aws_iam_role.eks-worker-role.arn
+  subnet_ids            = var.vpc_private_subnets
+  force_update_version  = var.force_upgrade
 
   disk_size = 80
 
@@ -88,11 +89,12 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
 }
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" {
-  count           = var.nodeUpgrade ? 1 : 0
-  cluster_name    = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  node_group_name = "notification-canada-ca-${var.env}-eks-secondary-node-group"
-  node_role_arn   = aws_iam_role.eks-worker-role.arn
-  subnet_ids      = var.vpc_private_subnets
+  count                 = var.node_upgrade ? 1 : 0
+  cluster_name          = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name       = "notification-canada-ca-${var.env}-eks-secondary-node-group"
+  node_role_arn         = aws_iam_role.eks-worker-role.arn
+  subnet_ids            = var.vpc_private_subnets
+  force_update_version  = var.force_upgrade
 
   disk_size = 80
 
