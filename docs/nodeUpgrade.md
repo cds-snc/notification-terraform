@@ -27,7 +27,7 @@ A valid node instance type and size to upgrade to needs to be known. This can be
 
 When upgrading a node group instance type, the node group must be destroyed and recreated. To ensure there is no downtime for the application an interim secondary node group must be created, and the workload migrated to this.
 
-- In env/\<environment>/eks/terragrunt.hcl, set the nodeUpgrade variable to **true**
+- In env/\<environment>/eks/terragrunt.hcl, set the node_upgrade variable to **true**
 - Set the secondary_worker_instance_types variable to the target node instance type. Ex "m6i.large"
 - Commit these changes, and create a PR
 - Validate in the PR that a new node group will be created and that none will be destroyed
@@ -66,7 +66,7 @@ When upgrading a node group instance type, the node group must be destroyed and 
 
 #### Remove Secondary Node Group
 
-- In env/\<environment>/eks/terragrunt.hcl, set the nodeUpgrade variable to **false**
+- In env/\<environment>/eks/terragrunt.hcl, set the node_upgrade variable to **false**
 - Commit these changes, and create a PR
 - Validate in the PR that a secondary node group will be destroyed
 - Merge the PR

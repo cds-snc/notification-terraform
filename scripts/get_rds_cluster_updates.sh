@@ -21,6 +21,7 @@ CLUSTER_ENGINE="$(echo "$CLUSTER" | jq -r .Engine)"
 
 AVAILABLE_VERSIONS="$(aws rds describe-db-engine-versions \
     --engine "$CLUSTER_ENGINE" \
+    --engine-version "$CLUSTER_VERSION" \
     --query 'DBEngineVersions[*].ValidUpgradeTarget[*].{EngineVersion:EngineVersion}' \
     --no-paginate)"
 
