@@ -21,3 +21,8 @@ variable "route_53_zone_arn" {
   description = "Used by the scratch environment to reference cdssandbox in staging"
   default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
 }
+
+variable "vpc_id" {
+  type        = string
+  description = "Used to associate the internal DNS with the VPC"
+}
