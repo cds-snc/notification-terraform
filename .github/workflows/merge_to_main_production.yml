@@ -21,7 +21,7 @@ env:
   TF_VAR_alt_base_domain: ${{secrets.PRODUCTION_ALT_BASE_DOMAIN}}  
   TF_VAR_dbtools_password: ${{ secrets.PRODUCTION_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_number: ${{ secrets.PRODUCTION_HEARTBEAT_SMS_NUMBER }}
   TF_VAR_rds_cluster_password: ${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.PRODUCTION_APP_DB_USER_PASSWORD }}
   TF_VAR_quicksight_db_user_password: ${{ secrets.PRODUCTION_QUICKSIGHT_DB_USER_PASSWORD }}
@@ -47,6 +47,9 @@ env:
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
   TF_VAR_blazer_slack_webhook_general_topic: ${{ secrets.PRODUCTION_BLAZER_SLACK_WEBHOOK }}
+  TF_VAR_client_vpn_access_group_id: ${{ secrets.PRODUCTION_CLIENT_VPN_ACCESS_GROUP_ID }}
+  TF_VAR_client_vpn_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SAML_METADATA }}
+  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
 
 jobs:
   terraform-apply:
@@ -164,4 +167,9 @@ jobs:
       - name: Apply aws/system_status
         run: |
           cd env/production/system_status
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+          
+      - name: Apply aws/system_status_static_site
+        run: |
+          cd env/production/system_status_static_site
           terragrunt apply --terragrunt-non-interactive -auto-approve

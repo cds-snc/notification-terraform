@@ -1,17 +1,22 @@
+locals {
+  image_tag = var.env == "production" ? var.heartbeat_docker_tag : "latest"
+}
+
 module "heartbeat" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v0.0.49"
+  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.0.4"
   name                   = "heartbeat"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.heartbeat_ecr_repository_url}:${var.heartbeat_docker_tag}"
+  image_uri              = "${var.heartbeat_ecr_repository_url}:${local.image_tag}"
   timeout                = 60
   memory                 = 1024
+  alias_name             = "latest"
 
   environment_variables = {
-    heartbeat_api_key     = var.heartbeat_api_key
-    heartbeat_base_url    = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
-    heartbeat_template_id = var.heartbeat_template_id
+    heartbeat_api_key    = var.heartbeat_api_key
+    heartbeat_base_url   = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
+    heartbeat_sms_number = var.heartbeat_sms_number
   }
 }
 
