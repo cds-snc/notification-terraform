@@ -10,7 +10,7 @@ variable "secondary_worker_instance_types" {
   type = list(any)
 }
 
-variable "nodeUpgrade" {
+variable "node_upgrade" {
   type        = bool
   description = "Set to true when wanting to upgrade Node sizes"
   default     = false
@@ -253,4 +253,10 @@ variable "client_vpn_security_group_id" {
 variable "eks_addon_ebs_driver_version" {
   type        = string
   description = "Version for EBS driver addon for EKS (Persistence)"
+}
+
+variable "force_upgrade" {
+  type        = bool
+  description = "Force k8s upgrade even though not all pods were able to be evicted"
+  default     = false
 }
