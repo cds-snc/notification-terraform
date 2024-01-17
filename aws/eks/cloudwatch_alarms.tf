@@ -907,3 +907,35 @@ resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
     }
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "queues-not-active-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "queues-not-active-1-minute-warning"
+  alarm_description   = "Queues have not been active for one minute"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].namespace
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "breaching"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "queues-not-active-5-minutes-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "queues-not-active-5-minutes-critical"
+  alarm_description         = "Queues have not been active for 5 minutes"
+  comparison_operator       = "LessThanThreshold"
+  evaluation_periods        = "1"
+  metric_name               = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].name
+  namespace                 = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].namespace
+  period                    = "300"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "breaching"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+}
