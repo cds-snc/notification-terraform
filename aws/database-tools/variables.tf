@@ -64,9 +64,9 @@ variable "enable_delete_protection" {
   default     = true
 }
 
-variable "database_read_only_proxy_endpoint" {
+variable "blazer_instance_endpoint" {
   type        = string
-  description = "Base endpoint for rds proxy"
+  description = "Base endpoint for blazer serverless instance"
 }
 variable "app_db_user_password" {
   type        = string

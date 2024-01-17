@@ -114,3 +114,4 @@ module "rds_proxy" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+

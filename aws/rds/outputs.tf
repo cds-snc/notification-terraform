@@ -13,3 +13,7 @@ output "database_subnet_ids" {
 output "rds_instance_id" {
   value = aws_rds_cluster_instance.notification-canada-ca-instances[0].identifier
 }
+
+output "blazer_rds_endpoint" {
+  value = aws_rds_cluster_instance.notification-canada-ca-blazer-readonly.endpoint
+}
