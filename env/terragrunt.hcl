@@ -14,6 +14,7 @@ inputs = {
   dns_account_id                        = local.vars.inputs.dns_account_id
   log_retention_period_days             = local.vars.inputs.log_retention_period_days
   sensitive_log_retention_period_days   = local.vars.inputs.sensitive_log_retention_period_days
+  account_budget_limit                  = local.vars.inputs.account_budget_limit
   
   region             = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
