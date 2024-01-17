@@ -96,6 +96,11 @@ resource "aws_rds_cluster" "notification-canada-ca" {
     var.eks_cluster_securitygroup
   ]
 
+  serverlessv2_scaling_configuration {
+    max_capacity = 1.0
+    min_capacity = 0.5
+  }
+
   lifecycle {
     ignore_changes = [
       # Ignore changes to tags, e.g. because a management agent
