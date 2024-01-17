@@ -33,6 +33,12 @@ dependency "eks" {
 
 dependency "rds" {
   config_path = "../rds"
+
+  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    blazer_instance_endpoint   = "blazer-instance-endpoint"
+  }  
 }
 
 include {
