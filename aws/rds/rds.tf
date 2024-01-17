@@ -15,7 +15,7 @@ resource "aws_db_subnet_group" "notification-canada-ca" {
 
 resource "aws_rds_cluster_parameter_group" "default" {
   name        = "rds-cluster-pg"
-  family      = "aurora-postgresql15"
+  family      = "aurora-postgresql11"
   description = "RDS customized cluster parameter group"
 
   parameter {
