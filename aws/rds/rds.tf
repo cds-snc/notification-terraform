@@ -118,6 +118,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 }
 
 resource "aws_rds_cluster_instance" "notification-canada-ca-blazer-readonly" {
+  count              = var.create_blazer_db ? 1 : 0
   identifier         = "notification-${var.env}-blazer-instance"
   cluster_identifier = aws_rds_cluster.notification-canada-ca.id
   #instance_class               = "db.serverless"

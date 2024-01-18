@@ -44,3 +44,9 @@ variable "rds_database_name" {
   description = "Set the name of the database"
 
 }
+
+variable "create_blazer_db" {
+  type        = bool
+  description = "Setting true/false to create/not create a separate database instance for blazer"
+  default     = true
+}
