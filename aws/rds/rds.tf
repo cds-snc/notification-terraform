@@ -132,6 +132,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-blazer-readonly" {
   # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   auto_minor_version_upgrade   = false
+  promotion_tier               = 10
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
