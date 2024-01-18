@@ -15,5 +15,5 @@ output "rds_instance_id" {
 }
 
 output "blazer_rds_endpoint" {
-  value = var.create_blazer_db ? aws_rds_cluster_instance.notification-canada-ca-blazer-readonly.endpoint : "${module.rds_proxy.db_proxy_endpoints.read_only.endpoint}:${module.rds_proxy.proxy_target_port}"
+  value = var.create_blazer_db ? aws_rds_cluster_instance.notification-canada-ca-blazer-readonly[0].endpoint : "${module.rds_proxy.db_proxy_endpoints.read_only.endpoint}:${module.rds_proxy.proxy_target_port}"
 }
