@@ -66,6 +66,7 @@ module "lambda_no_log_detection" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "failed-login-count-5-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "failed-login-count-5-minute-warning"
   alarm_description   = "One user had a failed login count of more than 10 times in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
