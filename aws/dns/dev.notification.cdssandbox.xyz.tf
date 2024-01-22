@@ -77,3 +77,4 @@ resource "aws_route53_record" "bounce-dev-notification-sandbox-TXT" {
   ttl      = "300"
   records  = ["v=spf1 include:amazonses.com ~all"]
 }
+
