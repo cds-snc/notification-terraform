@@ -4,17 +4,19 @@ echo "Checking if TFVars file exists..."
 if ! [ -f $VARFILE ]
 then
   echo "TFVars file doesn't exist... fetching."
-  op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > $VARFILE
-  echo "Done."
-  echo "STOPPING THIS RUN. TERRAFORM NEEDS TO BE RE-RUN TO PICK UP THE DEV FILE."
-  echo "PLEASE RE-RUN YOUR COMMAND."
   exit 1
 else
-  echo "TFVars file exists."
-  CHECK=true
+  echo "TFVars file exists. Checking contents."
+  CONTENTS=$(cat $VARFILE)
+  if [$CONTENTS = ""] 
+  then
+    echo "TFVars file is empty. Refetching"
+  else
+    CHECK=true
+  fi
 fi
 
-if $CHECK ;
+if [ "$CHECK" = true ] ;
 then
   echo "Checking for configuration changes between local and remote TFVars..."
   op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/op_secret
@@ -46,4 +48,10 @@ then
   else
     echo "No Changes Detected..."
   fi
+else 
+  op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > $VARFILE
+  echo "Done."
+  echo "STOPPING THIS RUN. TERRAFORM NEEDS TO BE RE-RUN TO PICK UP THE DEV FILE."
+  echo "PLEASE RE-RUN YOUR COMMAND."
+  exit 1
 fi
