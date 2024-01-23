@@ -154,14 +154,14 @@ resource "aws_cloudwatch_log_metric_filter" "documentation-evicted-pods" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "queues-are-active" {
+resource "aws_cloudwatch_log_metric_filter" "beat-inbox-tasks-are-active" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "queues-are-active"
+  name           = "beat-inbox-tasks-are-active"
   pattern        = "Batch saving with"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
-    name      = "queues-are-active"
+    name      = "beat-inbox-tasks-are-active"
     namespace = "LogMetrics"
     value     = "1"
   }

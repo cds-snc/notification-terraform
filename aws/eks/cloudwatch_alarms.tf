@@ -908,14 +908,14 @@ resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "queues-not-active-1-minute-warning" {
+resource "aws_cloudwatch_metric_alarm" "sqs-beat-inbox-tasks-not-active-1-minute-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "queues-not-active-1-minute-warning"
-  alarm_description   = "Queues have not been active for one minute"
+  alarm_name          = "sqs-beat-inbox-tasks-not-active-1-minute-warning"
+  alarm_description   = "Beat inbox tasks have not been active for one minute"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.beat-inbox-tasks-are-active[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.beat-inbox-tasks-are-active[0].metric_transformation[0].namespace
   period              = "60"
   statistic           = "Sum"
   threshold           = 1
@@ -923,14 +923,14 @@ resource "aws_cloudwatch_metric_alarm" "queues-not-active-1-minute-warning" {
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "queues-not-active-5-minutes-critical" {
+resource "aws_cloudwatch_metric_alarm" "sqs-beat-inbox-tasks-not-active-5-minutes-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "queues-not-active-5-minutes-critical"
-  alarm_description   = "Queues have not been active for 5 minutes"
+  alarm_name          = "sqs-beat-inbox-tasks-not-active-5-minutes-critical"
+  alarm_description   = "Beat inbox tasks have not been active for 5 minutes"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.queues-are-active[0].metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.beat-inbox-tasks-are-active[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.beat-inbox-tasks-are-active[0].metric_transformation[0].namespace
   period              = "300"
   statistic           = "Sum"
   threshold           = 1
