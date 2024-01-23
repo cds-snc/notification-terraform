@@ -53,3 +53,18 @@ resource "aws_quicksight_data_set" "templates" {
     principal = aws_quicksight_group.dataset_owner.arn
   }
 }
+
+resource "aws_quicksight_refresh_schedule" "templates" {
+  data_set_id = "templatesv2"
+  schedule_id = "schedule-templates"
+  depends_on  = [aws_quicksight_data_set.templates]
+
+  schedule {
+    refresh_type = "FULL_REFRESH"
+
+    schedule_frequency {
+      interval        = "DAILY"
+      time_of_the_day = "07:35"
+    }
+  }
+}
