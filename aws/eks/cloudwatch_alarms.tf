@@ -908,9 +908,9 @@ resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-beat-inbox-tasks-not-active-1-minute-warning" {
+resource "aws_cloudwatch_metric_alarm" "beat-inbox-tasks-not-active-1-minute-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-beat-inbox-tasks-not-active-1-minute-warning"
+  alarm_name          = "beat-inbox-tasks-not-active-1-minute-warning"
   alarm_description   = "Beat inbox tasks have not been active for one minute"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
@@ -923,9 +923,9 @@ resource "aws_cloudwatch_metric_alarm" "sqs-beat-inbox-tasks-not-active-1-minute
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-beat-inbox-tasks-not-active-5-minutes-critical" {
+resource "aws_cloudwatch_metric_alarm" "beat-inbox-tasks-not-active-5-minutes-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-beat-inbox-tasks-not-active-5-minutes-critical"
+  alarm_name          = "beat-inbox-tasks-not-active-5-minutes-critical"
   alarm_description   = "Beat inbox tasks have not been active for 5 minutes"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
