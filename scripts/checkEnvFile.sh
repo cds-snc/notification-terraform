@@ -36,7 +36,7 @@ then
       if [ "$RESPONSE" == "yes" ]; then
         echo "Updating Remote."
         
-        if op item edit "Bentest" notesPlain="$(cat $VARFILE)" > /dev/null ; then
+        if op item edit "TFVars - Dev" notesPlain="$(cat $VARFILE)" > /dev/null ; then
           echo "Done."
         else
           echo "WARNING: UPDATE FAILED"
