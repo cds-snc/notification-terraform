@@ -28,4 +28,12 @@ output "notification_canada_ca_dkim" {
   value = aws_ses_domain_dkim.notification-canada-ca.dkim_tokens
 
 }
+output "notification_internal_dns_cert" {
+  value = base64encode(tls_self_signed_cert.internal_dns.cert_pem)
+}
+
+output "notification_internal_dns_key" {
+  value     = base64encode(tls_private_key.internal_dns.private_key_pem)
+  sensitive = true
+}
 
