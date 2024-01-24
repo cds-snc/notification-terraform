@@ -64,7 +64,7 @@ resource "aws_quicksight_refresh_schedule" "templates" {
 
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "07:35"
+      time_of_the_day = "07:20"
     }
   }
 }

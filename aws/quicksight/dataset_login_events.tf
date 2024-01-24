@@ -56,7 +56,7 @@ resource "aws_quicksight_refresh_schedule" "login_events" {
 
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "07:10"
+      time_of_the_day = "07:35"
     }
   }
 }
