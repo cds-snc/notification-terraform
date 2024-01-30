@@ -37,3 +37,11 @@ output "notification_internal_dns_key" {
   sensitive = true
 }
 
+output "internal_dns_certificate_arn" {
+  value = aws_acm_certificate.internal_dns.arn
+}
+
+output "internal_dns_zone_id" {
+  value = aws_route53_zone.internal_dns.zone_id
+}
+
