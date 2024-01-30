@@ -26,7 +26,3 @@ variable "vpc_id" {
   type        = string
   description = "Used to associate the internal DNS with the VPC"
 }
-variable "nginx_internal_ip" {
-  type        = string
-  description = "The internal load balancer for nginx, which is used for internal tools over VPN"
-}
