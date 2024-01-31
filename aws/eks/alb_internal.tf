@@ -1,7 +1,8 @@
 resource "aws_lb" "internal_alb" {
-  name               = "notification-${var.env}-internal-alb"
-  internal           = true
-  load_balancer_type = "application"
+  name                       = "notification-${var.env}-internal-alb"
+  internal                   = true
+  load_balancer_type         = "application"
+  drop_invalid_header_fields = true
   security_groups = [
     aws_security_group.notification_internal.id
   ]
