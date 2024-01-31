@@ -4,6 +4,7 @@ locals {
   # This is required for the dynamic provider for DNS configuration. In staging and production, no role assumption is required,
   # so this will be empty. In scratch/dynamic environments, role assumption is required.
   dns_role           = local.vars.inputs.env == "production" || local.vars.inputs.env == "staging" ? "" : "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }"
+  
 }
 
 inputs = {
@@ -25,11 +26,21 @@ inputs = {
   cbs_satellite_bucket_name = "cbs-satellite-${local.vars.inputs.account_id}"
 }
 
+terraform {
+
+  before_hook "before_hook" {
+    commands     = local.vars.inputs.env == "dev" ? ["apply", "plan"] : []
+    execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", "${get_repo_root()}/aws/dev.tfvars"]
+  }
+
+}
+
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite"
   contents  = <<EOF
 terraform {
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -40,6 +51,7 @@ terraform {
       version = "~> 4.0"
     }
   }
+
 }
 
 provider "aws" {
@@ -71,6 +83,9 @@ provider "aws" {
     role_arn = "arn:aws:iam::239043911459:role/${local.vars.inputs.env}_dns_manager_role"
   }
 }
+
+
+
 EOF
 }
 
