@@ -36,6 +36,7 @@ include {
 
 inputs = {
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
+  vpc_id                                  = dependency.common.outputs.vpc_id
   ses_custom_sending_domains              = ["notification.gov.bc.ca", "notify.novascotia.ca"]
   lambda_ses_receiving_emails_image_arn   = dependency.ses_receiving_emails.outputs.lambda_ses_receiving_emails_image_arn
 }

@@ -10,7 +10,7 @@ variable "secondary_worker_instance_types" {
   type = list(any)
 }
 
-variable "nodeUpgrade" {
+variable "node_upgrade" {
   type        = bool
   description = "Set to true when wanting to upgrade Node sizes"
   default     = false
@@ -238,4 +238,25 @@ variable "sqs_send_sms_low_queue_name" {
 variable "celery_queue_prefix" {
   type        = string
   description = "Celery queue prefix"
+}
+
+variable "client_vpn_cloudwatch_log_group_name" {
+  type        = string
+  description = "Client VPN CloudWatch log group name. This is used by the Sentinel forwarder to send logs to Sentinel."
+}
+
+variable "client_vpn_security_group_id" {
+  type        = string
+  description = "Client VPN security group ID"
+}
+
+variable "eks_addon_ebs_driver_version" {
+  type        = string
+  description = "Version for EBS driver addon for EKS (Persistence)"
+}
+
+variable "force_upgrade" {
+  type        = bool
+  description = "Force k8s upgrade even though not all pods were able to be evicted"
+  default     = false
 }

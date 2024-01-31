@@ -9,4 +9,5 @@ include {
 inputs = {
   env                                    = "dev"
   billing_tag_value                      = "notification-canada-ca-dev"
+  status_cert_created                    = true  
 }

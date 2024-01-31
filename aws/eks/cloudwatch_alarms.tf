@@ -415,15 +415,15 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warnin
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-1-minute-critical" {
+resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-1-critical-bounce-rate-1-minute-warning"
-  alarm_description   = "One service exceeding 10% bounce rate in 1 minute"
+  alarm_name          = "logs-1-bounce-rate-critical"
+  alarm_description   = "Bounce rate exceeding 10% in a 12 hour period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].namespace
-  period              = 60
+  period              = 60 * 60 * 12
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
@@ -906,4 +906,35 @@ resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
       }
     }
   }
+}
+
+resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "aggregating-queues-not-active-1-minute-warning"
+  alarm_description   = "Beat inbox tasks have not been active for one minute"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.aggregating-queues-are-active[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.aggregating-queues-are-active[0].metric_transformation[0].namespace
+  period              = "60"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "breaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "aggregating-queues-not-active-5-minutes-critical"
+  alarm_description   = "Beat inbox tasks have not been active for 5 minutes"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.aggregating-queues-are-active[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.aggregating-queues-are-active[0].metric_transformation[0].namespace
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "breaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
 }

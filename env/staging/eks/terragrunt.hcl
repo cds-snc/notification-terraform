@@ -38,6 +38,8 @@ dependency "common" {
     sqs_send_sms_low_queue_name               = ""
     sqs_send_sms_medium_queue_name            = ""
     sqs_send_sms_high_queue_name              = ""
+    client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
+    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -60,7 +62,8 @@ inputs = {
   primary_worker_desired_size               = 4
   primary_worker_instance_types             = ["r5.large"]
   secondary_worker_instance_types           = ["r5.large"]
-  nodeUpgrade                               = false
+  node_upgrade                              = false
+  force_upgrade                             = true
   primary_worker_max_size                   = 7
   primary_worker_min_size                   = 4
   vpc_id                                    = dependency.common.outputs.vpc_id
@@ -76,7 +79,8 @@ inputs = {
   eks_addon_coredns_version                 = "v1.10.1-eksbuild.4"
   eks_addon_kube_proxy_version              = "v1.28.1-eksbuild.1"
   eks_addon_vpc_cni_version                 = "v1.15.0-eksbuild.2"
-  eks_node_ami_version                      = "1.28.3-20231116"
+  eks_addon_ebs_driver_version              = "v1.26.1-eksbuild.1"
+  eks_node_ami_version                      = "1.28.5-20240117"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100
@@ -95,6 +99,8 @@ inputs = {
   sqs_send_sms_medium_queue_name            = dependency.common.outputs.sqs_send_sms_medium_queue_name
   sqs_send_sms_high_queue_name              = dependency.common.outputs.sqs_send_sms_high_queue_name
   celery_queue_prefix                       = "eks-notification-canada-ca"
+  client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
+  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
 }
 
 
