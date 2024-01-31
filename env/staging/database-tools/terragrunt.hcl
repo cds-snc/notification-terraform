@@ -48,6 +48,7 @@ inputs = {
   database-tools-securitygroup      = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup   = dependency.eks.outputs.database-tools-db-securitygroup
   database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
+  rds_endpoint                           = dependency.rds.outputs.rds_endpoint
 }
 
 terraform {
