@@ -52,7 +52,7 @@ dependency "dns" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     internal_dns_certificate_arn = ""
-    internal_dns_zone_id = ""
+    internal_dns_zone_id = "ZQSVJUPU6J1EY"
   }
 }
 
