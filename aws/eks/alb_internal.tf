@@ -1,5 +1,5 @@
 resource "aws_lb" "internal_alb" {
-  name                       = "notification-${var.env}-internal-alb"
+  name                       = "notify-${var.env}-internal-alb"
   internal                   = true
   load_balancer_type         = "application"
   drop_invalid_header_fields = true
