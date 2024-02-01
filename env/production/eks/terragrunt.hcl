@@ -37,6 +37,19 @@ dependency "cloudfront" {
   config_path = "../cloudfront"
 }
 
+dependency "dns" {
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs = {
+    internal_dns_certificate_arn = ""
+    internal_dns_zone_id = "ZQSVJUPU6J1EY"
+  }
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -62,7 +75,7 @@ inputs = {
   eks_addon_kube_proxy_version              = "v1.28.1-eksbuild.1"
   eks_addon_vpc_cni_version                 = "v1.15.0-eksbuild.2"
   eks_addon_ebs_driver_version              = "v1.26.1-eksbuild.1"
-  eks_node_ami_version                      = "1.28.3-20231201"
+  eks_node_ami_version                      = "1.28.5-20240110"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100
@@ -83,5 +96,7 @@ inputs = {
   celery_queue_prefix                       = "eks-notification-canada-ca"
   client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
   client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
+  internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
+  internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
 
 }
