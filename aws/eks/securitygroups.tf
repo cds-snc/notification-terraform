@@ -350,3 +350,42 @@ resource "aws_security_group_rule" "client-vpn-ingress-redis" {
   source_security_group_id = var.client_vpn_security_group_id
   security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
 }
+
+# Security Group For Internal
+resource "aws_security_group" "notification_internal" {
+  name        = "notification-canada-ca-alb-internal"
+  description = "Ingress - Application load balancer"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
+  }
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
+  }
+
+  egress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
+  }
+
+  egress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
