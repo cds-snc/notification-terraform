@@ -260,3 +260,13 @@ variable "force_upgrade" {
   description = "Force k8s upgrade even though not all pods were able to be evicted"
   default     = false
 }
+
+variable "internal_dns_certificate_arn" {
+  type        = string
+  description = "The ARN for the internal DNS certificate"
+}
+
+variable "internal_dns_zone_id" {
+  type        = string
+  description = "The zone id for the internal DNS"
+}
