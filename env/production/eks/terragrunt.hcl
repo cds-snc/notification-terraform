@@ -38,6 +38,9 @@ dependency "cloudfront" {
 }
 
 dependency "dns" {
+
+  config_path = "../dns"
+  
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
 
