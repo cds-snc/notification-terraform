@@ -38,12 +38,14 @@ dependency "cloudfront" {
 }
 
 dependency "dns" {
+
+  config_path = "../dns"
+  
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
@@ -75,7 +77,7 @@ inputs = {
   eks_addon_kube_proxy_version              = "v1.28.1-eksbuild.1"
   eks_addon_vpc_cni_version                 = "v1.15.0-eksbuild.2"
   eks_addon_ebs_driver_version              = "v1.26.1-eksbuild.1"
-  eks_node_ami_version                      = "1.28.5-20240110"
+  eks_node_ami_version                      = "1.28.5-20240202"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100
