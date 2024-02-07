@@ -83,6 +83,7 @@ resource "aws_subnet" "notification-canada-ca-private" {
     Access                                                                = "private"
     "kubernetes.io/role/internal-elb"                                     = 1
     "kubernetes.io/cluster/notification-canada-ca-${var.env}-eks-cluster" = "shared"
+    "karpenter.sh/discovery"                                              = var.eks_cluster_name
   }
 }
 

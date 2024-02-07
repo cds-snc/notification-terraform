@@ -35,7 +35,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 
 resource "aws_rds_cluster_parameter_group" "default" {
   name        = "rds-cluster-pg"
-  family      = "aurora-postgresql11"
+  family      = var.env == "production" ? "aurora-postgresql11" : "aurora-postgresql15"
   description = "RDS customized cluster parameter group"
 
   parameter {
@@ -59,6 +59,12 @@ resource "aws_rds_cluster_parameter_group" "default" {
   }
 
   parameter {
+    name         = "rds.logical_replication"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+
+  parameter {
     name         = "rds.log_retention_period"
     value        = "4320" # 3 days (in minutes)
     apply_method = "pending-reboot"
@@ -73,7 +79,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
   engine_version               = 11.9
-  database_name                = "NotificationCanadaCa${var.env}"
+  database_name                = var.rds_database_name
   final_snapshot_identifier    = "server-${random_string.random.result}"
   master_username              = "postgres"
   master_password              = var.rds_cluster_password

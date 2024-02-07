@@ -1,5 +1,6 @@
 locals {
   application_log_group_arn = "arn:aws:logs:${var.region}:${var.account_id}:log-group:${local.eks_application_log_group}"
+  client_vpn_log_group_arn  = "arn:aws:logs:${var.region}:${var.account_id}:log-group:${var.client_vpn_cloudwatch_log_group_name}"
   blazer_log_group_arn      = "arn:aws:logs:${var.region}:${var.account_id}:log-group:blazer"
 }
 
@@ -17,7 +18,11 @@ module "sentinel_forwarder" {
   customer_id = var.sentinel_customer_id
   shared_key  = var.sentinel_shared_key
 
-  cloudwatch_log_arns = [local.application_log_group_arn, local.blazer_log_group_arn]
+  cloudwatch_log_arns = [
+    local.application_log_group_arn,
+    local.blazer_log_group_arn,
+    local.client_vpn_log_group_arn
+  ]
 }
 
 
@@ -30,12 +35,20 @@ resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
   distribution    = "Random"
 }
 
-
 resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
   count           = var.enable_sentinel_forwarding ? 1 : 0
   name            = "Blazer logging"
   log_group_name  = "blazer"
   filter_pattern  = "Audit "
+  destination_arn = module.sentinel_forwarder[0].lambda_arn
+  distribution    = "Random"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "client_vpn_connections" {
+  count           = var.enable_sentinel_forwarding ? 1 : 0
+  name            = "Client VPN connections"
+  log_group_name  = var.client_vpn_cloudwatch_log_group_name
+  filter_pattern  = "[w1=\"*\"]" # All logs
   destination_arn = module.sentinel_forwarder[0].lambda_arn
   distribution    = "Random"
 }

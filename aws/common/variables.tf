@@ -54,6 +54,21 @@ variable "celery_queue_prefix" {
   default = "eks-notification-canada-ca"
 }
 
+variable "sqs_visibility_timeout_default" {
+  type = number
+  # See SQS visibility timeout
+  # https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
+  default = 305
+}
+
+variable "sqs_visibility_timeout_priority_high" {
+  type = number
+  # See SQS visibility timeout
+  # https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
+  default = 26
+}
+
+# TODO: delete this variable once we verify that we've transitioned to the new queues
 variable "sqs_email_queue_name" {
   type = string
   # See QueueNames in
@@ -61,6 +76,28 @@ variable "sqs_email_queue_name" {
   default = "send-email-tasks"
 }
 
+variable "sqs_send_email_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-high"
+}
+
+variable "sqs_send_email_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-medium"
+}
+
+variable "sqs_send_email_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-low"
+}
+
+# TODO: delete this variable once we verify that we've transitioned to the new queues
 variable "sqs_sms_queue_name" {
   type = string
   # See QueueNames in
@@ -234,4 +271,40 @@ variable "create_cbs_bucket" {
   description = "Create the CBS bucket. Useful if this is a scratch deployment."
   type        = bool
   default     = false
+}
+
+variable "eks_cluster_name" {
+  description = "Name of EKS Cluster"
+  type        = string
+}
+
+variable "client_vpn_access_group_id" {
+  description = "IAM Identity Center group ID that will be allowed access to the VPN."
+  type        = string
+  sensitive   = true
+}
+
+variable "client_vpn_saml_metadata" {
+  description = "IAM Identity Center application SAML metadata.  Users that want to connect to the VPN must be granted access to this app."
+  type        = string
+  sensitive   = true
+}
+
+variable "client_vpn_self_service_saml_metadata" {
+  description = "IAM Identity Center self-service application SAML metadata.  This allows users to download the VPN client and configuration."
+  type        = string
+  sensitive   = true
+}
+
+variable "account_budget_limit" {
+  description = "The dollar amount in USD that this AWS account should be budgeted to"
+  type        = number
+  default     = 3000
+
+}
+
+variable "account_budget_alert_emails" {
+  description = "List of people who should be alerted when budget thresholds are met"
+  type        = list(any)
+  default     = ["jimmy.royer@cds-snc.ca", "stephen.astels@cds-snc.ca", "ben.larabie@cds-snc.ca"]
 }

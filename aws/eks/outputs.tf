@@ -21,6 +21,11 @@ output "documentation_target_group_arn" {
   value = aws_alb_target_group.notification-canada-ca-documentation.arn
 }
 
+output "internal_nginx_target_group_arn" {
+  value = aws_alb_target_group.internal_nginx_http.arn
+}
+
+
 ###
 # EKS cluster
 ###
@@ -66,25 +71,26 @@ output "alb_arn_suffix" {
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
 }
 
+# Karpenter
+output "karpenter_iam_role_arn" {
+  value       = module.iam_assumable_role_karpenter.iam_role_arn
+  description = "ARN of Karpenter IAM Role for EKS."
+}
+
+output "eks_cluster_endpoint" {
+  value = data.aws_eks_cluster.notify_cluster.endpoint
+}
+
+output "karpenter_instance_profile" {
+  value = aws_iam_instance_profile.karpenter.name
+}
+
+# Quicksight
 output "quicksight_security_group_id" {
   value = aws_security_group.quicksight.id
 }
 
-###
-# Secondary Target groups
-###
-output "doc_api_secondary" {
-  value = aws_alb_target_group.doc_api_secondary.arn
-}
-
-output "document_secondary" {
-  value = aws_alb_target_group.document_secondary.arn
-}
-
-output "api_secondary" {
-  value = aws_alb_target_group.api_secondary.arn
-}
-
-output "admin_secondary" {
-  value = aws_alb_target_group.admin_secondary.arn
+# EKS CSI
+output "eks_csi_role_arn" {
+  value = aws_iam_role.secrets_csi.arn
 }

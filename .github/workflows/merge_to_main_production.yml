@@ -21,9 +21,10 @@ env:
   TF_VAR_alt_base_domain: ${{secrets.PRODUCTION_ALT_BASE_DOMAIN}}  
   TF_VAR_dbtools_password: ${{ secrets.PRODUCTION_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_number: ${{ secrets.PRODUCTION_HEARTBEAT_SMS_NUMBER }}
   TF_VAR_rds_cluster_password: ${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.PRODUCTION_APP_DB_USER_PASSWORD }}
+  TF_VAR_quicksight_db_user_password: ${{ secrets.PRODUCTION_QUICKSIGHT_DB_USER_PASSWORD }}
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
@@ -34,6 +35,10 @@ env:
   TF_VAR_slack_channel_warning_topic: "notification-ops"
   TF_VAR_slack_channel_critical_topic: "notification-ops"
   TF_VAR_slack_channel_general_topic: "notification-ops"
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.PRODUCTION_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_system_status_admin_url: "https://notification.canada.ca"
+  TF_VAR_system_status_api_url: "https://api.notification.canada.ca"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-production-system-status"
   TF_VAR_cloudwatch_opsgenie_alarm_webhook: ${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}
   TF_VAR_new_relic_license_key: ${{ secrets.PRODUCTION_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_waf_secret: ${{secrets.PRODUCTION_WAF_SECRET}}
@@ -42,6 +47,9 @@ env:
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
   TF_VAR_blazer_slack_webhook_general_topic: ${{ secrets.PRODUCTION_BLAZER_SLACK_WEBHOOK }}
+  TF_VAR_client_vpn_access_group_id: ${{ secrets.PRODUCTION_CLIENT_VPN_ACCESS_GROUP_ID }}
+  TF_VAR_client_vpn_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SAML_METADATA }}
+  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
 
 jobs:
   terraform-apply:
@@ -66,6 +74,11 @@ jobs:
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3        
 
       - name: Inject token authentication
         run: |
@@ -141,13 +154,22 @@ jobs:
           cd env/production/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/quicksight
+        run: |
+          cd env/production/quicksight
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Apply aws/lambda-google-cidr
         run: |
           cd env/production/lambda-google-cidr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Slack message on failure
-        if: ${{ failure() }}
+      - name: Apply aws/system_status
         run: |
-          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform apply failed: <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|Merge to main (Production)>"}}]}'
-          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
+          cd env/production/system_status
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+          
+      - name: Apply aws/system_status_static_site
+        run: |
+          cd env/production/system_status_static_site
+          terragrunt apply --terragrunt-non-interactive -auto-approve

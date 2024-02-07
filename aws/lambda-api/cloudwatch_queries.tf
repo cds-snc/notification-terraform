@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_query_definition" "api-lambda-errors" {
-  name = "API lambda - errors"
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API lambda - errors"
 
   log_group_names = [
     local.api_lambda_log_group

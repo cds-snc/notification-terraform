@@ -184,3 +184,8 @@ data "aws_iam_policy_document" "firehose_waf_logs" {
     ]
   }
 }
+
+# This is required for Karpenter. Older accounts do not have this enabled by default
+resource "aws_iam_service_linked_role" "spotInstances" {
+  aws_service_name = "spot.amazonaws.com"
+}

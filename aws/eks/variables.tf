@@ -10,7 +10,7 @@ variable "secondary_worker_instance_types" {
   type = list(any)
 }
 
-variable "nodeUpgrade" {
+variable "node_upgrade" {
   type        = bool
   description = "Set to true when wanting to upgrade Node sizes"
   default     = false
@@ -183,4 +183,90 @@ variable "enable_delete_protection" {
 variable "notification_base_url_regex_arn" {
   type        = string
   description = "The ARN of the regex for the notify base URL"
+}
+
+variable "sqs_send_email_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-high"
+}
+
+variable "sqs_send_email_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-medium"
+}
+
+variable "sqs_send_email_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-low"
+}
+
+# TODO: delete this variable once we verify that we've transitioned to the new queues
+variable "sqs_sms_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-tasks"
+}
+
+variable "sqs_send_sms_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-high"
+}
+
+variable "sqs_send_sms_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-medium"
+}
+
+variable "sqs_send_sms_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-low"
+}
+
+variable "celery_queue_prefix" {
+  type        = string
+  description = "Celery queue prefix"
+}
+
+variable "client_vpn_cloudwatch_log_group_name" {
+  type        = string
+  description = "Client VPN CloudWatch log group name. This is used by the Sentinel forwarder to send logs to Sentinel."
+}
+
+variable "client_vpn_security_group_id" {
+  type        = string
+  description = "Client VPN security group ID"
+}
+
+variable "eks_addon_ebs_driver_version" {
+  type        = string
+  description = "Version for EBS driver addon for EKS (Persistence)"
+}
+
+variable "force_upgrade" {
+  type        = bool
+  description = "Force k8s upgrade even though not all pods were able to be evicted"
+  default     = false
+}
+
+variable "internal_dns_certificate_arn" {
+  type        = string
+  description = "The ARN for the internal DNS certificate"
+}
+
+variable "internal_dns_zone_id" {
+  type        = string
+  description = "The zone id for the internal DNS"
 }

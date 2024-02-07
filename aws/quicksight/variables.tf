@@ -1,5 +1,20 @@
 locals {
-  quicksight_db_user_name = "quicksight_db_user"
+  dataset_viewer_permissions = [
+    "quicksight:DescribeDataSet",
+    "quicksight:DescribeDataSetPermissions",
+    "quicksight:DescribeIngestion",
+    "quicksight:ListIngestions",
+    "quicksight:PassDataSet"
+  ]
+  dataset_owner_permissions = concat(
+    local.dataset_viewer_permissions,
+    [
+      "quicksight:DeleteDataSet",
+      "quicksight:UpdateDataSet",
+      "quicksight:UpdateDataSetPermissions",
+      "quicksight:CreateIngestion",
+      "quicksight:CancelIngestion"
+  ])
 }
 
 variable "rds_instance_id" {
@@ -8,6 +23,11 @@ variable "rds_instance_id" {
 
 variable "database_name" {
   type = string
+}
+
+variable "quicksight_db_user_name" {
+  type    = string
+  default = "quicksight_db_user"
 }
 
 variable "quicksight_db_user_password" {
