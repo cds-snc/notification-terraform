@@ -17,7 +17,7 @@ Each environment has its own VPN, and thus you must set up 3 VPN profiles. Repea
 1. Navigate to the [AWS Console](https://cds-snc-ct.awsapps.com/start#/)
 2. Log in to the account for the environment you would like to set up
 3. Search for "Client VPN Endpoints" or once you've done the above, simply [click here](https://ca-central-1.console.aws.amazon.com/vpc/home?region=ca-central-1#ClientVPNEndpoints:)
-4. Select the radio button beside the only avaialable endpoint
+4. Select the radio button beside the only available endpoint
 5. Click the "Download Client Configuration" button at the top right
 6. Open the AWS VPN Client
 7. Choose File -> Manage Profiles
