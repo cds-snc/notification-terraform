@@ -33,7 +33,7 @@ Currently Hasura is the only tool available under the VPN, but more will follow.
 
 ### Important Notes
 
-- The internal DNS for each environment is not a standard DNS and thus will not be resolavable 
+- The internal DNS for each environment is not a standard DNS and thus will not be resolvable
 without connecting to the appropriate VPN. 
 - You MUST connect to the corresponding environment VPN to reach that DNS (ex staging for *.staging.notification.internal)
 - Since the DNS is not standard, you MUST enter the https:// in the URL (at least the first time you navigate to it), or else you will be sent to search results. Bookmarking sites is recommended for ease of use.
