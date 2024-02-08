@@ -57,8 +57,8 @@ resource "aws_secretsmanager_secret_version" "app_db_user" {
 ################################################################################
 
 module "rds_proxy" {
-  source  = "clowdhaus/rds-proxy/aws"
-  version = "2.0.0"
+  source  = "terraform-aws-modules/rds-proxy/aws"
+  version = "2.1.2"
 
   name            = "rds-proxy"
   iam_auth        = "DISABLED"
@@ -100,8 +100,6 @@ module "rds_proxy" {
   }
 
   engine_family = "POSTGRESQL"
-  db_host       = aws_rds_cluster.notification-canada-ca.endpoint
-  db_name       = aws_rds_cluster.notification-canada-ca.database_name
 
   # Target Aurora cluster
   target_db_cluster     = true

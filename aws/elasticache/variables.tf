@@ -32,3 +32,7 @@ variable "sns_alert_warning_arn" {
 variable "sns_alert_critical_arn" {
   type = string
 }
+
+variable "kms_arn" {
+  type = string
+}

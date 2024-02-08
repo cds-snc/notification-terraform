@@ -103,35 +103,35 @@ output "sns_alert_ok_arn_us_east_1" {
 }
 
 output "sns_deliveries_ca_central_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].arn : ""
 }
 
 output "sns_deliveries_ca_central_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].name : ""
 }
 
 output "sns_deliveries_failures_ca_central_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].arn : ""
 }
 
 output "sns_deliveries_failures_ca_central_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].name : ""
 }
 
 output "sns_deliveries_us_west_2_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries_us_west_2.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].arn : ""
 }
 
 output "sns_deliveries_us_west_2_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries_us_west_2.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].name : ""
 }
 
 output "sns_deliveries_failures_us_west_2_arn" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.arn
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].arn : ""
 }
 
 output "sns_deliveries_failures_us_west_2_name" {
-  value = aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2.name
+  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].name : ""
 }
 
 output "sqs_notify_internal_tasks_arn" {
@@ -149,4 +149,36 @@ output "sqs_eks_notification_canada_cadelivery_receipts_arn" {
 output "notification_base_url_regex_arn" {
   value       = aws_wafv2_regex_pattern_set.notification_base_url.arn
   description = "The ARN of the regex pattern set for the allowed base domains"
+}
+
+output "sqs_send_sms_low_queue_name" {
+  value = var.sqs_send_sms_low_queue_name
+}
+
+output "sqs_send_sms_medium_queue_name" {
+  value = var.sqs_send_sms_medium_queue_name
+}
+
+output "sqs_send_sms_high_queue_name" {
+  value = var.sqs_send_sms_high_queue_name
+}
+
+output "sqs_send_email_low_queue_name" {
+  value = var.sqs_send_email_low_queue_name
+}
+
+output "sqs_send_email_medium_queue_name" {
+  value = var.sqs_send_email_medium_queue_name
+}
+
+output "sqs_send_email_high_queue_name" {
+  value = var.sqs_send_email_high_queue_name
+}
+
+output "client_vpn_cloudwatch_log_group_name" {
+  value = module.vpn.client_vpn_cloudwatch_log_group_name
+}
+
+output "client_vpn_security_group_id" {
+  value = module.vpn.client_vpn_security_group_id
 }

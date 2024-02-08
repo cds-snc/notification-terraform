@@ -51,10 +51,11 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 ###
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
-  cluster_name    = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  node_group_name = "notification-canada-ca-${var.env}-eks-primary-node-group"
-  node_role_arn   = aws_iam_role.eks-worker-role.arn
-  subnet_ids      = var.vpc_private_subnets
+  cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name      = "notification-canada-ca-${var.env}-eks-primary-node-group"
+  node_role_arn        = aws_iam_role.eks-worker-role.arn
+  subnet_ids           = var.vpc_private_subnets
+  force_update_version = var.force_upgrade
 
   disk_size = 80
 
@@ -81,17 +82,19 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
   ]
 
   tags = {
-    Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    Name                     = "notification-canada-ca"
+    CostCenter               = "notification-canada-ca-${var.env}"
+    "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" {
-  count           = var.nodeUpgrade ? 1 : 0
-  cluster_name    = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  node_group_name = "notification-canada-ca-${var.env}-eks-secondary-node-group"
-  node_role_arn   = aws_iam_role.eks-worker-role.arn
-  subnet_ids      = var.vpc_private_subnets
+  count                = var.node_upgrade ? 1 : 0
+  cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name      = "notification-canada-ca-${var.env}-eks-secondary-node-group"
+  node_role_arn        = aws_iam_role.eks-worker-role.arn
+  subnet_ids           = var.vpc_private_subnets
+  force_update_version = var.force_upgrade
 
   disk_size = 80
 
@@ -120,8 +123,9 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
   ]
 
   tags = {
-    Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    Name                     = "notification-canada-ca"
+    CostCenter               = "notification-canada-ca-${var.env}"
+    "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
 
@@ -130,22 +134,33 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
 ###
 
 resource "aws_eks_addon" "coredns" {
-  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  addon_name        = "coredns"
-  addon_version     = var.eks_addon_coredns_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "coredns"
+  addon_version               = var.eks_addon_coredns_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 }
 
 resource "aws_eks_addon" "kube_proxy" {
-  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  addon_name        = "kube-proxy"
-  addon_version     = var.eks_addon_kube_proxy_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "kube-proxy"
+  addon_version               = var.eks_addon_kube_proxy_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 }
 
 resource "aws_eks_addon" "vpc_cni" {
-  cluster_name      = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  addon_name        = "vpc-cni"
-  addon_version     = var.eks_addon_vpc_cni_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "vpc-cni"
+  addon_version               = var.eks_addon_vpc_cni_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "ebs_driver" {
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "aws-ebs-csi-driver"
+  addon_version               = var.eks_addon_ebs_driver_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 }

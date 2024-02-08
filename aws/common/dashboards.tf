@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Redis-batch-saving"
   dashboard_body = <<EOF
 {
@@ -179,6 +180,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "emails" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Emails"
   dashboard_body = <<EOF
 {
@@ -186,7 +188,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 0,
+            "y": 4,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -203,28 +205,34 @@ resource "aws_cloudwatch_dashboard" "emails" {
             }
         },
         {
-            "height": 6,
-            "width": 15,
+            "height": 4,
+            "width": 24,
             "y": 0,
-            "x": 9,
+            "x": 0,
             "type": "alarm",
             "properties": {
                 "title": "Email alarms",
                 "alarms": [
-                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-email-queue-delay-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning.arn}"
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.ses-complaint-rate-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-email-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning[0].arn}"
                 ]
             }
         },
         {
             "height": 6,
             "width": 9,
-            "y": 6,
+            "y": 4,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -242,7 +250,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 6,
+            "y": 10,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -266,26 +274,39 @@ resource "aws_cloudwatch_dashboard" "emails" {
         },
         {
             "height": 6,
-            "width": 9,
+            "width": 8,
             "y": 24,
             "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-high", { "color": "#1f77b4", "region": "${var.region}", "label": "Age of oldest message" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": true,
                 "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
-                "title": "Average approximate age of oldest message in send-email-tasks"
+                "title": "Average approximate age of oldest message in send-email-high",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "60 sec",
+                            "value": 60
+                        },
+                        {
+                            "label": "20 sec",
+                            "value": 20,
+                            "fill": "above"
+                        }
+                    ]
+                }
             }
         },
         {
-            "height": 15,
+            "height": 18,
             "width": 6,
-            "y": 6,
+            "y": 4,
             "x": 18,
             "type": "text",
             "properties": {
@@ -295,7 +316,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 18,
+            "y": 16,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -312,18 +333,19 @@ resource "aws_cloudwatch_dashboard" "emails" {
         },
         {
             "height": 6,
-            "width": 9,
-            "y": 18,
+            "width": 8,
+            "y": 30,
             "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-tasks" ]
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-high", { "region": "${var.region}", "label": "Messages waiting in queue" } ],
+                    [ ".", "ApproximateNumberOfMessagesNotVisible", ".", ".", { "region": "${var.region}", "label": "Messages in a celery worker" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
-                "title": "Approximate number of messages in send-email-tasks",
+                "title": "Approximate number of messages in send-email-high",
                 "period": 60,
                 "stat": "Average"
             }
@@ -331,7 +353,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 12,
+            "y": 16,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -349,7 +371,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 12,
+            "y": 10,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -367,7 +389,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 24,
+            "y": 42,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -385,7 +407,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 30,
+            "y": 48,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -403,7 +425,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
         {
             "height": 6,
             "width": 9,
-            "y": 30,
+            "y": 48,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -417,6 +439,170 @@ resource "aws_cloudwatch_dashboard" "emails" {
                 "period": 300,
                 "title": "Number of messages visible in retry-tasks"
             }
+        },
+        {
+            "height": 2,
+            "width": 24,
+            "y": 22,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Delivery Queues\n"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 42,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-tasks"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 36,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-tasks" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate number of messages in send-email-tasks",
+                "period": 60,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "y": 36,
+            "x": 9,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-tasks"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 24,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-medium", { "color": "#1f77b4", "region": "${var.region}", "label": "Age of oldest message" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-medium",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "45 min",
+                            "value": 2700
+                        },
+                        {
+                            "label": "30 min",
+                            "value": 1800,
+                            "fill": "above"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 24,
+            "x": 16,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-low", { "color": "#1f77b4", "region": "${var.region}", "label": "Age of oldest message" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Average approximate age of oldest message in send-email-low",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "3 hours",
+                            "value": 10800
+                        },
+                        {
+                            "label": "1 hour",
+                            "value": 3600,
+                            "fill": "above"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 30,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-medium", { "region": "${var.region}", "label": "Messages waiting in queue" } ],
+                    [ ".", "ApproximateNumberOfMessagesNotVisible", ".", ".", { "region": "${var.region}", "label": "Messages in a celery worker" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate number of messages in send-email-medium",
+                "period": 60,
+                "stat": "Average"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 30,
+            "x": 16,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-low", { "region": "${var.region}", "label": "Messages waiting in queue" } ],
+                    [ ".", "ApproximateNumberOfMessagesNotVisible", ".", ".", { "region": "${var.region}", "label": "Messages in a celery worker" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate number of messages in send-email-low",
+                "period": 60,
+                "stat": "Average"
+            }
         }
     ]
 }
@@ -424,6 +610,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "queues" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Queues"
   dashboard_body = <<EOF
 {
@@ -500,6 +687,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "sms" {
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SMS"
   dashboard_body = <<EOF
 {
@@ -513,12 +701,18 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "properties": {
                 "title": "Alarms",
                 "alarms": [
-                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-warning.arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-spending-critical.arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-spending-warning.arn}"
+                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-spending-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sns-spending-warning[0].arn}"
                 ]
             }
         },
@@ -544,7 +738,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "height": 6,
             "width": 9,
             "y": 11,
-            "x": 9,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -561,7 +755,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 9,
-            "y": 37,
+            "y": 45,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -595,7 +789,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 9,
-            "y": 37,
+            "y": 45,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -613,8 +807,8 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 9,
-            "y": 17,
-            "x": 0,
+            "y": 11,
+            "x": 9,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -645,7 +839,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 9,
-            "y": 31,
+            "y": 39,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -673,7 +867,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 2,
             "width": 24,
-            "y": 29,
+            "y": 37,
             "x": 0,
             "type": "text",
             "properties": {
@@ -683,7 +877,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 9,
-            "y": 31,
+            "y": 39,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -712,8 +906,8 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 9,
-            "y": 23,
-            "x": 0,
+            "y": 17,
+            "x": 9,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -730,7 +924,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 9,
             "width": 6,
-            "y": 31,
+            "y": 39,
             "x": 18,
             "type": "text",
             "properties": {
@@ -738,61 +932,9 @@ resource "aws_cloudwatch_dashboard" "sms" {
             }
         },
         {
-            "height": 6,
-            "width": 9,
-            "y": 17,
-            "x": 9,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-sms-tasks" ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "stat": "Average",
-                "period": 60,
-                "title": "Number of messages visible in send-sms-tasks"
-            }
-        },
-        {
-            "height": 6,
-            "width": 9,
-            "y": 11,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-sms-tasks" ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "title": "Approximate age of oldest message in send-sms-tasks",
-                "stat": "Average",
-                "period": 60,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "color": "#ff7f0e",
-                            "label": "Above 3mn",
-                            "value": 180,
-                            "fill": "above"
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "Above 5mn",
-                            "value": 300,
-                            "fill": "above"
-                        }
-                    ]
-                }
-            }
-        },
-        {
             "height": 3,
             "width": 24,
-            "y": 46,
+            "y": 54,
             "x": 0,
             "type": "log",
             "properties": {
@@ -806,7 +948,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 3,
             "width": 24,
-            "y": 43,
+            "y": 51,
             "x": 0,
             "type": "log",
             "properties": {
@@ -864,7 +1006,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 24,
-            "y": 55,
+            "y": 63,
             "x": 0,
             "type": "log",
             "properties": {
@@ -877,7 +1019,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
         {
             "height": 6,
             "width": 24,
-            "y": 49,
+            "y": 57,
             "x": 0,
             "type": "log",
             "properties": {
@@ -887,6 +1029,177 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 "view": "timeSeries",
                 "title": "dwellTimeMsUntilDeviceAck"
             }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 25,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-sms-high", { "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate age of oldest message in send-sms-high",
+                "stat": "Average",
+                "period": 60,
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "color": "#ff7f0e",
+                            "label": "Above 10 sec",
+                            "value": 10,
+                            "fill": "above"
+                        },
+                        {
+                            "color": "#d62728",
+                            "label": "Above 60 sec",
+                            "value": 60,
+                            "fill": "above"
+                        }
+                    ]
+                },
+                "yAxis": {
+                    "left": {
+                        "showUnits": true
+                    }
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 25,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-sms-medium", { "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate age of oldest message in send-sms-medium",
+                "stat": "Average",
+                "period": 60,
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "color": "#ff7f0e",
+                            "label": "Above 10 min",
+                            "value": 600,
+                            "fill": "above"
+                        },
+                        {
+                            "color": "#d62728",
+                            "label": "Above 15 min",
+                            "value": 900,
+                            "fill": "above"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 25,
+            "x": 16,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-sms-low", { "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Approximate age of oldest message in send-sms-low",
+                "stat": "Average",
+                "period": 60,
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "color": "#ff7f0e",
+                            "label": "Above 10 min",
+                            "value": 600,
+                            "fill": "above"
+                        },
+                        {
+                            "color": "#d62728",
+                            "label": "Above 3 hours",
+                            "value": 10800,
+                            "fill": "above"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "height": 2,
+            "width": 24,
+            "y": 23,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "\n# Delivery queues\n"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 31,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-sms-high", { "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Number of messages visible in send-sms-high"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 31,
+            "x": 16,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-sms-low", { "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Number of messages visible in send-sms-low"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 31,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-sms-medium", { "region": "${var.region}" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "stat": "Average",
+                "period": 60,
+                "title": "Number of messages visible in send-sms-medium"
+            }
         }
     ]
 }
@@ -895,9 +1208,11 @@ EOF
 
 
 resource "aws_cloudwatch_dashboard" "sensitive" {
-  dashboard_name = "Temp_admin_views_of_sensitive_services"
+  count          = var.cloudwatch_enabled ? 1 : 0
+  dashboard_name = "Platform-admin-access-of-sensitive-services"
   dashboard_body = <<EOF
 {
+    "start": "-PT168H",
     "widgets": [
         {
             "height": 17,
@@ -906,11 +1221,11 @@ resource "aws_cloudwatch_dashboard" "sensitive" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /(?<url>\\/service\\/.*) (?<admin>.*)\\|.*/\n| display @timestamp, admin, url\n| sort @timestamp desc\n| limit 5000\n",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /(?<url>\\/service\\/.*) (?<admin>.*)\\|.*/\n| parse log \"Sensitive Admin API request * \" as request_type\n| display @timestamp, admin, url, request_type\n| sort request_type desc, @timestamp desc\n| limit 5000\n",
                 "region": "${var.region}",
                 "stacked": false,
-                "view": "table",
-                "title": "Details"
+                "title": "Details",
+                "view": "table"
             }
         },
         {
@@ -920,8 +1235,9 @@ resource "aws_cloudwatch_dashboard" "sensitive" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log\n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /service\\/(?<service>[0-9a-f\\-]*)\\/.* (?<admin>.*)\\|.*/\n| stats count(*) as total by service, admin\n| sort total desc\n",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log \n| filter kubernetes.container_name like /admin/\n| filter log like /Sensitive/\n| filter log like /\\/service\\/[0-9a-f\\-]{36}\\//\n| parse log /service\\/(?<service>[0-9a-f\\-]*)\\/.* (?<admin>.*)\\|.*/\n| parse log \"Sensitive Admin API request * \" as request_type\n| stats count(*) as total by service, admin, request_type\n| sort request_type desc, total desc\n",
                 "region": "${var.region}",
+                "stacked": false,
                 "title": "Summary ordered by total",
                 "view": "table"
             }

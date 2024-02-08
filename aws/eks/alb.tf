@@ -66,27 +66,6 @@ resource "aws_lb_listener" "notification-canada-ca-80" {
   }
 }
 
-# An HTTPS listener with an old SSL policy
-# for some clients that cannot upgrade to TLSv1.2
-resource "aws_lb_listener" "notification-canada-ca-legacy-tls" {
-  load_balancer_arn = aws_alb.notification-canada-ca.id
-  port              = 4444
-  protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate.notification-canada-ca.arn
-  #tfsec:ignore:AWS010 Outdated SSL policy
-  ssl_policy = "ELBSecurityPolicy-2016-08"
-
-  default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Forbidden"
-      status_code  = "403"
-    }
-  }
-}
-
 ###
 # Document API Specific routing
 ###
@@ -362,50 +341,3 @@ resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
   web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
 }
 
-###
-# Secondary Target Groups for EKS Load Balancer Migration
-###
-
-resource "aws_alb_target_group" "doc_api_secondary" {
-  name     = "doc-api-secondary"
-  port     = 7000
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status"
-    matcher = "200"
-  }
-}
-
-resource "aws_alb_target_group" "document_secondary" {
-  name     = "document-secondary"
-  port     = 7001
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status"
-    matcher = "200"
-  }
-}
-
-resource "aws_alb_target_group" "api_secondary" {
-  name     = "k8s-api-secondary"
-  port     = 6011
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status?simple=true"
-    matcher = "200"
-  }
-}
-
-resource "aws_alb_target_group" "admin_secondary" {
-  name     = "admin-secondary"
-  port     = 6012
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status?simple=true"
-    matcher = "200"
-  }
-}

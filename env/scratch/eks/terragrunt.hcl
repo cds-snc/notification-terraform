@@ -32,6 +32,8 @@ dependency "common" {
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
+    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -51,12 +53,12 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 5
+  primary_worker_desired_size               = 3
   primary_worker_instance_types             = ["m5.large"]
   secondary_worker_instance_types           = ["m5.large"]
-  nodeUpgrade                               = false
+  node_upgrade                              = false
   primary_worker_max_size                   = 7
-  primary_worker_min_size                   = 4
+  primary_worker_min_size                   = 1
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
@@ -66,11 +68,12 @@ inputs = {
   firehose_waf_logs_iam_role_arn            = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                     = dependency.cloudfront.outputs.cloudfront_assets_arn
   eks_cluster_name                          = "notification-canada-ca-scratch-eks-cluster"
-  eks_cluster_version                       = "1.27"
-  eks_addon_coredns_version                 = "v1.10.1-eksbuild.2"
-  eks_addon_kube_proxy_version              = "v1.27.1-eksbuild.1"
-  eks_addon_vpc_cni_version                 = "v1.13.2-eksbuild.1"
-  eks_node_ami_version                      = "1.27.1-20230703"
+  eks_cluster_version                       = "1.29"
+  eks_addon_coredns_version                 = "v1.11.1-eksbuild.6"
+  eks_addon_kube_proxy_version              = "v1.29.0-eksbuild.1"
+  eks_addon_vpc_cni_version                 = "v1.16.2-eksbuild.1"
+  eks_addon_ebs_driver_version              = "v1.26.1-eksbuild.1"
+  eks_node_ami_version                      = "1.29.0-20240202"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 5000
   sign_in_waf_rate_limit                    = 100
@@ -82,6 +85,8 @@ inputs = {
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
+  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
 }
 
 terraform {

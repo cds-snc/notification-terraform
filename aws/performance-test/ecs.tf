@@ -10,20 +10,22 @@ resource "aws_ecs_cluster" "perf_test" {
     value = "enabled"
   }
 
-  capacity_providers = ["FARGATE"]
-
-  default_capacity_provider_strategy {
-    capacity_provider = "FARGATE"
-    weight            = 1
-    base              = 1
-  }
-
   lifecycle {
     ignore_changes = [setting]
   }
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
+  }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "perf_test" {
+  cluster_name       = aws_ecs_cluster.perf_test.name
+  capacity_providers = ["FARGATE"]
+  default_capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    weight            = 1
+    base              = 1
   }
 }
 
@@ -35,7 +37,7 @@ data "template_file" "perf_test_container_definition" {
   template = file("container_definitions/perf_test.json.tmpl")
 
   vars = {
-    AWS_LOGS_GROUP         = aws_cloudwatch_log_group.perf_test_ecs_logs.name
+    AWS_LOGS_GROUP         = var.cloudwatch_enabled ? aws_cloudwatch_log_group.perf_test_ecs_logs[0].name : "none"
     AWS_LOGS_REGION        = var.region
     AWS_LOGS_STREAM_PREFIX = "${aws_ecs_cluster.perf_test.name}-task"
     ECR_REPOSITORY_URL     = var.performance_test_ecr_repository_url

@@ -2,7 +2,10 @@ resource "aws_wafv2_ip_set" "ip_blocklist" {
   name               = "ip_blocklist"
   scope              = "REGIONAL"
   ip_address_version = "IPV4"
-  addresses          = ["40.50.60.70/32"]
+  addresses = [
+    "40.50.60.70/32",
+    "103.14.26.118/32"
+  ]
 
   lifecycle {
     ignore_changes = all
@@ -32,12 +35,12 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   description = "Regex matching valid admin endpoints"
   scope       = "REGIONAL"
 
-  # WAF Regex blocks are combined with OR logic. 
-  # Regex support is limited, please see: 
+  # WAF Regex blocks are combined with OR logic.
+  # Regex support is limited, please see:
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/agreement.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
+    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
   }
 
   regular_expression {
@@ -57,12 +60,12 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*|/using-a-spreadsheet"
+    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*|/using-a-spreadsheet|/new-f.*"
   }
 
   # GCA routes
   regular_expression {
-    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/securit.+|/privacy.*|/confidentialite.*|/accessibility|/accessibilite"
+    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/securit.+|/privacy.*|/confidentialite.*|/accessibility|/accessibilite|/nouvelles-fonc.*"
   }
 
   # GCA routes
@@ -90,8 +93,8 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
   description = "Regex matching valid document download endpoints"
   scope       = "REGIONAL"
 
-  # WAF Regex blocks are combined with OR logic. 
-  # Regex support is limited, please see: 
+  # WAF Regex blocks are combined with OR logic.
+  # Regex support is limited, please see:
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   # GET /_status and /_debug
@@ -124,8 +127,8 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
   description = "Regex matching valid documentation website endpoints"
   scope       = "REGIONAL"
 
-  # WAF Regex blocks are combined with OR logic. 
-  # Regex support is limited, please see: 
+  # WAF Regex blocks are combined with OR logic.
+  # Regex support is limited, please see:
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
@@ -150,8 +153,8 @@ resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
   description = "Regex matching the root domain of notify"
   scope       = "REGIONAL"
 
-  # WAF Regex blocks are combined with OR logic. 
-  # Regex support is limited, please see: 
+  # WAF Regex blocks are combined with OR logic.
+  # Regex support is limited, please see:
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {

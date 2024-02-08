@@ -208,5 +208,25 @@ resource "null_resource" "push_sns_to_sqs_sms_callbacks_docker_image" {
 
 }
 
+#System status Build and Push
 
+resource "null_resource" "build_system_status_docker_image" {
+  count = var.bootstrap ? 1 : 0
+  depends_on = [
+    null_resource.lambda_repo_clone
+  ]
 
+  provisioner "local-exec" {
+    command = "docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap -f /var/tmp/notification-lambdas/system_status/Dockerfile /var/tmp/notification-lambdas/"
+  }
+}
+
+resource "null_resource" "push_system_status_docker_image" {
+  count      = var.bootstrap ? 1 : 0
+  depends_on = [null_resource.build_system_status_docker_image]
+
+  provisioner "local-exec" {
+    command = "docker push ${aws_ecr_repository.system_status.repository_url}:bootstrap"
+  }
+
+}

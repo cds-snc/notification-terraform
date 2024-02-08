@@ -27,7 +27,8 @@ jobs:
           | jq -r ".addons[] | .addonVersions[] | .compatibilities[] | .clusterVersion" \
           | sort -r \
           | head -1)"
-        echo "::set-output name=version::${LATEST_VERSION}"
+        echo "version=${LATEST_VERSION}" >> "$GITHUB_OUTPUT"
+
 
     - name: Get Staging cluster version
       id: current
@@ -35,10 +36,12 @@ jobs:
         CLUSTER_VERSION="$(aws eks describe-cluster \
           --name ${{ env.EKS_CLUSTER_NAME }} \
           --query 'cluster.version' --output text)"
-        echo "::set-output name=version::${CLUSTER_VERSION}"
+        echo "version=${CLUSTER_VERSION}" >> "$GITHUB_OUTPUT"
+
 
     - name: Post to slack
       if: steps.latest.outputs.version != steps.current.outputs.version
+      #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes cluster update available: <https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html|${{ steps.latest.outputs.version }}>"}}]}'
         curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 

@@ -6,6 +6,11 @@
 *.tfstate.*
 *.tfvars
 *.yaml
+!.checkov.yaml
+!.checkov.yml
+
+# Checkov dependencies
+.external_modules
 
 # Crash log files
 crash.log
@@ -38,3 +43,7 @@ override.tf.json
 
 # VSCode editor's files
 .vscode
+
+# aider AI
+.aider*
+.DS_Store
