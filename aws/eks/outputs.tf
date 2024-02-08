@@ -21,6 +21,11 @@ output "documentation_target_group_arn" {
   value = aws_alb_target_group.notification-canada-ca-documentation.arn
 }
 
+output "internal_nginx_target_group_arn" {
+  value = aws_alb_target_group.internal_nginx_http.arn
+}
+
+
 ###
 # EKS cluster
 ###
@@ -83,4 +88,9 @@ output "karpenter_instance_profile" {
 # Quicksight
 output "quicksight_security_group_id" {
   value = aws_security_group.quicksight.id
+}
+
+# EKS CSI
+output "eks_csi_role_arn" {
+  value = aws_iam_role.secrets_csi.arn
 }

@@ -86,3 +86,26 @@ resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
     weight = 0
   }
 }
+
+# Dev Tools DNS
+
+resource "aws_route53_record" "notification_internal_dns" {
+  zone_id = var.internal_dns_zone_id
+  name    = "${var.env}.notification.internal"
+  type    = "A"
+
+  alias {
+    name = aws_lb.internal_alb.dns_name
+    # This Zone Id is an AWS system zone and common accross accounts
+    zone_id                = "ZQSVJUPU6J1EY"
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "wildcard_CNAME" {
+  zone_id = var.internal_dns_zone_id
+  name    = "*.${var.env}.notification.internal"
+  type    = "CNAME"
+  ttl     = "60"
+  records = ["${var.env}.notification.internal"]
+}
