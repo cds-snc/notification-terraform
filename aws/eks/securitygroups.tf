@@ -389,3 +389,22 @@ resource "aws_security_group" "notification_internal" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_security_group_rule" "internal_alb_http_ingress" {
+  description              = "Internal ALB HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification_internal.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
+}
+resource "aws_security_group_rule" "internal_alb_http_egress" {
+  description              = "Internal ALB HTTP"
+  type                     = "egress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification_internal.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
+}

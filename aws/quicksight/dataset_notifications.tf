@@ -384,3 +384,19 @@ resource "aws_cloudformation_stack" "notifications" {
     }
   })
 }
+
+
+resource "aws_quicksight_refresh_schedule" "notifications" {
+  data_set_id = "notifications"
+  schedule_id = "schedule-notifications"
+  depends_on  = [aws_cloudformation_stack.notifications]
+
+  schedule {
+    refresh_type = "FULL_REFRESH"
+
+    schedule_frequency {
+      interval        = "DAILY"
+      time_of_the_day = "07:10"
+    }
+  }
+}
