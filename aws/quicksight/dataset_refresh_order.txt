@@ -1,0 +1,17 @@
+
+Datasets are refreshed nightly. The order doesn't matter too much since we do it in the middle of the night, but we have ordered the refreshes by dependancy. 
+For example, we refresh the notifications before the services so we can be confident that if we have the notification in QuickSight then we have the corresponding service as well.
+
+All times are UTC.
+
+0510 - notification_history (takes about 1.5 hours. Rest of tables are under 5 minutes to refresh)
+0710 - notifications
+
+0715 - jobs
+0720 - templates
+
+0725 - services
+0730 - organisations
+
+0735 - login_events
+

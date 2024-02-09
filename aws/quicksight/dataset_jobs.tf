@@ -81,3 +81,18 @@ resource "aws_quicksight_data_set" "jobs" {
     principal = aws_quicksight_group.dataset_owner.arn
   }
 }
+
+resource "aws_quicksight_refresh_schedule" "jobs" {
+  data_set_id = "jobs"
+  schedule_id = "schedule-jobs"
+  depends_on  = [aws_quicksight_data_set.jobs]
+
+  schedule {
+    refresh_type = "FULL_REFRESH"
+
+    schedule_frequency {
+      interval        = "DAILY"
+      time_of_the_day = "07:15"
+    }
+  }
+}
