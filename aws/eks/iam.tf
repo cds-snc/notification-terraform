@@ -305,6 +305,10 @@ resource "aws_iam_role_policy" "karpenter_controller" {
   })
 }
 
+###
+# EKS EBS IAM
+###
+
 
 #checkov:skip=CKV_AWS_290:The EKS worker IAM requires the ability to create EBS
 #checkov:skip=CKV_AWS_355:The EKS worker IAM requires the ability to create EBS
@@ -446,4 +450,68 @@ resource "aws_iam_policy" "ebs_driver" {
   ]
 }
 POLICY
+}
+
+###
+# EKS Secrets CSI IAM
+###
+
+data "aws_iam_policy_document" "secrets_csi_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:nginx:ingress-nginx-ingress"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "secrets_csi" {
+  assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy.json
+  name               = "secrets-csi-role"
+}
+
+# Policy
+resource "aws_iam_policy" "secrets_csi" {
+  name = "secrets-csi-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ]
+      Resource = "arn:aws:secretsmanager:ca-central-1:${var.account_id}:secret:*"
+    }]
+  })
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "secrets_csi" {
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.secrets_csi.name
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "worker_csi" {
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.eks-worker-role.name
 }
