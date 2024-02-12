@@ -46,3 +46,14 @@ resource "aws_ssm_parameter" "sqlalchemy_database_reader_uri" {
   }
 }
 
+resource "aws_ssm_parameter" "blazer_slack_webhook_url" {
+  name  = "BLAZER_SLACK_WEBHOOK_URL"
+  type  = "SecureString"
+  value = var.blazer_slack_webhook_general_topic
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = true
+  }
+}
+
