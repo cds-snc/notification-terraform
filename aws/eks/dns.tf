@@ -91,7 +91,7 @@ resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
 
 resource "aws_route53_record" "notification_internal_dns" {
   zone_id = var.internal_dns_zone_id
-  name    = "${var.env}.notification.internal"
+  name    = var.internal_dns_name
   type    = "A"
 
   alias {
@@ -104,8 +104,8 @@ resource "aws_route53_record" "notification_internal_dns" {
 
 resource "aws_route53_record" "wildcard_CNAME" {
   zone_id = var.internal_dns_zone_id
-  name    = "*.${var.env}.notification.internal"
+  name    = "*.${var.internal_dns_name}"
   type    = "CNAME"
   ttl     = "60"
-  records = ["${var.env}.notification.internal"]
+  records = [var.internal_dns_name]
 }
