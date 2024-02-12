@@ -53,6 +53,7 @@ dependency "dns" {
   mock_outputs = {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
+    internal_dns_name = "staging.notification.internal.com"
   }
 }
 
@@ -117,6 +118,7 @@ inputs = {
   client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
+  internal_dns_name                         = dependency.dns.outputs.internal_dns_name
 }
 
 
