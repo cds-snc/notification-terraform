@@ -161,6 +161,9 @@ resource "aws_eks_addon" "coredns" {
           loadbalance
       }
       EOF
+    "nodeSelector" : {
+      "eks.amazonaws.com/capacityType" : "ON_DEMAND"
+    }
   })
 }
 
