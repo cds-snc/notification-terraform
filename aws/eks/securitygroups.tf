@@ -432,11 +432,11 @@ resource "aws_security_group_rule" "internal_alb_http_egress" {
 }
 
 resource "aws_security_group_rule" "vpn_k8s_api_access" {
-  description              = "Internal access to port 443 for private K8s API"
-  from_port                  = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  type                     = "ingress"
-  cidr_blocks              = ["10.0.0.0/16"]
+  description       = "Internal access to port 443 for private K8s API"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  type              = "ingress"
+  cidr_blocks       = ["10.0.0.0/16"]
   security_group_id = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }
