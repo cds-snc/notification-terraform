@@ -391,6 +391,68 @@ module "sns_sms_usage_report_bucket" {
   }
 }
 
+resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_policy" {
+  bucket = module.sns_sms_usage_report_bucket.s3_bucket_id
+
+  policy = <<POLICY
+{
+	"Version": "2008-10-17",
+	"Statement": [{
+			"Sid": "AllowPutObject",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:PutObject",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket.s3_bucket_id}/*",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowGetBucketLocation",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:GetBucketLocation",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowListBucket",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:ListBucket",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		}
+	]
+}
+POLICY
+}
+
 module "sns_sms_usage_report_bucket_us_west_2" {
   source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
 
@@ -403,4 +465,66 @@ module "sns_sms_usage_report_bucket_us_west_2" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+}
+
+resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_us_west_2_policy" {
+  bucket = module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id
+
+  policy = <<POLICY
+{
+	"Version": "2008-10-17",
+	"Statement": [{
+			"Sid": "AllowPutObject",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:PutObject",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id}/*",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowGetBucketLocation",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:GetBucketLocation",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowListBucket",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:ListBucket",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		}
+	]
+}
+POLICY
 }
