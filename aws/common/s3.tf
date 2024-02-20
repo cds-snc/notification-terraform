@@ -376,3 +376,31 @@ module "cbs_logs_bucket" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+module "sns_sms_usage_report_bucket" {
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+module "sns_sms_usage_report_bucket_us_west_2" {
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
