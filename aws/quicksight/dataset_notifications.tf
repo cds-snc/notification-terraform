@@ -45,57 +45,95 @@ resource "aws_cloudformation_stack" "notifications" {
 
           PhysicalTableMap = {
             nj-notifications-physical = {
-              RelationalTable = {
+              CustomSql = {
                 DataSourceArn = aws_quicksight_data_source.rds.arn
-                # Catalog =  "",
-                Name = "notifications"
+                Name          = "notifications"
+
+                SqlQuery = <<EOF
+                  with notification_data as (
+                      select 
+                          id as notification_id,
+                          created_at as notification_created_at,
+                          queue_name as notification_queue_name,
+                          sent_at as notification_sent_at,
+                          notification_status,
+                          notification_type,
+                          updated_at notification_updated_at,
+                          service_id,
+                          template_id,
+                          job_id,
+                          api_key_id,
+                          api_key_type
+                      from notifications
+                      union
+                      select 
+                          id as notification_id,
+                          created_at as notification_created_at,
+                          queue_name as notification_queue_name,
+                          sent_at as notification_sent_at,
+                          notification_status,
+                          notification_type,
+                          updated_at notification_updated_at,
+                          service_id,
+                          template_id,
+                          job_id,
+                          api_key_id,
+                          api_key_type
+                      from notification_history
+                  ),
+                  service_data as (
+                      select
+                          s.id as service_id,
+                          s.active as service_active,
+                          count_as_live as service_count_as_live,
+                          s.go_live_at as service_go_live_at,
+                          s.name as service_name,
+                          s.message_limit as service_message_limit,
+                          s.rate_limit as service_rate_limit,
+                          s.sms_daily_limit as service_sms_daily_limit,
+                          o.name as organisation_name,
+                          s.organisation_id
+                      from services s join organisation o on s.organisation_id = o.id
+                  ),
+                  template_data as (
+                      select
+                          id as template_id,
+                          created_at as template_created_at,
+                          name as template_name,
+                          updated_at as template_updated_at,
+                          version as template_version
+                      from templates
+                  ),
+                  data_joined as (
+                      select
+                        notification_id, notification_created_at, notification_sent_at, notification_updated_at, 
+                        notification_queue_name, notification_status, notification_type, job_id, api_key_id, api_key_type
+                      s.*, t.*
+                      from notification_data n 
+                          join service_data s on n.service_id = s.service_id
+                          join template_data t on n.template_id = t.template_id
+                  )
+                  select * from data_joined
+                EOF
                 InputColumns = [
                   {
-                    Name = "id",
+                    Name = "notification_id",
                     Type = "STRING"
                   },
                   {
-                    Name = "job_id",
-                    Type = "STRING"
-                  },
-                  {
-                    Name = "service_id",
-                    Type = "STRING"
-                  },
-                  {
-                    Name = "template_id",
-                    Type = "STRING"
-                  },
-                  {
-                    Name = "created_at",
+                    Name = "notification_created_at",
                     Type = "DATETIME"
                   },
                   {
-                    Name = "sent_at",
+                    Name = "notification_sent_at",
                     Type = "DATETIME"
                   },
                   {
-                    Name = "sent_by",
-                    Type = "STRING"
-                  },
-                  {
-                    Name = "updated_at",
+                    Name = "notification_updated_at",
                     Type = "DATETIME"
                   },
                   {
-                    Name = "template_version",
-                    Type = "INTEGER"
-                  },
-                  {
-                    Name = "api_key_id",
-                    Type = "STRING"
-                  },
-                  {
-                    Name = "key_type",
-                    Type = "STRING"
-                  },
-                  {
-                    Name = "notification_type",
+                    Name = "notification_queue_name",
                     Type = "STRING"
                   },
                   {
@@ -103,8 +141,80 @@ resource "aws_cloudformation_stack" "notifications" {
                     Type = "STRING"
                   },
                   {
-                    Name = "queue_name",
+                    Name = "notification_type",
                     Type = "STRING"
+                  },
+                  {
+                    Name = "job_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "api_key_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "api_key_type",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "service_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "service_active",
+                    Type = "BIT"
+                  },
+                  {
+                    Name = "service_count_as_live",
+                    Type = "BIT"
+                  },
+                  {
+                    Name = "service_go_live_at",
+                    Type = "DATETIME"
+                  },
+                  {
+                    Name = "service_name",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "service_message_limit",
+                    Type = "INTEGER"
+                  },
+                  {
+                    Name = "service_rate_limit",
+                    Type = "INTEGER"
+                  },
+                  {
+                    Name = "service_sms_daily_limit",
+                    Type = "INTEGER"
+                  },
+                  {
+                    Name = "organisation_name",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "organisation_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "template_id",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "template_created_at",
+                    Type = "DATETIME"
+                  },
+                  {
+                    Name = "template_name",
+                    Type = "STRING"
+                  },
+                  {
+                    Name = "template_updated_at",
+                    Type = "DATETIME"
+                  },
+                  {
+                    Name = "template_version",
+                    Type = "INTEGER"
                   }
                 ]
               }
@@ -112,7 +222,6 @@ resource "aws_cloudformation_stack" "notifications" {
           }
 
           LogicalTableMap = {
-
             nj-notifications-services-org-templates = {
               Alias = "nj-notifications-services-org-templates",
               DataTransforms = [
@@ -149,230 +258,9 @@ resource "aws_cloudformation_stack" "notifications" {
                 }
               ],
               Source = {
-                JoinInstruction = {
-                  LeftOperand  = "nj-notifications-services-org",
-                  RightOperand = "nj-templates",
-                  Type         = "LEFT",
-                  OnClause     = "{template_id} = {id[Templates]}"
-                }
-              }
-            },
-
-            nj-notifications-services-org = {
-              Alias = "nj-notifications-services-org",
-              Source = {
-                JoinInstruction = {
-                  LeftOperand  = "nj-notifications-services",
-                  RightOperand = "nj-organisation",
-                  Type         = "LEFT",
-                  OnClause     = "{organisation_id} = {id[Organisation]}"
-                }
-              }
-            },
-
-            nj-notifications-services = {
-              Alias = "nj-notifications-services",
-              Source = {
-                JoinInstruction = {
-                  LeftOperand  = "nj-notifications",
-                  RightOperand = "nj-services",
-                  Type         = "LEFT",
-                  OnClause     = "{service_id} = {id[Services]}"
-                }
-              }
-            },
-
-            nj-notifications = {
-              Alias = "nj-notifications",
-              DataTransforms = [
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "id",
-                    NewColumnName = "notification_id"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "created_at",
-                    NewColumnName = "notification_created_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "sent_at",
-                    NewColumnName = "notification_sent_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "updated_at",
-                    NewColumnName = "notification_updated_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "queue_name",
-                    NewColumnName = "notification_queue_name"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "key_type",
-                    NewColumnName = "api_key_type"
-                  }
-                },
-              ]
-              Source = {
                 PhysicalTableId = "nj-notifications-physical"
               }
             },
-
-            nj-services = {
-              Alias = "nj-services",
-              DataTransforms = [
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "id",
-                    NewColumnName = "id[Services]"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "updated_at",
-                    NewColumnName = "service_updated_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "created_at",
-                    NewColumnName = "service_created_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "active",
-                    NewColumnName = "service_active"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "count_as_live",
-                    NewColumnName = "service_count_as_live"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "go_live_at",
-                    NewColumnName = "service_go_live_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "name",
-                    NewColumnName = "service_name"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "message_limit",
-                    NewColumnName = "service_message_limit"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "rate_limit",
-                    NewColumnName = "service_rate_limit"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "sms_daily_limit",
-                    NewColumnName = "service_sms_daily_limit"
-                  }
-                }
-              ],
-              Source = {
-                DataSetArn = aws_quicksight_data_set.services.arn
-              }
-            }
-
-            nj-templates = {
-              Alias = "nj-templates",
-              DataTransforms = [
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "id",
-                    NewColumnName = "id[Templates]"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "version",
-                    NewColumnName = "template[Templates]"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "service_id",
-                    NewColumnName = "template_service_id"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "updated_at",
-                    NewColumnName = "template_updated_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "created_at",
-                    NewColumnName = "template_created_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "name",
-                    NewColumnName = "template_name"
-                  }
-                },
-              ],
-              Source = {
-                DataSetArn = aws_quicksight_data_set.templates.arn
-              }
-            }
-
-            nj-organisation = {
-              Alias = "nj-organisation",
-              DataTransforms = [
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "id",
-                    NewColumnName = "id[Organisation]"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "created_at",
-                    NewColumnName = "organisation_created_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "updated_at",
-                    NewColumnName = "organisation_updated_at"
-                  }
-                },
-                {
-                  RenameColumnOperation = {
-                    ColumnName    = "name",
-                    NewColumnName = "organisation_name"
-                  }
-                },
-              ],
-              Source = {
-                DataSetArn = aws_quicksight_data_set.organisation.arn
-              }
-            }
           },
           DataSetUsageConfiguration = {
             DisableUseAsDirectQuerySource = false,
