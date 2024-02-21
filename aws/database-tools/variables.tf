@@ -79,3 +79,8 @@ variable "cloudwatch_slack_webhook_general_topic" {
   type        = string
   sensitive   = true
 }
+
+variable "sns_alert_warning_arn" {
+  description = "value of the sns alert warning arn"
+  type        = string
+}
