@@ -384,7 +384,7 @@ module "sns_sms_usage_report_bucket" {
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
 
-  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
+  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "7" } } }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -460,7 +460,7 @@ module "sns_sms_usage_report_bucket_us_west_2" {
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
 
-  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
+  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "7" } } }
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
