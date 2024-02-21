@@ -83,26 +83,17 @@ resource "aws_sns_topic" "notification-canada-ca-alert-general" {
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs" {
-  depends_on = [
-    module.sns_sms_usage_report_bucket
-  ]
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
   delivery_status_success_sampling_rate = 100
   monthly_spend_limit                   = var.sns_monthly_spend_limit
-  usage_report_s3_bucket                = module.sns_sms_usage_report_bucket.s3_bucket_id
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
-  depends_on = [
-    module.sns_sms_usage_report_bucket_us_west_2
-  ]
-
   provider = aws.us-west-2
 
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
   delivery_status_success_sampling_rate = 100
   monthly_spend_limit                   = var.sns_monthly_spend_limit_us_west_2
-  usage_report_s3_bucket                = module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_ok_us_west_2_to_lambda" {
