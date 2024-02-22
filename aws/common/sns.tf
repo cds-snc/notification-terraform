@@ -90,10 +90,6 @@ resource "aws_sns_sms_preferences" "update-sms-prefs" {
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
-  depends_on = [
-    module.sns_sms_usage_report_bucket_us_west_2
-  ]
-
   provider = aws.us-west-2
 
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
