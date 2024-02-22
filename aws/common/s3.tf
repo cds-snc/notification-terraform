@@ -454,6 +454,8 @@ POLICY
 }
 
 module "sns_sms_usage_report_bucket_us_west_2" {
+  provider = aws.us-west-2
+
   source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs"
@@ -468,6 +470,8 @@ module "sns_sms_usage_report_bucket_us_west_2" {
 }
 
 resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_us_west_2_policy" {
+  provider = aws.us-west-2
+
   bucket = module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id
 
   policy = <<POLICY
