@@ -5,15 +5,16 @@
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "blazer-task-unavailable" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "blazer-task-unavailable"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = 1
-  alarm_description   = "Unavailable Blazer task"
-  alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_warning_arn]
-  treat_missing_data  = "breaching"
-  threshold           = 1
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "blazer-task-unavailable"
+  comparison_operator       = "LessThanThreshold"
+  evaluation_periods        = 1
+  alarm_description         = "Unavailable Blazer task"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  treat_missing_data        = "breaching"
+  threshold                 = 1
 
   metric_query {
     id          = "m1"
