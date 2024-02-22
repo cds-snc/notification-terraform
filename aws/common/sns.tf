@@ -83,9 +83,6 @@ resource "aws_sns_topic" "notification-canada-ca-alert-general" {
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs" {
-  depends_on = [
-    module.sns_sms_usage_report_bucket
-  ]
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
   delivery_status_success_sampling_rate = 100
   monthly_spend_limit                   = var.sns_monthly_spend_limit
