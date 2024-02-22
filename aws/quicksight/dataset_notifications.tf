@@ -2,7 +2,7 @@
 
 resource "aws_quicksight_data_set" "notifications" {
   data_set_id = "notifications"
-  name        = "notifications"
+  name        = "Notifications"
   import_mode = "SPICE"
 
   physical_table_map {
