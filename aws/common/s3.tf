@@ -454,7 +454,9 @@ POLICY
 }
 
 module "sns_sms_usage_report_bucket_us_west_2" {
-  provider = aws.us-west-2
+  providers = {
+    aws = aws.us-west-2
+  }
 
   source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
 
