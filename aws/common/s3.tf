@@ -509,7 +509,7 @@ resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_us_west_2_policy" {
 					"aws:SourceAccount": "${var.account_id}"
 				},
 				"ArnLike": {
-					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+					"aws:SourceArn": "arn:aws:sns:us-west-2:${var.account_id}:*"
 				}
 			}
 		},
