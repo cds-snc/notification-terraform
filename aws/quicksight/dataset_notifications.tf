@@ -64,17 +64,14 @@ resource "aws_quicksight_data_set" "notifications" {
             updated_at as template_updated_at,
             version as template_version
           from templates
-        ),
-        data_joined as (
-          select
-            notification_id, notification_created_at, notification_sent_at, notification_status,
-            notification_queue_name, notification_type, notification_updated_at, job_id, api_key_id, api_key_type,
-            s.*, t.*
-          from notification_data n 
-            join service_data s on n.service_id = s.service_id
-            join template_data t on n.template_id = t.template_id
         )
-        select * from data_joined
+        select
+          notification_id, notification_created_at, notification_sent_at, notification_status,
+          notification_queue_name, notification_type, notification_updated_at, job_id, api_key_id, api_key_type,
+          s.*, t.*
+        from notification_data n 
+          join service_data s on n.service_id = s.service_id
+          join template_data t on n.template_id = t.template_id
       EOF
 
       columns {
