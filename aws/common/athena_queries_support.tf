@@ -32,7 +32,7 @@ resource "aws_athena_named_query" "http_five_hundreds" {
   query       = templatefile("${path.module}/sql/find_500s.sql.tmpl", {})
 }
 
-resource "aws_athena_named_query" "four_hundreds" {
+resource "aws_athena_named_query" "http_four_hundreds" {
   name        = "ALB: find 400 errors"
   description = "Find 400 errors in the ALB logs"
   workgroup   = aws_athena_workgroup.support.name
