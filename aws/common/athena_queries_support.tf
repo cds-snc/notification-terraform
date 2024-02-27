@@ -24,7 +24,7 @@ resource "aws_athena_named_query" "investigate_ip" {
   query       = templatefile("${path.module}/sql/investigate_ip.sql.tmpl", {})
 }
 
-resource "aws_athena_named_query" "five_hundreds" {
+resource "aws_athena_named_query" "http_five_hundreds" {
   name        = "ALB: find 500 errors"
   description = "Find 500 errors in the ALB logs"
   workgroup   = aws_athena_workgroup.support.name
