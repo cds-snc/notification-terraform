@@ -1,0 +1,15 @@
+with data as (
+    select
+        date_format(from_unixtime(timestamp / 1000e0), '%Y-%m-%d') as time, header.value as host,
+        terminatingruleid,
+        httprequest.clientip, httprequest.country, httprequest.httpmethod, httprequest.uri,
+        httprequest.country = 'CA' as isCanada
+    FROM waf_logs
+    CROSS JOIN UNNEST(httprequest.headers) AS t(header)
+    where LOWER(header.name)='host'
+)
+select time, country, count(*) as num
+from data
+group by time, country
+having count(*) > 100
+order by time desc, num desc
