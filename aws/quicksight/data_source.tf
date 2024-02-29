@@ -33,3 +33,26 @@ resource "aws_quicksight_data_source" "rds" {
     principal = aws_quicksight_group.dataset_owner.arn
   }
 }
+
+resource "aws_s3_object" "object" {
+  bucket = s3.sns_sms_usage_report_bucket.bucket_name
+  key    = "quicksight/s3-manifest-sms-usage.json"                  # replace with desired object key
+  source = "aws/quicksight/s3-manifests.s3-manifest-sms-usage.json" # replace with path to local file
+  acl    = "private"
+}
+
+resource "aws_quicksight_data_source" "s3_sms_usage" {
+  data_source_id = "s3-sms-usage"
+  name           = "SMS Usage Data Source"
+
+  parameters {
+    s3 {
+      manifest_file_location {
+        bucket = var.s3_bucket_sms_usage_id
+        key    = "quicksight/s3-manifest-sms-usage.json"
+      }
+    }
+  }
+
+  type = "S3"
+}
