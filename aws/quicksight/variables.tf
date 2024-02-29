@@ -43,6 +43,10 @@ variable "vpc_id" {
   type = string
 }
 
+variable "s3_bucket_sms_usage_id" {
+  type = string
+}
+
 variable "sns_alert_warning_arn" {
   type = string
 }
