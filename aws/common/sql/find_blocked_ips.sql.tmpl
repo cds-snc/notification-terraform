@@ -1,0 +1,19 @@
+with data as (
+    select
+        date_format(from_unixtime(timestamp / 1000e0), '%Y-%m-%d') as time, header.value as host, action,
+        terminatingruleid,
+        httprequest.clientip, httprequest.country, httprequest.httpmethod, httprequest.uri
+    from waf_logs
+    cross join UNNEST(httprequest.headers) AS t(header)
+    where lower(header.name)='host'
+    -- and date_format(from_unixtime(timestamp / 1000e0), '%Y-%m-%d') = '2022-08-07'
+)
+select 
+    min(time) as start_date, max(time) as end_date, 
+    count(*) as num, 
+    clientip, country, action, terminatingruleid,  host, 
+    array_join(array_agg(distinct uri), ', ') as uris
+from data
+where action = 'BLOCK'
+group by clientip, country, action, terminatingruleid, host
+order by count(*) desc

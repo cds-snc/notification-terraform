@@ -147,7 +147,6 @@ resource "aws_eks_addon" "coredns" {
   configuration_values = jsonencode({
     corefile = <<-EOF
       .:53 {
-          log
           errors
           health {
               lameduck 5s

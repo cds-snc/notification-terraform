@@ -4,8 +4,7 @@ For example, we refresh the notifications before the services so we can be confi
 
 All times are UTC.
 
-0510 - notification_history (takes about 1.5 hours. Rest of tables are under 5 minutes to refresh)
-0710 - notifications
+0510 - notifications (takes about 1.5 hours. Rest of tables are under 5 minutes to refresh)
 
 0715 - jobs
 0720 - templates
@@ -14,4 +13,4 @@ All times are UTC.
 0730 - organisations
 
 0735 - login_events
-
+0740 - users
