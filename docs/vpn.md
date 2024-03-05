@@ -35,12 +35,12 @@ Connecting to redis and postgres directly would be using their respective CLI fr
 
 Redis:
 ``` shell
-redis-cli -h notify-dev-cluster-cache-az.\<amazon-generated\>.amazonaws.com -p 6379
+redis-cli -h notify-dev-cluster-cache-az.<amazon-generated>.amazonaws.com -p 6379
 ```
 
 Postgres:
 ``` shell
-psql  -h notification-canada-ca-dev-cluster.\<amazon-generated\>.rds.amazonaws.com -p 5432 -U username notificationcanadacadev
+psql  -h notification-canada-ca-dev-cluster.<amazon-generated>.rds.amazonaws.com -p 5432 -U username notificationcanadacadev
 ```
 
 ### Important Notes
