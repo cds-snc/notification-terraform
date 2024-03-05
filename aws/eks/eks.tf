@@ -139,6 +139,31 @@ resource "aws_eks_addon" "coredns" {
   addon_version               = var.eks_addon_coredns_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
+
+  configuration_values = jsonencode({
+    corefile = <<-EOF
+      .:53 {
+          errors
+          health {
+              lameduck 5s
+            }
+          ready
+          kubernetes cluster.local in-addr.arpa ip6.arpa {
+            pods insecure
+            fallthrough in-addr.arpa ip6.arpa
+          }
+          prometheus :9153
+          forward . /etc/resolv.conf
+          cache 60
+          loop
+          reload
+          loadbalance
+      }
+      EOF
+    "nodeSelector" : {
+      "eks.amazonaws.com/capacityType" : "ON_DEMAND"
+    }
+  })
 }
 
 resource "aws_eks_addon" "kube_proxy" {

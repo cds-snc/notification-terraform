@@ -9,7 +9,7 @@ resource "tls_self_signed_cert" "internal_dns" {
   early_renewal_hours   = 672   # Generate new cert if Terraform is run within 4 weeks of expiry
 
   subject {
-    common_name = "*.${var.env}.notification.internal"
+    common_name = aws_route53_zone.internal_dns.name
   }
 
   allowed_uses = [

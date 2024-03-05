@@ -49,6 +49,7 @@ dependency "dns" {
   mock_outputs = {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
+    internal_dns_name = "production.notification.internal.com"
   }
 }
 
@@ -74,10 +75,10 @@ inputs = {
   eks_cluster_name                          = "notification-canada-ca-production-eks-cluster"
   eks_cluster_version                       = "1.29"
   eks_addon_coredns_version                 = "v1.11.1-eksbuild.6"
-  eks_addon_kube_proxy_version              = "v1.29.0-eksbuild.1"
+  eks_addon_kube_proxy_version              = "v1.29.0-eksbuild.3"
   eks_addon_vpc_cni_version                 = "v1.16.2-eksbuild.1"
-  eks_addon_ebs_driver_version              = "v1.26.1-eksbuild.1"
-  eks_node_ami_version                      = "1.29.0-20240202"
+  eks_addon_ebs_driver_version              = "v1.27.0-eksbuild.1"
+  eks_node_ami_version                      = "1.29.0-20240227"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100
@@ -100,5 +101,6 @@ inputs = {
   client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
+  internal_dns_name                         = dependency.dns.outputs.internal_dns_name
 
 }
