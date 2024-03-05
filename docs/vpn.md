@@ -29,7 +29,19 @@ Each environment has its own VPN, and thus you must set up 3 VPN profiles. Repea
 
 ## Tools Currently Available
 
-Currently Hasura is the only tool available under the VPN, but more will follow. Additionally you can directly connect to redis and postgres but this is obviously not recommended in production.
+Currently Blazer and Hasura are the only tools available under the VPN, but more will follow. Additionally you can directly connect to redis and postgres but this is obviously not recommended in production.
+
+Connecting to redis and postgres directly would be using their respective CLI from your local machine
+
+Redis:
+``` shell
+redis-cli -h notify-dev-cluster-cache-az.\<amazon-generated\>.amazonaws.com -p 6379
+```
+
+Postgres:
+``` shell
+psql  -h notification-canada-ca-dev-cluster.\<amazon-generated\>.rds.amazonaws.com -p 5432 -U username notificationcanadacadev
+```
 
 ### Important Notes
 
@@ -42,17 +54,19 @@ without connecting to the appropriate VPN.
 ### Links
 
 #### Dev
-- https://hasura.dev.notification.internal
+- https://hasura.dev.notification.internal.com
+- https://blazer.dev.notification.internal.com
 
 #### Staging
-- https://hasura.staging.notification.internal
+- https://hasura.staging.notification.internal.com
+- https://blazer.staging.notification.internal.com
+
 
 #### Production
 - Coming soon
 
 ## Tools coming soon
 
-- Blazer
 - Graylog (Logs in Dev)
 - Kubernetes endpoint
 - Any other handy tools you would like to see??
