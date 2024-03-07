@@ -1,0 +1,14 @@
+with data as (
+    select
+        date_format(from_unixtime(timestamp / 1000e0), '%Y-%m-%d') as day, header.value as host,
+        httprequest.clientip, httprequest.country, httprequest.httpmethod, httprequest.uri, action
+    FROM waf_logs
+    CROSS JOIN UNNEST(httprequest.headers) AS t(header)
+    where LOWER(header.name)='host'
+    -- and date_format(from_unixtime(timestamp / 1000e0), '%Y-%m-%d') = '2022-08-09'
+        and action != 'BLOCK'
+)
+select day, count(*) as num, clientip, country,  host, array_join(array_agg(distinct uri), ', ') as uris
+from data
+group by day, clientip, country, host
+order by day desc, count(*) desc
