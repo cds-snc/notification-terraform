@@ -35,7 +35,7 @@ resource "aws_quicksight_data_source" "rds" {
 }
 
 resource "aws_s3_object" "object" {
-  bucket = s3.sns_sms_usage_report_bucket.bucket_name
+  bucket = var.s3_bucket_sms_usage_id
   key    = "quicksight/s3-manifest-sms-usage.json"                  # replace with desired object key
   source = "aws/quicksight/s3-manifests.s3-manifest-sms-usage.json" # replace with path to local file
   acl    = "private"
