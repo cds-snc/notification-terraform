@@ -36,10 +36,10 @@ resource "aws_quicksight_data_source" "rds" {
 
 resource "aws_s3_object" "manifest_file" {
   bucket = var.s3_bucket_sms_usage_id
-  key    = "quicksight/s3-manifest-sms-usage.json"                  # replace with desired object key
-  source = "aws/quicksight/s3-manifests.s3-manifest-sms-usage.json" # replace with path to local file
+  key    = "quicksight/s3-manifest-sms-usage.json"                           # replace with desired object key
+  source = "../../../aws/quicksight/s3-manifests.s3-manifest-sms-usage.json" # replace with path to local file
   acl    = "private"
-  etag   = filemd5("aws/quicksight/s3-manifests.s3-manifest-sms-usage.json")
+  etag   = filemd5("../../../aws/quicksight/s3-manifests.s3-manifest-sms-usage.json")
 }
 
 resource "aws_quicksight_data_source" "s3_sms_usage" {
