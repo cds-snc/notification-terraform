@@ -106,7 +106,7 @@ resource "aws_quicksight_data_set" "notifications" {
         type = "STRING"
       }
       columns {
-        name = "notification_resource"
+        name = "notification_reference"
         type = "STRING"
       }
       columns {
