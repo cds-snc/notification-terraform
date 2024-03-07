@@ -51,7 +51,7 @@ output "s3_bucket_csv_upload_bucket_arn" {
 }
 
 output "s3_bucket_sms_usage_id" {
-  value = aws_s3_bucket.sns_sms_usage_report_bucket.id
+  value = module.sns_sms_usage_report_bucket.s3_bucket_id
 }
 
 output "firehose_waf_logs_iam_role_arn" {
