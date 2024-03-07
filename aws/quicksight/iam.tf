@@ -63,7 +63,7 @@ resource "aws_iam_policy" "quicksight-s3-usage" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "rds-qs-attach" {
+resource "aws_iam_role_policy_attachment" "s3-qs-attach" {
   role       = aws_iam_role.quicksight.name
   policy_arn = aws_iam_policy.quicksight-s3-usage.arn
 }
