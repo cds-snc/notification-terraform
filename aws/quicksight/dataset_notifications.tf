@@ -24,7 +24,8 @@ resource "aws_quicksight_data_set" "notifications" {
               api_key_id,
               key_type as api_key_type,
               service_id,
-              template_id
+              template_id,
+              reference as notification_reference
             from notifications
           union
             select 
@@ -39,7 +40,8 @@ resource "aws_quicksight_data_set" "notifications" {
               api_key_id,
               key_type as api_key_type,
               service_id,
-              template_id
+              template_id,
+              reference as notification_reference
             from notification_history
         ),
         service_data as (
@@ -67,7 +69,8 @@ resource "aws_quicksight_data_set" "notifications" {
         )
         select
           notification_id, notification_created_at, notification_sent_at, notification_status,
-          notification_queue_name, notification_type, notification_updated_at, job_id, api_key_id, api_key_type,
+          notification_queue_name, notification_type, notification_updated_at, 
+          notification_reference, job_id, api_key_id, api_key_type,
           s.*, t.*
         from notification_data n 
           join service_data s on n.service_id = s.service_id
@@ -100,6 +103,10 @@ resource "aws_quicksight_data_set" "notifications" {
       }
       columns {
         name = "notification_type"
+        type = "STRING"
+      }
+      columns {
+        name = "notification_reference"
         type = "STRING"
       }
       columns {
