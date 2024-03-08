@@ -231,7 +231,8 @@ resource "null_resource" "push_system_status_docker_image" {
 
 }
 
-#Github ARC Runner Build and Push
+# Github ARC Runner Build and Push
+# The ARC Runner is required for the Github Actions to run inside the Private EKS cluster. 
 
 resource "null_resource" "build_github_arc_runner_docker_image" {
   count = var.bootstrap ? 1 : 0
