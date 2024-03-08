@@ -68,7 +68,7 @@ resource "aws_secretsmanager_secret" "github_arc_runner_repository_url" {
 
 resource "aws_secretsmanager_secret_version" "github_arc_runner_repository_url" {
   secret_id     = aws_secretsmanager_secret.github_arc_runner_repository_url.id
-  secret_string = aws_ecr_repository.github_arc_runner.repository_url
+  secret_string = aws_ecr_repository.github_arc.repository_url
 }
 
 

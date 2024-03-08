@@ -109,7 +109,7 @@ resource "aws_ecr_repository" "system_status" {
   }
 }
 
-resource "aws_ecr_repository" "github_arc_repo" {
+resource "aws_ecr_repository" "github_arc" {
 
   name                 = "notify/github_arc_runner"
   image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
