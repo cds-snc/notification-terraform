@@ -64,6 +64,8 @@ resource "aws_security_group_rule" "blazer-access-dbtools-db" {
   source_security_group_id = aws_security_group.database-tools-db-securitygroup.id
 }
 
+
+
 resource "aws_security_group" "database-tools-db-securitygroup" {
   name        = "Database tools Database Security Group"
   description = "Security group for database in database-tools"
@@ -427,4 +429,14 @@ resource "aws_security_group_rule" "internal_alb_http_egress" {
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.notification_internal.id
   security_group_id        = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "vpn_k8s_api_access" {
+  description       = "Internal access to port 443 for private K8s API"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  type              = "ingress"
+  cidr_blocks       = ["10.0.0.0/16"]
+  security_group_id = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }
