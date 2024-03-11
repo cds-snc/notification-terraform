@@ -11,7 +11,7 @@ env:
 
 jobs:
   check-eks-ami-update:
-    runs-on: github-arc-ss-staging
+    runs-on: ubuntu-latest
     steps:
 
     - name: Configure AWS credentials

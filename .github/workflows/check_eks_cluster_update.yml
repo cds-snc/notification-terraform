@@ -10,7 +10,7 @@ env:
 
 jobs:
   check-eks-cluster-update:
-    runs-on: github-arc-ss-staging
+    runs-on: ubuntu-latest
     steps:
 
     - name: Configure AWS credentials
