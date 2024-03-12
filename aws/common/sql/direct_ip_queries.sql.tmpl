@@ -1,0 +1,18 @@
+with data as (
+    select
+        date_format(from_unixtime(timestamp / 1000e0), '%Y-%m-%d') as time, header.value as host, action,
+        httprequest.clientip, httprequest.country, httprequest.httpmethod, httprequest.uri,
+        nonterminatingmatchingrule.ruleid as count_rule
+    from waf_logs
+    cross join UNNEST(httprequest.headers) AS t(header)
+    cross join UNNEST(nonterminatingmatchingrules) AS t(nonterminatingmatchingrule)
+    where lower(header.name)='host'
+      and REGEXP_LIKE(header.value, '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
+      and from_unixtime(timestamp/1000) > now() - interval '1' day
+)
+select 
+    count(*) as num, host, country, action, count_rule, 
+    array_join(array_agg(distinct uri), ', ') as uris
+ from data
+group by host, country, action, count_rule
+order by count(*) desc

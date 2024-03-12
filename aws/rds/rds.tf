@@ -35,7 +35,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
 
 resource "aws_rds_cluster_parameter_group" "default" {
   name        = "rds-cluster-pg"
-  family      = "aurora-postgresql11"
+  family      = "aurora-postgresql15"
   description = "RDS customized cluster parameter group"
 
   parameter {

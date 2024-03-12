@@ -41,17 +41,17 @@ env:
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
-  TF_VAR_blazer_slack_webhook_general_topic: ${{ secrets.PRODUCTION_BLAZER_SLACK_WEBHOOK }}
   TF_VAR_client_vpn_access_group_id: ${{ secrets.PRODUCTION_CLIENT_VPN_ACCESS_GROUP_ID }}
   TF_VAR_client_vpn_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SAML_METADATA }}
   TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
+  TF_VAR_gha_arc_pat: ${{ secrets.GHA_ARC_PAT }}
 
 jobs:
   terragrunt-plan-production:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Set environment variables
         uses: ./.github/actions/setvars
@@ -72,7 +72,7 @@ jobs:
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
       - name: Terragrunt plan common
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/common"
           comment-delete: "true"
@@ -81,7 +81,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ECR
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ecr"
           comment-delete: "true"
@@ -90,7 +90,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_receiving_emails
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ses_receiving_emails"
           comment-delete: "true"
@@ -99,7 +99,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ses_to_sqs_email_callbacks"
           comment-delete: "true"
@@ -108,7 +108,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/sns_to_sqs_sms_callbacks"
           comment-delete: "true"
@@ -117,7 +117,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan dns
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/dns"
           comment-delete: "true"
@@ -126,7 +126,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_validation_dns_entries
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ses_validation_dns_entries"
           comment-delete: "true"
@@ -135,7 +135,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan eks
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/eks"
           comment-delete: "true"
@@ -144,7 +144,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan elasticache
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/elasticache"
           comment-delete: "true"
@@ -153,7 +153,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan rds
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/rds"
           comment-delete: "true"
@@ -162,7 +162,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan cloudfront
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/cloudfront"
           comment-delete: "true"
@@ -171,7 +171,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-api
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/lambda-api"
           comment-delete: "true"
@@ -180,7 +180,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan heartbeat
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/heartbeat"
           comment-delete: "true"
@@ -189,7 +189,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan database-tools
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/database-tools"
           comment-delete: "true"
@@ -207,7 +207,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/lambda-google-cidr"
           comment-delete: "true"

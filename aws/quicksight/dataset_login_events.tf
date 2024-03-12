@@ -52,11 +52,11 @@ resource "aws_quicksight_refresh_schedule" "login_events" {
   depends_on  = [aws_quicksight_data_set.login_events]
 
   schedule {
-    refresh_type = "INCREMENTAL_REFRESH"
+    refresh_type = "FULL_REFRESH"
 
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "07:10"
+      time_of_the_day = "07:35"
     }
   }
 }

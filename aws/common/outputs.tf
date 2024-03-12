@@ -50,6 +50,10 @@ output "s3_bucket_csv_upload_bucket_arn" {
   value = aws_s3_bucket.csv_bucket.arn
 }
 
+output "s3_bucket_sms_usage_id" {
+  value = module.sns_sms_usage_report_bucket.s3_bucket_id
+}
+
 output "firehose_waf_logs_iam_role_arn" {
   value = aws_iam_role.firehose_waf_logs.arn
 }
