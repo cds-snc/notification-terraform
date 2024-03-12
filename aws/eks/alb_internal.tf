@@ -38,6 +38,22 @@ resource "aws_alb_listener" "internal_alb_tls" {
   }
 }
 
+resource "aws_lb_listener" "internal_alb-80" {
+  load_balancer_arn = aws_lb.internal_alb.id
+  port              = 80 #tfsec:ignore:AWS004
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
 resource "aws_alb_target_group" "internal_nginx_http" {
   name        = "notification-internal-nginx-http"
   port        = 80

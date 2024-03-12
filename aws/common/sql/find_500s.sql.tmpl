@@ -1,0 +1,5 @@
+select time, cast(elb_status_code as integer) as code, client_ip, domain_name, request_url
+from alb_logs
+where cast(elb_status_code as integer) > 499
+order by alb_logs.time desc
+limit 100

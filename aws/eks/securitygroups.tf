@@ -64,6 +64,8 @@ resource "aws_security_group_rule" "blazer-access-dbtools-db" {
   source_security_group_id = aws_security_group.database-tools-db-securitygroup.id
 }
 
+
+
 resource "aws_security_group" "database-tools-db-securitygroup" {
   name        = "Database tools Database Security Group"
   description = "Security group for database in database-tools"
@@ -88,6 +90,26 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-in
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.blazer.id
   security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+resource "aws_security_group_rule" "database-tools-internal-ingress" {
+  description       = "Allow Internal access to blazer DB"
+  type              = "ingress"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
+  cidr_blocks       = ["10.0.0.0/16"]
+  security_group_id = aws_security_group.database-tools-db-securitygroup.id
+}
+
+resource "aws_security_group_rule" "database-tools-internal-egress" {
+  description       = "Allow Internal access to blazer DB"
+  type              = "egress"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
+  cidr_blocks       = ["10.0.0.0/16"]
+  security_group_id = aws_security_group.database-tools-db-securitygroup.id
 }
 
 # Quicksight security groups
@@ -388,4 +410,33 @@ resource "aws_security_group" "notification_internal" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+}
+
+resource "aws_security_group_rule" "internal_alb_http_ingress" {
+  description              = "Internal ALB HTTP"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification_internal.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
+}
+resource "aws_security_group_rule" "internal_alb_http_egress" {
+  description              = "Internal ALB HTTP"
+  type                     = "egress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification_internal.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "vpn_k8s_api_access" {
+  description       = "Internal access to port 443 for private K8s API"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  type              = "ingress"
+  cidr_blocks       = ["10.0.0.0/16"]
+  security_group_id = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }

@@ -1,0 +1,14 @@
+with data as (
+    select 
+        from_unixtime(timestamp / 1000e0) as time, action,
+        httprequest.clientip, httprequest.country, httprequest.httpmethod, httprequest.uri,
+        header.value as cookie,
+        httprequest.headers
+
+from waf_logs cross join UNNEST(httprequest.headers) AS t(header)
+  where header.name = 'Cookie'
+)
+select * from data
+where clientip = '198.48.226.44'
+order by time desc
+limit 100

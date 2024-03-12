@@ -270,3 +270,15 @@ variable "internal_dns_zone_id" {
   type        = string
   description = "The zone id for the internal DNS"
 }
+
+variable "internal_dns_name" {
+  type        = string
+  description = "The fqdn for the internal DNS"
+}
+
+variable "gha_arc_pat" {
+  type        = string
+  description = "The Personal Access Token that Github ARC will use to authenticate"
+  sensitive   = true
+
+}

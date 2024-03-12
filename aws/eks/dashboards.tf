@@ -247,7 +247,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "view": "singleValue",
                 "stacked": false,
                 "region": "${var.region}",
-                "title": "Queue delays",
+                "title": "SQS queues delays over time",
                 "period": 60,
                 "stat": "Maximum",
                 "sparkline": true
@@ -268,7 +268,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "view": "singleValue",
                 "stacked": false,
                 "region": "${var.region}",
-                "title": "Queue delays",
+                "title": "SQS queues delays over time",
                 "period": 60,
                 "stat": "Maximum",
                 "sparkline": true

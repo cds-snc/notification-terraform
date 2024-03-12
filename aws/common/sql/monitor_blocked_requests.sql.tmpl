@@ -1,0 +1,17 @@
+with data as (
+    select
+        from_unixtime(timestamp / 1000e0) as datetime, header.value as host, httprequest.uri, header_agent.value as user_agent, action,
+        terminatingruleid,
+        httprequest.clientip, httprequest.country, httprequest.httpmethod
+    from waf_logs
+    cross join UNNEST(httprequest.headers) AS t(header)
+    cross join UNNEST(httprequest.headers) AS t(header_agent)
+    where lower(header.name)='host'
+    and lower(header_agent.name)='user-agent'
+    and action = 'BLOCK'
+)
+select * from data
+where host = 'api.notification.canada.ca' or host = 'api.notification.alpha.canada.ca/'
+    and lower(user_agent) like '%notify%'
+order by datetime desc
+limit 1000
