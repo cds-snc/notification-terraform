@@ -11,6 +11,12 @@ resource "aws_quicksight_data_set" "sms_usage" {
     s3_source {
       data_source_arn = aws_quicksight_data_source.s3_sms_usage.arn
 
+      upload_settings {
+        contains_header = "true"
+        delimiter       = ","
+        format          = "CSV"
+      }
+
       input_columns {
         name = "PublishTimeUTC"
         type = "DATETIME"
