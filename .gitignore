@@ -8,6 +8,7 @@
 *.yaml
 !.checkov.yaml
 !.checkov.yml
+!catalog-info.yaml
 
 # Checkov dependencies
 .external_modules
