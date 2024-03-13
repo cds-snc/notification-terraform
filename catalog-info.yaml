@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: notification-terraform
+  description: >-
+    Terraform files for notification.canada.ca | Fichiers Terraform pour notification.canada.ca
+  annotations:
+    github.com/project-slug: cds-snc/notification-terraform
+  labels:
+    license: MIT
+spec:
+  type: service
+  lifecycle: production
+  owner: group:cds-snc/notify-dev
+  system: gc-notification
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: gc-notification
+  title: GC Notify | GC Notification
+  description: >-
+    GC Notify System
+spec:
+  owner: group:cds-snc/notify-dev
