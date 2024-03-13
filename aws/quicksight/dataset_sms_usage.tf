@@ -35,15 +35,15 @@ resource "aws_quicksight_data_set" "sms_usage" {
       }
       input_columns {
         name = "PriceInUSD"
-        type = "DECIMAL"
+        type = "STRING"
       }
       input_columns {
         name = "PartNumber"
-        type = "INTEGER"
+        type = "STRING"
       }
       input_columns {
         name = "TotalParts"
-        type = "INTEGER"
+        type = "STRING"
       }
     }
   }
