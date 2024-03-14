@@ -2,7 +2,7 @@
 # https://backstage.cdssandbox.xyz/  
 ---
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: Resource
 metadata:
   name: notification-terraform
   description: >-
@@ -11,8 +11,10 @@ metadata:
     github.com/project-slug: cds-snc/notification-terraform
   labels:
     license: MIT
+  tags:
+    - terraform
 spec:
-  type: service
+  type: infrastructure
   lifecycle: production
   owner: group:cds-snc/notify-dev
   system: gc-notification
