@@ -64,7 +64,7 @@ resource "aws_quicksight_refresh_schedule" "sms_usage" {
   depends_on  = [aws_quicksight_data_set.sms_usage]
 
   schedule {
-    refresh_type = "INCREMENTAL_REFRESH"
+    refresh_type = "FULL_REFRESH"
 
     # SMS usage reports are generated around 01:00 UTC.
     schedule_frequency {
