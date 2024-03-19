@@ -12,8 +12,8 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   vpc_config {
 
     # Setting this explicitly for now, until manifests release is in
-    endpoint_private_access = var.env == "production" ? false : true
-    endpoint_public_access  = var.env == "production" ? true : false
+    endpoint_private_access = false
+    endpoint_public_access  = true
 
     # tfsec:ignore:AWS068 EKS cluster should not have open CIDR range for public access
     # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/203
