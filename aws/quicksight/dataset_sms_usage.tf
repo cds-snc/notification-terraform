@@ -48,6 +48,43 @@ resource "aws_quicksight_data_set" "sms_usage" {
     }
   }
 
+  logical_table_map {
+    logical_table_map_id = "smsusage"
+
+    alias = "smsusage"
+
+    source {
+      physical_table_id = "smsusage"
+    }
+
+    data_transforms {
+
+      # cast_column_type_operation {
+      #   column_name = "PublishTimeUTC"
+      #   new_column_type = "DATETIME"
+      # }
+
+      cast_column_type_operation {
+        column_name     = "PriceInUSD"
+        new_column_type = "DECIMAL"
+      }
+    }
+
+    data_transforms {
+      cast_column_type_operation {
+        column_name     = "PartNumber"
+        new_column_type = "INTEGER"
+      }
+    }
+
+    data_transforms {
+      cast_column_type_operation {
+        column_name     = "TotalParts"
+        new_column_type = "INTEGER"
+      }
+    }
+  }
+
   permissions {
     actions   = local.dataset_viewer_permissions
     principal = aws_quicksight_group.dataset_viewer.arn
