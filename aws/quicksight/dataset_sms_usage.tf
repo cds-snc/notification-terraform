@@ -49,15 +49,16 @@ resource "aws_quicksight_data_set" "sms_usage" {
   }
 
   logical_table_map {
-    logical_table_map_id = "smsusage"
-
-    alias = "smsusage"
+    logical_table_map_id = "smsusagelog"
+    alias = "SMS Usage Report"
 
     source {
+      # physical_table_id = ""
       join_instruction {
-        left_operand  = "smsusage"
-        right_operand = aws_quicksight_data_set.notifications.data_set_id
-        on_clause     = "smsusage.MessageId = notifications.notification_id"
+        left_operand  = "smsusagelog"
+        #right_operand = "notificationslog"
+        right_operand = aws_quicksight_data_set.notifications.logical_table_map.notificationslog.logical_table_map_id
+        on_clause     = "{MessageId} = {notification_id}"
         type          = "LEFT"
       }
     }
