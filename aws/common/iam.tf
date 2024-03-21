@@ -189,3 +189,32 @@ data "aws_iam_policy_document" "firehose_waf_logs" {
 resource "aws_iam_service_linked_role" "spotInstances" {
   aws_service_name = "spot.amazonaws.com"
 }
+
+# Adding iam policy to include dev environment
+resource "aws_iam_policy" "budget_sns_send" {
+  name        = "budget_sns_send"
+  path        = "/"
+  description = "IAM policy for sending messages to SNS from Budget Alerts"
+
+  policy = <<POLICY
+"Version": "2012-10-17",
+"Statement": [
+{
+  "Sid": "E.g., AWSBudgetsSNSPublishingPermissions",
+  "Effect": "Allow",
+  "Principal": {
+    "Service": "budgets.amazonaws.com"
+  },
+  "Action": "SNS:Publish",
+  "Resource": aws_sns_topic.notification-canada-ca-alert-general.arn,
+   "Condition": {
+        "StringEquals": {
+          "aws:SourceAccount": var.account_id
+        },
+        "ArnLike": {
+          "aws:SourceArn": "arn:aws:budgets::${var.account_id}:*"
+        }
+      }
+}]
+POLICY
+}
