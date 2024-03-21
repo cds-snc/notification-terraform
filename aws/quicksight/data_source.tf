@@ -38,8 +38,8 @@ resource "aws_s3_object" "manifest_file" {
   bucket = var.s3_bucket_sms_usage_id
   key    = "quicksight/s3-manifest-sms-usage.json"     # replace with desired object key
   source = "./s3-manifests/s3-manifest-sms-usage.json" # replace with path to local file
-  # acl    = "private"
-  etag = filemd5("./s3-manifests/s3-manifest-sms-usage.json")
+  acl    = "private"
+  etag   = filemd5("./s3-manifests/s3-manifest-sms-usage.json")
 }
 
 resource "aws_quicksight_data_source" "s3_sms_usage" {
