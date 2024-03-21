@@ -1,0 +1,30 @@
+# Metadata for the backstage catalog accessible at this link:  
+# https://backstage.cdssandbox.xyz/  
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: notification-terraform
+  description: >-
+    Terraform files for notification.canada.ca | Fichiers Terraform pour notification.canada.ca
+  annotations:
+    github.com/project-slug: cds-snc/notification-terraform
+  labels:
+    license: MIT
+  tags:
+    - terraform
+spec:
+  type: infrastructure
+  lifecycle: production
+  owner: group:cds-snc/notify-dev
+  system: gc-notification
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: gc-notification
+  title: GC Notify | GC Notification
+  description: >-
+    GC Notify System
+spec:
+  owner: group:cds-snc/notify-dev

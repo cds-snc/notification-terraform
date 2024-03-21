@@ -276,9 +276,21 @@ variable "internal_dns_name" {
   description = "The fqdn for the internal DNS"
 }
 
-variable "gha_arc_pat" {
+variable "pr_bot_private_key" {
   type        = string
-  description = "The Personal Access Token that Github ARC will use to authenticate"
+  description = "The Private Key for PR Bot, used by Github ARC"
   sensitive   = true
-
 }
+
+variable "pr_bot_app_id" {
+  type        = string
+  description = "The AppID for PR Bot, used by Github ARC"
+  sensitive   = true
+}
+
+variable "pr_bot_installation_id" {
+  type        = string
+  description = "The installation ID for PR Bot, used by Github ARC"
+  sensitive   = true
+}
+
