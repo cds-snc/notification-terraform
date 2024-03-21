@@ -1,5 +1,6 @@
 # valid column types are [STRING INTEGER DECIMAL DATETIME BIT BOOLEAN JSON]
 
+
 resource "aws_quicksight_data_set" "sms_usage" {
   data_set_id = "sms_usage"
   name        = "SmsUsage"
@@ -44,6 +45,50 @@ resource "aws_quicksight_data_set" "sms_usage" {
       input_columns {
         name = "TotalParts"
         type = "STRING"
+      }
+    }
+  }
+
+  logical_table_map {
+    logical_table_map_id = "smsusage"
+
+    alias = "smsusage"
+
+    source {
+      physical_table_id = "smsusage"
+
+      join_instruction {
+        left_operand  = "smsusage"
+        right_operand = aws_quicksight_data_set.notifications.id
+        on_clause     = "smsusage.MessageId = notifications.notification_id"
+        type          = "LEFT"
+      }
+    }
+
+    data_transforms {
+
+      # cast_column_type_operation {
+      #   column_name = "PublishTimeUTC"
+      #   new_column_type = "DATETIME"
+      # }
+
+      cast_column_type_operation {
+        column_name     = "PriceInUSD"
+        new_column_type = "DECIMAL"
+      }
+    }
+
+    data_transforms {
+      cast_column_type_operation {
+        column_name     = "PartNumber"
+        new_column_type = "INTEGER"
+      }
+    }
+
+    data_transforms {
+      cast_column_type_operation {
+        column_name     = "TotalParts"
+        new_column_type = "INTEGER"
       }
     }
   }
