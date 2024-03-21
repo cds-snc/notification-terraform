@@ -1,6 +1,5 @@
 # valid column types are [STRING INTEGER DECIMAL DATETIME BIT BOOLEAN JSON]
 
-
 resource "aws_quicksight_data_set" "sms_usage" {
   data_set_id = "sms_usage"
   name        = "SmsUsage"
@@ -56,13 +55,6 @@ resource "aws_quicksight_data_set" "sms_usage" {
 
     source {
       physical_table_id = "smsusage"
-
-      join_instruction {
-        left_operand  = "smsusage"
-        right_operand = aws_quicksight_data_set.notifications.id
-        on_clause     = "smsusage.MessageId = notifications.notification_id"
-        type          = "LEFT"
-      }
     }
 
     data_transforms {
