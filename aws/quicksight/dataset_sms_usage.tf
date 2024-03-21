@@ -54,7 +54,12 @@ resource "aws_quicksight_data_set" "sms_usage" {
     alias = "smsusage"
 
     source {
-      physical_table_id = "smsusage"
+      join_instruction {
+        left_operand  = "smsusage"
+        right_operand = aws_quicksight_data_set.notifications.data_set_id
+        on_clause     = "smsusage.MessageId = notifications.notification_id"
+        type          = "LEFT"
+      }
     }
 
     data_transforms {
