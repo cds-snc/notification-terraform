@@ -1,4 +1,5 @@
 resource "aws_quicksight_vpc_connection" "rds" {
+  depends_on         = [aws_quicksight_account_subscription.subscription]
   vpc_connection_id  = var.vpc_id
   name               = "Quicksight RDS connection"
   role_arn           = aws_iam_role.vpc_connection_role.arn
