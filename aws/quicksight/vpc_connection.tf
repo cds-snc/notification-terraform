@@ -1,7 +1,7 @@
 resource "aws_quicksight_vpc_connection" "rds" {
   depends_on         = [aws_quicksight_account_subscription.subscription]
-  vpc_connection_id  = "quicksight-rds-vpc-connection"
-  name               = "Quicksight RDS connection TEMP"
+  vpc_connection_id  = var.vpc_id
+  name               = "Quicksight RDS connection"
   role_arn           = aws_iam_role.vpc_connection_role.arn
   security_group_ids = [var.quicksight_security_group_id]
   subnet_ids         = var.database_subnet_ids
