@@ -32,18 +32,6 @@ resource "aws_quicksight_data_set" "login_events" {
     actions   = local.dataset_owner_permissions
     principal = aws_quicksight_group.dataset_owner.arn
   }
-
-  refresh_properties {
-    refresh_configuration {
-      incremental_refresh {
-        lookback_window {
-          column_name = "created_at"
-          size        = 1
-          size_unit   = "DAY"
-        }
-      }
-    }
-  }
 }
 
 resource "aws_quicksight_refresh_schedule" "login_events" {
