@@ -187,3 +187,50 @@ resource "aws_iam_role_policy_attachment" "parameters_csi_github" {
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.secrets_csi_github.name
 }
+
+#
+# NOTIFY - ADMIN
+#
+
+data "aws_iam_policy_document" "secrets_csi_assume_role_policy_notify_admin" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:notify-${var.env}:notify-admin"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "secrets_csi_notify_admin" {
+  assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy_notify_admin.json
+  name               = "secrets-csi-role-notify-admin"
+}
+
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "secrets_csi_notify_admin" {
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.secrets_csi_notify_admin.name
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "parameters_csi_notify_admin" {
+  policy_arn = aws_iam_policy.parameters_csi.arn
+  role       = aws_iam_role.secrets_csi_notify_admin.name
+}
