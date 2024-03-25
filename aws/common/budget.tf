@@ -30,3 +30,4 @@ module "spend_notifier" {
   billing_tag_value          = "notification-canada-ca-${var.env}"
   account_name               = "Notification-${var.env}"
 }
+
