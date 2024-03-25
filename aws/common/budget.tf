@@ -23,11 +23,10 @@ resource "aws_budgets_budget" "notify_global" {
   }
 }
 
-module "spend_notifier" {
-  source                     = "github.com/cds-snc/terraform-modules//spend_notifier?ref=main"
+module "budget_notifier" {
+  source                     = "github.com/cds-snc/terraform-modules//spend_notifier?ref=v9.2.6"
   daily_spend_notifier_hook  = "d5bfc2dc-07d9-4553-adbb-08a0b44a4bea"
   weekly_spend_notifier_hook = "d5bfc2dc-07d9-4553-adbb-08a0b44a4bea"
   billing_tag_value          = "notification-canada-ca-${var.env}"
   account_name               = "Notification-${var.env}"
 }
-
