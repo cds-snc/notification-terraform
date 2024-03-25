@@ -22,6 +22,7 @@ resource "aws_db_instance" "database-tools" {
   username            = "postgres"
   password            = var.dbtools_password
   ca_cert_identifier  = var.env == "production" ? "rds-ca-2019" : "rds-ca-rsa4096-g1"
+  apply_immediately   = var.env == "production" ? false : true
   skip_final_snapshot = true
 
   storage_encrypted   = true
