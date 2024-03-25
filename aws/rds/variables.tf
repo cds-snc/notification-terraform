@@ -44,3 +44,8 @@ variable "rds_database_name" {
   description = "Set the name of the database"
 
 }
+
+variable "app_db_user" {
+  type        = string
+  description = "Set the name of the database user"
+}
