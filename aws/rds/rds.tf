@@ -18,7 +18,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   identifier                   = "notification-canada-ca-${var.env}-instance-${count.index}"
   cluster_identifier           = aws_rds_cluster.notification-canada-ca.id
   instance_class               = var.rds_instance_type
-  ca_cert_identifier           = var.env == "production" ? "rds-ca-2019" : "rds-ca-rsa2048-g1"
+  ca_cert_identifier           = var.env == "production" ? "rds-ca-2019" : "rds-ca-rsa4096-g1"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
   engine                       = aws_rds_cluster.notification-canada-ca.engine
   engine_version               = aws_rds_cluster.notification-canada-ca.engine_version
