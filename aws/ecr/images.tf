@@ -25,7 +25,7 @@ resource "null_resource" "build_admin_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "docker build -t ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap -f /var/tmp/notification-admin/ci/Dockerfile.lambda"
+    command = "docker build -t ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap -f /var/tmp/notification-admin/ci/Dockerfile.lambda /var/tmp/notification-admin/"
   }
 
 }
