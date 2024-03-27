@@ -308,3 +308,9 @@ variable "account_budget_alert_emails" {
   type        = list(any)
   default     = ["jimmy.royer@cds-snc.ca", "stephen.astels@cds-snc.ca", "ben.larabie@cds-snc.ca", "michael.pond@cds-snc.ca"]
 }
+
+variable "budget_sre_bot_webhook" {
+  description = "Slack webhook used to post budget alerts to the SRE bot"
+  type        = string
+  sensitive   = true
+}
