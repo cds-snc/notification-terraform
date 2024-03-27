@@ -45,9 +45,9 @@ resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "client_vpn_connections" {
-  count           = var.enable_sentinel_forwarding ? 1 : 0
-  name            = "Client VPN connections"
-  log_group_name  = module.vpn.client_vpn_cloudwatch_log_group_name
+  count          = var.enable_sentinel_forwarding ? 1 : 0
+  name           = "Client VPN connections"
+  log_group_name = module.vpn.client_vpn_cloudwatch_log_group_name
 
   filter_pattern  = "[w1=\"*\"]" # All logs
   destination_arn = module.sentinel_forwarder[0].lambda_arn
