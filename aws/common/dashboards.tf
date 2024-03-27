@@ -223,7 +223,6 @@ resource "aws_cloudwatch_dashboard" "emails" {
                     "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-complaint-rate-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-email-queue-delay-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning[0].arn}"
                 ]
