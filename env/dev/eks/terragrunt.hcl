@@ -31,9 +31,9 @@ dependency "common" {
     re_documentation_arn                      = ""
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
+    subnet_ids                                = []
+    vpc_private_subnet_cidr_blocks            = []
     private-links-gateway-prefix-list-ids     = []
-    client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
-    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -76,6 +76,7 @@ inputs = {
   primary_worker_min_size                   = 1
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
+  vpc_private_subnet_cidr_blocks            = dependency.common.outputs.vpc_private_subnet_cidr_blocks
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
   sns_alert_warning_arn                     = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                    = dependency.common.outputs.sns_alert_critical_arn
