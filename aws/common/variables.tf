@@ -68,14 +68,6 @@ variable "sqs_visibility_timeout_priority_high" {
   default = 26
 }
 
-# TODO: delete this variable once we verify that we've transitioned to the new queues
-variable "sqs_email_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-tasks"
-}
-
 variable "sqs_send_email_high_queue_name" {
   type = string
   # See QueueNames in
