@@ -1,4 +1,4 @@
-FROM ghcr.io/actions/actions-runner:2.313.0
+FROM ghcr.io/actions/actions-runner:2.315.0@sha256:45f609ab5bd691735dbb25e3636db2f5142fcd8f17de635424f2e7cbd3e16bc9
 USER root
 
 RUN apt update
