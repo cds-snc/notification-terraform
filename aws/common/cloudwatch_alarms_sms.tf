@@ -253,44 +253,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning"
   treat_missing_data  = "notBreaching"
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-warning" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-sms-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in SMS queue is older than 10 minutes for 5 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "5"
-  metric_name         = "ApproximateAgeOfOldestMessage"
-  namespace           = "AWS/SQS"
-  period              = 60
-  statistic           = "Average"
-  threshold           = 60 * 10
-  treat_missing_data  = "missing"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_sms_queue_name}"
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "sqs-sms-stuck-in-queue-critical" {
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-sms-stuck-in-queue-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in SMS queue is older than 15 minutes for 5 minutes"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "5"
-  metric_name               = "ApproximateAgeOfOldestMessage"
-  namespace                 = "AWS/SQS"
-  period                    = 60
-  statistic                 = "Average"
-  threshold                 = 60 * 15
-  treat_missing_data        = "missing"
-  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_sms_queue_name}"
-  }
-}
-
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-sms-high-queue-delay-warning"
