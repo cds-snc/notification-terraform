@@ -649,14 +649,12 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 "alarms": [
                     "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-${var.sqs_send_sms_high_queue_name}-queue-delay-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-${var.sqs_send_sms_high_queue_name}-queue-delay-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-${var.sqs_send_sms_medium_queue_name}-queue-delay-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-${var.sqs_send_sms_medium_queue_name}-queue-delay-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-${var.sqs_send_sms_low_queue_name}-queue-delay-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-${var.sqs_send_sms_low_queue_name}-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sns-spending-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sns-spending-warning[0].arn}"
                 ]
