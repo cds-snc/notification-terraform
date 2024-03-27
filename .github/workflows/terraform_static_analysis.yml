@@ -29,6 +29,6 @@ jobs:
           config_file: ./aws/.checkov.yml
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@c2dc67199a2e650d535d7de586a07597aea4d9c7 # v2.24.8
         with:
           sarif_file: results.sarif
