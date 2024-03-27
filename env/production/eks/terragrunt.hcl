@@ -30,6 +30,7 @@ dependency "common" {
     sqs_send_sms_high_queue_name              = ""
     client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
     client_vpn_security_group_id              = "sg-1234"
+    vpc_private_subnet_cidr_blocks            = []
   }
 }
 
@@ -67,6 +68,7 @@ inputs = {
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
+  vpc_private_subnet_cidr_blocks            = dependency.common.outputs.vpc_private_subnet_cidr_blocks  
   sns_alert_warning_arn                     = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                    = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn

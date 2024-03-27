@@ -240,16 +240,6 @@ variable "celery_queue_prefix" {
   description = "Celery queue prefix"
 }
 
-variable "client_vpn_cloudwatch_log_group_name" {
-  type        = string
-  description = "Client VPN CloudWatch log group name. This is used by the Sentinel forwarder to send logs to Sentinel."
-}
-
-variable "client_vpn_security_group_id" {
-  type        = string
-  description = "Client VPN security group ID"
-}
-
 variable "eks_addon_ebs_driver_version" {
   type        = string
   description = "Version for EBS driver addon for EKS (Persistence)"
@@ -292,5 +282,27 @@ variable "pr_bot_installation_id" {
   type        = string
   description = "The installation ID for PR Bot, used by Github ARC"
   sensitive   = true
+}
+
+variable "client_vpn_access_group_id" {
+  description = "IAM Identity Center group ID that will be allowed access to the VPN."
+  type        = string
+  sensitive   = true
+}
+variable "client_vpn_saml_metadata" {
+  description = "IAM Identity Center application SAML metadata.  Users that want to connect to the VPN must be granted access to this app."
+  type        = string
+  sensitive   = true
+}
+
+variable "client_vpn_self_service_saml_metadata" {
+  description = "IAM Identity Center self-service application SAML metadata.  This allows users to download the VPN client and configuration."
+  type        = string
+  sensitive   = true
+}
+
+variable "vpc_private_subnet_cidr_blocks" {
+  description = "CIDR blocks of the subnets where the VPN will be deployed."
+  type        = list(string)
 }
 

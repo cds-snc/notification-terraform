@@ -31,9 +31,10 @@ dependency "common" {
     re_documentation_arn                      = ""
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
-    subnet_ids                                = []
-    vpc_private_subnet_cidr_blocks            = []
     private-links-gateway-prefix-list-ids     = []
+    client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
+    client_vpn_security_group_id              = "sg-1234"
+    vpc_private_subnet_cidr_blocks            = []
   }
 }
 
@@ -83,7 +84,7 @@ inputs = {
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn
   firehose_waf_logs_iam_role_arn            = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                     = dependency.cloudfront.outputs.cloudfront_assets_arn
-  eks_cluster_name                          = "notification-canada-ca-dev-eks-cluster"
+  eks_cluster_name                          = "notification-canada-ca-pond-eks-cluster"
   eks_cluster_version                       = "1.29"
   eks_addon_coredns_version                 = "v1.11.1-eksbuild.6"
   eks_addon_kube_proxy_version              = "v1.29.0-eksbuild.3"
@@ -102,8 +103,6 @@ inputs = {
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
   celery_queue_prefix                       = "eks-notification-canada-ca"
-  client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
-  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
