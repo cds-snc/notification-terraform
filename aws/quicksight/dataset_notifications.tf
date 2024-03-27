@@ -183,6 +183,15 @@ resource "aws_quicksight_data_set" "notifications" {
       }
     }
   }
+
+  logical_table_map {
+    logical_table_map_id = "notificationslog"
+    alias                = "Notifications"
+    source {
+      physical_table_id  = "notifications"
+    }
+  }
+
   permissions {
     actions   = local.dataset_viewer_permissions
     principal = aws_quicksight_group.dataset_viewer.arn
