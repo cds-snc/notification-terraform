@@ -179,13 +179,13 @@ resource "aws_wafv2_web_acl_association" "waf_association" {
 
 
 resource "aws_api_gateway_method_settings" "api_settings" {
-  rest_api_id = "${aws_api_gateway_rest_api.api.id}"
-  stage_name  = "${aws_api_gateway_stage.api.stage_name}"
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  stage_name  = aws_api_gateway_stage.api.stage_name
   method_path = "*/*"
   settings {
-    logging_level = "INFO"
+    logging_level      = "INFO"
     data_trace_enabled = true
-    metrics_enabled = true
+    metrics_enabled    = true
   }
 }
 
