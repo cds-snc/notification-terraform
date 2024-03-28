@@ -187,6 +187,7 @@ resource "aws_api_gateway_method_settings" "api_settings" {
     data_trace_enabled = false
     metrics_enabled    = true
     caching_enabled    = true
+    cache_data_encrypted = true
   }
 }
 
