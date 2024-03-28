@@ -176,3 +176,46 @@ resource "aws_wafv2_web_acl_association" "waf_association" {
   resource_arn = aws_api_gateway_stage.api.arn
   web_acl_arn  = aws_wafv2_web_acl.api_lambda.arn
 }
+
+
+resource "aws_api_gateway_method_settings" "api_settings" {
+  rest_api_id = "${aws_api_gateway_rest_api.api.id}"
+  stage_name  = "${aws_api_gateway_stage.api.stage_name}"
+  method_path = "*/*"
+  settings {
+    logging_level = "INFO"
+    data_trace_enabled = true
+    metrics_enabled = true
+  }
+}
+
+# Allow API Gateway to push logs to CloudWatch
+resource "aws_api_gateway_account" "main" {
+  cloudwatch_role_arn = aws_iam_role.main.arn
+}
+
+resource "aws_iam_role" "main" {
+  name = "api-gateway-logs-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+}
+
+resource "aws_iam_role_policy_attachment" "main" {
+  role       = aws_iam_role.main.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+}

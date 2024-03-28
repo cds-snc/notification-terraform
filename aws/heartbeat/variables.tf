@@ -45,3 +45,8 @@ variable "heartbeat_docker_tag" {
   description = "Set this to specify the image version"
   default     = "bootstrap"
 }
+variable "bootstrap" {
+  description = "Boolean value to decide whether or not to build images"
+  type        = bool
+  default     = false
+}
