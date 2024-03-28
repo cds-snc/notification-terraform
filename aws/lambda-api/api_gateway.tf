@@ -183,10 +183,10 @@ resource "aws_api_gateway_method_settings" "api_settings" {
   stage_name  = aws_api_gateway_stage.api.stage_name
   method_path = "*/*"
   settings {
-    logging_level      = "INFO"
-    data_trace_enabled = false
-    metrics_enabled    = true
-    caching_enabled    = true
+    logging_level        = "INFO"
+    data_trace_enabled   = false
+    metrics_enabled      = true
+    caching_enabled      = true
     cache_data_encrypted = true
   }
 }
