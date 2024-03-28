@@ -13,8 +13,8 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
         Type = "AWS::QuickSight::DataSet"
         Properties = {
           AwsAccountId = var.account_id
-          DataSetId    = "smsusage-notifications"
-          Name         = "Smsusage Notifications"
+          DataSetId    = "sms-usage-notifications"
+          Name         = "Notifications with SMS pricing"
           Permissions = [
             {
               Actions = [
@@ -46,8 +46,8 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
 
           LogicalTableMap = {
 
-            nj-notifications-smsusage = {
-              Alias = "nj-notifications-sms-usage",
+            sms-usage-notifications = {
+              Alias = "sms-usage-notifications",
               DataTransforms = [
                 {
                   ProjectOperation = {
@@ -91,23 +91,23 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
               ],
               Source = {
                 JoinInstruction = {
-                  LeftOperand  = "nj-sms-usage",
-                  RightOperand = "nj-notifications",
+                  LeftOperand  = "sms-usage",
+                  RightOperand = "notifications",
                   Type         = "LEFT",
                   OnClause     = "{MessageId} = {notification_reference}"
                 }
               }
             },
 
-            nj-notifications = {
-              Alias = "nj-notifications",
+            notifications = {
+              Alias = "notifications",
               Source = {
                 DataSetArn = aws_quicksight_data_set.notifications.arn
               }
             },
 
-            nj-sms-usage = {
-              Alias = "nj-sms-usage",
+            sms-usage = {
+              Alias = "sms-usage",
               Source = {
                 DataSetArn = aws_quicksight_data_set.sms_usage.arn
               }
@@ -125,7 +125,7 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
 }
 
 
-resource "aws_quicksight_refresh_schedule" "smsusage-notifications" {
+resource "aws_quicksight_refresh_schedule" "sms-usage-notifications" {
   data_set_id = "sms-usage-notifications"
   schedule_id = "schedule-sms-usage-notifications"
   depends_on  = [aws_cloudformation_stack.sms-usage-notifications]
