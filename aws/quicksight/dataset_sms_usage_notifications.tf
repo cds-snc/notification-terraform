@@ -48,47 +48,6 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
 
             sms-usage-notifications = {
               Alias = "sms-usage-notifications",
-              DataTransforms = [
-                {
-                  ProjectOperation = {
-                    ProjectedColumns = [
-                      "notification_id",
-                      "notification_created_at",
-                      "notification_sent_at",
-                      "notification_updated_at",
-                      "notification_type",
-                      "notification_status",
-                      "notification_queue_name",
-                      "notification_reference",
-                      "job_id",
-                      "api_key_id",
-                      "api_key_type",
-                      "service_id",
-                      "service_active",
-                      "service_count_as_live",
-                      "service_go_live_at",
-                      "service_name",
-                      "service_message_limit",
-                      "service_rate_limit",
-                      "service_sms_daily_limit",
-                      "template_id",
-                      "template_version",
-                      "template_name",
-                      "template_created_at",
-                      "template_updated_at",
-                      "organisation_name",
-                      "organisation_id",
-                      "PublishTimeUTC",
-                      "MessageId",
-                      "MessageType",
-                      "DeliveryStatus",
-                      "PriceInUSD",
-                      "PartNumber",
-                      "TotalParts"
-                    ]
-                  }
-                }
-              ],
               Source = {
                 JoinInstruction = {
                   LeftOperand  = "sms-usage",
