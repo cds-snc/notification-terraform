@@ -186,7 +186,7 @@ resource "aws_api_gateway_method_settings" "api_settings" {
     logging_level      = "INFO"
     data_trace_enabled = false
     metrics_enabled    = true
-    caching_enabled = true
+    caching_enabled    = true
   }
 }
 
@@ -196,7 +196,7 @@ resource "aws_api_gateway_account" "main" {
 }
 
 resource "aws_iam_role" "main" {
-  name = "api-gateway-logs-role"
+  name               = "api-gateway-logs-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
