@@ -1,0 +1,5 @@
+select * from alb_logs 
+where "request_url" LIKE '%<requestURLHere>%'
+and time > '2024-04-01T16:08:00'
+and time < '2024-04-01T16:12:00'
+limit 10;
