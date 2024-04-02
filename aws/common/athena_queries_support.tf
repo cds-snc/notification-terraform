@@ -63,3 +63,11 @@ resource "aws_athena_named_query" "fuzzing_attack" {
   database    = aws_athena_database.notification_athena.name
   query       = templatefile("${path.module}/sql/fuzzing_attack.sql.tmpl", {})
 }
+
+resource "aws_athena_named_query" "alb_ip_address_by_url" {
+  name        = "ALB: Lookup IP By URL"
+  description = "Find ips based on the URL hit between a date range"
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/alb_ip_lookup_by_url.sql.tmpl", {})
+}
