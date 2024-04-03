@@ -97,7 +97,7 @@ resource "null_resource" "build_heartbeat_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/heartbeat && docker build -t ${aws_ecr_repository.heartbeat.repository_url}:bootstrap -f /var/tmp/notification-lambdas/heartbeat/Dockerfile . && popd"
+    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.heartbeat.repository_url}:bootstrap -f /var/tmp/notification-lambdas/heartbeat/Dockerfile . && popd"
   }
 
 }
@@ -145,7 +145,7 @@ resource "null_resource" "build_ses_receiving_emails_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/sesreceivingemails && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesreceivingemails/Dockerfile . && popd"
+    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesreceivingemails/Dockerfile . && popd"
   }
 
 }
@@ -169,7 +169,7 @@ resource "null_resource" "build_ses_to_sqs_email_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/sesemailcallbacks && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile . && popd"
+    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile . && popd"
   }
 
 }
@@ -193,7 +193,7 @@ resource "null_resource" "build_sns_to_sqs_sms_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/sesemailcallbacks && docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile . && popd"
+    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile . && popd"
   }
 
 }
@@ -217,7 +217,7 @@ resource "null_resource" "build_system_status_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/system_status && docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap -f /var/tmp/notification-lambdas/system_status/Dockerfile . && popd"
+    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap -f /var/tmp/notification-lambdas/system_status/Dockerfile . && popd"
   }
 }
 
