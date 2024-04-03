@@ -71,47 +71,6 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
   treat_missing_data        = "notBreaching"
 }
 
-# TODO: delete this alarm and queue once we verify that we've transitioned to the new queues
-resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-warning" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-email-queue-delay-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in email queue >= 30 minutes for 5 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "5"
-  metric_name         = "ApproximateAgeOfOldestMessage"
-  namespace           = "AWS/SQS"
-  period              = 60
-  statistic           = "Maximum"
-  threshold           = 60 * 30
-  treat_missing_data  = "missing"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_email_queue_name}"
-  }
-}
-
-# TODO: delete this alarm and queue once we verify that we've transitioned to the new queues
-resource "aws_cloudwatch_metric_alarm" "sqs-email-queue-delay-critical" {
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-email-queue-delay-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in email queue >= 45 minutes for 5 minutes"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "5"
-  metric_name               = "ApproximateAgeOfOldestMessage"
-  namespace                 = "AWS/SQS"
-  period                    = 60
-  statistic                 = "Maximum"
-  threshold                 = 60 * 45
-  treat_missing_data        = "missing"
-  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_email_queue_name}"
-  }
-}
-
-
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-high-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-email-high-queue-delay-warning"
