@@ -2,6 +2,10 @@
 # We have to use a cloudformation stack here because the provider has a bug in it
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
+locals {
+  one_week_ago = timeadd(timestamp(), "-168h")
+}
+
 resource "aws_cloudformation_stack" "sms-usage-notifications" {
 
   timeouts {
@@ -70,6 +74,13 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
               Source = {
                 DataSetArn = aws_quicksight_data_set.notifications.arn
               }
+              DataTransforms = [
+                {
+                  FilterOperation = {
+                    ConditionExpression = "{notification_type} = \"sms\""
+                  }
+                }
+              ]
             },
 
             sms-usage = {
