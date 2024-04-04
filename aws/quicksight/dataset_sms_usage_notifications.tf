@@ -3,6 +3,13 @@
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
 resource "aws_cloudformation_stack" "sms-usage-notifications" {
+
+  timeouts {
+    create = "2h"
+    update = "2h"
+    delete = "20m"
+  }
+
   name              = "sms-usage-notifications"
   notification_arns = ["arn:aws:sns:ca-central-1:${var.account_id}:aws-controltower-SecurityNotifications"]
 
