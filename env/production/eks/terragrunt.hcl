@@ -67,6 +67,7 @@ inputs = {
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
+  vpc_private_subnets_new                   = dependency.common.outputs.vpc_private_subnets_new
   sns_alert_warning_arn                     = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                    = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn

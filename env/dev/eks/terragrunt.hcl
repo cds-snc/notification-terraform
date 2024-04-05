@@ -76,6 +76,7 @@ inputs = {
   primary_worker_min_size                   = 1
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
+  vpc_private_subnets_new                   = dependency.common.outputs.vpc_private_subnets_new
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
   sns_alert_warning_arn                     = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                    = dependency.common.outputs.sns_alert_critical_arn

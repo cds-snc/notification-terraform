@@ -53,6 +53,18 @@ resource "aws_eip" "notification-canada-ca-natgw" {
   }
 }
 
+resource "aws_eip" "notification-canada-ca-natgw-new" {
+  count      = 3
+  depends_on = [aws_internet_gateway.notification-canada-ca]
+
+  vpc = true
+
+  tags = {
+    Name       = "notification-canada-ca"
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_nat_gateway" "notification-canada-ca" {
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
@@ -65,6 +77,21 @@ resource "aws_nat_gateway" "notification-canada-ca" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_nat_gateway" "notification-canada-ca-new" {
+  count      = 3
+  depends_on = [aws_internet_gateway.notification-canada-ca]
+
+  allocation_id = aws_eip.notification-canada-ca-natgw-new.*.id[count.index]
+  subnet_id     = aws_subnet.notification-canada-ca-public.*.id[count.index]
+
+  tags = {
+    Name       = "notification-canada-ca"
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+
 
 ###
 # AWS Subnets
@@ -99,6 +126,23 @@ resource "aws_subnet" "notification-canada-ca-public" {
     CostCenter               = "notification-canada-ca-${var.env}"
     Access                   = "public"
     "kubernetes.io/role/elb" = 1
+  }
+}
+
+resource "aws_subnet" "notification-canada-ca-private-new" {
+  count = 3
+
+  vpc_id            = aws_vpc.notification-canada-ca.id
+  cidr_block        = cidrsubnet("10.0.0.0/16", 3, count.index + 1)
+  availability_zone = element(data.aws_availability_zones.available.names, count.index + 1)
+
+  tags = {
+    Name                                                                  = "Private Subnet 0${count.index + 4}"
+    CostCenter                                                            = "notification-canada-ca-${var.env}"
+    Access                                                                = "private"
+    "kubernetes.io/role/internal-elb"                                     = 1
+    "kubernetes.io/cluster/notification-canada-ca-${var.env}-eks-cluster" = "shared"
+    "karpenter.sh/discovery"                                              = var.eks_cluster_name
   }
 }
 
@@ -148,6 +192,29 @@ resource "aws_route_table_association" "notification-canada-ca-private" {
 
   subnet_id      = aws_subnet.notification-canada-ca-private.*.id[count.index]
   route_table_id = aws_route_table.notification-canada-ca-private_subnet.*.id[count.index]
+}
+
+resource "aws_route_table" "notification-canada-ca-private_subnet_new" {
+  count = 3
+
+  vpc_id = aws_vpc.notification-canada-ca.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.notification-canada-ca-new.*.id[count.index]
+  }
+
+  tags = {
+    Name       = "Private Subnet Route Table ${count.index}"
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_route_table_association" "notification-canada-ca-private-new" {
+  count = 3
+
+  subnet_id      = aws_subnet.notification-canada-ca-private-new.*.id[count.index]
+  route_table_id = aws_route_table.notification-canada-ca-private_subnet_new.*.id[count.index]
 }
 
 ###

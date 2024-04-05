@@ -32,6 +32,10 @@ variable "vpc_private_subnets" {
   type = list(any)
 }
 
+variable "vpc_private_subnets_new" {
+  type = list(any)
+}
+
 variable "vpc_public_subnets" {
   type = list(any)
 }
