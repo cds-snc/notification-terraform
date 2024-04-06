@@ -3,6 +3,8 @@
 # in an S3 bucket for 7 days.
 #
 module "rds_activity_stream" {
+  count = var.env != "production" ? 1 : 0 # Disable in prod until fully tested
+
   source = "github.com/cds-snc/terraform-modules//rds_activity_stream?ref=v9.3.1"
 
   rds_stream_name = "notification-canada-ca-${var.env}-cluster"
