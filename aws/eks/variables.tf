@@ -32,7 +32,7 @@ variable "vpc_private_subnets" {
   type = list(any)
 }
 
-variable "vpc_private_subnets_new" {
+variable "vpc_private_subnets_k8s" {
   type = list(any)
 }
 

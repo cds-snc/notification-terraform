@@ -53,7 +53,7 @@ resource "aws_eip" "notification-canada-ca-natgw" {
   }
 }
 
-resource "aws_eip" "notification-canada-ca-natgw-new" {
+resource "aws_eip" "notification-canada-ca-natgw-k8s" {
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
 
@@ -78,11 +78,11 @@ resource "aws_nat_gateway" "notification-canada-ca" {
   }
 }
 
-resource "aws_nat_gateway" "notification-canada-ca-new" {
+resource "aws_nat_gateway" "notification-canada-ca-k8s" {
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
 
-  allocation_id = aws_eip.notification-canada-ca-natgw-new.*.id[count.index]
+  allocation_id = aws_eip.notification-canada-ca-natgw-k8s.*.id[count.index]
   subnet_id     = aws_subnet.notification-canada-ca-public.*.id[count.index]
 
   tags = {
@@ -129,7 +129,7 @@ resource "aws_subnet" "notification-canada-ca-public" {
   }
 }
 
-resource "aws_subnet" "notification-canada-ca-private-new" {
+resource "aws_subnet" "notification-canada-ca-private-k8s" {
   count = 3
 
   vpc_id            = aws_vpc.notification-canada-ca.id
@@ -194,14 +194,14 @@ resource "aws_route_table_association" "notification-canada-ca-private" {
   route_table_id = aws_route_table.notification-canada-ca-private_subnet.*.id[count.index]
 }
 
-resource "aws_route_table" "notification-canada-ca-private_subnet_new" {
+resource "aws_route_table" "notification-canada-ca-private_subnet_k8s" {
   count = 3
 
   vpc_id = aws_vpc.notification-canada-ca.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.notification-canada-ca-new.*.id[count.index]
+    nat_gateway_id = aws_nat_gateway.notification-canada-ca-k8s.*.id[count.index]
   }
 
   tags = {
@@ -210,11 +210,11 @@ resource "aws_route_table" "notification-canada-ca-private_subnet_new" {
   }
 }
 
-resource "aws_route_table_association" "notification-canada-ca-private-new" {
+resource "aws_route_table_association" "notification-canada-ca-private-k8s" {
   count = 3
 
-  subnet_id      = aws_subnet.notification-canada-ca-private-new.*.id[count.index]
-  route_table_id = aws_route_table.notification-canada-ca-private_subnet_new.*.id[count.index]
+  subnet_id      = aws_subnet.notification-canada-ca-private-k8s.*.id[count.index]
+  route_table_id = aws_route_table.notification-canada-ca-private_subnet_k8s.*.id[count.index]
 }
 
 ###
