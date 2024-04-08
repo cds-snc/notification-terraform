@@ -14,7 +14,7 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    vpc_private_subnets_new = [
+    vpc_private_subnets_k8s = [
       "subnet-001e585d12cce4d1e",
       "subnet-08de34a9e1a7458dc",
       "subnet-0af8b8402f1d605ff",
@@ -72,7 +72,7 @@ inputs = {
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
-  vpc_private_subnets_new                   = dependency.common.outputs.vpc_private_subnets_new
+  vpc_private_subnets_k8s                   = dependency.common.outputs.vpc_private_subnets_k8s
   sns_alert_warning_arn                     = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                    = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn
