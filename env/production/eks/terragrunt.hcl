@@ -14,6 +14,11 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
+    vpc_private_subnets_new = [
+      "subnet-001e585d12cce4d1e",
+      "subnet-08de34a9e1a7458dc",
+      "subnet-0af8b8402f1d605ff",
+    ]        
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
     re_api_arn                                = ""
