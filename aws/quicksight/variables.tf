@@ -17,6 +17,11 @@ locals {
   ])
 }
 
+variable "bootstrap" {
+  type = bool
+  default = false
+}
+
 variable "rds_instance_id" {
   type = string
 }

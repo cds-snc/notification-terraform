@@ -1,3 +1,8 @@
+variable "bootstrap" {
+  type = bool
+  default = false
+}
+
 variable "billing_tag_value" {
   type        = string
   description = "Identifies the billing code."
