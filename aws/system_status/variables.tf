@@ -1,5 +1,5 @@
 variable "bootstrap" {
-  type = bool
+  type    = bool
   default = false
 }
 
