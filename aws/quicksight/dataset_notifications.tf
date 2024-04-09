@@ -127,11 +127,11 @@ resource "aws_quicksight_data_set" "notifications" {
       }
       columns {
         name = "service_active"
-        type = "BIT"
+        type = "BOOLEAN"
       }
       columns {
         name = "service_count_as_live"
-        type = "BIT"
+        type = "BOOLEAN"
       }
       columns {
         name = "service_go_live_at"
