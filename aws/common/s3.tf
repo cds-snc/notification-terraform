@@ -25,6 +25,7 @@ resource "aws_s3_bucket" "csv_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.csv_bucket_logs.s3_bucket_id
   }
 
@@ -155,6 +156,7 @@ resource "aws_s3_bucket" "document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.document_download_logs.s3_bucket_id
   }
 
@@ -188,6 +190,7 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.document_download_logs.s3_bucket_id
   }
 
@@ -329,6 +332,7 @@ resource "aws_s3_bucket" "athena_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.athena_logs_bucket.s3_bucket_id
   }
 
