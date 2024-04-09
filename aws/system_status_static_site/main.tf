@@ -22,7 +22,7 @@ module "system_status_static_site" {
     aws.us-east-1 = aws.us-east-1
     aws.dns       = aws.dns
   }
-  depends_on = [ aws_acm_certificate.system_status_static_site_root_certificate ]
+  depends_on = [aws_acm_certificate.system_status_static_site_root_certificate]
 }
 
 
