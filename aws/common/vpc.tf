@@ -205,7 +205,7 @@ resource "aws_route_table" "notification-canada-ca-private_subnet_k8s" {
   }
 
   tags = {
-    Name       = "Private Subnet Route Table ${count.index}"
+    Name       = "Private Subnet Route Table ${count.index + 3}"
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
