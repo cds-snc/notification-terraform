@@ -189,3 +189,49 @@ data "aws_iam_policy_document" "firehose_waf_logs" {
 resource "aws_iam_service_linked_role" "spotInstances" {
   aws_service_name = "spot.amazonaws.com"
 }
+
+# Pinpoint IAM
+
+resource "aws_iam_role" "pinpoint_logs" {
+  name               = "PinpointLogs"
+  assume_role_policy = data.aws_iam_policy_document.pinpoint_assume.json
+}
+
+resource "aws_iam_policy" "pinpoint_logs" {
+  name   = "PinpointLogsPolicy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.pinpoint_logs.json
+}
+
+resource "aws_iam_role_policy_attachment" "pinpoint_logs" {
+  role       = aws_iam_role.pinpoint_logs.name
+  policy_arn = aws_iam_policy.pinpoint_logs.arn
+}
+
+data "aws_iam_policy_document" "pinpoint_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["sms-voice.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "pinpoint_logs" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      aws_cloudwatch_log_group.pinpoint_shortcode_deliveries[0].arn,
+      aws_cloudwatch_log_group.pinpoint_shortcode_deliveries_failures[0].arn,
+      aws_cloudwatch_log_group.pinpoint_longcode_deliveries[0].arn,
+      aws_cloudwatch_log_group.pinpoint_longcode_deliveries_failures[0].arn
+    ]
+  }
+}

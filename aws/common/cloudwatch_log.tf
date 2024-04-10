@@ -44,8 +44,47 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
   }
 }
 
+# TODO fix the count line after it's working. Right now we want these in dev for testing
+resource "aws_cloudwatch_log_group" "pinpoint_shortcode_deliveries" {
+  count             = var.cloudwatch_enabled ? 1 : 1
+  name              = "sns/${var.region}/${var.account_id}/PinPointShortcodeDirectPublishToPhoneNumber"
+  retention_in_days = var.sensitive_log_retention_period_days
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "pinpoint_shortcode_deliveries_failures" {
+  count             = var.cloudwatch_enabled ? 1 : 1
+  name              = "sns/${var.region}/${var.account_id}/PinPointShortcodeDirectPublishToPhoneNumber/Failure"
+  retention_in_days = var.sensitive_log_retention_period_days
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "pinpoint_longcode_deliveries" {
+  count             = var.cloudwatch_enabled ? 1 : 1
+  name              = "sns/${var.region}/${var.account_id}/PinPointLongcodeDirectPublishToPhoneNumber"
+  retention_in_days = var.sensitive_log_retention_period_days
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "pinpoint_longcode_deliveries_failures" {
+  count             = var.cloudwatch_enabled ? 1 : 1
+  name              = "sns/${var.region}/${var.account_id}/PinPointLongcodeDirectPublishToPhoneNumber/Failure"
+  retention_in_days = var.sensitive_log_retention_period_days
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
-  count             = var.cloudwatch_enabled ? 1 : 0
+  count             = var.cloudwatch_enabled ? 1 : 1
   name              = "route53/${var.region}/${var.account_id}/DNS/logs"
   retention_in_days = var.log_retention_period_days
 
