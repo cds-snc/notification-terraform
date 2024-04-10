@@ -106,7 +106,7 @@ resource "aws_quicksight_refresh_schedule" "sms_usage" {
     # SMS usage reports are generated around 01:00 UTC.
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "02:30"
+      time_of_the_day = "05:00"
     }
   }
 }

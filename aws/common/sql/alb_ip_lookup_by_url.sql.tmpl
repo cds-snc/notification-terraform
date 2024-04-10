@@ -1,0 +1,6 @@
+select time, client_ip as "Client IP", request_url "URL", elb_status_code as "HTTP Status", request_verb as "Request Type", user_agent as "User Agent"  from alb_logs 
+where "request_url" LIKE '%contact%'
+and time > '2024-04-01T16:08:00'
+and time < '2024-04-01T16:12:00'
+
+limit 10;

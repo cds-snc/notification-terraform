@@ -36,13 +36,14 @@ resource "aws_quicksight_data_source" "rds" {
 
 resource "aws_s3_object" "manifest_file" {
   bucket = var.s3_bucket_sms_usage_id
-  key    = "quicksight/s3-manifest-sms-usage.json"     # replace with desired object key
-  source = "./s3-manifests/s3-manifest-sms-usage.json" # replace with path to local file
+  key    = "quicksight/s3-manifest-sms-usage-${var.env}.json"     # replace with desired object key
+  source = "./s3-manifests/s3-manifest-sms-usage-${var.env}.json" # replace with path to local file
   acl    = "private"
-  etag   = filemd5("./s3-manifests/s3-manifest-sms-usage.json")
+  etag   = filemd5("./s3-manifests/s3-manifest-sms-usage-${var.env}.json")
 }
 
 resource "aws_quicksight_data_source" "s3_sms_usage" {
+  depends_on     = [aws_iam_policy.quicksight-s3-usage, aws_iam_role_policy_attachment.s3-qs-attach, aws_quicksight_account_subscription.subscription]
   data_source_id = "s3-sms-usage"
   name           = "SMS Usage Data Source"
 
