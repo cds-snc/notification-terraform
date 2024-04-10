@@ -5,7 +5,7 @@
 module "rds_activity_stream" {
   count = var.env != "production" ? 1 : 0 # Disable in prod until fully tested
 
-  source = "github.com/cds-snc/terraform-modules//rds_activity_stream?ref=4db411b499072d93ab28deb229ef9292dd4fccfa"
+  source = "github.com/cds-snc/terraform-modules//rds_activity_stream?ref=v9.3.5"
 
   rds_stream_name = "notification-canada-ca-${var.env}-cluster"
   rds_cluster_arn = aws_rds_cluster.notification-canada-ca.arn
