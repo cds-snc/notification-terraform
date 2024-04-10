@@ -105,8 +105,7 @@ inputs = {
   sqs_send_sms_medium_queue_name            = dependency.common.outputs.sqs_send_sms_medium_queue_name
   sqs_send_sms_high_queue_name              = dependency.common.outputs.sqs_send_sms_high_queue_name
   celery_queue_prefix                       = "eks-notification-canada-ca"
-  client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
-  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
+
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
