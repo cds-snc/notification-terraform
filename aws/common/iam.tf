@@ -191,6 +191,7 @@ resource "aws_iam_service_linked_role" "spotInstances" {
 }
 
 # Pinpoint IAM
+# see https://docs.aws.amazon.com/sms-voice/latest/userguide/configuration-sets-cloud-watch.html
 
 resource "aws_iam_role" "pinpoint_logs" {
   name               = "PinpointLogs"
@@ -216,6 +217,18 @@ data "aws_iam_policy_document" "pinpoint_assume" {
       type        = "Service"
       identifiers = ["sms-voice.amazonaws.com"]
     }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [var.account_id]
+    }
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values = [
+        "arn:aws:sms-voice:${var.region}:${var.account_id}:configuration-set/pinpoint-configuration"
+      ]
+    }
   }
 }
 
@@ -228,10 +241,7 @@ data "aws_iam_policy_document" "pinpoint_logs" {
       "logs:PutLogEvents"
     ]
     resources = [
-      aws_cloudwatch_log_group.pinpoint_shortcode_deliveries[0].arn,
-      aws_cloudwatch_log_group.pinpoint_shortcode_deliveries_failures[0].arn,
-      aws_cloudwatch_log_group.pinpoint_longcode_deliveries[0].arn,
-      aws_cloudwatch_log_group.pinpoint_longcode_deliveries_failures[0].arn
+      aws_cloudwatch_log_group.pinpoint_deliveries[0].arn,
     ]
   }
 }
