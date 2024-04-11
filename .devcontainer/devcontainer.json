@@ -21,7 +21,8 @@
   "extensions": [
     "hashicorp.terraform",
     "redhat.vscode-yaml",
-    "sebastianbille.iam-legend"
+    "sebastianbille.iam-legend",
+    "karyan40024.gotmpl-syntax-highlighter"
   ],
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode"
