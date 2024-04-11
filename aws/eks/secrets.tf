@@ -56,9 +56,9 @@ resource "aws_secretsmanager_secret" "secrets" {
 }
 
 resource "aws_secretsmanager_secret_version" "secrets" {
-  for_each                = toset(local.secrets)
-  secret_id               = aws_secretsmanager_secret.secrets[each.key].id
-  secret_string           = "var.${each.key}"
+  for_each      = toset(local.secrets)
+  secret_id     = aws_secretsmanager_secret.secrets[each.key].id
+  secret_string = "var.${each.key}"
 }
 
 
