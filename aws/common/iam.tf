@@ -240,6 +240,6 @@ data "aws_iam_policy_document" "pinpoint_logs" {
       "logs:DescribeLogStreams",
       "logs:PutLogEvents"
     ]
-    resources = var.cloudwatch_enabled ? [aws_cloudwatch_log_group.pinpoint_deliveries[0].arn] : [aws_cloudwatch_log_group.pinpoint_deliveries[0].arn]
+    resources = var.cloudwatch_enabled ? ["${aws_cloudwatch_log_group.pinpoint_deliveries[0].arn}:*"] : ["${aws_cloudwatch_log_group.pinpoint_deliveries[0].arn}:*"]
   }
 }
