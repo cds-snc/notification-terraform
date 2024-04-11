@@ -235,8 +235,6 @@ resource "aws_iam_role_policy_attachment" "parameters_csi_notify_admin" {
   role       = aws_iam_role.secrets_csi_notify_admin.name
 }
 
-
-
 #
 # NOTIFY - API
 #
