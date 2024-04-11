@@ -55,7 +55,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
-  count             = var.cloudwatch_enabled ? 1 : 1
+  count             = var.cloudwatch_enabled ? 1 : 0
   name              = "route53/${var.region}/${var.account_id}/DNS/logs"
   retention_in_days = var.log_retention_period_days
 
