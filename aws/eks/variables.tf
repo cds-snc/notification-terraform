@@ -104,11 +104,6 @@ variable "sign_in_waf_rate_limit" {
   type        = number
 }
 
-variable "waf_secret" {
-  description = "secret the admin sends in the header so the WAF does not rate limit"
-  type        = string
-  sensitive   = true
-}
 
 locals {
   eks_application_log_group = "/aws/containerinsights/${var.eks_cluster_name}/application"
@@ -272,108 +267,6 @@ variable "internal_dns_name" {
   description = "The fqdn for the internal DNS"
 }
 
-variable "pr_bot_private_key" {
-  type        = string
-  description = "The Private Key for PR Bot, used by Github ARC"
-  sensitive   = true
-}
-
-variable "pr_bot_app_id" {
-  type        = string
-  description = "The AppID for PR Bot, used by Github ARC"
-  sensitive   = true
-}
-
-variable "pr_bot_installation_id" {
-  type        = string
-  description = "The installation ID for PR Bot, used by Github ARC"
-  sensitive   = true
-}
-
-variable "admin_client_secret" {
-  type        = string
-  description = "The client secret used for the admin page"
-  sensitive   = true
-}
-
-variable "allow_html_service_ids" {
-  type        = string
-  description = "The service IDS that are allowed to use HTML in their emails"
-  sensitive   = true
-}
-
-variable "bulk_send_test_service_id" {
-  type        = string
-  description = "The service ID for bulk send testing"
-  sensitive   = true
-}
-
-variable "dangerous_salt" {
-  type        = string
-  description = "The GC Notify Dangerous Salt"
-  sensitive   = true
-}
-
-variable "hc_en_service_id" {
-  type        = string
-  description = "English Service ID for Health Canada"
-  sensitive   = true
-}
-
-variable "hc_fr_service_id" {
-  type        = string
-  description = "French Service ID for Health Canada"
-  sensitive   = true
-}
-
-variable "mixpanel_project_token" {
-  type        = string
-  description = "Project token for mixpanel"
-  sensitive   = true
-}
-
-variable "sensitive_services" {
-  type        = string
-  description = "The list of sensitive services for audit"
-  sensitive   = true
-}
-
-variable "secret_key" {
-  type        = string
-  description = "notify Admin secret key"
-  sensitive   = true
-}
-
-variable "sentry_url" {
-  type        = string
-  description = "The URL for sentry"
-  sensitive   = true
-}
-
-variable "new_relic_license_key" {
-  type        = string
-  description = "License key for New Relic"
-  sensitive   = true
-}
-
-variable "gc_articles_api_auth_username" {
-  type        = string
-  description = "Username for the GC Articles API"
-  sensitive   = true
-}
-variable "gc_articles_api_auth_password" {
-  type        = string
-  description = "Password for the GC Articles API"
-  sensitive   = true
-}
-variable "crm_github_personal_access_token" {
-  type        = string
-  description = "GitHub PAT for CRM"
-  sensitive   = true
-}
-
-variable "ff_abtest_service_id" {
-  type        = string
-  description = "Service ID for the A/B testing service"
-  sensitive   = true
+variable "secrets" {
+  type = map(string)
 }
