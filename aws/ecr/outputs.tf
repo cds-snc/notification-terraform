@@ -22,6 +22,14 @@ output "sns_to_sqs_sms_callbacks_ecr_repository_url" {
   description = "Repository URL of sns_to_sqs_sms_callbacks ECR"
   value       = aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url
 }
+output "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
+  description = "arn of pinpoint_to_sqs_sms_callbacks ECR"
+  value       = aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.arn
+}
+output "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
+  description = "Repository URL of pinpoint_to_sqs_sms_callbacks ECR"
+  value       = aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url
+}
 output "heartbeat_ecr_arn" {
   description = "arn of heartbeat ECR"
   value       = aws_ecr_repository.heartbeat.arn
