@@ -46,8 +46,13 @@ resource "aws_iam_role_policy" "github_docker_push" {
               "ecr:BatchCheckLayerAvailability",
               "ecr:PutImage"
           ],
-          "Resource": "*"
-      }
+          "Resource": "arn:aws:ecr:${var.region}:${var.account_id}:repository/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ecr:GetAuthorizationToken",
+            "Resource": "*"
+        }
   ]
 }
 POLICY
