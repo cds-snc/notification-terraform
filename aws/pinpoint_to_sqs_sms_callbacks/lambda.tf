@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "pinpoint_to_sqs_sms_callbacks" {
 }
 
 ##
-# CloudWatch log groups for SNS deliveries in ca-central-1
+# CloudWatch log groups for Pinpoint deliveries in ca-central-1
 ##
 resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_successes" {
   count         = var.cloudwatch_enabled ? 1 : 0
@@ -60,43 +60,6 @@ resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_failures_
   count           = var.cloudwatch_enabled ? 1 : 0
   name            = "pinpoint_deliveries_failures_ca_central"
   log_group_name  = var.pinpoint_deliveries_failures_ca_central_name
-  filter_pattern  = ""
-  destination_arn = module.pinpoint_to_sqs_sms_callbacks.function_arn
-}
-
-##
-# CloudWatch log groups for SNS deliveries in us-west-2
-##
-resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_successes_us_west_2" {
-  count         = var.cloudwatch_enabled ? 1 : 0
-  action        = "lambda:InvokeFunction"
-  function_name = module.pinpoint_to_sqs_sms_callbacks.function_name
-  principal     = "logs.us-west-2.amazonaws.com"
-  source_arn    = "${var.pinpoint_deliveries_us_west_2_arn}:*"
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_us_west_2_to_lambda" {
-  count           = var.cloudwatch_enabled ? 1 : 0
-  provider        = aws.us-west-2
-  name            = "pinpoint_deliveries_us_west_2_to_lambda"
-  log_group_name  = var.pinpoint_deliveries_us_west_2_name
-  filter_pattern  = ""
-  destination_arn = module.pinpoint_to_sqs_sms_callbacks.function_arn
-}
-
-resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_failures_us_west_2" {
-  count         = var.cloudwatch_enabled ? 1 : 0
-  action        = "lambda:InvokeFunction"
-  function_name = module.pinpoint_to_sqs_sms_callbacks.function_name
-  principal     = "logs.us-west-2.amazonaws.com"
-  source_arn    = "${var.pinpoint_deliveries_failures_us_west_2_arn}:*"
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_failures_us_west_2_to_lambda" {
-  count           = var.cloudwatch_enabled ? 1 : 0
-  provider        = aws.us-west-2
-  name            = "pinpoint_deliveries_failures_us_west_2_to_lambda"
-  log_group_name  = var.pinpoint_deliveries_failures_us_west_2_name
   filter_pattern  = ""
   destination_arn = module.pinpoint_to_sqs_sms_callbacks.function_arn
 }

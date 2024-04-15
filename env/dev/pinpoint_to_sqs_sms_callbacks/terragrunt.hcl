@@ -22,6 +22,12 @@ dependency "common" {
 
 dependency "ecr" {
   config_path = "../ecr"
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = ""
+    pinpoint_to_sqs_sms_callbacks_ecr_arn            = ""
+  }
 }
 
 include {
