@@ -22,12 +22,23 @@ fi
 inbucket=$1
 outbucket=$2
 
-objects=$(aws s3api list-objects --bucket $inbucket --output json | jq -r '.Contents[].Key')
+echo "Processing files in $inbucket"
+objects=$(aws s3api list-objects \
+            --bucket $inbucket \
+            --output json        \
+            --query "Contents[].Key")
 
 for file in $(echo $objects | jq -r '.[]'); do
-    aws s3 cp s3://$inbucket/$file ${file}_in;
-    cut -f -2,4- -d, ${file}_in > $file;
-    aws s3 cp $file s3://$outbucket/$file;
-    rm $file;
+    if [[ $file == *".gz" ]]; then
+        echo "Processing $file"
+        aws s3 cp s3://$inbucket/$file ${file}
+        gunzip ${file};
+        csvFile=${file%.gz}
+        cut -f -2,4- -d, $csvFile > ${csvFile}_out
+        mv ${csvFile}_out $csvFile
+        gzip $csvFile
+        aws s3 cp $file s3://$outbucket/$file
+        rm $file
+    fi 
 done  
 
