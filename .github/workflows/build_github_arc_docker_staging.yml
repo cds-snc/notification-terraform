@@ -24,19 +24,12 @@ jobs:
     name: Build and push
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-    - name: Install AWS CLI
-      run: |
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip -q awscliv2.zip
-        sudo ./aws/install --update
-        aws --version
-
+    
     - name: Configure credentials to CDS public ECR using OIDC
       uses: aws-actions/configure-aws-credentials@master
       with:
         role-to-assume: arn:aws:iam::${{ secrets.STAGING_ACCOUNT_ID }}:role/github_docker_push
         role-session-name: NotifyTerraformGitHubActions
-        aws-region: "us-east-1"
   
     - name: Login to Amazon ECR
       id: login-ecr
