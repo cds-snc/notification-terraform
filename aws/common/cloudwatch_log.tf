@@ -44,7 +44,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
   }
 }
 
-# TODO fix the count line after it's working. Right now we want these in dev for testing
+# We probably always want these log groups as well as the sns ones... Pinpoint / SNS will write to them regardless -\_(ツ)_/-
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
   count             = var.cloudwatch_enabled ? 1 : 1
   name              = "sns/${var.region}/${var.account_id}/PinPointDirectPublishToPhoneNumber"
@@ -54,7 +54,6 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
   }
 }
 
-# TODO fix the count line after it's working. Right now we want these in dev for testing
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
   count             = var.cloudwatch_enabled ? 1 : 1
   name              = "sns/${var.region}/${var.account_id}/PinPointDirectPublishToPhoneNumber/Failure"

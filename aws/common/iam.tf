@@ -242,7 +242,7 @@ data "aws_iam_policy_document" "pinpoint_logs" {
     ]
     resources = [
       "${aws_cloudwatch_log_group.pinpoint_deliveries[0].arn}:*",
-      "${aws_cloudwatch_log_group.pinpoint_failures[0].arn}:*"
+      "${aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].arn}:*"
     ]
   }
 }
