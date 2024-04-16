@@ -30,7 +30,7 @@ jobs:
       with:
         role-to-assume: arn:aws:iam::${{ secrets.STAGING_ACCOUNT_ID }}:role/github_docker_push
         role-session-name: NotifyTerraformGitHubActions
-        region: us-east-1
+        aws-region: us-east-1
   
     - name: Login to Amazon ECR
       id: login-ecr
