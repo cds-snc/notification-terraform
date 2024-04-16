@@ -169,8 +169,9 @@ resource "aws_rds_cluster" "notification-canada-ca" {
 
 # Holds the exported postgresql logs
 resource "aws_cloudwatch_log_group" "logs_exports" {
-  count             = var.env != "production" ? 1 : 0
-  name              = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
+  count = var.env != "production" ? 1 : 0
+  name  = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
+  #checkov:skip=CKV_AWS_338:The short retention is required to respect Notify's privacy policy
   retention_in_days = 3
 
   tags = {
