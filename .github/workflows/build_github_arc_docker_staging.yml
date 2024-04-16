@@ -66,4 +66,4 @@ jobs:
       if: ${{ failure() }}
       run: |
         json="{'text':'<!here> Docker Build for Github ARC is failing in <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|notification-terraform> !'}"
-        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.SLACK_WEBHOOK }}
+        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.GHA_FAIL_SLACK_WEBHOOK }}
