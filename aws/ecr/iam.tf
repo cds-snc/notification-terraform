@@ -7,7 +7,7 @@ module "oidc" {
     {
       name : "github_docker_push"
       repo_name : "notification-terraform"
-      claim : "ref:refs/heads/main"
+      claim : "ref:refs/heads/*"
     }
   ]
 }
@@ -34,7 +34,8 @@ resource "aws_iam_role_policy" "github_docker_push" {
               "ecr:UploadLayerPart",
               "ecr:InitiateLayerUpload",
               "ecr:BatchCheckLayerAvailability",
-              "ecr:PutImage"
+              "ecr:PutImage",
+              "ecr:BatchGetImage"
           ],
           "Resource": "arn:aws:ecr:${var.region}:${var.account_id}:repository/*"
         },
