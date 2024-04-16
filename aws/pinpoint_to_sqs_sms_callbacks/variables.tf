@@ -14,20 +14,9 @@ variable "sns_alert_ok_arn" {
   type = string
 }
 
-variable "pinpoint_deliveries_ca_central_arn" {
-  type = string
-}
-
-variable "pinpoint_deliveries_ca_central_name" {
-  type = string
-}
-
-variable "pinpoint_deliveries_failures_ca_central_arn" {
-  type = string
-}
-
-variable "pinpoint_deliveries_failures_ca_central_name" {
-  type = string
+variable "sqs_deliver_receipts_queue_arn" {
+  type        = string
+  description = "The arn of the SQS queue for receipts processing celery tasks"
 }
 
 variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
@@ -36,11 +25,14 @@ variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
   default     = "bootstrap"
 }
 
-variable "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
-  type        = string
-  description = "Inherited from ecr dependency"
+variable "force_delete_ecr" {
+  description = "Boolean value to decide whether or not to force delete a non-empty ECR"
+  type        = bool
+  default     = false
 }
-variable "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
-  type        = string
-  description = "Inherited from ecr dependency"
+
+variable "bootstrap" {
+  description = "Boolean value to decide whether or not to build images"
+  type        = bool
+  default     = false
 }

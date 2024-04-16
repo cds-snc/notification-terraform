@@ -143,22 +143,6 @@ output "sns_deliveries_failures_us_west_2_name" {
   value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].name : ""
 }
 
-output "pinpoint_deliveries_ca_central_arn" {
-  value = aws_cloudwatch_log_group.pinpoint_deliveries.arn
-}
-
-output "pinpoint_deliveries_ca_central_name" {
-  value = aws_cloudwatch_log_group.pinpoint_deliveries.name
-}
-
-output "pinpoint_deliveries_failures_ca_central_arn" {
-  value = aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn
-}
-
-output "pinpoint_deliveries_failures_ca_central_name" {
-  value = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
-}
-
 output "sqs_notify_internal_tasks_arn" {
   value = aws_sqs_queue.notify_internal_tasks_queue.arn
 }
@@ -198,6 +182,10 @@ output "sqs_send_email_medium_queue_name" {
 
 output "sqs_send_email_high_queue_name" {
   value = var.sqs_send_email_high_queue_name
+}
+
+output "sqs_deliver_receipts_queue_arn" {
+  value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
 }
 
 output "client_vpn_cloudwatch_log_group_name" {
