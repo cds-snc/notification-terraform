@@ -44,9 +44,8 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
   }
 }
 
-# We probably always want these log groups as well as the sns ones... Pinpoint / SNS will write to them regardless -\_(ツ)_/-
+# Pinpoint will log delivery receipts here, so it needs to be created
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
-  count             = var.cloudwatch_enabled ? 1 : 1
   name              = "sns/${var.region}/${var.account_id}/PinPointDirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -54,8 +53,8 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
   }
 }
 
+# Pinpoint will log delivery receipts here, so it needs to be created
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
-  count             = var.cloudwatch_enabled ? 1 : 1
   name              = "sns/${var.region}/${var.account_id}/PinPointDirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {

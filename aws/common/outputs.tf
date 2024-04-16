@@ -144,19 +144,19 @@ output "sns_deliveries_failures_us_west_2_name" {
 }
 
 output "pinpoint_deliveries_ca_central_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.pinpoint_deliveries[0].arn : ""
+  value = aws_cloudwatch_log_group.pinpoint_deliveries.arn
 }
 
 output "pinpoint_deliveries_ca_central_name" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.pinpoint_deliveries[0].name : ""
+  value = aws_cloudwatch_log_group.pinpoint_deliveries.name
 }
 
 output "pinpoint_deliveries_failures_ca_central_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].arn : ""
+  value = aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn
 }
 
 output "pinpoint_deliveries_failures_ca_central_name" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name : ""
+  value = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
 }
 
 output "sqs_notify_internal_tasks_arn" {
