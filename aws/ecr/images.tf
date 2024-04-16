@@ -192,9 +192,8 @@ resource "null_resource" "build_sns_to_sqs_sms_callbacks_docker_image" {
     null_resource.lambda_repo_clone
   ]
 
-  # TODO: are we building the wrong image here?
   provisioner "local-exec" {
-    command = "docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile /var/tmp/notification-lambdas"
+    command = "docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/snssmscallbacks/Dockerfile /var/tmp/notification-lambdas"
   }
 
 }
