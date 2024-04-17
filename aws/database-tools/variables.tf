@@ -84,3 +84,9 @@ variable "sns_alert_warning_arn" {
   description = "value of the sns alert warning arn"
   type        = string
 }
+
+variable "bootstrap" {  
+  description = "Whether to bootstrap the lambda functions"
+  type        = bool
+  default     = false    
+}

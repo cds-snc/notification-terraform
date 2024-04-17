@@ -1,5 +1,9 @@
 terraform {
   source = "git::https://github.com/cds-snc/notification-terraform//aws/database-tools?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+  after_hook "cleanup-lambdas" {
+    commands     = ["apply"]
+    execute      = ["rm", "-rfd", "/var/tmp/notification-lambdas"]
+    run_on_error = true
 }
 
 dependencies {

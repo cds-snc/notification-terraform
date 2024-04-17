@@ -54,4 +54,9 @@ inputs = {
 
 terraform {
   source = "../../../aws//database-tools"
+  after_hook "cleanup-lambdas" {
+    commands     = ["apply"]
+    execute      = ["rm", "-rfd", "/var/tmp/notification-lambdas"]
+    run_on_error = true
+  }
 }
