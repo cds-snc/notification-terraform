@@ -85,8 +85,8 @@ variable "sns_alert_warning_arn" {
   type        = string
 }
 
-variable "bootstrap" {  
+variable "bootstrap" {
   description = "Whether to bootstrap the lambda functions"
   type        = bool
-  default     = false    
+  default     = false
 }
