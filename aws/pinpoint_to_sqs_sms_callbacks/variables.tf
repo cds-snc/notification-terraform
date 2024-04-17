@@ -25,6 +25,16 @@ variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
   default     = "bootstrap"
 }
 
+variable "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
+  type        = string
+  description = "The URL of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"
+}
+
+variable "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
+  type        = string
+  description = "The ARN of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"
+}
+
 variable "force_delete_ecr" {
   description = "Boolean value to decide whether or not to force delete a non-empty ECR"
   type        = bool

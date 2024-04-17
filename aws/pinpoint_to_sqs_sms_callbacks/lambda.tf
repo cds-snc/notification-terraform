@@ -2,9 +2,9 @@ module "pinpoint_to_sqs_sms_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.3.3"
   name                       = "pinpoint_to_sqs_sms_callbacks"
   billing_tag_value          = var.billing_tag_value
-  ecr_arn                    = aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.arn
+  ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
