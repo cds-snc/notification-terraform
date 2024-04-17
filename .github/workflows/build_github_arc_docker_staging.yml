@@ -48,9 +48,13 @@ jobs:
         -t $DOCKER_SLUG:latest \
         -f aws/ecr/github-runner/Dockerfile . 
 
-    - name: Publish
+    - name: Push
       run: |
         docker push $DOCKER_SLUG:latest && docker push $DOCKER_SLUG:$INFRASTRUCTURE_VERSION
+
+    - name: Deploy
+      run: |
+        ./scripts/callManifestsRollout.sh -s app=arc,tier=scaleset -t tag=$INFRASTRUCTURE_VERSION -n github-arc-ss 
 
 # TODO: Helmfile rollout
 
