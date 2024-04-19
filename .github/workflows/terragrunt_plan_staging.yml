@@ -49,12 +49,9 @@ jobs:
 
       - name: Terragrunt plan common
         run: |
-          pwd
           pushd env/staging/common
-          pwd
-          ls -al
-          terraform init
-          terraform validate
-          terraform fmt --check
-          terraform plan -var-file ../staging.tfvars -out=plan.tfplan
-          terraform show -json plan.tfplan 
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file ../../staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
