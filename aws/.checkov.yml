@@ -11,6 +11,7 @@ skip-check:
   - CKV_AWS_144 # S3 cross-region replication no required
   - CKV_AWS_145 # S3 default service key encryption is acceptable
   - CKV_AWS_149 # SecretsManager default service key encryption is acceptable
+  - CKV_AWS_158 # CloudWatch log group default service key encryption is acceptable
   - CKV_AWS_162 # RDS IAM authentication will not be used
   - CKV_AWS_173 # Lambda env var default service key encryption is acceptable
   - CKV2_AWS_5  # Security groups are attached in seperate Terragrunt modules

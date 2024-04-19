@@ -7,7 +7,7 @@ on:
 env:
   AWS_DEFAULT_REGION: ca-central-1
   EKS_CLUSTER_NAME: notification-canada-ca-staging-eks-cluster
-  EKS_CLUSTER_NODE_GROUP_NAME: notification-canada-ca-staging-eks-primary-node-group
+  EKS_CLUSTER_NODE_GROUP_NAME: notification-canada-ca-staging-eks-primary-node-group-k8s
 
 jobs:
   check-eks-ami-update:
