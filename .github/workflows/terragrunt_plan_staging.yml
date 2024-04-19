@@ -37,7 +37,7 @@ jobs:
 
       - name: One Password Fetch
         run: |
-          ./scripts/pullEnvFile.sh aws/staging/staging.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Staging"/notesPlain > /var/tmp/staging.tfvars
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
@@ -47,11 +47,290 @@ jobs:
             TERRAGRUNT_VERSION: 0.44.4
             TF_SUMMARIZE_VERSION: 0.2.3           
 
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        id: filter
+        with:
+          filters: |
+            common:
+              - '.github/workflows/terragrunt-plan-staging.yml'
+              - 'aws/common/**'
+              - 'env/staging/common/**'
+              - 'env/terragrunt.hcl'
+              - 'env/staging/env_vars.hcl'
+            dns:
+              - 'aws/dns/**'
+              - 'env/staging/dns/**'
+            ses_validation_dns_entries:
+              - 'aws/ses_validation_dns_entries/**'
+              - 'env/staging/ses_validation_dns_entries/**'
+            ecr:
+              - 'aws/ecr/**'
+              - 'env/staging/ecr/**'
+            eks:
+              - 'aws/eks/**'
+              - 'env/staging/eks/**'
+            elasticache:
+              - 'aws/elasticache/**'
+              - 'env/staging/elasticache/**'
+            rds:
+              - 'aws/rds/**'
+              - 'env/staging/rds/**'
+            cloudfront:
+              - 'aws/cloudfront/**'
+              - 'env/staging/cloudfront/**'
+            lambda-api:
+              - 'aws/lambda-api/**'
+              - 'env/staging/lambda-api/**'
+            lambda-admin-pr:
+              - 'aws/lambda-admin-pr/**'
+              - 'env/staging/lambda-admin-pr/**'              
+            performance-test:
+              - 'aws/performance-test/**'
+              - 'env/staging/performance-test/**'
+            heartbeat:
+              - 'aws/heartbeat/**'
+              - 'env/staging/heartbeat/**'
+            database-tools:
+              - 'aws/database-tools/**'
+              - 'env/staging/database-tools/**'
+            system_status:
+              - 'aws/system_status/**'
+              - 'env/staging/system_status/**'
+            system_status_static_site:
+              - 'aws/system_status_static_site/**'
+              - 'env/staging/system_status_static_site/**'
+            quicksight:
+              - 'aws/quicksight/**'
+              - 'env/staging/quicksight/**'
+            lambda-google-cidr:
+              - 'aws/lambda-google-cidr/**'
+              - 'env/staging/lambda-google-cidr/**'
+            ses_receiving_emails:
+              - 'aws/ses_receiving_emails/**'
+              - 'env/staging/ses_receiving_emails/**'
+            ses_to_sqs_email_callbacks:
+              - 'aws/ses_to_sqs_email_callbacks/**'
+              - 'env/staging/ses_to_sqs_email_callbacks/**'
+            sns_to_sqs_sms_callbacks:
+              - 'aws/sns_to_sqs_sms_callbacks/**'
+              - 'env/staging/sns_to_sqs_sms_callbacks/**'
+
       - name: Terragrunt plan common
+        if: ${{ steps.filter.outputs.common == 'true' }}
         run: |
           pushd env/staging/common
           terragrunt init
           terragrunt validate
           terragrunt fmt --check
-          terragrunt plan -var-file /home/runner/work/notification-terraform/notification-terraform/staging.tfvars -out=plan.tfplan
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
           terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan ECR
+        if: ${{ steps.filter.outputs.ecr == 'true' }}
+        run: |
+          pushd env/staging/ecr
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan ses_receiving_emails
+        if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' }}
+        run: |
+          pushd env/staging/ses_receiving_emails
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan dns
+        if: ${{ steps.filter.outputs.dns == 'true' }}
+        run: |
+          pushd env/staging/dns
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan ses_validation_dns_entries
+        if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' }}
+        run: |
+          pushd env/staging/ses_validation_dns_entries
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan eks
+        if: ${{ steps.filter.outputs.eks == 'true' }}
+        run: |
+          pushd env/staging/eks
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan elasticache
+        if: ${{ steps.filter.outputs.elasticache == 'true' }}
+        run: |
+          pushd env/staging/elasticache
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan rds
+        if: ${{ steps.filter.outputs.rds == 'true' }}
+        run: |
+          pushd env/staging/rds
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan cloudfront
+        if: ${{ steps.filter.outputs.cloudfront == 'true' }}
+        run: |
+          pushd env/staging/cloudfront
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan lambda-api
+        if: ${{ steps.filter.outputs.lambda-api == 'true' }}
+        run: |
+          pushd env/staging/lambda-api
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan lambda-admin-pr
+        if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' }}
+        run: |
+          pushd env/staging/lambda-admin-pr
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan performance-test
+        if: ${{ steps.filter.outputs.performance-test == 'true' }}
+        run: |
+          pushd env/staging/performance-test
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd          
+
+      - name: Terragrunt plan heartbeat
+        if: ${{ steps.filter.outputs.heartbeat == 'true' }}
+        run: |
+          pushd env/staging/heartbeat
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan database-tools
+        if: ${{ steps.filter.outputs.database-tools == 'true' }}
+        run: |
+          pushd env/staging/database-tools
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan quicksight
+        if: ${{ steps.filter.outputs.quicksight == 'true' }}
+        run: |
+          pushd env/staging/quicksight
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd          
+
+      - name: Terragrunt plan lambda-google-cidr
+        if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' }}
+        run: |
+          pushd env/staging/lambda-google-cidr
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan ses_to_sqs_email_callbacks
+        if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
+        run: |
+          pushd env/staging/ses_to_sqs_email_callbacks
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan sns_to_sqs_sms_callbacks
+        if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
+        run: |
+          pushd env/staging/sns_to_sqs_sms_callbacks
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan system_status
+        if: ${{ steps.filter.outputs.system_status == 'true' }}
+        run: |
+          pushd env/staging/system_status
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
+
+      - name: Terragrunt plan system_status_static_site
+        if: ${{ steps.filter.outputs.system_status_static_site == 'true' }}
+        run: |
+          pushd env/staging/system_status_static_site
+          terragrunt init
+          terragrunt validate
+          terragrunt fmt --check
+          terragrunt plan -var-file /var/tmp/staging.tfvars -out=plan.tfplan
+          terragrunt show -json plan.tfplan 
+          popd
