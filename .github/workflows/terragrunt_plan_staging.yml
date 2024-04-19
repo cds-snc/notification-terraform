@@ -1,6 +1,7 @@
 name: "Terragrunt plan STAGING"
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - ".env"
