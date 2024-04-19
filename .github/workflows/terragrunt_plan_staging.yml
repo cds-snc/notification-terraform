@@ -116,7 +116,7 @@ jobs:
               - 'env/staging/sns_to_sqs_sms_callbacks/**'
 
       - name: Terragrunt plan common
-        if: ${{ steps.filter.outputs.common == 'true' }}
+        # if: ${{ steps.filter.outputs.common == 'true' }}
         run: |
           pushd env/staging/common
           terragrunt init
@@ -127,7 +127,7 @@ jobs:
           popd
 
       - name: Terragrunt plan ECR
-        if: ${{ steps.filter.outputs.ecr == 'true' }}
+        # if: ${{ steps.filter.outputs.ecr == 'true' }}
         run: |
           pushd env/staging/ecr
           terragrunt init
@@ -138,7 +138,7 @@ jobs:
           popd
 
       - name: Terragrunt plan ses_receiving_emails
-        if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' }}
+        # if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' }}
         run: |
           pushd env/staging/ses_receiving_emails
           terragrunt init
@@ -149,7 +149,7 @@ jobs:
           popd
 
       - name: Terragrunt plan dns
-        if: ${{ steps.filter.outputs.dns == 'true' }}
+        # if: ${{ steps.filter.outputs.dns == 'true' }}
         run: |
           pushd env/staging/dns
           terragrunt init
@@ -160,7 +160,7 @@ jobs:
           popd
 
       - name: Terragrunt plan ses_validation_dns_entries
-        if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' }}
+        # if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' }}
         run: |
           pushd env/staging/ses_validation_dns_entries
           terragrunt init
@@ -171,7 +171,7 @@ jobs:
           popd
 
       - name: Terragrunt plan eks
-        if: ${{ steps.filter.outputs.eks == 'true' }}
+        # if: ${{ steps.filter.outputs.eks == 'true' }}
         run: |
           pushd env/staging/eks
           terragrunt init
@@ -182,7 +182,7 @@ jobs:
           popd
 
       - name: Terragrunt plan elasticache
-        if: ${{ steps.filter.outputs.elasticache == 'true' }}
+        # if: ${{ steps.filter.outputs.elasticache == 'true' }}
         run: |
           pushd env/staging/elasticache
           terragrunt init
@@ -193,7 +193,7 @@ jobs:
           popd
 
       - name: Terragrunt plan rds
-        if: ${{ steps.filter.outputs.rds == 'true' }}
+        # if: ${{ steps.filter.outputs.rds == 'true' }}
         run: |
           pushd env/staging/rds
           terragrunt init
@@ -204,7 +204,7 @@ jobs:
           popd
 
       - name: Terragrunt plan cloudfront
-        if: ${{ steps.filter.outputs.cloudfront == 'true' }}
+        # if: ${{ steps.filter.outputs.cloudfront == 'true' }}
         run: |
           pushd env/staging/cloudfront
           terragrunt init
@@ -215,7 +215,7 @@ jobs:
           popd
 
       - name: Terragrunt plan lambda-api
-        if: ${{ steps.filter.outputs.lambda-api == 'true' }}
+        # if: ${{ steps.filter.outputs.lambda-api == 'true' }}
         run: |
           pushd env/staging/lambda-api
           terragrunt init
@@ -226,7 +226,7 @@ jobs:
           popd
 
       - name: Terragrunt plan lambda-admin-pr
-        if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' }}
+        # if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' }}
         run: |
           pushd env/staging/lambda-admin-pr
           terragrunt init
@@ -237,7 +237,7 @@ jobs:
           popd
 
       - name: Terragrunt plan performance-test
-        if: ${{ steps.filter.outputs.performance-test == 'true' }}
+        # if: ${{ steps.filter.outputs.performance-test == 'true' }}
         run: |
           pushd env/staging/performance-test
           terragrunt init
@@ -248,7 +248,7 @@ jobs:
           popd          
 
       - name: Terragrunt plan heartbeat
-        if: ${{ steps.filter.outputs.heartbeat == 'true' }}
+        # if: ${{ steps.filter.outputs.heartbeat == 'true' }}
         run: |
           pushd env/staging/heartbeat
           terragrunt init
@@ -259,7 +259,7 @@ jobs:
           popd
 
       - name: Terragrunt plan database-tools
-        if: ${{ steps.filter.outputs.database-tools == 'true' }}
+        # if: ${{ steps.filter.outputs.database-tools == 'true' }}
         run: |
           pushd env/staging/database-tools
           terragrunt init
@@ -270,7 +270,7 @@ jobs:
           popd
 
       - name: Terragrunt plan quicksight
-        if: ${{ steps.filter.outputs.quicksight == 'true' }}
+        # if: ${{ steps.filter.outputs.quicksight == 'true' }}
         run: |
           pushd env/staging/quicksight
           terragrunt init
@@ -281,7 +281,7 @@ jobs:
           popd          
 
       - name: Terragrunt plan lambda-google-cidr
-        if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' }}
+        # if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' }}
         run: |
           pushd env/staging/lambda-google-cidr
           terragrunt init
@@ -292,7 +292,7 @@ jobs:
           popd
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
+        # if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
         run: |
           pushd env/staging/ses_to_sqs_email_callbacks
           terragrunt init
@@ -303,7 +303,7 @@ jobs:
           popd
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
+        # if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
         run: |
           pushd env/staging/sns_to_sqs_sms_callbacks
           terragrunt init
@@ -314,7 +314,7 @@ jobs:
           popd
 
       - name: Terragrunt plan system_status
-        if: ${{ steps.filter.outputs.system_status == 'true' }}
+        # if: ${{ steps.filter.outputs.system_status == 'true' }}
         run: |
           pushd env/staging/system_status
           terragrunt init
@@ -325,7 +325,7 @@ jobs:
           popd
 
       - name: Terragrunt plan system_status_static_site
-        if: ${{ steps.filter.outputs.system_status_static_site == 'true' }}
+        # if: ${{ steps.filter.outputs.system_status_static_site == 'true' }}
         run: |
           pushd env/staging/system_status_static_site
           terragrunt init
