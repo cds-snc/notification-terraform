@@ -37,7 +37,7 @@ jobs:
 
       - name: One Password Fetch
         run: |
-          ./scripts/pullEnvFile.sh
+          ./scripts/pullEnvFile.sh aws/staging/staging.tfvars
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
@@ -48,12 +48,10 @@ jobs:
             TF_SUMMARIZE_VERSION: 0.2.3           
 
       - name: Terragrunt plan common
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/staging/common"
-          comment-delete: "true"
-          comment-title: "Staging: common"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
-
-  
+        run: |
+          pushd env/staging/common
+          terraform init
+          terraform validate
+          terraform fmt --check
+          terraform plan -var-file ../staging.tfvars -out=plan.tfplan
+          terraform show -json plan.tfplan 
