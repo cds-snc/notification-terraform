@@ -18,45 +18,10 @@ env:
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: 0.35.13
-  TF_VAR_base_domain: ${{secrets.STAGING_BASE_DOMAIN}}
-  TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
-  TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
-  TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_sms_number: ${{ secrets.STAGING_HEARTBEAT_SMS_NUMBER }}
-  TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
-  TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
-  TF_VAR_quicksight_db_user_password: ${{ secrets.STAGING_QUICKSIGHT_DB_USER_PASSWORD }}
-  TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
-  TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
-  TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
-  TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
-  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID_STAGING }}
-  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET_STAGING }}
-  TF_VAR_sentinel_customer_id: ${{ secrets.SENTINEL_CUSTOMER_ID }}
-  TF_VAR_sentinel_shared_key: ${{ secrets.SENTINEL_SHARED_KEY }}
-  TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
-  TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
-  TF_VAR_slack_channel_general_topic: "notification-staging-ops"
-  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
-  TF_VAR_system_status_admin_url: "https://staging.notification.cdssandbox.xyz"
-  TF_VAR_system_status_api_url: "https://api.staging.notification.cdssandbox.xyz"
-  TF_VAR_system_status_bucket_name: "notification-canada-ca-staging-system-status"
-  TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
-  TF_VAR_waf_secret: ${{secrets.STAGING_WAF_SECRET}}
+
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
-  TF_VAR_perf_test_phone_number: ${{ secrets.PERF_TEST_PHONE_NUMBER }}
-  TF_VAR_perf_test_email: ${{ secrets.PERF_TEST_EMAIL }}
-  TF_VAR_perf_test_domain: ${{ secrets.PERF_TEST_DOMAIN }}
-  TF_VAR_perf_test_auth_header: ${{ secrets.PERF_TEST_AUTH_HEADER }}
-  TF_VAR_client_vpn_access_group_id: ${{ secrets.STAGING_CLIENT_VPN_ACCESS_GROUP_ID }}
-  TF_VAR_client_vpn_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SAML_METADATA }}
-  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
-  TF_VAR_pr_bot_installation_id: ${{ secrets.NOTIFY_PR_BOT_INSTALLATION_ID_MANIFESTS }}
-  TF_VAR_pr_bot_app_id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
-  TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
-  TF_VAR_budget_sre_bot_webhook: ${{ secrets.STAGING_BUDGET_SRE_BOT_WEBHOOK }}
 
 jobs:
   terragrunt-plan-staging:

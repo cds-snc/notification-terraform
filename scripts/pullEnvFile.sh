@@ -3,6 +3,8 @@
 #   Used by GitHub Actions To Pull the Environment File from 1Password                            #  
 ###################################################################################################
 
+TARGET_FOLDER=$1
+
 echo "reading 1Password for TFVars - Staging"
-op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Staging"/notesPlain > .env
+op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Staging"/notesPlain > $TARGET_FOLDER/.env
 echo "done."
