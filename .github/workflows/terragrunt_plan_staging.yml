@@ -49,7 +49,9 @@ jobs:
 
       - name: Terragrunt plan common
         run: |
+          pwd
           pushd env/staging/common
+          pwd
           terraform init
           terraform validate
           terraform fmt --check
