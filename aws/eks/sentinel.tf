@@ -2,6 +2,10 @@ locals {
   application_log_group_arn = "arn:aws:logs:${var.region}:${var.account_id}:log-group:${local.eks_application_log_group}"
   client_vpn_log_group_arn  = "arn:aws:logs:${var.region}:${var.account_id}:log-group:${module.vpn.client_vpn_cloudwatch_log_group_name}"
   blazer_log_group_arn      = "arn:aws:logs:${var.region}:${var.account_id}:log-group:blazer"
+  postgresql_log_group_arn  = "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
+
+  postgres_dangerous_queries       = ["ALTER", "CREATE", "DELETE", "DROP", "GRANT", "REVOKE", "TRUNCATE"]
+  postgres_dangerous_queries_lower = formatlist(lower("%s"), local.postgres_dangerous_queries)
 }
 
 # The sentinel_forwarder module fails to Terraform apply if the layer_arn being used is not the most recently published layer version
@@ -21,7 +25,8 @@ module "sentinel_forwarder" {
   cloudwatch_log_arns = [
     local.application_log_group_arn,
     local.blazer_log_group_arn,
-    local.client_vpn_log_group_arn
+    local.client_vpn_log_group_arn,
+    local.postgresql_log_group_arn
   ]
 }
 
@@ -49,6 +54,15 @@ resource "aws_cloudwatch_log_subscription_filter" "client_vpn_connections" {
   name            = "Client VPN connections"
   log_group_name  = module.vpn.client_vpn_cloudwatch_log_group_name
   filter_pattern  = "[w1=\"*\"]" # All logs
+  destination_arn = module.sentinel_forwarder[0].lambda_arn
+  distribution    = "Random"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "postgresql_dangerous_queries" {
+  count           = var.enable_sentinel_forwarding ? 1 : 0
+  name            = "Postgresql dangerous queries"
+  log_group_name  = local.postgresql_log_group_arn
+  filter_pattern  = "[(w1=\"*${join("*\" || w1=\"*", concat(local.postgres_dangerous_queries, local.postgres_dangerous_queries_lower))}*\")]"
   destination_arn = module.sentinel_forwarder[0].lambda_arn
   distribution    = "Random"
 }
