@@ -52,6 +52,7 @@ jobs:
           pwd
           pushd env/staging/common
           pwd
+          ls -al
           terraform init
           terraform validate
           terraform fmt --check
