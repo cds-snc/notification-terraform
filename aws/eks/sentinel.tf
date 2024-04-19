@@ -5,7 +5,7 @@ locals {
   postgresql_log_group_arn  = "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
 
   postgres_dangerous_queries       = ["ALTER", "CREATE", "DELETE", "DROP", "GRANT", "REVOKE", "TRUNCATE"]
-  postgres_dangerous_queries_lower = formatlist(lower("%s"), local.postgres_dangerous_queries)
+  postgres_dangerous_queries_lower = [for sql in local.postgres_dangerous_queries : lower(sql)]
 }
 
 # The sentinel_forwarder module fails to Terraform apply if the layer_arn being used is not the most recently published layer version
