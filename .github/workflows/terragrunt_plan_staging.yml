@@ -53,5 +53,5 @@ jobs:
           terragrunt init
           terragrunt validate
           terragrunt fmt --check
-          terragrunt plan -var-file ../../staging.tfvars -out=plan.tfplan
+          terragrunt plan -var-file /home/runner/work/notification-terraform/notification-terraform/staging.tfvars -out=plan.tfplan
           terragrunt show -json plan.tfplan 
