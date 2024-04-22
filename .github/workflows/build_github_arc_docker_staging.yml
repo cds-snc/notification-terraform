@@ -30,6 +30,7 @@ jobs:
       with:
         role-to-assume: arn:aws:iam::${{ secrets.STAGING_ACCOUNT_ID }}:role/github_docker_push
         role-session-name: NotifyTerraformGitHubActions
+        aws-region: ca-central-1
   
     - name: Login to Amazon ECR
       id: login-ecr
@@ -47,9 +48,13 @@ jobs:
         -t $DOCKER_SLUG:latest \
         -f aws/ecr/github-runner/Dockerfile . 
 
-    - name: Publish
+    - name: Push
       run: |
         docker push $DOCKER_SLUG:latest && docker push $DOCKER_SLUG:$INFRASTRUCTURE_VERSION
+
+    - name: Deploy
+      run: |
+        ./scripts/callManifestsRollout.sh -s app=arc,tier=scaleset -t tag=$INFRASTRUCTURE_VERSION -n github-arc-ss 
 
 # TODO: Helmfile rollout
 
@@ -65,4 +70,4 @@ jobs:
       if: ${{ failure() }}
       run: |
         json="{'text':'<!here> Docker Build for Github ARC is failing in <https://github.com/cds-snc/notification-terraform/actions/runs/${GITHUB_RUN_ID}|notification-terraform> !'}"
-        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.SLACK_WEBHOOK }}
+        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.GHA_FAIL_SLACK_WEBHOOK }}
