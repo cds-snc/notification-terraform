@@ -14,7 +14,7 @@ dependency "common" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     kms_arn                          = ""
-    s3_bucket_sms_usage_id_sanitized = "sns_sms_usage_report_bucket"
+    s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
     vpc_id                           = ""
     vpc_private_subnets = [
       "",
