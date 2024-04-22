@@ -13,9 +13,9 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    kms_arn                = ""
-    s3_bucket_sms_usage_id = "sns_sms_usage_report_bucket"
-    vpc_id                 = ""
+    kms_arn                          = ""
+    s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
+    vpc_id                           = ""
     vpc_private_subnets = [
       "",
       "",
