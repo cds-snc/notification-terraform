@@ -26,6 +26,15 @@ resource "aws_secretsmanager_secret_version" "sns_to_sqs_sms_callbacks_repositor
   secret_string = aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url
 }
 
+resource "aws_secretsmanager_secret" "pinpoint_to_sqs_sms_callbacks_repository_url" {
+  name = "PINPOINT_TO_SQS_SMS_CALLBACKS_REPOSITORY_URL"
+}
+
+resource "aws_secretsmanager_secret_version" "pinpoint_to_sqs_sms_callbacks_repository_url" {
+  secret_id     = aws_secretsmanager_secret.pinpoint_to_sqs_sms_callbacks_repository_url.id
+  secret_string = aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url
+}
+
 resource "aws_secretsmanager_secret" "heartbeat_repository_url" {
   name = "HEARTBEAT_REPOSITORY_URL"
 }

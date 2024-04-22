@@ -184,6 +184,10 @@ output "sqs_send_email_high_queue_name" {
   value = var.sqs_send_email_high_queue_name
 }
 
+output "sqs_deliver_receipts_queue_arn" {
+  value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
+}
+
 output "client_vpn_cloudwatch_log_group_name" {
   value = module.vpn.client_vpn_cloudwatch_log_group_name
 }
