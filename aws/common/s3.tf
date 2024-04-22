@@ -538,3 +538,32 @@ resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_us_west_2_policy" {
 }
 POLICY
 }
+
+module "sns_sms_usage_report_sanitized_bucket" {
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs-sanitized"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+
+module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
+  providers = {
+    aws = aws.us-west-2
+  }
+
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs-sanitized"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
