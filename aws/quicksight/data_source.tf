@@ -35,7 +35,7 @@ resource "aws_quicksight_data_source" "rds" {
 }
 
 resource "aws_s3_object" "manifest_file" {
-  bucket = var.s3_bucket_sms_usage_id
+  bucket = var.s3_bucket_sms_usage_sanitized_id
   key    = "quicksight/s3-manifest-sms-usage-${var.env}.json"     # replace with desired object key
   source = "./s3-manifests/s3-manifest-sms-usage-${var.env}.json" # replace with path to local file
   acl    = "private"
@@ -50,7 +50,7 @@ resource "aws_quicksight_data_source" "s3_sms_usage" {
   parameters {
     s3 {
       manifest_file_location {
-        bucket = var.s3_bucket_sms_usage_id
+        bucket = var.s3_bucket_sms_usage_sanitized_id
         key    = aws_s3_object.manifest_file.key
       }
     }
