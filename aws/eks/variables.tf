@@ -303,6 +303,7 @@ variable "client_vpn_access_group_id" {
 variable "vpc_cidr_block" {
   type        = string
   description = "The CIDR block for the VPC"
+  default     = "10.0.0.0/16"
 }
 
 variable "subnet_cidr_blocks" {
