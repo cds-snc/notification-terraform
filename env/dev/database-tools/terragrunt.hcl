@@ -59,3 +59,4 @@ terraform {
     execute      = ["rm", "-rfd", "/var/tmp/notification-lambdas"]
     run_on_error = true
 }
+}
