@@ -294,8 +294,3 @@ variable "base_domain" {
   type        = string
   description = "The base domain for the environment"
 }
-
-variable "region" {
-  type        = string
-  description = "The AWS region"
-}
