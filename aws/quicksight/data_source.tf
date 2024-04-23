@@ -43,14 +43,14 @@ resource "aws_s3_object" "manifest_file" {
 }
 
 resource "aws_quicksight_data_source" "s3_sms_usage" {
-  depends_on     = [aws_iam_policy.quicksight-s3-usage, aws_iam_role_policy_attachment.s3-qs-attach, aws_quicksight_account_subscription.subscription, aws_s3_object.manifest_file]
+  depends_on     = [aws_iam_policy.quicksight-s3-usage, aws_iam_role_policy_attachment.s3-qs-attach, aws_quicksight_account_subscription.subscription]
   data_source_id = "s3-sms-usage"
   name           = "SMS Usage Data Source"
 
   parameters {
     s3 {
       manifest_file_location {
-        bucket = var.s3_bucket_sms_usage_sanitized_id
+        bucket = aws_s3_object.manifest_file.bucket
         key    = aws_s3_object.manifest_file.key
       }
     }
