@@ -236,16 +236,6 @@ variable "celery_queue_prefix" {
   description = "Celery queue prefix"
 }
 
-variable "client_vpn_cloudwatch_log_group_name" {
-  type        = string
-  description = "Client VPN CloudWatch log group name. This is used by the Sentinel forwarder to send logs to Sentinel."
-}
-
-variable "client_vpn_security_group_id" {
-  type        = string
-  description = "Client VPN security group ID"
-}
-
 variable "eks_addon_ebs_driver_version" {
   type        = string
   description = "Version for EBS driver addon for EKS (Persistence)"
@@ -293,4 +283,34 @@ variable "pr_bot_installation_id" {
 variable "base_domain" {
   type        = string
   description = "The base domain for the environment"
+}
+
+variable "client_vpn_self_service_saml_metadata" {
+  type        = string
+  description = "The SAML metadata for the client VPN self service"
+}
+
+variable "client_vpn_saml_metadata" {
+  type        = string
+  description = "The SAML metadata for the client VPN"
+}
+
+variable "client_vpn_access_group_id" {
+  type        = string
+  description = "The access group ID for the client VPN"
+}
+
+variable "vpc_cidr_block" {
+  type        = string
+  description = "The CIDR block for the VPC"
+}
+
+variable "subnet_cidr_blocks" {
+  type        = list(string)
+  description = "The CIDR blocks for the subnets"
+}
+
+variable "subnet_ids" {
+  type        = list(string)
+  description = "The IDs for the subnets"
 }

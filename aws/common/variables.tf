@@ -262,24 +262,6 @@ variable "eks_cluster_name" {
   type        = string
 }
 
-variable "client_vpn_access_group_id" {
-  description = "IAM Identity Center group ID that will be allowed access to the VPN."
-  type        = string
-  sensitive   = true
-}
-
-variable "client_vpn_saml_metadata" {
-  description = "IAM Identity Center application SAML metadata.  Users that want to connect to the VPN must be granted access to this app."
-  type        = string
-  sensitive   = true
-}
-
-variable "client_vpn_self_service_saml_metadata" {
-  description = "IAM Identity Center self-service application SAML metadata.  This allows users to download the VPN client and configuration."
-  type        = string
-  sensitive   = true
-}
-
 variable "account_budget_limit" {
   description = "The dollar amount in USD that this AWS account should be budgeted to"
   type        = number
@@ -297,4 +279,9 @@ variable "budget_sre_bot_webhook" {
   description = "Slack webhook used to post budget alerts to the SRE bot"
   type        = string
   sensitive   = true
+}
+
+variable "vpc_cidr_block" {
+  description = "CIDR block for the VPC"
+  type        = string
 }

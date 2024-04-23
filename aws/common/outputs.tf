@@ -188,10 +188,10 @@ output "sqs_deliver_receipts_queue_arn" {
   value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
 }
 
-output "client_vpn_cloudwatch_log_group_name" {
-  value = module.vpn.client_vpn_cloudwatch_log_group_name
+output "subnet_ids" {
+  value = concat(aws_subnet.notification-canada-ca-private[*].id, aws_subnet.notification-canada-ca-private-k8s.*.id)
 }
 
-output "client_vpn_security_group_id" {
-  value = module.vpn.client_vpn_security_group_id
+output "subnet_cidr_blocks" {
+  value = concat(aws_subnet.notification-canada-ca-private[*].cidr_block, aws_subnet.notification-canada-ca-private-k8s.*.cidr_block)
 }
