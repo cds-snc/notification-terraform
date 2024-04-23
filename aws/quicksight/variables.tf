@@ -35,9 +35,9 @@ variable "quicksight_db_user_password" {
   sensitive = true
 }
 
-variable "vpc_private_subnets" {
-  type = list(any)
-}
+# variable "vpc_private_subnets" {
+#   type = list(any)
+# }
 
 variable "vpc_id" {
   type = string

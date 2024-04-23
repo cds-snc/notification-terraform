@@ -50,7 +50,6 @@ include {
 
 inputs = {
   vpc_id                           = dependency.common.outputs.vpc_id
-  vpc_private_subnets              = dependency.common.outputs.vpc_private_subnets # do we need this? getting database subnets from rds
   sns_alert_warning_arn            = dependency.common.outputs.sns_alert_warning_arn
   s3_bucket_sms_usage_sanitized_id = dependency.common.outputs.s3_bucket_sms_usage_sanitized_id
   quicksight_security_group_id     = dependency.eks.outputs.quicksight_security_group_id
