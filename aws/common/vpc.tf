@@ -7,7 +7,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_vpc" "notification-canada-ca" {
-  cidr_block           = "var.vpc_cidr_block"
+  cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
 
   tags = {
@@ -101,7 +101,7 @@ resource "aws_subnet" "notification-canada-ca-private" {
   count = 3
 
   vpc_id            = aws_vpc.notification-canada-ca.id
-  cidr_block        = cidrsubnet("var.vpc_cidr_block", 8, count.index)
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 8, count.index)
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
 
   tags = {
@@ -118,7 +118,7 @@ resource "aws_subnet" "notification-canada-ca-public" {
   count = 3
 
   vpc_id            = aws_vpc.notification-canada-ca.id
-  cidr_block        = cidrsubnet("var.vpc_cidr_block", 8, count.index + 3)
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 8, count.index + 3)
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
 
   tags = {
@@ -133,7 +133,7 @@ resource "aws_subnet" "notification-canada-ca-private-k8s" {
   count = 3
 
   vpc_id            = aws_vpc.notification-canada-ca.id
-  cidr_block        = cidrsubnet("var.vpc_cidr_block", 3, count.index + 1)
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 3, count.index + 1)
   availability_zone = element(data.aws_availability_zones.available.names, count.index + 1)
 
   tags = {
