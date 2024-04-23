@@ -34,3 +34,21 @@ resource "aws_secretsmanager_secret_version" "pr_bot_installation_id" {
   secret_string = var.pr_bot_installation_id
 }
 
+resource "aws_secretsmanager_secret" "base_domain" {
+  name = "BASE_DOMAIN"
+}
+
+resource "aws_secretsmanager_secret_version" "base_domain" {
+  secret_id     = aws_secretsmanager_secret.base_domain.id
+  secret_string = var.base_domain
+}
+
+resource "aws_secretsmanager_secret" "aws_region" {
+  name = "AWS_REGION"
+}
+
+resource "aws_secretsmanager_secret_version" "aws_region" {
+  secret_id     = aws_secretsmanager_secret.aws_region.id
+  secret_string = var.region
+}
+
