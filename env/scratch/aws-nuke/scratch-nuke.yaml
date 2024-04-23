@@ -106,10 +106,7 @@ resource-types:
     - IAMUserPolicyAttachment
     - IAMLoginProfile
     - IAMOpenIDConnectProvider
-    - IAMSAMLProvider
     - IAMUser
-    - KMSAlias
-    - KMSKey
     - OpsWorksUserProfile
     - SecurityHub
     - CloudFormationStack
@@ -129,7 +126,6 @@ resource-types:
     - RedshiftParameterGroup
     - SageMakerNotebookInstance
     - SageMakerEndpoint
-    - SESReceiptRuleSet
     - SESReceiptFilter
     - SageMakerApp
     - SageMakerModel
