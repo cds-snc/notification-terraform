@@ -290,3 +290,7 @@ variable "pr_bot_installation_id" {
   sensitive   = true
 }
 
+variable "base_domain" {
+  type        = string
+  description = "The base domain for the environment"
+}
