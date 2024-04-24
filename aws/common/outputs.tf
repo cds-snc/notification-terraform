@@ -193,9 +193,9 @@ output "sqs_deliver_receipts_queue_arn" {
 }
 
 output "subnet_ids" {
-  value = concat(aws_subnet.notification-canada-ca-private[*].id, aws_subnet.notification-canada-ca-private-k8s.*.id)
+  value = aws_subnet.notification-canada-ca-private[*].id
 }
 
 output "subnet_cidr_blocks" {
-  value = concat(aws_subnet.notification-canada-ca-private[*].cidr_block, aws_subnet.notification-canada-ca-private-k8s.*.cidr_block)
+  value = aws_subnet.notification-canada-ca-private[*].cidr_block
 }
