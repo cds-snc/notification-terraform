@@ -73,6 +73,6 @@ variable "database_read_write_proxy_endpoint_host" {
 }
 
 variable "rds_cluster_password" {
-  type = string
+  type      = string
   sensitive = true
 }
