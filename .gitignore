@@ -9,7 +9,7 @@
 !.checkov.yaml
 !.checkov.yml
 !catalog-info.yaml
-!.scratch-nuke.yaml
+!scripts/scratch-nuke.yaml
 
 # Checkov dependencies
 .external_modules
