@@ -217,4 +217,3 @@ resource "aws_iam_role" "pond_dns_manager" {
 }
 EOF
 }
-
