@@ -46,7 +46,3 @@ inputs = {
   pinpoint_to_sqs_sms_callbacks_ecr_repository_url   = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
   pinpoint_to_sqs_sms_callbacks_ecr_arn              = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_arn
 }
-
-terraform {
-  source = "../../../aws//pinpoint_to_sqs_sms_callbacks"
-}
