@@ -9,7 +9,7 @@ locals {
 # and https://docs.google.com/document/d/16LLelZ7WEKrnbocrl0Az74JqkCv5DBZ9QILRBUFJQt8/edit#heading=h.z87ipkd84djw
 module "sentinel_forwarder" {
   count             = var.enable_sentinel_forwarding ? 1 : 0
-  source            = "github.com/cds-snc/terraform-modules//sentinel_forwarder?ref=v9.3.8"
+  source            = "github.com/cds-snc/terraform-modules//sentinel_forwarder?ref=v9.4.2"
   function_name     = "sentinel-cloud-watch-forwarder"
   billing_tag_value = "notification-canada-ca-${var.env}"
 
