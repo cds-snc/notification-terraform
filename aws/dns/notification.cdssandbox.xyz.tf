@@ -33,8 +33,6 @@ resource "aws_route53_record" "bounce-custom-notification-sandbox-MX" {
   records  = ["10 feedback-smtp.ca-central-1.amazonses.com"]
 }
 
-# SES TXT Record - To Be Automated
-
 resource "aws_route53_record" "ses-notification-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
@@ -56,8 +54,6 @@ resource "aws_route53_record" "dmarc-notification-sandbox-TXT" {
   ttl      = "300"
   records  = ["v=DMARC1; p=reject; sp=reject; pct=100; rua=mailto:dmarc@cyber.gc.ca; ruf=mailto:dmarc@cyber.gc.ca"]
 }
-
-# Google Site Verification
 
 resource "aws_route53_record" "notification-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
