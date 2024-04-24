@@ -78,21 +78,21 @@ resource "aws_route53_record" "bounce-notification-sandbox-TXT" {
 }
 
 resource "aws_route53_record" "custom-domain-aws-ses-sandbox-TXT" {
-  count   = var.env == "production" ? 0 : 1
-  zone_id = var.route_53_zone_arn
+  count    = var.env == "production" ? 0 : 1
+  zone_id  = var.route_53_zone_arn
   provider = aws.dns
-  name    = "_amazonses.custom-sending-domain.${var.domain}"
-  type    = "TXT"
-  ttl     = "300"
-  records = ["fXT/J45wZcUoBSnJAwPyfnHVf5E2b7aNayCC5PeQltg="]
+  name     = "_amazonses.custom-sending-domain.${var.domain}"
+  type     = "TXT"
+  ttl      = "300"
+  records  = ["fXT/J45wZcUoBSnJAwPyfnHVf5E2b7aNayCC5PeQltg="]
 }
 
 resource "aws_route53_record" "custom-domain-ses-sandbox-TXT" {
-  count   = var.env == "production" ? 0 : 1
+  count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id = var.route_53_zone_arn
-  name    = "custom-sending-domain.${var.domain}"
-  type    = "TXT"
-  ttl     = "300"
-  records = ["amazonses:fXT/J45wZcUoBSnJAwPyfnHVf5E2b7aNayCC5PeQltg="]
+  zone_id  = var.route_53_zone_arn
+  name     = "custom-sending-domain.${var.domain}"
+  type     = "TXT"
+  ttl      = "300"
+  records  = ["amazonses:fXT/J45wZcUoBSnJAwPyfnHVf5E2b7aNayCC5PeQltg="]
 }
