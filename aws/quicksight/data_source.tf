@@ -1,5 +1,5 @@
 resource "aws_quicksight_data_source" "rds" {
-  depends_on     = [aws_iam_role_policy_attachment.rds-qs-attach, aws_quicksight_account_subscription.subscription]
+  depends_on     = [aws_iam_role_policy_attachment.rds-qs-attach, aws_quicksight_account_subscription.subscription, null_resource.db_setup]
   data_source_id = var.database_name
   name           = "Quicksight RDS data source"
   ssl_properties {

@@ -63,3 +63,16 @@ variable "database_subnet_ids" {
 variable "quicksight_security_group_id" {
   type = string
 }
+
+variable "database_read_write_proxy_endpoint" {
+  type = string
+}
+
+variable "database_read_write_proxy_endpoint_host" {
+  type = string
+}
+
+variable "rds_cluster_password" {
+  type = string
+  sensitive = true
+}

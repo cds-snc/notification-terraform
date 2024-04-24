@@ -32,6 +32,8 @@ dependency "rds" {
     rds_instance_id     = "id"
     database_name       = "database"
     database_subnet_ids = ["subnet-1", "subnet-2"]
+    database_read_write_proxy_endpoint = "changeme"
+    database_read_write_proxy_endpoint_host = "changeme"
   }
 }
 
@@ -49,7 +51,7 @@ include {
 }
 
 inputs = {
-  env                          = "staging"
+  database_name                = dependency.rds.outputs.database_name
   vpc_id                       = dependency.common.outputs.vpc_id
   vpc_private_subnets          = dependency.common.outputs.vpc_private_subnets # do we need this? getting database subnets from rds
   sns_alert_warning_arn        = dependency.common.outputs.sns_alert_warning_arn
@@ -58,4 +60,7 @@ inputs = {
   database_name                = dependency.rds.outputs.database_name
   database_subnet_ids          = dependency.rds.outputs.database_subnet_ids
   rds_instance_id              = dependency.rds.outputs.rds_instance_id
+  database_read_write_proxy_endpoint = dependency.rds.outputs.database_read_write_proxy_endpoint
+  database_read_write_proxy_endpoint_host = dependency.rds.outputs.database_read_write_proxy_endpoint_host
 }
+
