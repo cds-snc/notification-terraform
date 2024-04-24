@@ -8,10 +8,10 @@ module "vpn" {
   endpoint_name   = "private-subnets"
   access_group_id = var.client_vpn_access_group_id
 
-  vpc_id              = aws_vpc.notification-canada-ca.id
-  vpc_cidr_block      = aws_vpc.notification-canada-ca.cidr_block
-  subnet_cidr_blocks  = aws_subnet.notification-canada-ca-private.*.cidr_block
-  subnet_ids          = aws_subnet.notification-canada-ca-private.*.id
+  vpc_id              = var.vpc_id
+  vpc_cidr_block      = var.vpc_cidr_block
+  subnet_cidr_blocks  = var.subnet_cidr_blocks
+  subnet_ids          = var.subnet_ids
   acm_certificate_arn = aws_acm_certificate.client_vpn.arn
 
   # Only create a self-service portal in prod  
