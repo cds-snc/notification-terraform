@@ -80,6 +80,7 @@ resource "aws_route53_record" "bounce-notification-sandbox-TXT" {
 resource "aws_route53_record" "custom-domain-aws-ses-sandbox-TXT" {
   count   = var.env == "production" ? 0 : 1
   zone_id = var.route_53_zone_arn
+  provider = aws.dns
   name    = "_amazonses.custom-sending-domain.${var.domain}"
   type    = "TXT"
   ttl     = "300"
@@ -88,6 +89,7 @@ resource "aws_route53_record" "custom-domain-aws-ses-sandbox-TXT" {
 
 resource "aws_route53_record" "custom-domain-ses-sandbox-TXT" {
   count   = var.env == "production" ? 0 : 1
+  provider = aws.dns
   zone_id = var.route_53_zone_arn
   name    = "custom-sending-domain.${var.domain}"
   type    = "TXT"
