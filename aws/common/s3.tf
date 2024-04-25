@@ -542,7 +542,7 @@ POLICY
 module "sns_sms_usage_report_sanitized_bucket" {
   source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
 
-  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs-sanitized"
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs-san"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
 
@@ -559,7 +559,7 @@ module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
 
   source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
 
-  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs-sanitized"
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs-san"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
 
