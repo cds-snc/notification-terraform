@@ -119,6 +119,15 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+      - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/production/pinpoint_to_sqs_sms_callbacks"
+          comment-delete: "true"
+          comment-title: "Production: pinpoint_to_sqs_sms_callbacks"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
       - name: Terragrunt plan dns
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
