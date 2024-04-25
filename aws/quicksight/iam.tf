@@ -70,9 +70,10 @@ resource "aws_iam_role_policy_attachment" "s3-qs-attach" {
 
 resource "null_resource" "db_setup" {
   provisioner "local-exec" {
-    command = "export QUICKSIGHT_DB_PASSWORD=${var.quicksight_db_user_password} && envsubst < ./scripts/quicksight_db_user.sql > ./scripts/temp.sql && psql -f ./scripts/temp.sql -h ${var.database_read_write_proxy_endpoint_host} -p 5432 -U postgres ${var.database_name}"
+    command = "psql -c \"SET password_encryption = 'md5';\" -c \"CREATE ROLE quicksight_db_user WITH LOGIN PASSWORD '$QSPASS';\" -c \"GRANT rds_superuser TO quicksight_db_user;\" -h ${var.database_read_write_proxy_endpoint_host} -p 5432 -U postgres ${var.database_name} 2> /dev/null"
     environment = {
       # for instance, postgres would need the password here:
+      QSPASS="${var.quicksight_db_user_password}"
       PGPASSWORD = "${var.rds_cluster_password}"
     }
   }
