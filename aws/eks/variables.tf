@@ -32,6 +32,10 @@ variable "vpc_private_subnets" {
   type = list(any)
 }
 
+variable "vpc_private_subnets_k8s" {
+  type = list(any)
+}
+
 variable "vpc_public_subnets" {
   type = list(any)
 }
@@ -206,14 +210,6 @@ variable "sqs_send_email_low_queue_name" {
   default = "send-email-low"
 }
 
-# TODO: delete this variable once we verify that we've transitioned to the new queues
-variable "sqs_sms_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-tasks"
-}
-
 variable "sqs_send_sms_high_queue_name" {
   type = string
   # See QueueNames in
@@ -238,16 +234,6 @@ variable "sqs_send_sms_low_queue_name" {
 variable "celery_queue_prefix" {
   type        = string
   description = "Celery queue prefix"
-}
-
-variable "client_vpn_cloudwatch_log_group_name" {
-  type        = string
-  description = "Client VPN CloudWatch log group name. This is used by the Sentinel forwarder to send logs to Sentinel."
-}
-
-variable "client_vpn_security_group_id" {
-  type        = string
-  description = "Client VPN security group ID"
 }
 
 variable "eks_addon_ebs_driver_version" {
@@ -276,9 +262,56 @@ variable "internal_dns_name" {
   description = "The fqdn for the internal DNS"
 }
 
-variable "gha_arc_pat" {
+variable "pr_bot_private_key" {
   type        = string
-  description = "The Personal Access Token that Github ARC will use to authenticate"
+  description = "The Private Key for PR Bot, used by Github ARC"
   sensitive   = true
+}
 
+variable "pr_bot_app_id" {
+  type        = string
+  description = "The AppID for PR Bot, used by Github ARC"
+  sensitive   = true
+}
+
+variable "pr_bot_installation_id" {
+  type        = string
+  description = "The installation ID for PR Bot, used by Github ARC"
+  sensitive   = true
+}
+
+variable "base_domain" {
+  type        = string
+  description = "The base domain for the environment"
+}
+
+variable "client_vpn_self_service_saml_metadata" {
+  type        = string
+  description = "The SAML metadata for the client VPN self service"
+}
+
+variable "client_vpn_saml_metadata" {
+  type        = string
+  description = "The SAML metadata for the client VPN"
+}
+
+variable "client_vpn_access_group_id" {
+  type        = string
+  description = "The access group ID for the client VPN"
+}
+
+variable "vpc_cidr_block" {
+  type        = string
+  description = "The CIDR block for the VPC"
+  default     = "10.0.0.0/16"
+}
+
+variable "subnet_cidr_blocks" {
+  type        = list(string)
+  description = "The CIDR blocks for the subnets"
+}
+
+variable "subnet_ids" {
+  type        = list(string)
+  description = "The IDs for the subnets"
 }

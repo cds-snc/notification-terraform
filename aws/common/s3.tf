@@ -25,6 +25,7 @@ resource "aws_s3_bucket" "csv_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.csv_bucket_logs.s3_bucket_id
   }
 
@@ -155,6 +156,7 @@ resource "aws_s3_bucket" "document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.document_download_logs.s3_bucket_id
   }
 
@@ -188,6 +190,7 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.document_download_logs.s3_bucket_id
   }
 
@@ -329,6 +332,7 @@ resource "aws_s3_bucket" "athena_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.athena_logs_bucket.s3_bucket_id
   }
 
@@ -533,4 +537,33 @@ resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_us_west_2_policy" {
 	]
 }
 POLICY
+}
+
+module "sns_sms_usage_report_sanitized_bucket" {
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs-san"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+
+module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
+  providers = {
+    aws = aws.us-west-2
+  }
+
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs-san"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
 }

@@ -21,6 +21,8 @@ resource "aws_db_instance" "database-tools" {
   instance_class      = "db.t3.micro"
   username            = "postgres"
   password            = var.dbtools_password
+  ca_cert_identifier  = "rds-ca-rsa4096-g1"
+  apply_immediately   = true
   skip_final_snapshot = true
 
   storage_encrypted   = true

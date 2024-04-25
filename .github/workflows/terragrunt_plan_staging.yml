@@ -1,6 +1,7 @@
 name: "Terragrunt plan STAGING"
 
 on:
+  workflow_dispatch: 
   pull_request:
     paths:
       - ".env"
@@ -51,7 +52,10 @@ env:
   TF_VAR_client_vpn_access_group_id: ${{ secrets.STAGING_CLIENT_VPN_ACCESS_GROUP_ID }}
   TF_VAR_client_vpn_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SAML_METADATA }}
   TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
-  TF_VAR_gha_arc_pat: ${{ secrets.GHA_ARC_PAT }}
+  TF_VAR_pr_bot_installation_id: ${{ secrets.NOTIFY_PR_BOT_INSTALLATION_ID_MANIFESTS }}
+  TF_VAR_pr_bot_app_id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
+  TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
+  TF_VAR_budget_sre_bot_webhook: ${{ secrets.STAGING_BUDGET_SRE_BOT_WEBHOOK }}
 
 jobs:
   terragrunt-plan-staging:
@@ -140,6 +144,10 @@ jobs:
             sns_to_sqs_sms_callbacks:
               - 'aws/sns_to_sqs_sms_callbacks/**'
               - 'env/staging/sns_to_sqs_sms_callbacks/**'
+            pinpoint_to_sqs_sms_callbacks:
+              - 'aws/pinpoint_to_sqs_sms_callbacks/**'
+              - 'env/staging/pinpoint_to_sqs_sms_callbacks/**'
+              
 
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
@@ -318,6 +326,16 @@ jobs:
           directory: "env/staging/sns_to_sqs_sms_callbacks"
           comment-delete: "true"
           comment-title: "Staging: sns_to_sqs_sms_callbacks"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
+        if: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/staging/pinpoint_to_sqs_sms_callbacks"
+          comment-delete: "true"
+          comment-title: "Staging: pinpoint_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
