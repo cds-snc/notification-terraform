@@ -73,7 +73,7 @@ resource "null_resource" "db_setup" {
     command = "psql -c \"SET password_encryption = 'md5';\" -c \"CREATE ROLE quicksight_db_user WITH LOGIN PASSWORD '$QSPASS';\" -c \"GRANT rds_superuser TO quicksight_db_user;\" -h ${var.database_read_write_proxy_endpoint_host} -p 5432 -U postgres ${var.database_name} 2> /dev/null"
     environment = {
       # for instance, postgres would need the password here:
-      QSPASS="${var.quicksight_db_user_password}"
+      QSPASS     = "${var.quicksight_db_user_password}"
       PGPASSWORD = "${var.rds_cluster_password}"
     }
   }
