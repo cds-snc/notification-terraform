@@ -213,11 +213,16 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "properties": {
                 "title": "Email alarms",
                 "alarms": [
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-complaint-rate-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-email-queue-delay-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning[0].arn}"
                 ]
@@ -304,7 +309,7 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n# Sending emails\n\nEmails are sent with [SES](https://${var.region}.console.aws.amazon.com/ses/home?region=${var.region}#dashboard:).\n\nOur limits are:\n- 1,000,000 emails per 24 hour period\n- 100 emails/second\n\nEmails are sent by Celery through the `deliver_email` task through the [send-email-tasks](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-email-tasks) queue.\n\n## Message flow\n\nAfter a notification has been created in the database, Celery sends the email to the provider using the deliver_email Celery task. This Celery task is assigned to the SQS queue eks-notification-canada-casend-email-tasks, unless a specific queue has been assigned to the queue (for example: eks-notification-canada-capriority-tasks for priority notifications or eks-notification-canada-cabulk-tasks through the API REST service). This task calls the AWS SES API to send a text message.\n\n## Delivery receipts\n\nReceipts from SES are dispatched to SNS -> [Lambda](https://${var.region}.console.aws.amazon.com/lambda/home?region=${var.region}#/functions/ses-to-sqs-email-callbacks) -> [SQS](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-cadelivery-receipts) in the `delivery-receipts` queue.\n\nA delay in this queue means that we are slow to process delivery receipts (delivered, bounce, complaints).\n"
+                "markdown": "\n# Sending emails\n\nEmails are sent with [SES](https://${var.region}.console.aws.amazon.com/ses/home?region=${var.region}#dashboard:).\n\nOur limits are:\n- 1,000,000 emails per 24 hour period\n- 100 emails/second\n\nEmails are sent by Celery through the `deliver_email` task through the [send-email-low](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-email-low), [send-email-medium](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-email-medium), or [send-email-high](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-email-high) queues.\n\n## Message flow\n\nAfter a notification has been created in the database, Celery sends the email to the provider using the deliver_email Celery task. This Celery task is assigned to the send-email-low, send-email-medium, or send-email-high SQS queue depending on the email's priority. This task calls the AWS SES API to send a text message.\n\n## Delivery receipts\n\nReceipts from SES are dispatched to SNS -> [Lambda](https://${var.region}.console.aws.amazon.com/lambda/home?region=${var.region}#/functions/ses-to-sqs-email-callbacks) -> [SQS](https://${var.region}.console.aws.amazon.com/sqs/v2/home?region=${var.region}#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-cadelivery-receipts) in the `delivery-receipts` queue.\n\nA delay in this queue means that we are slow to process delivery receipts (delivered, bounce, complaints).\n"
             }
         },
         {
@@ -382,9 +387,9 @@ resource "aws_cloudwatch_dashboard" "emails" {
         },
         {
             "height": 6,
-            "width": 9,
-            "y": 42,
-            "x": 9,
+            "width": 8,
+            "y": 36,
+            "x": 8,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -400,8 +405,8 @@ resource "aws_cloudwatch_dashboard" "emails" {
         },
         {
             "height": 6,
-            "width": 9,
-            "y": 48,
+            "width": 8,
+            "y": 36,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -418,9 +423,9 @@ resource "aws_cloudwatch_dashboard" "emails" {
         },
         {
             "height": 6,
-            "width": 9,
-            "y": 48,
-            "x": 9,
+            "width": 8,
+            "y": 36,
+            "x": 16,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -442,60 +447,6 @@ resource "aws_cloudwatch_dashboard" "emails" {
             "type": "text",
             "properties": {
                 "markdown": "# Delivery Queues\n"
-            }
-        },
-        {
-            "height": 6,
-            "width": 9,
-            "y": 42,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": true,
-                "region": "${var.region}",
-                "stat": "Average",
-                "period": 60,
-                "title": "Average approximate age of oldest message in send-email-tasks"
-            }
-        },
-        {
-            "height": 6,
-            "width": 9,
-            "y": 36,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-email-tasks" ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "title": "Approximate number of messages in send-email-tasks",
-                "period": 60,
-                "stat": "Average"
-            }
-        },
-        {
-            "height": 6,
-            "width": 9,
-            "y": 36,
-            "x": 9,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-email-tasks", { "color": "#1f77b4" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": true,
-                "region": "${var.region}",
-                "stat": "Average",
-                "period": 60,
-                "title": "Average approximate age of oldest message in send-email-tasks"
             }
         },
         {
@@ -697,8 +648,6 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 "alarms": [
                     "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-sms-stuck-in-queue-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0].arn}",
@@ -894,7 +843,7 @@ resource "aws_cloudwatch_dashboard" "sms" {
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n## Limits\n- SNS [maximum sending rate](https://docs.aws.amazon.com/general/latest/gr/sns.html#limits_sns): 20 SMS/second\n- [Spending limit](https://${var.region}.console.aws.amazon.com/sns/v3/home?region=${var.region}#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [eks-notification-canada-casend-sms-tasks](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2Feks-notification-canada-casend-sms-tasks), unless a specific queue has been assigned to the queue (for example priority templates, SMS sent by the Notify service etc.). This task calls the SNS API to send a text message.\n\n## SNS IDs\nSNS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `${var.region}` use random phone numbers managed by AWS.\n\n### ⚠️  SNS in `us-west-2`\nIf a Notify service has an inbound number attached, SMS will be sent with SNS using a long code phone number ordered on Pinpoint in the `us-west-2` region. Statistics for this region and alarms are **not visible on this dashboard**.\n"
+                "markdown": "\n## Limits\n- SNS [maximum sending rate](https://docs.aws.amazon.com/general/latest/gr/sns.html#limits_sns): 20 SMS/second\n- [Spending limit](https://${var.region}.console.aws.amazon.com/sns/v3/home?region=${var.region}#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [${var.celery_queue_prefix}send-sms-low](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-low), [${var.celery_queue_prefix}send-sms-medium](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-medium), or [${var.celery_queue_prefix}send-sms-high](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-high) depending on the SMS priority. This task calls the SNS API to send a text message.\n\n## SNS IDs\nSNS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `${var.region}` use random phone numbers managed by AWS.\n\n### ⚠️  SNS in `us-west-2`\nIf a Notify service has an inbound number attached, SMS will be sent with SNS using a long code phone number ordered on Pinpoint in the `us-west-2` region. Statistics for this region and alarms are **not visible on this dashboard**.\n"
             }
         },
         {

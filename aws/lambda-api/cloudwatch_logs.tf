@@ -4,7 +4,7 @@
 
 resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
   name              = "api_gateway_log_group"
-  retention_in_days = 0
+  retention_in_days = var.log_retention_period_days
   tags = {
     CostCenter  = "notification-canada-ca-${var.env}"
     Environment = var.env
@@ -15,7 +15,7 @@ resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
 resource "aws_cloudwatch_log_group" "api_lambda_log_group" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/lambda/${aws_lambda_function.api.function_name}"
-  retention_in_days = 0
+  retention_in_days = var.log_retention_period_days
   tags = {
     CostCenter  = "notification-canada-ca-${var.env}"
     Environment = var.env
@@ -77,6 +77,19 @@ resource "aws_cloudwatch_log_metric_filter" "errors-salesforce-api" {
 
   metric_transformation {
     name      = "errors-salesforce-api"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "failed-login-count-more-than-10" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "failed-login-count-more-than-10"
+  pattern        = jsonencode("Failed login: Incorrect password for")
+  log_group_name = aws_cloudwatch_log_group.api_lambda_log_group[0].name
+
+  metric_transformation {
+    name      = "failed-login-count"
     namespace = "LogMetrics"
     value     = "1"
   }

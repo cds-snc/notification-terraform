@@ -8,6 +8,7 @@
 *.yaml
 !.checkov.yaml
 !.checkov.yml
+!catalog-info.yaml
 
 # Checkov dependencies
 .external_modules
@@ -43,3 +44,7 @@ override.tf.json
 
 # VSCode editor's files
 .vscode
+
+# aider AI
+.aider*
+.DS_Store

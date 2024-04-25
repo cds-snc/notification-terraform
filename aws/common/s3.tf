@@ -25,6 +25,7 @@ resource "aws_s3_bucket" "csv_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.csv_bucket_logs.s3_bucket_id
   }
 
@@ -155,6 +156,7 @@ resource "aws_s3_bucket" "document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.document_download_logs.s3_bucket_id
   }
 
@@ -188,6 +190,7 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.document_download_logs.s3_bucket_id
   }
 
@@ -329,6 +332,7 @@ resource "aws_s3_bucket" "athena_bucket" {
 
   #tfsec:ignore:AWS077 - Versioning is not enabled
   logging {
+    target_prefix = var.env
     target_bucket = module.athena_logs_bucket.s3_bucket_id
   }
 
@@ -371,6 +375,193 @@ module "cbs_logs_bucket" {
   attach_elb_log_delivery_policy = true
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+module "sns_sms_usage_report_bucket" {
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "7" } } }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_policy" {
+  bucket = module.sns_sms_usage_report_bucket.s3_bucket_id
+
+  policy = <<POLICY
+{
+	"Version": "2008-10-17",
+	"Statement": [{
+			"Sid": "AllowPutObject",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:PutObject",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket.s3_bucket_id}/*",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowGetBucketLocation",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:GetBucketLocation",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowListBucket",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:ListBucket",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:${var.region}:${var.account_id}:*"
+				}
+			}
+		}
+	]
+}
+POLICY
+}
+
+module "sns_sms_usage_report_bucket_us_west_2" {
+  providers = {
+    aws = aws.us-west-2
+  }
+
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "7" } } }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_us_west_2_policy" {
+  provider = aws.us-west-2
+
+  bucket = module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id
+
+  policy = <<POLICY
+{
+	"Version": "2008-10-17",
+	"Statement": [{
+			"Sid": "AllowPutObject",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:PutObject",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id}/*",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:us-west-2:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowGetBucketLocation",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:GetBucketLocation",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:us-west-2:${var.account_id}:*"
+				}
+			}
+		},
+		{
+			"Sid": "AllowListBucket",
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "sns.amazonaws.com"
+			},
+			"Action": "s3:ListBucket",
+			"Resource": "arn:aws:s3:::${module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id}",
+			"Condition": {
+				"StringEquals": {
+					"aws:SourceAccount": "${var.account_id}"
+				},
+				"ArnLike": {
+					"aws:SourceArn": "arn:aws:sns:us-west-2:${var.account_id}:*"
+				}
+			}
+		}
+	]
+}
+POLICY
+}
+
+module "sns_sms_usage_report_sanitized_bucket" {
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs-san"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+
+module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
+  providers = {
+    aws = aws.us-west-2
+  }
+
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
+
+  bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs-san"
+  force_destroy     = var.force_destroy_s3
+  billing_tag_value = "notification-canada-ca-${var.env}"
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"

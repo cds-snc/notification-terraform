@@ -1,6 +1,7 @@
 name: "Terragrunt plan STAGING"
 
 on:
+  workflow_dispatch: 
   pull_request:
     paths:
       - ".env"
@@ -20,7 +21,7 @@ env:
   TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
   TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_template_id: ${{ secrets.STAGING_HEARTBEAT_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_number: ${{ secrets.STAGING_HEARTBEAT_SMS_NUMBER }}
   TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
   TF_VAR_quicksight_db_user_password: ${{ secrets.STAGING_QUICKSIGHT_DB_USER_PASSWORD }}
@@ -28,13 +29,17 @@ env:
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
-  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID }}
-  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET }}
+  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID_STAGING }}
+  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET_STAGING }}
   TF_VAR_sentinel_customer_id: ${{ secrets.SENTINEL_CUSTOMER_ID }}
   TF_VAR_sentinel_shared_key: ${{ secrets.SENTINEL_SHARED_KEY }}
   TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
   TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
   TF_VAR_slack_channel_general_topic: "notification-staging-ops"
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_system_status_admin_url: "https://staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_api_url: "https://api.staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-staging-system-status"
   TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_waf_secret: ${{secrets.STAGING_WAF_SECRET}}
   # Prevents repeated creation of the Slack lambdas if already existing.
@@ -44,14 +49,20 @@ env:
   TF_VAR_perf_test_email: ${{ secrets.PERF_TEST_EMAIL }}
   TF_VAR_perf_test_domain: ${{ secrets.PERF_TEST_DOMAIN }}
   TF_VAR_perf_test_auth_header: ${{ secrets.PERF_TEST_AUTH_HEADER }}
-  TF_VAR_blazer_slack_webhook_general_topic: ${{ secrets.STAGING_BLAZER_SLACK_WEBHOOK }}
+  TF_VAR_client_vpn_access_group_id: ${{ secrets.STAGING_CLIENT_VPN_ACCESS_GROUP_ID }}
+  TF_VAR_client_vpn_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SAML_METADATA }}
+  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
+  TF_VAR_pr_bot_installation_id: ${{ secrets.NOTIFY_PR_BOT_INSTALLATION_ID_MANIFESTS }}
+  TF_VAR_pr_bot_app_id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
+  TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
+  TF_VAR_budget_sre_bot_webhook: ${{ secrets.STAGING_BUDGET_SRE_BOT_WEBHOOK }}
 
 jobs:
   terragrunt-plan-staging:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Set environment variables
         uses: ./.github/actions/setvars
@@ -60,8 +71,13 @@ jobs:
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3           
 
-      - uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721 # v2.10.2
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: filter
         with:
           filters: |
@@ -107,6 +123,12 @@ jobs:
             database-tools:
               - 'aws/database-tools/**'
               - 'env/staging/database-tools/**'
+            system_status:
+              - 'aws/system_status/**'
+              - 'env/staging/system_status/**'
+            system_status_static_site:
+              - 'aws/system_status_static_site/**'
+              - 'env/staging/system_status_static_site/**'
             quicksight:
               - 'aws/quicksight/**'
               - 'env/staging/quicksight/**'
@@ -122,10 +144,14 @@ jobs:
             sns_to_sqs_sms_callbacks:
               - 'aws/sns_to_sqs_sms_callbacks/**'
               - 'env/staging/sns_to_sqs_sms_callbacks/**'
+            pinpoint_to_sqs_sms_callbacks:
+              - 'aws/pinpoint_to_sqs_sms_callbacks/**'
+              - 'env/staging/pinpoint_to_sqs_sms_callbacks/**'
+              
 
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/common"
           comment-delete: "true"
@@ -135,7 +161,7 @@ jobs:
 
       - name: Terragrunt plan ECR
         if: ${{ steps.filter.outputs.ecr == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ecr"
           comment-delete: "true"
@@ -145,7 +171,7 @@ jobs:
 
       - name: Terragrunt plan ses_receiving_emails
         if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ses_receiving_emails"
           comment-delete: "true"
@@ -155,7 +181,7 @@ jobs:
 
       - name: Terragrunt plan dns
         if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/dns"
           comment-delete: "true"
@@ -165,7 +191,7 @@ jobs:
 
       - name: Terragrunt plan ses_validation_dns_entries
         if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ses_validation_dns_entries"
           comment-delete: "true"
@@ -175,7 +201,7 @@ jobs:
 
       - name: Terragrunt plan eks
         if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/eks"
           comment-delete: "true"
@@ -185,7 +211,7 @@ jobs:
 
       - name: Terragrunt plan elasticache
         if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/elasticache"
           comment-delete: "true"
@@ -195,7 +221,7 @@ jobs:
 
       - name: Terragrunt plan rds
         if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/rds"
           comment-delete: "true"
@@ -205,7 +231,7 @@ jobs:
 
       - name: Terragrunt plan cloudfront
         if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/cloudfront"
           comment-delete: "true"
@@ -215,7 +241,7 @@ jobs:
 
       - name: Terragrunt plan lambda-api
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/lambda-api"
           comment-delete: "true"
@@ -225,7 +251,7 @@ jobs:
 
       - name: Terragrunt plan lambda-admin-pr
         if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/lambda-admin-pr"
           comment-delete: "true"
@@ -235,7 +261,7 @@ jobs:
 
       - name: Terragrunt plan performance-test
         if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/performance-test"
           comment-delete: "true"
@@ -245,7 +271,7 @@ jobs:
 
       - name: Terragrunt plan heartbeat
         if: ${{ steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/heartbeat"
           comment-delete: "true"
@@ -255,7 +281,7 @@ jobs:
 
       - name: Terragrunt plan database-tools
         if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/database-tools"
           comment-delete: "true"
@@ -263,19 +289,19 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-      # - name: Terragrunt plan quicksight
-      #   if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
-      #   uses: cds-snc/terraform-plan@v3
-      #   with:
-      #     directory: "env/staging/quicksight"
-      #     comment-delete: "true"
-      #     comment-title: "Staging: quicksight"
-      #     github-token: "${{ secrets.GITHUB_TOKEN }}"
-      #     terragrunt: "true"
+      - name: Terragrunt plan quicksight
+        if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/staging/quicksight"
+          comment-delete: "true"
+          comment-title: "Staging: quicksight"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
 
       - name: Terragrunt plan lambda-google-cidr
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/lambda-google-cidr"
           comment-delete: "true"
@@ -285,7 +311,7 @@ jobs:
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
         if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ses_to_sqs_email_callbacks"
           comment-delete: "true"
@@ -295,10 +321,41 @@ jobs:
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
         if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/sns_to_sqs_sms_callbacks"
           comment-delete: "true"
           comment-title: "Staging: sns_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
+        if: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/staging/pinpoint_to_sqs_sms_callbacks"
+          comment-delete: "true"
+          comment-title: "Staging: pinpoint_to_sqs_sms_callbacks"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan system_status
+        if: ${{ steps.filter.outputs.system_status == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/system_status"
+          comment-delete: "true"
+          comment-title: "Staging: system_status"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan aws/system_status_static_site
+        if: ${{ steps.filter.outputs.system_status_static_site == 'true' || steps.filter.outputs.common == 'true' }}
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/staging/system_status_static_site"
+          comment-delete: "true"
+          comment-title: "Staging: system_status_static_site"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"

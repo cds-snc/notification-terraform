@@ -1,3 +1,7 @@
+locals {
+  image_tag = var.env == "production" ? var.blazer_image_tag : "latest"
+}
+
 resource "aws_ecs_cluster" "blazer" {
   name = "blazer"
 
@@ -37,7 +41,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : "${aws_ecr_repository.blazer.repository_url}:${var.blazer_image_tag}",
+      "image" : "${aws_ecr_repository.blazer.repository_url}:${local.image_tag}",
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
@@ -59,9 +63,6 @@ resource "aws_ecs_task_definition" "blazer" {
         }, {
         "name" : "NOTIFY_URL",
         "value" : "https://${var.base_domain}"
-        }, {
-        "name" : "BLAZER_SLACK_WEBHOOK_URL",
-        "value" : var.blazer_slack_webhook_general_topic
       }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",

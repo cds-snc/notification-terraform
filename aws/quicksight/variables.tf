@@ -1,5 +1,4 @@
 locals {
-  quicksight_db_user_name = "quicksight_db_user"
   dataset_viewer_permissions = [
     "quicksight:DescribeDataSet",
     "quicksight:DescribeDataSetPermissions",
@@ -26,16 +25,25 @@ variable "database_name" {
   type = string
 }
 
+variable "quicksight_db_user_name" {
+  type    = string
+  default = "quicksight_db_user"
+}
+
 variable "quicksight_db_user_password" {
   type      = string
   sensitive = true
 }
 
-variable "vpc_private_subnets" {
-  type = list(any)
-}
+# variable "vpc_private_subnets" {
+#   type = list(any)
+# }
 
 variable "vpc_id" {
+  type = string
+}
+
+variable "s3_bucket_sms_usage_sanitized_id" {
   type = string
 }
 

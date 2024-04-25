@@ -16,9 +16,10 @@ env:
   TF_VAR_alt_base_domain: ${{secrets.PRODUCTION_ALT_BASE_DOMAIN}}
   TF_VAR_dbtools_password: ${{ secrets.PRODUCTION_DBTOOLS_PASSWORD }}
   TF_VAR_heartbeat_api_key: ${{ secrets.PRODUCTION_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_template_id: ${{ secrets.PRODUCTION_HEARTBEAT_TEMPLATE_ID }}
+  TF_VAR_heartbeat_sms_number: ${{ secrets.PRODUCTION_HEARTBEAT_SMS_NUMBER }}
   TF_VAR_rds_cluster_password: ${{ secrets.PRODUCTION_RDS_CLUSTER_PASSWORD }}
   TF_VAR_app_db_user_password: ${{ secrets.PRODUCTION_APP_DB_USER_PASSWORD }}
+  TF_VAR_quicksight_db_user_password: ${{ secrets.PRODUCTION_QUICKSIGHT_DB_USER_PASSWORD }}
   TF_VAR_cloudwatch_opsgenie_alarm_webhook: ${{ secrets.PRODUCTION_CLOUDWATCH_OPSGENIE_ALARM_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
   TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.PRODUCTION_CLOUDWATCH_SLACK_WEBHOOK }}
@@ -30,20 +31,30 @@ env:
   TF_VAR_slack_channel_warning_topic: notification-ops
   TF_VAR_slack_channel_critical_topic: notification-ops
   TF_VAR_slack_channel_general_topic: notification-ops
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.PRODUCTION_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_system_status_admin_url: "https://notification.canada.ca"
+  TF_VAR_system_status_api_url: "https://api.notification.canada.ca"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-production-system-status"
   TF_VAR_new_relic_license_key: ${{ secrets.PRODUCTION_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_waf_secret: ${{secrets.PRODUCTION_WAF_SECRET}}
   TF_VAR_route_53_zone_arn: /hostedzone/Z07701011ICTZVSX5P68J
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
-  TF_VAR_blazer_slack_webhook_general_topic: ${{ secrets.PRODUCTION_BLAZER_SLACK_WEBHOOK }}
+  TF_VAR_client_vpn_access_group_id: ${{ secrets.PRODUCTION_CLIENT_VPN_ACCESS_GROUP_ID }}
+  TF_VAR_client_vpn_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SAML_METADATA }}
+  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.PRODUCTION_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
+  TF_VAR_pr_bot_installation_id: ${{ secrets.NOTIFY_PR_BOT_INSTALLATION_ID_MANIFESTS }}
+  TF_VAR_pr_bot_app_id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
+  TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
+  TF_VAR_budget_sre_bot_webhook: ${{ secrets.PRODUCTION_BUDGET_SRE_BOT_WEBHOOK }}
 
 jobs:
   terragrunt-plan-production:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Set environment variables
         uses: ./.github/actions/setvars
@@ -52,6 +63,11 @@ jobs:
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3           
 
       - name: Set INFRASTRUCTURE_VERSION
         run: |
@@ -59,7 +75,7 @@ jobs:
           echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
 
       - name: Terragrunt plan common
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/common"
           comment-delete: "true"
@@ -68,7 +84,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ECR
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ecr"
           comment-delete: "true"
@@ -77,7 +93,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_receiving_emails
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ses_receiving_emails"
           comment-delete: "true"
@@ -86,7 +102,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ses_to_sqs_email_callbacks"
           comment-delete: "true"
@@ -95,7 +111,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/sns_to_sqs_sms_callbacks"
           comment-delete: "true"
@@ -103,8 +119,17 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+      - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/production/pinpoint_to_sqs_sms_callbacks"
+          comment-delete: "true"
+          comment-title: "Production: pinpoint_to_sqs_sms_callbacks"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
       - name: Terragrunt plan dns
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/dns"
           comment-delete: "true"
@@ -113,7 +138,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan ses_validation_dns_entries
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/ses_validation_dns_entries"
           comment-delete: "true"
@@ -122,7 +147,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan eks
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/eks"
           comment-delete: "true"
@@ -131,7 +156,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan elasticache
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/elasticache"
           comment-delete: "true"
@@ -140,7 +165,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan rds
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/rds"
           comment-delete: "true"
@@ -149,7 +174,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan cloudfront
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/cloudfront"
           comment-delete: "true"
@@ -158,7 +183,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan lambda-api
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/lambda-api"
           comment-delete: "true"
@@ -167,7 +192,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan heartbeat
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/heartbeat"
           comment-delete: "true"
@@ -176,7 +201,7 @@ jobs:
           terragrunt: "true"
 
       - name: Terragrunt plan database-tools
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/database-tools"
           comment-delete: "true"
@@ -184,11 +209,41 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-      - name: Terragrunt plan lambda-google-cidr
+      - name: Terragrunt plan quicksight
         uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/quicksight"
+          comment-delete: "true"
+          comment-title: "Production: quicksight"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
+      - name: Terragrunt plan lambda-google-cidr
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/production/lambda-google-cidr"
           comment-delete: "true"
           comment-title: "Production: lambda-google-cidr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+      - name: Terragrunt plan system_status
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/system_status"
+          comment-delete: "true"
+          comment-title: "Production: system_status"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+
+      - name: Terragrunt plan system_status_static_site
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/system_status_static_site"
+          comment-delete: "true"
+          comment-title: "Production: system_status_static_site"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+                    

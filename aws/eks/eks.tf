@@ -10,6 +10,11 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler", "authenticator"]
 
   vpc_config {
+
+    # Setting this explicitly for now, until manifests release is in
+    endpoint_private_access = true
+    endpoint_public_access  = false
+
     # tfsec:ignore:AWS068 EKS cluster should not have open CIDR range for public access
     # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/203
     security_group_ids = [
@@ -50,11 +55,12 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 # AWS EKS Nodegroup configuration
 ###
 
-resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
-  cluster_name    = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  node_group_name = "notification-canada-ca-${var.env}-eks-primary-node-group"
-  node_role_arn   = aws_iam_role.eks-worker-role.arn
-  subnet_ids      = var.vpc_private_subnets
+resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
+  cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name      = "notification-canada-ca-${var.env}-eks-primary-node-group-k8s"
+  node_role_arn        = aws_iam_role.eks-worker-role.arn
+  subnet_ids           = var.vpc_private_subnets_k8s
+  force_update_version = var.force_upgrade
 
   disk_size = 80
 
@@ -88,11 +94,12 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
 }
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" {
-  count           = var.nodeUpgrade ? 1 : 0
-  cluster_name    = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  node_group_name = "notification-canada-ca-${var.env}-eks-secondary-node-group"
-  node_role_arn   = aws_iam_role.eks-worker-role.arn
-  subnet_ids      = var.vpc_private_subnets
+  count                = var.node_upgrade ? 1 : 0
+  cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name      = "notification-canada-ca-${var.env}-eks-secondary-node-group"
+  node_role_arn        = aws_iam_role.eks-worker-role.arn
+  subnet_ids           = var.vpc_private_subnets_k8s
+  force_update_version = var.force_upgrade
 
   release_version = var.eks_node_ami_version
   instance_types  = var.secondary_worker_instance_types
@@ -131,7 +138,9 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
 }
 
 resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
-  name                   = "notification-canada-ca-${var.env}-eks-node-group"
+  name        = "notification-canada-ca-${var.env}-eks-node-group"
+  description = "EKS worker node group launch template"
+
   update_default_version = true
 
   block_device_mappings {
@@ -142,12 +151,6 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
       volume_size           = 80
       volume_type           = "gp3"
     }
-  }
-
-  network_interfaces {
-    security_groups = [
-      aws_security_group.notification-canada-ca-worker.id
-    ]
   }
 
   # Require IMDSv2
@@ -173,6 +176,31 @@ resource "aws_eks_addon" "coredns" {
   addon_version               = var.eks_addon_coredns_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
+
+  configuration_values = jsonencode({
+    corefile = <<-EOF
+      .:53 {
+          errors
+          health {
+              lameduck 5s
+            }
+          ready
+          kubernetes cluster.local in-addr.arpa ip6.arpa {
+            pods insecure
+            fallthrough in-addr.arpa ip6.arpa
+          }
+          prometheus :9153
+          forward . /etc/resolv.conf
+          cache 60
+          loop
+          reload
+          loadbalance
+      }
+      EOF
+    "nodeSelector" : {
+      "eks.amazonaws.com/capacityType" : "ON_DEMAND"
+    }
+  })
 }
 
 resource "aws_eks_addon" "kube_proxy" {
@@ -187,6 +215,14 @@ resource "aws_eks_addon" "vpc_cni" {
   cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   addon_name                  = "vpc-cni"
   addon_version               = var.eks_addon_vpc_cni_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "ebs_driver" {
+  cluster_name                = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  addon_name                  = "aws-ebs-csi-driver"
+  addon_version               = var.eks_addon_ebs_driver_version
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 }

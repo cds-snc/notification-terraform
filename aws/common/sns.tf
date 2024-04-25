@@ -80,12 +80,60 @@ resource "aws_sns_topic" "notification-canada-ca-alert-general" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AWSBudgetsSNSPublishingPermissions",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "budgets.amazonaws.com"
+      },
+      "Action": "SNS:Publish",
+      "Resource": "arn:aws:sns:ca-central-1:${var.account_id}:alert-general",
+      "Condition": {
+        "StringEquals": {
+          "aws:SourceAccount": "${var.account_id}"
+        },
+        "ArnLike": {
+          "aws:SourceArn": "arn:aws:budgets::${var.account_id}:*"
+        }
+      }
+    },
+    {
+      "Sid": "__default_statement_ID",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "SNS:GetTopicAttributes",
+        "SNS:SetTopicAttributes",
+        "SNS:AddPermission",
+        "SNS:RemovePermission",
+        "SNS:DeleteTopic",
+        "SNS:Subscribe",
+        "SNS:ListSubscriptionsByTopic",
+        "SNS:Publish"
+      ],
+      "Resource": "arn:aws:sns:ca-central-1:${var.account_id}:alert-general",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceOwner": "${var.account_id}"
+        }
+      }
+    }
+  ]
+}
+POLICY
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs" {
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
   delivery_status_success_sampling_rate = 100
   monthly_spend_limit                   = var.sns_monthly_spend_limit
+  usage_report_s3_bucket                = module.sns_sms_usage_report_bucket.s3_bucket_id
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
@@ -94,6 +142,7 @@ resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
   delivery_status_success_sampling_rate = 100
   monthly_spend_limit                   = var.sns_monthly_spend_limit_us_west_2
+  usage_report_s3_bucket                = module.sns_sms_usage_report_bucket_us_west_2.s3_bucket_id
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_ok_us_west_2_to_lambda" {

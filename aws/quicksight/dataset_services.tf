@@ -35,7 +35,15 @@ resource "aws_quicksight_data_set" "services" {
         type = "DATETIME"
       }
       input_columns {
+        name = "restricted"
+        type = "STRING"
+      }
+      input_columns {
         name = "name"
+        type = "STRING"
+      }
+      input_columns {
+        name = "organisation_id"
         type = "STRING"
       }
       input_columns {
@@ -59,5 +67,20 @@ resource "aws_quicksight_data_set" "services" {
   permissions {
     actions   = local.dataset_owner_permissions
     principal = aws_quicksight_group.dataset_owner.arn
+  }
+}
+
+resource "aws_quicksight_refresh_schedule" "services" {
+  data_set_id = "services"
+  schedule_id = "schedule-services"
+  depends_on  = [aws_quicksight_data_set.services]
+
+  schedule {
+    refresh_type = "FULL_REFRESH"
+
+    schedule_frequency {
+      interval        = "DAILY"
+      time_of_the_day = "07:25"
+    }
   }
 }

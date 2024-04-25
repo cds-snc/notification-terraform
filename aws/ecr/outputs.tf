@@ -22,6 +22,16 @@ output "sns_to_sqs_sms_callbacks_ecr_repository_url" {
   description = "Repository URL of sns_to_sqs_sms_callbacks ECR"
   value       = aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url
 }
+
+output "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
+  description = "arn of pinpoint_to_sqs_sms_callbacks ECR"
+  value       = aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.arn
+}
+output "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
+  description = "Repository URL of pinpoint_to_sqs_sms_callbacks ECR"
+  value       = aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url
+}
+
 output "heartbeat_ecr_arn" {
   description = "arn of heartbeat ECR"
   value       = aws_ecr_repository.heartbeat.arn
@@ -61,4 +71,21 @@ output "performance_test_ecr_arn" {
 output "performance_test_ecr_repository_url" {
   description = "Repository URL of performance-test ECR"
   value       = var.env == "production" ? "" : aws_ecr_repository.performance-test[0].repository_url
+}
+output "system_status_ecr_arn" {
+  description = "arn of system_status ECR"
+  value       = aws_ecr_repository.system_status.arn
+}
+output "system_status_ecr_repository_url" {
+  description = "Repository URL of system_status ECR"
+  value       = aws_ecr_repository.system_status.repository_url
+}
+
+output "github_arc_runner_ecr_arn" {
+  description = "arn of github arc runner ECR"
+  value       = aws_ecr_repository.github_arc.arn
+}
+output "github_arc_runner_repository_url" {
+  description = "Repository URL of github arc runner ECR"
+  value       = aws_ecr_repository.github_arc.repository_url
 }

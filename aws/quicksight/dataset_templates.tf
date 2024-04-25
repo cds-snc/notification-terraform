@@ -6,7 +6,7 @@ resource "aws_quicksight_data_set" "templates" {
   import_mode = "SPICE"
 
   physical_table_map {
-    physical_table_map_id = "templatesv2"
+    physical_table_map_id = "templates"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "templates"
@@ -51,5 +51,20 @@ resource "aws_quicksight_data_set" "templates" {
   permissions {
     actions   = local.dataset_owner_permissions
     principal = aws_quicksight_group.dataset_owner.arn
+  }
+}
+
+resource "aws_quicksight_refresh_schedule" "templates" {
+  data_set_id = "templatesv2"
+  schedule_id = "schedule-templates"
+  depends_on  = [aws_quicksight_data_set.templates]
+
+  schedule {
+    refresh_type = "FULL_REFRESH"
+
+    schedule_frequency {
+      interval        = "DAILY"
+      time_of_the_day = "07:20"
+    }
   }
 }

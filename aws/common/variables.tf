@@ -68,18 +68,25 @@ variable "sqs_visibility_timeout_priority_high" {
   default = 26
 }
 
-variable "sqs_email_queue_name" {
+variable "sqs_send_email_high_queue_name" {
   type = string
   # See QueueNames in
   # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-tasks"
+  default = "send-email-high"
 }
 
-variable "sqs_sms_queue_name" {
+variable "sqs_send_email_medium_queue_name" {
   type = string
   # See QueueNames in
   # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-tasks"
+  default = "send-email-medium"
+}
+
+variable "sqs_send_email_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-low"
 }
 
 variable "sqs_send_sms_high_queue_name" {
@@ -253,4 +260,29 @@ variable "create_cbs_bucket" {
 variable "eks_cluster_name" {
   description = "Name of EKS Cluster"
   type        = string
+}
+
+variable "account_budget_limit" {
+  description = "The dollar amount in USD that this AWS account should be budgeted to"
+  type        = number
+  default     = 3000
+
+}
+
+variable "account_budget_alert_emails" {
+  description = "List of people who should be alerted when budget thresholds are met"
+  type        = list(any)
+  default     = ["jimmy.royer@cds-snc.ca", "stephen.astels@cds-snc.ca", "ben.larabie@cds-snc.ca", "michael.pond@cds-snc.ca"]
+}
+
+variable "budget_sre_bot_webhook" {
+  description = "Slack webhook used to post budget alerts to the SRE bot"
+  type        = string
+  sensitive   = true
+}
+
+variable "vpc_cidr_block" {
+  description = "CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
 }

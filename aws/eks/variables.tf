@@ -10,7 +10,7 @@ variable "secondary_worker_instance_types" {
   type = list(any)
 }
 
-variable "nodeUpgrade" {
+variable "node_upgrade" {
   type        = bool
   description = "Set to true when wanting to upgrade Node sizes"
   default     = false
@@ -29,6 +29,10 @@ variable "vpc_id" {
 }
 
 variable "vpc_private_subnets" {
+  type = list(any)
+}
+
+variable "vpc_private_subnets_k8s" {
   type = list(any)
 }
 
@@ -183,4 +187,131 @@ variable "enable_delete_protection" {
 variable "notification_base_url_regex_arn" {
   type        = string
   description = "The ARN of the regex for the notify base URL"
+}
+
+variable "sqs_send_email_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-high"
+}
+
+variable "sqs_send_email_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-medium"
+}
+
+variable "sqs_send_email_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-email-low"
+}
+
+variable "sqs_send_sms_high_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-high"
+}
+
+variable "sqs_send_sms_medium_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-medium"
+}
+
+variable "sqs_send_sms_low_queue_name" {
+  type = string
+  # See QueueNames in
+  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
+  default = "send-sms-low"
+}
+
+variable "celery_queue_prefix" {
+  type        = string
+  description = "Celery queue prefix"
+}
+
+variable "eks_addon_ebs_driver_version" {
+  type        = string
+  description = "Version for EBS driver addon for EKS (Persistence)"
+}
+
+variable "force_upgrade" {
+  type        = bool
+  description = "Force k8s upgrade even though not all pods were able to be evicted"
+  default     = false
+}
+
+variable "internal_dns_certificate_arn" {
+  type        = string
+  description = "The ARN for the internal DNS certificate"
+}
+
+variable "internal_dns_zone_id" {
+  type        = string
+  description = "The zone id for the internal DNS"
+}
+
+variable "internal_dns_name" {
+  type        = string
+  description = "The fqdn for the internal DNS"
+}
+
+variable "pr_bot_private_key" {
+  type        = string
+  description = "The Private Key for PR Bot, used by Github ARC"
+  sensitive   = true
+}
+
+variable "pr_bot_app_id" {
+  type        = string
+  description = "The AppID for PR Bot, used by Github ARC"
+  sensitive   = true
+}
+
+variable "pr_bot_installation_id" {
+  type        = string
+  description = "The installation ID for PR Bot, used by Github ARC"
+  sensitive   = true
+}
+
+variable "base_domain" {
+  type        = string
+  description = "The base domain for the environment"
+}
+
+variable "client_vpn_self_service_saml_metadata" {
+  type        = string
+  description = "The SAML metadata for the client VPN self service"
+}
+
+variable "client_vpn_saml_metadata" {
+  type        = string
+  description = "The SAML metadata for the client VPN"
+}
+
+variable "client_vpn_access_group_id" {
+  type        = string
+  description = "The access group ID for the client VPN"
+}
+
+variable "vpc_cidr_block" {
+  type        = string
+  description = "The CIDR block for the VPC"
+  default     = "10.0.0.0/16"
+}
+
+variable "subnet_cidr_blocks" {
+  type        = list(string)
+  description = "The CIDR blocks for the subnets"
+}
+
+variable "subnet_ids" {
+  type        = list(string)
+  description = "The IDs for the subnets"
 }

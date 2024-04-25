@@ -45,4 +45,3 @@ resource "aws_ssm_parameter" "sqlalchemy_database_reader_uri" {
     Terraform             = true
   }
 }
-

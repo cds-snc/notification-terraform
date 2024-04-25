@@ -21,6 +21,11 @@ output "documentation_target_group_arn" {
   value = aws_alb_target_group.notification-canada-ca-documentation.arn
 }
 
+output "internal_nginx_target_group_arn" {
+  value = aws_alb_target_group.internal_nginx_http.arn
+}
+
+
 ###
 # EKS cluster
 ###
@@ -83,4 +88,13 @@ output "karpenter_instance_profile" {
 # Quicksight
 output "quicksight_security_group_id" {
   value = aws_security_group.quicksight.id
+}
+
+# Sentinel
+output "sentinel_forwarder_cloudwatch_lambda_arn" {
+  value = length(module.sentinel_forwarder) != 0 ? module.sentinel_forwarder[0].lambda_arn : null
+}
+
+output "sentinel_forwarder_cloudwatch_lambda_name" {
+  value = length(module.sentinel_forwarder) != 0 ? module.sentinel_forwarder[0].lambda_name : null
 }

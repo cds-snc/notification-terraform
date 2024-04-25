@@ -10,6 +10,11 @@ output "vpc_private_subnets" {
   value = aws_subnet.notification-canada-ca-private.*.id
 }
 
+output "vpc_private_subnets_k8s" {
+  value = aws_subnet.notification-canada-ca-private-k8s.*.id
+}
+
+
 output "vpc_public_subnets" {
   value = aws_subnet.notification-canada-ca-public.*.id
 }
@@ -48,6 +53,14 @@ output "s3_bucket_asset_bucket_arn" {
 
 output "s3_bucket_csv_upload_bucket_arn" {
   value = aws_s3_bucket.csv_bucket.arn
+}
+
+output "s3_bucket_sms_usage_id" {
+  value = module.sns_sms_usage_report_bucket.s3_bucket_id
+}
+
+output "s3_bucket_sms_usage_sanitized_id" {
+  value = module.sns_sms_usage_report_sanitized_bucket.s3_bucket_id
 }
 
 output "firehose_waf_logs_iam_role_arn" {
@@ -149,4 +162,40 @@ output "sqs_eks_notification_canada_cadelivery_receipts_arn" {
 output "notification_base_url_regex_arn" {
   value       = aws_wafv2_regex_pattern_set.notification_base_url.arn
   description = "The ARN of the regex pattern set for the allowed base domains"
+}
+
+output "sqs_send_sms_low_queue_name" {
+  value = var.sqs_send_sms_low_queue_name
+}
+
+output "sqs_send_sms_medium_queue_name" {
+  value = var.sqs_send_sms_medium_queue_name
+}
+
+output "sqs_send_sms_high_queue_name" {
+  value = var.sqs_send_sms_high_queue_name
+}
+
+output "sqs_send_email_low_queue_name" {
+  value = var.sqs_send_email_low_queue_name
+}
+
+output "sqs_send_email_medium_queue_name" {
+  value = var.sqs_send_email_medium_queue_name
+}
+
+output "sqs_send_email_high_queue_name" {
+  value = var.sqs_send_email_high_queue_name
+}
+
+output "sqs_deliver_receipts_queue_arn" {
+  value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
+}
+
+output "subnet_ids" {
+  value = aws_subnet.notification-canada-ca-private[*].id
+}
+
+output "subnet_cidr_blocks" {
+  value = aws_subnet.notification-canada-ca-private[*].cidr_block
 }
