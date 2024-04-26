@@ -1,5 +1,5 @@
 locals {
-  postgres_dangerous_queries       = ["ALTER ", "CREATE ", "DELETE ", "DROP ", "GRANT ", "REVOKE ", "TRUNCATE "]
+  postgres_dangerous_queries       = ["ALTER ", "CREATE ", "DROP ", "GRANT ", "REVOKE ", "TRUNCATE "]
   postgres_dangerous_queries_lower = [for sql in local.postgres_dangerous_queries : lower(sql)]
 }
 
