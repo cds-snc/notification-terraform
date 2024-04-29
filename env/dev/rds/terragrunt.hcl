@@ -26,7 +26,9 @@ dependency "eks" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
-    eks-cluster-securitygroup = "sg-0e2c3ef6c5c75b74c"
+    eks-cluster-securitygroup                 = "sg-0e2c3ef6c5c75b74c"
+    sentinel_forwarder_cloudwatch_lambda_arn  = "arn:aws:lambda:ca-central-1:123456789012:function:sentinel-cloud-watch-forwarder"
+    sentinel_forwarder_cloudwatch_lambda_name = "sentinel-cloud-watch-forwarder"
   }
 }
 
@@ -42,6 +44,9 @@ inputs = {
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
   sns_alert_general_arn     = dependency.common.outputs.sns_alert_general_arn
   rds_database_name         = "notificationcanadacadev"
+
+  sentinel_forwarder_cloudwatch_lambda_arn  = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_arn
+  sentinel_forwarder_cloudwatch_lambda_name = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_name
 }
 
 terraform {

@@ -42,5 +42,14 @@ variable "enable_delete_protection" {
 variable "rds_database_name" {
   type        = string
   description = "Set the name of the database"
+}
 
+variable "sentinel_forwarder_cloudwatch_lambda_name" {
+  type        = string
+  description = "Name of the Sentinel forwarder lambda function."
+}
+
+variable "sentinel_forwarder_cloudwatch_lambda_arn" {
+  type        = string
+  description = "ARN of the Sentinel forwarder lambda function."
 }
