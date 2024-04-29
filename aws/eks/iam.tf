@@ -281,6 +281,10 @@ resource "aws_iam_role_policy" "karpenter_controller" {
         Action = [
           "ssm:GetParameter",
           "iam:PassRole",
+          "iam:GetInstanceProfile",
+          "iam:CreateInstanceProfile",
+          "iam:TagInstanceProfile",
+          "iam:AddRoleToInstanceProfile",
           "ec2:DescribeImages",
           "ec2:RunInstances",
           "ec2:DescribeSubnets",
