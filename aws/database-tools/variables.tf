@@ -90,3 +90,9 @@ variable "bootstrap" {
   type        = bool
   default     = false
 }
+
+variable "force_delete_ecr" {
+  description = "Whether to force delete the ECR repository"
+  type        = bool
+  default     = false
+}
