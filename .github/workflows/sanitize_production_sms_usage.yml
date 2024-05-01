@@ -1,12 +1,12 @@
-name: Sanitize staging SMS usage data
+name: Sanitize production SMS usage data
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 22 * * *"
 
 env:
-  INPUT_BUCKET_1: notification-canada-ca-staging-sms-usage-logs
-  INPUT_BUCKET_2: notification-canada-ca-staging-sms-usage-west-2-logs
+  INPUT_BUCKET_1: notification-canada-ca-production-sms-usage-logs
+  INPUT_BUCKET_2: notification-canada-ca-production-sms-usage-west-2-logs
 
 jobs:
   sanitize-sms-usage:
@@ -19,8 +19,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
       with:
-        aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
         aws-region: ca-central-1
 
     - name: run script
@@ -31,5 +31,5 @@ jobs:
     - name: Notify Slack channel if this job failed
       if: ${{ failure() }}
       run: |
-        json="{'text':'<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
+        json="{'text':'<!here> Sanitize production SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
         curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
