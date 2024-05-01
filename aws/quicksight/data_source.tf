@@ -50,7 +50,7 @@ resource "aws_quicksight_data_source" "s3_sms_usage" {
   parameters {
     s3 {
       manifest_file_location {
-        bucket = aws_s3_object.manifest_file.bucket
+        bucket = var.s3_bucket_sms_usage_sanitized_id
         key    = aws_s3_object.manifest_file.key
       }
     }
