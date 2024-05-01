@@ -1,4 +1,4 @@
-name: Sanitize SMS usage data
+name: Sanitize staging SMS usage data
 on:
   workflow_dispatch:
   schedule:
@@ -26,10 +26,10 @@ jobs:
 
     - name: run script
       run: |
-        ./sZZZcripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET} ${OUTPUT_BUCKET}
+        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET} ${OUTPUT_BUCKET}
 
     - name: Notify Slack channel if this job failed
       if: ${{ failure() }}
       run: |
-        json="{'text':'<!here> Sanitize SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
+        json="{'text':'<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
         curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
