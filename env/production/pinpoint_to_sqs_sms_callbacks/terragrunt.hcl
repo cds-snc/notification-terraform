@@ -1,6 +1,6 @@
 # Uses GitHub tags for release management
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/pinpoint_to_sqs_email_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/pinpoint_to_sqs_sms_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {
