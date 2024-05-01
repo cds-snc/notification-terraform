@@ -38,7 +38,7 @@ for file in $(echo $objects | jq -r '.[]'); do
         mv ${csvFile}_out $csvFile
         gzip $csvFile
         aws s3 cp $file s3://$outbucket/$file --content-encoding gzip
-        rm $file $csvFile
+        rm $file
     fi
 done
 
