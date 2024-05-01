@@ -6,8 +6,8 @@ on:
   pull_request:
 
 env:
-  INPUT_BUCKET: notification-canada-ca-staging-sms-usage-logs 
-  OUTPUT_BUCKET: notification-canada-ca-staging-sms-usage-logs-san
+  INPUT_BUCKET_1: notification-canada-ca-staging-sms-usage-logs
+  INPUT_BUCKET_2: notification-canada-ca-staging-sms-usage-west-2-logs
 
 jobs:
   sanitize-sms-usage:
@@ -26,10 +26,11 @@ jobs:
 
     - name: run script
       run: |
-        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET} ${OUTPUT_BUCKET}
+        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET_1} ${INPUT_BUCKET_1}-san
+        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET_2} ${INPUT_BUCKET_2}-san
 
-    - name: Notify Slack channel if this job failed
-      if: ${{ failure() }}
-      run: |
-        json="{'text':'<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
-        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
+    # - name: Notify Slack channel if this job failed
+    #   if: ${{ failure() }}
+    #   run: |
+    #     json="{'text':'<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
+    #     curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
