@@ -1,0 +1,35 @@
+name: S3 backup
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 22 * * *"
+  pull_request:
+
+env:
+  INPUT_BUCKET: notification-canada-ca-staging-sms-usage-logs 
+  OUTPUT_BUCKET: notification-canada-ca-staging-sms-usage-logs-san
+
+jobs:
+  sanitize-sms-usage:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+      with:
+        aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+        aws-region: ca-central-1
+
+    - name: run script
+      run: |
+        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET} ${OUTPUT_BUCKET}
+
+    - name: Notify Slack channel if this job failed
+      if: ${{ failure() }}
+      run: |
+        json='{"text":"SMS usage sanitizer failed in <https://github.com/${{ github.repository }}>!"}'
+        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.SLACK_NOTIFY_WEBHOOK }}
