@@ -1,5 +1,5 @@
 inputs = {
-  account_id                          = "339712868793"
+  account_id                          = "update-me"
   region                              = "ca-central-1"
   domain                              = "sandbox.notification.cdssandbox.xyz"
   alt_domain                          = "alpha.sandbox.notification.cdssandbox.xyz"
