@@ -1,4 +1,4 @@
-name: S3 backup
+name: Sanitize SMS usage data
 on:
   workflow_dispatch:
   schedule:
@@ -26,10 +26,10 @@ jobs:
 
     - name: run script
       run: |
-        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET} ${OUTPUT_BUCKET}
+        ./sZZZcripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET} ${OUTPUT_BUCKET}
 
     - name: Notify Slack channel if this job failed
       if: ${{ failure() }}
       run: |
-        json='{"text":"SMS usage sanitizer failed in <https://github.com/${{ github.repository }}>!"}'
-        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.SLACK_NOTIFY_WEBHOOK }}
+        json="{'text':'<!here> Sanitize SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
+        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
