@@ -89,3 +89,12 @@ output "karpenter_instance_profile" {
 output "quicksight_security_group_id" {
   value = aws_security_group.quicksight.id
 }
+
+# Sentinel
+output "sentinel_forwarder_cloudwatch_lambda_arn" {
+  value = length(module.sentinel_forwarder) != 0 ? module.sentinel_forwarder[0].lambda_arn : null
+}
+
+output "sentinel_forwarder_cloudwatch_lambda_name" {
+  value = length(module.sentinel_forwarder) != 0 ? module.sentinel_forwarder[0].lambda_name : null
+}

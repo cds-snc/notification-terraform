@@ -25,6 +25,19 @@ dependency "common" {
       "subnet-0c7d18c0c51b28b61",
       "subnet-0c91f7c6b8211904b",
     ]
+    subnet_ids = [
+      "subnet-0cecd9e634daf82d3",
+      "subnet-0c7d18c0c51b28b61",
+      "subnet-0c91f7c6b8211904b",
+    ]
+    subnet_cidr_blocks = [
+      "10.0.0.0/24",
+      "10.0.1.0/24",
+      "10.0.2.0/24",
+      "10.0.32.0/19",
+      "10.0.64.0/19",
+      "10.0.96.0/19",
+    ]        
     sns_alert_warning_arn                     = ""
     sns_alert_critical_arn                    = ""
     sns_alert_general_arn                     = ""
@@ -37,8 +50,6 @@ dependency "common" {
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
-    client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
-    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -107,11 +118,11 @@ inputs = {
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
   celery_queue_prefix                       = "eks-notification-canada-ca"
-  client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
-  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
+  subnet_ids                                = dependency.common.outputs.subnet_ids
+  subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
   
 }
 
