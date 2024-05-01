@@ -62,10 +62,13 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
   subnet_ids           = var.vpc_private_subnets_k8s
   force_update_version = var.force_upgrade
 
-  disk_size = 80
-
   release_version = var.eks_node_ami_version
   instance_types  = var.primary_worker_instance_types
+
+  launch_template {
+    id      = aws_launch_template.notification-canada-ca-eks-node-group.id
+    version = aws_launch_template.notification-canada-ca-eks-node-group.default_version
+  }
 
   scaling_config {
     desired_size = var.primary_worker_desired_size
