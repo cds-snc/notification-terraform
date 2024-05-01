@@ -41,11 +41,11 @@ inputs = {
   alarm_warning_bulk_bulk_processed_created_delta_threshold          = 5000
   alarm_critical_bulk_bulk_processed_created_delta_threshold         = 10000
   alarm_critical_expired_inflights_threshold                         = 10
-  billing_tag_value                                                  = "notification-canada-ca-dev"
+  billing_tag_value                                                  = "notification-canada-ca-pond"
   sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
   sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
   sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
-  eks_cluster_name                                                   = "notification-canada-ca-dev-eks-cluster"  
+  eks_cluster_name                                                   = "notification-canada-ca-pond-eks-cluster"  
 }
 
 # See QueueNames in

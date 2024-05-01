@@ -7,7 +7,7 @@ include {
 }
 
 inputs = {
-  env                                    = "dev"
-  billing_tag_value                      = "notification-canada-ca-dev"
+  env                                    = "pond"
+  billing_tag_value                      = "notification-canada-ca-pond"
   status_cert_created                    = true  
 }

@@ -56,7 +56,7 @@ include {
 }
 
 inputs = {
-  env                                    = "dev"
+  env                                    = "pond"
   api_image_tag                          = "latest"
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   redis_enabled                          = "1"
@@ -66,7 +66,7 @@ inputs = {
   high_demand_max_concurrency            = 10
   csv_upload_bucket_arn                  = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
-  new_relic_app_name                     = "notification-lambda-api-dev"
+  new_relic_app_name                     = "notification-lambda-api-pond"
   new_relic_distribution_tracing_enabled = "true"
   notification_queue_prefix              = "eks-notification-canada-ca"
   redis_enabled                          = 1

@@ -44,7 +44,7 @@ inputs = {
   vpc_private_subnets               = dependency.common.outputs.vpc_private_subnets
   vpc_id                            = dependency.common.outputs.vpc_id
   billing_tag_key                   = "CostCenter"
-  billing_tag_value                 = "notification-canada-ca-dev"
+  billing_tag_value                 = "notification-canada-ca-pond"
   blazer_image_tag                  = "latest"
   database-tools-securitygroup      = dependency.eks.outputs.database-tools-securitygroup
   database-tools-db-securitygroup   = dependency.eks.outputs.database-tools-db-securitygroup
@@ -54,4 +54,9 @@ inputs = {
 
 terraform {
   source = "../../../aws//database-tools"
+  after_hook "cleanup-lambdas" {
+    commands     = ["apply"]
+    execute      = ["rm", "-rfd", "/var/tmp/notification-lambdas"]
+    run_on_error = true
+  }
 }
