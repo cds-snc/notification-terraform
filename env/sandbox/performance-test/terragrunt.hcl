@@ -51,9 +51,9 @@ inputs = {
   aws_pinpoint_region       = "ca-central-1"
 
   billing_tag_key                             = "CostCenter"
-  billing_tag_value                           = "notification-canada-ca-pond"
+  billing_tag_value                           = "notification-canada-ca-sandbox"
   schedule_expression                         = "cron(0 0 * * ? *)"
-  perf_test_aws_s3_bucket                     = "notify-performance-test-results-pond"
+  perf_test_aws_s3_bucket                     = "notify-performance-test-results-sandbox"
   perf_test_csv_directory_path                = "/tmp/notify_performance_test"
   perf_test_sms_template_id                   = "d5fea9f3-f69d-481e-9186-b7f4eaa5cf63"
   perf_test_bulk_email_template_id            = "fa759679-30f2-4666-94e2-bd4921329c46"
