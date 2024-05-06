@@ -4,7 +4,7 @@ locals {
 }
 
 resource "aws_lambda_permission" "sentinel_forwarder_cloudwatch_log_subscription" {
-  count           = var.enable_sentinel_forwarding ? 1 : 0
+  count = var.enable_sentinel_forwarding ? 1 : 0
 
   action        = "lambda:InvokeFunction"
   function_name = var.sentinel_forwarder_cloudwatch_lambda_name
@@ -14,7 +14,7 @@ resource "aws_lambda_permission" "sentinel_forwarder_cloudwatch_log_subscription
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "postgresql_dangerous_queries" {
-  count           = var.enable_sentinel_forwarding ? 1 : 0
+  count = var.enable_sentinel_forwarding ? 1 : 0
 
   name            = "Postgresql dangerous queries"
   log_group_name  = aws_cloudwatch_log_group.logs_exports[0].name

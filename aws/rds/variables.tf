@@ -58,11 +58,11 @@ variable "enable_sentinel_forwarding" {
   type        = bool
   description = "Enable forwarding of logs to Sentinel."
   default     = false
-  
+
 }
 
 variable "rds_version" {
   type        = string
   description = "The version of the RDS instance."
-  default = "15.5"
+  default     = "15.5"
 }
