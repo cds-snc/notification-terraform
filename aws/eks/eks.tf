@@ -12,8 +12,8 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   vpc_config {
 
     # Setting this explicitly for now, until manifests release is in
-    endpoint_private_access = var.env == "production" ? false : true
-    endpoint_public_access  = var.env == "production" ? true : false
+    endpoint_private_access = true
+    endpoint_public_access  = false
 
     # tfsec:ignore:AWS068 EKS cluster should not have open CIDR range for public access
     # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/203
@@ -54,44 +54,6 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 ###
 # AWS EKS Nodegroup configuration
 ###
-
-resource "aws_eks_node_group" "notification-canada-ca-eks-node-group" {
-  cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  node_group_name      = "notification-canada-ca-${var.env}-eks-primary-node-group"
-  node_role_arn        = aws_iam_role.eks-worker-role.arn
-  subnet_ids           = var.vpc_private_subnets
-  force_update_version = var.force_upgrade
-
-  disk_size = 80
-
-  release_version = var.eks_node_ami_version
-  instance_types  = var.primary_worker_instance_types
-
-  scaling_config {
-    desired_size = var.primary_worker_desired_size
-    max_size     = var.primary_worker_max_size
-    min_size     = var.primary_worker_min_size
-  }
-
-  update_config {
-    max_unavailable = 1
-  }
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
-  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
-  depends_on = [
-    aws_iam_role_policy_attachment.eks-worker-AWSLoadBalancerControllerIAMPolicy,
-    aws_iam_role_policy_attachment.eks-worker-AmazonEC2ContainerRegistryReadOnly,
-    aws_iam_role_policy_attachment.eks-worker-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.eks-worker-AmazonEKS_CNI_Policy
-  ]
-
-  tags = {
-    Name                     = "notification-canada-ca"
-    CostCenter               = "notification-canada-ca-${var.env}"
-    "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
-  }
-}
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
   cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
@@ -139,8 +101,6 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
   subnet_ids           = var.vpc_private_subnets_k8s
   force_update_version = var.force_upgrade
 
-  disk_size = 80
-
   release_version = var.eks_node_ami_version
   instance_types  = var.secondary_worker_instance_types
 
@@ -156,6 +116,11 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
     max_unavailable = 1
   }
 
+  launch_template {
+    id      = aws_launch_template.notification-canada-ca-eks-node-group.id
+    version = aws_launch_template.notification-canada-ca-eks-node-group.default_version
+  }
+
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
   # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
   depends_on = [
@@ -169,6 +134,35 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
     Name                     = "notification-canada-ca"
     CostCenter               = "notification-canada-ca-${var.env}"
     "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  }
+}
+
+resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
+  name        = "notification-canada-ca-${var.env}-eks-node-group"
+  description = "EKS worker node group launch template"
+
+  update_default_version = true
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      delete_on_termination = true
+      encrypted             = true
+      volume_size           = 80
+      volume_type           = "gp3"
+    }
+  }
+
+  # Require IMDSv2
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_put_response_hop_limit = 2 # checkov:skip=CKV_AWS_341:Hop count > 1 is needed for containerized environments with multiple layers of networking
+    http_tokens                 = "required"
+  }
+
+  tags = {
+    Name       = "notification-canada-ca"
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 

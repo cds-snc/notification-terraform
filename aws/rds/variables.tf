@@ -42,5 +42,27 @@ variable "enable_delete_protection" {
 variable "rds_database_name" {
   type        = string
   description = "Set the name of the database"
+}
 
+variable "sentinel_forwarder_cloudwatch_lambda_name" {
+  type        = string
+  description = "Name of the Sentinel forwarder lambda function."
+}
+
+variable "sentinel_forwarder_cloudwatch_lambda_arn" {
+  type        = string
+  description = "ARN of the Sentinel forwarder lambda function."
+}
+
+variable "enable_sentinel_forwarding" {
+  type        = bool
+  description = "Enable forwarding of logs to Sentinel."
+  default     = false
+
+}
+
+variable "rds_version" {
+  type        = string
+  description = "The version of the RDS instance."
+  default     = "15.5"
 }

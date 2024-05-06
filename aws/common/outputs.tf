@@ -59,6 +59,10 @@ output "s3_bucket_sms_usage_id" {
   value = module.sns_sms_usage_report_bucket.s3_bucket_id
 }
 
+output "s3_bucket_sms_usage_sanitized_id" {
+  value = module.sns_sms_usage_report_sanitized_bucket.s3_bucket_id
+}
+
 output "firehose_waf_logs_iam_role_arn" {
   value = aws_iam_role.firehose_waf_logs.arn
 }
@@ -184,10 +188,14 @@ output "sqs_send_email_high_queue_name" {
   value = var.sqs_send_email_high_queue_name
 }
 
-output "client_vpn_cloudwatch_log_group_name" {
-  value = module.vpn.client_vpn_cloudwatch_log_group_name
+output "sqs_deliver_receipts_queue_arn" {
+  value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
 }
 
-output "client_vpn_security_group_id" {
-  value = module.vpn.client_vpn_security_group_id
+output "subnet_ids" {
+  value = aws_subnet.notification-canada-ca-private[*].id
+}
+
+output "subnet_cidr_blocks" {
+  value = aws_subnet.notification-canada-ca-private[*].cidr_block
 }
