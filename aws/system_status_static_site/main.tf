@@ -6,7 +6,7 @@ variable "billing_tag_value" {
 
 module "system_status_static_site" {
   source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.3.1"
-
+  depends_on = [aws_acm_certificate.system_status_static_site_root_certificate]
   count = var.status_cert_created ? 1 : 0
 
   acm_certificate_arn                = aws_acm_certificate.system_status_static_site_root_certificate.arn
@@ -22,7 +22,6 @@ module "system_status_static_site" {
     aws.us-east-1 = aws.us-east-1
     aws.dns       = aws.dns
   }
-  depends_on = [aws_acm_certificate.system_status_static_site_root_certificate]
 }
 
 
