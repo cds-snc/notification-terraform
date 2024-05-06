@@ -176,7 +176,7 @@ variable "route_53_zone_arn" {
 variable "enable_sentinel_forwarding" {
   type        = bool
   description = "Flag to enable or disable log forwarding to sentinel."
-  default     = true
+  default     = false
 }
 variable "enable_delete_protection" {
   type        = bool
