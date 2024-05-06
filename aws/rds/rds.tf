@@ -133,7 +133,7 @@ resource "aws_rds_cluster_parameter_group" "pgaudit" {
 resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
-  engine_version               = 11.9
+  engine_version               = var.rds_version
   database_name                = var.rds_database_name
   final_snapshot_identifier    = "server-${random_string.random.result}"
   master_username              = "postgres"
@@ -157,8 +157,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
     ignore_changes = [
       # Ignore changes to tags, e.g. because a management agent
       # updates these based on some ruleset managed elsewhere.
-      tags,
-      engine_version
+      tags
     ]
   }
 
