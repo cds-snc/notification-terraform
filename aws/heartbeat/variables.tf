@@ -45,3 +45,10 @@ variable "heartbeat_docker_tag" {
   description = "Set this to specify the image version"
   default     = "bootstrap"
 }
+
+variable "bootstrap" {
+  type        = bool
+  description = "Set this to true to use the bootstrap image"
+  default     = false
+  
+}

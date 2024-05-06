@@ -84,3 +84,21 @@ variable "sns_alert_warning_arn" {
   description = "value of the sns alert warning arn"
   type        = string
 }
+
+variable "bootstrap"  {
+  type        = bool
+  description = "Set this to true to use the bootstrap image"
+  default     = false
+}
+
+variable "force_delete_ecr" {
+  description = "Whether to force delete the ECR repository"
+  type        = bool
+  default     = false
+}
+
+variable "rds_version" {
+  description = "The version of the RDS instance"
+  type        = string
+  default     = "15.5"
+}
