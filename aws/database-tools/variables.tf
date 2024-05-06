@@ -85,7 +85,7 @@ variable "sns_alert_warning_arn" {
   type        = string
 }
 
-variable "bootstrap"  {
+variable "bootstrap" {
   type        = bool
   description = "Set this to true to use the bootstrap image"
   default     = false

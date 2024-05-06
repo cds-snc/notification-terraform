@@ -50,5 +50,5 @@ variable "bootstrap" {
   type        = bool
   description = "Set this to true to use the bootstrap image"
   default     = false
-  
+
 }
