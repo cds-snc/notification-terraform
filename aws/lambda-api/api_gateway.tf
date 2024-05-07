@@ -103,7 +103,7 @@ resource "aws_api_gateway_deployment" "api" {
 }
 
 resource "aws_api_gateway_stage" "api" {
-  depends_on    = [aws_api_gateway_account.main]
+  depends_on    = [aws_api_gateway_account.api_cloudwatch]
   deployment_id = aws_api_gateway_deployment.api.id
   rest_api_id   = aws_api_gateway_rest_api.api.id
   stage_name    = "v1"
