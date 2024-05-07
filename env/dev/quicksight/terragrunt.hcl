@@ -13,9 +13,10 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    kms_arn                          = ""
-    s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
-    vpc_id                           = ""
+    kms_arn                                     = ""
+    s3_bucket_sms_usage_sanitized_ca_central_id = "sns_sms_usage_report_bucket"
+    s3_bucket_sms_usage_sanitized_us_west_id    = "sns_sms_usage_report_bucket_2"
+    vpc_id                                      = ""
     vpc_private_subnets = [
       "",
       "",
@@ -49,11 +50,12 @@ include {
 }
 
 inputs = {
-  vpc_id                           = dependency.common.outputs.vpc_id
-  sns_alert_warning_arn            = dependency.common.outputs.sns_alert_warning_arn
-  s3_bucket_sms_usage_sanitized_id = dependency.common.outputs.s3_bucket_sms_usage_sanitized_id
-  quicksight_security_group_id     = dependency.eks.outputs.quicksight_security_group_id
-  database_name                    = dependency.rds.outputs.database_name
-  database_subnet_ids              = dependency.rds.outputs.database_subnet_ids
-  rds_instance_id                  = dependency.rds.outputs.rds_instance_id
+  vpc_id                                      = dependency.common.outputs.vpc_id
+  sns_alert_warning_arn                       = dependency.common.outputs.sns_alert_warning_arn
+  s3_bucket_sms_usage_sanitized_ca_central_id = dependency.common.outputs.s3_bucket_sms_usage_sanitized_ca_central_id
+  s3_bucket_sms_usage_sanitized_us_west_id    = dependency.common.outputs.s3_bucket_sms_usage_sanitized_us_west_id
+  quicksight_security_group_id                = dependency.eks.outputs.quicksight_security_group_id
+  database_name                               = dependency.rds.outputs.database_name
+  database_subnet_ids                         = dependency.rds.outputs.database_subnet_ids
+  rds_instance_id                             = dependency.rds.outputs.rds_instance_id
 }

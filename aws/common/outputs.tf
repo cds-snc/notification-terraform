@@ -59,8 +59,12 @@ output "s3_bucket_sms_usage_id" {
   value = module.sns_sms_usage_report_bucket.s3_bucket_id
 }
 
-output "s3_bucket_sms_usage_sanitized_id" {
+output "s3_bucket_sms_usage_sanitized_ca_central_id" {
   value = module.sns_sms_usage_report_sanitized_bucket.s3_bucket_id
+}
+
+output "s3_bucket_sms_usage_sanitized_us_west_id" {
+  value = module.sns_sms_usage_report_sanitized_bucket_us_west_2.s3_bucket_id
 }
 
 output "firehose_waf_logs_iam_role_arn" {

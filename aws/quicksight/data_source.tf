@@ -35,10 +35,11 @@ resource "aws_quicksight_data_source" "rds" {
 }
 
 resource "aws_s3_object" "manifest_file" {
-  bucket = var.s3_bucket_sms_usage_sanitized_id
+  bucket = var.s3_bucket_sms_usage_sanitized_ca_central_id
   key    = "quicksight/s3-manifest-sms-usage.json"
   content = templatefile("./s3-manifests/s3-manifest-sms-usage.tmpl", {
-    bucket = var.s3_bucket_sms_usage_sanitized_id
+    bucket_ca = var.s3_bucket_sms_usage_sanitized_ca_central_id,
+    bucket_us = var.s3_bucket_sms_usage_sanitized_us_west_id
   })
   acl  = "private"
   etag = filemd5("./s3-manifests/s3-manifest-sms-usage.tmpl")
