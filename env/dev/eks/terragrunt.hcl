@@ -44,6 +44,7 @@ dependency "common" {
     firehose_waf_logs_iam_role_arn            = ""
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
+    re_admin_arn2                             = ""
     re_api_arn                                = ""
     re_document_download_arn                  = ""
     re_documentation_arn                      = ""
@@ -111,6 +112,7 @@ inputs = {
   sign_in_waf_rate_limit                    = 100
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
+  re_admin_arn2                             = dependency.common.outputs.re_admin_arn2
   re_api_arn                                = dependency.common.outputs.re_api_arn
   re_document_download_arn                  = dependency.common.outputs.re_document_download_arn
   re_documentation_arn                      = dependency.common.outputs.re_documentation_arn
