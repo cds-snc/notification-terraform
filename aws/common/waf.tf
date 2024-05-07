@@ -40,7 +40,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/callbacks.*|/contact.*|/documentation.*|/email.*|/sitemap"
+    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
   }
 
   regular_expression {
@@ -81,6 +81,24 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   # GCA routes
   regular_expression {
     regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_wafv2_regex_pattern_set" "re_admin2" {
+  name        = "re_admin2"
+  description = "Regex matching valid admin endpoints"
+  scope       = "REGIONAL"
+
+  # WAF Regex blocks are combined with OR logic.
+  # Regex support is limited, please see:
+  # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
+
+  regular_expression {
+    regex_string = "/sitemap|/plandesite"
   }
 
   tags = {
