@@ -85,6 +85,11 @@ output "re_admin_arn" {
   description = "The ARN of the regex pattern set for the allowed URLs of the admin"
 }
 
+output "re_admin_arn2" {
+  value       = aws_wafv2_regex_pattern_set.re_admin2.arn
+  description = "The ARN of the regex pattern set for the allowed URLs of the admin"
+}
+
 output "re_document_download_arn" {
   value       = aws_wafv2_regex_pattern_set.re_document_download.arn
   description = "The ARN of the regex pattern set for the allowed URLs of the document download API"
