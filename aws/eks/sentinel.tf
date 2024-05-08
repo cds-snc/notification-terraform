@@ -26,7 +26,6 @@ module "sentinel_forwarder" {
 
 
 resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
-  count           = var.enable_sentinel_forwarding ? 1 : 0
   name            = "Admin API request"
   log_group_name  = local.eks_application_log_group
   filter_pattern  = "Admin API request"
@@ -35,7 +34,6 @@ resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
-  count           = var.enable_sentinel_forwarding ? 1 : 0
   name            = "Blazer logging"
   log_group_name  = "blazer"
   filter_pattern  = "Audit "
@@ -44,7 +42,6 @@ resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "client_vpn_connections" {
-  count           = var.enable_sentinel_forwarding ? 1 : 0
   name            = "Client VPN connections"
   log_group_name  = module.vpn.client_vpn_cloudwatch_log_group_name
   filter_pattern  = "[w1=\"*\"]" # All logs
