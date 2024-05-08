@@ -103,7 +103,7 @@ resource "aws_api_gateway_deployment" "api" {
 }
 
 resource "aws_api_gateway_stage" "api" {
-  depends_on    = [aws_api_gateway_account.main]
+  depends_on    = [aws_api_gateway_account.api_cloudwatch]
   deployment_id = aws_api_gateway_deployment.api.id
   rest_api_id   = aws_api_gateway_rest_api.api.id
   stage_name    = "v1"
@@ -190,34 +190,4 @@ resource "aws_api_gateway_method_settings" "api_settings" {
     caching_enabled      = true
     cache_data_encrypted = true
   }
-}
-
-# Allow API Gateway to push logs to CloudWatch
-resource "aws_api_gateway_account" "main" {
-  cloudwatch_role_arn = aws_iam_role.main.arn
-}
-
-resource "aws_iam_role" "main" {
-  name               = "api-gateway-logs-role"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "apigateway.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-
-}
-
-resource "aws_iam_role_policy_attachment" "main" {
-  role       = aws_iam_role.main.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
 }
