@@ -30,7 +30,7 @@ resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
   name            = "Admin API request"
   log_group_name  = local.eks_application_log_group
   filter_pattern  = "Admin API request"
-  destination_arn = module.sentinel_forwarder[0].lambda_arn
+  destination_arn = module.sentinel_forwarder.lambda_arn
   distribution    = "Random"
 }
 
@@ -39,7 +39,7 @@ resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
   name            = "Blazer logging"
   log_group_name  = "blazer"
   filter_pattern  = "Audit "
-  destination_arn = module.sentinel_forwarder[0].lambda_arn
+  destination_arn = module.sentinel_forwarder.lambda_arn
   distribution    = "Random"
 }
 
@@ -48,6 +48,6 @@ resource "aws_cloudwatch_log_subscription_filter" "client_vpn_connections" {
   name            = "Client VPN connections"
   log_group_name  = module.vpn.client_vpn_cloudwatch_log_group_name
   filter_pattern  = "[w1=\"*\"]" # All logs
-  destination_arn = module.sentinel_forwarder[0].lambda_arn
+  destination_arn = module.sentinel_forwarder.lambda_arn
   distribution    = "Random"
 }
