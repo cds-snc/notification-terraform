@@ -92,9 +92,9 @@ output "quicksight_security_group_id" {
 
 # Sentinel
 output "sentinel_forwarder_cloudwatch_lambda_arn" {
-  value = length(module.sentinel_forwarder) != 0 ? module.sentinel_forwarder[0].lambda_arn : null
+  value = module.sentinel_forwarder.lambda_arn
 }
 
 output "sentinel_forwarder_cloudwatch_lambda_name" {
-  value = length(module.sentinel_forwarder) != 0 ? module.sentinel_forwarder[0].lambda_name : null
+  value = module.sentinel_forwarder.lambda_name
 }

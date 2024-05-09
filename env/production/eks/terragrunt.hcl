@@ -44,6 +44,7 @@ dependency "common" {
     ]            
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
+    re_admin_arn2                             = ""
     re_api_arn                                = ""
     notification_base_url_regex_arn           = ""
     re_document_download_arn                  = ""
@@ -105,12 +106,13 @@ inputs = {
   eks_addon_kube_proxy_version              = "v1.29.0-eksbuild.3"
   eks_addon_vpc_cni_version                 = "v1.16.2-eksbuild.1"
   eks_addon_ebs_driver_version              = "v1.27.0-eksbuild.1"
-  eks_node_ami_version                      = "1.29.0-20240415"
+  eks_node_ami_version                      = "1.29.3-20240424"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
+  re_admin_arn2                             = dependency.common.outputs.re_admin_arn2
   re_api_arn                                = dependency.common.outputs.re_api_arn
   re_document_download_arn                  = dependency.common.outputs.re_document_download_arn
   re_documentation_arn                      = dependency.common.outputs.re_documentation_arn

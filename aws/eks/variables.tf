@@ -129,6 +129,11 @@ variable "re_admin_arn" {
   type        = string
 }
 
+variable "re_admin_arn2" {
+  description = "Regular expression (2) to match the admin urls"
+  type        = string
+}
+
 variable "re_document_download_arn" {
   description = "Regular expression to match the document download api urls"
   type        = string
@@ -176,7 +181,7 @@ variable "route_53_zone_arn" {
 variable "enable_sentinel_forwarding" {
   type        = bool
   description = "Flag to enable or disable log forwarding to sentinel."
-  default     = true
+  default     = false
 }
 variable "enable_delete_protection" {
   type        = bool
