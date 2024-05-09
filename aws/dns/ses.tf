@@ -27,6 +27,7 @@ resource "aws_ses_domain_dkim" "notification-canada-ca" {
   domain = var.domain
 }
 
+
 # TODO: SES Domain Validation Records Programmatically
 
 resource "aws_ses_identity_notification_topic" "notification-canada-ca-bounce-topic" {
@@ -67,6 +68,12 @@ resource "aws_ses_domain_identity" "notification-canada-ca-receiving" {
 
   domain = var.domain
 }
+
+resource "aws_ses_domain_dkim" "notification-canada-ca-receiving" {
+  provider = aws.us-east-1
+  domain   = var.domain
+}
+
 
 resource "aws_ses_receipt_rule_set" "main" {
   provider = aws.us-east-1
