@@ -39,4 +39,5 @@ inputs = {
   custom_sending_domains_dkim   = dependency.dns.outputs.custom_sending_domains_dkim
   cic_trvapply_vrtdemande_dkim  = dependency.dns.outputs.cic_trvapply_vrtdemande_dkim
   notification_canada_ca_dkim   = dependency.dns.outputs.notification_canada_ca_dkim
+  notification_canada_ca_receiving_dkim   = dependency.dns.outputs.notification_canada_ca_receiving_dkim
 }
