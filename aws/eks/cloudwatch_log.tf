@@ -166,16 +166,3 @@ resource "aws_cloudwatch_log_metric_filter" "aggregating-queues-are-active" {
     value     = "1"
   }
 }
-
-resource "aws_cloudwatch_log_metric_filter" "github-arc-write-alarm" {
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "GitHub ARC Runners Write Alarm"
-  pattern        = "WRITE ERROR: An error occured:"
-  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
-
-  metric_transformation {
-    name      = "aggregating-github-arc-write-alarm"
-    namespace = "LogMetrics"
-    value     = "1"
-  }
-}
