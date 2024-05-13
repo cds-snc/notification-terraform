@@ -129,6 +129,11 @@ variable "re_admin_arn" {
   type        = string
 }
 
+variable "re_admin_arn2" {
+  description = "Regular expression (2) to match the admin urls"
+  type        = string
+}
+
 variable "re_document_download_arn" {
   description = "Regular expression to match the document download api urls"
   type        = string

@@ -116,6 +116,7 @@ resource "aws_iam_policy" "notification-worker-policy" {
         "ses:SendRawEmail",
         "sqs:*",
         "sns:Publish",
+        "sms-voice:SendTextMessage",
         "securityhub:BatchImportFindings",
         "s3:*"
       ],

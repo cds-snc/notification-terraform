@@ -62,3 +62,9 @@ variable "eks_cluster_securitygroup" {
 variable "vpc_private_subnets" {
   type = list(any)
 }
+
+variable "bootstrap" {
+  type        = bool
+  description = "Set this to true to deploy the bootstrap image"
+  default     = false
+}

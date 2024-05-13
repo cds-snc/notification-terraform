@@ -43,7 +43,11 @@ variable "vpc_id" {
   type = string
 }
 
-variable "s3_bucket_sms_usage_sanitized_id" {
+variable "s3_bucket_sms_usage_sanitized_ca_central_id" {
+  type = string
+}
+
+variable "s3_bucket_sms_usage_sanitized_us_west_id" {
   type = string
 }
 

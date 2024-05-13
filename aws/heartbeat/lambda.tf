@@ -1,5 +1,5 @@
 locals {
-  image_tag = var.env == "production" ? var.heartbeat_docker_tag : "latest"
+  image_tag = var.env == "production" ? var.heartbeat_docker_tag : (var.bootstrap == true ? "bootstrap" : "latest")
 }
 
 module "heartbeat" {

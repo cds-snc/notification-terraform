@@ -103,6 +103,7 @@ resource "aws_api_gateway_deployment" "api" {
 }
 
 resource "aws_api_gateway_stage" "api" {
+  depends_on    = [aws_api_gateway_account.api_cloudwatch]
   deployment_id = aws_api_gateway_deployment.api.id
   rest_api_id   = aws_api_gateway_rest_api.api.id
   stage_name    = "v1"
@@ -175,4 +176,18 @@ resource "aws_api_gateway_method_settings" "all" {
 resource "aws_wafv2_web_acl_association" "waf_association" {
   resource_arn = aws_api_gateway_stage.api.arn
   web_acl_arn  = aws_wafv2_web_acl.api_lambda.arn
+}
+
+
+resource "aws_api_gateway_method_settings" "api_settings" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  stage_name  = aws_api_gateway_stage.api.stage_name
+  method_path = "*/*"
+  settings {
+    logging_level        = "ERROR"
+    data_trace_enabled   = true
+    metrics_enabled      = true
+    caching_enabled      = true
+    cache_data_encrypted = true
+  }
 }
