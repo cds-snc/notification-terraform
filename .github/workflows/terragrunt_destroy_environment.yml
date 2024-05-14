@@ -69,10 +69,10 @@ jobs:
           cd env/dev/lambda-google-cidr
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
-      - name: Destroy aws/quicksight
-        run: |
-          cd env/dev/quicksight
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+      # - name: Destroy aws/quicksight
+      #   run: |
+      #     cd env/dev/quicksight
+      #     terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/database-tools
         run: |
