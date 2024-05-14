@@ -12,7 +12,7 @@ module "sentinel_forwarder" {
   function_name     = "sentinel-cloud-watch-forwarder"
   billing_tag_value = "notification-canada-ca-${var.env}"
 
-  layer_arn = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:131"
+  layer_arn = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:132"
 
   customer_id = var.sentinel_customer_id
   shared_key  = var.sentinel_shared_key
@@ -34,6 +34,7 @@ resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
+  count           = var.cloudwatch_enabled ? 1 : 0
   name            = "Blazer logging"
   log_group_name  = "blazer"
   filter_pattern  = "Audit "
