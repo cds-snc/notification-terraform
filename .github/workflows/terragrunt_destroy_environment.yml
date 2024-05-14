@@ -10,12 +10,14 @@ defaults:
 env:
   AWS_REGION: ca-central-1
 
+
 permissions:
   id-token: write   # This is required for requesting the OIDC JWT
   contents: read    # This is required for actions/checkout
 
 jobs:
   terraform-destroy:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -41,6 +43,7 @@ jobs:
           TERRAFORM_VERSION: 1.6.2
           TERRAGRUNT_VERSION: 0.44.4
           TF_SUMMARIZE_VERSION: 0.2.3        
+
 
       - name: Inject token authentication
         run: |
