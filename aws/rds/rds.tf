@@ -28,7 +28,7 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   # https://github.com/hashicorp/terraform-provider-aws/issues/3015#issuecomment-520667166
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   auto_minor_version_upgrade   = false
-  apply_immediately            = true
+  apply_immediately            = false
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -133,7 +133,7 @@ resource "aws_rds_cluster_parameter_group" "pgaudit" {
 resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
-  engine_version               = 11.9
+  engine_version               = var.rds_version
   database_name                = var.rds_database_name
   final_snapshot_identifier    = "server-${random_string.random.result}"
   master_username              = "postgres"
@@ -146,8 +146,8 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   storage_encrypted   = true
   deletion_protection = var.enable_delete_protection
 
-  db_cluster_parameter_group_name = var.env != "production" ? aws_rds_cluster_parameter_group.pgaudit.name : aws_rds_cluster_parameter_group.default.name
-  enabled_cloudwatch_logs_exports = var.env != "production" ? ["postgresql"] : null
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.pgaudit.name
+  enabled_cloudwatch_logs_exports = ["postgresql"]
 
   vpc_security_group_ids = [
     var.eks_cluster_securitygroup
@@ -157,8 +157,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
     ignore_changes = [
       # Ignore changes to tags, e.g. because a management agent
       # updates these based on some ruleset managed elsewhere.
-      tags,
-      engine_version
+      tags
     ]
   }
 
@@ -169,14 +168,20 @@ resource "aws_rds_cluster" "notification-canada-ca" {
 
 # Holds the exported postgresql logs
 resource "aws_cloudwatch_log_group" "logs_exports" {
-  count = var.env != "production" ? 1 : 0
-  name  = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
+  name = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
   #checkov:skip=CKV_AWS_338:The short retention is required to respect Notify's privacy policy
   retention_in_days = 3
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+}
+
+# Now that the postgresql log group is no longer conditionl, we need to update it's TF state reference.
+# This can be deleted once the change has been merged to Staging.
+moved {
+  from = aws_cloudwatch_log_group.logs_exports[0]
+  to   = aws_cloudwatch_log_group.logs_exports
 }
 
 resource "aws_db_event_subscription" "notification-canada-ca" {

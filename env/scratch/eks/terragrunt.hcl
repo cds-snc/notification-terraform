@@ -26,14 +26,13 @@ dependency "common" {
     firehose_waf_logs_iam_role_arn            = ""
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
+    re_admin_arn2                             = ""
     re_api_arn                                = ""
     re_document_download_arn                  = ""
     re_documentation_arn                      = ""
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
-    client_vpn_cloudwatch_log_group_name      = "/aws/vpc/client-vpn-endpoint-logs"
-    client_vpn_security_group_id              = "sg-1234"
   }
 }
 
@@ -79,14 +78,13 @@ inputs = {
   sign_in_waf_rate_limit                    = 100
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
+  re_admin_arn2                             = dependency.common.outputs.re_admin_arn2
   re_api_arn                                = dependency.common.outputs.re_api_arn
   re_document_download_arn                  = dependency.common.outputs.re_document_download_arn
   re_documentation_arn                      = dependency.common.outputs.re_documentation_arn
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
-  client_vpn_cloudwatch_log_group_name      = dependency.common.outputs.client_vpn_cloudwatch_log_group_name
-  client_vpn_security_group_id              = dependency.common.outputs.client_vpn_security_group_id  
 }
 
 terraform {

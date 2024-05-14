@@ -174,10 +174,10 @@ resource "aws_iam_role" "dev_dns_manager" {
 EOF
 }
 
-resource "aws_iam_role_policy" "pond_dns_manager_policy" {
+resource "aws_iam_role_policy" "sandbox_dns_manager_policy" {
   count = var.env == "staging" ? 1 : 0
-  name  = "pond_dns_manager_policy"
-  role  = aws_iam_role.pond_dns_manager[0].id
+  name  = "sandbox_dns_manager_policy"
+  role  = aws_iam_role.sandbox_dns_manager[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -197,9 +197,9 @@ resource "aws_iam_role_policy" "pond_dns_manager_policy" {
   })
 }
 
-resource "aws_iam_role" "pond_dns_manager" {
+resource "aws_iam_role" "sandbox_dns_manager" {
   count = var.env == "staging" ? 1 : 0
-  name  = "pond_dns_manager_role"
+  name  = "sandbox_dns_manager_role"
 
   assume_role_policy = <<EOF
 {
@@ -208,7 +208,7 @@ resource "aws_iam_role" "pond_dns_manager" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "339712868793"
+        "AWS": "891376947407"
       },
       "Effect": "Allow",
       "Sid": ""

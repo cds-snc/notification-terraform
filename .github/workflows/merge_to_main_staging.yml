@@ -59,6 +59,7 @@ env:
   TF_VAR_pr_bot_app_id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
   TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
   TF_VAR_budget_sre_bot_webhook: ${{ secrets.STAGING_BUDGET_SRE_BOT_WEBHOOK }}
+  TF_VAR_enable_sentinel_forwarding: true
 
 jobs:
   terraform-apply:
@@ -172,6 +173,11 @@ jobs:
       - name: Apply aws/sns_to_sqs_sms_callbacks
         run: |
           cd env/staging/sns_to_sqs_sms_callbacks
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/pinpoint_to_sqs_sms_callbacks
+        run: |
+          cd env/staging/pinpoint_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
       - name: Apply aws/system_status

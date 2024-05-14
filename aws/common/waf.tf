@@ -88,6 +88,24 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 }
 
+resource "aws_wafv2_regex_pattern_set" "re_admin2" {
+  name        = "re_admin2"
+  description = "Regex matching valid admin endpoints"
+  scope       = "REGIONAL"
+
+  # WAF Regex blocks are combined with OR logic.
+  # Regex support is limited, please see:
+  # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
+
+  regular_expression {
+    regex_string = "/sitemap|/plandesite"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_wafv2_regex_pattern_set" "re_document_download" {
   name        = "re_document_download"
   description = "Regex matching valid document download endpoints"

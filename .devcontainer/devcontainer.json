@@ -12,17 +12,22 @@
   "containerEnv": {
     "SHELL": "/bin/zsh"
   },
-  "settings": {
-    "[terraform]": {
-      "editor.formatOnSave": true
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "[terraform]": {
+          "editor.formatOnSave": true
+        }
+      },
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
+        "hashicorp.terraform",
+        "hashicorp.hcl",
+        "redhat.vscode-yaml",
+        "sebastianbille.iam-legend"
+      ]
     }
   },
-  // Add the IDs of extensions you want installed when the container is created.
-  "extensions": [
-    "hashicorp.terraform",
-    "redhat.vscode-yaml",
-    "sebastianbille.iam-legend"
-  ],
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode"
 }

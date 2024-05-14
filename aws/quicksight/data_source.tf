@@ -35,11 +35,14 @@ resource "aws_quicksight_data_source" "rds" {
 }
 
 resource "aws_s3_object" "manifest_file" {
-  bucket = var.s3_bucket_sms_usage_id
-  key    = "quicksight/s3-manifest-sms-usage-${var.env}.json"     # replace with desired object key
-  source = "./s3-manifests/s3-manifest-sms-usage-${var.env}.json" # replace with path to local file
-  acl    = "private"
-  etag   = filemd5("./s3-manifests/s3-manifest-sms-usage-${var.env}.json")
+  bucket = var.s3_bucket_sms_usage_sanitized_ca_central_id
+  key    = "quicksight/s3-manifest-sms-usage.json"
+  content = templatefile("./s3-manifests/s3-manifest-sms-usage.tmpl", {
+    bucket_ca = var.s3_bucket_sms_usage_sanitized_ca_central_id,
+    bucket_us = var.s3_bucket_sms_usage_sanitized_us_west_id
+  })
+  acl  = "private"
+  etag = filemd5("./s3-manifests/s3-manifest-sms-usage.tmpl")
 }
 
 resource "aws_quicksight_data_source" "s3_sms_usage" {
@@ -50,7 +53,7 @@ resource "aws_quicksight_data_source" "s3_sms_usage" {
   parameters {
     s3 {
       manifest_file_location {
-        bucket = var.s3_bucket_sms_usage_id
+        bucket = aws_s3_object.manifest_file.bucket
         key    = aws_s3_object.manifest_file.key
       }
     }
