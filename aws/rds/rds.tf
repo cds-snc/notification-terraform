@@ -146,8 +146,8 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   storage_encrypted   = true
   deletion_protection = var.enable_delete_protection
 
-  db_cluster_parameter_group_name = var.env != "production" ? aws_rds_cluster_parameter_group.pgaudit.name : aws_rds_cluster_parameter_group.default.name
-  enabled_cloudwatch_logs_exports = var.env != "production" ? ["postgresql"] : null
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.pgaudit.name
+  enabled_cloudwatch_logs_exports = ["postgresql"]
 
   vpc_security_group_ids = [
     var.eks_cluster_securitygroup
@@ -168,14 +168,20 @@ resource "aws_rds_cluster" "notification-canada-ca" {
 
 # Holds the exported postgresql logs
 resource "aws_cloudwatch_log_group" "logs_exports" {
-  count = var.enable_sentinel_forwarding ? 1 : 0
-  name  = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
+  name = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
   #checkov:skip=CKV_AWS_338:The short retention is required to respect Notify's privacy policy
   retention_in_days = 3
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+}
+
+# Now that the postgresql log group is no longer conditionl, we need to update it's TF state reference.
+# This can be deleted once the change has been merged to Staging.
+moved {
+  from = aws_cloudwatch_log_group.logs_exports[0]
+  to   = aws_cloudwatch_log_group.logs_exports
 }
 
 resource "aws_db_event_subscription" "notification-canada-ca" {

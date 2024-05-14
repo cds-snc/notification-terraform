@@ -9,7 +9,7 @@ resource "aws_lambda_permission" "sentinel_forwarder_cloudwatch_log_subscription
   action        = "lambda:InvokeFunction"
   function_name = var.sentinel_forwarder_cloudwatch_lambda_name
   principal     = "logs.${var.region}.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_log_group.logs_exports[0].arn}:*"
+  source_arn    = "${aws_cloudwatch_log_group.logs_exports.arn}:*"
   statement_id  = "AllowExecutionFromCloudWatchLogs-sentinel-cloud-watch-forwarder-postgres"
 }
 
@@ -17,7 +17,7 @@ resource "aws_cloudwatch_log_subscription_filter" "postgresql_dangerous_queries"
   count = var.enable_sentinel_forwarding ? 1 : 0
 
   name            = "Postgresql dangerous queries"
-  log_group_name  = aws_cloudwatch_log_group.logs_exports[0].name
+  log_group_name  = aws_cloudwatch_log_group.logs_exports.name
   filter_pattern  = "[(w1=\"*${join("*\" || w1=\"*", concat(local.postgres_dangerous_queries, local.postgres_dangerous_queries_lower))}*\")]"
   destination_arn = var.sentinel_forwarder_cloudwatch_lambda_arn
   distribution    = "Random"
