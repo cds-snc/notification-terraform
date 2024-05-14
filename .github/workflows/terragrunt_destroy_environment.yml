@@ -1,0 +1,142 @@
+name: "Delete Dev Environment"
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_REGION: ca-central-1
+
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
+        with:
+          role-to-assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role-session-name: TerragruntDestroy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - name: Set environment variables
+        uses: ./.github/actions/setvars
+        with:
+          envVarFile: ./.env
+
+      - name: Setup Terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3        
+
+      - name: Inject token authentication
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Echo hello world
+        run: |
+          echo "Hello, world!"  
+
+      # - name: Apply aws/common
+      #   run: |
+      #     cd env/production/common
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+      
+      # - name: Apply aws/ecr
+      #   run: |
+      #     cd env/production/ecr
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve          
+
+      # - name: Apply aws/ses_receiving_emails
+      #   run: |
+      #     cd env/production/ses_receiving_emails
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/ses_to_sqs_email_callbacks
+      #   run: |
+      #     cd env/production/ses_to_sqs_email_callbacks
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/sns_to_sqs_sms_callbacks
+      #   run: |
+      #     cd env/production/sns_to_sqs_sms_callbacks
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/pinpoint_to_sqs_sms_callbacks
+      #   run: |
+      #     cd env/production/pinpoint_to_sqs_sms_callbacks
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/dns
+      #   run: |
+      #     cd env/production/dns
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/ses_validation_dns_entries
+      #   run: |
+      #     cd env/production/ses_validation_dns_entries
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/cloudfront
+      #   run: |
+      #     cd env/production/cloudfront
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/eks
+      #   run: |
+      #     cd env/production/eks
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/elasticache
+      #   run: |
+      #     cd env/production/elasticache
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/rds
+      #   run: |
+      #     cd env/production/rds
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/lambda-api
+      #   run: |
+      #     cd env/production/lambda-api
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/heartbeat
+      #   run: |
+      #     cd env/production/heartbeat
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/database-tools
+      #   run: |
+      #     cd env/production/database-tools
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/quicksight
+      #   run: |
+      #     cd env/production/quicksight
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/lambda-google-cidr
+      #   run: |
+      #     cd env/production/lambda-google-cidr
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      # - name: Apply aws/system_status
+      #   run: |
+      #     cd env/production/system_status
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
+          
+      # - name: Apply aws/system_status_static_site
+      #   run: |
+      #     cd env/production/system_status_static_site
+      #     terragrunt apply --terragrunt-non-interactive -auto-approve
