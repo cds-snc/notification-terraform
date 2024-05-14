@@ -31,10 +31,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
-      - name: Set environment variables
-        uses: ./.github/actions/setvars
-        with:
-          envVarFile: ./.env
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+
+      - name: One Password Fetch
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
@@ -52,94 +56,94 @@ jobs:
       - name: Destroy aws/system_status_static_site
         run: |
           cd env/dev/system_status_static_site
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/system_status
         run: |
           cd env/dev/system_status
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-google-cidr
         run: |
           cd env/dev/lambda-google-cidr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/quicksight
         run: |
           cd env/dev/quicksight
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/database-tools
         run: |
           cd env/dev/database-tools
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/heartbeat
         run: |
           cd env/dev/heartbeat
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-api
         run: |
           cd env/dev/lambda-api
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/rds
         run: |
           cd env/dev/rds
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/elasticache
         run: |
           cd env/dev/elasticache
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/eks
         run: |
           cd env/dev/eks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/cloudfront
         run: |
           cd env/dev/cloudfront
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_validation_dns_entries
         run: |
           cd env/dev/ses_validation_dns_entries
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/dns
         run: |
           cd env/dev/dns
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/pinpoint_to_sqs_sms_callbacks
         run: |
           cd env/dev/pinpoint_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/sns_to_sqs_sms_callbacks
         run: |
           cd env/dev/sns_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_to_sqs_email_callbacks
         run: |
           cd env/dev/ses_to_sqs_email_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_receiving_emails
         run: |
           cd env/dev/ses_receiving_emails
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ecr
         run: |
           cd env/dev/ecr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/common
         run: |
           cd env/dev/common
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
