@@ -9,6 +9,7 @@ defaults:
 
 env:
   AWS_REGION: ca-central-1
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
 
 permissions:
@@ -31,10 +32,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
-      - name: Set environment variables
-        uses: ./.github/actions/setvars
-        with:
-          envVarFile: ./.env
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+
+      - name: One Password Fetch
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
 
       - name: Setup Terraform tools
         uses: cds-snc/terraform-tools-setup@v1
@@ -50,96 +55,142 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Destroy aws/system_status_static_site
+        continue-on-error: true
         run: |
           cd env/dev/system_status_static_site
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/system_status
+        continue-on-error: true
         run: |
           cd env/dev/system_status
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-google-cidr
+        continue-on-error: true
         run: |
           cd env/dev/lambda-google-cidr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
-      - name: Destroy aws/quicksight
+      # This must be run before quicksight destroy
+      - name: Destroy quicksight VPC Connection
+        continue-on-error: true
         run: |
-          cd env/dev/quicksight
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          aws quicksight delete-vpc-connection --aws-account-id 800095993820 --vpc-connection-id $(aws quicksight list-vpc-connections --aws-account-id 800095993820 --query 'VPCConnectionSummaries[].VPCConnectionId' --output text)
 
+      # - name: Destroy aws/quicksight
+      #   run: |
+      #     cd env/dev/quicksight
+      #     terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+      
       - name: Destroy aws/database-tools
+        continue-on-error: true
         run: |
           cd env/dev/database-tools
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/heartbeat
+        continue-on-error: true
         run: |
           cd env/dev/heartbeat
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-api
+        continue-on-error: true
         run: |
           cd env/dev/lambda-api
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/rds
+        continue-on-error: true
         run: |
           cd env/dev/rds
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/elasticache
+        continue-on-error: true
         run: |
           cd env/dev/elasticache
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+
+      - name: Destroy aws/preformance-test
+        continue-on-error: true
+        run: |
+          cd env/dev/performance-test
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/eks
+        continue-on-error: true
         run: |
           cd env/dev/eks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+
+      - name: Clean Up Lingering EKS 
+        continue-on-error: true
+        run: |
+          ./scripts/eksDestroyCleanup.sh
+
+      - name: Destroy aws/eks
+        continue-on-error: true
+        run: |
+          cd env/dev/eks
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/cloudfront
+        continue-on-error: true
         run: |
           cd env/dev/cloudfront
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_validation_dns_entries
+        continue-on-error: true
         run: |
           cd env/dev/ses_validation_dns_entries
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/dns
+        continue-on-error: true
         run: |
           cd env/dev/dns
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/pinpoint_to_sqs_sms_callbacks
+        continue-on-error: true
         run: |
           cd env/dev/pinpoint_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/sns_to_sqs_sms_callbacks
+        continue-on-error: true
         run: |
           cd env/dev/sns_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_to_sqs_email_callbacks
+        continue-on-error: true
         run: |
           cd env/dev/ses_to_sqs_email_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_receiving_emails
+        continue-on-error: true
         run: |
           cd env/dev/ses_receiving_emails
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ecr
+        continue-on-error: true
         run: |
           cd env/dev/ecr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
+      - name: Cleanup Internal Load Balancers
+        continue-on-error: true
+        run: |
+          ./scripts/cleanupELB.sh
+
+      # Do not continue on error here so that we can track whether or not this actually worked
       - name: Destroy aws/common
         run: |
           cd env/dev/common
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars

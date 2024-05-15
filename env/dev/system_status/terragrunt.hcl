@@ -11,6 +11,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs = {
     sns_alert_warning_arn             = ""
     sns_alert_critical_arn            = ""
@@ -22,7 +23,7 @@ dependency "ecr" {
   config_path = "../ecr"
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     system_status_ecr_repository_url = ""
@@ -32,7 +33,7 @@ dependency "ecr" {
 
 dependency "rds" {
   config_path = "../rds"
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     database_read_only_proxy_endpoint = ""
@@ -44,7 +45,7 @@ dependency "eks" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     eks-cluster-securitygroup = ""
