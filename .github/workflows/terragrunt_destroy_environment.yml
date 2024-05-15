@@ -104,15 +104,6 @@ jobs:
           cd env/dev/eks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
-      - name: Destroy spot instances
-        run: |
-          aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running --output text)
-
-      - name: Destroy aws/eks
-        run: |
-          cd env/dev/eks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
       - name: Destroy aws/cloudfront
         run: |
           cd env/dev/cloudfront
