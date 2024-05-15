@@ -57,94 +57,94 @@ jobs:
       - name: Destroy aws/system_status_static_site
         run: |
           cd env/dev/system_status_static_site
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/system_status
         run: |
           cd env/dev/system_status
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-google-cidr
         run: |
           cd env/dev/lambda-google-cidr
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       # - name: Destroy aws/quicksight
       #   run: |
       #     cd env/dev/quicksight
-      #     terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+      #     terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/database-tools
         run: |
           cd env/dev/database-tools
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/heartbeat
         run: |
           cd env/dev/heartbeat
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-api
         run: |
           cd env/dev/lambda-api
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/rds
         run: |
           cd env/dev/rds
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/elasticache
         run: |
           cd env/dev/elasticache
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/eks
         run: |
           cd env/dev/eks
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/cloudfront
         run: |
           cd env/dev/cloudfront
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_validation_dns_entries
         run: |
           cd env/dev/ses_validation_dns_entries
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/dns
         run: |
           cd env/dev/dns
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/pinpoint_to_sqs_sms_callbacks
         run: |
           cd env/dev/pinpoint_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/sns_to_sqs_sms_callbacks
         run: |
           cd env/dev/sns_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_to_sqs_email_callbacks
         run: |
           cd env/dev/ses_to_sqs_email_callbacks
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_receiving_emails
         run: |
           cd env/dev/ses_receiving_emails
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ecr
         run: |
           cd env/dev/ecr
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/common
         run: |
           cd env/dev/common
-          terragrunt destroy --terragrunt-ignore-dependency-errors --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
