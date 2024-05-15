@@ -100,8 +100,6 @@ jobs:
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/eks
-        # This will fail if spot instances exist. We will delete them manually in the next step. We can't delete them first because Karpenter will recreate them.
-        continue-on-error: true
         run: |
           cd env/dev/eks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
