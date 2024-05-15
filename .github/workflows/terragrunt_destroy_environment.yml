@@ -163,6 +163,11 @@ jobs:
           cd env/dev/ecr
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
+      # We need to clean up the internal load balancers created by EKS.
+      - name: Cleanup Internal Load Balancers
+        run: |
+          ./scripts/cleanupELB.sh
+
       - name: Destroy aws/common
         run: |
           cd env/dev/common
