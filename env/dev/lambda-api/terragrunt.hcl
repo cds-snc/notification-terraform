@@ -11,7 +11,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     kms_arn = ""
@@ -35,7 +35,7 @@ dependency "eks" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     eks-cluster-securitygroup = ""
@@ -45,10 +45,20 @@ dependency "eks" {
 
 dependency "ecr" {
   config_path = "../ecr"
+  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
+  mock_outputs = {
+    api_lambda_ecr_repository_url = ""
+    api_lambda_ecr_arn            = ""
+  }
 }
 
 dependency "rds" {
   config_path = "../rds"
+    mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
+    mock_outputs = {
+      database_read_only_proxy_endpoint  = ""
+      database_read_write_proxy_endpoint = ""
+    }
 }
 
 include {

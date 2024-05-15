@@ -8,6 +8,11 @@ dependencies {
 
 dependency "ecr" {
   config_path = "../ecr"
+  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
+  mock_outputs = {
+    ses_to_sqs_email_callbacks_ecr_arn            = ""
+    ses_to_sqs_email_callbacks_ecr_repository_url = ""
+  }
 }
 
 dependency "common" {
@@ -15,7 +20,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
