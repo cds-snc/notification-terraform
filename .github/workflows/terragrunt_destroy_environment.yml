@@ -188,9 +188,9 @@ jobs:
         continue-on-error: true
         run: |
           ./scripts/cleanupELB.sh
-          
+
+      # Do not continue on error here so that we can track whether or not this actually worked
       - name: Destroy aws/common
-        continue-on-error: true
         run: |
           cd env/dev/common
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
