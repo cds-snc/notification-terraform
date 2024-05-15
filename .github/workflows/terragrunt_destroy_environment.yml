@@ -55,16 +55,19 @@ jobs:
           git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Destroy aws/system_status_static_site
+        continue-on-error: true
         run: |
           cd env/dev/system_status_static_site
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/system_status
+        continue-on-error: true
         run: |
           cd env/dev/system_status
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-google-cidr
+        continue-on-error: true
         run: |
           cd env/dev/lambda-google-cidr
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
@@ -79,96 +82,115 @@ jobs:
       #   run: |
       #     cd env/dev/quicksight
       #     terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
+      
       - name: Destroy aws/database-tools
+        continue-on-error: true
         run: |
           cd env/dev/database-tools
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/heartbeat
+        continue-on-error: true
         run: |
           cd env/dev/heartbeat
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/lambda-api
+        continue-on-error: true
         run: |
           cd env/dev/lambda-api
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/rds
+        continue-on-error: true
         run: |
           cd env/dev/rds
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/elasticache
+        continue-on-error: true
         run: |
           cd env/dev/elasticache
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
+      - name: Destroy aws/preformance-test
+        continue-on-error: true
+        run: |
+          cd env/dev/performance-test
+          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+
       - name: Destroy aws/eks
-        # This will fail if spot instances exist. We will delete them manually in the next step. We can't delete them first because Karpenter will recreate them.
         continue-on-error: true
         run: |
           cd env/dev/eks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Clean Up Lingering EKS 
-        # This will fail if there are no instances to delete. I'm too lazy to check if we need to delete first. A future TODO.
         continue-on-error: true
         run: |
           ./scripts/eksDestroyCleanup.sh
 
       - name: Destroy aws/eks
+        continue-on-error: true
         run: |
           cd env/dev/eks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/cloudfront
+        continue-on-error: true
         run: |
           cd env/dev/cloudfront
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_validation_dns_entries
+        continue-on-error: true
         run: |
           cd env/dev/ses_validation_dns_entries
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/dns
+        continue-on-error: true
         run: |
           cd env/dev/dns
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/pinpoint_to_sqs_sms_callbacks
+        continue-on-error: true
         run: |
           cd env/dev/pinpoint_to_sqs_sms_callbacks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/sns_to_sqs_sms_callbacks
+        continue-on-error: true
         run: |
           cd env/dev/sns_to_sqs_sms_callbacks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_to_sqs_email_callbacks
+        continue-on-error: true
         run: |
           cd env/dev/ses_to_sqs_email_callbacks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ses_receiving_emails
+        continue-on-error: true
         run: |
           cd env/dev/ses_receiving_emails
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
       - name: Destroy aws/ecr
+        continue-on-error: true
         run: |
           cd env/dev/ecr
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
-      # We need to clean up the internal load balancers created by EKS.
       - name: Cleanup Internal Load Balancers
+        continue-on-error: true
         run: |
           ./scripts/cleanupELB.sh
-
+          
       - name: Destroy aws/common
+        continue-on-error: true
         run: |
           cd env/dev/common
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
