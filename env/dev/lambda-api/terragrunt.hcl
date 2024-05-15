@@ -40,6 +40,10 @@ dependency "eks" {
   mock_outputs = {
     eks-cluster-securitygroup = ""
     eks_application_log_group = "eks_application_log_group_name"
+    aws_acm_notification_canada_ca_arn = ""
+    aws_acm_alt_notification_canada_ca_arn = ""
+    alb_arn_suffix = ""
+
   }
 }
 
