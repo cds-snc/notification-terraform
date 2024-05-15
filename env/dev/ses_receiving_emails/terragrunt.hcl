@@ -24,7 +24,7 @@ dependency "common" {
 dependency "ecr" {
   config_path = "../ecr"
   mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
-  mock_outputs {
+  mock_outputs = {
     ses_receiving_emails_ecr_repository_url = ""
     ses_receiving_emails_ecr_arn = ""
   }
