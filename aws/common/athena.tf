@@ -3,8 +3,9 @@
 ###
 
 resource "aws_athena_database" "notification_athena" {
-  name   = "notification_athena"
-  bucket = aws_s3_bucket.athena_bucket.bucket
+  name          = "notification_athena"
+  bucket        = aws_s3_bucket.athena_bucket.bucket
+  force_destroy = var.force_destroy_athena
 
   encryption_configuration {
     encryption_option = "SSE_S3"

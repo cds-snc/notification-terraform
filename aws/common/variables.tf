@@ -245,6 +245,12 @@ variable "force_destroy_s3" {
   default     = false
 }
 
+variable "force_destroy_athena" {
+  description = "Destroy Athena workgroups even if there are tables in them when running terraform destroy"
+  type        = bool
+  default     = false
+}
+
 variable "athena_workgroup_name" {
   description = "Set the name for the athena workgroup"
   type        = string
