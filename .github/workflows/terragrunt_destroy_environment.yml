@@ -99,9 +99,8 @@ jobs:
           cd env/dev/elasticache
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
 
-      - name:
-
       - name: Destroy aws/eks
+        # This will fail if spot instances exist. We will delete them manually in the next step. We can't delete them first because Karpenter will recreate them.
         continue-on-error: true
         run: |
           cd env/dev/eks
@@ -112,7 +111,6 @@ jobs:
           aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running --output text)
 
       - name: Destroy aws/eks
-        continue-on-error: true
         run: |
           cd env/dev/eks
           terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
