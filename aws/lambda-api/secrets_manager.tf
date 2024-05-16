@@ -6,8 +6,9 @@ resource "random_string" "new_relic_postfix" {
 }
 
 resource "aws_secretsmanager_secret" "new-relic-license-key" {
-  name        = var.env == "production" || var.env == "staging" ? "NEW_RELIC_LICENSE_KEY" : "NEW_RELIC_LICENSE_KEY_${random_string.new_relic_postfix[0].result}"
-  description = "The New Relic license key, for sending telemetry"
+  name                    = var.env == "production" || var.env == "staging" ? "NEW_RELIC_LICENSE_KEY" : "NEW_RELIC_LICENSE_KEY_${random_string.new_relic_postfix[0].result}"
+  description             = "The New Relic license key, for sending telemetry"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "new-relic-license-key" {
