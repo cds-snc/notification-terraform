@@ -48,3 +48,6 @@ override.tf.json
 # aider AI
 .aider*
 .DS_Store
+
+# python environment variables
+.env*
