@@ -1,4 +1,5 @@
 import os
+from io import BytesIO
 
 import argparse
 import pandas as pd
@@ -23,8 +24,7 @@ def main():
         raise ValueError("Input bucket is required")
     in_bucket = s3.Bucket(args.in_bucket)
 
-    for csv_file in list(in_bucket.objects.all()):
-        key = str(csv_file.key)
+    for key in [csv_file.key for csv_file in list(in_bucket.objects.all()) if csv_file.key.endswith(".gz") or csv_file.key.endswith(".csv")]:
         print(f"\nProcessing {key}")
         df = pd.read_csv(f"s3://{args.in_bucket}/{key}").sort_values(by="PublishTimeUTC")
         df = df.drop(columns=["DestinationPhoneNumber"], errors='ignore')
@@ -34,7 +34,9 @@ def main():
         if args.push:
             if args.out_bucket is None:
                 raise ValueError("Output bucket is required when pushing to s3")
-            df.to_csv(f"s3://{args.out_bucket}/{key}", index=False)    
+            csv_buffer = BytesIO()
+            df.to_csv(csv_buffer, index=False, compression={'method': 'gzip'})
+            s3.Object(args.out_bucket, key).put(Body=csv_buffer.getvalue(), ContentEncoding='gzip')
             print(f"Pushed to s3://{args.out_bucket}/{key}")
         else:
             directory = os.path.dirname(key)
