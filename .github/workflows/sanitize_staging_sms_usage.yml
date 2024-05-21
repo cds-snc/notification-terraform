@@ -31,8 +31,8 @@ jobs:
 
     - name: run script
       run: |
-        python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.sh ${INPUT_BUCKET_1} ${INPUT_BUCKET_1}-san --push
-        python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.sh ${INPUT_BUCKET_2} ${INPUT_BUCKET_2}-san --push
+        python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.py ${INPUT_BUCKET_1} ${INPUT_BUCKET_1}-san --push
+        python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.py ${INPUT_BUCKET_2} ${INPUT_BUCKET_2}-san --push
 
     - name: Notify Slack channel if this job failed
       if: ${{ failure() }}
