@@ -13,11 +13,9 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("in_bucket", help="input bucket")
     parser.add_argument("out_bucket", nargs='?', help="output bucket")
-    parser.add_argument("--push", help="push output to s3 (default just save locally)", action="store_true", default=False)
+    parser.add_argument("--push", help="push output to s3 (default: save locally instead)", action="store_true", default=False)
     args = parser.parse_args()
-    
-    # s3 = boto3.resource('s3')
-    
+        
     session = boto3.Session(aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"))
     s3 = session.resource('s3')
     
@@ -27,9 +25,9 @@ def main():
 
     for csv_file in list(in_bucket.objects.all()):
         key = str(csv_file.key)
-        print(f"\n---- {key}")
+        print(f"\nProcessing {key}")
         df = pd.read_csv(f"s3://{args.in_bucket}/{key}").sort_values(by="PublishTimeUTC")
-        df = df.drop(columns=["DestinationPhoneNumber", "MessageType"])
+        df = df.drop(columns=["DestinationPhoneNumber"], errors='ignore')
         df = df.drop_duplicates(subset=['MessageId'], keep='last')
         df["PriceInUSDPerFragment"] = df.PriceInUSD / df.TotalParts
         
