@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 22 * * *"
+  pull_request:
 
 env:
   INPUT_BUCKET_1: notification-canada-ca-staging-sms-usage-logs
@@ -34,8 +35,8 @@ jobs:
         python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.py ${INPUT_BUCKET_1} ${INPUT_BUCKET_1}-san --push
         python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.py ${INPUT_BUCKET_2} ${INPUT_BUCKET_2}-san --push
 
-    - name: Notify Slack channel if this job failed
-      if: ${{ failure() }}
-      run: |
-        json="{'text':'<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
-        curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
+    # - name: Notify Slack channel if this job failed
+    #   if: ${{ failure() }}
+    #   run: |
+    #     json="{'text':'<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
+    #     curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
