@@ -1,7 +1,7 @@
 -- Inspired from the following links:
 -- https://docs.aws.amazon.com/athena/latest/ug/application-load-balancer-logs.html
 -- https://github.com/yutachaos/terraform-aws-athena-alb-logs
-CREATE EXTERNAL TABLE IF NOT EXISTS alb_access_logs (
+CREATE EXTERNAL TABLE IF NOT EXISTS `${database_name}.${table_name}` (
             type string,
             time string,
             elb string,
@@ -43,4 +43,4 @@ CREATE EXTERNAL TABLE IF NOT EXISTS alb_access_logs (
             'serialization.format' = '1',
             'input.regex' = 
         '([^ ]*) ([^ ]*) ([^ ]*) ([^ ]*):([0-9]*) ([^ ]*)[:-]([0-9]*) ([-.0-9]*) ([-.0-9]*) ([-.0-9]*) (|[-0-9]*) (-|[-0-9]*) ([-0-9]*) ([-0-9]*) \"([^ ]*) (.*) (- |[^ ]*)\" \"([^\"]*)\" ([A-Z0-9-_]+) ([A-Za-z0-9.-]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^\"]*)\" ([-.0-9]*) ([^ ]*) \"([^\"]*)\" \"([^\"]*)\" \"([^ ]*)\" \"([^\s]+?)\" \"([^\s]+)\" \"([^ ]*)\" \"([^ ]*)\" ?([^ ]*)?')
-            LOCATION 's3://DOC-EXAMPLE-BUCKET/access-log-folder-path/'
+            LOCATION '${bucket_location}';
