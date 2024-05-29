@@ -54,7 +54,7 @@ jobs:
 
     - name: Deploy
       run: |
-        ./scripts/callManifestsRollout.sh -s app=arc,tier=scaleset -t tag=$INFRASTRUCTURE_VERSION -n github-arc-ss 
+        ./scripts/callManifestsRollout.sh -s app=arc,tier=scaleset -t $INFRASTRUCTURE_VERSION -n github-arc-ss 
 
 # TODO: Helmfile rollout
 

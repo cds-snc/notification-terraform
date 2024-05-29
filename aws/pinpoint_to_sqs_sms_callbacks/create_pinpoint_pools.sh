@@ -3,7 +3,7 @@
 # Usage:
 # . create_pinpoint_pools.sh iam_role_arn log_group_deliveries_arn log_group_failures_arn
 
-# This script creates a shortcode and longcode pool in Pinpoint SMS Voice as well as a configuration set with two event destinations
+# This script creates a shortcode and default pool in Pinpoint SMS Voice as well as a configuration set with two event destinations
 # The event destinations are used to log all events and failures to CloudWatch Logs
 # The script takes three arguments:
 # 1. The IAM role ARN that will be used to write to the CloudWatch Logs
@@ -28,19 +28,19 @@ iamRoleArn=$1
 logGroupArnDeliveries=$2
 logGroupArnFailures=$3
 
-# Create pools for the shortcode and longcodes
+# Create pools for the shortcode and default numbers
 
 poolArns=$(aws pinpoint-sms-voice-v2 describe-pools --output json | jq -r '.Pools.[].PoolArn')
 shortcodePoolExists=false
-longcodePoolExists=false
+defaultPoolExists=false
 for poolArn in $poolArns; do
     isShort=$(aws pinpoint-sms-voice-v2 list-tags-for-resource --resource-arn $poolArn | jq -r '.Tags[].Value' | grep "shortcode-pool" | wc -l)
-    isLong=$(aws pinpoint-sms-voice-v2 list-tags-for-resource --resource-arn $poolArn | jq -r '.Tags[].Value' | grep 'longcode-pool' | wc -l)
+    isDefault=$(aws pinpoint-sms-voice-v2 list-tags-for-resource --resource-arn $poolArn | jq -r '.Tags[].Value' | grep 'default-pool' | wc -l)
     if [ $isShort == 1 ]; then
         shortcodePoolExists=true
     fi
-    if [ $isLong == 1 ]; then
-        longcodePoolExists=true
+    if [ $isDefault == 1 ]; then
+        defaultPoolExists=true
     fi
 done
 
@@ -51,12 +51,12 @@ else
     number1=$(aws pinpoint-sms-voice-v2 request-phone-number --iso-country-code CA --message-type TRANSACTIONAL --number-capabilities SMS --number-type LONG_CODE | jq -r ".PhoneNumberId")
     aws pinpoint-sms-voice-v2 create-pool --origination-identity $number1 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=shortcode-pool
 fi
-if [ $longcodePoolExists == true ]; then
-    echo "Longcode pool already exists"
+if [ $defaultPoolExists == true ]; then
+    echo "Default pool already exists"
 else
-    echo "Creating longcode pool"
+    echo "Creating default pool"
     number2=$(aws pinpoint-sms-voice-v2 request-phone-number --iso-country-code CA --message-type TRANSACTIONAL --number-capabilities SMS --number-type LONG_CODE  | jq -r ".PhoneNumberId")
-    aws pinpoint-sms-voice-v2 create-pool --origination-identity $number2 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=longcode-pool
+    aws pinpoint-sms-voice-v2 create-pool --origination-identity $number2 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=default-pool
 fi
 
 # # Create a configuration set and assign destinations
