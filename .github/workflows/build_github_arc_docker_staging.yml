@@ -1,4 +1,4 @@
-name: "Build and Push Github ARC Image"
+name: "Build and Push Github ARC Image (Staging)"
 
 on:
   workflow_dispatch:
