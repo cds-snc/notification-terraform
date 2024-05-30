@@ -13,8 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Upgrade pip
+      run: python -m pip install --upgrade pip
+
     - name: Checkout
       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+    - name: Install python packages
+      run: pip install -r ./scripts/sanitize_sms_usage_logs/requirements.txt
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
@@ -25,8 +31,8 @@ jobs:
 
     - name: run script
       run: |
-        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET_1} ${INPUT_BUCKET_1}-san
-        ./scripts/sanitize_sms_usage_logs.sh ${INPUT_BUCKET_2} ${INPUT_BUCKET_2}-san
+        python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.py ${INPUT_BUCKET_1} ${INPUT_BUCKET_1}-san --push
+        python ./scripts/sanitize_sms_usage_logs/sanitize_sms_usage_logs.py ${INPUT_BUCKET_2} ${INPUT_BUCKET_2}-san --push
 
     - name: Notify Slack channel if this job failed
       if: ${{ failure() }}
