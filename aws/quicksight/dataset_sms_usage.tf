@@ -58,12 +58,13 @@ resource "aws_quicksight_data_set" "sms_usage" {
     }
 
     data_transforms {
+      cast_column_type_operation {
+        column_name     = "PublishTimeUTC"
+        new_column_type = "DATETIME"
+      }
+    }
 
-      # cast_column_type_operation {
-      #   column_name = "PublishTimeUTC"
-      #   new_column_type = "DATETIME"
-      # }
-
+    data_transforms {
       cast_column_type_operation {
         column_name     = "PriceInUSD"
         new_column_type = "DECIMAL"
