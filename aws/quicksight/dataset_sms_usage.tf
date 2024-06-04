@@ -61,6 +61,7 @@ resource "aws_quicksight_data_set" "sms_usage" {
       cast_column_type_operation {
         column_name     = "PublishTimeUTC"
         new_column_type = "DATETIME"
+        format          = "yyyy-MM-dd'T'HH:mm:SS.SSSZ"
       }
     }
 
