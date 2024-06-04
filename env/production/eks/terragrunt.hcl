@@ -107,6 +107,7 @@ inputs = {
   eks_addon_vpc_cni_version                 = "v1.16.2-eksbuild.1"
   eks_addon_ebs_driver_version              = "v1.27.0-eksbuild.1"
   eks_node_ami_version                      = "1.29.3-20240506"
+  eks_karpenter_ami_id                      = "ami-02aa678d778b79aea"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 30000
   sign_in_waf_rate_limit                    = 100

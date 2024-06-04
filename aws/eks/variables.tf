@@ -315,3 +315,8 @@ variable "subnet_ids" {
   type        = list(string)
   description = "The IDs for the subnets"
 }
+
+variable "eks_karpenter_ami_id" {
+  type        = string
+  description = "The AMI ID for the Karpenter nodes"
+}
