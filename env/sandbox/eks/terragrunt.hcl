@@ -19,7 +19,7 @@ dependency "common" {
       "subnet-001e585d12cce4d1e",
       "subnet-08de34a9e1a7458dc",
       "subnet-0af8b8402f1d605ff",
-    ]  
+    ]
     vpc_public_subnets = [
       "subnet-0cecd9e634daf82d3",
       "subnet-0c7d18c0c51b28b61",
@@ -52,8 +52,8 @@ dependency "dns" {
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     internal_dns_certificate_arn = ""
-    internal_dns_zone_id = ""
-    internal_dns_name = ""
+    internal_dns_zone_id         = ""
+    internal_dns_name            = ""
   }
 }
 
@@ -85,7 +85,7 @@ inputs = {
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_private_subnets_k8s                   = dependency.common.outputs.vpc_private_subnets_k8s
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
-  subnet_ids                                = dependency.common.outputs.subnet_ids 
+  subnet_ids                                = dependency.common.outputs.subnet_ids
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
   sns_alert_warning_arn                     = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                    = dependency.common.outputs.sns_alert_critical_arn
@@ -116,7 +116,9 @@ inputs = {
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
-  
+  alarm_warning_callback_failure_threshold  = "1" # Todo: proper thresholds
+  alarm_critical_callback_failure_threshold = "1" # Todo: proper thresholds
+
 }
 
 terraform {

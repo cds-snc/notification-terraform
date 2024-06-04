@@ -85,6 +85,8 @@ inputs = {
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  alarm_warning_callback_failure_threshold  = "1" # Todo: proper thresholds
+  alarm_critical_callback_failure_threshold = "1" # Todo: proper thresholds
 }
 
 terraform {

@@ -179,3 +179,75 @@ resource "aws_cloudwatch_log_metric_filter" "github-arc-write-alarm" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "callback-failures" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "callbacks-failures"
+  pattern        = "send_delivery_status_to_service request failed for notification_id"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "callback-failures"
+    namespace = "LogMetrics"
+    value     = "1"
+    dimensions = {
+      url       = "$.url"
+      error     = "$.Error"
+      exception = "$.exc"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "callback-creation-failure-invalid-url" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "callback-creation-failure-invalid-url"
+  pattern        = "Invalid callback URL format"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "callback-creation-failure-invalid-url"
+    namespace = "LogMetrics"
+    value     = "1"
+    dimensions = {
+      service = "$.service"
+      url     = "$.URL"
+      error   = "$.Error"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "callback-creation-failure-endpoint-returned-error" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "callback-creation-failure-endpoint-returned-error"
+  pattern        = "URL was reachable but returned status code"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "callback-creation-failure-endpoint-returned-error"
+    namespace = "LogMetrics"
+    value     = "1"
+    dimensions = {
+      service = "$.service"
+      url     = "$.URL"
+      error   = "$.Error"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "callback-creation-failure-endpoint-unreachable" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "callback-creation-failure-endpoint-unreachable"
+  pattern        = "Callback URL not reachable URL"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "callback-creation-failure-endpoint-unreachable"
+    namespace = "LogMetrics"
+    value     = "1"
+    dimensions = {
+      service = "$.service"
+      url     = "$.URL"
+      error   = "$.Error"
+    }
+  }
+}

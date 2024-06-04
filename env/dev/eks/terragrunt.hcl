@@ -19,7 +19,7 @@ dependency "common" {
       "subnet-001e585d12cce4d1e",
       "subnet-08de34a9e1a7458dc",
       "subnet-0af8b8402f1d605ff",
-    ]        
+    ]
     vpc_public_subnets = [
       "subnet-0cecd9e634daf82d3",
       "subnet-0c7d18c0c51b28b61",
@@ -37,7 +37,7 @@ dependency "common" {
       "10.0.32.0/19",
       "10.0.64.0/19",
       "10.0.96.0/19",
-    ]        
+    ]
     sns_alert_warning_arn                     = ""
     sns_alert_critical_arn                    = ""
     sns_alert_general_arn                     = ""
@@ -126,7 +126,9 @@ inputs = {
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
-  
+  alarm_warning_callback_failure_threshold  = "1" # Todo: proper thresholds
+  alarm_critical_callback_failure_threshold = "1" # Todo: proper thresholds
+
 }
 
 terraform {
