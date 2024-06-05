@@ -2,7 +2,7 @@
 #
 terraform {
   source = "git::https://github.com/cds-snc/notification-terraform//aws/common?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
-  
+
   before_hook "get-admin" {
     commands     = ["apply", "plan"]
     execute      = ["git", "clone", "https://github.com/cds-snc/notification-admin.git", "/var/tmp/notification-admin"]
@@ -14,7 +14,7 @@ terraform {
     commands     = ["apply", "plan"]
     execute      = ["rm", "-rfd", "/var/tmp/notification-admin"]
     run_on_error = true
-  }    
+  }
 }
 
 include {
@@ -49,6 +49,7 @@ inputs = {
   sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
   sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
   eks_cluster_name                                                   = "notification-canada-ca-production-eks-cluster"
+  alarm_warning_callback_failure_threshold                           = "5"
 }
 
 # See QueueNames in

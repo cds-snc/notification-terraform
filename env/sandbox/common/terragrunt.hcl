@@ -12,7 +12,7 @@ terraform {
     commands     = ["apply", "plan"]
     execute      = ["rm", "-rfd", "/var/tmp/notification-admin"]
     run_on_error = true
-  }  
+  }
 
 }
 
@@ -45,7 +45,8 @@ inputs = {
   sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
   sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
   sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
-  eks_cluster_name                                                   = "notification-canada-ca-sandbox-eks-cluster"  
+  eks_cluster_name                                                   = "notification-canada-ca-sandbox-eks-cluster"
+  alarm_warning_callback_failure_threshold                           = "5"
 }
 
 # See QueueNames in

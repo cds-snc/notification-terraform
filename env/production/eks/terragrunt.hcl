@@ -23,7 +23,7 @@ dependency "common" {
       "subnet-0cecd9e634daf82d3",
       "subnet-0c7d18c0c51b28b61",
       "subnet-0c91f7c6b8211904b",
-    ]
+    ]   
     vpc_private_subnets = [
       "subnet-001e585d12cce4d1e",
       "subnet-08de34a9e1a7458dc",
@@ -33,7 +33,7 @@ dependency "common" {
       "subnet-0cecd9e634daf82d3",
       "subnet-0c7d18c0c51b28b61",
       "subnet-0c91f7c6b8211904b",
-    ]
+    ]     
     subnet_cidr_blocks = [
       "10.0.0.0/24",
       "10.0.1.0/24",
@@ -41,7 +41,7 @@ dependency "common" {
       "10.0.32.0/19",
       "10.0.64.0/19",
       "10.0.96.0/19",
-    ]
+    ]            
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
     re_admin_arn2                             = ""
@@ -88,7 +88,7 @@ inputs = {
   primary_worker_desired_size               = 5
   primary_worker_instance_types             = ["r5.large"]
   secondary_worker_instance_types           = ["r5.large"]
-  node_upgrade                              = false
+  node_upgrade                              = false  
   primary_worker_max_size                   = 8
   primary_worker_min_size                   = 3
   vpc_id                                    = dependency.common.outputs.vpc_id
@@ -117,7 +117,7 @@ inputs = {
   re_api_arn                                = dependency.common.outputs.re_api_arn
   re_document_download_arn                  = dependency.common.outputs.re_document_download_arn
   re_documentation_arn                      = dependency.common.outputs.re_documentation_arn
-  notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
+  notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn  
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
   sqs_send_email_low_queue_name             = dependency.common.outputs.sqs_send_email_low_queue_name
@@ -132,7 +132,5 @@ inputs = {
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
-  alarm_warning_callback_failure_threshold  = "1" # Todo: proper thresholds
-  alarm_critical_callback_failure_threshold = "1" # Todo: proper thresholds
 
 }
