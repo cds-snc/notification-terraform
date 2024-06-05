@@ -430,45 +430,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-# Callbacks are
-#   retried:        5 times
-#   delay between:  5 minutes
-#
-# If a service has retried the max number of times for > 1 notification, then the callback url is considered problematic
-# We were unable to reach your callback service.
-# Callback URL not reachable for service
-# Callback URL for service: {current_service.id} was reachable but returned status code
-#
-resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warning" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "service-callback-too-many-failures-warning"
-  alarm_description   = "Services where callbacks have failed x times in x minutes"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = aws_cloudwatch_log_metric_filter.callback-failures.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.callback-failures.metric_transformation[0].namespace
-  period              = 60
-  statistic           = "Sum"
-  threshold           = var.alarm_warning_callback_failure_threshold
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
-}
-
-resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-retries-critical" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "service-callback-too-many-failures-warning"
-  alarm_description   = "Services where callbacks have failed x times in x minutes"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = aws_cloudwatch_log_metric_filter.callback-failures.metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.callback-failures.metric_transformation[0].namespace
-  period              = 60
-  statistic           = "Sum"
-  threshold           = var.alarm_warning_callback_failure_threshold
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_critical_arn]
-}
-
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "kubernetes-failed-nodes"

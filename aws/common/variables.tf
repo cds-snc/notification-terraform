@@ -239,6 +239,11 @@ variable "alarm_critical_expired_inflights_threshold" {
   type        = number
 }
 
+variable "alarm_warning_callback_failure_threshold" {
+  description = "Warning alarm threshold for number of callback failures in 30 minutes"
+  type        = number
+}
+
 variable "force_destroy_s3" {
   description = "Destroy S3 buckets even if there are files in them when running terraform destroy"
   type        = bool

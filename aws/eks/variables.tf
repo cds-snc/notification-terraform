@@ -320,13 +320,3 @@ variable "eks_karpenter_ami_id" {
   type        = string
   description = "The AMI ID for the Karpenter nodes"
 }
-
-variable "alarm_warning_callback_failure_threshold" {
-  description = "Warning alarm threshold for number of callback failures in 5 minutes"
-  type        = number
-}
-
-variable "alarm_critical_callback_failure_threshold" {
-  description = "Warning alarm threshold for number of callback failures in 5 minutes"
-  type        = number
-}
