@@ -72,3 +72,124 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-pinpoint-delivery-receipts-
     FunctionName = module.pinpoint_to_sqs_sms_callbacks.function_name
   }
 }
+
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-spending-warning"
+  alarm_description   = "Pinpoint spending reached 80% of limit this month"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "TextMessageMonthlySpend"
+  namespace           = "AWS/SMSVoice"
+  period              = "300"
+  statistic           = "Maximum"
+  threshold           = 0.8 * var.sns_monthly_spend_limit # pinpoint limit is the same as sns
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-spending-critical"
+  alarm_description   = "Pinpoint spending reached 90% of limit this month"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "TextMessageMonthlySpend"
+  namespace           = "AWS/SMSVoice"
+  period              = "300"
+  statistic           = "Maximum"
+  threshold           = 0.9 * var.sns_monthly_spend_limit # pinpoint limit is the same as sns
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+}
+
+
+## TODO - Change to pinpoint
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
+  alarm_description   = "Pinpoint SMS success rate to Canadian numbers is below 60% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  metric_name         = "SMSSuccessRate"
+  namespace           = "AWS/SNS"
+  period              = 60 * 60 * 12
+  statistic           = "Average"
+  threshold           = 60 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    SMSType = "Transactional"
+    Country = "CA"
+  }
+}
+
+## TODO - Change to pinpoint
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
+  alarm_description   = "Pinpoint SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  metric_name         = "SMSSuccessRate"
+  namespace           = "AWS/SNS"
+  period              = 60 * 60 * 12
+  statistic           = "Average"
+  threshold           = 25 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    SMSType = "Transactional"
+    Country = "CA"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-blocked-as-spam-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-blocked-as-spam-warning"
+  alarm_description   = "More than 10 Pinpoint SMS have been blocked as spam over 12 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-blocked-as-spam[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-blocked-as-spam[0].metric_transformation[0].namespace
+  period              = 60 * 60 * 12
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-phone-carrier-unavailable-warning"
+  alarm_description   = "More than 100 Pinpoint SMS failed because a phone carrier is unavailable over 3 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-phone-carrier-unavailable[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-phone-carrier-unavailable[0].metric_transformation[0].namespace
+  period              = 60 * 60 * 3
+  statistic           = "Sum"
+  threshold           = 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-rate-exceeded-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-rate-exceeded-warning"
+  alarm_description   = "At least 1 Pinpoint SMS rate exceeded error in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-rate-exceeded[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-rate-exceeded[0].metric_transformation[0].namespace
+  period              = 60 * 5
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
+}
