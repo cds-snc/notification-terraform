@@ -94,3 +94,32 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-rate-exceeded" {
     default_value = "0"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-successes" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "pinpoint-sms-successes"
+  pattern        = "{ ($.isFinal IS TRUE) && ( ($.messageStatus = \"SUCCESSFUL\") || ($.messageStatus = \"DELIVERED\") ) }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries.name
+
+  metric_transformation {
+    name          = "pinpoint-sms-successes"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-failures" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "pinpoint-sms-failures"
+  pattern        = "{ ($.isFinal IS TRUE) && ( ($.messageStatus != \"SUCCESSFUL\") && ($.messageStatus != \"DELIVERED\") ) }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+
+  metric_transformation {
+    name          = "pinpoint-sms-failures"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
