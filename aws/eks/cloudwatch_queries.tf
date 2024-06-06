@@ -264,12 +264,12 @@ resource "aws_cloudwatch_query_definition" "callback-failures-by-service" {
   ]
 
   query_string = <<QUERY
-fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+fields @timestamp, @service_id, @callback_url, @notification_id
 | filter kubernetes.container_name like /^celery/
 | filter @message like /send_delivery_status_to_service has retried the max num of times for callback url/
 | parse @message 'Retry: send_delivery_status_to_service has retried the max num of times for callback url * and notification_id: * for service: *' as @callback_url, @notification_id, @service_id
 | sort @timestamp desc
-| stats count(@service_id) by @service_id
+| stats count(@service_id) by @service_id, bin(30m)
 | limit 10000
 QUERY
 }
