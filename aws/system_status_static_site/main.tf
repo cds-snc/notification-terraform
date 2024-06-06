@@ -5,9 +5,9 @@ variable "billing_tag_value" {
 }
 
 module "system_status_static_site" {
-  source     = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.3.1"
-  depends_on = [aws_acm_certificate.system_status_static_site_root_certificate]
-  count      = var.status_cert_created ? 1 : 0
+  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.0.2"
+
+  count = var.status_cert_created ? 1 : 0
 
   acm_certificate_arn                = aws_acm_certificate.system_status_static_site_root_certificate.arn
   domain_name_source                 = var.env == "production" ? "status.notification.canada.ca" : "status.${var.env}.notification.cdssandbox.xyz"

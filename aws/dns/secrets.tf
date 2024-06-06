@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "internal_dns_cert_base64" {
-  name = "INTERNAL_DNS_CERT_BASE64"
+  name                    = "INTERNAL_DNS_CERT_BASE64"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "internal_dns_cert_base64" {
