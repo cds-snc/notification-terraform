@@ -106,48 +106,92 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-critical" {
 }
 
 
-## TODO - Change to pinpoint
-# resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
-#   count               = var.cloudwatch_enabled ? 1 : 0
-#   alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
-#   alarm_description   = "Pinpoint SMS success rate to Canadian numbers is below 60% over 2 consecutive periods of 12 hours"
-#   comparison_operator = "LessThanThreshold"
-#   evaluation_periods  = "2"
-#   datapoints_to_alarm = "2"
-#   metric_name         = "SMSSuccessRate"
-#   namespace           = "AWS/SNS"
-#   period              = 60 * 60 * 12
-#   statistic           = "Average"
-#   threshold           = 60 / 100
-#   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-#   treat_missing_data  = "notBreaching"
-#   dimensions = {
-#     SMSType = "Transactional"
-#     Country = "CA"
-#   }
-# }
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-success-rate-warning"
+  alarm_description   = "Pinpoint SMS success rate is below 60% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  statistic           = "Average"
+  threshold           = 60 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  treat_missing_data  = "notBreaching"
 
-## TODO - Change to pinpoint
-# resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
-#   count               = var.cloudwatch_enabled ? 1 : 0
-#   alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
-#   alarm_description   = "Pinpoint SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours"
-#   comparison_operator = "LessThanThreshold"
-#   evaluation_periods  = "2"
-#   datapoints_to_alarm = "2"
-#   metric_name         = "SMSSuccessRate"
-#   namespace           = "AWS/SNS"
-#   period              = 60 * 60 * 12
-#   statistic           = "Average"
-#   threshold           = 25 / 100
-#   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-#   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-#   treat_missing_data  = "notBreaching"
-#   dimensions = {
-#     SMSType = "Transactional"
-#     Country = "CA"
-#   }
-# }
+
+  metric_query {
+    id          = "success_rate"
+    expression  = "successes / (successes + failures)"
+    label       = "Success Rate"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "successes"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "failures"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
+  alarm_description   = "Pinpoint SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  statistic           = "Average"
+  threshold           = 25 / 100
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  treat_missing_data  = "notBreaching"
+
+  metric_query {
+    id          = "success_rate"
+    expression  = "successes / (successes + failures)"
+    label       = "Success Rate"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "successes"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "failures"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+}
+
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-blocked-as-spam-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
