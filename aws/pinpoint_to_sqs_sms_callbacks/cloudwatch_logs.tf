@@ -54,7 +54,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-blocked-as-spam" {
   name  = "pinpoint-sms-blocked-as-spam"
   # See https://docs.aws.amazon.com/sms-voice/latest/userguide/configuration-sets-event-format.html
   pattern        = "{ $.messageStatus = \"SPAM\" }"
-  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
+  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
 
   metric_transformation {
     name          = "pinpoint-sms-blocked-as-spam"
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-phone-carrier-unavaila
   name  = "pinpoint-sms-phone-carrier-unavailable"
   # See https://docs.aws.amazon.com/sms-voice/latest/userguide/configuration-sets-event-format.html
   pattern        = "{ $.messageStatus = \"CARRIER_UNREACHABLE\" }"
-  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
+  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
 
   metric_transformation {
     name          = "pinpoint-sms-phone-carrier-unavailable"
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-rate-exceeded" {
   # https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-long-codes.html
   # Canadian long code numbers are limited at 1 SMS per second/number
   pattern        = "{ $.messageStatusDescription = \"Rate exceeded.\" }"
-  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
+  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
 
   metric_transformation {
     name          = "pinpoint-sms-rate-exceeded"
