@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "nginx_target_group_arn" {
-  name = "NGINX_TARGET_GROUP_ARN"
+  name                    = "NGINX_TARGET_GROUP_ARN"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "nginx_target_group_arn" {
@@ -8,7 +9,8 @@ resource "aws_secretsmanager_secret_version" "nginx_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "pr_bot_app_id" {
-  name = "PR_BOT_APP_ID"
+  name                    = "PR_BOT_APP_ID"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "pr_bot_app_id" {
@@ -17,7 +19,8 @@ resource "aws_secretsmanager_secret_version" "pr_bot_app_id" {
 }
 
 resource "aws_secretsmanager_secret" "pr_bot_private_key" {
-  name = "PR_BOT_PRIVATE_KEY"
+  name                    = "PR_BOT_PRIVATE_KEY"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "pr_bot_private_key" {
@@ -26,7 +29,8 @@ resource "aws_secretsmanager_secret_version" "pr_bot_private_key" {
 }
 
 resource "aws_secretsmanager_secret" "pr_bot_installation_id" {
-  name = "PR_BOT_INSTALLATION_ID"
+  name                    = "PR_BOT_INSTALLATION_ID"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "pr_bot_installation_id" {
@@ -35,7 +39,8 @@ resource "aws_secretsmanager_secret_version" "pr_bot_installation_id" {
 }
 
 resource "aws_secretsmanager_secret" "base_domain" {
-  name = "BASE_DOMAIN"
+  name                    = "BASE_DOMAIN"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "base_domain" {
@@ -44,7 +49,8 @@ resource "aws_secretsmanager_secret_version" "base_domain" {
 }
 
 resource "aws_secretsmanager_secret" "aws_region" {
-  name = "AWS_REGION"
+  name                    = "AWS_REGION"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "aws_region" {
@@ -53,7 +59,8 @@ resource "aws_secretsmanager_secret_version" "aws_region" {
 }
 
 resource "aws_secretsmanager_secret" "admin_target_group_arn" {
-  name = "ADMIN_TARGET_GROUP_ARN"
+  name                    = "ADMIN_TARGET_GROUP_ARN"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "admin_target_group_arn" {
@@ -62,7 +69,8 @@ resource "aws_secretsmanager_secret_version" "admin_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "api_target_group_arn" {
-  name = "API_TARGET_GROUP_ARN"
+  name                    = "API_TARGET_GROUP_ARN"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "api_target_group_arn" {
@@ -71,7 +79,8 @@ resource "aws_secretsmanager_secret_version" "api_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "documentation_target_group_arn" {
-  name = "DOCUMENTATION_TARGET_GROUP_ARN"
+  name                    = "DOCUMENTATION_TARGET_GROUP_ARN"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "documentation_target_group_arn" {
@@ -80,7 +89,8 @@ resource "aws_secretsmanager_secret_version" "documentation_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "document_download_api_target_group_arn" {
-  name = "DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN"
+  name                    = "DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "document_download_api_target_group_arn" {
