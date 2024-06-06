@@ -84,7 +84,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-warning" {
   namespace           = "AWS/SMSVoice"
   period              = "300"
   statistic           = "Maximum"
-  threshold           = 0.8 * var.sns_monthly_spend_limit # pinpoint limit is the same as sns
+  threshold           = 0.8 * var.pinpoint_monthly_spend_limit
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
@@ -99,7 +99,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-critical" {
   namespace           = "AWS/SMSVoice"
   period              = "300"
   statistic           = "Maximum"
-  threshold           = 0.9 * var.sns_monthly_spend_limit # pinpoint limit is the same as sns
+  threshold           = 0.9 * var.pinpoint_monthly_spend_limit # pinpoint limit is the same as sns
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_ok_arn]

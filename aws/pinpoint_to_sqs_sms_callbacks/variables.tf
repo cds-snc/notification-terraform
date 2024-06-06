@@ -35,6 +35,11 @@ variable "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
   description = "The ARN of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"
 }
 
+variable "pinpoint_monthly_spend_limit" {
+  type        = number
+  description = "The monthly spending limit for Amazon Pinpoint"
+}
+
 variable "force_delete_ecr" {
   description = "Boolean value to decide whether or not to force delete a non-empty ECR"
   type        = bool
