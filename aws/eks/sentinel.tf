@@ -26,6 +26,7 @@ module "sentinel_forwarder" {
 
 
 resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
+  count           = var.cloudwatch_enabled ? 1 : 0
   name            = "Admin API request"
   log_group_name  = local.eks_application_log_group
   filter_pattern  = "Admin API request"
