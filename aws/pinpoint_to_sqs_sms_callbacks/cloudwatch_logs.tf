@@ -109,7 +109,6 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-successes" {
   }
 }
 
-
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-failures" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "pinpoint-sms-failures"

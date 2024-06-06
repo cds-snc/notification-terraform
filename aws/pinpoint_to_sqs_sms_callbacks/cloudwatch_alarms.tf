@@ -73,7 +73,6 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-pinpoint-delivery-receipts-
   }
 }
 
-
 resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "pinpoint-spending-warning"
@@ -105,7 +104,6 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-critical" {
   ok_actions          = [var.sns_alert_ok_arn]
 }
 
-
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "pinpoint-sms-success-rate-warning"
@@ -116,7 +114,6 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
   threshold           = 60 / 100
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
-
 
   metric_query {
     id          = "success_rate"
@@ -189,7 +186,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
     }
   }
 }
-
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-blocked-as-spam-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
