@@ -175,7 +175,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-w
   period              = 60 * 60 * 3
   statistic           = "Sum"
   threshold           = 100
-  alarm_actions       = [avar.sns_alert_warning_arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
 }
 

@@ -208,3 +208,7 @@ output "subnet_ids" {
 output "subnet_cidr_blocks" {
   value = aws_subnet.notification-canada-ca-private[*].cidr_block
 }
+
+output "sns_monthly_spend_limit" {
+  value = var.sns_monthly_spend_limit
+}
