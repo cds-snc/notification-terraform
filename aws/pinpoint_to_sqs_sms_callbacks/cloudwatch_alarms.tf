@@ -113,9 +113,8 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
-  statistic           = "Average"
   threshold           = 60 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
 
 
@@ -129,8 +128,8 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
   metric_query {
     id = "successes"
     metric {
-      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].name
-      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].namespace
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].namespace
       period      = 60 * 60 * 12
       stat        = "Sum"
       unit        = "Count"
@@ -140,8 +139,8 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
   metric_query {
     id = "failures"
     metric {
-      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].name
-      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].namespace
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].namespace
       period      = 60 * 60 * 12
       stat        = "Sum"
       unit        = "Count"
@@ -156,10 +155,9 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
-  statistic           = "Average"
   threshold           = 25 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
 
   metric_query {
@@ -172,8 +170,8 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
   metric_query {
     id = "successes"
     metric {
-      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].name
-      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes.metric_transformation[0].namespace
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].namespace
       period      = 60 * 60 * 12
       stat        = "Sum"
       unit        = "Count"
@@ -183,8 +181,8 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
   metric_query {
     id = "failures"
     metric {
-      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].name
-      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures.metric_transformation[0].namespace
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].namespace
       period      = 60 * 60 * 12
       stat        = "Sum"
       unit        = "Count"
