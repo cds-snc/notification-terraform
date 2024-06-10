@@ -26,6 +26,29 @@ module "vpn" {
   billing_tag_value = "notification-canada-ca-${var.env}"
 }
 
+# GHA VPN
+module "gha_vpn" {
+  source = "/Users/benlarabie/projects/terraform-modules/client_vpn"
+
+  endpoint_name   = "gha-vpn"
+  access_group_id = var.client_vpn_access_group_id
+
+  vpc_id              = var.vpc_id
+  vpc_cidr_block      = var.vpc_cidr_block
+  subnet_cidr_blocks  = var.subnet_cidr_blocks
+  subnet_ids          = var.subnet_ids
+  acm_certificate_arn = aws_acm_certificate.client_vpn.arn
+
+  # Only create a self-service portal in prod  
+  # The client config can still be downloaded from the AWS console
+  self_service_portal = var.env == "production" ? "enabled" : "disabled"
+  banner_text         = "Welcome to the Notify ${upper(var.env)} Environment. This is a private network.  Only authorized users may connect and should take care not to cause service disruptions."
+
+
+  billing_tag_value = "notification-canada-ca-${var.env}"
+}
+
+
 #
 # Certificate used for VPN communication
 #
