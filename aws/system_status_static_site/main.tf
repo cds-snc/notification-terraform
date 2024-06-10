@@ -5,7 +5,7 @@ variable "billing_tag_value" {
 }
 
 module "system_status_static_site" {
-  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.0.2"
+  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.3.1"
 
   count = var.status_cert_created ? 1 : 0
 
