@@ -13,16 +13,16 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "properties": {
                 "title": "Alarms",
                 "alarms": [
-                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-warning[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-spending-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.sns-spending-warning[0].arn}"
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-warning[0].arn}",
+                    "${var.sqs_send_sms_high_queue_delay_warning_arn}",
+                    "${var.sqs_send_sms_high_queue_delay_critical_arn}",
+                    "${var.sqs_send_sms_medium_queue_delay_warning_arn}",
+                    "${var.sqs_send_sms_medium_queue_delay_critical_arn}",
+                    "${var.sqs_send_sms_low_queue_delay_warning_arn}",
+                    "${var.sqs_send_sms_low_queue_delay_critical_arn}",
+                    "${aws_cloudwatch_metric_alarm.total-sms-spending-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.total-sms-spending-warning[0].arn}"
                 ]
             }
         },
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SNS", "NumberOfNotificationsDelivered", "PhoneNumber", "PhoneNumberDirect" ]
+                    [ "LogMetrics", "pinpoint-sms-successes" ]
                 ],
                 "view": "timeSeries",
                 "stacked": true,
@@ -52,7 +52,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SNS", "NumberOfNotificationsFailed", "PhoneNumber", "PhoneNumberDirect", { "color": "#d62728" } ]
+                    [ "LogMetrics", "pinpoint-sms-failures" ]
                 ],
                 "view": "timeSeries",
                 "stacked": true,
@@ -129,7 +129,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
-                "title": "p90 SNS request time in ms",
+                "title": "TODO CONVERT TO PINPOINT p90 SNS request time in ms",
                 "annotations": {
                     "horizontal": [
                         {
@@ -192,7 +192,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/Lambda", "Invocations", "FunctionName", "sns-to-sqs-sms-callbacks" ],
+                    [ "AWS/Lambda", "Invocations", "FunctionName", "pinpoint-to-sqs-sms-callbacks" ],
                     [ ".", "Errors", ".", ".", { "color": "#d62728", "yAxis": "right" } ]
                 ],
                 "view": "timeSeries",
@@ -200,7 +200,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
-                "title": "Lambda invocations per 5m"
+                "title": "Pinpoint Callback Lambda invocations per 5m"
             }
         },
         {
@@ -244,29 +244,15 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 3,
             "width": 24,
-            "y": 54,
-            "x": 0,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE 'sns/us-west-2/${var.account_id}/DirectPublishToPhoneNumber/Failure' | fields @timestamp as Timestamp, notification.messageId as MessageID, status, delivery.destination as Destination, delivery.providerResponse as ProviderResponse\n| sort @timestamp desc\n| limit 20",
-                "region": "us-west-2",
-                "stacked": false,
-                "title": "SMS Errors Log / us-west-2",
-                "view": "table"
-            }
-        },
-        {
-            "height": 3,
-            "width": 24,
             "y": 51,
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | fields @timestamp as Timestamp, notification.messageId as MessageID, status, delivery.destination as Destination, delivery.providerResponse as ProviderResponse\n| sort @timestamp desc\n| limit 20",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure' | fields @timestamp as Timestamp, notification.messageId as MessageID, status, delivery.destination as Destination, delivery.providerResponse as ProviderResponse\n| sort @timestamp desc\n| limit 20",
                 "region": "${var.region}",
                 "stacked": false,
                 "view": "table",
-                "title": "SMS Errors Log / ${var.region}"
+                "title": "Pinpoint SMS Errors Log / ${var.region}"
             }
         },
         {
@@ -286,7 +272,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
-                "title": "p90 SMS sending time in seconds",
+                "title": "TODO: Convert to Pinpoint p90 SMS sending time in seconds",
                 "annotations": {
                     "horizontal": [
                         {
@@ -320,7 +306,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes, count(*) as Number by delivery.phoneCarrier as Carrier",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes, count(*) as Number by delivery.phoneCarrier as Carrier",
                 "region": "${var.region}",
                 "title": "Carrier Dwell Times",
                 "view": "table"
@@ -333,7 +319,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber' | SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes by bin(30s)",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber' | SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes by bin(30s)",
                 "region": "${var.region}",
                 "stacked": false,
                 "view": "timeSeries",
