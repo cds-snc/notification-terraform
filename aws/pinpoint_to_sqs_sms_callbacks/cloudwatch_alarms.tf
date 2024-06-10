@@ -73,35 +73,84 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-pinpoint-delivery-receipts-
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-warning" {
+resource "aws_cloudwatch_metric_alarm" "total-sms-spending-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-spending-warning"
-  alarm_description   = "Pinpoint spending reached 80% of limit this month"
+  alarm_name          = "total-sms-spending-warning"
+  alarm_description   = "SMS spending reached 80% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = "TextMessageMonthlySpend"
-  namespace           = "AWS/SMSVoice"
-  period              = "300"
-  statistic           = "Maximum"
-  threshold           = 0.8 * var.pinpoint_monthly_spend_limit
+  threshold           = 0.8 * var.sms_monthly_spend_limit
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "total_spend"
+    expression  = "sns_spend + pinpoint_spend"
+    label       = "Total SMS Monthly Spend"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "sns_spend"
+    metric {
+      metric_name = "SMSMonthToDateSpentUSD"
+      namespace   = "AWS/SNS"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "pinpoint_spend"
+    metric {
+      metric_name = "TextMessageMonthlySpend"
+      namespace   = "AWS/SMSVoice"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
 }
 
-resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-critical" {
+resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-spending-critical"
-  alarm_description   = "Pinpoint spending reached 90% of limit this month"
+  alarm_name          = "total-sms-spending-critical"
+  alarm_description   = "SMS spending reached 90% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = "TextMessageMonthlySpend"
-  namespace           = "AWS/SMSVoice"
-  period              = "300"
-  statistic           = "Maximum"
-  threshold           = 0.9 * var.pinpoint_monthly_spend_limit # pinpoint limit is the same as sns
+  threshold           = 0.9 * var.sms_monthly_spend_limit
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_ok_arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "total_spend"
+    expression  = "sns_spend + pinpoint_spend"
+    label       = "Total SMS Monthly Spend"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "sns_spend"
+    metric {
+      metric_name = "SMSMonthToDateSpentUSD"
+      namespace   = "AWS/SNS"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "pinpoint_spend"
+    metric {
+      metric_name = "TextMessageMonthlySpend"
+      namespace   = "AWS/SMSVoice"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
