@@ -4,7 +4,7 @@ import boto3
 from dotenv import load_dotenv
 
 """
-Set the SMS keywords for the SMS phone numbers in the account that are not in a pool.
+Set the keywords for the phone numbers in the account that are not in a pool.
 """
 
 def main():
