@@ -194,7 +194,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-canadian-numbers-critical" {
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "pinpoint-sms-success-rate-canadian-numbers-critical"
   alarm_description   = "Pinpoint SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours"
