@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_dashboard" "pinpoint" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  dashboard_name = "Pinpoint SMS"
+  dashboard_name = "SMS-Pinpoint"
   dashboard_body = <<EOF
 {
     "widgets": [

@@ -633,7 +633,7 @@ EOF
 
 resource "aws_cloudwatch_dashboard" "sms" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  dashboard_name = "SMS"
+  dashboard_name = "SMS-SNS"
   dashboard_body = <<EOF
 {
     "widgets": [
