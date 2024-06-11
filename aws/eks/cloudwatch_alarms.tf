@@ -939,14 +939,14 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-
   ok_actions          = [var.sns_alert_critical_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "github-arc-runner-write-alarm" {
+resource "aws_cloudwatch_metric_alarm" "github-arc-runner-error-alarm" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "github-arc-runner-write-alarm"
-  alarm_description   = "GitHub ARC Runners Are Failing - Check Version Deprecation"
+  alarm_name          = "github-arc-runner-error-alarm"
+  alarm_description   = "GitHub ARC Runners Are Failing"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.github-arc-write-alarm[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.github-arc-write-alarm[0].metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.github-arc-runner-alarm[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.github-arc-runner-alarm[0].metric_transformation[0].namespace
   period              = "300"
   statistic           = "Sum"
   threshold           = 1
