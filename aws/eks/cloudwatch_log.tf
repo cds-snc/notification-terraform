@@ -190,10 +190,5 @@ resource "aws_cloudwatch_log_metric_filter" "callback-max-retry-failures" {
     name      = "callback-max-retry-failures"
     namespace = "LogMetrics"
     value     = "1"
-    dimensions = {
-      url             = "$.url"
-      notification_id = "$.notification_id"
-      service_id      = "$.service"
-    }
   }
 }
