@@ -188,7 +188,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "admin-api-50X-errors" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "ADMIN & API - 50X errors"
+  name  = "API / ADMIN & API - 50X errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -205,7 +205,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Critical bounces"
+  name  = "Bounces / Critical bounces"
 
   log_group_names = [
     local.eks_application_log_group
@@ -222,7 +222,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Warning bounces"
+  name  = "Bounces / Warning bounces"
 
   log_group_names = [
     local.eks_application_log_group
@@ -239,7 +239,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-warnings-and-criticals" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Bounce warnings and criticals grouped by type"
+  name  = "Bounces / Bounce warnings and criticals grouped by type"
 
   log_group_names = [
     local.eks_application_log_group
@@ -251,6 +251,23 @@ fields @timestamp, @service_id, @bounce_type
 | filter @message like /bounce rate threshold of/
 | parse @message "Service: * has met or exceeded a * bounce rate" as @service_id, @bounce_type
 | stats count(*) by @service_id, @bounce_type
+| limit 100
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "gh-arc-errors" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "GitHub / ARC Errors"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message, @logStream, @log
+| filter @message like /ERR|Exception/
+| filter kubernetes.namespace_name = "github-arc-controller"
+| sort @timestamp desc
 | limit 100
 QUERY
 }
