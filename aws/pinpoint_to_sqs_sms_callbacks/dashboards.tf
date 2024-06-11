@@ -122,14 +122,14 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_clients_sns_request-time", "metric_type", "timing" ]
+                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_clients_pinpoint_request-time", "metric_type", "timing" ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
-                "title": "TODO CONVERT TO PINPOINT p90 SNS request time in ms",
+                "title": "p90 Pinpoint request time in ms",
                 "annotations": {
                     "horizontal": [
                         {
@@ -154,14 +154,14 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_tasks_process_sns_results", "metric_type", "counter" ]
+                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_tasks_process_pinpoint_results", "metric_type", "counter" ]
                 ],
                 "view": "timeSeries",
                 "stacked": true,
                 "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
-                "title": "Celery: Number of SNS delivery receipts processed"
+                "title": "Celery: Number of Pinpoint delivery receipts processed"
             }
         },
         {
@@ -272,7 +272,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
-                "title": "TODO: Convert to Pinpoint p90 SMS sending time in seconds",
+                "title": "SMS (SNS and Pinpoint) sending time in seconds",
                 "annotations": {
                     "horizontal": [
                         {
