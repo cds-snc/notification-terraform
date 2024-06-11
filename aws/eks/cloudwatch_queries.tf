@@ -254,3 +254,22 @@ fields @timestamp, @service_id, @bounce_type
 | limit 100
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "callback-failures-by-service" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Count of callbacks that exceeded MaxRetries by service"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @service_id, @callback_url, @notification_id
+| filter kubernetes.container_name like /^celery/
+| filter @message like /send_delivery_status_to_service has retried the max num of times for callback url/
+| parse @message 'Retry: send_delivery_status_to_service has retried the max num of times for callback url * and notification_id: * for service: *' as @callback_url, @notification_id, @service_id
+| sort @timestamp desc
+| stats count(@service_id) by @service_id, bin(30m)
+| limit 10000
+QUERY
+}

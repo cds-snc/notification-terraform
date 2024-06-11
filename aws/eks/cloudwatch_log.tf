@@ -179,3 +179,21 @@ resource "aws_cloudwatch_log_metric_filter" "github-arc-runner-alarm" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "callback-max-retry-failures" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "callback-max-retry-failures"
+  pattern        = "Retry: send_delivery_status_to_service has retried the max num of times for callback url"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "callback-max-retry-failures"
+    namespace = "LogMetrics"
+    value     = "1"
+    dimensions = {
+      url             = "$.url"
+      notification_id = "$.notification_id"
+      service_id      = "$.service"
+    }
+  }
+}
