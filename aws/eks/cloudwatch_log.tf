@@ -167,14 +167,27 @@ resource "aws_cloudwatch_log_metric_filter" "aggregating-queues-are-active" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "github-arc-write-alarm" {
+resource "aws_cloudwatch_log_metric_filter" "github-arc-runner-alarm" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "GitHub ARC Runners Write Alarm"
-  pattern        = "WRITE ERROR"
+  pattern        = "{ $.kubernetes.pod_name = \"github-arc-ss-${var.env}-*-runner-*\"  && $.log = \"*ERROR*\" }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
-    name      = "aggregating-github-arc-write-alarm"
+    name      = "aggregating-github-arc-runner-alarm"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "callback-max-retry-failures" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "callback-max-retry-failures"
+  pattern        = "send_delivery_status_to_service has retried the max num of times for callback url"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "callback-max-retry-failures"
     namespace = "LogMetrics"
     value     = "1"
   }
