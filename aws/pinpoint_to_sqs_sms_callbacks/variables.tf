@@ -51,3 +51,38 @@ variable "bootstrap" {
   type        = bool
   default     = false
 }
+
+variable "celery_queue_prefix" {
+  description = "The prefix for the celery queue"
+  type        = string
+}
+
+variable "sqs_send_sms_high_queue_delay_warning_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_high_queue_delay_critical_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_medium_queue_delay_warning_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_medium_queue_delay_critical_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_low_queue_delay_warning_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_low_queue_delay_critical_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
