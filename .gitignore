@@ -51,3 +51,6 @@ override.tf.json
 
 # python environment variables
 .env*
+
+# Allow example environment variables file
+!.env.example

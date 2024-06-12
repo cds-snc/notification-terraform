@@ -1,4 +1,3 @@
-import json
 import boto3
 
 from dotenv import load_dotenv
@@ -9,11 +8,6 @@ Set the keywords for the phone numbers in the account that are not in a pool.
 
 def main():
     load_dotenv()
-
-    # TODO: Do we want all these unicode characters? In particular the no break spaces \u202f 
-    # TODO: Do we want to include the "GC Notify:" prefix in the messages?
-    # TODO: Do we want a space in the INFO message ... applyPlus ...
-    # TODO: Should "ARRET" be an "OPT_OUT"?
 
     keyword_data = [
         {
@@ -51,7 +45,6 @@ def main():
         if phone_number.get('PoolId') is None:
             id = phone_number['PhoneNumberId']            
             keywords = client.describe_keywords(OriginationIdentity=id)['Keywords']
-            print(json.dumps(keywords, indent=4))
 
             for keyword in keywords:
                 if keyword['Keyword'] not in [k['Keyword'] for k in keyword_data]:
