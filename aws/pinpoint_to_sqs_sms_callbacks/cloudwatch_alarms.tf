@@ -72,3 +72,211 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-pinpoint-delivery-receipts-
     FunctionName = module.pinpoint_to_sqs_sms_callbacks.function_name
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "total-sms-spending-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "total-sms-spending-warning"
+  alarm_description   = "SMS spending reached 80% of limit this month"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 0.8 * var.sms_monthly_spend_limit
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "total_spend"
+    expression  = "sns_spend + pinpoint_spend"
+    label       = "Total SMS Monthly Spend"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "sns_spend"
+    metric {
+      metric_name = "SMSMonthToDateSpentUSD"
+      namespace   = "AWS/SNS"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "pinpoint_spend"
+    metric {
+      metric_name = "TextMessageMonthlySpend"
+      namespace   = "AWS/SMSVoice"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "total-sms-spending-critical"
+  alarm_description   = "SMS spending reached 90% of limit this month"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 0.9 * var.sms_monthly_spend_limit
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "total_spend"
+    expression  = "sns_spend + pinpoint_spend"
+    label       = "Total SMS Monthly Spend"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "sns_spend"
+    metric {
+      metric_name = "SMSMonthToDateSpentUSD"
+      namespace   = "AWS/SNS"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "pinpoint_spend"
+    metric {
+      metric_name = "TextMessageMonthlySpend"
+      namespace   = "AWS/SMSVoice"
+      period      = 300
+      stat        = "Maximum"
+      unit        = "Count"
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-success-rate-warning"
+  alarm_description   = "Pinpoint SMS success rate is below 60% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  threshold           = 60 / 100
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
+
+  metric_query {
+    id          = "success_rate"
+    expression  = "successes / (successes + failures)"
+    label       = "Success Rate"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "successes"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "failures"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-success-rate-canadian-numbers-critical"
+  alarm_description   = "Pinpoint SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  threshold           = 25 / 100
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
+  treat_missing_data  = "notBreaching"
+
+  metric_query {
+    id          = "success_rate"
+    expression  = "successes / (successes + failures)"
+    label       = "Success Rate"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "successes"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+
+  metric_query {
+    id = "failures"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].namespace
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      unit        = "Count"
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-blocked-as-spam-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-blocked-as-spam-warning"
+  alarm_description   = "More than 10 Pinpoint SMS have been blocked as spam over 12 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-blocked-as-spam[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-blocked-as-spam[0].metric_transformation[0].namespace
+  period              = 60 * 60 * 12
+  statistic           = "Sum"
+  threshold           = 10
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-phone-carrier-unavailable-warning"
+  alarm_description   = "More than 100 Pinpoint SMS failed because a phone carrier is unavailable over 3 hours"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-phone-carrier-unavailable[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-phone-carrier-unavailable[0].metric_transformation[0].namespace
+  period              = 60 * 60 * 3
+  statistic           = "Sum"
+  threshold           = 100
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-rate-exceeded-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-rate-exceeded-warning"
+  alarm_description   = "At least 1 Pinpoint SMS rate exceeded error in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-rate-exceeded[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-rate-exceeded[0].metric_transformation[0].namespace
+  period              = 60 * 5
+  statistic           = "Sum"
+  threshold           = 1
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
+}

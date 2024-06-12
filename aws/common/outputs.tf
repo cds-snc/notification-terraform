@@ -208,3 +208,35 @@ output "subnet_ids" {
 output "subnet_cidr_blocks" {
   value = aws_subnet.notification-canada-ca-private[*].cidr_block
 }
+
+output "sns_monthly_spend_limit" {
+  value = var.sns_monthly_spend_limit
+}
+
+output "celery_queue_prefix" {
+  value = var.celery_queue_prefix
+}
+
+output "sqs_send_sms_high_queue_delay_warning_arn" {
+  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0].arn : ""
+}
+
+output "sqs_send_sms_high_queue_delay_critical_arn" {
+  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0].arn : ""
+}
+
+output "sqs_send_sms_medium_queue_delay_warning_arn" {
+  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0].arn : ""
+}
+
+output "sqs_send_sms_medium_queue_delay_critical_arn" {
+  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-critical[0].arn : ""
+}
+
+output "sqs_send_sms_low_queue_delay_warning_arn" {
+  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-warning[0].arn : ""
+}
+
+output "sqs_send_sms_low_queue_delay_critical_arn" {
+  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-critical[0].arn : ""
+}
