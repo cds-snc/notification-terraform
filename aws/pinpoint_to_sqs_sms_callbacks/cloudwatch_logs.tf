@@ -3,7 +3,7 @@
 #
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
-  name              = "sns/${var.region}/${var.account_id}/PinPointDirectPublishToPhoneNumber"
+  name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -11,7 +11,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
-  name              = "sns/${var.region}/${var.account_id}/PinPointDirectPublishToPhoneNumber/Failure"
+  name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
