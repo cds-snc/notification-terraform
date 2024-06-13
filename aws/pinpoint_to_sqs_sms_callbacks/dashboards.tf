@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_dashboard" "pinpoint" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  dashboard_name = "Pinpoint"
+  dashboard_name = "SMS-Pinpoint"
   dashboard_body = <<EOF
 {
     "widgets": [
@@ -122,14 +122,14 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_clients_sns_request-time", "metric_type", "timing" ]
+                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_clients_pinpoint_request-time", "metric_type", "timing" ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
-                "title": "TODO CONVERT TO PINPOINT p90 SNS request time in ms",
+                "title": "p90 Pinpoint request time in ms",
                 "annotations": {
                     "horizontal": [
                         {
@@ -154,14 +154,14 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_tasks_process_sns_results", "metric_type", "counter" ]
+                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_tasks_process_pinpoint_results", "metric_type", "counter" ]
                 ],
                 "view": "timeSeries",
                 "stacked": true,
                 "region": "${var.region}",
                 "stat": "Sum",
                 "period": 300,
-                "title": "Celery: Number of SNS delivery receipts processed"
+                "title": "Celery: Number of Pinpoint delivery receipts processed"
             }
         },
         {
@@ -171,7 +171,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "x": 0,
             "type": "text",
             "properties": {
-                "markdown": "\n# Sending SMS with SNS\n"
+                "markdown": "\n# Sending SMS with Pinpoint\n"
             }
         },
         {
@@ -210,7 +210,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n## Limits\n- SNS [maximum sending rate](https://docs.aws.amazon.com/general/latest/gr/sns.html#limits_sns): 20 SMS/second\n- [Spending limit](https://${var.region}.console.aws.amazon.com/sns/v3/home?region=${var.region}#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [${var.celery_queue_prefix}send-sms-low](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-low), [${var.celery_queue_prefix}send-sms-medium](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-medium), or [${var.celery_queue_prefix}send-sms-high](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-high) depending on the SMS priority. This task calls the SNS API to send a text message.\n\n## SNS IDs\nSNS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `${var.region}` use random phone numbers managed by AWS.\n\n### ⚠️  SNS in `us-west-2`\nIf a Notify service has an inbound number attached, SMS will be sent with SNS using a long code phone number ordered on Pinpoint in the `us-west-2` region. Statistics for this region and alarms are **not visible on this dashboard**.\n"
+                "markdown": "\n## Limits\n- [Spending limit](https://${var.region}.console.aws.amazon.com/sns/v3/home?region=${var.region}#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [${var.celery_queue_prefix}send-sms-low](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-low), [${var.celery_queue_prefix}send-sms-medium](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-medium), or [${var.celery_queue_prefix}send-sms-high](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-high) depending on the SMS priority. This task calls the SNS pr Pinpoint API to send a text message.\n\n## SMS IDs\nAWS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS/Pinpoint API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `${var.region}` use phone numbers reserved for Notify's use\n\n### ⚠️  SNS in `us-west-2`\nIf a Notify service has an inbound number attached, SMS will be sent with SNS using a long code phone number ordered on Pinpoint in the `us-west-2` region. Statistics for this region and alarms are **not visible on this dashboard**.\n"
             }
         },
         {
@@ -238,7 +238,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n## Message flow\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\nThe log groups are subscribed the Lambda function [sns-to-sqs-sms-callbacks](#/functions/sns-to-sqs-sms-callbacks?tab=configuration). This Lambda adds messages to the SQS queue `delivery-receipts` to trigger the Celery task in charge of updating notifications in the database, `process-sns-result`.\n\nSee the relevant [AWS documentation](https://docs.aws.amazon.com/sns/latest/dg/sms_stats_cloudwatch.html#sns-viewing-cloudwatch-logs) for these messages.\n"
+                "markdown": "\n## Message flow\nAfter an SMS has been sent by Pinpoint, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FPinpointDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FPinpointDirectPublishToPhoneNumber$252FFailure) for failures\n\nThe log groups are subscribed the Lambda function [pinpoint-to-sqs-sms-callbacks](#/functions/pinpoint-to-sqs-sms-callbacks?tab=configuration). This Lambda adds messages to the SQS queue `delivery-receipts` to trigger the Celery task in charge of updating notifications in the database, `process-pinpoint-result`.\n\nSee the relevant [AWS documentation](https://docs.aws.amazon.com/sns/latest/dg/sms_stats_cloudwatch.html#sns-viewing-cloudwatch-logs) for these messages.\n"
             }
         },
         {
@@ -272,7 +272,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "region": "${var.region}",
                 "stat": "p90",
                 "period": 60,
-                "title": "TODO: Convert to Pinpoint p90 SMS sending time in seconds",
+                "title": "SMS (SNS and Pinpoint) sending time in seconds",
                 "annotations": {
                     "horizontal": [
                         {
