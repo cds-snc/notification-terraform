@@ -81,7 +81,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 4,
-            "width": 8,
+            "width": 4,
             "y": 8,
             "x": 0,
             "type": "metric",
@@ -95,10 +95,30 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "region": "${var.region}",
                 "period": 60,
                 "stat": "Sum",
-                "title": "SMS Send Rate Per Minute",
+                "title": "SNS/SMS Send Rate Per Minute",
                 "legend": {
                     "position": "hidden"
                 },
+                "sparkline": true
+            }
+        },
+        {
+            "type": "metric",
+            "x": 4,
+            "y": 8,
+            "width": 4,
+            "height": 4,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "FILL(METRICS(), 0)", "label": "Pinpoint /", "id": "e1", "region": "${var.region}", "period": 60 } ],
+                    [ "LogMetrics", "pinpoint-sms-successes", { "region": "${var.region}", "label": "min", "id": "m1", "visible": false } ]
+                ],
+                "view": "singleValue",
+                "stacked": true,
+                "region": "${var.region}",
+                "stat": "Sum",
+                "period": 60,
+                "title": "Pinpoint Send Rate Per Minute",
                 "sparkline": true
             }
         },
@@ -218,7 +238,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "text",
             "properties": {
-                "markdown": "# SMS ([Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/SMS))"
+                "markdown": "# SMS ([SNS Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/SMS) - [Pinpoint Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/Pinpoint))"
             }
         },
         {
