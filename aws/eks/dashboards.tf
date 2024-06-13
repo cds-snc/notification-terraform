@@ -95,7 +95,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "region": "${var.region}",
                 "period": 60,
                 "stat": "Sum",
-                "title": "SNS Send Rate Per Minute",
+                "title": "SNS/SMS Send Rate Per Minute",
                 "legend": {
                     "position": "hidden"
                 },
