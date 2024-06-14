@@ -11,7 +11,7 @@ module "vpn" {
   vpc_id              = var.vpc_id
   vpc_cidr_block      = var.vpc_cidr_block
   subnet_cidr_blocks  = var.subnet_cidr_blocks
-  subnet_ids          = var.subnet_ids
+  subnet_ids          = [tolist(var.subnet_ids)[0]]
   acm_certificate_arn = aws_acm_certificate.client_vpn.arn
 
   # Only create a self-service portal in prod  
@@ -28,7 +28,7 @@ module "vpn" {
 
 # GHA VPN
 module "gha_vpn" {
-  source = "/Users/benlarabie/projects/terraform-modules/client_vpn"
+  source = "/Users/benlarabie/projects/terraform-modules/gha_vpn"
 
   endpoint_name   = "gha-vpn"
   access_group_id = var.client_vpn_access_group_id
@@ -36,7 +36,7 @@ module "gha_vpn" {
   vpc_id              = var.vpc_id
   vpc_cidr_block      = var.vpc_cidr_block
   subnet_cidr_blocks  = var.subnet_cidr_blocks
-  subnet_ids          = var.subnet_ids
+  subnet_ids          = [tolist(var.subnet_ids)[0]]
   acm_certificate_arn = aws_acm_certificate.client_vpn.arn
 
   # Only create a self-service portal in prod  
