@@ -115,7 +115,7 @@ resource "aws_secretsmanager_secret" "gha_vpn_cert" {
 
 resource "aws_secretsmanager_secret_version" "gha_vpn_cert" {
   secret_id     = aws_secretsmanager_secret.gha_vpn_cert.id
-  secret_string = module.gha_vpn.gha_vpn_certificate_pem
+  secret_string = module.gha_vpn.client_vpn_certificate_pem
 }
 
 resource "aws_secretsmanager_secret" "gha_vpn_key" {
@@ -125,5 +125,5 @@ resource "aws_secretsmanager_secret" "gha_vpn_key" {
 
 resource "aws_secretsmanager_secret_version" "gha_vpn_key" {
   secret_id     = aws_secretsmanager_secret.gha_vpn_key.id
-  secret_string = module.gha_vpn.gha_vpn_private_key_pem
+  secret_string = module.gha_vpn.client_vpn_private_key_pem
 }
