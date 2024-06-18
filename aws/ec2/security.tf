@@ -6,11 +6,11 @@ resource "aws_security_group" "instance_security_group" {
 
   # Allow outbound HTTPS traffic
   egress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow HTTPS outbound traffic"
+    description = "Allow All outbound traffic"
   }
 
   tags = {
@@ -31,6 +31,14 @@ resource "aws_security_group" "vpc_endpoint_security_group" {
     protocol    = "tcp"
     cidr_blocks = [aws_vpc.vpc.cidr_block]
     description = "Allow HTTPS traffic from VPC"
+  }
+
+  ingress {
+    from_port   = 0
+    to_port     = 8888
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow Jupyter traffic from VPC"
   }
 
   tags = {
