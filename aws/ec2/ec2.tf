@@ -25,6 +25,10 @@ resource "aws_instance" "ec2_instance" {
   ]
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
+  metadata_options {
+    http_tokens = "required"
+  }
+
   root_block_device {
     volume_size = 120
   }
