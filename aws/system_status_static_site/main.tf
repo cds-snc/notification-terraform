@@ -14,7 +14,7 @@ module "system_status_static_site" {
   billing_tag_value                  = var.billing_tag_value
   hosted_zone_id                     = var.route_53_zone_arn
   s3_bucket_name                     = "notification-canada-ca-${var.env}-system-status"
-  force_destroy_s3_bucket            = var.env == "staging" ? true : var.force_destroy_s3
+  force_destroy_s3_bucket            = true
   cloudfront_query_string_forwarding = true
 
   providers = {
