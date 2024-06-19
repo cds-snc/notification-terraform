@@ -238,7 +238,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "text",
             "properties": {
-                "markdown": "# SMS ([SNS Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/SMS) - [Pinpoint Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/Pinpoint))"
+                "markdown": "# SMS ([SNS Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/SMS) - [Pinpoint Dashboard](https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards/dashboard/SMS-Pinpoint))"
             }
         },
         {
