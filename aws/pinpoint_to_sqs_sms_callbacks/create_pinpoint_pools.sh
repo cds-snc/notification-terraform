@@ -49,14 +49,16 @@ if [ $shortcodePoolExists == true ]; then
 else
     echo "Creating shortcode pool"
     number1=$(aws pinpoint-sms-voice-v2 request-phone-number --iso-country-code CA --message-type TRANSACTIONAL --number-capabilities SMS --number-type LONG_CODE | jq -r ".PhoneNumberId")
-    aws pinpoint-sms-voice-v2 create-pool --origination-identity $number1 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=shortcode-pool
+    poolId=$(aws pinpoint-sms-voice-v2 create-pool --origination-identity $number1 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=shortcode-pool | jq -r ".PoolId")
+    aws pinpoint-sms-voice-v2 update-pool --pool-id $poolId --shared-routes-enabled
 fi
 if [ $defaultPoolExists == true ]; then
     echo "Default pool already exists"
 else
     echo "Creating default pool"
     number2=$(aws pinpoint-sms-voice-v2 request-phone-number --iso-country-code CA --message-type TRANSACTIONAL --number-capabilities SMS --number-type LONG_CODE  | jq -r ".PhoneNumberId")
-    aws pinpoint-sms-voice-v2 create-pool --origination-identity $number2 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=default-pool
+    poolId=$(aws aws pinpoint-sms-voice-v2 create-pool --origination-identity $number2 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=default-pool | jq -r ".PoolId")
+    aws pinpoint-sms-voice-v2 update-pool --pool-id $poolId --shared-routes-enabled
 fi
 
 # # Create a configuration set and assign destinations
