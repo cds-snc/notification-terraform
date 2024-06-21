@@ -35,6 +35,11 @@ variable "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
   description = "The ARN of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"
 }
 
+variable "sms_monthly_spend_limit" {
+  type        = number
+  description = "The total monthly spending limit for SMS (SNS plus Pinpoint)"
+}
+
 variable "force_delete_ecr" {
   description = "Boolean value to decide whether or not to force delete a non-empty ECR"
   type        = bool
@@ -45,4 +50,39 @@ variable "bootstrap" {
   description = "Boolean value to decide whether or not to build images"
   type        = bool
   default     = false
+}
+
+variable "celery_queue_prefix" {
+  description = "The prefix for the celery queue"
+  type        = string
+}
+
+variable "sqs_send_sms_high_queue_delay_warning_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_high_queue_delay_critical_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_medium_queue_delay_warning_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_medium_queue_delay_critical_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_low_queue_delay_warning_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
+}
+
+variable "sqs_send_sms_low_queue_delay_critical_arn" {
+  description = "ARN for the corresponding alarm"
+  type        = string
 }

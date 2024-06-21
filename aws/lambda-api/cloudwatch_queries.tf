@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_query_definition" "api-lambda-errors" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API lambda - errors"
+  name  = "API / API Lambda errors"
 
   log_group_names = [
     local.api_lambda_log_group
@@ -15,7 +15,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "services-over-daily-rate-limit" {
-  name = "Services going over daily rate limits"
+  name = "API / Services going over daily rate limits"
 
   log_group_names = [
     local.api_lambda_log_group,
