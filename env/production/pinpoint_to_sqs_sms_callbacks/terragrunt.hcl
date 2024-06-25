@@ -20,6 +20,13 @@ dependency "common" {
     sns_alert_ok_arn                             = ""
     sqs_deliver_receipts_queue_arn               = ""
     sns_monthly_spend_limit                      = 1
+    celery_queue_prefix                          = ""
+    sqs_send_sms_high_queue_delay_warning_arn    = ""
+    sqs_send_sms_high_queue_delay_critical_arn   = ""
+    sqs_send_sms_medium_queue_delay_warning_arn  = ""
+    sqs_send_sms_medium_queue_delay_critical_arn = ""
+    sqs_send_sms_low_queue_delay_warning_arn     = ""
+    sqs_send_sms_low_queue_delay_critical_arn    = ""
   }
 }
 
@@ -46,4 +53,11 @@ inputs = {
   pinpoint_to_sqs_sms_callbacks_ecr_repository_url   = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
   pinpoint_to_sqs_sms_callbacks_ecr_arn              = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_arn
   sms_monthly_spend_limit                            = dependency.common.outputs.sns_monthly_spend_limit
+  celery_queue_prefix                                = dependency.common.outputs.celery_queue_prefix
+  sqs_send_sms_high_queue_delay_warning_arn          = dependency.common.outputs.sqs_send_sms_high_queue_delay_warning_arn
+  sqs_send_sms_high_queue_delay_critical_arn         = dependency.common.outputs.sqs_send_sms_high_queue_delay_critical_arn
+  sqs_send_sms_medium_queue_delay_warning_arn        = dependency.common.outputs.sqs_send_sms_medium_queue_delay_warning_arn
+  sqs_send_sms_medium_queue_delay_critical_arn       = dependency.common.outputs.sqs_send_sms_medium_queue_delay_critical_arn
+  sqs_send_sms_low_queue_delay_warning_arn           = dependency.common.outputs.sqs_send_sms_low_queue_delay_warning_arn
+  sqs_send_sms_low_queue_delay_critical_arn          = dependency.common.outputs.sqs_send_sms_low_queue_delay_critical_arn
 }
