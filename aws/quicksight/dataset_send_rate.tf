@@ -12,35 +12,37 @@ resource "aws_quicksight_data_set" "send_rate" {
       name            = "send_rate"
       sql_query       = <<EOF
         with
-          data as (
-            select 
-              created_at,
-              sent_at,
-              notification_status,
-              notification_type,
-              billable_units
-            from notifications
-            where sent_at is not null
-          union
-            select 
-              created_at,
-              sent_at,
-              notification_status,
-              notification_type,
-              billable_units
+          data_nh as (
+            select
+                id,
+                notification_type,
+                sent_at, sent_at::date as day, round_minutes(sent_at, 5) as sent_minute,
+                billable_units
             from notification_history
             where sent_at is not null
-          ),
-          rollup as (
+        ),
+        data_n as (
+            select
+                id,
+                notification_type,
+                sent_at, sent_at::date as day, round_minutes(sent_at, 5) as sent_minute,
+                billable_units
+            from notifications
+            where sent_at is not null
+        ),
+        data as (
+            select * from data_nh
+            union
+            select * from data_n
+        ),
+        rollup as (
             select day, notification_type, sent_minute, count(*) / 5 as notifications_per_minute, 
-              case when notification_type = 'sms' then sum(billable_units)/5 else count(*)/5 end as fragments_per_minute
+              case when notification_type = 'sms' then sum(billable_units)/5 else count(*) / 5 end as fragments_per_minute
             from data
             group by day, notification_type, sent_minute
-          )
-        select day, notification_type, max(notifications_per_minute) as max_notifications_per_minute, max(fragments_per_minute) as max_fragments_per_minute
-        from rollup
+        )
+        select day, notification_type, max(notifications_per_minute) as max_notifications_per_minute, max(fragments_per_minute) as max_fragments_per_minute from rollup
         group by day, notification_type
-        order by day, notification_type
       EOF
 
       columns {
