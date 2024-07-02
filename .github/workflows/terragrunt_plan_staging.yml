@@ -12,8 +12,6 @@ on:
 
 env:
   TARGET_ENV_PATH: staging
-  AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: 0.35.13
@@ -76,7 +74,23 @@ jobs:
             CONFTEST_VERSION: 0.30.0 
             TERRAFORM_VERSION: 1.6.2
             TERRAGRUNT_VERSION: 0.44.4
-            TF_SUMMARIZE_VERSION: 0.2.3           
+            TF_SUMMARIZE_VERSION: 0.2.3
+
+      - name: Configure credentials to Notify account using OIDC
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          role-to-assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role-session-name: NotifyTerraformPlan
+          aws-region: "ca-central-1"
+
+      - name: Terragrunt plan common
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/staging/common"
+          comment-delete: "true"
+          comment-title: "Staging: common"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
 
       - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: filter
