@@ -13,7 +13,7 @@ on:
 permissions:
   id-token: write   # This is required for requesting the OIDC JWT
   contents: read    # This is required for actions/checkout
-  
+
 env:
   TARGET_ENV_PATH: staging
   AWS_REGION: ca-central-1
@@ -86,15 +86,6 @@ jobs:
           role-to-assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role-session-name: NotifyTerraformPlan
           aws-region: "ca-central-1"
-
-      - name: Terragrunt plan common
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/staging/common"
-          comment-delete: "true"
-          comment-title: "Staging: common"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
 
       - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: filter
