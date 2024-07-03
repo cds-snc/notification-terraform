@@ -60,8 +60,8 @@ terraform {
 }
 
 provider "newrelic" {
-  account_id          = var.new_relic_account_id
-  region              = "US"
+  account_id = var.new_relic_account_id
+  region = "US"
 }
 
 provider "aws" {
@@ -93,8 +93,6 @@ provider "aws" {
     role_arn = "arn:aws:iam::239043911459:role/${local.vars.inputs.env}_dns_manager_role"
   }
 }
-
-
 
 EOF
 }
