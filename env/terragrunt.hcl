@@ -114,11 +114,6 @@ variable "new_relic_account_id" {
   type        = number
 }
 
-variable "new_relic_api_key" {
-  description = "New Relic Key"
-  type        = string
-}
-
 variable "domain" {
   description = "The current domain"
   type        = string
