@@ -16,9 +16,11 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  id-token: write   # This is required for requesting the OIDC JWT
+  contents: write    # This is required for actions/checkout      
+
 env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
   TF_VAR_base_domain: ${{secrets.STAGING_BASE_DOMAIN}}
   TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
@@ -84,6 +86,13 @@ jobs:
             TERRAFORM_VERSION: 1.6.2
             TERRAGRUNT_VERSION: 0.44.4
             TF_SUMMARIZE_VERSION: 0.2.3
+
+      - name: Configure credentials to Notify account using OIDC
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          role-to-assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role-session-name: NotifyTerraformApply
+          aws-region: "ca-central-1"
 
       - name: Apply aws/common
         run: |
