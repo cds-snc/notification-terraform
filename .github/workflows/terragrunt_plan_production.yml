@@ -5,9 +5,7 @@ on:
     paths:
       - ".github/workflows/infrastructure_version.txt"
 
-permissions:
-  id-token: write   # This is required for requesting the OIDC JWT
-  contents: write    # This is required for actions/checkout      
+permissions: write-all
 
 env:
   TARGET_ENV_PATH: production
