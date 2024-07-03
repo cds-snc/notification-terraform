@@ -2,7 +2,7 @@ resource "newrelic_nrql_alert_condition" "tf_lambda_api_errors_count_anomaly_une
   account_id                   = 2691974
   policy_id                    = 2801728
   type                         = "baseline"
-  name                         = "Terraform - [Lambda API] Errors count anomaly (Unexpected Errors)"
+  name                         = "Staging - Terraform - [Lambda API] Errors count anomaly (Unexpected Errors)"
   enabled                      = true
   violation_time_limit_seconds = 86400
 
