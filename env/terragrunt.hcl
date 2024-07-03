@@ -61,7 +61,7 @@ terraform {
 
 provider "newrelic" {
   account_id = var.new_relic_account_id
-  region = "US"
+  region     = "US"
 }
 
 provider "aws" {
