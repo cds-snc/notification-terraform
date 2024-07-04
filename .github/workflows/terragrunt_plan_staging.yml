@@ -191,7 +191,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_receiving_emails:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.ses_receiving_emails == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -209,7 +209,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-dns:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.dns == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.dns == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -246,7 +246,7 @@ jobs:
 
 
   terragrunt-plan-eks:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.eks == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.eks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -264,7 +264,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-elasticache:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.elasticache == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.elasticache == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -282,7 +282,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-rds:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.rds == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.rds == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -299,7 +299,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-cloudfront:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.cloudfront == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.cloudfront == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -317,7 +317,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-api:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-api == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-api == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -335,7 +335,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-admin-pr:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-admin-pr == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-admin-pr == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -353,7 +353,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-performance-test:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.performance-test == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.performance-test == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -371,7 +371,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-heartbeat:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.heartbeat == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.heartbeat == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -389,7 +389,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-database-tools:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.database-tools == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.database-tools == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -407,7 +407,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-quicksight:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.quicksight == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.quicksight == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -425,7 +425,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-google-cidr:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-google-cidr == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-google-cidr == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -443,7 +443,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_to_sqs_email_callbacks:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -461,7 +461,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-sns_to_sqs_sms_callbacks:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -479,7 +479,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -497,7 +497,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.system_status == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.system_status == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
@@ -515,7 +515,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status_static_site:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.system_status_static_site == 'true' }}
+    if: ${{ needs.jobs.terragrunt-filter.outputs.system_status_static_site == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
     needs: terragrunt-filter
 
