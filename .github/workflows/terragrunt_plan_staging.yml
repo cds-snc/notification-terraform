@@ -153,7 +153,7 @@ jobs:
               - 'env/staging/pinpoint_to_sqs_sms_callbacks/**'
 
   terragrunt-plan-common:
-    if: ${{ jobs.filter.outputs.common == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
 
     steps:
@@ -172,7 +172,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ecr:
-    if: ${{ jobs.filter.outputs.ecr == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.ecr == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -189,7 +189,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_receiving_emails:
-    if: ${{ jobs.filter.outputs.ses_receiving_emails == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.ses_receiving_emails == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -206,7 +206,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-dns:
-    if: ${{ jobs.filter.outputs.dns == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.dns == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -223,7 +223,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_validation_dns_entries:
-    if: ${{ jobs.filter.outputs.ses_validation_dns_entries == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.ses_validation_dns_entries == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -241,7 +241,7 @@ jobs:
 
 
   terragrunt-plan-eks:
-    if: ${{ jobs.filter.outputs.eks == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.eks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -258,7 +258,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-elasticache:
-    if: ${{ jobs.filter.outputs.elasticache == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.elasticache == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -275,7 +275,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-rds:
-    if: ${{ jobs.filter.outputs.rds == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.rds == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -291,7 +291,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-cloudfront:
-    if: ${{ jobs.filter.outputs.cloudfront == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.cloudfront == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -308,7 +308,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-api:
-    if: ${{ jobs.filter.outputs.lambda-api == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.lambda-api == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -325,7 +325,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-admin-pr:
-    if: ${{ jobs.filter.outputs.lambda-admin-pr == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.lambda-admin-pr == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -342,7 +342,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-performance-test:
-    if: ${{ jobs.filter.outputs.performance-test == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.performance-test == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -359,7 +359,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-heartbeat:
-    if: ${{ jobs.filter.outputs.heartbeat == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.heartbeat == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -376,7 +376,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-database-tools:
-    if: ${{ jobs.filter.outputs.database-tools == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.database-tools == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -393,7 +393,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-quicksight:
-    if: ${{ jobs.filter.outputs.quicksight == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.quicksight == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -410,7 +410,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-google-cidr:
-    if: ${{ jobs.filter.outputs.lambda-google-cidr == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.lambda-google-cidr == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -427,7 +427,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_to_sqs_email_callbacks:
-    if: ${{ jobs.filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -444,7 +444,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-sns_to_sqs_sms_callbacks:
-    if: ${{ jobs.filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -461,7 +461,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
-    if: ${{ jobs.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -478,7 +478,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status:
-    if: ${{ jobs.filter.outputs.system_status == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.system_status == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -495,7 +495,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status_static_site:
-    if: ${{ jobs.filter.outputs.system_status_static_site == 'true' }}
+    if: ${{ needs.jobs.filter.outputs.system_status_static_site == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
