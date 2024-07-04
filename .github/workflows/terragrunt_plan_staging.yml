@@ -211,7 +211,6 @@ jobs:
   terragrunt-plan-dns:
     if: |
       always() &&
-      (needs.jobs.terragrunt-filter.outputs.dns == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
