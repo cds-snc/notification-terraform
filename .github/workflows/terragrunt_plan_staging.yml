@@ -193,7 +193,7 @@ jobs:
   terragrunt-plan-ses_receiving_emails:
     if: ${{ needs.jobs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -211,7 +211,7 @@ jobs:
   terragrunt-plan-dns:
     if: ${{ needs.jobs.terragrunt-filter.outputs.dns == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
 
     steps:
       - name: setup-terraform 
@@ -229,7 +229,7 @@ jobs:
   terragrunt-plan-ses_validation_dns_entries:
     if: ${{ needs.jobs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns]
 
     steps:
       - name: setup-terraform 
@@ -245,10 +245,28 @@ jobs:
           terragrunt: "true"
 
 
+  terragrunt-plan-cloudfront:
+    if: ${{ needs.jobs.terragrunt-filter.outputs.cloudfront == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-filter,terragrunt-plan-common]
+
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform 
+
+      - name: Terragrunt plan cloudfront
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/staging/cloudfront"
+          comment-delete: "true"
+          comment-title: "Staging: cloudfront"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+
   terragrunt-plan-eks:
     if: ${{ needs.jobs.terragrunt-filter.outputs.eks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
 
     steps:
       - name: setup-terraform 
@@ -266,7 +284,7 @@ jobs:
   terragrunt-plan-elasticache:
     if: ${{ needs.jobs.terragrunt-filter.outputs.elasticache == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
 
     steps:
       - name: setup-terraform 
@@ -284,7 +302,7 @@ jobs:
   terragrunt-plan-rds:
     if: ${{ needs.jobs.terragrunt-filter.outputs.rds == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
 
     steps:
       - name: setup-terraform 
@@ -298,28 +316,10 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-  terragrunt-plan-cloudfront:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.cloudfront == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
-    runs-on: ubuntu-latest  
-    needs: terragrunt-filter
-
-    steps:
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
-
-      - name: Terragrunt plan cloudfront
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/staging/cloudfront"
-          comment-delete: "true"
-          comment-title: "Staging: cloudfront"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
-
   terragrunt-plan-lambda-api:
     if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-api == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
 
     steps:
       - name: setup-terraform 
@@ -337,7 +337,7 @@ jobs:
   terragrunt-plan-lambda-admin-pr:
     if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-admin-pr == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -355,7 +355,7 @@ jobs:
   terragrunt-plan-performance-test:
     if: ${{ needs.jobs.terragrunt-filter.outputs.performance-test == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -373,7 +373,7 @@ jobs:
   terragrunt-plan-heartbeat:
     if: ${{ needs.jobs.terragrunt-filter.outputs.heartbeat == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -391,7 +391,7 @@ jobs:
   terragrunt-plan-database-tools:
     if: ${{ needs.jobs.terragrunt-filter.outputs.database-tools == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
 
     steps:
       - name: setup-terraform 
@@ -409,7 +409,7 @@ jobs:
   terragrunt-plan-quicksight:
     if: ${{ needs.jobs.terragrunt-filter.outputs.quicksight == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
 
     steps:
       - name: setup-terraform 
@@ -427,7 +427,7 @@ jobs:
   terragrunt-plan-lambda-google-cidr:
     if: ${{ needs.jobs.terragrunt-filter.outputs.lambda-google-cidr == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -445,7 +445,7 @@ jobs:
   terragrunt-plan-ses_to_sqs_email_callbacks:
     if: ${{ needs.jobs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -463,7 +463,7 @@ jobs:
   terragrunt-plan-sns_to_sqs_sms_callbacks:
     if: ${{ needs.jobs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -481,7 +481,7 @@ jobs:
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
     if: ${{ needs.jobs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
@@ -499,7 +499,7 @@ jobs:
   terragrunt-plan-system_status:
     if: ${{ needs.jobs.terragrunt-filter.outputs.system_status == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-    needs: terragrunt-filter
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
 
     steps:
       - name: setup-terraform 
