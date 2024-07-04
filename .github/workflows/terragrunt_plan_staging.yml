@@ -218,7 +218,7 @@ jobs:
 
     steps:
       - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform
+        uses: ./.github/actions/setup-terraform.yml
 
       - name: Terragrunt plan dns
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
