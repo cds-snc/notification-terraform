@@ -209,7 +209,11 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-dns:
-    if: ${{ needs.jobs.terragrunt-filter.outputs.dns == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
+    if: |
+      always() &&
+      (needs.jobs.terragrunt-filter.outputs.dns == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true') &&
+      (needs.terragrunt-plan-common.result == 'success' || needs.terragrunt-plan-common.result == 'skipped') &&
+      (needs.terragrunt-plan-ses_receiving_emails.result == 'success' || needs.terragrunt-plan-ses_receiving_emails.result == 'skipped')
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
 
