@@ -467,6 +467,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-common,terragrunt-apply-system_status]
     runs-on: ubuntu-latest  
 
     steps:
