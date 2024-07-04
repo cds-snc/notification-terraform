@@ -192,6 +192,11 @@ jobs:
           cd env/staging/system_status_static_site
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
+      - name: Apply aws/newrelic
+        run: |
+          cd env/staging/newrelic
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
       - name: Bump version and push tag
         if: github.event_name != 'workflow_dispatch' # We don't want to tag new versions when launched via workflow_dispatch since only environment variables changed
         uses: mathieudutour/github-tag-action@bcb832838e1612ff92089d914bccc0fd39458223 # v4.6
