@@ -184,3 +184,8 @@ jobs:
         run: |
           cd env/production/system_status_static_site
           terragrunt apply --terragrunt-non-interactive -auto-approve
+
+      - name: Apply aws/newrelic
+        run: |
+          cd env/production/newrelic
+          terragrunt apply --terragrunt-non-interactive -auto-approve
