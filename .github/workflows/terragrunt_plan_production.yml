@@ -250,3 +250,12 @@ jobs:
           terragrunt: "true"
           skip-conftest: "true"
                     
+      - name: Terragrunt plan newrelic
+        uses: cds-snc/terraform-plan@v3
+        with:
+          directory: "env/production/newrelic"
+          comment-delete: "true"
+          comment-title: "Production: newrelic"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
