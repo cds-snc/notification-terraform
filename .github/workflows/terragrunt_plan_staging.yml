@@ -273,7 +273,7 @@ jobs:
           comment-delete: "true"
           comment-title: "Staging: elasticache"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"ß
+          terragrunt: "true"
 
   terragrunt-plan-rds:
     if: ${{ jobs.filter.outputs.rds == 'true' }}
