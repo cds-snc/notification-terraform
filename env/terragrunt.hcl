@@ -16,13 +16,14 @@ inputs = {
   log_retention_period_days             = local.vars.inputs.log_retention_period_days
   sensitive_log_retention_period_days   = local.vars.inputs.sensitive_log_retention_period_days
   account_budget_limit                  = local.vars.inputs.account_budget_limit
+
   
   region             = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
   elb_account_ids = {
     "ca-central-1" = "985666609251"
   }
-  new_relic_account_id      = "2691974"
+  
   cbs_satellite_bucket_name = "cbs-satellite-${local.vars.inputs.account_id}"
 }
 
@@ -50,8 +51,11 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0"
     }
+    newrelic = {
+      source  = "newrelic/newrelic"
+      version = "~> 2.0"
+    }
   }
-
 }
 
 provider "aws" {
@@ -83,8 +87,6 @@ provider "aws" {
     role_arn = "arn:aws:iam::239043911459:role/${local.vars.inputs.env}_dns_manager_role"
   }
 }
-
-
 
 EOF
 }
