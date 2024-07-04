@@ -180,6 +180,7 @@ jobs:
 
   terragrunt-plan-ecr:
     if: |
+      always() &&
       needs.terragrunt-filter.outputs.ecr  == 'true' &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -204,6 +205,7 @@ jobs:
 
   terragrunt-plan-ses_receiving_emails:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -259,6 +261,7 @@ jobs:
 
   terragrunt-plan-ses_validation_dns_entries:
     if: |
+      always() &&
       needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -284,6 +287,7 @@ jobs:
 
   terragrunt-plan-cloudfront:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -308,6 +312,7 @@ jobs:
 
   terragrunt-plan-eks:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.eks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -332,6 +337,7 @@ jobs:
 
   terragrunt-plan-elasticache:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.elasticache == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -356,6 +362,7 @@ jobs:
 
   terragrunt-plan-rds:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.rds == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -379,6 +386,7 @@ jobs:
 
   terragrunt-plan-lambda-api:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.lambda-api == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -403,6 +411,7 @@ jobs:
 
   terragrunt-plan-lambda-admin-pr:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -427,6 +436,7 @@ jobs:
 
   terragrunt-plan-performance-test:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.performance-test == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -451,6 +461,7 @@ jobs:
 
   terragrunt-plan-heartbeat:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -475,6 +486,7 @@ jobs:
 
   terragrunt-plan-database-tools:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.database-tools == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -499,6 +511,7 @@ jobs:
 
   terragrunt-plan-quicksight:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.quicksight == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -523,6 +536,7 @@ jobs:
 
   terragrunt-plan-lambda-google-cidr:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -547,6 +561,7 @@ jobs:
 
   terragrunt-plan-ses_to_sqs_email_callbacks:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -571,6 +586,7 @@ jobs:
 
   terragrunt-plan-sns_to_sqs_sms_callbacks:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -595,6 +611,7 @@ jobs:
 
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -619,6 +636,7 @@ jobs:
 
   terragrunt-plan-system_status:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.system_status == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -643,6 +661,7 @@ jobs:
 
   terragrunt-plan-system_status_static_site:
     if: |
+      always() &&
       (needs.terragrunt-filter.outputs.system_status_static_site == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
