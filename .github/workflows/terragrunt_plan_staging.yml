@@ -355,7 +355,7 @@ jobs:
   terragrunt-plan-performance-test:
     if: ${{ needs.jobs.terragrunt-filter.outputs.performance-test == 'true' || needs.jobs.terragrunt-filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
-needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
 
     steps:
       - name: setup-terraform 
