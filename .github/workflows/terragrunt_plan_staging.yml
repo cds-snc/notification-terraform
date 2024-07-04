@@ -153,8 +153,9 @@ jobs:
               - 'env/staging/pinpoint_to_sqs_sms_callbacks/**'
 
   terragrunt-plan-common:
-    if: ${{ needs.jobs.filter.outputs.common == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
+    needs: filter
 
     steps:
       - uses: ./.github/actions/setup-terraform
@@ -172,8 +173,9 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ecr:
-    if: ${{ needs.jobs.filter.outputs.ecr == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.ecr == 'true' }}
     runs-on: ubuntu-latest  
+    needs: filter
     
     steps:
       - name: setup-terraform
@@ -189,9 +191,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_receiving_emails:
-    if: ${{ needs.jobs.filter.outputs.ses_receiving_emails == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.ses_receiving_emails == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -206,9 +209,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-dns:
-    if: ${{ needs.jobs.filter.outputs.dns == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.dns == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -223,9 +227,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_validation_dns_entries:
-    if: ${{ needs.jobs.filter.outputs.ses_validation_dns_entries == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.ses_validation_dns_entries == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -241,9 +246,10 @@ jobs:
 
 
   terragrunt-plan-eks:
-    if: ${{ needs.jobs.filter.outputs.eks == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.eks == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -258,9 +264,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-elasticache:
-    if: ${{ needs.jobs.filter.outputs.elasticache == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.elasticache == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -275,9 +282,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-rds:
-    if: ${{ needs.jobs.filter.outputs.rds == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.rds == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -291,9 +299,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-cloudfront:
-    if: ${{ needs.jobs.filter.outputs.cloudfront == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.cloudfront == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform 
@@ -308,9 +317,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-api:
-    if: ${{ needs.jobs.filter.outputs.lambda-api == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.lambda-api == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -325,9 +335,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-admin-pr:
-    if: ${{ needs.jobs.filter.outputs.lambda-admin-pr == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.lambda-admin-pr == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -342,9 +353,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-performance-test:
-    if: ${{ needs.jobs.filter.outputs.performance-test == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.performance-test == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -359,9 +371,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-heartbeat:
-    if: ${{ needs.jobs.filter.outputs.heartbeat == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.heartbeat == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -376,9 +389,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-database-tools:
-    if: ${{ needs.jobs.filter.outputs.database-tools == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.database-tools == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
@@ -393,9 +407,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-quicksight:
-    if: ${{ needs.jobs.filter.outputs.quicksight == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.quicksight == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform          
@@ -410,9 +425,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-google-cidr:
-    if: ${{ needs.jobs.filter.outputs.lambda-google-cidr == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.lambda-google-cidr == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform     
@@ -427,9 +443,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_to_sqs_email_callbacks:
-    if: ${{ needs.jobs.filter.outputs.ses_to_sqs_email_callbacks == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform 
@@ -444,9 +461,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-sns_to_sqs_sms_callbacks:
-    if: ${{ needs.jobs.filter.outputs.sns_to_sqs_sms_callbacks == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform 
@@ -461,9 +479,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
-    if: ${{ needs.jobs.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform 
@@ -478,9 +497,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status:
-    if: ${{ needs.jobs.filter.outputs.system_status == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.system_status == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform 
@@ -495,9 +515,10 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status_static_site:
-    if: ${{ needs.jobs.filter.outputs.system_status_static_site == 'false' }}
+    if: ${{ needs.jobs.filter.outputs.system_status_static_site == 'true' }}
     runs-on: ubuntu-latest  
-    
+    needs: filter
+        
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform 
