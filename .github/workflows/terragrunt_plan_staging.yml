@@ -154,7 +154,7 @@ jobs:
               - 'env/staging/pinpoint_to_sqs_sms_callbacks/**'
 
   terragrunt-plan-common:
-    if: ${{ jobs..filter.outputs.common == 'true' }}
+    if: ${{ jobs.filter.outputs.common == 'true' }}
     runs-on: ubuntu-latest  
 
     steps:
@@ -164,7 +164,6 @@ jobs:
           token: ${{ secrets.envPAT }}
 
       - name: Terragrunt plan common
-        if: ${{ steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/common"
@@ -174,7 +173,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ecr:
-    if: ${{ jobs..filter.outputs.ecr == 'true' }}
+    if: ${{ jobs.filter.outputs.ecr == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -182,7 +181,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan ECR
-        if: ${{ steps.filter.outputs.ecr == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ecr"
@@ -192,7 +190,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_receiving_emails:
-    if: ${{ jobs..filter.outputs.ses_receiving_emails == 'true' }}
+    if: ${{ jobs.filter.outputs.ses_receiving_emails == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -200,7 +198,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan ses_receiving_emails
-        if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ses_receiving_emails"
@@ -210,7 +207,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-dns:
-    if: ${{ jobs..filter.outputs.dns == 'true' }}
+    if: ${{ jobs.filter.outputs.dns == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -218,7 +215,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan dns
-        if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/dns"
@@ -228,7 +224,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_validation_dns_entries:
-    if: ${{ jobs..filter.outputs.ses_validation_dns_entries == 'true' }}
+    if: ${{ jobs.filter.outputs.ses_validation_dns_entries == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -236,7 +232,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan ses_validation_dns_entries
-        if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ses_validation_dns_entries"
@@ -247,7 +242,7 @@ jobs:
 
 
   terragrunt-plan-eks:
-    if: ${{ jobs..filter.outputs.eks == 'true' }}
+    if: ${{ jobs.filter.outputs.eks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -255,7 +250,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan eks
-        if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/eks"
@@ -265,7 +259,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-elasticache:
-    if: ${{ jobs..filter.outputs.elasticache == 'true' }}
+    if: ${{ jobs.filter.outputs.elasticache == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -273,7 +267,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan elasticache
-        if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/elasticache"
@@ -283,14 +276,13 @@ jobs:
           terragrunt: "true"ß
 
   terragrunt-plan-rds:
-    if: ${{ jobs..filter.outputs.rds == 'true' }}
+    if: ${{ jobs.filter.outputs.rds == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
       - name: Terragrunt plan rds
-        if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/rds"
@@ -300,7 +292,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-cloudfront:
-    if: ${{ jobs..filter.outputs.cloudfront == 'true' }}
+    if: ${{ jobs.filter.outputs.cloudfront == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -308,7 +300,6 @@ jobs:
         uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan cloudfront
-        if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/cloudfront"
@@ -318,7 +309,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-api:
-    if: ${{ jobs..filter.outputs.lambda-api == 'true' }}
+    if: ${{ jobs.filter.outputs.lambda-api == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -326,7 +317,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan lambda-api
-        if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/lambda-api"
@@ -336,7 +326,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-admin-pr:
-    if: ${{ jobs..filter.outputs.lambda-admin-pr == 'true' }}
+    if: ${{ jobs.filter.outputs.lambda-admin-pr == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -344,7 +334,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan lambda-admin-pr
-        if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/lambda-admin-pr"
@@ -354,7 +343,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-performance-test:
-    if: ${{ jobs..filter.outputs.performance-test == 'true' }}
+    if: ${{ jobs.filter.outputs.performance-test == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -362,7 +351,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan performance-test
-        if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/performance-test"
@@ -372,7 +360,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-heartbeat:
-    if: ${{ jobs..filter.outputs.heartbeat == 'true' }}
+    if: ${{ jobs.filter.outputs.heartbeat == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -380,7 +368,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan heartbeat
-        if: ${{ steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/heartbeat"
@@ -390,7 +377,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-database-tools:
-    if: ${{ jobs..filter.outputs.database-tools == 'true' }}
+    if: ${{ jobs.filter.outputs.database-tools == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -398,7 +385,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan database-tools
-        if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/database-tools"
@@ -408,7 +394,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-quicksight:
-    if: ${{ jobs..filter.outputs.quicksight == 'true' }}
+    if: ${{ jobs.filter.outputs.quicksight == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -416,7 +402,6 @@ jobs:
         uses: ./.github/actions/setup-terraform          
 
       - name: Terragrunt plan quicksight
-        if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/quicksight"
@@ -426,7 +411,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-lambda-google-cidr:
-    if: ${{ jobs..filter.outputs.lambda-google-cidr == 'true' }}
+    if: ${{ jobs.filter.outputs.lambda-google-cidr == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -434,7 +419,6 @@ jobs:
         uses: ./.github/actions/setup-terraform     
 
       - name: Terragrunt plan lambda-google-cidr
-        if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/lambda-google-cidr"
@@ -444,7 +428,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-ses_to_sqs_email_callbacks:
-    if: ${{ jobs..filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
+    if: ${{ jobs.filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -452,7 +436,6 @@ jobs:
         uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/ses_to_sqs_email_callbacks"
@@ -462,7 +445,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-sns_to_sqs_sms_callbacks:
-    if: ${{ jobs..filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
+    if: ${{ jobs.filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -470,7 +453,6 @@ jobs:
         uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/sns_to_sqs_sms_callbacks"
@@ -480,7 +462,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
-    if: ${{ jobs..filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' }}
+    if: ${{ jobs.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -488,7 +470,6 @@ jobs:
         uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
-        if: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
           directory: "env/staging/pinpoint_to_sqs_sms_callbacks"
@@ -498,7 +479,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status:
-    if: ${{ jobs..filter.outputs.system_status == 'true' }}
+    if: ${{ jobs.filter.outputs.system_status == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -506,7 +487,6 @@ jobs:
         uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan system_status
-        if: ${{ steps.filter.outputs.system_status == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/system_status"
@@ -516,7 +496,7 @@ jobs:
           terragrunt: "true"
 
   terragrunt-plan-system_status_static_site:
-    if: ${{ jobs..filter.outputs.system_status_static_site == 'true' }}
+    if: ${{ jobs.filter.outputs.system_status_static_site == 'true' }}
     runs-on: ubuntu-latest  
     
     steps:
@@ -524,7 +504,6 @@ jobs:
         uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan aws/system_status_static_site
-        if: ${{ steps.filter.outputs.system_status_static_site == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v3
         with:
           directory: "env/staging/system_status_static_site"
