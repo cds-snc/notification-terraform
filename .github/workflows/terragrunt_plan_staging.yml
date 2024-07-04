@@ -59,7 +59,6 @@ env:
 jobs:
   terragrunt-filter:
     runs-on: ubuntu-latest
-    id: filter
 
     outputs:
       common: ${{ steps.filter.outputs.common }}
