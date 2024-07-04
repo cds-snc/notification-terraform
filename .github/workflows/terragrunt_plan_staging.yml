@@ -15,8 +15,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
-  TERRAFORM_VERSION: 0.14.4
-  TERRAGRUNT_VERSION: 0.35.13
   TF_VAR_base_domain: ${{secrets.STAGING_BASE_DOMAIN}}
   TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
   TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
@@ -59,24 +57,30 @@ env:
   TF_VAR_enable_sentinel_forwarding: true
 
 jobs:
-  terragrunt-plan-staging:
+  terragrunt-filter:
     runs-on: ubuntu-latest
+    id: filter
+
+    outputs:
+      common: ${{ steps.filter.outputs.common }}
+      ecr: ${{ steps.filter.outputs.ecr }}
+      ses_receiving_emails: ${{ steps.filter.outputs.ses_receiving_emails }}
+      ses_to_sqs_email_callbacks: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks }}
+      sns_to_sqs_sms_callbacks: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks }}
+      pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}      
+      dns: ${{ steps.filter.outputs.dns }}
+      ses_validation_dns_entries: ${{ steps.filter.outputs.ses_validation_dns_entries }}
+      eks: ${{ steps.filter.outputs.eks }}
+      rds: ${{ steps.filter.outputs.rds }}
+      lambda-api: ${{ steps.filter.outputs.lambda-api }}
+      heartbeat: ${{ steps.filter.outputs.heartbeat }}   
+      database-tools: ${{ steps.filter.outputs.database-tools }}
+      quicksight: ${{ steps.filter.outputs.quicksight }}
+      lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
+      system_status: ${{ steps.filter.outputs.system_status }}      
+      system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}      
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
-      - name: Set environment variables
-        uses: ./.github/actions/setvars
-        with:
-          envVarFile: ./.env
-
-      - name: Setup Terraform tools
-        uses: cds-snc/terraform-tools-setup@v1
-        env: # In case you want to override default versions
-            CONFTEST_VERSION: 0.30.0 
-            TERRAFORM_VERSION: 1.6.2
-            TERRAGRUNT_VERSION: 0.44.4
-            TF_SUMMARIZE_VERSION: 0.2.3           
 
       - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: filter
@@ -148,7 +152,16 @@ jobs:
             pinpoint_to_sqs_sms_callbacks:
               - 'aws/pinpoint_to_sqs_sms_callbacks/**'
               - 'env/staging/pinpoint_to_sqs_sms_callbacks/**'
-              
+
+  terragrunt-plan-common:
+    if: ${{ jobs..filter.outputs.common == 'true' }}
+    runs-on: ubuntu-latest  
+
+    steps:
+      - uses: ./.github/actions/setup-terraform
+        with:
+          username: ${{ inputs.username }}
+          token: ${{ secrets.envPAT }}
 
       - name: Terragrunt plan common
         if: ${{ steps.filter.outputs.common == 'true' }}
@@ -160,6 +173,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-ecr:
+    if: ${{ jobs..filter.outputs.ecr == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+
       - name: Terragrunt plan ECR
         if: ${{ steps.filter.outputs.ecr == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -169,6 +190,14 @@ jobs:
           comment-title: "Staging: ecr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-ses_receiving_emails:
+    if: ${{ jobs..filter.outputs.ses_receiving_emails == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan ses_receiving_emails
         if: ${{ steps.filter.outputs.ses_receiving_emails == 'true' || steps.filter.outputs.common == 'true' }}
@@ -180,6 +209,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-dns:
+    if: ${{ jobs..filter.outputs.dns == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
+
       - name: Terragrunt plan dns
         if: ${{ steps.filter.outputs.dns == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -189,6 +226,14 @@ jobs:
           comment-title: "Staging: dns"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-ses_validation_dns_entries:
+    if: ${{ jobs..filter.outputs.ses_validation_dns_entries == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan ses_validation_dns_entries
         if: ${{ steps.filter.outputs.ses_validation_dns_entries == 'true' || steps.filter.outputs.common == 'true' }}
@@ -200,6 +245,15 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+
+  terragrunt-plan-eks:
+    if: ${{ jobs..filter.outputs.eks == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
+
       - name: Terragrunt plan eks
         if: ${{ steps.filter.outputs.eks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -210,6 +264,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-elasticache:
+    if: ${{ jobs..filter.outputs.elasticache == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
+
       - name: Terragrunt plan elasticache
         if: ${{ steps.filter.outputs.elasticache == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -218,8 +280,15 @@ jobs:
           comment-delete: "true"
           comment-title: "Staging: elasticache"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
+          terragrunt: "true"ß
 
+  terragrunt-plan-rds:
+    if: ${{ jobs..filter.outputs.rds == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
       - name: Terragrunt plan rds
         if: ${{ steps.filter.outputs.rds == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -229,6 +298,14 @@ jobs:
           comment-title: "Staging: rds"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-cloudfront:
+    if: ${{ jobs..filter.outputs.cloudfront == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan cloudfront
         if: ${{ steps.filter.outputs.cloudfront == 'true' || steps.filter.outputs.common == 'true' }}
@@ -240,6 +317,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-lambda-api:
+    if: ${{ jobs..filter.outputs.lambda-api == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
+
       - name: Terragrunt plan lambda-api
         if: ${{ steps.filter.outputs.lambda-api == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -249,6 +334,14 @@ jobs:
           comment-title: "Staging: lambda-api"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-lambda-admin-pr:
+    if: ${{ jobs..filter.outputs.lambda-admin-pr == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan lambda-admin-pr
         if: ${{ steps.filter.outputs.lambda-admin-pr == 'true' || steps.filter.outputs.common == 'true' }}
@@ -260,6 +353,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-performance-test:
+    if: ${{ jobs..filter.outputs.performance-test == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
+
       - name: Terragrunt plan performance-test
         if: ${{ steps.filter.outputs.performance-test == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -269,6 +370,14 @@ jobs:
           comment-title: "Staging: performance-test"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-heartbeat:
+    if: ${{ jobs..filter.outputs.heartbeat == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
 
       - name: Terragrunt plan heartbeat
         if: ${{ steps.filter.outputs.heartbeat == 'true' || steps.filter.outputs.common == 'true' }}
@@ -280,6 +389,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-database-tools:
+    if: ${{ jobs..filter.outputs.database-tools == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform
+
       - name: Terragrunt plan database-tools
         if: ${{ steps.filter.outputs.database-tools == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -289,6 +406,14 @@ jobs:
           comment-title: "Staging: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-quicksight:
+    if: ${{ jobs..filter.outputs.quicksight == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform          
 
       - name: Terragrunt plan quicksight
         if: ${{ steps.filter.outputs.quicksight == 'true' || steps.filter.outputs.common == 'true' }}
@@ -300,6 +425,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-lambda-google-cidr:
+    if: ${{ jobs..filter.outputs.lambda-google-cidr == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform     
+
       - name: Terragrunt plan lambda-google-cidr
         if: ${{ steps.filter.outputs.lambda-google-cidr == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -309,6 +442,14 @@ jobs:
           comment-title: "Staging: lambda-google-cidr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-ses_to_sqs_email_callbacks:
+    if: ${{ jobs..filter.outputs.ses_to_sqs_email_callbacks == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
         if: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
@@ -320,6 +461,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-sns_to_sqs_sms_callbacks:
+    if: ${{ jobs..filter.outputs.sns_to_sqs_sms_callbacks == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform 
+
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
         if: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -329,6 +478,14 @@ jobs:
           comment-title: "Staging: sns_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
+    if: ${{ jobs..filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
         if: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || steps.filter.outputs.common == 'true' }}
@@ -340,6 +497,14 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
+  terragrunt-plan-system_status:
+    if: ${{ jobs..filter.outputs.system_status == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform 
+
       - name: Terragrunt plan system_status
         if: ${{ steps.filter.outputs.system_status == 'true' || steps.filter.outputs.common == 'true' }}
         uses: cds-snc/terraform-plan@v3
@@ -349,6 +514,14 @@ jobs:
           comment-title: "Staging: system_status"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+
+  terragrunt-plan-system_status_static_site:
+    if: ${{ jobs..filter.outputs.system_status_static_site == 'true' }}
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: setup-terraform 
+        uses: ./.github/actions/setup-terraform 
 
       - name: Terragrunt plan aws/system_status_static_site
         if: ${{ steps.filter.outputs.system_status_static_site == 'true' || steps.filter.outputs.common == 'true' }}

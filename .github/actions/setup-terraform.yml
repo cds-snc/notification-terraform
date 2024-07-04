@@ -1,0 +1,25 @@
+name: "Setup Terraform for Github Actions"
+
+on:
+  workflow_call:
+
+jobs:
+  setup-terragrunt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - name: Set environment variables
+        uses: ./.github/actions/setvars
+        with:
+          envVarFile: ./.env
+
+      - name: Setup Terraform tools
+        uses: cds-snc/terraform-tools-setup@v1
+        env: # In case you want to override default versions
+            CONFTEST_VERSION: 0.30.0 
+            TERRAFORM_VERSION: 1.6.2
+            TERRAGRUNT_VERSION: 0.44.4
+            TF_SUMMARIZE_VERSION: 0.2.3                    
