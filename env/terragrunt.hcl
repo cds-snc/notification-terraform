@@ -16,7 +16,6 @@ inputs = {
   log_retention_period_days             = local.vars.inputs.log_retention_period_days
   sensitive_log_retention_period_days   = local.vars.inputs.sensitive_log_retention_period_days
   account_budget_limit                  = local.vars.inputs.account_budget_limit
-  new_relic_account_id                  = local.vars.inputs.new_relic_account_id
 
   
   region             = "ca-central-1"
@@ -57,11 +56,6 @@ terraform {
       version = "~> 2.0"
     }
   }
-}
-
-provider "newrelic" {
-  account_id = var.new_relic_account_id
-  region     = "US"
 }
 
 provider "aws" {
@@ -105,11 +99,6 @@ generate "common_variables" {
 variable "account_id" {
   description = "(Required) The account ID to perform actions on."
   type        = string
-}
-
-variable "new_relic_account_id" {
-  description = "New Relic Account Id"
-  type        = number
 }
 
 variable "domain" {

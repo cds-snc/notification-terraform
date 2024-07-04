@@ -84,10 +84,6 @@ locals {
   api_lambda_log_group = "/aws/lambda/api-lambda"
 }
 
-variable "new_relic_account_id" {
-  type = string
-}
-
 variable "ff_cloudwatch_metrics_enabled" {
   type = bool
 }

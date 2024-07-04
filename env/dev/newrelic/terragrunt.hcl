@@ -1,6 +1,5 @@
 terraform {
   source = "../../../aws//newrelic"
-
 }
 
 include {
