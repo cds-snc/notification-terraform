@@ -678,7 +678,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
   extended_s3_configuration {
     role_arn           = var.firehose_waf_logs_iam_role_arn
     prefix             = "waf_acl_logs/AWSLogs/${var.account_id}/lb/"
-    bucket_arn         = "arn:aws:s3:::${var.cbs_satellite_bucket_name}"
+    bucket_arn         = "arn:aws:s3:::cbs-satellite-${var.account_id}"
     compression_format = "GZIP"
 
     # Buffer incoming data size (MB), before delivering to S3 bucket

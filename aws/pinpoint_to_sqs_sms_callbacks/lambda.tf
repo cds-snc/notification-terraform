@@ -1,7 +1,7 @@
 module "pinpoint_to_sqs_sms_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.3.3"
   name                       = "pinpoint_to_sqs_sms_callbacks"
-  billing_tag_value          = var.billing_tag_value
+  billing_tag_value          = "notification-canada-ca-${var.env}"
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_ecr_arn
   enable_lambda_insights     = true
   image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"

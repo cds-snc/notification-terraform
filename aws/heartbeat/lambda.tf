@@ -5,7 +5,7 @@ locals {
 module "heartbeat" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.0.4"
   name                   = "heartbeat"
-  billing_tag_value      = var.billing_tag_value
+  billing_tag_value      = "notification-canada-ca-${var.env}"
   ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
   image_uri              = "${var.heartbeat_ecr_repository_url}:${local.image_tag}"
@@ -15,7 +15,7 @@ module "heartbeat" {
 
   environment_variables = {
     heartbeat_api_key    = var.heartbeat_api_key
-    heartbeat_base_url   = "['https://api-lambda.${var.base_domain}', 'https://api-k8s.${var.base_domain}']"
+    heartbeat_base_url   = "['https://api-lambda.${var.domain}', 'https://api-k8s.${var.domain}']"
     heartbeat_sms_number = var.heartbeat_sms_number
   }
 }

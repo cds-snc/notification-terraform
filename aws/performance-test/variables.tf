@@ -23,12 +23,6 @@ variable "schedule_expression" {
   type        = string
   description = "This aws cloudwatch event rule scheule expression that specifies when the scheduler runs."
 }
-variable "billing_tag_key" {
-  type = string
-}
-variable "billing_tag_value" {
-  type = string
-}
 variable "name" {
   type    = string
   default = "perf-test"

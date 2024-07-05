@@ -45,7 +45,7 @@ resource "aws_secretsmanager_secret" "base_domain" {
 
 resource "aws_secretsmanager_secret_version" "base_domain" {
   secret_id     = aws_secretsmanager_secret.base_domain.id
-  secret_string = var.base_domain
+  secret_string = var.domain
 }
 
 resource "aws_secretsmanager_secret" "aws_region" {

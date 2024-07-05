@@ -70,20 +70,10 @@ include {
 }
 
 inputs = {
-  env                                    = "dev"
-  api_image_tag                          = "latest"
+
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
-  redis_enabled                          = "1"
-  low_demand_min_concurrency             = 1
-  low_demand_max_concurrency             = 5
-  high_demand_min_concurrency            = 1
-  high_demand_max_concurrency            = 10
   csv_upload_bucket_arn                  = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
   firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
-  new_relic_app_name                     = "notification-lambda-api-dev"
-  new_relic_distribution_tracing_enabled = "true"
-  notification_queue_prefix              = "eks-notification-canada-ca"
-  redis_enabled                          = 1
   certificate_arn                        = dependency.eks.outputs.aws_acm_notification_canada_ca_arn
   certificate_alt_arn                    = dependency.eks.outputs.aws_acm_alt_notification_canada_ca_arn
   alb_arn_suffix                         = dependency.eks.outputs.alb_arn_suffix
@@ -91,10 +81,8 @@ inputs = {
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
-  ff_cloudwatch_metrics_enabled          = "true"
   ip_blocklist_arn                       = dependency.common.outputs.ip_blocklist_arn
   re_api_arn                             = dependency.common.outputs.re_api_arn
-  api_waf_rate_limit                     = 5000
   api_lambda_ecr_repository_url          = dependency.ecr.outputs.api_lambda_ecr_repository_url
   api_lambda_ecr_arn                     = dependency.ecr.outputs.api_lambda_ecr_arn
   database_read_only_proxy_endpoint      = dependency.rds.outputs.database_read_only_proxy_endpoint

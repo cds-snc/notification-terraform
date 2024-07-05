@@ -170,8 +170,8 @@ data "aws_iam_policy_document" "firehose_waf_logs" {
       "s3:PutObject"
     ]
     resources = [
-      "arn:aws:s3:::${var.cbs_satellite_bucket_name}",
-      "arn:aws:s3:::${var.cbs_satellite_bucket_name}/*"
+      "arn:aws:s3:::cbs-satellite-${var.account_id}",
+      "arn:aws:s3:::cbs-satellite-${var.account_id}/*"
     ]
   }
   statement {

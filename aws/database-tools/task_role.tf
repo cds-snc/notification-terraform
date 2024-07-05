@@ -2,7 +2,7 @@ resource "aws_iam_role" "blazer_ecs_task" {
   name               = "${aws_ecs_cluster.blazer.name}-ecs-task"
   assume_role_policy = data.aws_iam_policy_document.ecs_task_assume.json
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter            = "notification-canada-ca-${var.env}"
   }
 }
 

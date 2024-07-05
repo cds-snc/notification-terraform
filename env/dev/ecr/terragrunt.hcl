@@ -2,10 +2,6 @@ include {
   path = find_in_parent_folders()
 }
 
-locals {
-  vars = read_terragrunt_config("../env_vars.hcl")
-}
-
 terraform {
   source = "../../../aws//ecr"
 

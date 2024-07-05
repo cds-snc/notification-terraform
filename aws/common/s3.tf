@@ -368,7 +368,7 @@ module "cbs_logs_bucket" {
   source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
   count  = var.create_cbs_bucket ? 1 : 0
 
-  bucket_name                    = var.cbs_satellite_bucket_name
+  bucket_name                    = "cbs-satellite-${var.account_id}"
   force_destroy                  = var.force_destroy_s3
   billing_tag_value              = "notification-canada-ca-${var.env}"
   attach_lb_log_delivery_policy  = true

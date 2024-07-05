@@ -8,7 +8,7 @@ resource "aws_ssm_parameter" "db_tools_environment_variables" {
   value = "postgres://postgres:${var.dbtools_password}@${aws_db_instance.database-tools.address}:5432"
 
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter            = "notification-canada-ca-${var.env}"
     Terraform             = true
   }
 }
@@ -19,7 +19,7 @@ resource "aws_ssm_parameter" "notify_o11y_google_oauth_client_id" {
   value = var.notify_o11y_google_oauth_client_id
 
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter            = "notification-canada-ca-${var.env}"
     Terraform             = true
   }
 }
@@ -30,7 +30,7 @@ resource "aws_ssm_parameter" "notify_o11y_google_oauth_client_secret" {
   value = var.notify_o11y_google_oauth_client_secret
 
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter            = "notification-canada-ca-${var.env}"
     Terraform             = true
   }
 }
@@ -41,7 +41,7 @@ resource "aws_ssm_parameter" "sqlalchemy_database_reader_uri" {
   value = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
 
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter            = "notification-canada-ca-${var.env}"
     Terraform             = true
   }
 }

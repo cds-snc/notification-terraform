@@ -1,7 +1,3 @@
-variable "billing_tag_value" {
-  type        = string
-  description = "Identifies the billing code."
-}
 variable "system_status_admin_url" {
   type        = string
   description = "Admin URL"
@@ -15,7 +11,7 @@ variable "system_status_bucket_name" {
   description = "bucket name"
 }
 
-variable "schedule_expression" {
+variable "system_status_schedule_expression" {
   type        = string
   description = "This aws cloudwatch event rule scheule expression that specifies when the scheduler runs."
 }

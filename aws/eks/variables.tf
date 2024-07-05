@@ -280,11 +280,6 @@ variable "pr_bot_installation_id" {
   sensitive   = true
 }
 
-variable "base_domain" {
-  type        = string
-  description = "The base domain for the environment"
-}
-
 variable "client_vpn_self_service_saml_metadata" {
   type        = string
   description = "The SAML metadata for the client VPN self service"

@@ -35,7 +35,6 @@ include {
 }
 
 inputs = {
-  billing_tag_value                                   = "notification-canada-ca-dev"
   notification_canada_ca_ses_callback_arn             = dependency.common.outputs.notification_canada_ca_ses_callback_arn
   sns_alert_warning_arn                               = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                              = dependency.common.outputs.sns_alert_critical_arn

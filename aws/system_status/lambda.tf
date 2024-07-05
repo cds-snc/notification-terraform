@@ -5,7 +5,7 @@ locals {
 module "system_status" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.0.4"
   name                   = "system_status"
-  billing_tag_value      = var.billing_tag_value
+  billing_tag_value      = "notification-canada-ca-${var.env}"
   ecr_arn                = var.system_status_ecr_arn
   enable_lambda_insights = true
   image_uri              = "${var.system_status_ecr_repository_url}:${local.image_tag}"
@@ -45,7 +45,7 @@ resource "aws_cloudwatch_event_rule" "system_status_testing" {
   count               = var.cloudwatch_enabled ? 1 : 0
   name                = "system_status_testing"
   description         = "system_status_testing event rule"
-  schedule_expression = var.schedule_expression
+  schedule_expression = var.system_status_schedule_expression
   depends_on          = [module.system_status]
 }
 

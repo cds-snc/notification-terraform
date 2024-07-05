@@ -1,7 +1,3 @@
-variable "billing_tag_value" {
-  type        = string
-  description = "Identifies the billing code."
-}
 
 variable "notify_sending_domain" {
   type        = string

@@ -84,13 +84,7 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 4
-  primary_worker_instance_types             = ["m5.large"]
-  secondary_worker_instance_types           = ["m5.large"]
-  node_upgrade                              = false
-  force_upgrade                             = true
-  primary_worker_max_size                   = 7
-  primary_worker_min_size                   = 1
+
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_private_subnets_k8s                   = dependency.common.outputs.vpc_private_subnets_k8s
@@ -100,17 +94,6 @@ inputs = {
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn
   firehose_waf_logs_iam_role_arn            = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                     = dependency.cloudfront.outputs.cloudfront_assets_arn
-  eks_cluster_name                          = "notification-canada-ca-dev-eks-cluster"
-  eks_cluster_version                       = "1.30"
-  eks_addon_coredns_version                 = "v1.11.1-eksbuild.9"
-  eks_addon_kube_proxy_version              = "v1.30.0-eksbuild.3"
-  eks_addon_vpc_cni_version                 = "v1.18.1-eksbuild.3"
-  eks_addon_ebs_driver_version              = "v1.31.0-eksbuild.1"
-  eks_node_ami_version                      = "1.30.0-20240615"
-  eks_karpenter_ami_id                      = "ami-0e0bc4911f33e65b2"
-  non_api_waf_rate_limit                    = 500
-  api_waf_rate_limit                        = 5000
-  sign_in_waf_rate_limit                    = 100
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
   re_admin_arn2                             = dependency.common.outputs.re_admin_arn2
@@ -120,7 +103,6 @@ inputs = {
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
-  celery_queue_prefix                       = "eks-notification-canada-ca"
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name

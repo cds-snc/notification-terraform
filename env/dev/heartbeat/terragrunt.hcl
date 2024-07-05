@@ -29,8 +29,6 @@ include {
 }
 
 inputs = {
-  billing_tag_value      = "notification-canada-ca-dev"
-  schedule_expression    = "rate(1 minute)"
   sns_alert_warning_arn  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn = dependency.common.outputs.sns_alert_critical_arn
   heartbeat_ecr_repository_url = dependency.ecr.outputs.heartbeat_ecr_repository_url

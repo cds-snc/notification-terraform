@@ -1,6 +1,4 @@
-variable "alt_base_domain" {
-  type = string
-}
+
 
 variable "csv_upload_bucket_arn" {
   type = string
@@ -19,7 +17,7 @@ variable "new_relic_license_key" {
   sensitive = true
 }
 
-variable "notification_queue_prefix" {
+variable "celery_queue_prefix" {
   type = string
 }
 
@@ -36,10 +34,6 @@ variable "eks_cluster_securitygroup" {
 }
 
 variable "firehose_waf_logs_iam_role_arn" {
-  type = string
-}
-
-variable "base_domain" {
   type = string
 }
 

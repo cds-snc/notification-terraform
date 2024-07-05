@@ -9,7 +9,7 @@ resource "aws_lb" "internal_alb" {
   subnets = var.vpc_private_subnets
 
   access_logs {
-    bucket  = var.cbs_satellite_bucket_name
+    bucket  = "cbs-satellite-${var.account_id}"
     prefix  = "inernal_lb_logs"
     enabled = true
   }

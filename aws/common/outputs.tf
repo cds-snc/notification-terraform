@@ -161,7 +161,7 @@ output "sqs_notify_internal_tasks_arn" {
 }
 
 output "cbs_satellite_bucket_name" {
-  value = var.create_cbs_bucket ? var.cbs_satellite_bucket_name : ""
+  value = var.create_cbs_bucket ? "cbs-satellite-${var.account_id}" : ""
 }
 
 output "sqs_eks_notification_canada_cadelivery_receipts_arn" {
