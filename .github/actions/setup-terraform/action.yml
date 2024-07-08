@@ -3,6 +3,11 @@ name: "setup-terraform"
 on:
   workflow_call:
 
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
 runs:
   using: "composite"
   steps:
@@ -21,3 +26,10 @@ runs:
           TERRAFORM_VERSION: 1.6.2
           TERRAGRUNT_VERSION: 0.44.4
           TF_SUMMARIZE_VERSION: 0.2.3                    
+
+    - name: Configure credentials to Notify account using OIDC
+      uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+      with:
+        role-to-assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+        role-session-name: NotifyTerraformPlan
+        aws-region: "ca-central-1"
