@@ -5,13 +5,11 @@ on:
     inputs:
       role_to_assume:
         description: The roll to assume when configuring AWS credentials
-        default: arn:aws:iam::239043911459:role/notification-terraform-apply
-        required: false
+        required: true
         type: string
       role_session_name:
         description: The name of the session when configuring AWS credentials
-        default: NotifyTerraformPlan
-        required: false
+        required: true
         type: string
 
 permissions:
