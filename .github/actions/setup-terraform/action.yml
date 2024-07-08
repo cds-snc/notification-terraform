@@ -21,3 +21,12 @@ runs:
           TERRAFORM_VERSION: 1.6.2
           TERRAGRUNT_VERSION: 0.44.4
           TF_SUMMARIZE_VERSION: 0.2.3                    
+
+    - name: Setup Infrastructure Version
+      # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure
+      # to a new version in production
+      # See https://github.com/cds-snc/notification-terraform/releases
+      # We will always do this, but staging will ignore it.
+      run: |
+        INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
+        echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
