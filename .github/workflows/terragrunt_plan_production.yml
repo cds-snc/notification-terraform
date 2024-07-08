@@ -1,8 +1,10 @@
 name: "Terragrunt plan PRODUCTION"
 
 on:
+  workflow_dispatch:
   pull_request:
-
+    paths:
+      - ".github/workflows/infrastructure_version.txt"
 
 env:
   TARGET_ENV_PATH: production
