@@ -10,7 +10,6 @@ resource "newrelic_notification_destination" "terraform_notify_slack_destination
   }
 }
 
-
 resource "newrelic_notification_channel" "terraform_notify_slack_channel_staging" {
   name           = "Terraform Notify Slack Channel - Staging"
   type           = "SLACK_LEGACY"
