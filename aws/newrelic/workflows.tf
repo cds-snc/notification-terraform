@@ -2,7 +2,7 @@ resource "newrelic_notification_destination" "terraform_notify_slack_destination
   account_id = var.new_relic_account_id
   active     = true
   name       = "Terraform Notify Slack Destination - Staging"
-  type = "SLACK_LEGACY"
+  type       = "SLACK_LEGACY"
   property {
     display_value = "notification-staging-ops"
     key           = "url"
@@ -12,28 +12,28 @@ resource "newrelic_notification_destination" "terraform_notify_slack_destination
 
 
 resource "newrelic_notification_channel" "terraform_notify_slack_channel_staging" {
-  name = "Terraform Notify Slack Channel - Staging"
-  type = "SLACK_LEGACY"
+  name           = "Terraform Notify Slack Channel - Staging"
+  type           = "SLACK_LEGACY"
   destination_id = newrelic_notification_destination.terraform_notify_slack_destination_staging.id
-  product = "IINT"
+  product        = "IINT"
 
   property {
-    key = "payload"
+    key   = "payload"
     value = "{}"
     label = "Payload Template"
   }
 }
 
 resource "newrelic_workflow" "terraform_notify_workflow_staging" {
-  name                = "Terraform Notify Workflow - Staging"
-  account_id          = var.new_relic_account_id
-  enabled             = true
-  enrichments_enabled = true
+  name                  = "Terraform Notify Workflow - Staging"
+  account_id            = var.new_relic_account_id
+  enabled               = true
+  enrichments_enabled   = true
   muting_rules_handling = "DONT_NOTIFY_FULLY_MUTED_ISSUES"
 
 
   destination {
-    channel_id = newrelic_notification_channel.terraform_notify_slack_channel_staging.id
+    channel_id            = newrelic_notification_channel.terraform_notify_slack_channel_staging.id
     notification_triggers = []
   }
 
