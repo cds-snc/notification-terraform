@@ -1,6 +1,6 @@
 resource "newrelic_nrql_alert_condition" "tf_lambda_api_errors_count_anomaly_unexpected_errors" {
   account_id                   = var.new_relic_account_id
-  policy_id                    = 2801728
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy_staging.id
   type                         = "baseline"
   name                         = "Staging - Terraform - [Lambda API] Errors count anomaly (Unexpected Errors)"
   enabled                      = true
