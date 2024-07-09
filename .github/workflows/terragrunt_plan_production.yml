@@ -6,10 +6,13 @@ on:
     paths:
       - ".github/workflows/infrastructure_version.txt"
 
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
 env:
   TARGET_ENV_PATH: production
-  AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
   TERRAFORM_VERSION: 0.14.4
   TERRAGRUNT_VERSION: 0.35.13
@@ -88,6 +91,9 @@ jobs:
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan ECR
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -110,8 +116,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan ses_receiving_emails
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -134,8 +143,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan dns
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -158,8 +170,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan ses_validation_dns_entries
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -183,8 +198,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan cloudfront
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -207,8 +225,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan eks
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -231,8 +252,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan elasticache
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -255,8 +279,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+
       - name: Terragrunt plan rds
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -278,8 +306,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan lambda-api
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -302,8 +333,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan lambda-admin-pr
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -326,8 +360,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan performance-test
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -350,8 +387,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan heartbeat
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -374,8 +414,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
+      - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan database-tools
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -398,8 +441,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform          
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan        
 
       - name: Terragrunt plan quicksight
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -422,8 +468,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform     
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan    
 
       - name: Terragrunt plan lambda-google-cidr
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -446,8 +495,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -470,8 +522,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -494,8 +549,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
@@ -518,8 +576,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan system_status
         uses: cds-snc/terraform-plan@v3
@@ -542,8 +603,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan aws/system_status_static_site
         uses: cds-snc/terraform-plan@v3
@@ -567,8 +631,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform 
-        uses: ./.github/actions/setup-terraform 
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan aws/newrelic
         uses: cds-snc/terraform-plan@v3
