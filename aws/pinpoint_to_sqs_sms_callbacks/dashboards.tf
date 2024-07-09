@@ -248,7 +248,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure' | fields @timestamp as Timestamp, notification.messageId as MessageID, status, delivery.destination as Destination, delivery.providerResponse as ProviderResponse\n| sort @timestamp desc\n| limit 20",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure' | fields @timestamp as Timestamp, messageId as MessageID, messageStatus as status, destinationPhoneNumber as Destination, messageStatusDescription as ProviderResponse\n| sort @timestamp desc\n| limit 20",
                 "region": "${var.region}",
                 "stacked": false,
                 "view": "table",
@@ -306,7 +306,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE 'sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure' | SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber' | stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_minutes, count(*) as Number by delivery.phoneCarrier as Carrier",
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber' | filter isFinal = 1 \n| stats avg((eventTimestamp - messageRequestTimestamp) / 1000 / 60) as Avg_carrier_time_minutes, count(*) as Number by carrierName as Carrier",
                 "region": "${var.region}",
                 "title": "Carrier Dwell Times",
                 "view": "table"
