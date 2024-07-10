@@ -385,6 +385,7 @@ jobs:
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
+    permissions: write-all
 
     steps:
       - name: Checkout
