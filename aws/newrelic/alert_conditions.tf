@@ -1,6 +1,6 @@
 #TODO:  Check if we can extract the guids from the entities and use them in the queries, dynamically after we add the entities to code
 locals {
-  guid = var.env == "production" ?  "MjY5MTk3NHxJTkZSQXxOQXwxMDg0NzM0MjU4MTkwNzk3NTQz": "MjY5MTk3NHxJTkZSQXxOQXwtNzgwNDUyNTc5NzAyODI1NTcyNw"
+  guid = var.env == "production" ? "MjY5MTk3NHxJTkZSQXxOQXwxMDg0NzM0MjU4MTkwNzk3NTQz" : "MjY5MTk3NHxJTkZSQXxOQXwtNzgwNDUyNTc5NzAyODI1NTcyNw"
 }
 
 resource "newrelic_nrql_alert_condition" "tf_lambda_api_errors_count_anomaly_unexpected_errors" {
