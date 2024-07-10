@@ -36,6 +36,15 @@ runs:
           TERRAGRUNT_VERSION: 0.44.4
           TF_SUMMARIZE_VERSION: 0.2.3                    
 
+    - name: Setup Infrastructure Version
+      # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure
+      # to a new version in production
+      # See https://github.com/cds-snc/notification-terraform/releases
+      # We will always do this, but staging will ignore it.
+      run: |
+        INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
+        echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
+
     - name: Configure credentials to Notify account using OIDC
       uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
       with:
