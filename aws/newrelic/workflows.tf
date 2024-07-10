@@ -1,19 +1,19 @@
-resource "newrelic_notification_destination" "terraform_notify_destination_staging" {
+resource "newrelic_notification_destination" "terraform_notify_destination" {
   account_id = var.new_relic_account_id
   active     = true
-  name       = "Terraform Notify Slack Destination - Staging"
+  name       = "Terraform Notify Slack Destination - ${var.env}"
   type       = "SLACK_LEGACY"
   property {
-    display_value = "notification-staging-ops"
+    display_value = var.env == "production" ? "notification-ops" : "notification-staging-ops"
     key           = "url"
     value         = var.new_relic_slack_webhook_url
   }
 }
 
-resource "newrelic_notification_channel" "terraform_notify_channel_staging" {
-  name           = "Terraform Notify Slack Channel - Staging"
+resource "newrelic_notification_channel" "terraform_notify_channel" {
+  name           = "Terraform Notify Slack Channel - ${var.env}"
   type           = "SLACK_LEGACY"
-  destination_id = newrelic_notification_destination.terraform_notify_destination_staging.id
+  destination_id = newrelic_notification_destination.terraform_notify_destination.id
   product        = "IINT"
 
   property {
@@ -23,8 +23,8 @@ resource "newrelic_notification_channel" "terraform_notify_channel_staging" {
   }
 }
 
-resource "newrelic_workflow" "terraform_notify_workflow_staging" {
-  name                  = "Terraform Notify Workflow - Staging"
+resource "newrelic_workflow" "terraform_notify_workflow" {
+  name                  = "Terraform Notify Workflow - ${var.env}"
   account_id            = var.new_relic_account_id
   enabled               = true
   enrichments_enabled   = true
@@ -32,7 +32,7 @@ resource "newrelic_workflow" "terraform_notify_workflow_staging" {
 
 
   destination {
-    channel_id            = newrelic_notification_channel.terraform_notify_channel_staging.id
+    channel_id            = newrelic_notification_channel.terraform_notify_channel.id
     notification_triggers = []
   }
 
@@ -44,7 +44,7 @@ resource "newrelic_workflow" "terraform_notify_workflow_staging" {
       attribute = "labels.policyIds"
       operator  = "EXACTLY_MATCHES"
       values = [
-        newrelic_alert_policy.terraform_notify_policy_staging.id
+        newrelic_alert_policy.terraform_notify_policy.id
       ]
     }
     predicate {
