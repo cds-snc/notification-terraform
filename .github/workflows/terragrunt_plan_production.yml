@@ -324,33 +324,6 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-  terragrunt-plan-lambda-admin-pr:
-    if: |
-      always() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-        
-      - name: setup-terraform
-        uses: ./.github/actions/setup-terraform
-        with:
-          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan
-
-      - name: Terragrunt plan lambda-admin-pr
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/production/lambda-admin-pr"
-          comment-delete: "true"
-          comment-title: "Production: lambda-admin-pr"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
-
   terragrunt-plan-heartbeat:
     if: |
       always() &&
