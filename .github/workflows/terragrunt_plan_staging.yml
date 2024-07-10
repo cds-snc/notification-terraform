@@ -18,8 +18,9 @@ permissions:
 env:
   TARGET_ENV_PATH: staging
   AWS_REGION: ca-central-1
-  TF_VAR_new_relic_api_key: ${{ secrets.PRODUCTION_NEW_RELIC_API_KEY }}
-  TF_VAR_new_relic_account_id: ${{ secrets.PRODUCTION_NEW_RELIC_ACCOUNT_ID }}
+  TF_VAR_new_relic_api_key: ${{ secrets.STAGING_NEW_RELIC_API_KEY }}
+  TF_VAR_new_relic_account_id: ${{ secrets.STAGING_NEW_RELIC_ACCOUNT_ID }}
+  TF_VAR_new_relic_new_relic_slack_webhook_url: ${{ secrets.STAGING_NEW_RELIC_SLACK_WEBHOOK_URL }}
   TF_VAR_base_domain: ${{secrets.STAGING_BASE_DOMAIN}}
   TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
   TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
