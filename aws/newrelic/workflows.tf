@@ -1,4 +1,4 @@
-resource "newrelic_notification_destination" "terraform_notify_slack_destination_staging" {
+resource "newrelic_notification_destination" "terraform_notify_destination_staging" {
   account_id = var.new_relic_account_id
   active     = true
   name       = "Terraform Notify Slack Destination - Staging"
@@ -10,10 +10,10 @@ resource "newrelic_notification_destination" "terraform_notify_slack_destination
   }
 }
 
-resource "newrelic_notification_channel" "terraform_notify_slack_channel_staging" {
+resource "newrelic_notification_channel" "terraform_notify_channel_staging" {
   name           = "Terraform Notify Slack Channel - Staging"
   type           = "SLACK_LEGACY"
-  destination_id = newrelic_notification_destination.terraform_notify_slack_destination_staging.id
+  destination_id = newrelic_notification_destination.terraform_notify_destination_staging.id
   product        = "IINT"
 
   property {
@@ -32,7 +32,7 @@ resource "newrelic_workflow" "terraform_notify_workflow_staging" {
 
 
   destination {
-    channel_id            = newrelic_notification_channel.terraform_notify_slack_channel_staging.id
+    channel_id            = newrelic_notification_channel.terraform_notify_channel_staging.id
     notification_triggers = []
   }
 
