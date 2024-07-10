@@ -67,6 +67,9 @@ jobs:
 
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::296255494825:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
 
       - name: Terragrunt plan common
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
