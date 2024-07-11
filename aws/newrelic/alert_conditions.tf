@@ -359,3 +359,110 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_api_us
   aggregation_delay  = 300
   baseline_direction = "upper_and_lower"
 }
+
+resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_attack_anomaly_detection" {
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type = "baseline"
+  name = "${var.env} - [Lambda API] Error percentage (Fuzzy attack) (Anomaly Detection)"
+
+  description = <<-EOT
+  Unusual fuzzy attack is detected. 
+  EOT
+
+  enabled = true
+  violation_time_limit_seconds = 86400
+
+  nrql {
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='MjY5MTk3NHxJTkZSQXxOQXwxMDg0NzM0MjU4MTkwNzk3NTQz' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
+  }
+
+  critical {
+    operator = "above"
+    threshold = 5
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+  fill_option = "none"
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 300
+  expiration_duration = 600
+  open_violation_on_expiration = false
+  close_violations_on_expiration = true
+  baseline_direction = "upper_only"
+}
+
+resource "newrelic_nrql_alert_condition" "external_services_callbacks_over_5_seconds_duration" {
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type = "static"
+  name = "${var.env} - [External Services / Callbacks] Over 5 seconds duration"
+
+  description = <<-EOT
+  An API callback has a duration over 5 seconds. This has the potential to slow down the overall Celery processing of neighbors tasks such as database saving. Please investigate which service callback might be higher than the threshold and contact the service owner to look into the issue. If they cannot resolve in a timely manner, please remove their service's API URL callback. 
+
+  You can identify the offending service(s) report by this alarm or via the production errors dashboard: https://one.newrelic.com/dashboards/detail/MjY5MTk3NHxWSVp8REFTSEJPQVJEfGRhOjQ4MDgxNzM?account=2691974&state=26777034-e42b-5a7c-100c-3bc1934d2e77
+  EOT
+
+  enabled = true
+  violation_time_limit_seconds = 3600
+
+  nrql {
+    query = "SELECT max(duration) 
+      FROM Span 
+     WHERE service.name like 'notification-celery-production' 
+       AND http.url IS NOT NULL 
+       AND http.url not like '%amazonaws.com%' 
+       AND http.url not like '%notification.canada.ca%' 
+       AND name like 'External%' facet http.url
+    "
+  }
+
+  critical {
+    operator = "above"
+    threshold = 10
+    threshold_duration = 60
+    threshold_occurrences = "all"
+  }
+  fill_option = "none"
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 120
+}
+
+resource "newrelic_nrql_alert_condition" "internal_services_awsnotify_over_5_seconds_duration" {
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type = "static"
+  name = "${var.env} - [Internal Services / AWS+Notify] Over 5 seconds duration"
+
+  description = <<-EOT
+  An API callback has a duration over 5 seconds. This has the potential to slow down the overall Celery processing of neighbors tasks such as database saving. Please investigate which service callback might be higher than the threshold and contact the service owner to look into the issue. If they cannot resolve in a timely manner, please remove their service's API URL callback. 
+
+  You can identify the offending service(s) report by this alarm or via the production errors dashboard: https://one.newrelic.com/dashboards/detail/MjY5MTk3NHxWSVp8REFTSEJPQVJEfGRhOjQ4MDgxNzM?account=2691974&state=26777034-e42b-5a7c-100c-3bc1934d2e77
+  EOT
+
+  enabled = true
+  violation_time_limit_seconds = 86400
+
+  nrql {
+    query = "SELECT max(duration) 
+      FROM Span 
+     WHERE service.name like 'notification-celery-production' 
+       AND http.url IS NOT NULL 
+       AND (http.url like '%amazonaws.com%' OR http.url like '%notification.canada.ca%')
+       AND name like 'External%' facet http.url"
+  }
+
+  critical {
+    operator = "above"
+    threshold = 10
+    threshold_duration = 60
+    threshold_occurrences = "all"
+  }
+  fill_option = "none"
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 120
+}
