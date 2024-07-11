@@ -175,7 +175,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan common
@@ -203,7 +203,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ECR
@@ -231,7 +231,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_receiving_emails
@@ -260,7 +260,7 @@ jobs:
       - name: setup-terraform 
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan dns
@@ -288,7 +288,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_validation_dns_entries
@@ -317,7 +317,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan cloudfront
@@ -345,7 +345,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan eks
@@ -373,7 +373,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan elasticache
@@ -401,7 +401,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan rds
@@ -429,7 +429,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-api
@@ -457,7 +457,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-admin-pr
@@ -485,7 +485,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan performance-test
@@ -513,7 +513,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan heartbeat
@@ -541,7 +541,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan database-tools
@@ -569,7 +569,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan quicksight
@@ -597,7 +597,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-google-cidr
@@ -625,7 +625,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
@@ -653,7 +653,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
@@ -681,7 +681,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
@@ -709,7 +709,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan system_status
@@ -737,7 +737,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan aws/system_status_static_site
@@ -766,7 +766,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan aws/newrelic
