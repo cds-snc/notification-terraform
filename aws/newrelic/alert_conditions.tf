@@ -3,7 +3,7 @@ data "newrelic_entity" "notification-api-lambda" {
   provider = newrelic
   tag {
     key   = "env"
-    value = "${var.env}"
+    value = var.env
   }
 }
 
