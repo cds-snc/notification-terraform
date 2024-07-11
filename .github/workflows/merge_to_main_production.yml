@@ -518,18 +518,3 @@ jobs:
         run: |
           cd env/production/newrelic
           terragrunt apply --terragrunt-non-interactive -auto-approve
-
-  bump-version-and-push-tag:
-    if: |
-        always() &&
-        github.event_name != 'workflow_dispatch' &&
-        !contains(needs.*.result, 'failure') &&
-        !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
-    needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-dns,terragrunt-apply-ses_validation_dns_entries,terragrunt-apply-cloudfront,terragrunt-apply-eks,terragrunt-apply-elasticache,terragrunt-apply-rds,terragrunt-apply-lambda-api,terragrunt-apply-heartbeat,terragrunt-apply-database-tools,terragrunt-apply-quicksight,terragrunt-apply-lambda-google-cidr,terragrunt-apply-ses_to_sqs_email_callbacks,terragrunt-apply-sns_to_sqs_sms_callbacks,terragrunt-apply-pinpoint_to_sqs_sms_callbacks,terragrunt-apply-system_status,terragrunt-apply-ses_receiving_emails,terragrunt-apply-system_status_static_site,terragrunt-apply-newrelic]
-    steps:
-      - name: bump-version-and-push-tag
-        uses: mathieudutour/github-tag-action@bcb832838e1612ff92089d914bccc0fd39458223 # v4.6
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: main          
