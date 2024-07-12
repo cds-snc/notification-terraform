@@ -91,6 +91,7 @@ inputs = {
   new_relic_account_id                      = local.vars.inputs.monitoring.new_relic_account_id
   new_relic_api_key                         = local.vars.inputs.monitoring.new_relic_api_key
   new_relic_license_key                     = local.vars.inputs.monitoring.new_relic_license_key
+  new_relic_slack_webhook_url               = local.vars.inputs.monitoring.new_relic_slack_webhook_url
   notify_o11y_google_oauth_client_id        = local.vars.inputs.monitoring.notify_o11y_google_oauth_client_id
   notify_o11y_google_oauth_client_secret    = local.vars.inputs.monitoring.notify_o11y_google_oauth_client_secret
   sentinel_customer_id                      = local.vars.inputs.monitoring.sentinel_customer_id
@@ -251,6 +252,12 @@ generate "common_variables" {
   path      = "common_variables.tf"
   if_exists = "overwrite"
   contents  = <<EOF
+
+variable "billing_tag_value" {
+  type        = string
+  description = "Identifies the billing code."
+}
+
 variable "account_id" {
   description = "(Required) The account ID to perform actions on."
   type        = string
@@ -314,7 +321,7 @@ remote_state {
     bucket              = "notification-canada-ca-${local.vars.inputs.environment.name}-tf"
     dynamodb_table      = "terraform-state-lock-dynamo"
     region              = "ca-central-1"
-    key                 = "${path_relative_to_include()}/terraform.tfstate"
+    key                 = "${local.vars.inputs.environment.name}/${path_relative_to_include()}/terraform.tfstate"
     s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.vars.inputs.environment.name}" }
     dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.vars.inputs.environment.name}" }
   }

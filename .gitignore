@@ -9,7 +9,7 @@
 !.checkov.yaml
 !.checkov.yml
 !catalog-info.yaml
-env/dev/dev.hcl
+env/dev.hcl
 
 # Checkov dependencies
 .external_modules
