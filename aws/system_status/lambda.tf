@@ -5,7 +5,7 @@ locals {
 module "system_status" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.0.4"
   name                   = "system_status"
-  billing_tag_value      = "notification-canada-ca-${var.env}"
+  billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
   enable_lambda_insights = true
   image_uri              = "${var.system_status_ecr_repository_url}:${local.image_tag}"

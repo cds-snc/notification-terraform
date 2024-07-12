@@ -62,7 +62,7 @@ module "lambda_no_log_detection" {
   log_group_names       = ["/aws/lambda/api-lambda"]
   time_period_minutes   = 10
   use_anomaly_detection = false
-  billing_tag_value     = "notification-canada-ca-${var.env}"
+  billing_tag_value     = var.billing_tag_value
 }
 
 resource "aws_cloudwatch_metric_alarm" "failed-login-count-5-minute-warning" {

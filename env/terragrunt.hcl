@@ -13,6 +13,7 @@ inputs = {
   account_id                                = local.vars.inputs.aws.account_id
   dns_account_id                            = local.vars.inputs.aws.dns_account_id
   region                                    = local.vars.inputs.aws.region
+  billing_tag_value                         = local.vars.inputs.aws.billing_tag_value
 
   ## DNS
 

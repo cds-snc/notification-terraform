@@ -6,7 +6,7 @@ module "ses_receiving_emails" {
 
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.3.3"
   name                       = "ses_receiving_emails"
-  billing_tag_value          = "notification-canada-ca-${var.env}"
+  billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_receiving_emails_ecr_arn
   enable_lambda_insights     = true
   image_uri                  = "${var.ses_receiving_emails_ecr_repository_url}:${var.ses_receiving_emails_docker_tag}"

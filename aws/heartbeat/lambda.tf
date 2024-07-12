@@ -5,7 +5,7 @@ locals {
 module "heartbeat" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.0.4"
   name                   = "heartbeat"
-  billing_tag_value      = "notification-canada-ca-${var.env}"
+  billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
   image_uri              = "${var.heartbeat_ecr_repository_url}:${local.image_tag}"
