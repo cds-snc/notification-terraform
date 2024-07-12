@@ -1,5 +1,5 @@
-# resource "newrelic_alert_policy" "notify_terraform_policy" {
-#   name     = "Pond Example staging"
-#   provider = newrelic
-# }
+resource "newrelic_alert_policy" "terraform_notify_policy" {
+  name     = "TF Notify Policy - ${var.env}"
+  provider = newrelic
+}
 
