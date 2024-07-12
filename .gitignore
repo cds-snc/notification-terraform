@@ -10,6 +10,7 @@
 !.checkov.yml
 !catalog-info.yaml
 env/dev.hcl
+terrable/build
 
 # Checkov dependencies
 .external_modules

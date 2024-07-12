@@ -3,8 +3,8 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
   name                = "perf_test_event_rule"
   schedule_expression = var.schedule_expression
   tags = {
-    Name                  = "perf_test_cw_event_rule"
-    CostCenter            = "notification-canada-ca-${var.env}"
+    Name       = "perf_test_cw_event_rule"
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 

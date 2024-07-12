@@ -1,0 +1,13 @@
+[project]
+name = "terrable"
+version = "0.1"
+description = "Terragrunt wrapper for GC Notify"
+
+[tool.cxfreeze]
+executables = [
+    {script = "src/terrable.py"}
+]
+
+[tool.cxfreeze.build_exe]
+excludes = ["tkinter", "unittest"]
+zip_include_packages = ["encodings", "PySide6", "shiboken6"]
