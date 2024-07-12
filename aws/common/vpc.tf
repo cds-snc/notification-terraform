@@ -274,7 +274,7 @@ resource "aws_flow_log" "cloud-based-sensor" {
   depends_on = [
     module.cbs_logs_bucket
   ]
-  log_destination      = "arn:aws:s3:::${var.cbs_satellite_bucket_name}/vpc_flow_logs/"
+  log_destination      = "arn:aws:s3:::cbs-satellite-${var.account_id}/vpc_flow_logs/"
   log_destination_type = "s3"
   traffic_type         = "ALL"
   vpc_id               = aws_vpc.notification-canada-ca.id

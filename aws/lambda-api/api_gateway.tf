@@ -116,7 +116,7 @@ resource "aws_api_gateway_stage" "api" {
 
 resource "aws_api_gateway_domain_name" "api" {
   regional_certificate_arn = var.certificate_arn
-  domain_name              = "api.${var.base_domain}"
+  domain_name              = "api.${var.domain}"
   security_policy          = "TLS_1_2"
 
   endpoint_configuration {
@@ -126,7 +126,7 @@ resource "aws_api_gateway_domain_name" "api" {
 
 resource "aws_api_gateway_domain_name" "api_lambda" {
   regional_certificate_arn = var.certificate_arn
-  domain_name              = "api-lambda.${var.base_domain}"
+  domain_name              = "api-lambda.${var.domain}"
   security_policy          = "TLS_1_2"
 
   endpoint_configuration {
@@ -136,7 +136,7 @@ resource "aws_api_gateway_domain_name" "api_lambda" {
 
 resource "aws_api_gateway_domain_name" "alt_api_lambda" {
   regional_certificate_arn = var.certificate_alt_arn
-  domain_name              = "api.${var.alt_base_domain}"
+  domain_name              = "api.${var.alt_domain}"
   security_policy          = "TLS_1_2"
 
   endpoint_configuration {

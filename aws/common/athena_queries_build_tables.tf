@@ -7,7 +7,7 @@ resource "aws_athena_named_query" "create_table_alb_logs" {
     {
       database_name   = aws_athena_database.notification_athena.name
       table_name      = "alb_logs"
-      bucket_location = "s3://${var.cbs_satellite_bucket_name}/lb_logs/AWSLogs/${var.account_id}/elasticloadbalancing/${var.region}/"
+      bucket_location = "s3://cbs-satellite-${var.account_id}/lb_logs/AWSLogs/${var.account_id}/elasticloadbalancing/${var.region}/"
   })
 }
 
@@ -20,7 +20,7 @@ resource "aws_athena_named_query" "create_table_waf_logs" {
     {
       database_name   = aws_athena_database.notification_athena.name
       table_name      = "waf_logs_lb"
-      bucket_location = "s3://${var.cbs_satellite_bucket_name}/waf_acl_logs/AWSLogs/${var.account_id}/lb/"
+      bucket_location = "s3://cbs-satellite-${var.account_id}/waf_acl_logs/AWSLogs/${var.account_id}/lb/"
   })
 }
 
@@ -33,7 +33,7 @@ resource "aws_athena_named_query" "create_table_waf_logs_api_lambda" {
     {
       database_name   = aws_athena_database.notification_athena.name
       table_name      = "waf_logs_api_lambda"
-      bucket_location = "s3://${var.cbs_satellite_bucket_name}/waf_acl_logs/AWSLogs/${var.account_id}/lambda/"
+      bucket_location = "s3://cbs-satellite-${var.account_id}/waf_acl_logs/AWSLogs/${var.account_id}/lambda/"
   })
 }
 
@@ -46,7 +46,7 @@ resource "aws_athena_named_query" "create_table_all_waf_logs" {
     {
       database_name   = aws_athena_database.notification_athena.name
       table_name      = "waf_logs"
-      bucket_location = "s3://${var.cbs_satellite_bucket_name}/waf_acl_logs/AWSLogs/${var.account_id}/"
+      bucket_location = "s3://cbs-satellite-${var.account_id}/waf_acl_logs/AWSLogs/${var.account_id}/"
   })
 }
 

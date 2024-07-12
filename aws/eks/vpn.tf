@@ -24,7 +24,7 @@ module "vpn" {
   banner_text = "Welcome to the Notify ${upper(var.env)} Environment. This is a private network.  Only authorized users may connect and should take care not to cause service disruptions."
 
 
-  billing_tag_value = "notification-canada-ca-${var.env}"
+  billing_tag_value = var.billing_tag_value
 }
 
 # GHA VPN
@@ -48,7 +48,7 @@ module "gha_vpn" {
   banner_text         = "Welcome to the Notify ${upper(var.env)} Environment. This is a private network.  Only authorized users may connect and should take care not to cause service disruptions."
 
 
-  billing_tag_value = "notification-canada-ca-${var.env}"
+  billing_tag_value = var.billing_tag_value
 }
 
 

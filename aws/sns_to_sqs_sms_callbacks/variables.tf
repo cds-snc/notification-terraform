@@ -1,7 +1,3 @@
-variable "billing_tag_value" {
-  type        = string
-  description = "Identifies the billing code."
-}
 variable "sns_alert_warning_arn" {
   type = string
 }

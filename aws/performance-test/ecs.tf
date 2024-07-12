@@ -15,7 +15,7 @@ resource "aws_ecs_cluster" "perf_test" {
   }
 
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 
@@ -68,6 +68,6 @@ resource "aws_ecs_task_definition" "perf_test_task" {
   container_definitions    = data.template_file.perf_test_container_definition.rendered
 
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 }

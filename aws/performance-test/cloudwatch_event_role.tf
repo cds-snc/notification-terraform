@@ -29,7 +29,7 @@ resource "aws_iam_role" "scheduled_task_perf_test_event_role" {
   name               = "perf_test_scheduled_task_role"
   assume_role_policy = data.aws_iam_policy_document.scheduled_task_perf_test_event_role_assume_role_policy.json
   tags = {
-    (var.billing_tag_key) = var.billing_tag_value
+    CostCenter = "notification-canada-ca-${var.env}"
   }
 }
 
