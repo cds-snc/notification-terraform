@@ -44,7 +44,7 @@ resource "aws_route53_record" "notificatio-root-WC" {
 resource "aws_route53_record" "doc-notification-canada-ca-cname" {
   provider = aws.dns
   zone_id  = var.route_53_zone_arn
-  name     = "doc.notification.canada.ca"
+  name     = "doc.${var.domain}"
   type     = "CNAME"
   records = [
     aws_alb.notification-canada-ca.dns_name
@@ -55,7 +55,7 @@ resource "aws_route53_record" "doc-notification-canada-ca-cname" {
 resource "aws_route53_record" "document-notification-canada-ca-cname" {
   provider = aws.dns
   zone_id  = var.route_53_zone_arn
-  name     = "document.notification.canada.ca"
+  name     = "document.${var.domain}"
   type     = "CNAME"
   records = [
     aws_alb.notification-canada-ca.dns_name
@@ -66,7 +66,7 @@ resource "aws_route53_record" "document-notification-canada-ca-cname" {
 resource "aws_route53_record" "api-document-notification-canada-ca-cname" {
   provider = aws.dns
   zone_id  = var.route_53_zone_arn
-  name     = "api.document.notification.canada.ca"
+  name     = "api.document.${var.domain}"
   type     = "CNAME"
   records = [
     aws_alb.notification-canada-ca.dns_name
@@ -77,7 +77,7 @@ resource "aws_route53_record" "api-document-notification-canada-ca-cname" {
 resource "aws_route53_record" "documentation-notification-canada-ca-cname" {
   provider = aws.dns
   zone_id  = var.route_53_zone_arn
-  name     = "documentation.notification.canada.ca"
+  name     = "documentation.${var.domain}"
   type     = "CNAME"
   records = [
     aws_alb.notification-canada-ca.dns_name
