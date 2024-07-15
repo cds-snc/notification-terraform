@@ -12,6 +12,20 @@ resource "aws_route53_record" "notification-root" {
   }
 }
 
+resource "aws_route53_record" "notification-www-root" {
+
+  provider = aws.dns
+  zone_id  = var.route_53_zone_arn
+  name     = "www.${var.domain}"
+  type     = "CNAME"
+
+  records  = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl      = "300"
+}
+
+
 resource "aws_route53_record" "notificatio-root-WC" {
 
   provider = aws.dns
@@ -25,6 +39,50 @@ resource "aws_route53_record" "notificatio-root-WC" {
     evaluate_target_health = false
   }
 
+}
+
+resource "aws_route53_record" "doc-notification-canada-ca-cname" {
+  provider  = aws.dns
+  zone_id   = var.route_53_zone_arn
+  name      = "doc.notification.canada.ca"
+  type      = "CNAME"
+  records   = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
+resource "aws_route53_record" "document-notification-canada-ca-cname" {
+  provider  = aws.dns
+  zone_id   = var.route_53_zone_arn
+  name      = "document.notification.canada.ca"
+  type      = "CNAME"
+  records   = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
+resource "aws_route53_record" "api-document-notification-canada-ca-cname" {
+  provider  = aws.dns
+  zone_id   = var.route_53_zone_arn
+  name      = "api.document.notification.canada.ca"
+  type      = "CNAME"
+  records   = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
+resource "aws_route53_record" "documentation-notification-canada-ca-cname" {
+  provider  = aws.dns
+  zone_id   = var.route_53_zone_arn
+  name      = "documentation.notification.canada.ca"
+  type      = "CNAME"
+  records   = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
 }
 
 resource "aws_route53_record" "notification-alt-root" {
@@ -109,3 +167,4 @@ resource "aws_route53_record" "wildcard_CNAME" {
   ttl     = "60"
   records = [var.internal_dns_name]
 }
+
