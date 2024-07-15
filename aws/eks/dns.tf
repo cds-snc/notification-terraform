@@ -19,10 +19,10 @@ resource "aws_route53_record" "notification-www-root" {
   name     = "www.${var.domain}"
   type     = "CNAME"
 
-  records  = [
+  records = [
     aws_alb.notification-canada-ca.dns_name
   ]
-  ttl      = "300"
+  ttl = "300"
 }
 
 
@@ -42,44 +42,44 @@ resource "aws_route53_record" "notificatio-root-WC" {
 }
 
 resource "aws_route53_record" "doc-notification-canada-ca-cname" {
-  provider  = aws.dns
-  zone_id   = var.route_53_zone_arn
-  name      = "doc.notification.canada.ca"
-  type      = "CNAME"
-  records   = [
+  provider = aws.dns
+  zone_id  = var.route_53_zone_arn
+  name     = "doc.notification.canada.ca"
+  type     = "CNAME"
+  records = [
     aws_alb.notification-canada-ca.dns_name
   ]
   ttl = "300"
 }
 
 resource "aws_route53_record" "document-notification-canada-ca-cname" {
-  provider  = aws.dns
-  zone_id   = var.route_53_zone_arn
-  name      = "document.notification.canada.ca"
-  type      = "CNAME"
-  records   = [
+  provider = aws.dns
+  zone_id  = var.route_53_zone_arn
+  name     = "document.notification.canada.ca"
+  type     = "CNAME"
+  records = [
     aws_alb.notification-canada-ca.dns_name
   ]
   ttl = "300"
 }
 
 resource "aws_route53_record" "api-document-notification-canada-ca-cname" {
-  provider  = aws.dns
-  zone_id   = var.route_53_zone_arn
-  name      = "api.document.notification.canada.ca"
-  type      = "CNAME"
-  records   = [
+  provider = aws.dns
+  zone_id  = var.route_53_zone_arn
+  name     = "api.document.notification.canada.ca"
+  type     = "CNAME"
+  records = [
     aws_alb.notification-canada-ca.dns_name
   ]
   ttl = "300"
 }
 
 resource "aws_route53_record" "documentation-notification-canada-ca-cname" {
-  provider  = aws.dns
-  zone_id   = var.route_53_zone_arn
-  name      = "documentation.notification.canada.ca"
-  type      = "CNAME"
-  records   = [
+  provider = aws.dns
+  zone_id  = var.route_53_zone_arn
+  name     = "documentation.notification.canada.ca"
+  type     = "CNAME"
+  records = [
     aws_alb.notification-canada-ca.dns_name
   ]
   ttl = "300"
