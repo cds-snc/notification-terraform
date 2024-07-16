@@ -1,9 +1,9 @@
 resource "newrelic_nrql_alert_condition" "admin_error_percentage" {
-  account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
-  type = "static"
-  name = "[Admin] Error percentage"
-  enabled = true
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type                         = "static"
+  name                         = "[Admin] Error percentage"
+  enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -11,31 +11,31 @@ resource "newrelic_nrql_alert_condition" "admin_error_percentage" {
   }
 
   critical {
-    operator = "above"
-    threshold = 1
-    threshold_duration = 300
+    operator              = "above"
+    threshold             = 1
+    threshold_duration    = 300
     threshold_occurrences = "all"
   }
 
   warning {
-    operator = "above"
-    threshold = 0.5
-    threshold_duration = 600
+    operator              = "above"
+    threshold             = 0.5
+    threshold_duration    = 600
     threshold_occurrences = "all"
   }
-  fill_option = "static"
-  fill_value = 0
+  fill_option        = "static"
+  fill_value         = 0
   aggregation_window = 60
   aggregation_method = "event_flow"
-  aggregation_delay = 120
+  aggregation_delay  = 120
 }
 
 resource "newrelic_nrql_alert_condition" "admin_response_time" {
-  account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
-  type = "static"
-  name = "[Admin] Response time"
-  enabled = true
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type                         = "static"
+  name                         = "[Admin] Response time"
+  enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -43,31 +43,31 @@ resource "newrelic_nrql_alert_condition" "admin_response_time" {
   }
 
   critical {
-    operator = "above"
-    threshold = 0.5
-    threshold_duration = 300
+    operator              = "above"
+    threshold             = 0.5
+    threshold_duration    = 300
     threshold_occurrences = "all"
   }
 
   warning {
-    operator = "above"
-    threshold = 0.2
-    threshold_duration = 600
+    operator              = "above"
+    threshold             = 0.2
+    threshold_duration    = 600
     threshold_occurrences = "all"
   }
-  fill_option = "static"
-  fill_value = 0
+  fill_option        = "static"
+  fill_value         = 0
   aggregation_window = 60
   aggregation_method = "event_flow"
-  aggregation_delay = 120
+  aggregation_delay  = 120
 }
 
 resource "newrelic_nrql_alert_condition" "k8s_api_error_percentage" {
-  account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
-  type = "static"
-  name = "[k8s API] Error percentage"
-  enabled = true
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type                         = "static"
+  name                         = "[k8s API] Error percentage"
+  enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -75,31 +75,31 @@ resource "newrelic_nrql_alert_condition" "k8s_api_error_percentage" {
   }
 
   warning {
-    operator = "above"
-    threshold = 1
-    threshold_duration = 300
+    operator              = "above"
+    threshold             = 1
+    threshold_duration    = 300
     threshold_occurrences = "all"
   }
 
   critical {
-    operator = "above"
-    threshold = 2
-    threshold_duration = 300
+    operator              = "above"
+    threshold             = 2
+    threshold_duration    = 300
     threshold_occurrences = "all"
   }
-  fill_option = "static"
-  fill_value = 0
+  fill_option        = "static"
+  fill_value         = 0
   aggregation_window = 60
   aggregation_method = "event_flow"
-  aggregation_delay = 120
+  aggregation_delay  = 120
 }
 
 resource "newrelic_nrql_alert_condition" "k8s_api_response_time" {
-  account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
-  type = "static"
-  name = "[k8s API] Response time"
-  enabled = true
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type                         = "static"
+  name                         = "[k8s API] Response time"
+  enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -107,31 +107,31 @@ resource "newrelic_nrql_alert_condition" "k8s_api_response_time" {
   }
 
   critical {
-    operator = "above"
-    threshold = 0.1
-    threshold_duration = 300
+    operator              = "above"
+    threshold             = 0.1
+    threshold_duration    = 300
     threshold_occurrences = "all"
   }
 
   warning {
-    operator = "above"
-    threshold = 0.05
-    threshold_duration = 300
+    operator              = "above"
+    threshold             = 0.05
+    threshold_duration    = 300
     threshold_occurrences = "all"
   }
-  fill_option = "static"
-  fill_value = 0
+  fill_option        = "static"
+  fill_value         = 0
   aggregation_window = 60
   aggregation_method = "event_flow"
-  aggregation_delay = 120
+  aggregation_delay  = 120
 }
 
 resource "newrelic_nrql_alert_condition" "k8s_api_transaction_database_time" {
-  account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
-  type = "baseline"
-  name = "[k8s API] Transaction database time"
-  enabled = true
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  type                         = "baseline"
+  name                         = "[k8s API] Transaction database time"
+  enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -139,23 +139,23 @@ resource "newrelic_nrql_alert_condition" "k8s_api_transaction_database_time" {
   }
 
   critical {
-    operator = "above"
-    threshold = 2.81838
-    threshold_duration = 300
+    operator              = "above"
+    threshold             = 2.81838
+    threshold_duration    = 300
     threshold_occurrences = "all"
   }
 
   warning {
-    operator = "above"
-    threshold = 2.81838
-    threshold_duration = 180
+    operator              = "above"
+    threshold             = 2.81838
+    threshold_duration    = 180
     threshold_occurrences = "all"
   }
-  fill_option = "static"
-  fill_value = 0
+  fill_option        = "static"
+  fill_value         = 0
   aggregation_window = 60
   aggregation_method = "event_flow"
-  aggregation_delay = 120
+  aggregation_delay  = 120
   baseline_direction = "lower_only"
 }
 
