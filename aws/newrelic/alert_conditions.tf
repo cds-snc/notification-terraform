@@ -1,11 +1,164 @@
-data "newrelic_entity" "notification-api-lambda" {
-  name     = "api-lambda"
-  provider = newrelic
-  tag {
-    key   = "env"
-    value = var.env
+resource "newrelic_nrql_alert_condition" "admin_error_percentage" {
+  account_id = var.new_relic_account_id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  type = "static"
+  name = "[Admin] Error percentage"
+  enabled = true
+  violation_time_limit_seconds = 259200
+
+  nrql {
+    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
   }
+
+  critical {
+    operator = "above"
+    threshold = 1
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+
+  warning {
+    operator = "above"
+    threshold = 0.5
+    threshold_duration = 600
+    threshold_occurrences = "all"
+  }
+  fill_option = "static"
+  fill_value = 0
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 120
 }
+
+resource "newrelic_nrql_alert_condition" "admin_response_time" {
+  account_id = var.new_relic_account_id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  type = "static"
+  name = "[Admin] Response time"
+  enabled = true
+  violation_time_limit_seconds = 259200
+
+  nrql {
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
+  }
+
+  critical {
+    operator = "above"
+    threshold = 0.5
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+
+  warning {
+    operator = "above"
+    threshold = 0.2
+    threshold_duration = 600
+    threshold_occurrences = "all"
+  }
+  fill_option = "static"
+  fill_value = 0
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 120
+}
+
+resource "newrelic_nrql_alert_condition" "k8s_api_error_percentage" {
+  account_id = var.new_relic_account_id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  type = "static"
+  name = "[k8s API] Error percentage"
+  enabled = true
+  violation_time_limit_seconds = 259200
+
+  nrql {
+    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
+  }
+
+  warning {
+    operator = "above"
+    threshold = 1
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+
+  critical {
+    operator = "above"
+    threshold = 2
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+  fill_option = "static"
+  fill_value = 0
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 120
+}
+
+resource "newrelic_nrql_alert_condition" "k8s_api_response_time" {
+  account_id = var.new_relic_account_id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  type = "static"
+  name = "[k8s API] Response time"
+  enabled = true
+  violation_time_limit_seconds = 259200
+
+  nrql {
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
+  }
+
+  critical {
+    operator = "above"
+    threshold = 0.1
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+
+  warning {
+    operator = "above"
+    threshold = 0.05
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+  fill_option = "static"
+  fill_value = 0
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 120
+}
+
+resource "newrelic_nrql_alert_condition" "k8s_api_transaction_database_time" {
+  account_id = var.new_relic_account_id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  type = "baseline"
+  name = "[k8s API] Transaction database time"
+  enabled = true
+  violation_time_limit_seconds = 259200
+
+  nrql {
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'Datastore/all') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.id}) AND metricTimesliceName IN ('Datastore/all', 'Agent/MetricsReported/count') FACET appId"
+  }
+
+  critical {
+    operator = "above"
+    threshold = 2.81838
+    threshold_duration = 300
+    threshold_occurrences = "all"
+  }
+
+  warning {
+    operator = "above"
+    threshold = 2.81838
+    threshold_duration = 180
+    threshold_occurrences = "all"
+  }
+  fill_option = "static"
+  fill_value = 0
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay = 120
+  baseline_direction = "lower_only"
+}
+
 
 resource "newrelic_nrql_alert_condition" "external_services_callbacks_over_5_seconds_duration" {
   account_id = var.new_relic_account_id
