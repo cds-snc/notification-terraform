@@ -7,7 +7,7 @@ resource "newrelic_nrql_alert_condition" "admin_error_percentage" {
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.application_id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
@@ -39,7 +39,7 @@ resource "newrelic_nrql_alert_condition" "admin_response_time" {
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.application_id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
@@ -71,7 +71,7 @@ resource "newrelic_nrql_alert_condition" "k8s_api_error_percentage" {
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.application_id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
   }
 
   warning {
@@ -103,7 +103,7 @@ resource "newrelic_nrql_alert_condition" "k8s_api_response_time" {
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.application_id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
@@ -135,7 +135,7 @@ resource "newrelic_nrql_alert_condition" "k8s_api_transaction_database_time" {
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'Datastore/all') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.id}) AND metricTimesliceName IN ('Datastore/all', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'Datastore/all') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.application_id}) AND metricTimesliceName IN ('Datastore/all', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
