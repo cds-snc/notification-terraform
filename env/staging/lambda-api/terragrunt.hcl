@@ -3,8 +3,9 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../eks", "../ecr", "../rds"]
+  paths = ["../common", "../eks", "../ecr", "../rds", "../dns"]
 }
+
 
 dependency "common" {
   config_path = "../common"
@@ -47,6 +48,21 @@ dependency "ecr" {
   config_path = "../ecr"
 }
 
+dependency "dns" {
+
+  config_path = "../dns"
+
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs = {
+    route53_zone_id = "ZQSVJUPU6J1EY"
+  }
+}
+
+
 dependency "rds" {
   config_path = "../rds"
 }
@@ -85,4 +101,5 @@ inputs = {
   api_lambda_ecr_arn                     = dependency.ecr.outputs.api_lambda_ecr_arn
   database_read_only_proxy_endpoint      = dependency.rds.outputs.database_read_only_proxy_endpoint
   database_read_write_proxy_endpoint     = dependency.rds.outputs.database_read_write_proxy_endpoint
+  route53_zone_id                        = dependency.dns.outputs.route53_zone_id
 }

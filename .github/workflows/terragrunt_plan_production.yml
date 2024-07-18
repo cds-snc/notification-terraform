@@ -44,7 +44,6 @@ env:
   TF_VAR_system_status_bucket_name: "notification-canada-ca-production-system-status"
   TF_VAR_new_relic_license_key: ${{ secrets.PRODUCTION_NEW_RELIC_LICENSE_KEY }}
   TF_VAR_waf_secret: ${{secrets.PRODUCTION_WAF_SECRET}}
-  TF_VAR_route_53_zone_arn: /hostedzone/Z07701011ICTZVSX5P68J
   # Prevents repeated creation of the Slack lambdas if already existing.
   # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
   TF_RECREATE_MISSING_LAMBDA_PACKAGE: false

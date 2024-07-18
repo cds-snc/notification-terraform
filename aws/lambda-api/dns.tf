@@ -2,7 +2,7 @@ resource "aws_route53_record" "api-lambda-notification-A" {
 
   provider = aws.dns
 
-  zone_id = var.route_53_zone_arn
+  zone_id = var.route53_zone_id
   name    = "api-lambda.${var.domain}"
   type    = "A"
 
