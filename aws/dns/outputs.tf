@@ -53,3 +53,6 @@ output "internal_dns_name" {
   value = aws_route53_zone.internal_dns.name
 }
 
+output "route53_zone_id" {
+  value = var.env == "production" ? aws_route53_zone.notification-canada-ca[0].zone_id : aws_route53_zone.notification-sandbox[0].zone_id
+}

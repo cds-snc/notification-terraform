@@ -1,8 +1,7 @@
 resource "aws_route53_record" "assets-notification-CNAME" {
-  count = var.env != "production" ? 1 : 0
 
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = var.route53_zone_id
   name     = "assets.${var.domain}"
   type     = "CNAME"
   ttl      = "300"
