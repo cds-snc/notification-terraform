@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//ses_validation_dns_entries"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/ses_validation_dns_entries?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {

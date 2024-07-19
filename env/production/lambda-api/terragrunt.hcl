@@ -1,8 +1,7 @@
 # Uses GitHub tags for release management
 terraform {
-  source = "../../../aws//lambda-api"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/lambda-api?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
-
 
 dependencies {
   paths = ["../common", "../eks", "../ecr", "../rds", "../dns"]

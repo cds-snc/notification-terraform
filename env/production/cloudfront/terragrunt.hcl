@@ -1,7 +1,8 @@
 # Uses GitHub tags for release management
 terraform {
-  source = "../../../aws//cloudfront"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/cloudfront?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
+
 
 dependency "common" {
   config_path = "../common"

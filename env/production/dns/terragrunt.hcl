@@ -1,6 +1,6 @@
 # Uses GitHub tags for release management
 terraform {
-  source = "../../../aws//dns"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {

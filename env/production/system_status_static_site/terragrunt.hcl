@@ -28,5 +28,5 @@ inputs = {
 }
 
 terraform {
-  source = "../../../aws//system_status_static_site"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/system_status_static_site?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
