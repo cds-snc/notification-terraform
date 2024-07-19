@@ -1,7 +1,7 @@
 resource "newrelic_notification_destination" "terraform_notify_destination" {
   account_id = var.new_relic_account_id
   active     = true
-  name       = "Terraform Notify Slack Destination - ${var.env}"
+  name       = "Notify Slack Destination - ${var.env}"
   type       = "SLACK_LEGACY"
   property {
     display_value = var.env == "production" ? "notification-ops" : "notification-staging-ops"
@@ -11,7 +11,7 @@ resource "newrelic_notification_destination" "terraform_notify_destination" {
 }
 
 resource "newrelic_notification_channel" "terraform_notify_channel" {
-  name           = "Terraform Notify Slack Channel - ${var.env}"
+  name           = "Notify Slack Channel - ${var.env}"
   type           = "SLACK_LEGACY"
   destination_id = newrelic_notification_destination.terraform_notify_destination.id
   product        = "IINT"
@@ -24,7 +24,7 @@ resource "newrelic_notification_channel" "terraform_notify_channel" {
 }
 
 resource "newrelic_workflow" "terraform_notify_workflow" {
-  name                  = "Terraform Notify Workflow - ${var.env}"
+  name                  = "Notify Workflow - ${var.env}"
   account_id            = var.new_relic_account_id
   enabled               = true
   enrichments_enabled   = true
