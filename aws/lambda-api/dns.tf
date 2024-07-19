@@ -18,7 +18,7 @@ resource "aws_route53_record" "api-weighted-100-notification-A" {
   # Send all API traffic to Lambda
   provider = aws.dns
 
-  zone_id        = var.route_53_zone_arn
+  zone_id        = var.route53_zone_id
   name           = "api.${var.domain}"
   type           = "A"
   set_identifier = "lambda"
@@ -39,7 +39,7 @@ resource "aws_route53_record" "api-notification-alt-A" {
   count    = var.env != "production" ? 1 : 0
   provider = aws.dns
 
-  zone_id = var.route_53_zone_arn
+  zone_id = var.route53_zone_id
   name    = "api.${var.alt_domain}"
   type    = "A"
 

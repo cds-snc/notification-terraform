@@ -26,6 +26,7 @@ dependency "dns" {
     notification_canada_ca_dkim = []
     cic_trvapply_vrtdemande_dkim = []
     custom_sending_domains_dkim = []
+    route53_zone_id = "ZQSVJUPU6J1EY"
   }
 }
 
@@ -39,6 +40,7 @@ inputs = {
   cic_trvapply_vrtdemande_dkim  = dependency.dns.outputs.cic_trvapply_vrtdemande_dkim
   notification_canada_ca_dkim   = dependency.dns.outputs.notification_canada_ca_dkim
   notification_canada_ca_receiving_dkim   = dependency.dns.outputs.notification_canada_ca_receiving_dkim
+  route53_zone_id                        = dependency.dns.outputs.route53_zone_id
 }
 
 terraform {
