@@ -75,7 +75,7 @@ dependency "dns" {
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
   mock_outputs = {
-    route53_zone_id = "ZQSVJUPU6J1EY"
+    zone_id                = "Z04028033PLSHVOO9ZJ1Z"
   }
 }
 

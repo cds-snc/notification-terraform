@@ -16,7 +16,7 @@ resource "aws_route53_record" "notification_canada_ca_dkim_record" {
   zone_id         = var.route53_zone_id
   name            = "${each.value}._domainkey.${var.domain}"
   type            = "CNAME"
-  ttl             = "600"
+  ttl             = "300"
   allow_overwrite = true
   records         = ["${each.value}.dkim.amazonses.com"]
 }
@@ -27,7 +27,7 @@ resource "aws_route53_record" "notification_canada_ca_receiving_dkim_record" {
   zone_id         = var.route53_zone_id
   name            = "${each.value}._domainkey.${var.domain}"
   type            = "CNAME"
-  ttl             = "600"
+  ttl             = "300"
   allow_overwrite = true
   records         = ["${each.value}.dkim.amazonses.com"]
 }
