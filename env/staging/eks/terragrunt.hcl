@@ -71,7 +71,7 @@ dependency "dns" {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
     internal_dns_name = "staging.notification.internal.com"
-    route53_zone_id = "ZQSVJUPU6J1EY"
+    route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
 }
 
