@@ -172,10 +172,9 @@ variable "notify_k8s_namespace" {
   default     = "notification-canada-ca"
 }
 
-variable "route_53_zone_arn" {
+variable "route53_zone_id" {
   type        = string
   description = "Used by the scratch environment to reference cdssandbox in staging"
-  default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
 }
 
 variable "enable_delete_protection" {

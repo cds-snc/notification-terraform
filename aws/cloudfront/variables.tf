@@ -9,7 +9,7 @@ variable "s3_bucket_asset_bucket_id" {
 variable "s3_bucket_asset_bucket_arn" {
   type = string
 }
-variable "route_53_zone_arn" {
+variable "route53_zone_id" {
   type        = string
   description = "Used by the scratch environment to reference cdssandbox in staging"
   default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"

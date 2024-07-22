@@ -71,6 +71,7 @@ dependency "dns" {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
     internal_dns_name = "staging.notification.internal.com"
+    route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
 }
 
@@ -139,6 +140,7 @@ inputs = {
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks  
+  route53_zone_id                           = dependency.dns.outputs.route53_zone_id
 }
 
 

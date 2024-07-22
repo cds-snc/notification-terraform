@@ -1,9 +1,10 @@
+# Uses GitHub tags for release management
 terraform {
   source = "git::https://github.com/cds-snc/notification-terraform//aws/eks?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {
-  paths = ["../common", "../cloudfront"]
+  paths = ["../common", "../cloudfront", "../dns"]
 }
 
 dependency "common" {
@@ -77,6 +78,7 @@ dependency "dns" {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
     internal_dns_name = "production.notification.internal.com"
+    route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
 }
 
@@ -132,5 +134,6 @@ inputs = {
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
+  route53_zone_id                           = dependency.dns.outputs.route53_zone_id
 
 }
