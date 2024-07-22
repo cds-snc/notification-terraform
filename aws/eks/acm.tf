@@ -51,7 +51,7 @@ resource "aws_route53_record" "notification-canada-ca" {
     }
   }
 
-  allow_overwrite = false
+  allow_overwrite = true
   name            = each.value.name
   records         = [each.value.record]
   type            = each.value.type
