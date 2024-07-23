@@ -378,7 +378,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Average"
-  threshold           = 60 * 30
+  threshold           = 60 * 45
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -396,7 +396,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
   namespace                 = "AWS/SQS"
   period                    = 60
   statistic                 = "Average"
-  threshold                 = 60 * 45
+  threshold                 = 60 * 60
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
