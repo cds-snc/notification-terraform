@@ -24,6 +24,7 @@ resource "newrelic_notification_channel" "terraform_notify_channel" {
 }
 
 resource "newrelic_workflow" "terraform_notify_workflow" {
+  name                  = "Notify Workflow - ${var.env}"
   account_id            = var.new_relic_account_id
   enabled               = true
   enrichments_enabled   = true
