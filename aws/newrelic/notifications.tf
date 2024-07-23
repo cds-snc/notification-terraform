@@ -32,12 +32,8 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
 
 
   destination {
-    channel_id = newrelic_notification_channel.terraform_notify_channel.id
-    notification_triggers = [
-      "ACKNOWLEDGED",
-      "ACTIVATED",
-      "CLOSED"
-    ]
+    channel_id            = newrelic_notification_channel.terraform_notify_channel.id
+    notification_triggers = []
   }
 
   issues_filter {
