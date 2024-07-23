@@ -24,7 +24,6 @@ resource "newrelic_notification_channel" "terraform_notify_channel" {
 }
 
 resource "newrelic_workflow" "terraform_notify_workflow" {
-  name                  = "Notify Workflow - ${var.env}"
   account_id            = var.new_relic_account_id
   enabled               = true
   enrichments_enabled   = true
@@ -32,14 +31,14 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
 
 
   destination {
-    channel_id            = newrelic_notification_channel.terraform_notify_channel.id
-    name                  = "Terraform Notify Slack Channel - ${var.env}"
+    channel_id = newrelic_notification_channel.terraform_notify_channel.id
+    name       = "Terraform Notify Slack Channel - ${var.env}"
     notification_triggers = [
       "ACKNOWLEDGED",
       "ACTIVATED",
       "CLOSED"
     ]
-    type                  = "SLACK_LEGACY" 
+    type = "SLACK_LEGACY"
   }
 
   issues_filter {
