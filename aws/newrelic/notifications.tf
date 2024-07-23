@@ -38,7 +38,6 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
       "ACTIVATED",
       "CLOSED"
     ]
-    type = "SLACK_LEGACY"
   }
 
   issues_filter {
