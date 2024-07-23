@@ -17,14 +17,14 @@ data "aws_iam_policy_document" "newrelic_assume_policy" {
 }
 
 resource "aws_iam_role" "newrelic_aws_role" {
-  count              = var.env == "staging" ? 1 :0
+  count              = var.env == "staging" ? 1 : 0
   name               = "NewRelicInfrastructure-Integrations-${var.env}"
   description        = "New Relic Cloud integration role"
   assume_role_policy = data.aws_iam_policy_document.newrelic_assume_policy.json
 }
 
 resource "aws_iam_policy" "newrelic_aws_permissions" {
-  count              = var.env == "staging" ? 1 :0
+  count       = var.env == "staging" ? 1 : 0
   name        = "NewRelicCloudStreamReadPermissions-${var.env}"
   description = ""
   policy      = <<EOF
@@ -65,13 +65,13 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "newrelic_aws_policy_attach" {
-  count              = var.env == "staging" ? 1 :0
+  count      = var.env == "staging" ? 1 : 0
   role       = aws_iam_role.newrelic_aws_role[0].name
   policy_arn = aws_iam_policy.newrelic_aws_permissions[0].arn
 }
 
 resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_push" {
-  count              = var.env == "staging" ? 1 :0
+  count                  = var.env == "staging" ? 1 : 0
   account_id             = var.new_relic_account_id
   arn                    = aws_iam_role.newrelic_aws_role[0].arn
   metric_collection_mode = "PUSH"
@@ -80,7 +80,7 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_push" {
 }
 
 resource "newrelic_api_access_key" "newrelic_aws_access_key" {
-  count              = var.env == "staging" ? 1 :0
+  count       = var.env == "staging" ? 1 : 0
   account_id  = var.new_relic_account_id
   key_type    = "INGEST"
   ingest_type = "LICENSE"
@@ -89,8 +89,8 @@ resource "newrelic_api_access_key" "newrelic_aws_access_key" {
 }
 
 resource "aws_iam_role" "firehose_newrelic_role" {
-  count              = var.env == "staging" ? 1 :0
-  name = "firehose_newrelic_role_${var.env}"
+  count = var.env == "staging" ? 1 : 0
+  name  = "firehose_newrelic_role_${var.env}"
 
   assume_role_policy = <<EOF
 {
@@ -110,20 +110,20 @@ EOF
 }
 
 resource "random_string" "s3-bucket-name" {
-  count              = var.env == "staging" ? 1 :0
+  count   = var.env == "staging" ? 1 : 0
   length  = 8
   special = false
   upper   = false
 }
 
 resource "aws_s3_bucket" "newrelic_aws_bucket" {
-  count              = var.env == "staging" ? 1 :0
+  count         = var.env == "staging" ? 1 : 0
   bucket        = "newrelic-aws-bucket-${random_string.s3-bucket-name[0].id}"
   force_destroy = true
 }
 
 resource "aws_s3_bucket_ownership_controls" "newrelic_ownership_controls" {
-  count              = var.env == "staging" ? 1 :0
+  count  = var.env == "staging" ? 1 : 0
   bucket = aws_s3_bucket.newrelic_aws_bucket[0].id
   rule {
     object_ownership = "BucketOwnerEnforced"
@@ -131,7 +131,7 @@ resource "aws_s3_bucket_ownership_controls" "newrelic_ownership_controls" {
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "newrelic_firehose_stream" {
-  count              = var.env == "staging" ? 1 :0
+  count       = var.env == "staging" ? 1 : 0
   name        = "newrelic_firehose_stream_${var.env}"
   destination = "http_endpoint"
   http_endpoint_configuration {
@@ -156,8 +156,8 @@ resource "aws_kinesis_firehose_delivery_stream" "newrelic_firehose_stream" {
 }
 
 resource "aws_iam_role" "metric_stream_to_firehose" {
-  count              = var.env == "staging" ? 1 :0
-  name = "newrelic_metric_stream_to_firehose_role_${var.env}"
+  count = var.env == "staging" ? 1 : 0
+  name  = "newrelic_metric_stream_to_firehose_role_${var.env}"
 
   assume_role_policy = <<EOF
 {
@@ -177,9 +177,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "metric_stream_to_firehose" {
-  count              = var.env == "staging" ? 1 :0
-  name = "default"
-  role = aws_iam_role.metric_stream_to_firehose[0].id
+  count = var.env == "staging" ? 1 : 0
+  name  = "default"
+  role  = aws_iam_role.metric_stream_to_firehose[0].id
 
   policy = <<EOF
 {
@@ -199,7 +199,7 @@ EOF
 }
 
 resource "aws_cloudwatch_metric_stream" "newrelic_metric_stream" {
-  count              = var.env == "staging" ? 1 :0
+  count         = var.env == "staging" ? 1 : 0
   name          = "newrelic-metric-stream-${var.env}"
   role_arn      = aws_iam_role.metric_stream_to_firehose[0].arn
   firehose_arn  = aws_kinesis_firehose_delivery_stream.newrelic_firehose_stream[0].arn
@@ -207,7 +207,7 @@ resource "aws_cloudwatch_metric_stream" "newrelic_metric_stream" {
 }
 
 resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_pull" {
-  count              = var.env == "staging" ? 1 :0
+  count                  = var.env == "staging" ? 1 : 0
   account_id             = var.new_relic_account_id
   arn                    = aws_iam_role.newrelic_aws_role[0].arn
   metric_collection_mode = "PULL"
@@ -216,7 +216,7 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_pull" {
 }
 
 resource "newrelic_cloud_aws_integrations" "newrelic_cloud_integration_pull" {
-  count              = var.env == "staging" ? 1 :0
+  count             = var.env == "staging" ? 1 : 0
   account_id        = var.new_relic_account_id
   linked_account_id = newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0].id
   billing {}
@@ -274,13 +274,13 @@ resource "newrelic_cloud_aws_integrations" "newrelic_cloud_integration_pull" {
 }
 
 resource "aws_s3_bucket" "newrelic_configuration_recorder_s3" {
-  count              = var.env == "staging" ? 1 :0
+  count         = var.env == "staging" ? 1 : 0
   bucket        = "newrelic-configuration-recorder-${random_string.s3-bucket-name[0].id}"
   force_destroy = true
 }
 
 resource "aws_iam_role" "newrelic_configuration_recorder" {
-  count              = var.env == "staging" ? 1 :0
+  count              = var.env == "staging" ? 1 : 0
   name               = "newrelic_configuration_recorder-${var.env}"
   assume_role_policy = <<EOF
 {
@@ -300,9 +300,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "newrelic_configuration_recorder_s3" {
-  count              = var.env == "staging" ? 1 :0
-  name = "newrelic-configuration-recorder-s3-${var.env}"
-  role = aws_iam_role.newrelic_configuration_recorder[0].id
+  count = var.env == "staging" ? 1 : 0
+  name  = "newrelic-configuration-recorder-s3-${var.env}"
+  role  = aws_iam_role.newrelic_configuration_recorder[0].id
 
   policy = <<POLICY
 {
@@ -324,21 +324,21 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "newrelic_configuration_recorder" {
-  count              = var.env == "staging" ? 1 :0
+  count      = var.env == "staging" ? 1 : 0
   role       = aws_iam_role.newrelic_configuration_recorder[0].name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 }
 
 
 resource "aws_config_configuration_recorder_status" "newrelic_recorder_status" {
-  count              = var.env == "staging" ? 1 :0
+  count      = var.env == "staging" ? 1 : 0
   name       = var.aws_config_recorder_name
   is_enabled = true
   depends_on = [aws_config_delivery_channel.newrelic_recorder_delivery]
 }
 
 resource "aws_config_delivery_channel" "newrelic_recorder_delivery" {
-  count              = var.env == "staging" ? 1 :0
+  count          = var.env == "staging" ? 1 : 0
   name           = "newrelic_configuration_recorder-${var.env}"
   s3_bucket_name = aws_s3_bucket.newrelic_configuration_recorder_s3[0].bucket
 
