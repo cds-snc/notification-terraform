@@ -33,7 +33,13 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
 
   destination {
     channel_id            = newrelic_notification_channel.terraform_notify_channel.id
-    notification_triggers = []
+    name                  = "Terraform Notify Slack Channel - ${var.env}"
+    notification_triggers = [
+      "ACKNOWLEDGED",
+      "ACTIVATED",
+      "CLOSED"
+    ]
+    type                  = "SLACK_LEGACY" 
   }
 
   issues_filter {
