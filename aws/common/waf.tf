@@ -18,7 +18,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
   scope       = "REGIONAL"
 
   regular_expression {
-    regex_string = var.env == "production" ? "/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*" : "/_debug|/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*|/template-category.*|/template-categories.*"
+    regex_string = var.env == "production" ? "/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*" : "/_debug|/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*|/template-category.*"
   }
 
   regular_expression {
@@ -48,7 +48,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = var.env == "production" ? "/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*" : "/_debug|/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*"
+    regex_string = var.env == "production" ? "/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*" : "/_debug|/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*|/template-category.*|/template-categories.*"
   }
 
   regular_expression {
@@ -98,7 +98,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-categories.*"
+    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc"
   }
 
   tags = {
