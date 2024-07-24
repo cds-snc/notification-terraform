@@ -84,7 +84,7 @@ jobs:
       lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
       system_status: ${{ steps.filter.outputs.system_status }}      
       system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}      
-      new_relic: ${{ steps.filter.outputs.newrelic }}
+      newrelic: ${{ steps.filter.outputs.newrelic }}
 
     steps:
 
