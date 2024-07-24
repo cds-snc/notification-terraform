@@ -334,12 +334,5 @@ resource "aws_config_configuration_recorder_status" "newrelic_recorder_status" {
   count      = var.env == "staging" ? 1 : 0
   name       = var.aws_config_recorder_name
   is_enabled = true
-  depends_on = [aws_config_delivery_channel.newrelic_recorder_delivery]
 }
 
-resource "aws_config_delivery_channel" "newrelic_recorder_delivery" {
-  count          = var.env == "staging" ? 1 : 0
-  name           = "newrelic_configuration_recorder-${var.env}"
-  s3_bucket_name = aws_s3_bucket.newrelic_configuration_recorder_s3[0].bucket
-
-}
