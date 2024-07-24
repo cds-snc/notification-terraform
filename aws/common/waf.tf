@@ -52,10 +52,6 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = var.env == "production" ? "/template-category.*|/template-categories.*"
-  }
-
-  regular_expression {
     regex_string = "/register-from-org-invite.*|/registration-continue.*|/resend-email-verification.*|/roadmap.*|/robots.txt.*|/send-new-code.*|/send-new-email-token.*|/services.*|/services-or-dashboard.*|/set-lang.*"
   }
 
@@ -102,7 +98,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc"
+    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*"
   }
 
   tags = {
