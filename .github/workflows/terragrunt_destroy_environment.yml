@@ -35,6 +35,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
+      
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy aws/newrelic
         run: |
@@ -60,6 +65,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy         
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy aws/system_status_static_site
         run: |
           cd env/dev/system_status_static_site
@@ -82,6 +92,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy system_status
         run: |
@@ -106,6 +121,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy pinpoint_to_sqs_sms_callbacks
         run: |
           cd env/dev/pinpoint_to_sqs_sms_callbacks
@@ -128,6 +148,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy sns_to_sqs_sms_callbacks
         run: |
@@ -152,6 +177,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy ses_to_sqs_email_callbacks
         run: |
           cd env/dev/ses_to_sqs_email_callbacks
@@ -175,6 +205,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy lambda-google-cidr
         run: |
           cd env/dev/lambda-google-cidr
@@ -197,6 +232,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy                  
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy quicksight
         run: |
@@ -223,6 +263,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy          
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy database-tools
         run: |
           cd env/dev/database-tools
@@ -247,6 +292,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy lambda-admin-pr
         run: |
           cd env/dev/lambda-admin-pr
@@ -270,6 +320,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy heartbeat
         run: |
           cd env/dev/heartbeat
@@ -292,6 +347,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy rds
         run: |
@@ -317,6 +377,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy           
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy performance-test
         run: |
           cd env/dev/performance-test
@@ -339,6 +404,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy lambda-api
         run: |
@@ -363,6 +433,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy elasticache
         run: |
           cd env/dev/elasticache
@@ -385,6 +460,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy           
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy eks
         run: |
@@ -409,6 +489,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy cloudfront
         run: |
           cd env/dev/cloudfront
@@ -431,6 +516,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy ses_validation_dns_entries
         run: |
@@ -455,6 +545,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy            
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy dns
         run: |
           cd env/dev/dns
@@ -478,6 +573,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy ses_receiving_emails
         run: |
           cd env/dev/ses_receiving_emails
@@ -500,6 +600,11 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy        
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
       - name: terragrunt destroy ECR
         run: |
           cd env/dev/ecr
@@ -517,6 +622,11 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy common
         run: |
