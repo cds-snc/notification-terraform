@@ -21,7 +21,7 @@ jobs:
   terragrunt-destroy-newrelic:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
 
@@ -50,7 +50,7 @@ jobs:
   terragrunt-destroy-system_status_static_site:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic]
@@ -79,7 +79,7 @@ jobs:
   terragrunt-destroy-system_status:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-system_status_static_site]
@@ -108,7 +108,7 @@ jobs:
   terragrunt-destroy-pinpoint_to_sqs_sms_callbacks:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site]
@@ -137,7 +137,7 @@ jobs:
   terragrunt-destroy-sns_to_sqs_sms_callbacks:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site]
@@ -166,7 +166,7 @@ jobs:
   terragrunt-destroy-ses_to_sqs_email_callbacks:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site]
@@ -195,7 +195,7 @@ jobs:
   terragrunt-destroy-lambda-google-cidr:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -224,7 +224,7 @@ jobs:
   terragrunt-destroy-quicksight:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -255,7 +255,7 @@ jobs:
   terragrunt-destroy-database-tools:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -285,7 +285,7 @@ jobs:
   terragrunt-destroy-lambda-admin-pr:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -314,7 +314,7 @@ jobs:
   terragrunt-destroy-heartbeat:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -342,7 +342,7 @@ jobs:
   terragrunt-destroy-rds:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -372,7 +372,7 @@ jobs:
   terragrunt-destroy-performance-test:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -401,7 +401,7 @@ jobs:
   terragrunt-destroy-lambda-api:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -430,7 +430,7 @@ jobs:
   terragrunt-destroy-elasticache:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -459,7 +459,7 @@ jobs:
   terragrunt-destroy-eks:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -488,7 +488,7 @@ jobs:
   terragrunt-destroy-cloudfront:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -517,7 +517,7 @@ jobs:
   terragrunt-destroy-ses_validation_dns_entries:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -546,7 +546,7 @@ jobs:
   terragrunt-destroy-dns:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -575,7 +575,7 @@ jobs:
   terragrunt-destroy-ses_receiving_emails:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-dns,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
@@ -604,7 +604,7 @@ jobs:
   terragrunt-destroy-ecr:
     if: |
       always() &&
-      !contains(needs.*.result, 'failure') &&
+
       !contains(needs.*.result, 'cancelled')
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-ses_receiving_emails,terragrunt-destroy-dns,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
     runs-on: ubuntu-latest  
