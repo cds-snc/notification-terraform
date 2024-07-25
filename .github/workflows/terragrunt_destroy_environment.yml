@@ -632,6 +632,9 @@ jobs:
 
 
   terragrunt-destroy-common:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-ecr,terragrunt-destroy-ses_receiving_emails,terragrunt-destroy-dns,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
 
