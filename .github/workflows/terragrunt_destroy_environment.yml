@@ -44,7 +44,7 @@ jobs:
         run: |
           cd env/dev/newrelic
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
 
   terragrunt-destroy-system_status_static_site:
@@ -74,7 +74,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/system_status_static_site
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-system_status:
     if: |
@@ -103,7 +103,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/system_status
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-pinpoint_to_sqs_sms_callbacks:
     if: |
@@ -132,7 +132,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/pinpoint_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-sns_to_sqs_sms_callbacks:
     if: |
@@ -161,7 +161,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/sns_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-ses_to_sqs_email_callbacks:
     if: |
@@ -190,7 +190,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ses_to_sqs_email_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-lambda-google-cidr:
     if: |
@@ -219,7 +219,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/lambda-google-cidr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-quicksight:
     if: |
@@ -249,7 +249,7 @@ jobs:
           aws quicksight delete-vpc-connection --aws-account-id 800095993820 --vpc-connection-id $(aws quicksight list-vpc-connections --aws-account-id 800095993820 --query 'VPCConnectionSummaries[].VPCConnectionId' --output text)
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/quicksight
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
 
   terragrunt-destroy-database-tools:
@@ -279,7 +279,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/database-tools
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
 
   terragrunt-destroy-lambda-admin-pr:
@@ -309,7 +309,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/lambda-admin-pr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-heartbeat:
     if: |
@@ -337,7 +337,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/heartbeat
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-rds:
     if: |
@@ -366,7 +366,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/rds
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
 
   terragrunt-destroy-performance-test:
@@ -396,7 +396,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/performance-test
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-lambda-api:
     if: |
@@ -425,7 +425,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/lambda-api
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-elasticache:
     if: |
@@ -454,7 +454,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/elasticache
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-eks:
     if: |
@@ -483,7 +483,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/eks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-cloudfront:
     if: |
@@ -512,7 +512,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/cloudfront
-          terragrunt destroy --terragrunt-non-interactive -auto-approve 
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve 
 
   terragrunt-destroy-ses_validation_dns_entries:
     if: |
@@ -541,7 +541,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ses_validation_dns_entries
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-dns:
     if: |
@@ -570,7 +570,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/dns
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-ses_receiving_emails:
     if: |
@@ -599,7 +599,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ses_receiving_emails
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-destroy-ecr:
     if: |
@@ -628,7 +628,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ecr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
 
   terragrunt-destroy-common:
@@ -653,4 +653,4 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/common
-          terragrunt destroy --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
