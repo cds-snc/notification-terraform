@@ -2,8 +2,8 @@ data "newrelic_entity" "notification-api-lambda" {
   name     = "api-lambda"
   provider = newrelic
   tag {
-    key   = "env"
-    value = var.env
+    key   = "aws.accountId"
+    value = var.account_id
   }
 }
 
