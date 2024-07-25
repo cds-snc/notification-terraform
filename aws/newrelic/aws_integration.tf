@@ -199,7 +199,7 @@ EOF
 }
 
 resource "aws_cloudwatch_metric_stream" "newrelic_metric_stream" {
-  count         = var.env == "staging" ? 1 : 0
+  count         = 0
   name          = "newrelic-metric-stream-${var.env}"
   role_arn      = aws_iam_role.metric_stream_to_firehose[0].arn
   firehose_arn  = aws_kinesis_firehose_delivery_stream.newrelic_firehose_stream[0].arn
@@ -216,7 +216,7 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_pull" {
 }
 
 resource "newrelic_cloud_aws_integrations" "newrelic_cloud_integration_pull" {
-  count             = var.env == "staging" ? 1 : 0
+  count             = 0
   account_id        = var.new_relic_account_id
   linked_account_id = newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0].id
   billing {}
@@ -334,12 +334,5 @@ resource "aws_config_configuration_recorder_status" "newrelic_recorder_status" {
   count      = var.env == "staging" ? 1 : 0
   name       = var.aws_config_recorder_name
   is_enabled = true
-  depends_on = [aws_config_delivery_channel.newrelic_recorder_delivery]
 }
 
-resource "aws_config_delivery_channel" "newrelic_recorder_delivery" {
-  count          = var.env == "staging" ? 1 : 0
-  name           = "newrelic_configuration_recorder-${var.env}"
-  s3_bucket_name = aws_s3_bucket.newrelic_configuration_recorder_s3[0].bucket
-
-}
