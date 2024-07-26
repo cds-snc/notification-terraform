@@ -246,7 +246,7 @@ jobs:
 
       - name: terragrunt destroy quicksight
         run: |
-          aws quicksight delete-vpc-connection --aws-account-id 800095993820 --vpc-connection-id $(aws quicksight list-vpc-connections --aws-account-id 800095993820 --query 'VPCConnectionSummaries[].VPCConnectionId' --output text)
+          aws quicksight delete-vpc-connection --aws-account-id 800095993820 --vpc-connection-id $(aws quicksight list-vpc-connections --aws-account-id 800095993820 --query 'VPCConnectionSummaries[].VPCConnectionId' --output text) || true
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/quicksight
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve

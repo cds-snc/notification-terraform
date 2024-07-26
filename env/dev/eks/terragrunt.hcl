@@ -64,6 +64,7 @@ dependency "dns" {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = ""
     internal_dns_name = ""
+    route53_zone_id = ""
   }
 }
 
@@ -126,6 +127,7 @@ inputs = {
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
+  route53_zone_id                           = dependency.dns.outputs.route53_zone_id
   
 }
 
