@@ -18,7 +18,7 @@ data "newrelic_entity" "notification-admin" {
 
 data "newrelic_entity" "notification-api-k8s" {
   count = var.enable_new_relic ? 1 : 0
-  
+
   name     = "notification-api-${var.env}"
   provider = newrelic
 }
