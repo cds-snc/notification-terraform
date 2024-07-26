@@ -459,7 +459,7 @@ POLICY
 
 #XRAY IAM
 resource "aws_iam_role" "nodes_k8s_role" {
-  name = "nodes.k8s.cluster.${var.env}"
+  name = "nodes.k8s.cluster.local"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -475,7 +475,7 @@ resource "aws_iam_role" "nodes_k8s_role" {
 }
 
 resource "aws_iam_instance_profile" "nodes_k8s_instance_profile" {
-  name = "nodes.k8s.cluster.${var.env}"
+  name = "nodes.k8s.cluster.local"
   role = aws_iam_role.nodes_k8s_role.name
 }
 
@@ -492,7 +492,7 @@ resource "aws_iam_policy" "xray_policy" {
           "xray:PutTelemetryRecords"
         ]
         Resource = [
-          "arn:aws:iam::${var.account_id}:instance-profile/nodes.k8s.cluster.${var.env}"
+          "arn:aws:iam::${var.account_id}:instance-profile/nodes.k8s.cluster.local"
         ]
       }
     ]
