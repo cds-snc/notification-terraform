@@ -1,13 +1,15 @@
 resource "newrelic_nrql_alert_condition" "admin_error_percentage" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Admin] Error percentage"
   enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.application_id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin[0].application_id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
@@ -31,15 +33,17 @@ resource "newrelic_nrql_alert_condition" "admin_error_percentage" {
 }
 
 resource "newrelic_nrql_alert_condition" "admin_response_time" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Admin] Response time"
   enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin.application_id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-admin[0].application_id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
@@ -63,15 +67,17 @@ resource "newrelic_nrql_alert_condition" "admin_response_time" {
 }
 
 resource "newrelic_nrql_alert_condition" "k8s_api_error_percentage" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[k8s API] Error percentage"
   enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.application_id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT ((filter(count(newrelic.timeslice.value), where metricTimesliceName = 'Errors/all') / filter(count(newrelic.timeslice.value), WHERE metricTimesliceName IN ('HttpDispatcher', 'OtherTransaction/all'))) OR 0) * 100 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s[0].application_id}) AND metricTimesliceName IN ('Errors/all', 'HttpDispatcher', 'OtherTransaction/all', 'Agent/MetricsReported/count') FACET appId"
   }
 
   warning {
@@ -95,15 +101,17 @@ resource "newrelic_nrql_alert_condition" "k8s_api_error_percentage" {
 }
 
 resource "newrelic_nrql_alert_condition" "k8s_api_response_time" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[k8s API] Response time"
   enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.application_id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'HttpDispatcher') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s[0].application_id}) AND metricTimesliceName IN ('HttpDispatcher', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
@@ -127,15 +135,17 @@ resource "newrelic_nrql_alert_condition" "k8s_api_response_time" {
 }
 
 resource "newrelic_nrql_alert_condition" "k8s_api_transaction_database_time" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "baseline"
   name                         = "[k8s API] Transaction database time"
   enabled                      = true
   violation_time_limit_seconds = 259200
 
   nrql {
-    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'Datastore/all') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s.application_id}) AND metricTimesliceName IN ('Datastore/all', 'Agent/MetricsReported/count') FACET appId"
+    query = "SELECT filter(average(newrelic.timeslice.value), WHERE metricTimesliceName = 'Datastore/all') OR 0 FROM Metric WHERE appId IN (${data.newrelic_entity.notification-api-k8s[0].application_id}) AND metricTimesliceName IN ('Datastore/all', 'Agent/MetricsReported/count') FACET appId"
   }
 
   critical {
@@ -161,15 +171,17 @@ resource "newrelic_nrql_alert_condition" "k8s_api_transaction_database_time" {
 
 
 resource "newrelic_nrql_alert_condition" "external_services_callbacks_over_5_seconds_duration" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy[0].id
   type       = "static"
   name       = "[External Services / Callbacks] Over 5 seconds duration"
 
   description = <<-EOT
   An API callback has a duration over 5 seconds. This has the potential to slow down the overall Celery processing of neighbors tasks such as database saving. Please investigate which service callback might be higher than the threshold and contact the service owner to look into the issue. If they cannot resolve in a timely manner, please remove their service's API URL callback. 
 
-  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda.guid}?account=${var.new_relic_account_id}
+  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
   EOT
 
   enabled                      = true
@@ -192,15 +204,17 @@ resource "newrelic_nrql_alert_condition" "external_services_callbacks_over_5_sec
 }
 
 resource "newrelic_nrql_alert_condition" "internal_services_awsnotify_over_5_seconds_duration" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy[0].id
   type       = "static"
   name       = "[Internal Services / AWS+Notify] Over 5 seconds duration"
 
   description = <<-EOT
   An API callback has a duration over 5 seconds. This has the potential to slow down the overall Celery processing of neighbors tasks such as database saving. Please investigate which service callback might be higher than the threshold and contact the service owner to look into the issue. If they cannot resolve in a timely manner, please remove their service's API URL callback. 
 
-  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda.guid}?account=${var.new_relic_account_id}
+  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
   EOT
 
   enabled                      = true
@@ -223,15 +237,17 @@ resource "newrelic_nrql_alert_condition" "internal_services_awsnotify_over_5_sec
 }
 
 resource "newrelic_nrql_alert_condition" "lambda_api_error_count_anomaly_fuzzy_attack" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "baseline"
   name                         = "[Lambda API] Error count anomaly (Fuzzy attack)"
   enabled                      = false
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda.guid}') AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
+    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}') AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
   }
 
   critical {
@@ -255,15 +271,17 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_count_anomaly_fuzzy_a
 }
 
 resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_api_user_errors" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Lambda API] Error percentage (API User Errors)"
   enabled                      = true
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda.guid}' AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
   }
 
   critical {
@@ -289,15 +307,17 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_api_user_e
 }
 
 resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_attack" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Lambda API] Error percentage (Fuzzy attack)"
   enabled                      = false
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda.guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
   }
 
   warning {
@@ -316,8 +336,10 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_atta
 }
 
 resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_attack_anomaly_detection" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id = var.new_relic_account_id
-  policy_id  = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id  = newrelic_alert_policy.terraform_notify_policy[0].id
   type       = "baseline"
   name       = "[Lambda API] Error percentage (Fuzzy attack) (Anomaly Detection)"
 
@@ -329,7 +351,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_atta
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda.guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
   }
 
   critical {
@@ -349,15 +371,17 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_atta
 }
 
 resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_unexpected_errors" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Lambda API] Error percentage (Unexpected Errors)"
   enabled                      = true
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda.guid}' AND `error.class` NOT IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` NOT IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
   }
 
   critical {
@@ -383,15 +407,17 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_unexpected
 }
 
 resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_api_user_errors" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "baseline"
   name                         = "[Lambda API] Errors count anomaly (API User Errors)"
   enabled                      = true
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda.guid}') AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
+    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}') AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
   }
 
   critical {
@@ -415,15 +441,17 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_api_us
 }
 
 resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_unexpected_errors" {
+  count = var.enable_new_relic ? 1 : 0
+
   account_id                   = var.new_relic_account_id
-  policy_id                    = newrelic_alert_policy.terraform_notify_policy.id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "baseline"
   name                         = "[Lambda API] Errors count anomaly (Unexpected Errors)"
   enabled                      = true
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda.guid}') and error.class NOT IN ('app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'app.authentication.auth:AuthError', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
+    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}') and error.class NOT IN ('app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'app.authentication.auth:AuthError', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
   }
 
   critical {

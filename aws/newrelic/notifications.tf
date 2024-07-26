@@ -1,4 +1,6 @@
 resource "newrelic_notification_destination" "terraform_notify_destination" {
+  count              = var.enable_new_relic && var.env == "staging" ? 1 : 0
+
   account_id = var.new_relic_account_id
   active     = true
   name       = "Notify Slack Destination - ${var.env}"
@@ -11,9 +13,11 @@ resource "newrelic_notification_destination" "terraform_notify_destination" {
 }
 
 resource "newrelic_notification_channel" "terraform_notify_channel" {
+  count              = var.enable_new_relic && var.env == "staging" ? 1 : 0
+
   name           = "Notify Slack Channel - ${var.env}"
   type           = "SLACK_LEGACY"
-  destination_id = newrelic_notification_destination.terraform_notify_destination.id
+  destination_id = newrelic_notification_destination.terraform_notify_destination[0].id
   product        = "IINT"
 
   property {
@@ -24,6 +28,8 @@ resource "newrelic_notification_channel" "terraform_notify_channel" {
 }
 
 resource "newrelic_workflow" "terraform_notify_workflow" {
+  count              = var.enable_new_relic && var.env == "staging" ? 1 : 0
+
   name                  = "Notify Workflow - ${var.env}"
   account_id            = var.new_relic_account_id
   enabled               = true
@@ -32,7 +38,7 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
 
 
   destination {
-    channel_id = newrelic_notification_channel.terraform_notify_channel.id
+    channel_id = newrelic_notification_channel.terraform_notify_channel[0].id
     notification_triggers = [
       "ACKNOWLEDGED",
       "ACTIVATED",
@@ -48,7 +54,7 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
       attribute = "labels.policyIds"
       operator  = "EXACTLY_MATCHES"
       values = [
-        newrelic_alert_policy.terraform_notify_policy.id
+        newrelic_alert_policy.terraform_notify_policy[0].id
       ]
     }
     predicate {
