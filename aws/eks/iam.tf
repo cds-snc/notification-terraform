@@ -456,3 +456,50 @@ resource "aws_iam_policy" "ebs_driver" {
 }
 POLICY
 }
+
+#XRAY IAM
+resource "aws_iam_role" "nodes_k8s_role" {
+  name = "nodes.k8s.cluster.${var.env}"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_instance_profile" "nodes_k8s_instance_profile" {
+  name = "nodes.k8s.cluster.${var.env}"
+  role = aws_iam_role.nodes_k8s_role.name
+}
+
+resource "aws_iam_policy" "xray_policy" {
+  name        = "XRayPolicy"
+  description = "Policy to allow XRay tracing"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords"
+        ]
+        Resource = [
+          "arn:aws:iam::${var.account_id}:instance-profile/nodes.k8s.cluster.${var.env}"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_xray_policy" {
+  role       = aws_iam_role.eks-worker-role.name
+  policy_arn = aws_iam_policy.xray_policy.arn
+}
