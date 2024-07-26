@@ -10,6 +10,7 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
+    vpc_id                                  = "vpc-028dc6d810c3c699a"
   }
 }
 
@@ -35,7 +36,6 @@ inputs = {
   vpc_id                                  = dependency.common.outputs.vpc_id
   ses_custom_sending_domains              = ["custom-sending-domain.dev.notification.cdssandbox.xyz"]
   lambda_ses_receiving_emails_image_arn   = dependency.ses_receiving_emails.outputs.lambda_ses_receiving_emails_image_arn
-  route53_zone_id                         = dependency.dns.outputs.route53_zone_id
 }
 
 terraform {

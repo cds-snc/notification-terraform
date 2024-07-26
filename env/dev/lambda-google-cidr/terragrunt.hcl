@@ -5,6 +5,7 @@ dependencies {
 dependency "common" {
   config_path = "../common"
   mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
+  skip_outputs = true
 }
 
 
