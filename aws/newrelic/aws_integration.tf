@@ -67,7 +67,7 @@ EOF
 resource "aws_iam_role_policy_attachment" "newrelic_aws_policy_attach" {
   count      = var.env == "staging" ? 1 : 0
   role       = aws_iam_role.newrelic_aws_role[0].name
-  policy_arn = aws_iam_policy.newrelic_aws_permissions[0].arn
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_push" {
