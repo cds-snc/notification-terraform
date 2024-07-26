@@ -161,7 +161,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/sns_to_sqs_sms_callbacks
-          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve -refresh=false
 
   terragrunt-destroy-ses_to_sqs_email_callbacks:
     if: |
@@ -246,7 +246,6 @@ jobs:
 
       - name: terragrunt destroy quicksight
         run: |
-          aws quicksight delete-vpc-connection --aws-account-id 800095993820 --vpc-connection-id $(aws quicksight list-vpc-connections --aws-account-id 800095993820 --query 'VPCConnectionSummaries[].VPCConnectionId' --output text) 2> /dev/null
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/quicksight
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
