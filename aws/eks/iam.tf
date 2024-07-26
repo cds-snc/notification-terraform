@@ -482,12 +482,12 @@ resource "aws_iam_instance_profile" "nodes_k8s_instance_profile" {
 resource "aws_iam_policy" "xray_policy" {
   name        = "XRayPolicy"
   description = "Policy to allow XRay tracing"
-  policy      = jsonencode({
+  policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = [
+        Effect = "Allow"
+        Action = [
           "xray:PutTraceSegments",
           "xray:PutTelemetryRecords"
         ]
