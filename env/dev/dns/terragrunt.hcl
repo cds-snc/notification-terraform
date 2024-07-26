@@ -10,7 +10,7 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
-    vpc_id                                  = ""
+    vpc_id                                  = "vpc-028dc6d810c3c699a"
   }
 }
 

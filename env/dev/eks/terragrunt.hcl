@@ -51,6 +51,7 @@ dependency "common" {
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    vpc_id = "vpc-028dc6d810c3c699a" 
   }
 }
 
