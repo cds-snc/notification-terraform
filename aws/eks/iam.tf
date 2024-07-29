@@ -459,7 +459,7 @@ POLICY
 
 #XRAY IAM
 resource "aws_iam_role" "xray_daemon_role" {
-  name = "xray_daemon_role"
+  name = "xray-daemon-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -475,7 +475,7 @@ resource "aws_iam_role" "xray_daemon_role" {
   })
 
   tags = {
-    Name = "xray_daemon_role"
+    Name = "xray-daemon-role"
   }
 }
 
@@ -485,6 +485,6 @@ resource "aws_iam_role_policy_attachment" "xray_daemon_policy_attachment" {
 }
 
 resource "aws_iam_instance_profile" "xray_daemon_instance_profile" {
-  name = "xray_daemon_instance_profile"
+  name = "xray-daemon-instance-profile"
   role = aws_iam_role.xray_daemon_role.name
 }
