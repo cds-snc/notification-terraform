@@ -458,48 +458,33 @@ POLICY
 }
 
 #XRAY IAM
-resource "aws_iam_role" "nodes_k8s_role" {
-  name = "nodes.k8s.cluster.local"
+resource "aws_iam_role" "xray_daemon_role" {
+  name = "xray-daemon-role"
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
+        Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "ec2.amazonaws.com"
+          Service = "eks.amazonaws.com"
         }
-        Action = "sts:AssumeRole"
-      }
+      },
     ]
   })
+
+  tags = {
+    Name = "xray-daemon-role"
+  }
 }
 
-resource "aws_iam_instance_profile" "nodes_k8s_instance_profile" {
-  name = "nodes.k8s.cluster.local"
-  role = aws_iam_role.nodes_k8s_role.name
+resource "aws_iam_role_policy_attachment" "xray_daemon_policy_attachment" {
+  role       = aws_iam_role.xray_daemon_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
 }
 
-resource "aws_iam_policy" "xray_policy" {
-  name        = "XRayPolicy"
-  description = "Policy to allow XRay tracing"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "xray:PutTraceSegments",
-          "xray:PutTelemetryRecords"
-        ]
-        Resource = [
-          "arn:aws:iam::${var.account_id}:instance-profile/nodes.k8s.cluster.local"
-        ]
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "attach_xray_policy" {
-  role       = aws_iam_role.eks-worker-role.name
-  policy_arn = aws_iam_policy.xray_policy.arn
+resource "aws_iam_instance_profile" "xray_daemon_instance_profile" {
+  name = "xray-daemon-instance-profile"
+  role = aws_iam_role.xray_daemon_role.name
 }
