@@ -472,7 +472,7 @@ resource "aws_iam_role" "xray_daemon_role" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "${aws_iam_openid_connect_provider.notification-canada-ca.arn}:sub": ["sts.amazonaws.com"]
+            "${aws_iam_openid_connect_provider.notification-canada-ca.arn}:sub" : ["sts.amazonaws.com"]
           }
         }
       }
