@@ -456,3 +456,40 @@ resource "aws_iam_policy" "ebs_driver" {
 }
 POLICY
 }
+
+#XRAY IAM
+resource "aws_iam_role" "xray_daemon_role" {
+  name = "xray-daemon-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = "arn:aws:iam::${var.account_id}:oidc-provider/${aws_iam_openid_connect_provider.notification-canada-ca.arn}"
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "${aws_iam_openid_connect_provider.notification-canada-ca.arn}:sub" : ["sts.amazonaws.com"]
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "xray-daemon-role"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "xray_daemon_policy_attachment" {
+  role       = aws_iam_role.xray_daemon_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
+}
+
+resource "aws_iam_instance_profile" "xray_daemon_instance_profile" {
+  name = "xray-daemon-instance-profile"
+  role = aws_iam_role.xray_daemon_role.name
+}

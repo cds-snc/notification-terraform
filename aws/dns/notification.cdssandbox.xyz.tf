@@ -6,7 +6,7 @@ resource "aws_route53_zone" "notification-sandbox" {
 resource "aws_route53_record" "notification-sandbox-MX" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = var.domain
   type     = "MX"
   ttl      = "300"
@@ -16,7 +16,7 @@ resource "aws_route53_record" "notification-sandbox-MX" {
 resource "aws_route53_record" "bounce-notification-sandbox-MX" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = "bounce.${var.domain}"
   type     = "MX"
   ttl      = "300"
@@ -26,7 +26,7 @@ resource "aws_route53_record" "bounce-notification-sandbox-MX" {
 resource "aws_route53_record" "bounce-custom-notification-sandbox-MX" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = "bounce.custom-sending-domain.${var.domain}"
   type     = "MX"
   ttl      = "300"
@@ -36,7 +36,7 @@ resource "aws_route53_record" "bounce-custom-notification-sandbox-MX" {
 resource "aws_route53_record" "ses-notification-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = "_amazonses.${var.domain}"
   type     = "TXT"
   ttl      = "300"
@@ -48,7 +48,7 @@ resource "aws_route53_record" "ses-notification-sandbox-TXT" {
 resource "aws_route53_record" "dmarc-notification-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = "_dmarc.${var.domain}"
   type     = "TXT"
   ttl      = "300"
@@ -58,7 +58,7 @@ resource "aws_route53_record" "dmarc-notification-sandbox-TXT" {
 resource "aws_route53_record" "notification-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = var.domain
   type     = "TXT"
   ttl      = "300"
@@ -70,7 +70,7 @@ resource "aws_route53_record" "notification-sandbox-TXT" {
 resource "aws_route53_record" "bounce-notification-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = "bounce.${var.domain}"
   type     = "TXT"
   ttl      = "300"
@@ -79,7 +79,7 @@ resource "aws_route53_record" "bounce-notification-sandbox-TXT" {
 
 resource "aws_route53_record" "custom-domain-aws-ses-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   provider = aws.dns
   name     = "_amazonses.custom-sending-domain.${var.domain}"
   type     = "TXT"
@@ -90,7 +90,7 @@ resource "aws_route53_record" "custom-domain-aws-ses-sandbox-TXT" {
 resource "aws_route53_record" "custom-domain-ses-sandbox-TXT" {
   count    = var.env == "production" ? 0 : 1
   provider = aws.dns
-  zone_id  = var.route_53_zone_arn
+  zone_id  = aws_route53_zone.notification-sandbox[0].zone_id
   name     = "custom-sending-domain.${var.domain}"
   type     = "TXT"
   ttl      = "300"

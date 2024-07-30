@@ -17,9 +17,10 @@ defaults:
     shell: bash
 
 env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ca-central-1
+  TF_VAR_new_relic_api_key: ${{ secrets.STAGING_NEW_RELIC_API_KEY }}
+  TF_VAR_new_relic_account_id: ${{ secrets.STAGING_NEW_RELIC_ACCOUNT_ID }}
+  TF_VAR_new_relic_slack_webhook_url: ${{ secrets.STAGING_NEW_RELIC_SLACK_WEBHOOK_URL }}
   TF_VAR_base_domain: ${{secrets.STAGING_BASE_DOMAIN}}
   TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
   TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
@@ -61,139 +62,527 @@ env:
   TF_VAR_budget_sre_bot_webhook: ${{ secrets.STAGING_BUDGET_SRE_BOT_WEBHOOK }}
   TF_VAR_enable_sentinel_forwarding: true
 
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
 jobs:
-  terraform-apply:
-    runs-on: ubuntu-latest
+  
+  terragrunt-apply-common:
+    runs-on: ubuntu-latest  
 
     steps:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: ./.github/actions/setup-terraform
         with:
-          # Fetches entire history, so we can analyze commits since last tag
-          fetch-depth: 0
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply
 
-      - name: Set environment variables
-        uses: ./.github/actions/setvars
-        with:
-          envVarFile: ./.env
-
-      - name: Setup Terraform tools
-        uses: cds-snc/terraform-tools-setup@v1
-        env: # In case you want to override default versions
-            CONFTEST_VERSION: 0.30.0 
-            TERRAFORM_VERSION: 1.6.2
-            TERRAGRUNT_VERSION: 0.44.4
-            TF_SUMMARIZE_VERSION: 0.2.3
-
-      - name: Apply aws/common
+      - name: Terragrunt apply common
         run: |
           cd env/staging/common
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/ecr
+  terragrunt-apply-ecr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply ECR
         run: |
           cd env/staging/ecr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/ses_receiving_emails
+  terragrunt-apply-ses_receiving_emails:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply ses_receiving_emails
         run: |
           cd env/staging/ses_receiving_emails
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/dns
+  terragrunt-apply-dns:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ses_receiving_emails]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply            
+
+      - name: Terragrunt apply dns
         run: |
           cd env/staging/dns
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/ses_validation_dns_entries
+  terragrunt-apply-ses_validation_dns_entries:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-dns]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply ses_validation_dns_entries
         run: |
           cd env/staging/ses_validation_dns_entries
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/cloudfront
+
+  terragrunt-apply-cloudfront:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply cloudfront
         run: |
           cd env/staging/cloudfront
-          terragrunt apply --terragrunt-non-interactive -auto-approve          
+          terragrunt apply --terragrunt-non-interactive -auto-approve 
 
-      - name: Apply aws/eks
+  terragrunt-apply-eks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-dns,terragrunt-apply-cloudfront]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply           
+
+      - name: Terragrunt apply eks
         run: |
           cd env/staging/eks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/elasticache
+  terragrunt-apply-elasticache:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply elasticache
         run: |
           cd env/staging/elasticache
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/rds
+  terragrunt-apply-rds:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply rds
         run: |
           cd env/staging/rds
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/lambda-api
+  terragrunt-apply-lambda-api:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr,terragrunt-apply-rds]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply lambda-api
         run: |
           cd env/staging/lambda-api
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/lambda-admin-pr
+  terragrunt-apply-lambda-admin-pr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-elasticache,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply lambda-admin-pr
         run: |
           cd env/staging/lambda-admin-pr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/performance-test
+  terragrunt-apply-performance-test:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply           
+
+      - name: Terragrunt apply performance-test
         run: |
           cd env/staging/performance-test
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/heartbeat
+  terragrunt-apply-heartbeat:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply heartbeat
         run: |
           cd env/staging/heartbeat
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/database-tools
+  terragrunt-apply-database-tools:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply          
+
+      - name: Terragrunt apply database-tools
         run: |
           cd env/staging/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/quicksight
+  terragrunt-apply-quicksight:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply                  
+
+      - name: Terragrunt apply quicksight
         run: |
           cd env/staging/quicksight
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/lambda-google-cidr
+  terragrunt-apply-lambda-google-cidr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply lambda-google-cidr
         run: |
           cd env/staging/lambda-google-cidr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/ses_to_sqs_email_callbacks
+  terragrunt-apply-ses_to_sqs_email_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply ses_to_sqs_email_callbacks
         run: |
           cd env/staging/ses_to_sqs_email_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/sns_to_sqs_sms_callbacks
+  terragrunt-apply-sns_to_sqs_sms_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply sns_to_sqs_sms_callbacks
         run: |
           cd env/staging/sns_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/pinpoint_to_sqs_sms_callbacks
+  terragrunt-apply-pinpoint_to_sqs_sms_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply pinpoint_to_sqs_sms_callbacks
         run: |
           cd env/staging/pinpoint_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/system_status
+  terragrunt-apply-system_status:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-rds,terragrunt-apply-eks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply system_status
         run: |
           cd env/staging/system_status
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Apply aws/system_status_static_site
+  terragrunt-apply-system_status_static_site:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-common,terragrunt-apply-system_status]
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply         
+
+      - name: Terragrunt apply aws/system_status_static_site
         run: |
           cd env/staging/system_status_static_site
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-      - name: Bump version and push tag
-        if: github.event_name != 'workflow_dispatch' # We don't want to tag new versions when launched via workflow_dispatch since only environment variables changed
+  terragrunt-apply-newrelic:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-common]
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Terragrunt apply aws/newrelic
+        run: |
+          cd env/staging/newrelic
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
+  bump-version-and-push-tag:
+    if: |
+        always() &&
+        github.event_name != 'workflow_dispatch' &&
+        !contains(needs.*.result, 'failure') &&
+        !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-dns,terragrunt-apply-ses_validation_dns_entries,terragrunt-apply-cloudfront,terragrunt-apply-eks,terragrunt-apply-elasticache,terragrunt-apply-rds,terragrunt-apply-lambda-api,terragrunt-apply-lambda-admin-pr,terragrunt-apply-performance-test,terragrunt-apply-heartbeat,terragrunt-apply-database-tools,terragrunt-apply-quicksight,terragrunt-apply-lambda-google-cidr,terragrunt-apply-ses_to_sqs_email_callbacks,terragrunt-apply-sns_to_sqs_sms_callbacks,terragrunt-apply-pinpoint_to_sqs_sms_callbacks,terragrunt-apply-system_status,terragrunt-apply-ses_receiving_emails,terragrunt-apply-system_status_static_site,terragrunt-apply-newrelic]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: bump-version-and-push-tag
         uses: mathieudutour/github-tag-action@bcb832838e1612ff92089d914bccc0fd39458223 # v4.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: main
-          
+          release_branches: main          

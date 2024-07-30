@@ -35,6 +35,7 @@ inputs = {
   vpc_id                                  = dependency.common.outputs.vpc_id
   ses_custom_sending_domains              = ["custom-sending-domain.dev.notification.cdssandbox.xyz"]
   lambda_ses_receiving_emails_image_arn   = dependency.ses_receiving_emails.outputs.lambda_ses_receiving_emails_image_arn
+  route53_zone_id                         = dependency.dns.outputs.route53_zone_id
 }
 
 terraform {

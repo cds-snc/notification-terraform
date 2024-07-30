@@ -55,8 +55,8 @@ resource "aws_route53_record" "notification-canada-ca" {
   name            = each.value.name
   records         = [each.value.record]
   type            = each.value.type
-  ttl             = 60
-  zone_id         = var.route_53_zone_arn
+  ttl             = 300
+  zone_id         = var.route53_zone_id
 
 }
 
@@ -88,7 +88,7 @@ resource "aws_route53_record" "notification-canada-ca-alt" {
   records         = [each.value.record]
   type            = each.value.type
   ttl             = 60
-  zone_id         = var.route_53_zone_arn
+  zone_id         = var.route53_zone_id
 
 }
 

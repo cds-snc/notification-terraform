@@ -21,7 +21,7 @@ resource "aws_route53_record" "assets-notification-canada-ca" {
   name            = tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_name
   records         = [tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_value]
   type            = tolist(aws_acm_certificate.assets-notification-canada-ca.domain_validation_options)[0].resource_record_type
-  zone_id         = var.route_53_zone_arn
+  zone_id         = var.route53_zone_id
   ttl             = 60
 }
 

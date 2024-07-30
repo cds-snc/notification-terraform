@@ -118,10 +118,9 @@ variable "eks_application_log_group" {
   type        = string
 }
 
-variable "route_53_zone_arn" {
+variable "route53_zone_id" {
   type        = string
   description = "Used by the scratch environment to reference cdssandbox in staging"
-  default     = "/hostedzone/Z04028033PLSHVOO9ZJ1Z"
 }
 
 variable "api_lambda_ecr_arn" {

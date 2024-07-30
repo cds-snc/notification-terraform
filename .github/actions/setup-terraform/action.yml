@@ -1,0 +1,54 @@
+name: "setup-terraform"
+
+on:
+  workflow_call:
+    inputs:
+      role_to_assume:
+        description: The roll to assume when configuring AWS credentials
+        required: true
+        type: string
+      role_session_name:
+        description: The name of the session when configuring AWS credentials
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+    - name: Set environment variables
+      uses: ./.github/actions/setvars
+      with:
+        envVarFile: ./.env
+
+    - name: Setup Terraform tools
+      uses: cds-snc/terraform-tools-setup@v1
+      env: # In case you want to override default versions
+          CONFTEST_VERSION: 0.30.0 
+          TERRAFORM_VERSION: 1.6.2
+          TERRAGRUNT_VERSION: 0.44.4
+          TF_SUMMARIZE_VERSION: 0.2.3                    
+
+    - name: Setup Infrastructure Version
+      # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure
+      # to a new version in production
+      # See https://github.com/cds-snc/notification-terraform/releases
+      # We will always do this, but staging will ignore it.
+      run: |
+        INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
+        echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Configure credentials to Notify account using OIDC
+      uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+      with:
+        role-to-assume: ${{ inputs.role_to_assume }}
+        role-session-name: ${{ inputs.role_session_name }}
+        aws-region: "ca-central-1"

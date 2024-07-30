@@ -107,6 +107,15 @@ data "aws_iam_policy_document" "api_policies" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "api" {

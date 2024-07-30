@@ -3,7 +3,7 @@ locals {
   # dns_role is very fragile - if not set exactly as below, terraform fmt will fail in github actions.
   # This is required for the dynamic provider for DNS configuration. In staging and production, no role assumption is required,
   # so this will be empty. In scratch/dynamic environments, role assumption is required.
-  dns_role           = local.vars.inputs.env == "production" || local.vars.inputs.env == "staging" ? "" : "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }"
+  dns_role           = local.vars.inputs.env == "staging" ? "" : (local.vars.inputs.env == "production" ? "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/notify_prod_dns_manager\"\n  }" :  "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }")
   
 }
 
@@ -16,13 +16,14 @@ inputs = {
   log_retention_period_days             = local.vars.inputs.log_retention_period_days
   sensitive_log_retention_period_days   = local.vars.inputs.sensitive_log_retention_period_days
   account_budget_limit                  = local.vars.inputs.account_budget_limit
+
   
   region             = "ca-central-1"
   # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
   elb_account_ids = {
     "ca-central-1" = "985666609251"
   }
-  new_relic_account_id      = "2691974"
+  
   cbs_satellite_bucket_name = "cbs-satellite-${local.vars.inputs.account_id}"
 }
 
@@ -50,8 +51,11 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0"
     }
+    newrelic = {
+      source  = "newrelic/newrelic"
+      version = "~> 3.3"
+    }
   }
-
 }
 
 provider "aws" {
@@ -83,8 +87,6 @@ provider "aws" {
     role_arn = "arn:aws:iam::239043911459:role/${local.vars.inputs.env}_dns_manager_role"
   }
 }
-
-
 
 EOF
 }
