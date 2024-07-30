@@ -465,7 +465,6 @@ resource "aws_iam_role" "xray_daemon_role" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
           Federated = "arn:aws:iam::${var.account_id}:oidc-provider/${aws_iam_openid_connect_provider.notification-canada-ca.arn}"
@@ -477,9 +476,6 @@ resource "aws_iam_role" "xray_daemon_role" {
           }
         }
       }
-          Service = "eks.amazonaws.com"
-        }
-      },
     ]
   })
 
