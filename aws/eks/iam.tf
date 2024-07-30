@@ -467,12 +467,12 @@ resource "aws_iam_role" "xray_daemon_role" {
       {
         Effect = "Allow"
         Principal = {
-          Federated = "arn:aws:iam::${var.account_id}:oidc-provider/${aws_iam_openid_connect_provider.notification-canada-ca.arn}"
+          Federated = "${aws_iam_openid_connect_provider.notification-canada-ca.arn}"
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "${aws_iam_openid_connect_provider.notification-canada-ca.arn}:aud" : ["sts.amazonaws.com"]
+            "${aws_iam_openid_connect_provider.notification-canada-ca.url}:aud" : ["sts.amazonaws.com"]
           }
         }
       }
