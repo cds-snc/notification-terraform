@@ -4,7 +4,7 @@ echo "Checking if TFVars file exists..."
 if ! [ -f $VARFILE ]
 then
   echo "TFVars file doesn't exist... fetching."
-  exit 1
+  CHECK=false
 else
   echo "TFVars file exists. Checking contents."
   CONTENTS=$(cat $VARFILE)
