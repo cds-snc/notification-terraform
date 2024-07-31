@@ -7,54 +7,65 @@ resource "aws_quicksight_data_set" "services" {
 
   physical_table_map {
     physical_table_map_id = "services"
-    relational_table {
+    custom_sql {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "services"
-      input_columns {
+      sql_query       = <<EOF
+        select s.id, s.created_at, s.updated_at, s.active, count_as_live, 
+               go_live_at, restricted, s.name, organisation_id, o.name as organisation_name,
+               message_limit, rate_limit, sms_daily_limit
+          from services s inner join organisation o on s.organisation_id = o.id
+      EOF
+
+      columns {
         name = "id"
         type = "STRING"
       }
-      input_columns {
+      columns {
         name = "created_at"
         type = "DATETIME"
       }
-      input_columns {
+      columns {
         name = "updated_at"
         type = "DATETIME"
       }
-      input_columns {
+      columns {
         name = "active"
         type = "BOOLEAN"
       }
-      input_columns {
+      columns {
         name = "count_as_live"
         type = "BOOLEAN"
       }
-      input_columns {
+      columns {
         name = "go_live_at"
         type = "DATETIME"
       }
-      input_columns {
+      columns {
         name = "restricted"
         type = "STRING"
       }
-      input_columns {
+      columns {
         name = "name"
         type = "STRING"
       }
-      input_columns {
+      columns {
         name = "organisation_id"
         type = "STRING"
       }
-      input_columns {
+      columns {
+        name = "organisation_name"
+        type = "STRING"
+      }
+      columns {
         name = "message_limit"
         type = "INTEGER"
       }
-      input_columns {
+      columns {
         name = "rate_limit"
         type = "INTEGER"
       }
-      input_columns {
+      columns {
         name = "sms_daily_limit"
         type = "INTEGER"
       }
