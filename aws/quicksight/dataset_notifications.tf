@@ -188,6 +188,30 @@ resource "aws_quicksight_data_set" "notifications" {
         name = "template_version"
         type = "INTEGER"
       }
+      columns {
+        name = "tc_id"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_name_en"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_name_fr"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_email_process_type"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_sms_process_type"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_sms_sending_vehicle"
+        type = "STRING"
+      }
     }
   }
   permissions {
