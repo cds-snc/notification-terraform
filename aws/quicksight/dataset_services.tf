@@ -12,7 +12,7 @@ resource "aws_quicksight_data_set" "services" {
       name            = "services"
       sql_query       = <<EOF
         select s.id, s.created_at, s.updated_at, s.active, count_as_live, 
-               go_live_at, restricted, s.name, organisation_id, o.name,
+               go_live_at, restricted, s.name, organisation_id, o.name as organisation_name,
                message_limit, rate_limit, sms_daily_limit
           from services s inner join organisation o on s.organisation_id = o.id
       EOF
