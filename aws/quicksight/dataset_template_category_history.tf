@@ -6,10 +6,10 @@ resource "aws_quicksight_data_set" "template-category-history" {
   import_mode = "SPICE"
 
   physical_table_map {
-    physical_table_map_id = "services"
+    physical_table_map_id = "tc-usage-history"
     custom_sql {
       data_source_arn = aws_quicksight_data_source.rds.arn
-      name            = "servictemplate-category-historyes"
+      name            = "template-category-history"
       sql_query       = <<EOF
         SELECT 
             from_cat.name_en AS from_category,
@@ -56,7 +56,7 @@ resource "aws_quicksight_data_set" "template-category-history" {
   }
 }
 
-resource "aws_quicksight_refresh_schedule" "services" {
+resource "aws_quicksight_refresh_schedule" "template-category-history" {
   data_set_id = "template-category-history"
   schedule_id = "schedule-template-category-history"
   depends_on  = [aws_quicksight_data_set.template-category-history]
