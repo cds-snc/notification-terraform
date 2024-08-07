@@ -72,7 +72,7 @@ resource "aws_quicksight_data_set" "notifications" {
             tc.sms_process_type as tc_sms_process_type, 
             tc.sms_sending_vehicle as tc_sms_sending_vehicle
           from templates t
-          join template_categories tc on tc.id = t.template_category_id
+          left outer join template_categories tc on tc.id = t.template_category_id
         )
         select
           notification_id, notification_created_at, notification_sent_at, notification_status,
