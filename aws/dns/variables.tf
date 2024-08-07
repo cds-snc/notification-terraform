@@ -20,3 +20,9 @@ variable "vpc_id" {
   type        = string
   description = "Used to associate the internal DNS with the VPC"
 }
+
+variable "bootstrap" {
+  type        = bool
+  description = "Set this to true to use the bootstrap image"
+  default     = false
+}

@@ -18,7 +18,8 @@ resource "aws_secretsmanager_secret_version" "internal_dns_key_base64" {
 }
 
 resource "aws_secretsmanager_secret" "internal_dns_fqdn" {
-  name = "INTERNAL_DNS_FQDN"
+  name                    = "INTERNAL_DNS_FQDN"
+  recovery_window_in_days = var.bootstrap ? 0 : 30
 }
 
 resource "aws_secretsmanager_secret_version" "internal_dns_fqdn" {
