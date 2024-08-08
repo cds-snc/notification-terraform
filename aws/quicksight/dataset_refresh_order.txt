@@ -4,6 +4,8 @@ For example, we refresh the notifications before the services so we can be confi
 
 All times are UTC.
 
+0405 - send_rate
+
 0500 - sms_usage
 
 0510 - notifications (takes about 1.5 hours. Rest of tables are under 5 minutes to refresh)
