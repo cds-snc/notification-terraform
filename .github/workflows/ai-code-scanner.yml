@@ -1,10 +1,10 @@
 name: AI Code Review
 
-on:
-  pull_request:
-    types:
-      - opened
-      - synchronize
+# on:
+#   pull_request:
+#     types:
+#       - opened
+#       - synchronize
 
 jobs:
   ai_code_review:
