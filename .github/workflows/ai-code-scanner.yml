@@ -3,10 +3,8 @@ name: AI Code Review
 on:
     push:
       branches: [ "main" ]
-      paths: ['aws/common/**']
     pull_request:
       branches: [ "main" ]
-      paths: ['aws/common/**']
 
 jobs:
   ai_code_review:
