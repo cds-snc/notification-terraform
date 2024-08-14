@@ -17,7 +17,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: AI Code Review Action
-      uses: freeedcom/ai-codereviewer@v2.7.0
+      uses: freeedcom/ai-codereviewer@8dff11715837750379472ead710753262e2ca65f # 2.7.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
