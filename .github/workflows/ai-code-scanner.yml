@@ -5,14 +5,11 @@ on:
     types:
       - opened
       - synchronize
-permissions: write-all
 
 jobs:
   ai_code_review:
     runs-on: ubuntu-latest
-    defaults:
-        run:
-            working-directory: ./aws/common/variables.tf
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
