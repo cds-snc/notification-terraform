@@ -3,8 +3,10 @@ name: AI Code Review
 on:
     push:
       branches: [ "main" ]
+      paths: ['**/variables.tf']
     pull_request:
       branches: [ "main" ]
+      paths: ['**/variables.tf']
 
 jobs:
   ai_code_review:
