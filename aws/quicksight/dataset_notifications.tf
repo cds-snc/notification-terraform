@@ -60,12 +60,19 @@ resource "aws_quicksight_data_set" "notifications" {
         ),
         template_data as (
           select
-            id as template_id,
-            created_at as template_created_at,
-            name as template_name,
-            updated_at as template_updated_at,
-            version as template_version
-          from templates
+            t.id as template_id,
+            t.created_at as template_created_at,
+            t.name as template_name,
+            t.updated_at as template_updated_at,
+            t.version as template_version,
+            tc.id as tc_id, 
+            tc.name_en as tc_name_en, 
+            tc.name_fr as tc_name_fr, 
+            tc.email_process_type as tc_email_process_type, 
+            tc.sms_process_type as tc_sms_process_type, 
+            tc.sms_sending_vehicle as tc_sms_sending_vehicle
+          from templates t
+          left outer join template_categories tc on tc.id = t.template_category_id
         )
         select
           notification_id, notification_created_at, notification_sent_at, notification_status,
@@ -180,6 +187,30 @@ resource "aws_quicksight_data_set" "notifications" {
       columns {
         name = "template_version"
         type = "INTEGER"
+      }
+      columns {
+        name = "tc_id"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_name_en"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_name_fr"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_email_process_type"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_sms_process_type"
+        type = "STRING"
+      }
+      columns {
+        name = "tc_sms_sending_vehicle"
+        type = "STRING"
       }
     }
   }

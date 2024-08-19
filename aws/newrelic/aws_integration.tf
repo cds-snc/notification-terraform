@@ -219,8 +219,7 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_pull" {
 }
 
 resource "newrelic_cloud_aws_integrations" "newrelic_cloud_integration_pull" {
-  # Disabled for now
-  count             = 0
+  count             = var.env == "staging" ? 1 : 0
   account_id        = var.new_relic_account_id
   linked_account_id = newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0].id
   billing {}
@@ -263,7 +262,6 @@ resource "newrelic_cloud_aws_integrations" "newrelic_cloud_integration_pull" {
   efs {}
   elasticbeanstalk {}
   elasticsearch {}
-  elb {}
   emr {}
   iam {}
   iot {}
