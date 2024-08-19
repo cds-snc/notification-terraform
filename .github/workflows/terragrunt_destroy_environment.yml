@@ -483,6 +483,9 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/eks
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+          scripts/cleanupEKSNetwork.sh
+          aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId]")
+
 
   terragrunt-destroy-cloudfront:
     if: |
@@ -653,6 +656,7 @@ jobs:
 
       - name: terragrunt destroy common
         run: |
+          scripts/cleanupSecurityGroups.sh
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/common
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
