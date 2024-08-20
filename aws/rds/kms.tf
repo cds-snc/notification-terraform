@@ -1,9 +1,9 @@
 resource "aws_kms_key" "rds_snapshot" {
-  count = var.env == "staging" ? 1 : 0 
+  count                   = var.env == "staging" ? 1 : 0
   description             = "A KMS key for encrypting RDS snapshots"
   enable_key_rotation     = true
   deletion_window_in_days = 7
-  policy = <<POLICY
+  policy                  = <<POLICY
 {
     "Id": "key-consolepolicy-3",
     "Version": "2012-10-17",
