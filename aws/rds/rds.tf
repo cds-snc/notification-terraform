@@ -131,6 +131,11 @@ resource "aws_rds_cluster_parameter_group" "pgaudit" {
 }
 
 resource "aws_rds_cluster" "notification-canada-ca" {
+
+  depends_on = [
+    aws_cloudwatch_log_group.logs_exports
+  ]
+
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
   engine_version               = var.rds_version
@@ -164,6 +169,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+
 }
 
 # Holds the exported postgresql logs
