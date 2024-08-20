@@ -22,9 +22,9 @@ resource "aws_kms_key" "rds_snapshot" {
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
+                    "arn:aws:iam::${var.account_id}:role/aws-reserved/sso.amazonaws.com/ca-central-1/AWSReservedSSO_AWSAdministratorAccess_4085b2fdb6f29f43",
                     "arn:aws:iam::${var.account_id}:role/notification-terraform-apply",
-                    "arn:aws:iam::${var.account_id}:role/notification-terraform-plan",
-                    "arn:aws:iam::${var.account_id}:role/aws-reserved/sso.amazonaws.com/ca-central-1/AWSReservedSSO_AWSAdministratorAccess_e6e62a284c3c35fc"
+                    "arn:aws:iam::${var.account_id}:role/notification-terraform-plan"
                 ]
             },
             "Action": [
@@ -50,7 +50,12 @@ resource "aws_kms_key" "rds_snapshot" {
             "Sid": "Allow use of the key",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::800095993820:root"
+                "AWS": [
+                    "arn:aws:iam::${var.account_id}:role/aws-reserved/sso.amazonaws.com/ca-central-1/AWSReservedSSO_AWSAdministratorAccess_4085b2fdb6f29f43",
+                    "arn:aws:iam::${var.account_id}:role/notification-terraform-apply",
+                    "arn:aws:iam::${var.account_id}:role/notification-terraform-plan",
+                    "arn:aws:iam::800095993820:root"
+                ]
             },
             "Action": [
                 "kms:Encrypt",
@@ -65,7 +70,12 @@ resource "aws_kms_key" "rds_snapshot" {
             "Sid": "Allow attachment of persistent resources",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::800095993820:root"
+                "AWS": [
+                    "arn:aws:iam::${var.account_id}:role/aws-reserved/sso.amazonaws.com/ca-central-1/AWSReservedSSO_AWSAdministratorAccess_4085b2fdb6f29f43",
+                    "arn:aws:iam::${var.account_id}:role/notification-terraform-apply",
+                    "arn:aws:iam::${var.account_id}:role/notification-terraform-plan",
+                    "arn:aws:iam::800095993820:root"
+                ]
             },
             "Action": [
                 "kms:CreateGrant",
