@@ -76,4 +76,4 @@ variable "recovery" {
 variable "rds_snapshot_identifier" {
   type        = string
   description = "The snapshot identifier to recover from."
-}
+} 
