@@ -494,10 +494,12 @@ jobs:
           sleep 30
 
       - name: aws cleanup EKS network and ELBs
+        run: |
           scripts/cleanupEKSNetwork.sh 
           scripts/cleanupELB.sh
 
       - name: terragrunt destroy eks post-spot cleanup
+        run: |
           cd env/dev/eks
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
