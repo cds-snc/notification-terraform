@@ -227,6 +227,7 @@ jobs:
 
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
+    continue-on-error: true
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
 
     steps:
@@ -345,6 +346,7 @@ jobs:
 
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
+    continue-on-error: true
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
 
     steps:
@@ -462,6 +464,7 @@ jobs:
 
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
+    continue-on-error: true    
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
 
     steps:
@@ -491,6 +494,7 @@ jobs:
 
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
+    continue-on-error: true
     needs: [terragrunt-destroy-eks,terragrunt-destroy-newrelic,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
 
     steps:
@@ -511,8 +515,8 @@ jobs:
       - name: terragrunt destroy eks
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-          aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId]") || true
-          scripts/cleanupEKSNetwork.sh || true
+          aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId]")
+          scripts/cleanupEKSNetwork.sh 
           cd env/dev/eks
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
