@@ -506,9 +506,9 @@ jobs:
       - name: aws cleanup EKS network and ELBs
         continue-on-error: true 
         run: |
-          scripts/cleanupEKSNetwork.sh 
           scripts/cleanupELB.sh
-
+          scripts/cleanupEKSNetwork.sh 
+          
       - name: terragrunt destroy eks post-spot cleanup
         run: |
           cd env/dev/eks
