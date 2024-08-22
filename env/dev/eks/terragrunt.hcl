@@ -63,7 +63,7 @@ dependency "dns" {
   mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
   mock_outputs = {
     internal_dns_certificate_arn = ""
-    internal_dns_zone_id = ""
+    internal_dns_zone_id = "ABCDEFGHIJKLMNOP"
     internal_dns_name = ""
     route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
