@@ -463,8 +463,7 @@ jobs:
       always() &&
 
       !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest  
-    continue-on-error: true    
+    runs-on: ubuntu-latest     
     needs: [terragrunt-destroy-newrelic,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
 
     steps:
@@ -483,17 +482,20 @@ jobs:
           sudo dpkg -i 1pass.deb          
 
       - name: terragrunt destroy eks
+        continue-on-error: true 
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/eks
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
       - name: aws destroy eks ec2 spots
+        continue-on-error: true 
         run: |
           aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId]")
           sleep 30
 
       - name: aws cleanup EKS network and ELBs
+        continue-on-error: true 
         run: |
           scripts/cleanupEKSNetwork.sh 
           scripts/cleanupELB.sh
