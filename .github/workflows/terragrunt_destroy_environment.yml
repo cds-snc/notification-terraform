@@ -517,6 +517,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId]")
           scripts/cleanupEKSNetwork.sh 
+          scripts/cleanupELB.sh
           cd env/dev/eks
           terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
