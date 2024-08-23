@@ -78,10 +78,6 @@ jobs:
 
       - name: terragrunt apply ECR
         run: |
-          git clone 'https://github.com/cds-snc/notification-admin.git' /var/tmp/notification-admin
-          cd /var/tmp/notification-admin/ 
-          docker build -t 800095993820.dkr.ecr.ca-central-1.amazonaws.com/admin:bootstrap -f /var/tmp/notification-admin/ci/Dockerfile.lambda .
-          docker push 800095993820.dkr.ecr.ca-central-1.amazonaws.com/admin:bootstrap
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ecr
           terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
