@@ -61,6 +61,10 @@ jobs:
           role-session-name: NotifyApiGitHubActions
           aws-region: "us-east-1"        
 
+      - name: Install ECR Credential Helper
+        run: |
+          apt update && apt install -y amazon-ecr-credential-helper
+
       - name: Login to Amazon ECR
         id: login-ecr
         run: |
