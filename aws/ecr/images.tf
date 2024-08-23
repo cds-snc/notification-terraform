@@ -231,34 +231,6 @@ resource "null_resource" "push_system_status_docker_image" {
 
 }
 
-# Github ARC Runner Build and Push
-# The ARC Runner is required for the Github Actions to run inside the Private EKS cluster. 
-
-resource "null_resource" "build_github_arc_runner_docker_image" {
-  count = var.bootstrap ? 1 : 0
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "docker build -t ${aws_ecr_repository.github_arc.repository_url}:bootstrap -f ./github-runner/Dockerfile ."
-  }
-}
-
-resource "null_resource" "push_github_arc_runner_docker_image" {
-  count      = var.bootstrap ? 1 : 0
-  depends_on = [null_resource.build_github_arc_runner_docker_image]
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.github_arc.repository_url}:bootstrap"
-  }
-
-}
 # Pinpoint to SQS Queue Build and Push
 
 resource "null_resource" "build_pinpoint_to_sqs_sms_callbacks_docker_image" {
