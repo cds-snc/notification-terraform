@@ -40,7 +40,7 @@ resource "null_resource" "push_admin_docker_image" {
   depends_on = [null_resource.build_admin_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap"
   }
 
 }
@@ -81,7 +81,7 @@ resource "null_resource" "push_api_docker_image" {
   depends_on = [null_resource.build_api_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.api-lambda.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.api-lambda.repository_url}:bootstrap"
   }
 
 }
@@ -122,7 +122,7 @@ resource "null_resource" "push_heartbeat_docker_image" {
   depends_on = [null_resource.build_heartbeat_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.heartbeat.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.heartbeat.repository_url}:bootstrap"
   }
 
 }
@@ -151,7 +151,7 @@ resource "null_resource" "push_google_cidr_docker_image" {
   depends_on = [null_resource.build_google_cidr_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.google-cidr.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.google-cidr.repository_url}:bootstrap"
   }
 
 }
@@ -180,7 +180,7 @@ resource "null_resource" "push_ses_receiving_emails_docker_image" {
   depends_on = [null_resource.build_ses_receiving_emails_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap"
   }
 
 }
@@ -209,7 +209,7 @@ resource "null_resource" "push_ses_to_sqs_email_callbacks_docker_image" {
   depends_on = [null_resource.build_ses_to_sqs_email_callbacks_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap"
   }
 
 }
@@ -238,7 +238,7 @@ resource "null_resource" "push_sns_to_sqs_sms_callbacks_docker_image" {
   depends_on = [null_resource.build_sns_to_sqs_sms_callbacks_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap"
   }
 
 }
@@ -266,7 +266,7 @@ resource "null_resource" "push_system_status_docker_image" {
   depends_on = [null_resource.build_system_status_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.system_status.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.system_status.repository_url}:bootstrap"
   }
 
 }
@@ -279,7 +279,7 @@ resource "null_resource" "build_pinpoint_to_sqs_sms_callbacks_docker_image" {
   triggers = {
     always_run = "${timestamp()}"
   }
-    
+
   depends_on = [
     null_resource.lambda_repo_clone
   ]
@@ -294,6 +294,6 @@ resource "null_resource" "push_pinpoint_to_sqs_sms_callbacks_docker_image" {
   depends_on = [null_resource.build_pinpoint_to_sqs_sms_callbacks_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:bootstrap"
+    command = "aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com && docker push ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:bootstrap"
   }
 }
