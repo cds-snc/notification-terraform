@@ -67,7 +67,8 @@ jobs:
           # Get the ECR login password and use it to log in to the ECR registry
           result=$(aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com)
           # Print the login result for debugging
-          echo "Login Result: $result"        
+          echo "Login Result: $result" 
+          echo $AWS_PROFILE       
           
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
