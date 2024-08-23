@@ -61,11 +61,9 @@ jobs:
           role-session-name: NotifyApiGitHubActions
           aws-region: "us-east-1"        
 
-      - name: Login to ECR
+      - name: Login to Amazon ECR Private
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@5a88a04c91d5c6f97aae0d9be790e64d9b1d47b7 # v1.7.1
-        with:
-          registry-type: public          
+        uses: aws-actions/amazon-ecr-login@v2 
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
