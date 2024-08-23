@@ -1,36 +1,30 @@
 locals {
-  vars = read_terragrunt_config("../env_vars.hcl")
-  # dns_role is very fragile - if not set exactly as below, terraform fmt will fail in github actions.
-  # This is required for the dynamic provider for DNS configuration. In staging and production, no role assumption is required,
-  # so this will be empty. In scratch/dynamic environments, role assumption is required.
-  dns_role           = local.vars.inputs.env == "staging" ? "" : (local.vars.inputs.env == "production" ? "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/notify_prod_dns_manager\"\n  }" :  "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }")
-  
+  inputs = jsondecode(read_tfvars_file("../../../aws/staging.tfvars"))
 }
 
-inputs = {
-  account_id                            = local.vars.inputs.account_id
-  domain                                = local.vars.inputs.domain
-  alt_domain                            = local.vars.inputs.alt_domain
-  env                                   = local.vars.inputs.env
-  dns_account_id                        = local.vars.inputs.dns_account_id
-  log_retention_period_days             = local.vars.inputs.log_retention_period_days
-  sensitive_log_retention_period_days   = local.vars.inputs.sensitive_log_retention_period_days
-  account_budget_limit                  = local.vars.inputs.account_budget_limit
-
-  
-  region             = "ca-central-1"
-  # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
-  elb_account_ids = {
-    "ca-central-1" = "985666609251"
+inputs = merge(
+  local.inputs,
+  {
+    domain                              = "staging.notification.cdssandbox.xyz"
+    alt_domain                          = "staging.alpha.notification.cdssandbox.xyz"
+    env                                 = "staging"
+    dns_account_id                      = "${local.inputs.dns_account_id}"
+    account_budget_limit                = 5000
+    log_retention_period_days           = 365
+    sensitive_log_retention_period_days = 14
+    region                              = "ca-central-1"
+    # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
+    elb_account_ids = {
+      "ca-central-1" = "${local.inputs.elb_account_id}"
+    }
+    cbs_satellite_bucket_name = "cbs-satellite-${local.inputs.account_id}"
   }
-  
-  cbs_satellite_bucket_name = "cbs-satellite-${local.vars.inputs.account_id}"
-}
+)
 
 terraform {
 
   before_hook "before_hook" {
-    commands     = local.vars.inputs.env == "dev" ? ["apply", "plan"] : []
+    commands     = local.inputs.env == "dev" ? ["apply", "plan"] : []
     execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", "${get_repo_root()}/aws/dev.tfvars"]
   }
 
@@ -60,31 +54,34 @@ terraform {
 
 provider "aws" {
   region              = var.region
-  allowed_account_ids = [var.account_id]
+  allowed_account_ids = [${local.inputs.account_id}]
 }
 
 provider "aws" {
   alias               = "us-west-2"
   region              = "us-west-2"
-  allowed_account_ids = [var.account_id]
+  allowed_account_ids = [${local.inputs.account_id}]
 }
 
 provider "aws" {
   alias               = "us-east-1"
   region              = "us-east-1"
-  allowed_account_ids = [var.account_id]
+  allowed_account_ids = [${local.inputs.account_id}]
 }
 
 provider "aws" {
   alias  = "dns"
-  region = "ca-central-1"${local.dns_role}
+  region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_${local.inputs.env}_dns_manager"
+  }
 }
 
 provider "aws" {
   alias  = "staging"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::239043911459:role/${local.vars.inputs.env}_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.inputs.account_id}:role/${local.inputs.env}_dns_manager_role"
   }
 }
 
@@ -161,11 +158,11 @@ remote_state {
   }
   config = {
     encrypt             = true
-    bucket              = "notification-canada-ca-${local.vars.inputs.env}-tf"
+    bucket              = "notification-canada-ca-${local.inputs.env}-tf"
     dynamodb_table      = "terraform-state-lock-dynamo"
     region              = "ca-central-1"
     key                 = "${path_relative_to_include()}/terraform.tfstate"
-    s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.vars.inputs.env}" }
-    dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.vars.inputs.env}" }
+    s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.inputs.env}" }
+    dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.inputs.env}" }
   }
 }
