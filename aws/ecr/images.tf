@@ -25,7 +25,7 @@ resource "null_resource" "build_admin_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-admin/ && docker build -t ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap -f /var/tmp/notification-admin/ci/Dockerfile.lambda . && popd"
+    command = "cd /var/tmp/notification-admin/ && docker build -t ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap -f /var/tmp/notification-admin/ci/Dockerfile.lambda ."
   }
 
 }
@@ -61,7 +61,7 @@ resource "null_resource" "build_api_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-api/ && docker build -t ${aws_ecr_repository.api-lambda.repository_url}:bootstrap -f /var/tmp/notification-api/ci/Dockerfile.lambda . && popd"
+    command = "cd /var/tmp/notification-api/ && docker build -t ${aws_ecr_repository.api-lambda.repository_url}:bootstrap -f /var/tmp/notification-api/ci/Dockerfile.lambda ."
   }
 
 }
@@ -97,7 +97,7 @@ resource "null_resource" "build_heartbeat_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/heartbeat && docker build -t ${aws_ecr_repository.heartbeat.repository_url}:bootstrap -f /var/tmp/notification-lambdas/heartbeat/Dockerfile . && popd"
+    command = "cd /var/tmp/notification-lambdas/heartbeat && docker build -t ${aws_ecr_repository.heartbeat.repository_url}:bootstrap -f /var/tmp/notification-lambdas/heartbeat/Dockerfile ."
   }
 
 }
@@ -121,7 +121,7 @@ resource "null_resource" "build_google_cidr_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/google-cidr && docker build -t ${aws_ecr_repository.google-cidr.repository_url}:bootstrap -f /var/tmp/notification-lambdas/google-cidr/Dockerfile . && popd"
+    command = "cd /var/tmp/notification-lambdas/google-cidr && docker build -t ${aws_ecr_repository.google-cidr.repository_url}:bootstrap -f /var/tmp/notification-lambdas/google-cidr/Dockerfile ."
   }
 
 }
@@ -145,7 +145,7 @@ resource "null_resource" "build_ses_receiving_emails_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesreceivingemails/Dockerfile . && popd"
+    command = "cd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesreceivingemails/Dockerfile ."
   }
 
 }
@@ -169,7 +169,7 @@ resource "null_resource" "build_ses_to_sqs_email_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile . && popd"
+    command = "cd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile ."
   }
 
 }
@@ -193,7 +193,7 @@ resource "null_resource" "build_sns_to_sqs_sms_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile . && popd"
+    command = "cd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile ."
   }
 
 }
@@ -217,7 +217,7 @@ resource "null_resource" "build_system_status_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "pushd /var/tmp/notification-lambdas/system_status && docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap -f /var/tmp/notification-lambdas/system_status/Dockerfile . && popd"
+    command = "cd /var/tmp/notification-lambdas/system_status && docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap -f /var/tmp/notification-lambdas/system_status/Dockerfile ."
   }
 }
 
