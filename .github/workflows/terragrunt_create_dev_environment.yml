@@ -61,10 +61,14 @@ jobs:
           role-session-name: NotifyApiGitHubActions
           aws-region: "us-east-1"        
 
-      - name: Login to Amazon ECR Private
+      - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2 
-        
+        run: |
+          # Get the ECR login password and use it to log in to the ECR registry
+          result=$(aws ecr get-login-password --region ca-central-1 | docker --config ${GITHUB_WORKSPACE}/${GITHUB_RUN_ID} login --username AWS --password-stdin 800095993820.dkr.ecr.ca-central-1.amazonaws.com)
+          # Print the login result for debugging
+          echo "Login Result: $result"        
+          
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
