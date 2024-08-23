@@ -51,6 +51,7 @@ dependency "common" {
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    vpc_id = "vpc-028dc6d810c3c699a" 
   }
 }
 
@@ -62,8 +63,9 @@ dependency "dns" {
   mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
   mock_outputs = {
     internal_dns_certificate_arn = ""
-    internal_dns_zone_id = ""
+    internal_dns_zone_id = "ABCDEFGHIJKLMNOP"
     internal_dns_name = ""
+    route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
 }
 
@@ -126,6 +128,7 @@ inputs = {
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
+  route53_zone_id                           = dependency.dns.outputs.route53_zone_id
   
 }
 

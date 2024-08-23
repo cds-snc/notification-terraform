@@ -14,7 +14,7 @@ dependency "dns" {
 
   config_path = "../dns"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
