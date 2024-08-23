@@ -46,5 +46,5 @@ output "internal_dns_name" {
 }
 
 output "route53_zone_id" {
-  value = var.env == "production" ? aws_route53_zone.notification-canada-ca[0].zone_id : aws_route53_zone.notification-sandbox[0].zone_id
+  value = var.env == "production" ? aws_route53_zone.notification-canada-ca[0].zone_id : var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
 }
