@@ -148,7 +148,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
 
-  snapshot_identifier          = var.recovery == true ? var.rds_snapshot_identifier  : null
+  snapshot_identifier = var.recovery == true ? var.rds_snapshot_identifier : null
 
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
   storage_encrypted   = true
