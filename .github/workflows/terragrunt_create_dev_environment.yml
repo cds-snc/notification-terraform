@@ -63,7 +63,7 @@ jobs:
 
       - name: Install ECR Credential Helper
         run: |
-          apt update && apt install -y amazon-ecr-credential-helper
+          sudo apt update && sudo apt install -y amazon-ecr-credential-helper
 
       - name: Login to Amazon ECR
         id: login-ecr
