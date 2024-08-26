@@ -54,7 +54,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
-      - name: Configure credentials to CDS public ECR using OIDC
+      - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
           role-to-assume: arn:aws:iam::800095993820:role/notification-api-apply
@@ -425,6 +425,17 @@ jobs:
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb          
+
+      - name: Configure credentials to Notify Private ECR using OIDC
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::800095993820:role/notification-api-apply
+          role-session-name: NotifyApiGitHubActions
+          aws-region: "ca-central-1"        
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: terragrunt apply database-tools
         run: |
