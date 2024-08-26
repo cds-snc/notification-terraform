@@ -98,3 +98,8 @@ output "sentinel_forwarder_cloudwatch_lambda_arn" {
 output "sentinel_forwarder_cloudwatch_lambda_name" {
   value = module.sentinel_forwarder.lambda_name
 }
+
+# GHA VPN ID
+output "gha_vpn_id" {
+  value = module.gha_vpn.client_vpn_endpoint_id
+}
