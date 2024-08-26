@@ -17,6 +17,10 @@ resource "null_resource" "build_blazer_docker_image" {
   depends_on = [
     null_resource.lambda_repo_clone
   ]
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
 
   provisioner "local-exec" {
     command = "cd /var/tmp/notification-lambdas/blazer/ && docker build -t ${aws_ecr_repository.blazer.repository_url}:bootstrap ."
