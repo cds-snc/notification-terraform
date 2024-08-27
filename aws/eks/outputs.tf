@@ -106,10 +106,10 @@ output "gha_vpn_id" {
 
 output "gha_vpn_certificate" {
   sensitive = true
-  value = tls_self_signed_cert.client_vpn.cert_pem
+  value = module.gha_vpn.client_vpn_certificate_pem
 }
 
 output "gha_vpn_key" {
   sensitive = true
-  value = tls_private_key.client_vpn.private_key_pem
+  value = module.gha_vpn.client_vpn_private_key_pem
 }
