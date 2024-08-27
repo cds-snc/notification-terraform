@@ -164,3 +164,9 @@ variable "alb_arn_suffix" {
   type        = string
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
 }
+
+variable "aws_xray_sdk_enabled" {
+  type        = bool
+  description = "Boolean value to decide whether or not to enable AWS X-Ray SDK"
+  default     = false
+}
