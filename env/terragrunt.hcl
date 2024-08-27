@@ -1,21 +1,12 @@
 locals {
-  inputs = jsondecode(read_tfvars_file("../../../aws/staging.tfvars"))
+  inputs = jsondecode(read_tfvars_file(find_in_parent_folders("../aws/${get_env("ENVIRONMENT")}.tfvars")))
 }
 
 inputs = merge(
   local.inputs,
   {
-    domain                              = "staging.notification.cdssandbox.xyz"
-    alt_domain                          = "staging.alpha.notification.cdssandbox.xyz"
-    env                                 = "staging"
-    dns_account_id                      = "${local.inputs.dns_account_id}"
-    account_budget_limit                = 5000
-    log_retention_period_days           = 365
-    sensitive_log_retention_period_days = 14
-    region                              = "ca-central-1"
-    # See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
     elb_account_ids = {
-      "ca-central-1" = "${local.inputs.elb_account_id}"
+      "${local.inputs.region}" = "${local.inputs.elb_account_id}"
     }
     cbs_satellite_bucket_name = "cbs-satellite-${local.inputs.account_id}"
   }
@@ -87,7 +78,6 @@ provider "aws" {
 
 EOF
 }
-
 
 generate "common_variables" {
   path      = "common_variables.tf"
