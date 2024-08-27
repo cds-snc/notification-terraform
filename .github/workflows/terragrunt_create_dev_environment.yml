@@ -712,7 +712,7 @@ jobs:
           KEY=$(terragrunt output --raw gha_vpn_key)
           aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT_ID --output text > /var/tmp/dev.ovpn
           echo "<cert> $CERT </cert>" >> /var/tmp/dev.ovpn
-          echo <key> $KEY </key>" >> /var/tmp/dev.ovpn
+          echo "<key> $KEY </key>" >> /var/tmp/dev.ovpn
 
       - name: Connect to VPN
         uses: "kota65535/github-openvpn-connect-action@a582825650e2e4101d4e32fa210e2a0a87c7b0ef" # v2.1.0
