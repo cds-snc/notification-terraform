@@ -674,3 +674,44 @@ jobs:
           cd env/dev/newrelic
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  deploy-application:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-eks, terragrunt-apply-rds]
+    runs-on: ubuntu-latest            
+
+    steps:
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+
+      - name: Retrieve VPN Config
+        run: |
+          cd env/dev/eks
+          ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
+          CERT=$(terragrunt output --raw gha_vpn_certificate)
+          KEY=$(terragrunt output --raw gha_vpn_key)
+          aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT_ID --output text > /var/tmp/dev.ovpn
+          echo "$CERT" >> /var/tmp/dev.ovpn
+          echo "$KEY" >> /var/tmp/dev.ovpn
+
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@a582825650e2e4101d4e32fa210e2a0a87c7b0ef" # v2.1.0
+        with:
+          config_file: /var/tmp/dev.ovpn
+          echo_config: false       
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --name notification-canada-ca-dev-eks-cluster     
+          kubectl config rename-context arn:aws:eks:ca-central-1:800095993820:cluster/notification-canada-ca-dev-eks-cluster dev       
+        

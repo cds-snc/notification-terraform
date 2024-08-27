@@ -99,7 +99,17 @@ output "sentinel_forwarder_cloudwatch_lambda_name" {
   value = module.sentinel_forwarder.lambda_name
 }
 
-# GHA VPN ID
+# GHA VPN
 output "gha_vpn_id" {
   value = module.gha_vpn.client_vpn_endpoint_id
+}
+
+output "gha_vpn_certificate" {
+  sensitive = true
+  value = tls_self_signed_cert.client_vpn.cert_pem
+}
+
+output "gha_vpn_key" {
+  sensitive = true
+  value = tls_private_key.client_vpn.private_key_pem
 }
