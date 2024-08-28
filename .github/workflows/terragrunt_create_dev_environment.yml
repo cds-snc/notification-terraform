@@ -701,6 +701,11 @@ jobs:
           install-helm: yes       
           helmfile-version: "v0.151.0"
 
+      - name: Install sponge
+        run: |
+          sudo apt update
+          sudo apt-get install -y moreutils
+
       - name: Install OpenVPN
         run: |
           sudo apt update
