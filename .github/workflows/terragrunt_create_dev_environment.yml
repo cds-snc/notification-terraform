@@ -749,6 +749,14 @@ jobs:
           cd ..
           make decrypt-dev
           cd env/dev
+          export ADMIN_TARGET_GROUP_ARN=$(echo $ADMIN_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export API_TARGET_GROUP_ARN=$(echo $API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN=$(echo $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENTATION_TARGET_GROUP_ARN=$(echo $DOCUMENTATION_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          sed "s/targetGroupARN.*/targetGroupARN: $ADMIN_TARGET_GROUP_ARN/" admin-target-group.yaml | sponge admin-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $API_TARGET_GROUP_ARN/" api-target-group.yaml | sponge api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN/" document-download-api-target-group.yaml | sponge document-download-api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENTATION_TARGET_GROUP_ARN/" documentation-target-group.yaml | sponge documentation-target-group.yaml
           kubectl apply -k . 2>&1
           kubectl apply -k . 
-        
+          
