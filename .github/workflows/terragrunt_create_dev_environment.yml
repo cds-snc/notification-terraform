@@ -694,6 +694,13 @@ jobs:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply           
 
+      - name: Setup helmfile
+        uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
+        with:
+          install-kubectl: yes
+          install-helm: yes       
+          helmfile-version: "v0.151.0"
+
       - name: Install OpenVPN
         run: |
           sudo apt update
@@ -719,7 +726,7 @@ jobs:
           </key>" >> /var/tmp/dev.ovpn
 
       - name: Connect to VPN
-        uses: "kota65535/github-openvpn-connect-action@a582825650e2e4101d4e32fa210e2a0a87c7b0ef" # v2.1.0
+        uses: "kota65535/github-openvpn-connect-action@cd2ed8a90cc7b060dc4e001143e811b5f7ea0af5" # v3.1.0
         with:
           config_file: /var/tmp/dev.ovpn
           echo_config: false       
