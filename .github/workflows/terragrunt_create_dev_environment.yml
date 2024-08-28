@@ -749,5 +749,6 @@ jobs:
           cd ..
           make decrypt-dev
           cd env/dev
-          kubectl apply -k .
+          kubectl apply -k . 2>&1
+          kubectl apply -k . 
         
