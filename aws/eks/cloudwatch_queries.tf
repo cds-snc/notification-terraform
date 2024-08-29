@@ -293,7 +293,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "callback-failures" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Callbacks / Callbacks that exceeded MaxRetries by URL"
+  name  = "Callbacks / Callback errors by notification_id"
 
   log_group_names = [
     local.eks_application_log_group
