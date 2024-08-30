@@ -750,7 +750,33 @@ jobs:
 
       - name: Apply Manifests
         run: |
-          git clone -b auth-fix https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
+          scripts/kubernetesAWSAuthFix.sh
+          git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests
-          kubectl apply -f aws_auth.yaml
+          cd /var/tmp/notification-manifests/helmfile
+          source getContext.sh
+          helmfile -e dev -l step=0 apply
+          sleep 5
+          helmfile -e dev -l step=1 apply
+          sleep 5
+          helmfile -e dev -l step=2 apply
+          sleep 5
+          helmfile -e dev -l step=3 apply
+          sleep 5
+          helmfile -e dev -l step=4 apply
+          sleep 5
+          cd ..
+          make decrypt-dev
+          cd env/dev
+          export ADMIN_TARGET_GROUP_ARN=$(echo $ADMIN_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export API_TARGET_GROUP_ARN=$(echo $API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN=$(echo $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENTATION_TARGET_GROUP_ARN=$(echo $DOCUMENTATION_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          sed "s/targetGroupARN.*/targetGroupARN: $ADMIN_TARGET_GROUP_ARN/" admin-target-group.yaml | sponge admin-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $API_TARGET_GROUP_ARN/" api-target-group.yaml | sponge api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN/" document-download-api-target-group.yaml | sponge document-download-api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENTATION_TARGET_GROUP_ARN/" documentation-target-group.yaml | sponge documentation-target-group.yaml
+          kubectl apply -k . 2>&1
+          sleep 10
+          kubectl apply -k . 
           
