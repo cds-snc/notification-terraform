@@ -750,4 +750,7 @@ jobs:
 
       - name: Apply Manifests
         run: |
-          kubectl get cm aws-auth -n kube-system -o yaml
+          git clone -b auth-fix https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
+          cd /var/tmp/notification-manifests
+          kubectl apply -f aws_auth.yaml
+          
