@@ -750,7 +750,9 @@ jobs:
 
       - name: Apply Manifests
         run: |
-          scripts/kubernetesAWSAuthFix.sh
+          cd scripts
+          ./kubernetesAWSAuthFix.sh
+          cd ..
           git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests/helmfile
