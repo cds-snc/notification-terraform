@@ -26,11 +26,6 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
     # https://github.com/cds-snc/notification-terraform/issues/205
   }
 
-  access_config {
-    authentication_mode                         = "API_AND_CONFIG_MAP"
-    bootstrap_cluster_creator_admin_permissions = true
-  }
-
   # tfsec:ignore:AWS066 EKS should have the encryption of secrets enabled
   # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/202
 
