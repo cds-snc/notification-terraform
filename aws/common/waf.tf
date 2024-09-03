@@ -22,7 +22,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
   }
 
   regular_expression {
-    regex_string = "/notifications.*|/organisation.*|/organisations.*|/platform-stats.*|/provider-details.*|/service.*|/static.*|/user.*|/v2.*"
+    regex_string = "/notifications.*|/organisation.*|/organisations.*|/platform-stats.*|/provider-details.*|/service.*|/static.*|/user.*|/v2.*|/cache-clear"
   }
 
   tags = {
