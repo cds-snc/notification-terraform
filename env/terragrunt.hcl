@@ -3,9 +3,6 @@ locals {
   # dns_role is very fragile - if not set exactly as below, terraform fmt will fail in github actions.
   # This is required for the dynamic provider for DNS configuration. In staging and production, no role assumption is required,
   # so this will be empty. In scratch/dynamic environments, role assumption is required.
-
-
-
   dns_role           = local.vars.inputs.env == "staging" ? "" : (local.vars.inputs.env == "production" ? "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/notify_prod_dns_manager\"\n  }" :  "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.vars.inputs.dns_account_id}:role/${local.vars.inputs.env}_dns_manager_role\"\n  }")
   
 }
