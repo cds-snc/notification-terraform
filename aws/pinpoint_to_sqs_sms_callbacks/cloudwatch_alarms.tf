@@ -97,7 +97,6 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-warning" {
       namespace   = "AWS/SNS"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
     }
   }
 
@@ -108,7 +107,6 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-warning" {
       namespace   = "AWS/SMSVoice"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
     }
   }
 }
@@ -137,7 +135,6 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical" {
       namespace   = "AWS/SNS"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
     }
   }
 
@@ -148,7 +145,6 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical" {
       namespace   = "AWS/SMSVoice"
       period      = 300
       stat        = "Maximum"
-      unit        = "Count"
     }
   }
 }
@@ -218,7 +214,6 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-critical" {
       namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-successes[0].metric_transformation[0].namespace
       period      = 60 * 60 * 12
       stat        = "Sum"
-      unit        = "Count"
     }
   }
 
@@ -229,7 +224,6 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-critical" {
       namespace   = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures[0].metric_transformation[0].namespace
       period      = 60 * 60 * 12
       stat        = "Sum"
-      unit        = "Count"
     }
   }
 }
