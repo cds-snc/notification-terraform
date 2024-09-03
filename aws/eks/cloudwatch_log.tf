@@ -182,7 +182,7 @@ resource "aws_cloudwatch_log_metric_filter" "github-arc-runner-alarm" {
 
 resource "aws_cloudwatch_log_metric_filter" "callback-request-failures" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "allback-request-failures"
+  name           = "callback-request-failures"
   pattern        = "send_delivery_status_to_service request failed for notification_id:"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
