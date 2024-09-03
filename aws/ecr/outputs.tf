@@ -80,12 +80,3 @@ output "system_status_ecr_repository_url" {
   description = "Repository URL of system_status ECR"
   value       = aws_ecr_repository.system_status.repository_url
 }
-
-output "github_arc_runner_ecr_arn" {
-  description = "arn of github arc runner ECR"
-  value       = aws_ecr_repository.github_arc.arn
-}
-output "github_arc_runner_repository_url" {
-  description = "Repository URL of github arc runner ECR"
-  value       = aws_ecr_repository.github_arc.repository_url
-}

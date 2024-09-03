@@ -78,16 +78,3 @@ resource "aws_secretsmanager_secret_version" "system_status_repository_url" {
   secret_id     = aws_secretsmanager_secret.system_status_repository_url.id
   secret_string = aws_ecr_repository.system_status.repository_url
 }
-
-resource "aws_secretsmanager_secret" "github_arc_runner_repository_url" {
-  name                    = "GITHUB_ARC_RUNNER_REPOSITORY_URL"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "github_arc_runner_repository_url" {
-  secret_id     = aws_secretsmanager_secret.github_arc_runner_repository_url.id
-  secret_string = aws_ecr_repository.github_arc.repository_url
-}
-
-
-

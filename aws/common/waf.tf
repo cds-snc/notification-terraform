@@ -22,7 +22,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
   }
 
   regular_expression {
-    regex_string = "/notifications.*|/organisation.*|/organisations.*|/platform-stats.*|/provider-details.*|/service.*|/static.*|/user.*|/v2.*"
+    regex_string = "/notifications.*|/organisation.*|/organisations.*|/platform-stats.*|/provider-details.*|/service.*|/static.*|/user.*|/v2.*|/cache-clear"
   }
 
   tags = {
@@ -98,7 +98,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*"
+    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels"
   }
 
   tags = {

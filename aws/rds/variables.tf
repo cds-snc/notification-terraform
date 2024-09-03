@@ -66,3 +66,15 @@ variable "rds_version" {
   description = "The version of the RDS instance."
   default     = "15.5"
 }
+
+variable "recovery" {
+  type        = bool
+  description = "Set to true if you want to recover from a snapshot."
+  default     = false
+}
+
+variable "rds_snapshot_identifier" {
+  type        = string
+  description = "The snapshot identifier to recover from."
+  default     = ""
+} 

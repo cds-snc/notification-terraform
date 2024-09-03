@@ -45,6 +45,7 @@ resource "aws_lambda_function" "api" {
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
       NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
       NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
+      AWS_XRAY_SDK_ENABLED                  = var.aws_xray_sdk_enabled
 
     }
   }
