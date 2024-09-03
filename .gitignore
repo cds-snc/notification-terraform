@@ -8,6 +8,7 @@
 *.yaml
 !.checkov.yaml
 !.checkov.yml
+!aws-auth.yaml
 !catalog-info.yaml
 /env/dev.hcl
 terrable
