@@ -1,7 +1,8 @@
 #!/bin/bash
-# This script will accept a new K8s node image name, lookup the AMI ID, and patch it in the eks terragrunt.hcl file for a given environment
+# This script will accept a new K8s node image name, lookup the AMI ID, and patch it in the eks terragrunt.hcl file for a list of given environments
 # Usage: ./patchK8sAmi.sh <env> <new_image_version>
-# Example: ./patchK8sAmi.sh dev 1.30.2-20240828
+# Example: ./patchK8sAmi.sh dev,staging 1.30.2-20240828
+# Example: ./patchK8sAmi.sh prod 1.30.2-20240828
 ENVIRONMENTS=$1
 NEW_IMAGE_VERSION=$2
 
