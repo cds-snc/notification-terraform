@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script is used to clean up spot instances that are not terminated by terraform since they are controlled by Karpenter.
+
 # Clean up Spot instances
 aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --filters Name=instance-state-name,Values=running --output text)
 

@@ -30,7 +30,7 @@ inputs = {
 terraform {
 
   before_hook "before_hook" {
-    commands     = local.vars.inputs.env == "dev" ? ["apply", "plan"] : []
+    commands     = local.vars.inputs.env == "dev" && ! get_env("WORKFLOW", "false") ? ["apply", "plan"] : []
     execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", "${get_repo_root()}/aws/dev.tfvars"]
   }
 
