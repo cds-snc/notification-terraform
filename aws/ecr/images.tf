@@ -20,11 +20,11 @@ resource "null_resource" "admin_repo_clone" {
 
 resource "null_resource" "build_admin_docker_image" {
   count = var.bootstrap ? 1 : 0
-  
+
   triggers = {
     always_run = "${timestamp()}"
-  }  
-  
+  }
+
   depends_on = [
     null_resource.admin_repo_clone
   ]
@@ -279,7 +279,7 @@ resource "null_resource" "build_pinpoint_to_sqs_sms_callbacks_docker_image" {
   triggers = {
     always_run = "${timestamp()}"
   }
-    
+
   depends_on = [
     null_resource.lambda_repo_clone
   ]
