@@ -754,9 +754,6 @@ jobs:
       - name: Apply Manifests
         run: |
           kubectl describe -n kube-system configmap/aws-auth
-          cd scripts
-          ./kubernetesAWSAuthFix.sh
-          cd ..
           git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests/helmfile
