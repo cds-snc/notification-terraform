@@ -27,6 +27,7 @@ dependency "common" {
     sns_alert_warning_arn          = ""
     sns_alert_critical_arn         = ""
     sns_alert_ok_arn               = ""
+    sqs_eks_notification_canada_cadelivery_receipts_arn = ""
   }
 }
 

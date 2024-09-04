@@ -1,0 +1,784 @@
+
+name: "Create Dev Environment"
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_REGION: ca-central-1
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  WORKFLOW: true
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  
+  terragrunt-apply-common:
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDevAppply
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply common
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/common
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-ecr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - name: Configure credentials to Notify Private ECR using OIDC
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::800095993820:role/notification-api-apply
+          role-session-name: NotifyApiGitHubActions
+          aws-region: "ca-central-1"        
+
+      - name: Configure credentials to Notify Private ECR using OIDC
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::800095993820:role/notification-api-apply
+          role-session-name: NotifyApiGitHubActions
+          aws-region: "us-east-1"  
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+          
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDevAppply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply ECR
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/ecr
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-ses_receiving_emails:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply ses_receiving_emails
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/ses_receiving_emails
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-dns:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ses_receiving_emails]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply            
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply dns
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/dns
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-ses_validation_dns_entries:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-dns]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply ses_validation_dns_entries
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/ses_validation_dns_entries
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+
+  terragrunt-apply-cloudfront:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply cloudfront
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/cloudfront
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve 
+
+  # terragrunt-apply-eks:
+  #   if: |
+  #     always() &&
+  #     !contains(needs.*.result, 'failure') &&
+  #     !contains(needs.*.result, 'cancelled')
+  #   runs-on: ubuntu-latest  
+  #   needs: [terragrunt-apply-common,terragrunt-apply-dns,terragrunt-apply-cloudfront]
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+  #     - name: setup-terraform
+  #       uses: ./.github/actions/setup-terraform
+  #       with:
+  #         role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+  #         role_session_name: NotifyTerraformApply           
+
+  #     - name: Install 1Pass CLI
+  #       run: |
+  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+  #         sudo dpkg -i 1pass.deb          
+
+  #     - name: terragrunt apply eks
+  #       continue-on-error: true 
+  #       run: |
+  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+  #         cd env/dev/eks
+  #         terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-elasticache:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply elasticache
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/elasticache
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-rds:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply rds
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/rds
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-lambda-api:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr,terragrunt-apply-rds]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply lambda-api
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/lambda-api
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-lambda-admin-pr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-elasticache,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply lambda-admin-pr
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/lambda-admin-pr
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-performance-test:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply           
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply performance-test
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/performance-test
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-heartbeat:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply heartbeat
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/heartbeat
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-database-tools:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply          
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: Configure credentials to Notify Private ECR using OIDC
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::800095993820:role/notification-api-apply
+          role-session-name: NotifyApiGitHubActions
+          aws-region: "ca-central-1"        
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: terragrunt apply database-tools
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/database-tools
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-quicksight:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply                  
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply quicksight
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/quicksight
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-lambda-google-cidr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply lambda-google-cidr
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/lambda-google-cidr
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-ses_to_sqs_email_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply ses_to_sqs_email_callbacks
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/ses_to_sqs_email_callbacks
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-sns_to_sqs_sms_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply sns_to_sqs_sms_callbacks
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/sns_to_sqs_sms_callbacks
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve -refresh=false
+
+  terragrunt-apply-pinpoint_to_sqs_sms_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/pinpoint_to_sqs_sms_callbacks
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-system_status:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-rds,terragrunt-apply-eks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply system_status
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/system_status
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-system_status_static_site:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-common,terragrunt-apply-system_status]
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply         
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply aws/system_status_static_site
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/system_status_static_site
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-newrelic:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-common]
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
+      
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt apply aws/newrelic
+        run: |
+          cd env/dev/newrelic
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  deploy-application:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-eks, terragrunt-apply-rds]
+    runs-on: ubuntu-latest            
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply           
+
+      - name: Setup helmfile
+        uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
+        with:
+          install-kubectl: yes
+          install-helm: yes       
+          helmfile-version: "v0.151.0"
+
+      - name: Install sponge
+        run: |
+          sudo apt update
+          sudo apt-get install -y moreutils
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+          
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+
+      - name: Retrieve VPN Config
+        run: |
+          cd env/dev/eks
+          ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
+          CERT=$(terragrunt output --raw gha_vpn_certificate)
+          KEY=$(terragrunt output --raw gha_vpn_key)
+          aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT_ID --output text > /var/tmp/dev.ovpn
+          echo "<cert>
+          $CERT
+          </cert>" >> /var/tmp/dev.ovpn
+          echo "<key>
+          $KEY
+          </key>" >> /var/tmp/dev.ovpn
+
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@cd2ed8a90cc7b060dc4e001143e811b5f7ea0af5" # v3.1.0
+        with:
+          config_file: /var/tmp/dev.ovpn
+          echo_config: false       
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --name notification-canada-ca-dev-eks-cluster     
+          kubectl config rename-context arn:aws:eks:ca-central-1:800095993820:cluster/notification-canada-ca-dev-eks-cluster dev
+
+      - name: Apply Manifests
+        run: |
+          cd scripts
+          ./kubernetesAWSAuthFix.sh
+          cd ..
+          git clone -b dev-env-fix https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
+          cd /var/tmp/notification-manifests
+          cd /var/tmp/notification-manifests/helmfile
+          source getContext.sh
+          helmfile -e dev -l step=0 apply
+          sleep 5
+          helmfile -e dev -l step=1 apply
+          sleep 5
+          helmfile -e dev -l step=2 apply
+          sleep 5
+          helmfile -e dev -l step=3 apply
+          sleep 5
+          helmfile -e dev -l step=4 apply
+          sleep 5
+          cd ..
+          make decrypt-dev
+          cd env/dev
+          export ADMIN_TARGET_GROUP_ARN=$(echo $ADMIN_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export API_TARGET_GROUP_ARN=$(echo $API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN=$(echo $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENTATION_TARGET_GROUP_ARN=$(echo $DOCUMENTATION_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          sed "s/targetGroupARN.*/targetGroupARN: $ADMIN_TARGET_GROUP_ARN/" admin-target-group.yaml | sponge admin-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $API_TARGET_GROUP_ARN/" api-target-group.yaml | sponge api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN/" document-download-api-target-group.yaml | sponge document-download-api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENTATION_TARGET_GROUP_ARN/" documentation-target-group.yaml | sponge documentation-target-group.yaml
+          kubectl apply -k . 2>&1
+          sleep 10
+          kubectl apply -k . 
+          

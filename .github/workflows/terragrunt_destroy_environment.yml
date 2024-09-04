@@ -11,186 +11,680 @@ env:
   AWS_REGION: ca-central-1
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
-
 permissions:
-  id-token: write   # This is required for requesting the OIDC JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write
+  contents: write
+  pull-requests: write
 
 jobs:
-  terraform-destroy:
+  
+  terragrunt-destroy-newrelic:
+    if: |
+      always() &&
 
-    runs-on: ubuntu-latest
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
 
     steps:
-      - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
-        with:
-          role-to-assume: arn:aws:iam::800095993820:role/notification-terraform-apply
-          role-session-name: TerragruntDestroy
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+      
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy aws/newrelic
+        run: |
+          cd env/dev/newrelic
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+
+  terragrunt-destroy-system_status_static_site:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy         
 
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
+          sudo dpkg -i 1pass.deb          
 
-      - name: One Password Fetch
+      - name: terragrunt destroy aws/system_status_static_site
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-
-      - name: Setup Terraform tools
-        uses: cds-snc/terraform-tools-setup@v1
-        env: # In case you want to override default versions
-          CONFTEST_VERSION: 0.30.0 
-          TERRAFORM_VERSION: 1.6.2
-          TERRAGRUNT_VERSION: 0.44.4
-          TF_SUMMARIZE_VERSION: 0.2.3        
-
-
-      - name: Inject token authentication
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-
-      - name: Destroy aws/system_status_static_site
-        continue-on-error: true
-        run: |
           cd env/dev/system_status_static_site
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-      - name: Destroy aws/system_status
-        continue-on-error: true
+  terragrunt-destroy-system_status:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-system_status_static_site]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
         run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy system_status
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/system_status
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-      - name: Destroy aws/lambda-google-cidr
-        continue-on-error: true
-        run: |
-          cd env/dev/lambda-google-cidr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+  terragrunt-destroy-pinpoint_to_sqs_sms_callbacks:
+    if: |
+      always() &&
 
-      # This must be run before quicksight destroy
-      - name: Destroy quicksight VPC Connection
-        continue-on-error: true
-        run: |
-          aws quicksight delete-vpc-connection --aws-account-id 800095993820 --vpc-connection-id $(aws quicksight list-vpc-connections --aws-account-id 800095993820 --query 'VPCConnectionSummaries[].VPCConnectionId' --output text)
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site]
 
-      # - name: Destroy aws/quicksight
-      #   run: |
-      #     cd env/dev/quicksight
-      #     terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-      
-      - name: Destroy aws/database-tools
-        continue-on-error: true
-        run: |
-          cd env/dev/database-tools
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
 
-      - name: Destroy aws/heartbeat
-        continue-on-error: true
+      - name: Install 1Pass CLI
         run: |
-          cd env/dev/heartbeat
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
 
-      - name: Destroy aws/lambda-api
-        continue-on-error: true
+      - name: terragrunt destroy pinpoint_to_sqs_sms_callbacks
         run: |
-          cd env/dev/lambda-api
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/rds
-        continue-on-error: true
-        run: |
-          cd env/dev/rds
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/elasticache
-        continue-on-error: true
-        run: |
-          cd env/dev/elasticache
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/preformance-test
-        continue-on-error: true
-        run: |
-          cd env/dev/performance-test
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/eks
-        continue-on-error: true
-        run: |
-          cd env/dev/eks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Clean Up Lingering EKS 
-        continue-on-error: true
-        run: |
-          ./scripts/eksDestroyCleanup.sh
-
-      - name: Destroy aws/eks
-        continue-on-error: true
-        run: |
-          cd env/dev/eks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/cloudfront
-        continue-on-error: true
-        run: |
-          cd env/dev/cloudfront
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/ses_validation_dns_entries
-        continue-on-error: true
-        run: |
-          cd env/dev/ses_validation_dns_entries
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/dns
-        continue-on-error: true
-        run: |
-          cd env/dev/dns
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
-
-      - name: Destroy aws/pinpoint_to_sqs_sms_callbacks
-        continue-on-error: true
-        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/pinpoint_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-      - name: Destroy aws/sns_to_sqs_sms_callbacks
-        continue-on-error: true
+  terragrunt-destroy-sns_to_sqs_sms_callbacks:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
         run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy sns_to_sqs_sms_callbacks
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/sns_to_sqs_sms_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve -refresh=false
 
-      - name: Destroy aws/ses_to_sqs_email_callbacks
-        continue-on-error: true
+  terragrunt-destroy-ses_to_sqs_email_callbacks:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
         run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy ses_to_sqs_email_callbacks
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ses_to_sqs_email_callbacks
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-      - name: Destroy aws/ses_receiving_emails
+  terragrunt-destroy-lambda-google-cidr:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy lambda-google-cidr
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/lambda-google-cidr
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-quicksight:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    continue-on-error: true
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy                  
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy vpc connection
         continue-on-error: true
         run: |
+          aws quicksight delete-vpc-connection --aws-account-id 800095993820 --vpc-connection-id $(aws quicksight list-vpc-connections --aws-account-id 800095993820 --query 'VPCConnectionSummaries[].VPCConnectionId' --output text) || true
+
+      - name: update account settings
+        continue-on-error: true
+        run: |
+          aws quicksight update-account-settings --aws-account-id 800095993820 --default-namespace default --no-termination-protection-enabled
+
+      - name: terragrunt destroy quicksight
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/quicksight
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+
+  terragrunt-destroy-database-tools:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy          
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy database-tools
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/database-tools
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+
+  terragrunt-destroy-lambda-admin-pr:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy lambda-admin-pr
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/lambda-admin-pr
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-heartbeat:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy heartbeat
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/heartbeat
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-rds:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    continue-on-error: true
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy rds
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/rds
+          aws rds delete-db-cluster-snapshot --db-cluster-snapshot-identifier $(aws rds describe-db-cluster-snapshots --query 'DBClusterSnapshots[].DBClusterSnapshotIdentifier' --output text) || true
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-performance-test:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy           
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy performance-test
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/performance-test
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-lambda-api:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy lambda-api
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/lambda-api
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-elasticache:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy elasticache
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/elasticache
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-eks:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest     
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy           
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy eks
+        continue-on-error: true 
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/eks
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+      - name: aws destroy eks ec2 spots
+        continue-on-error: true 
+        run: |
+          aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[*].Instances[*].[InstanceId]")
+          sleep 30
+
+      - name: aws cleanup EKS network and ELBs
+        continue-on-error: true 
+        run: |
+          scripts/cleanupELB.sh
+          scripts/cleanupEKSNetwork.sh 
+          
+      - name: terragrunt destroy eks post-spot cleanup
+        run: |
+          cd env/dev/eks
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+
+  terragrunt-destroy-cloudfront:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy cloudfront
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/cloudfront
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve 
+
+  terragrunt-destroy-ses_validation_dns_entries:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy ses_validation_dns_entries
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/ses_validation_dns_entries
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-dns:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy            
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy dns
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/dns
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
+  terragrunt-destroy-ses_receiving_emails:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-dns,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy ses_receiving_emails
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ses_receiving_emails
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-      - name: Destroy aws/ecr
-        continue-on-error: true
+  terragrunt-destroy-ecr:
+    if: |
+      always() &&
+
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-ses_receiving_emails,terragrunt-destroy-dns,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+    runs-on: ubuntu-latest  
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy        
+
+      - name: Install 1Pass CLI
         run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy ECR
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/ecr
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-      - name: Cleanup Internal Load Balancers
-        continue-on-error: true
-        run: |
-          ./scripts/cleanupELB.sh
 
-      # Do not continue on error here so that we can track whether or not this actually worked
-      - name: Destroy aws/common
+  terragrunt-destroy-common:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-destroy-newrelic,terragrunt-destroy-ecr,terragrunt-destroy-ses_receiving_emails,terragrunt-destroy-dns,terragrunt-destroy-ses_validation_dns_entries,terragrunt-destroy-cloudfront,terragrunt-destroy-eks,terragrunt-destroy-elasticache,terragrunt-destroy-lambda-api,terragrunt-destroy-performance-test,terragrunt-destroy-rds,terragrunt-destroy-heartbeat,terragrunt-destroy-lambda-admin-pr,terragrunt-destroy-database-tools,terragrunt-destroy-quicksight,terragrunt-destroy-lambda-google-cidr,terragrunt-destroy-sns_to_sqs_sms_callbacks,terragrunt-destroy-pinpoint_to_sqs_sms_callbacks,terragrunt-destroy-system_status,terragrunt-destroy-system_status_static_site,terragrunt-destroy-ses_to_sqs_email_callbacks]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_session_name: NotifyTerraformDestroy
+
+      - name: Install 1Pass CLI
         run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: terragrunt destroy common
+        run: |
+          scripts/cleanupSecurityGroups.sh
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/common
-          terragrunt destroy --terragrunt-non-interactive -auto-approve -var-file /var/tmp/dev.tfvars
+          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve

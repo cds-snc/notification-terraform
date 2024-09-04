@@ -51,6 +51,7 @@ dependency "common" {
     notification_base_url_regex_arn           = ""
     private-links-vpc-endpoints-securitygroup = ""
     private-links-gateway-prefix-list-ids     = []
+    vpc_id = "vpc-028dc6d810c3c699a" 
   }
 }
 
@@ -62,8 +63,9 @@ dependency "dns" {
   mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
   mock_outputs = {
     internal_dns_certificate_arn = ""
-    internal_dns_zone_id = ""
+    internal_dns_zone_id = "ABCDEFGHIJKLMNOP"
     internal_dns_name = ""
+    route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
 }
 
@@ -106,8 +108,8 @@ inputs = {
   eks_addon_kube_proxy_version              = "v1.30.0-eksbuild.3"
   eks_addon_vpc_cni_version                 = "v1.18.1-eksbuild.3"
   eks_addon_ebs_driver_version              = "v1.31.0-eksbuild.1"
-  eks_node_ami_version                      = "1.30.0-20240703"
-  eks_karpenter_ami_id                      = "ami-0f6c33d83676fc4d7"
+  eks_node_ami_version                      = "1.30.2-20240828"
+  eks_karpenter_ami_id                      = "ami-07e998bb7f77c40c5"
   non_api_waf_rate_limit                    = 500
   api_waf_rate_limit                        = 5000
   sign_in_waf_rate_limit                    = 100
@@ -126,6 +128,7 @@ inputs = {
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks
+  route53_zone_id                           = dependency.dns.outputs.route53_zone_id
   
 }
 

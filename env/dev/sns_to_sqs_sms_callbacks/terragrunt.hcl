@@ -26,6 +26,15 @@ dependency "common" {
 
 dependency "ecr" {
   config_path = "../ecr"
+
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
+  mock_outputs_merge_with_state           = true
+
+  mock_outputs = {
+    sns_to_sqs_sms_callbacks_ecr_repository_url = "111111111111.dkr.ecr.us-west-2.amazonaws.com/sns-to-sqs-sms-callbacks"
+    sns_to_sqs_sms_callbacks_ecr_arn            = "arn:aws:ecr:us-west-2:111111111111:repository/sns-to-sqs-sms-callbacks"
+  }
+
 }
 
 include {
