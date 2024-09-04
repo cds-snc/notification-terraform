@@ -747,9 +747,13 @@ jobs:
         run: |
           aws eks update-kubeconfig --name notification-canada-ca-dev-eks-cluster     
           kubectl config rename-context arn:aws:eks:ca-central-1:800095993820:cluster/notification-canada-ca-dev-eks-cluster dev
-          cd aws/kubernetes_fix
-          terraform init
-          terraform apply -auto-approve
+
+      - name: terragrunt apply k8s-fix
+        continue-on-error: true 
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/dev_only_kubernetes_fix
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
       - name: Apply Manifests
         run: |
@@ -782,4 +786,3 @@ jobs:
           kubectl apply -k . 2>&1
           sleep 10
           kubectl apply -k . 
-          
