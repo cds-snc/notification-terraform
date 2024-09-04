@@ -753,7 +753,7 @@ jobs:
           cd scripts
           ./kubernetesAWSAuthFix.sh
           cd ..
-          git clone -b dev-env-fix https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
+          git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests/helmfile
           source getContext.sh
