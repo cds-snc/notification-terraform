@@ -750,6 +750,7 @@ jobs:
 
       - name: Apply Manifests
         run: |
+          kubectl describe -n kube-system configmap/aws-auth
           cd scripts
           ./kubernetesAWSAuthFix.sh
           cd ..
