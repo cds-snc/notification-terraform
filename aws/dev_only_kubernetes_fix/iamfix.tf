@@ -18,7 +18,7 @@ module "eks" {
       groups   = ["system:nodes", "system:bootstrappers"]
     },
     {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/${split("/", data.aws_caller_identity.current.arn)[1]}"
+      rolearn  = "arn:aws:iam::${var.account_id}:role/AWSReservedSSO_AWSAdministratorAccess_e6e62a284c3c35fc"
       username = "AWSAdministratorAccess:{{SessionName}}"
       groups   = ["system:masters"]
     },
