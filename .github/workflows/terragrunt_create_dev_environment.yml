@@ -789,7 +789,6 @@ jobs:
       - name: Apply Manifests Take 2
         continue-on-error: true 
         run: |
-          git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests/helmfile
           source getContext.sh
           make decrypt-dev
