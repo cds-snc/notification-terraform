@@ -132,6 +132,7 @@ jobs:
 
       - name: Retrieve TFVars
         run: |
+          mkdir -p env/${{env.ENVIRONMENT}}/vars
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/vars/${{env.ENVIRONMENT}}.tfvars
 
   terragrunt-plan-common:
