@@ -180,7 +180,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan common
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/common"
           comment-delete: "true"
@@ -208,7 +208,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ECR
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/ecr"
           comment-delete: "true"
@@ -236,7 +236,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_receiving_emails
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/ses_receiving_emails"
           comment-delete: "true"
@@ -265,7 +265,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan dns
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/dns"
           comment-delete: "true"
@@ -293,7 +293,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_validation_dns_entries
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/ses_validation_dns_entries"
           comment-delete: "true"
@@ -322,7 +322,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan cloudfront
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/cloudfront"
           comment-delete: "true"
@@ -350,7 +350,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan eks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/eks"
           comment-delete: "true"
@@ -378,7 +378,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan elasticache
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/elasticache"
           comment-delete: "true"
@@ -406,7 +406,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan rds
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/rds"
           comment-delete: "true"
@@ -434,7 +434,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-api
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/lambda-api"
           comment-delete: "true"
@@ -462,7 +462,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-admin-pr
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/lambda-admin-pr"
           comment-delete: "true"
@@ -490,7 +490,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan performance-test
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/performance-test"
           comment-delete: "true"
@@ -518,7 +518,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan heartbeat
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/heartbeat"
           comment-delete: "true"
@@ -546,7 +546,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan database-tools
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/database-tools"
           comment-delete: "true"
@@ -574,7 +574,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan quicksight
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/quicksight"
           comment-delete: "true"
@@ -602,7 +602,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-google-cidr
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/lambda-google-cidr"
           comment-delete: "true"
@@ -630,7 +630,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/ses_to_sqs_email_callbacks"
           comment-delete: "true"
@@ -658,7 +658,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/sns_to_sqs_sms_callbacks"
           comment-delete: "true"
@@ -686,7 +686,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba # v3.0.6
         with:
           directory: "env/staging/pinpoint_to_sqs_sms_callbacks"
           comment-delete: "true"
@@ -714,7 +714,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan system_status
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
           directory: "env/staging/system_status"
           comment-delete: "true"
@@ -742,7 +742,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan aws/system_status_static_site
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
           directory: "env/staging/system_status_static_site"
           comment-delete: "true"
@@ -771,7 +771,7 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan aws/newrelic
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
           directory: "env/staging/newrelic"
           comment-delete: "true"
