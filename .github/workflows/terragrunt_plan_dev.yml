@@ -197,6 +197,7 @@ jobs:
         if: |
           always() &&
           needs.terragrunt-filter.outputs.${{ matrix.module }}  == 'true' &&
+          needs.terragrunt-filter.outputs.common == 'true' &&
           !contains(needs.*.result, 'failure') &&
           !contains(needs.*.result, 'cancelled')
         uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
@@ -206,4 +207,3 @@ jobs:
           comment-title: "${{ env.ENVIRONMENT }}: ${{ matrix.module }}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
-          
