@@ -784,13 +784,14 @@ jobs:
           sed "s/targetGroupARN.*/targetGroupARN: $API_TARGET_GROUP_ARN/" api-target-group.yaml | sponge api-target-group.yaml
           sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN/" document-download-api-target-group.yaml | sponge document-download-api-target-group.yaml
           sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENTATION_TARGET_GROUP_ARN/" documentation-target-group.yaml | sponge documentation-target-group.yaml
-          kubectl apply -k . 2>&1 | true 
+          kubectl apply -k . 2>&1
 
       - name: Apply Manifests Take 2
         continue-on-error: true 
         run: |
           cd /var/tmp/notification-manifests/helmfile
           source getContext.sh
+          cd ..
           make decrypt-dev
           cd env/dev
           export ADMIN_TARGET_GROUP_ARN=$(echo $ADMIN_TARGET_GROUP_ARN | sed 's/\//\\\//g')
