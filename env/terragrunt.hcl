@@ -1,5 +1,6 @@
 locals {
-  inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars", path_relative_to_include("${get_env("ENVIRONMENT")}.tfvars"))))
+  # inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars", "${get_env("ENVIRONMENT")}.tfvars")))
+  inputs = jsondecode(read_tfvars_file(get_working_dir() + "/var/tmp/${get_env("ENVIRONMENT")}.tfvars"))
 }
 
 inputs = merge(
