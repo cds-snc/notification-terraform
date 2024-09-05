@@ -141,7 +141,7 @@ jobs:
 
       - name: Retrieve TFVars
         run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > env/${{env.ENVIRONMENT}}/common/${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt plan common
         uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
