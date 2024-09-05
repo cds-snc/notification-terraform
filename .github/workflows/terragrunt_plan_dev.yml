@@ -2,7 +2,7 @@ name: "Terragrunt plan DEV"
 
 env:
   ENVIRONMENT: dev
-  ACCOUNT_ID: 800095993820
+  ACCOUNT_ID: "800095993820"
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
 on:
