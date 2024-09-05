@@ -18,7 +18,7 @@ module "eks" {
       groups   = ["system:nodes", "system:bootstrappers"]
     },
     {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/AWSReservedSSO_AWSAdministratorAccess_e6e62a284c3c35fc"
+      rolearn  = "arn:aws:iam::${var.account_id}:role/${var.role_name}"
       username = "AWSAdministratorAccess:{{SessionName}}"
       groups   = ["system:masters"]
     },
@@ -27,4 +27,9 @@ module "eks" {
   aws_auth_accounts = [
     var.account_id
   ]
+}
+
+variable "role_name" {
+  type        = string
+  description = "The name of the role to create"
 }

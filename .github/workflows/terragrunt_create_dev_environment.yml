@@ -294,34 +294,34 @@ jobs:
           cd env/dev/rds
           terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-  terragrunt-apply-lambda-api:
-    if: |
-      always() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr,terragrunt-apply-rds]
+  # terragrunt-apply-lambda-api:
+  #   if: |
+  #     always() &&
+  #     !contains(needs.*.result, 'failure') &&
+  #     !contains(needs.*.result, 'cancelled')
+  #   runs-on: ubuntu-latest  
+  #   needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr,terragrunt-apply-rds]
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform
-        uses: ./.github/actions/setup-terraform
-        with:
-          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
-          role_session_name: NotifyTerraformApply        
+  #     - name: setup-terraform
+  #       uses: ./.github/actions/setup-terraform
+  #       with:
+  #         role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+  #         role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
-        run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb          
+  #     - name: Install 1Pass CLI
+  #       run: |
+  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+  #         sudo dpkg -i 1pass.deb          
 
-      - name: terragrunt apply lambda-api
-        run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-          cd env/dev/lambda-api
-          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+  #     - name: terragrunt apply lambda-api
+  #       run: |
+  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+  #         cd env/dev/lambda-api
+  #         terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-admin-pr:
     if: |
@@ -450,34 +450,34 @@ jobs:
           cd env/dev/database-tools
           terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
-  terragrunt-apply-quicksight:
-    if: |
-      always() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds]
+  # terragrunt-apply-quicksight:
+  #   if: |
+  #     always() &&
+  #     !contains(needs.*.result, 'failure') &&
+  #     !contains(needs.*.result, 'cancelled')
+  #   runs-on: ubuntu-latest  
+  #   needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds]
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         
-      - name: setup-terraform
-        uses: ./.github/actions/setup-terraform
-        with:
-          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
-          role_session_name: NotifyTerraformApply                  
+  #     - name: setup-terraform
+  #       uses: ./.github/actions/setup-terraform
+  #       with:
+  #         role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+  #         role_session_name: NotifyTerraformApply                  
 
-      - name: Install 1Pass CLI
-        run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb          
+  #     - name: Install 1Pass CLI
+  #       run: |
+  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+  #         sudo dpkg -i 1pass.deb          
 
-      - name: terragrunt apply quicksight
-        run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-          cd env/dev/quicksight
-          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+  #     - name: terragrunt apply quicksight
+  #       run: |
+  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+  #         cd env/dev/quicksight
+  #         terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-google-cidr:
     if: |
@@ -753,12 +753,13 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
           cd env/dev/dev_only_kubernetes_fix
+          export TF_VAR_role_name = $(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSReservedSSO_AWSAdministratorAccess_*")) | .RoleName')
           terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
 
       - name: Apply Manifests
+        continue-on-error: true 
         run: |
-          kubectl describe -n kube-system configmap/aws-auth
-          git clone https://github.com/cds-snc/notification-manifests.git -b aws-auth-fix /var/tmp/notification-manifests
+          git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests/helmfile
           source getContext.sh
@@ -783,6 +784,23 @@ jobs:
           sed "s/targetGroupARN.*/targetGroupARN: $API_TARGET_GROUP_ARN/" api-target-group.yaml | sponge api-target-group.yaml
           sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN/" document-download-api-target-group.yaml | sponge document-download-api-target-group.yaml
           sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENTATION_TARGET_GROUP_ARN/" documentation-target-group.yaml | sponge documentation-target-group.yaml
-          kubectl apply -k . 2>&1
-          sleep 10
+          kubectl apply -k . 2>&1 | true 
+
+      - name: Apply Manifests Take 2
+        continue-on-error: true 
+        run: |
+          git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
+          cd /var/tmp/notification-manifests/helmfile
+          source getContext.sh
+          make decrypt-dev
+          cd env/dev
+          export ADMIN_TARGET_GROUP_ARN=$(echo $ADMIN_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export API_TARGET_GROUP_ARN=$(echo $API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN=$(echo $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          export DOCUMENTATION_TARGET_GROUP_ARN=$(echo $DOCUMENTATION_TARGET_GROUP_ARN | sed 's/\//\\\//g')
+          sed "s/targetGroupARN.*/targetGroupARN: $ADMIN_TARGET_GROUP_ARN/" admin-target-group.yaml | sponge admin-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $API_TARGET_GROUP_ARN/" api-target-group.yaml | sponge api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN/" document-download-api-target-group.yaml | sponge document-download-api-target-group.yaml
+          sed "s/targetGroupARN.*/targetGroupARN: $DOCUMENTATION_TARGET_GROUP_ARN/" documentation-target-group.yaml | sponge documentation-target-group.yaml
+          sleep 30
           kubectl apply -k . 
