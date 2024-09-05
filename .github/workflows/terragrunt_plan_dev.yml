@@ -179,7 +179,6 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
-
   terragrunt-plan-ecr:
     if: |
       always() &&
