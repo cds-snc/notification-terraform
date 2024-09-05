@@ -157,7 +157,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/common
-          terragrunt plan --var-file /var/tmp/${{env.ENVIRONMENT}}.tfvars --terragrunt-non-interactive
+          terragrunt plan --var-file ./././var/tmp/${{env.ENVIRONMENT}}.tfvars --terragrunt-non-interactive
 
       # - name: Terragrunt plan ECR
       #   if: |
