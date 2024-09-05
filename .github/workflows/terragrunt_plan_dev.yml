@@ -119,6 +119,21 @@ jobs:
               - 'aws/newrelic/**'
               - 'env/${{env.ENVIRONMENT}}/newrelic/**'
 
+  get-tfvars-from-1pass:
+    runs-on: ubuntu-latest  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/vars/${{env.ENVIRONMENT}}.tfvars
+
   terragrunt-plan-common:
     if: |
       needs.terragrunt-filter.outputs.common == 'true'
@@ -134,15 +149,6 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
-
-      - name: Install 1Pass CLI
-        run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb          
-
-      - name: Retrieve TFVars
-        run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/common/${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt plan common
         uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
