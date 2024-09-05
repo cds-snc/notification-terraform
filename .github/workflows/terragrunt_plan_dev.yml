@@ -142,7 +142,7 @@ jobs:
 
       - name: Retrieve TFVars
         run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/common/vars/${{env.ENVIRONMENT}}.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/common/${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt plan common
         uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
@@ -191,13 +191,13 @@ jobs:
 
       - name: Retrieve TFVars
         run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{ env.ENVIRONMENT }}"/notesPlain > env/${{ env.ENVIRONMENT }}/${{ matrix.module }}/${{ env.ENVIRONMENT }}.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{ env.ENVIRONMENT }}"/notesPlain > env/${{ env.ENVIRONMENT }}/${{ matrix.module }}/vars/${{ env.ENVIRONMENT }}.tfvars
 
       - name: Terragrunt plan ${{ matrix.module }}  
         if: |
           always() &&
           needs.terragrunt-filter.outputs.${{ matrix.module }}  == 'true' &&
-          needs.terragrunt-filter.outputs.common == 'true' &&
+          needs.terragrunt-filter.outputs.common  == 'true' &&
           !contains(needs.*.result, 'failure') &&
           !contains(needs.*.result, 'cancelled')
         uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
