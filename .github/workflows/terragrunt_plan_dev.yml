@@ -1,4 +1,8 @@
-name: "Terragrunt plan STAGING"
+name: "Terragrunt plan DEV"
+
+env:
+  ENVIRONMENT: dev
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
 on:
   workflow_dispatch: 
@@ -6,62 +10,14 @@ on:
     paths:
       - ".env"
       - "aws/**"
-      - "env/staging/**"
+      - "env/dev/**"
       - "env/terragrunt.hcl"
-      - ".github/workflows/terragrunt_plan_staging.yml"
+      - ".github/workflows/terragrunt_plan_dev.yml"
 
 permissions:
   id-token: write   # This is required for requesting the OIDC JWT
   contents: write    # This is required for actions/checkout     
   pull-requests: write
-
-env:
-  TARGET_ENV_PATH: staging
-  AWS_REGION: ca-central-1
-  TF_VAR_new_relic_api_key: ${{ secrets.STAGING_NEW_RELIC_API_KEY }}
-  TF_VAR_new_relic_account_id: ${{ secrets.STAGING_NEW_RELIC_ACCOUNT_ID }}
-  TF_VAR_new_relic_slack_webhook_url: ${{ secrets.STAGING_NEW_RELIC_SLACK_WEBHOOK_URL }}
-  TF_VAR_base_domain: ${{secrets.STAGING_BASE_DOMAIN}}
-  TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
-  TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
-  TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
-  TF_VAR_heartbeat_sms_number: ${{ secrets.STAGING_HEARTBEAT_SMS_NUMBER }}
-  TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
-  TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
-  TF_VAR_quicksight_db_user_password: ${{ secrets.STAGING_QUICKSIGHT_DB_USER_PASSWORD }}
-  TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
-  TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
-  TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
-  TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
-  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID_STAGING }}
-  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET_STAGING }}
-  TF_VAR_sentinel_customer_id: ${{ secrets.SENTINEL_CUSTOMER_ID }}
-  TF_VAR_sentinel_shared_key: ${{ secrets.SENTINEL_SHARED_KEY }}
-  TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
-  TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
-  TF_VAR_slack_channel_general_topic: "notification-staging-ops"
-  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
-  TF_VAR_system_status_admin_url: "https://staging.notification.cdssandbox.xyz"
-  TF_VAR_system_status_api_url: "https://api.staging.notification.cdssandbox.xyz"
-  TF_VAR_system_status_bucket_name: "notification-canada-ca-staging-system-status"
-  TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
-  TF_VAR_waf_secret: ${{secrets.STAGING_WAF_SECRET}}
-  # Prevents repeated creation of the Slack lambdas if already existing.
-  # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
-  TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
-  TF_VAR_perf_test_phone_number: ${{ secrets.PERF_TEST_PHONE_NUMBER }}
-  TF_VAR_perf_test_email: ${{ secrets.PERF_TEST_EMAIL }}
-  TF_VAR_perf_test_domain: ${{ secrets.PERF_TEST_DOMAIN }}
-  TF_VAR_perf_test_auth_header: ${{ secrets.PERF_TEST_AUTH_HEADER }}
-  TF_VAR_client_vpn_access_group_id: ${{ secrets.STAGING_CLIENT_VPN_ACCESS_GROUP_ID }}
-  TF_VAR_client_vpn_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SAML_METADATA }}
-  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
-  TF_VAR_pr_bot_installation_id: ${{ secrets.NOTIFY_PR_BOT_INSTALLATION_ID_MANIFESTS }}
-  TF_VAR_pr_bot_app_id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
-  TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
-  TF_VAR_budget_sre_bot_webhook: ${{ secrets.STAGING_BUDGET_SRE_BOT_WEBHOOK }}
-  TF_VAR_enable_sentinel_forwarding: true
-  TF_VAR_aws_xray_sdk_enabled: true
 
 jobs:
   terragrunt-filter:
@@ -94,74 +50,73 @@ jobs:
         with:
           filters: |
             common:
-              - '.github/workflows/terragrunt-plan-staging.yml'
+              - '.github/workflows/terragrunt-plan-${{env.ENVIRONMENT}}.yml'
               - 'aws/common/**'
-              - 'env/staging/common/**'
+              - 'env/${{env.ENVIRONMENT}}/common/**'
               - 'env/terragrunt.hcl'
-              - 'env/staging/env_vars.hcl'
             dns:
               - 'aws/dns/**'
-              - 'env/staging/dns/**'
+              - 'env/${{env.ENVIRONMENT}}/dns/**'
             ses_validation_dns_entries:
               - 'aws/ses_validation_dns_entries/**'
-              - 'env/staging/ses_validation_dns_entries/**'
+              - 'env/${{env.ENVIRONMENT}}/ses_validation_dns_entries/**'
             ecr:
               - 'aws/ecr/**'
-              - 'env/staging/ecr/**'
+              - 'env/${{env.ENVIRONMENT}}/ecr/**'
             eks:
               - 'aws/eks/**'
-              - 'env/staging/eks/**'
+              - 'env/${{env.ENVIRONMENT}}/eks/**'
             elasticache:
               - 'aws/elasticache/**'
-              - 'env/staging/elasticache/**'
+              - 'env/${{env.ENVIRONMENT}}/elasticache/**'
             rds:
               - 'aws/rds/**'
-              - 'env/staging/rds/**'
+              - 'env/${{env.ENVIRONMENT}}/rds/**'
             cloudfront:
               - 'aws/cloudfront/**'
-              - 'env/staging/cloudfront/**'
+              - 'env/${{env.ENVIRONMENT}}/cloudfront/**'
             lambda-api:
               - 'aws/lambda-api/**'
-              - 'env/staging/lambda-api/**'
+              - 'env/${{env.ENVIRONMENT}}/lambda-api/**'
             lambda-admin-pr:
               - 'aws/lambda-admin-pr/**'
-              - 'env/staging/lambda-admin-pr/**'              
+              - 'env/${{env.ENVIRONMENT}}/lambda-admin-pr/**'              
             performance-test:
               - 'aws/performance-test/**'
-              - 'env/staging/performance-test/**'
+              - 'env/${{env.ENVIRONMENT}}/performance-test/**'
             heartbeat:
               - 'aws/heartbeat/**'
-              - 'env/staging/heartbeat/**'
+              - 'env/${{env.ENVIRONMENT}}/heartbeat/**'
             database-tools:
               - 'aws/database-tools/**'
-              - 'env/staging/database-tools/**'
+              - 'env/${{env.ENVIRONMENT}}/database-tools/**'
             system_status:
               - 'aws/system_status/**'
-              - 'env/staging/system_status/**'
+              - 'env/${{env.ENVIRONMENT}}/system_status/**'
             system_status_static_site:
               - 'aws/system_status_static_site/**'
-              - 'env/staging/system_status_static_site/**'
+              - 'env/${{env.ENVIRONMENT}}/system_status_static_site/**'
             quicksight:
               - 'aws/quicksight/**'
-              - 'env/staging/quicksight/**'
+              - 'env/${{env.ENVIRONMENT}}/quicksight/**'
             lambda-google-cidr:
               - 'aws/lambda-google-cidr/**'
-              - 'env/staging/lambda-google-cidr/**'
+              - 'env/${{env.ENVIRONMENT}}/lambda-google-cidr/**'
             ses_receiving_emails:
               - 'aws/ses_receiving_emails/**'
-              - 'env/staging/ses_receiving_emails/**'
+              - 'env/${{env.ENVIRONMENT}}/ses_receiving_emails/**'
             ses_to_sqs_email_callbacks:
               - 'aws/ses_to_sqs_email_callbacks/**'
-              - 'env/staging/ses_to_sqs_email_callbacks/**'
+              - 'env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks/**'
             sns_to_sqs_sms_callbacks:
               - 'aws/sns_to_sqs_sms_callbacks/**'
-              - 'env/staging/sns_to_sqs_sms_callbacks/**'
+              - 'env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks/**'
             pinpoint_to_sqs_sms_callbacks:
               - 'aws/pinpoint_to_sqs_sms_callbacks/**'
-              - 'env/staging/pinpoint_to_sqs_sms_callbacks/**'
+              - 'env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks/**'
             newrelic:
               - 'aws/newrelic/**'
-              - 'env/staging/newrelic/**'
+              - 'env/${{env.ENVIRONMENT}}/newrelic/**'
 
   terragrunt-plan-common:
     if: |
@@ -179,12 +134,21 @@ jobs:
           role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan  
 
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb          
+
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+
       - name: Terragrunt plan common
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/common"
+          directory: "env/${{env.ENVIRONMENT}}/common"
           comment-delete: "true"
-          comment-title: "Staging: common"
+          comment-title: "${{env.ENVIRONMENT}}: common"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -208,11 +172,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ECR
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/ecr"
+          directory: "env/${{env.ENVIRONMENT}}/ecr"
           comment-delete: "true"
-          comment-title: "Staging: ecr"
+          comment-title: "${{env.ENVIRONMENT}}: ecr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -236,11 +200,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_receiving_emails
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/ses_receiving_emails"
+          directory: "env/${{env.ENVIRONMENT}}/ses_receiving_emails"
           comment-delete: "true"
-          comment-title: "Staging: ses_receiving_emails"
+          comment-title: "${{env.ENVIRONMENT}}: ses_receiving_emails"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -265,11 +229,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan dns
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/dns"
+          directory: "env/${{env.ENVIRONMENT}}/dns"
           comment-delete: "true"
-          comment-title: "Staging: dns"
+          comment-title: "${{env.ENVIRONMENT}}: dns"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -293,11 +257,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_validation_dns_entries
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/ses_validation_dns_entries"
+          directory: "env/${{env.ENVIRONMENT}}/ses_validation_dns_entries"
           comment-delete: "true"
-          comment-title: "Staging: ses_validation_dns_entries"
+          comment-title: "${{env.ENVIRONMENT}}: ses_validation_dns_entries"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -322,11 +286,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan cloudfront
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/cloudfront"
+          directory: "env/${{env.ENVIRONMENT}}/cloudfront"
           comment-delete: "true"
-          comment-title: "Staging: cloudfront"
+          comment-title: "${{env.ENVIRONMENT}}: cloudfront"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -350,11 +314,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan eks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/eks"
+          directory: "env/${{env.ENVIRONMENT}}/eks"
           comment-delete: "true"
-          comment-title: "Staging: eks"
+          comment-title: "${{env.ENVIRONMENT}}: eks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -378,11 +342,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan elasticache
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/elasticache"
+          directory: "env/${{env.ENVIRONMENT}}/elasticache"
           comment-delete: "true"
-          comment-title: "Staging: elasticache"
+          comment-title: "${{env.ENVIRONMENT}}: elasticache"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -406,11 +370,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan rds
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/rds"
+          directory: "env/${{env.ENVIRONMENT}}/rds"
           comment-delete: "true"
-          comment-title: "Staging: rds"
+          comment-title: "${{env.ENVIRONMENT}}: rds"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -434,11 +398,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-api
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/lambda-api"
+          directory: "env/${{env.ENVIRONMENT}}/lambda-api"
           comment-delete: "true"
-          comment-title: "Staging: lambda-api"
+          comment-title: "${{env.ENVIRONMENT}}: lambda-api"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -462,11 +426,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-admin-pr
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/lambda-admin-pr"
+          directory: "env/${{env.ENVIRONMENT}}/lambda-admin-pr"
           comment-delete: "true"
-          comment-title: "Staging: lambda-admin-pr"
+          comment-title: "${{env.ENVIRONMENT}}: lambda-admin-pr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -490,11 +454,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan performance-test
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/performance-test"
+          directory: "env/${{env.ENVIRONMENT}}/performance-test"
           comment-delete: "true"
-          comment-title: "Staging: performance-test"
+          comment-title: "${{env.ENVIRONMENT}}: performance-test"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -518,11 +482,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan heartbeat
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/heartbeat"
+          directory: "env/${{env.ENVIRONMENT}}/heartbeat"
           comment-delete: "true"
-          comment-title: "Staging: heartbeat"
+          comment-title: "${{env.ENVIRONMENT}}: heartbeat"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -546,11 +510,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan database-tools
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/database-tools"
+          directory: "env/${{env.ENVIRONMENT}}/database-tools"
           comment-delete: "true"
-          comment-title: "Staging: database-tools"
+          comment-title: "${{env.ENVIRONMENT}}: database-tools"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -574,11 +538,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan quicksight
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/quicksight"
+          directory: "env/${{env.ENVIRONMENT}}/quicksight"
           comment-delete: "true"
-          comment-title: "Staging: quicksight"
+          comment-title: "${{env.ENVIRONMENT}}: quicksight"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -602,11 +566,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan lambda-google-cidr
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/lambda-google-cidr"
+          directory: "env/${{env.ENVIRONMENT}}/lambda-google-cidr"
           comment-delete: "true"
-          comment-title: "Staging: lambda-google-cidr"
+          comment-title: "${{env.ENVIRONMENT}}: lambda-google-cidr"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -630,11 +594,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan ses_to_sqs_email_callbacks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/ses_to_sqs_email_callbacks"
+          directory: "env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks"
           comment-delete: "true"
-          comment-title: "Staging: ses_to_sqs_email_callbacks"
+          comment-title: "${{env.ENVIRONMENT}}: ses_to_sqs_email_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -658,11 +622,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan sns_to_sqs_sms_callbacks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/sns_to_sqs_sms_callbacks"
+          directory: "env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks"
           comment-delete: "true"
-          comment-title: "Staging: sns_to_sqs_sms_callbacks"
+          comment-title: "${{env.ENVIRONMENT}}: sns_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -686,11 +650,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan pinpoint_to_sqs_sms_callbacks
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/pinpoint_to_sqs_sms_callbacks"
+          directory: "env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks"
           comment-delete: "true"
-          comment-title: "Staging: pinpoint_to_sqs_sms_callbacks"
+          comment-title: "${{env.ENVIRONMENT}}: pinpoint_to_sqs_sms_callbacks"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -714,11 +678,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan system_status
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/system_status"
+          directory: "env/${{env.ENVIRONMENT}}/system_status"
           comment-delete: "true"
-          comment-title: "Staging: system_status"
+          comment-title: "${{env.ENVIRONMENT}}: system_status"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
 
@@ -742,11 +706,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan aws/system_status_static_site
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/system_status_static_site"
+          directory: "env/${{env.ENVIRONMENT}}/system_status_static_site"
           comment-delete: "true"
-          comment-title: "Staging: system_status_static_site"
+          comment-title: "${{env.ENVIRONMENT}}: system_status_static_site"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
           skip-conftest: "true"
@@ -771,11 +735,11 @@ jobs:
           role_session_name: NotifyTerraformPlan  
 
       - name: Terragrunt plan aws/newrelic
-        uses: cds-snc/terraform-plan@v3
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
         with:
-          directory: "env/staging/newrelic"
+          directory: "env/${{env.ENVIRONMENT}}/newrelic"
           comment-delete: "true"
-          comment-title: "Staging: newrelic"
+          comment-title: "${{env.ENVIRONMENT}}: newrelic"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
           skip-conftest: "true"
