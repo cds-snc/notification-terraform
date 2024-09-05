@@ -748,10 +748,17 @@ jobs:
           aws eks update-kubeconfig --name notification-canada-ca-dev-eks-cluster     
           kubectl config rename-context arn:aws:eks:ca-central-1:800095993820:cluster/notification-canada-ca-dev-eks-cluster dev
 
+      - name: terragrunt apply k8s-fix
+        continue-on-error: true 
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
+          cd env/dev/dev_only_kubernetes_fix
+          terragrunt apply --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+
       - name: Apply Manifests
         run: |
           kubectl describe -n kube-system configmap/aws-auth
-          git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
+          git clone https://github.com/cds-snc/notification-manifests.git -b aws-auth-fix /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests
           cd /var/tmp/notification-manifests/helmfile
           source getContext.sh
