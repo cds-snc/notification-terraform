@@ -11,9 +11,9 @@ on:
     paths:
       - ".env"
       - "aws/**"
-      - "env/dev/**"
+      - "env/$ENVIRONMENT/**"
       - "env/terragrunt.hcl"
-      - ".github/workflows/terragrunt_plan_dev.yml"
+      - ".github/workflows/terragrunt_plan_$ENVIRONMENT.yml"
 
 permissions:
   id-token: write   # This is required for requesting the OIDC JWT
