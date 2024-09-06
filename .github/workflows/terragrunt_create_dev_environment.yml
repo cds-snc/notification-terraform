@@ -31,7 +31,7 @@ jobs:
 
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformDevAppply
 
       - name: Install 1Pass CLI
@@ -59,14 +59,14 @@ jobs:
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-api-apply
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
           role-session-name: NotifyApiGitHubActions
           aws-region: "ca-central-1"        
 
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-api-apply
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
           role-session-name: NotifyApiGitHubActions
           aws-region: "us-east-1"  
 
@@ -77,7 +77,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformDevAppply        
 
       - name: Install 1Pass CLI
@@ -106,7 +106,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -135,7 +135,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply            
 
       - name: Install 1Pass CLI
@@ -164,7 +164,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -194,7 +194,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -223,7 +223,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply           
 
       - name: Install 1Pass CLI
@@ -253,7 +253,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -282,7 +282,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -311,7 +311,7 @@ jobs:
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
-  #         role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+  #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
   #         role_session_name: NotifyTerraformApply        
 
   #     - name: Install 1Pass CLI
@@ -340,7 +340,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -369,7 +369,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply           
 
       - name: Install 1Pass CLI
@@ -398,7 +398,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -427,7 +427,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply          
 
       - name: Install 1Pass CLI
@@ -438,7 +438,7 @@ jobs:
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-api-apply
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
           role-session-name: NotifyApiGitHubActions
           aws-region: "ca-central-1"        
 
@@ -467,7 +467,7 @@ jobs:
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
-  #         role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+  #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
   #         role_session_name: NotifyTerraformApply                  
 
   #     - name: Install 1Pass CLI
@@ -496,7 +496,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -525,7 +525,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -554,7 +554,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -583,7 +583,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -612,7 +612,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
       - name: Install 1Pass CLI
@@ -641,7 +641,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply         
 
       - name: Install 1Pass CLI
@@ -670,7 +670,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
       
       - name: Install 1Pass CLI
@@ -700,7 +700,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply           
 
       - name: Setup helmfile
@@ -748,7 +748,7 @@ jobs:
       - name: Configure kubeconfig
         run: |
           aws eks update-kubeconfig --name notification-canada-ca-dev-eks-cluster     
-          kubectl config rename-context arn:aws:eks:ca-central-1:${{env.DEV_ACCOUNT_ID}}:cluster/notification-canada-ca-dev-eks-cluster dev
+          kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-dev-eks-cluster dev
 
       - name: terragrunt apply k8s-fix
         continue-on-error: true 
