@@ -17,7 +17,7 @@ terraform {
 
   before_hook "before_hook" {
     commands     = local.inputs.env == "dev" ? ["apply", "plan"] : []
-    execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars", "/var/tmp/${get_env("ENVIRONMENT")}.tfvars"))]
+    execute      = [find_in_parent_folders("./scripts/checkEnvFile.sh"), find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars", "/var/tmp/${get_env("ENVIRONMENT")}.tfvars")]
   }
 
 }
