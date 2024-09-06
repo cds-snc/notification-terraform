@@ -1,0 +1,46 @@
+name: Reusable Steps
+
+on:
+  workflow_call:
+    inputs:
+      component:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+      ACCOUNT_ID:
+        required: true
+      OP_SERVICE_ACCOUNT_TOKEN:
+        required: true
+
+jobs:
+  terragrunt-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.6.0
+
+      - name: Setup Terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{ inputs.environment }}"/notesPlain > /var/tmp/${{ inputs.environment }}.tfvars
+
+      - name: Terragrunt plan ${{ inputs.component }}
+        run: |
+          cd env/${{ inputs.environment }}/${{ inputs.component }}
+          terragrunt plan --terragrunt-non-interactive
