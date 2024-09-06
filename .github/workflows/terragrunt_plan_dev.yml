@@ -146,23 +146,10 @@ jobs:
         if: |
           needs.terragrunt-filter.outputs.common == 'true'
 
-        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/common"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: common"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
-
-      - name: Terragrunt plan ECR
-
-        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/ecr"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ecr"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          cd env/${{env.ENVIRONMENT}}/common
+          terragrunt plan --terragrunt-non-interactive
 
   # terragrunt-plan-ecr:
   #   if: |
