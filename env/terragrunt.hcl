@@ -13,14 +13,14 @@ inputs = merge(
   }
 )
 
-# terraform {
+terraform {
 
-#   before_hook "before_hook" {
-#     commands     = local.inputs.env == "dev" ? ["apply", "plan"] : []
-#     execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", "${get_repo_root()}/aws/dev.tfvars"]
-#   }
+  before_hook "before_hook" {
+    commands     = local.inputs.env == "dev" ? ["apply", "plan"] : []
+    execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars", "/var/tmp/${get_env("ENVIRONMENT")}.tfvars"))]
+  }
 
-# }
+}
 
 generate "provider" {
   path      = "provider.tf"
