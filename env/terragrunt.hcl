@@ -9,7 +9,6 @@ inputs = merge(
       "${local.inputs.region}" = "${local.inputs.elb_account_id}"
     }
     cbs_satellite_bucket_name = "cbs-satellite-${local.inputs.account_id}"
-    dns_role                  = local.inputs.env == "staging" ? "" : (local.inputs.env == "production" ? "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.inputs.dns_account_id}:role/notify_prod_dns_manager\"\n  }" :  "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.inputs.dns_account_id}:role/${local.inputs.env}_dns_manager_role\"\n  }")
   }
 )
 
@@ -45,7 +44,7 @@ terraform {
 }
 
 provider "aws" {
-  region              = var.region
+  region              = "${local.inputs.region}"
   allowed_account_ids = [${local.inputs.account_id}]
 }
 
@@ -61,10 +60,33 @@ provider "aws" {
   allowed_account_ids = [${local.inputs.account_id}]
 }
 
+%{ if local.inputs.env == "dev" }
 provider "aws" {
   alias  = "dns"
-  region = "ca-central-1"${local.inputs.dns_role}
+  region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/${local.inputs.env}_dns_manager_role"
+  }
 }
+%{ endif }
+
+%{ if local.inputs.env == "staging" }
+provider "aws" {
+  alias  = "dns"
+  region = "ca-central-1"
+  }
+}
+%{ endif }
+
+%{ if local.inputs.env == "production" }
+provider "aws" {
+  alias  = "dns"
+  region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_${local.inputs.env}_dns_manager"
+  }
+}
+%{ endif }
 
 provider "aws" {
   alias  = "staging"
