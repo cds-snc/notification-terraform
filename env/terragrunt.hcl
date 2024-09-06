@@ -9,17 +9,18 @@ inputs = merge(
       "${local.inputs.region}" = "${local.inputs.elb_account_id}"
     }
     cbs_satellite_bucket_name = "cbs-satellite-${local.inputs.account_id}"
+    dns_role                  = local.inputs.env == "staging" ? "" : (local.inputs.env == "production" ? "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.inputs.dns_account_id}:role/notify_prod_dns_manager\"\n  }" :  "\n  assume_role {\n    role_arn = \"arn:aws:iam::${local.inputs.dns_account_id}:role/${local.inputs.env}_dns_manager_role\"\n  }")
   }
 )
 
-# terraform {
+terraform {
 
-#   before_hook "before_hook" {
-#     commands     = local.inputs.env == "dev" ? ["apply", "plan"] : []
-#     execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", "${get_repo_root()}/aws/dev.tfvars"]
-#   }
+  before_hook "before_hook" {
+    commands     = local.inputs.env == "dev" ? ["apply", "plan"] : []
+    execute      = ["${get_repo_root()}/scripts/checkEnvFile.sh", "${get_repo_root()}/aws/dev.tfvars"]
+  }
 
-# }
+}
 
 generate "provider" {
   path      = "provider.tf"
@@ -62,17 +63,14 @@ provider "aws" {
 
 provider "aws" {
   alias  = "dns"
-  region = "ca-central-1"
-  assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_${local.inputs.env}_dns_manager"
-  }
+  region = "ca-central-1"${local.inputs.dns_role}
 }
 
 provider "aws" {
   alias  = "staging"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.account_id}:role/${local.inputs.env}_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/${local.inputs.env}_dns_manager_role"
   }
 }
 

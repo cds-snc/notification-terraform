@@ -178,7 +178,6 @@ jobs:
           cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}
           terragrunt plan --terragrunt-non-interactive
 
-
   terragrunt-plan-ses_receiving_emails:
     if: |
       always() &&
