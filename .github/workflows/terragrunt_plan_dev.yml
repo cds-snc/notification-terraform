@@ -120,14 +120,36 @@ jobs:
               - 'env/${{env.ENVIRONMENT}}/newrelic/**'
 
   terragrunt-plan-common:
-    if: |
-      needs.terragrunt-filter.outputs.common == 'true'
-    runs-on: ubuntu-latest  
-    needs: terragrunt-filter
     uses: ./.github/workflows/reusable-steps.yml
+    if: |
+      always() &&
+      needs.terragrunt-filter.outputs.common == 'true'
+    needs: terragrunt-filter
     with:
       component: common
       environment: ${{ env.ENVIRONMENT }}
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+
+  # terragrunt-plan-ecr:
+  #   uses: ./.github/workflows/reusable-steps.yml
+  #   if: |
+  #     always() &&
+  #     needs.terragrunt-filter.outputs.ecr == 'true' &&
+  #     !contains(needs.*.result, 'failure') &&
+  #     !contains(needs.*.result, 'cancelled')
+  #   needs: terragrunt-filter
+  #   with:
+  #     component: ecr
+  #     environment: ${{ env.ENVIRONMENT }}
+  #   secrets:
+  #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+  #     OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
 
   # terragrunt-plan-ecr:
   #   if: |
