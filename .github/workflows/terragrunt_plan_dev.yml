@@ -122,14 +122,14 @@ jobs:
   terragrunt-plan-common:
     uses: ./.github/workflows/reusable-steps.yml
     if: |
-      needs.terragrunt-filter.outputs.common == 'true'
+      needs.terragrunt-filter.outputs.common == 'true' 
     needs: terragrunt-filter
     with:
       component: common
       environment: dev
     secrets:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+      ACCOUNT_ID: "800095993820"
       OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
 
