@@ -6,7 +6,7 @@ env:
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: 
   pull_request:
     paths:
       - ".env"
@@ -16,8 +16,8 @@ on:
       - ".github/workflows/terragrunt_plan_$ENVIRONMENT.yml"
 
 permissions:
-  id-token: write # This is required for requesting the OIDC JWT
-  contents: write # This is required for actions/checkout
+  id-token: write   # This is required for requesting the OIDC JWT
+  contents: write    # This is required for actions/checkout     
   pull-requests: write
 
 jobs:
@@ -30,21 +30,22 @@ jobs:
       ses_receiving_emails: ${{ steps.filter.outputs.ses_receiving_emails }}
       ses_to_sqs_email_callbacks: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks }}
       sns_to_sqs_sms_callbacks: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks }}
-      pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}
+      pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}      
       dns: ${{ steps.filter.outputs.dns }}
       ses_validation_dns_entries: ${{ steps.filter.outputs.ses_validation_dns_entries }}
       eks: ${{ steps.filter.outputs.eks }}
       rds: ${{ steps.filter.outputs.rds }}
       lambda-api: ${{ steps.filter.outputs.lambda-api }}
-      heartbeat: ${{ steps.filter.outputs.heartbeat }}
+      heartbeat: ${{ steps.filter.outputs.heartbeat }}   
       database-tools: ${{ steps.filter.outputs.database-tools }}
       quicksight: ${{ steps.filter.outputs.quicksight }}
       lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
-      system_status: ${{ steps.filter.outputs.system_status }}
-      system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}
+      system_status: ${{ steps.filter.outputs.system_status }}      
+      system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}      
       newrelic: ${{ steps.filter.outputs.newrelic }}
 
     steps:
+
       - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: filter
         with:
@@ -119,217 +120,188 @@ jobs:
               - 'env/${{env.ENVIRONMENT}}/newrelic/**'
 
   terragrunt-plan-common:
-    uses: ./.github/workflows/reusable-steps.yml
     if: |
       needs.terragrunt-filter.outputs.common == 'true'
+    runs-on: ubuntu-latest  
     needs: terragrunt-filter
-    with:
-      component: common
-      environment: dev
-    secrets:
-      ACCOUNT_ID: "800095993820"
-      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+    env:
+      COMPONENT: common
+    steps:
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan  
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}
+          terragrunt plan --terragrunt-non-interactive
 
-  # terragrunt-plan-ecr:
-  #   uses: ./.github/workflows/reusable-steps.yml
-  #   if: |
-  #     always() &&
-  #     needs.terragrunt-filter.outputs.ecr == 'true' &&
-  #     !contains(needs.*.result, 'failure') &&
-  #     !contains(needs.*.result, 'cancelled')
-  #   needs: terragrunt-filter
-  #   with:
-  #     component: ecr
-  #     environment: ${{ env.ENVIRONMENT }}
-  #   secrets:
-  #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-  #     OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  terragrunt-plan-ecr:
+    if: |
+      always() &&
+      needs.terragrunt-filter.outputs.ecr  == 'true' &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: terragrunt-filter
+    env:
+      COMPONENT: ecr
+    steps:
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan  
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}
+          terragrunt plan --terragrunt-non-interactive
 
-  # terragrunt-plan-ecr:
-  #   if: |
-  #     always() &&
-  #     needs.terragrunt-filter.outputs.ecr  == 'true' &&
-  #     !contains(needs.*.result, 'failure') &&
-  #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
-  #   needs: terragrunt-filter
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+  terragrunt-plan-ses_receiving_emails:
+    if: |
+      always() &&
+      (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: terragrunt-filter
+    env:
+      COMPONENT: ses_receiving_emails
+    steps:
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan  
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}
+          terragrunt plan --terragrunt-non-interactive
 
-  #     - name: setup-terraform
-  #       uses: ./.github/actions/setup-terraform
-  #       with:
-  #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  terragrunt-plan-dns:
+    if: |
+      always() &&
+      (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
+    env:
+      COMPONENT: dns
+    steps:
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan  
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}
+          terragrunt plan --terragrunt-non-interactive
 
-  #     - name: Install 1Pass CLI
-  #       run: |
-  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-  #         sudo dpkg -i 1pass.deb
+  terragrunt-plan-ses_validation_dns_entries:
+    if: |
+      always() &&
+      needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns]
+    env:
+      COMPONENT: ses_validation_dns_entries
+    steps:
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan  
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}
+          terragrunt plan --terragrunt-non-interactive
 
-  #     - name: Retrieve TFVars
-  #       run: |
-  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/ecr/${{env.ENVIRONMENT}}.tfvars
-
-  #     - name: Terragrunt plan ECR
-  #       uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
-  #       with:
-  #         directory: "env/${{env.ENVIRONMENT}}/ecr"
-  #         comment-delete: "true"
-  #         comment-title: "${{env.ENVIRONMENT}}: ecr"
-  #         github-token: "${{ secrets.GITHUB_TOKEN }}"
-  #         terragrunt: "true"
-
-  # terragrunt-plan-ses_receiving_emails:
-  #   if: |
-  #     always() &&
-  #     (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
-  #     !contains(needs.*.result, 'failure') &&
-  #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
-  #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
-  #     - name: setup-terraform
-  #       uses: ./.github/actions/setup-terraform
-  #       with:
-  #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
-
-  #     - name: Install 1Pass CLI
-  #       run: |
-  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-  #         sudo dpkg -i 1pass.deb
-
-  #     - name: Retrieve TFVars
-  #       run: |
-  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/ses_receiving_emails/${{env.ENVIRONMENT}}.tfvars
-
-  #     - name: Terragrunt plan ses_receiving_emails
-  #       uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
-  #       with:
-  #         directory: "env/${{env.ENVIRONMENT}}/ses_receiving_emails"
-  #         comment-delete: "true"
-  #         comment-title: "${{env.ENVIRONMENT}}: ses_receiving_emails"
-  #         github-token: "${{ secrets.GITHUB_TOKEN }}"
-  #         terragrunt: "true"
-
-  # terragrunt-plan-dns:
-  #   if: |
-  #     always() &&
-  #     (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
-  #     !contains(needs.*.result, 'failure') &&
-  #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
-  #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
-  #     - name: setup-terraform
-  #       uses: ./.github/actions/setup-terraform
-  #       with:
-  #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
-
-  #     - name: Install 1Pass CLI
-  #       run: |
-  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-  #         sudo dpkg -i 1pass.deb
-
-  #     - name: Retrieve TFVars
-  #       run: |
-  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/dns/${{env.ENVIRONMENT}}.tfvars
-
-  #     - name: Terragrunt plan dns
-  #       uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
-  #       with:
-  #         directory: "env/${{env.ENVIRONMENT}}/dns"
-  #         comment-delete: "true"
-  #         comment-title: "${{env.ENVIRONMENT}}: dns"
-  #         github-token: "${{ secrets.GITHUB_TOKEN }}"
-  #         terragrunt: "true"
-
-  # terragrunt-plan-ses_validation_dns_entries:
-  #   if: |
-  #     always() &&
-  #     needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' &&
-  #     !contains(needs.*.result, 'failure') &&
-  #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
-  #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns]
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
-  #     - name: setup-terraform
-  #       uses: ./.github/actions/setup-terraform
-  #       with:
-  #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
-
-  #     - name: Install 1Pass CLI
-  #       run: |
-  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-  #         sudo dpkg -i 1pass.deb
-
-  #     - name: Retrieve TFVars
-  #       run: |
-  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/ses_validation_dns_entries/${{env.ENVIRONMENT}}.tfvars
-
-  #     - name: Terragrunt plan ses_validation_dns_entries
-  #       uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
-  #       with:
-  #         directory: "env/${{env.ENVIRONMENT}}/ses_validation_dns_entries"
-  #         comment-delete: "true"
-  #         comment-title: "${{env.ENVIRONMENT}}: ses_validation_dns_entries"
-  #         github-token: "${{ secrets.GITHUB_TOKEN }}"
-  #         terragrunt: "true"
-
-  # terragrunt-plan-cloudfront:
-  #   if: |
-  #     always() &&
-  #     (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
-  #     !contains(needs.*.result, 'failure') &&
-  #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
-  #   needs: [terragrunt-filter,terragrunt-plan-common]
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
-  #     - name: setup-terraform
-  #       uses: ./.github/actions/setup-terraform
-  #       with:
-  #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
-
-  #     - name: Install 1Pass CLI
-  #       run: |
-  #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-  #         sudo dpkg -i 1pass.deb
-
-  #     - name: Retrieve TFVars
-  #       run: |
-  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/cloudfront/${{env.ENVIRONMENT}}.tfvars
-
-  #     - name: Terragrunt plan cloudfront
-  #       uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
-  #       with:
-  #         directory: "env/${{env.ENVIRONMENT}}/cloudfront"
-  #         comment-delete: "true"
-  #         comment-title: "${{env.ENVIRONMENT}}: cloudfront"
-  #         github-token: "${{ secrets.GITHUB_TOKEN }}"
-  #         terragrunt: "true"
+  terragrunt-plan-cloudfront:
+    if: |
+      always() &&
+      (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-filter,terragrunt-plan-common]
+    env:
+      COMPONENT: cloudfront
+    steps:
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+      - name: Retrieve TFVars
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan  
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
+          cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}
+          terragrunt plan --terragrunt-non-interactive
 
   # terragrunt-plan-eks:
   #   if: |
@@ -337,24 +309,24 @@ jobs:
   #     (needs.terragrunt-filter.outputs.eks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
   #         curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
   #         sudo dpkg -i 1pass.deb
-
+        
   #     - name: Retrieve TFVars
   #       run: |
   #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/eks/${{env.ENVIRONMENT}}.tfvars
@@ -374,13 +346,13 @@ jobs:
   #     (needs.terragrunt-filter.outputs.elasticache == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
@@ -411,18 +383,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.rds == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -448,18 +420,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.lambda-api == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -469,7 +441,7 @@ jobs:
   #     - name: Retrieve TFVars
   #       run: |
   #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/lambda-api/${{env.ENVIRONMENT}}.tfvars
-
+          
   #     - name: Terragrunt plan lambda-api
   #       uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
   #       with:
@@ -485,18 +457,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -522,18 +494,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.performance-test == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -559,18 +531,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -596,18 +568,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.database-tools == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -633,18 +605,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.quicksight == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -670,18 +642,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -707,18 +679,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -744,18 +716,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -781,18 +753,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -818,18 +790,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.system_status == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -855,18 +827,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.system_status_static_site == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: terragrunt-filter
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
@@ -893,18 +865,18 @@ jobs:
   #     (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.common == 'true') &&
   #     !contains(needs.*.result, 'failure') &&
   #     !contains(needs.*.result, 'cancelled')
-  #   runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest  
   #   needs: terragrunt-filter
 
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
+        
   #     - name: setup-terraform
   #       uses: ./.github/actions/setup-terraform
   #       with:
   #         role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-  #         role_session_name: NotifyTerraformPlan
+  #         role_session_name: NotifyTerraformPlan  
 
   #     - name: Install 1Pass CLI
   #       run: |
