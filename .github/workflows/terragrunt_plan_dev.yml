@@ -135,7 +135,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/common
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ecr:
     if: |
@@ -160,7 +160,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ecr
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ses_receiving_emails:
     if: |
@@ -185,7 +185,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-dns:
     if: |
@@ -210,7 +210,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/dns
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ses_validation_dns_entries:
     if: |
@@ -235,7 +235,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-cloudfront:
     if: |
@@ -260,7 +260,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/cloudfront
-          terragrunt plan --terragrunt-non-interactive -auto-approve 
+          terragrunt plan --terragrunt-non-interactive 
 
   terragrunt-plan-eks:
     if: |
@@ -286,7 +286,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/eks
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-elasticache:
     if: |
@@ -311,7 +311,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/elasticache
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-rds:
     if: |
@@ -336,7 +336,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/rds
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-lambda-api:
     if: |
@@ -361,7 +361,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/lambda-api
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-lambda-admin-pr:
     if: |
@@ -386,7 +386,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-performance-test:
     if: |
@@ -411,7 +411,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/performance-test
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-heartbeat:
     if: |
@@ -436,7 +436,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/heartbeat
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-database-tools:
     if: |
@@ -461,7 +461,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/database-tools
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-quicksight:
     if: |
@@ -486,7 +486,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/quicksight
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-lambda-google-cidr:
     if: |
@@ -511,7 +511,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ses_to_sqs_email_callbacks:
     if: |
@@ -536,7 +536,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-sns_to_sqs_sms_callbacks:
     if: |
@@ -561,7 +561,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
-          terragrunt plan --terragrunt-non-interactive -auto-approve -refresh=false
+          terragrunt plan --terragrunt-non-interactive -refresh=false
 
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
     if: |
@@ -586,7 +586,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-system_status:
     if: |
@@ -611,7 +611,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/system_status
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-system_status_static_site:
     if: |
@@ -636,7 +636,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/system_status_static_site
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-newrelic:
     if: |
@@ -661,4 +661,4 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/newrelic
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
-          terragrunt plan --terragrunt-non-interactive -auto-approve
+          terragrunt plan --terragrunt-non-interactive
