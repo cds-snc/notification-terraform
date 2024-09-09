@@ -74,14 +74,6 @@ provider "aws" {
 }
 %{ endif }
 
-%{ if local.inputs.env == "staging" }
-provider "aws" {
-  alias  = "dns"
-  region = "ca-central-1"
-  }
-}
-%{ endif }
-
 %{ if local.inputs.env == "production" }
 provider "aws" {
   alias  = "dns"
