@@ -34,7 +34,7 @@ runs:
           CONFTEST_VERSION: 0.30.0 
           TERRAFORM_VERSION: 1.9.5
           TERRAGRUNT_VERSION: 0.67.3
-          TF_SUMMARIZE_VERSION: 0.3.9                   
+          TF_SUMMARIZE_VERSION: 0.2.3                    
 
     - name: Setup Infrastructure Version
       # Set the GitHub tag within .github/workflows/infrastructure_version.txt to update the infrastructure
