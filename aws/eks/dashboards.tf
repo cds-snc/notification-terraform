@@ -48,7 +48,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 8,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/ForkPoolWorker/ or @message like /WorkerLostError/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Celery Errors",
