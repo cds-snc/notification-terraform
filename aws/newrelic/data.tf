@@ -1,4 +1,6 @@
 data "newrelic_entity" "notification-api-lambda" {
+  count = var.enable_new_relic ? 1 : 0
+
   name     = "api-lambda"
   provider = newrelic
   tag {
@@ -8,11 +10,15 @@ data "newrelic_entity" "notification-api-lambda" {
 }
 
 data "newrelic_entity" "notification-admin" {
+  count = var.enable_new_relic ? 1 : 0
+
   name     = "notification-admin-${var.env}"
   provider = newrelic
 }
 
 data "newrelic_entity" "notification-api-k8s" {
+  count = var.enable_new_relic ? 1 : 0
+
   name     = "notification-api-${var.env}"
   provider = newrelic
 }

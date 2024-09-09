@@ -55,6 +55,7 @@ env:
   TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
   TF_VAR_budget_sre_bot_webhook: ${{ secrets.PRODUCTION_BUDGET_SRE_BOT_WEBHOOK }}
   TF_VAR_enable_sentinel_forwarding: true
+  TF_VAR_aws_xray_sdk_enabled: false
 
 jobs:
   terragrunt-plan-common:

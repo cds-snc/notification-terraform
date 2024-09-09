@@ -131,6 +131,11 @@ resource "aws_rds_cluster_parameter_group" "pgaudit" {
 }
 
 resource "aws_rds_cluster" "notification-canada-ca" {
+
+  depends_on = [
+    aws_cloudwatch_log_group.logs_exports
+  ]
+
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
   engine_version               = var.rds_version
@@ -142,6 +147,9 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_backup_window      = "07:00-09:00"
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
+
+  snapshot_identifier = var.recovery == true ? var.rds_snapshot_identifier : null
+
   #tfsec:ignore:AWS051 - database is encrypted without a custom key and that's fine
   storage_encrypted   = true
   deletion_protection = var.enable_delete_protection
@@ -164,6 +172,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+
 }
 
 # Holds the exported postgresql logs
