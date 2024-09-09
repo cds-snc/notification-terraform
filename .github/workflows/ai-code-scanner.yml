@@ -1,10 +1,10 @@
 name: AI Code Review
 
-# on:
-#   pull_request:
-#     types:
-#       - opened
-#       - synchronize
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
 jobs:
   ai_code_review:
@@ -12,10 +12,15 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: AI Code Review Action
+    - name: AI Code Review
       uses: cds-snc/cds-ai-codereviewer@main
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        OPENAI_API_MODEL: ${{ vars.OPENAI_API_MODEL }}
+        OPENAI_API_VERSION: ${{ vars.OPENAI_API_VERSION }}
+        OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
+        exclude: "*lock*,.env"
+        include: "**/*.md,**/*.hcl,**/*.sh,**/*.tf,**/*.txt,**/*.yml"
