@@ -40,7 +40,7 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error"
-  pattern        = "?\"ERROR/Worker\" ?\"ERROR/ForkPoolWorker\" ?\"WorkerLostError\""
+  pattern        = "?\"ERROR/*Worker\" ?\"ERROR/MainProcess\""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
@@ -180,10 +180,10 @@ resource "aws_cloudwatch_log_metric_filter" "github-arc-runner-alarm" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "callback-max-retry-failures" {
+resource "aws_cloudwatch_log_metric_filter" "callback-request-failures" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "callback-max-retry-failures"
-  pattern        = "send_delivery_status_to_service has retried the max num of times for callback url"
+  name           = "callback-request-failures"
+  pattern        = "send_delivery_status_to_service request failed for notification_id"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {

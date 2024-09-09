@@ -29,7 +29,7 @@ module "vpn" {
 
 # GHA VPN
 module "gha_vpn" {
-  source = "github.com/cds-snc/terraform-modules//client_vpn?ref=v9.5.3"
+  source = "github.com/cds-snc/terraform-modules//client_vpn?ref=v9.6.4"
 
   endpoint_name   = "gha-vpn"
   access_group_id = var.client_vpn_access_group_id
