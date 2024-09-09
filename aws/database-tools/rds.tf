@@ -28,6 +28,9 @@ resource "aws_db_instance" "database-tools" {
   storage_encrypted   = true
   deletion_protection = var.enable_delete_protection
 
+  backup_retention_period = 7
+  backup_window           = "02:00-04:00"
+
   vpc_security_group_ids = [var.database-tools-db-securitygroup]
   db_subnet_group_name   = aws_db_subnet_group.database-tools-rds-subnet.name
 
