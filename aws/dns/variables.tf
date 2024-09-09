@@ -13,7 +13,7 @@ variable "lambda_ses_receiving_emails_image_arn" {
 variable "scratch_account_ids" {
   type        = string
   description = "Used by staging DNS zone to set up cross account IAM"
-  default     = "\"AWS\": \"419291849580\", \"AWS\": \"239043911459\", \"AWS\": \"296255494825\""
+  default     = var.scratch_account_ids
 }
 
 variable "vpc_id" {
