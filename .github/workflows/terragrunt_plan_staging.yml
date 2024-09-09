@@ -128,7 +128,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan
+          role_session_name: NotifyTerraformStagingPlan
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -152,7 +152,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan      
+          role_session_name: NotifyTerraformStagingPlan      
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -177,7 +177,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -202,7 +202,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan            
+          role_session_name: NotifyTerraformStagingPlan            
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -227,7 +227,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -252,7 +252,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -277,7 +277,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan           
+          role_session_name: NotifyTerraformStagingPlan           
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -303,7 +303,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -328,7 +328,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -353,7 +353,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -378,7 +378,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -403,7 +403,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan           
+          role_session_name: NotifyTerraformStagingPlan           
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -428,7 +428,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -453,7 +453,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan          
+          role_session_name: NotifyTerraformStagingPlan          
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -478,7 +478,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan                  
+          role_session_name: NotifyTerraformStagingPlan                  
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -503,7 +503,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -528,7 +528,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -553,7 +553,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -578,7 +578,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -603,7 +603,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -628,7 +628,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan         
+          role_session_name: NotifyTerraformStagingPlan         
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
@@ -653,7 +653,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan        
+          role_session_name: NotifyTerraformStagingPlan        
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
