@@ -146,12 +146,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-      - name: Configure credentials to Notify Private ECR using OIDC
-        uses: aws-actions/configure-aws-credentials@master
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
         with:
-          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-plan
-          role-session-name: NotifyApiGitHubActions
-          aws-region: "ca-central-1"        
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan      
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
