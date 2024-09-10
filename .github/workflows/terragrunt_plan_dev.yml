@@ -211,7 +211,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/dns
-          terragrunt plan --terragrunt-non-interactive
+          TF_LOG=DEBUG terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ses_validation_dns_entries:
     if: |
@@ -287,7 +287,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/eks
-          terragrunt plan --terragrunt-non-interactive
+          TF_LOG=DEBUG terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-elasticache:
     if: |
