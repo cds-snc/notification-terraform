@@ -49,6 +49,7 @@ module "csv_bucket_logs" {
   bucket_name       = "notification-canada-ca-${var.env}-csv-upload-logs"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
+  versioning_status = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
@@ -223,6 +224,7 @@ module "document_download_logs" {
   bucket_name       = "notification-canada-ca-${var.env}-document-download-logs"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
+  versioning_status = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
@@ -356,6 +358,7 @@ module "athena_logs_bucket" {
   bucket_name       = "notification-canada-ca-${var.env}-athena-logs"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
+  versioning_status = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
@@ -373,6 +376,7 @@ module "cbs_logs_bucket" {
   billing_tag_value              = "notification-canada-ca-${var.env}"
   attach_lb_log_delivery_policy  = true
   attach_elb_log_delivery_policy = true
+  versioning_status              = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
