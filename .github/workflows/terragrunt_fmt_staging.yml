@@ -3,12 +3,8 @@ name: "Terragrunt Format STAGING"
 on:
   workflow_dispatch: 
   pull_request:
-    paths:
-      - ".env"
-      - "aws/**"
-      - "env/staging/**"
-      - "env/terragrunt.hcl"
-      - ".github/workflows/terragrunt_fmt_staging.yml"
+    branches:
+      - main
 env:
     tf_version: 'latest'
     tg_version: 'latest'
