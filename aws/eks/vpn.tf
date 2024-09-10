@@ -51,45 +51,51 @@ module "gha_vpn" {
   billing_tag_value = "notification-canada-ca-${var.env}"
 }
 
-
-#
-# Certificate used for VPN communication
-#
-resource "tls_private_key" "client_vpn" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
-
-resource "tls_self_signed_cert" "client_vpn" {
-  private_key_pem       = tls_private_key.client_vpn.private_key_pem
-  validity_period_hours = 43800 # 5 years
-  early_renewal_hours   = 672   # Generate new cert if Terraform is run within 4 weeks of expiry
-
-  subject {
-    common_name = "vpn.${var.env}.notification.canada.ca"
-  }
-
-  allowed_uses = [
-    "key_encipherment",
-    "digital_signature",
-    "server_auth",
-    "ipsec_end_system",
-    "ipsec_tunnel",
-    "any_extended",
-    "cert_signing",
-  ]
-}
-
 resource "aws_acm_certificate" "client_vpn" {
-  private_key      = tls_private_key.client_vpn.private_key_pem
-  certificate_body = tls_self_signed_cert.client_vpn.cert_pem
+  certificate_authority_arn   = aws_acmpca_certificate_authority.client_vpn.arn
+  domain_name                 = "${var.env}.notification.canada.ca"
 
   tags = {
-    Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
+    Environment = var.env
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
+
+resource "aws_acmpca_certificate_authority_certificate" "client_vpn" {
+  certificate_authority_arn = aws_acmpca_certificate_authority.client_vpn.arn
+
+  certificate       = aws_acmpca_certificate.client_vpn.certificate
+  certificate_chain = aws_acmpca_certificate.client_vpn.certificate_chain
+}
+
+resource "aws_acmpca_certificate" "client_vpn" {
+  certificate_authority_arn   = aws_acmpca_certificate_authority.client_vpn.arn
+  certificate_signing_request = aws_acmpca_certificate_authority.client_vpn.certificate_signing_request
+  signing_algorithm           = "SHA512WITHRSA"
+
+  template_arn = "arn:${data.aws_partition.current.partition}:acm-pca:::template/RootCACertificate/V1"
+
+  validity {
+    type  = "YEARS"
+    value = 5
+  }
+}
+
+resource "aws_acmpca_certificate_authority" "client_vpn" {
+  type = "ROOT"
+
+  certificate_authority_configuration {
+    key_algorithm     = "RSA_4096"
+    signing_algorithm = "SHA512WITHRSA"
+
+    subject {
+      common_name = "notification.canada.ca"
+    }
+  }
+}
+
+
+data "aws_partition" "current" {}
