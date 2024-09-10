@@ -95,6 +95,8 @@ resource "aws_acmpca_certificate_authority" "client_vpn" {
       common_name = "notification.canada.ca"
     }
   }
+
+  permanent_deletion_time_in_days = 7
 }
 
 
