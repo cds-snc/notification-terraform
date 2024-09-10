@@ -52,8 +52,8 @@ module "gha_vpn" {
 }
 
 resource "aws_acm_certificate" "client_vpn" {
-  certificate_authority_arn   = aws_acmpca_certificate_authority.client_vpn.arn
-  domain_name                 = "${var.env}.notification.canada.ca"
+  certificate_authority_arn = aws_acmpca_certificate_authority.client_vpn.arn
+  domain_name               = "${var.env}.notification.canada.ca"
 
   tags = {
     Environment = var.env
