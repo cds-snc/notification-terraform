@@ -1,7 +1,7 @@
 variable "scratch_account_ids" {
   type        = string
   description = "Used by staging DNS zone to set up cross account IAM"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "route53_zone_id" {

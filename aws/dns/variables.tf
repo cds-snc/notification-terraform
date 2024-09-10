@@ -13,7 +13,7 @@ variable "lambda_ses_receiving_emails_image_arn" {
 variable "scratch_account_ids" {
   type        = string
   description = "Used by staging DNS zone to set up cross account IAM"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "vpc_id" {
