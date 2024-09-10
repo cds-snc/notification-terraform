@@ -12,7 +12,7 @@ on:
 env:
     tf_version: 'latest'
     tg_version: 'latest'
-    tf_working_dir: './aws'
+    tf_working_dir: './env/staging'
 permissions:
   id-token: write   # This is required for requesting the OIDC JWT
   contents: write    # This is required for actions/checkout     
