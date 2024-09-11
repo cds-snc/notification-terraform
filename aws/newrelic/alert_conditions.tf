@@ -181,7 +181,7 @@ resource "newrelic_nrql_alert_condition" "external_services_callbacks_over_5_sec
   description = <<-EOT
   An API callback has a duration over 5 seconds. This has the potential to slow down the overall Celery processing of neighbors tasks such as database saving. Please investigate which service callback might be higher than the threshold and contact the service owner to look into the issue. If they cannot resolve in a timely manner, please remove their service's API URL callback. 
 
-  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
+  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
   EOT
 
   enabled                      = true
@@ -214,7 +214,7 @@ resource "newrelic_nrql_alert_condition" "internal_services_awsnotify_over_5_sec
   description = <<-EOT
   An API callback has a duration over 5 seconds. This has the potential to slow down the overall Celery processing of neighbors tasks such as database saving. Please investigate which service callback might be higher than the threshold and contact the service owner to look into the issue. If they cannot resolve in a timely manner, please remove their service's API URL callback. 
 
-  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
+  You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
   EOT
 
   enabled                      = true
@@ -247,7 +247,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_count_anomaly_fuzzy_a
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}') AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
+    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}') AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
   }
 
   critical {
@@ -281,7 +281,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_api_user_e
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
   }
 
   critical {
@@ -317,7 +317,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_atta
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
   }
 
   warning {
@@ -351,7 +351,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_atta
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError', 'werkzeug.exceptions:MethodNotAllowed')"
   }
 
   critical {
@@ -381,7 +381,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_unexpected
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` NOT IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
+    query = "SELECT percentage(count(*), WHERE `error.class` IS NOT null)*100 / percentage(count(*), WHERE duration IS NOT null) as 'Error rate (%); filtered' FROM AwsLambdaInvocation, AwsLambdaInvocationError WHERE `entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}' AND `error.class` NOT IN ('app.authentication.auth:AuthError', 'app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
   }
 
   critical {
@@ -417,7 +417,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_api_us
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}') AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
+    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}') AND `error.class` IN ('jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound')"
   }
 
   critical {
@@ -451,7 +451,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_unexpe
   violation_time_limit_seconds = 86400
 
   nrql {
-    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid}') and error.class NOT IN ('app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'app.authentication.auth:AuthError', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
+    query = "SELECT count(*) FROM AwsLambdaInvocationError WHERE (`entityGuid`='${data.newrelic_entity.notification-api-lambda[0].guid == null ? "null" : data.newrelic_entity.notification-api-lambda[0].guid}') and error.class NOT IN ('app.v2.errors:BadRequestError','jsonschema.exceptions:ValidationError', 'sqlalchemy.exc:NoResultFound', 'app.authentication.auth:AuthError', 'werkzeug.exceptions:MethodNotAllowed') and error.message NOT LIKE '{\\'result\\': \\'error\\', \\'message\\': {\\'password\\': [\\'Incorrect password\\']}}'"
   }
 
   critical {

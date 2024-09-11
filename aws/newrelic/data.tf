@@ -3,6 +3,7 @@ data "newrelic_entity" "notification-api-lambda" {
 
   name     = "api-lambda"
   provider = newrelic
+  ignore_not_found = true
   tag {
     key   = "aws.accountId"
     value = var.account_id
