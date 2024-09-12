@@ -79,6 +79,6 @@ else
     aws pinpoint-sms-voice-v2 create-event-destination \
         --event-destination-name PinpointLoggingFailures \
         --configuration-set-name pinpoint-configuration \
-        --matching-event-types '["TEXT_BLOCKED","TEXT_TTL_EXPIRED","TEXT_CARRIER_UNREACHABLE","TEXT_INVALID","TEXT_INVALID_MESSAGE","TEXT_CARRIER_BLOCKED","TEXT_CARRIER_BLOCKED","TEXT_SPAM","TEXT_UNKNOWN"]' \
+        --matching-event-types '["TEXT_INVALID","TEXT_INVALID_MESSAGE","TEXT_UNREACHABLE","TEXT_CARRIER_UNREACHABLE","TEXT_BLOCKED","TEXT_CARRIER_BLOCKED","TEXT_SPAM","TEXT_UNKNOWN","TEXT_TTL_EXPIRED"]' \
         --cloud-watch-logs-destination IamRoleArn=$iamRoleArn,LogGroupArn=$logGroupArnFailures
 fi
