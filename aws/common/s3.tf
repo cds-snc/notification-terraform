@@ -44,12 +44,11 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket" {
 }
 
 module "csv_bucket_logs" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-csv-upload-logs"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
-  versioning_status = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
@@ -219,12 +218,11 @@ resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
 }
 
 module "document_download_logs" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-document-download-logs"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
-  versioning_status = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
@@ -353,12 +351,11 @@ resource "aws_s3_bucket_public_access_block" "athena_bucket" {
 }
 
 module "athena_logs_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-athena-logs"
   force_destroy     = var.force_destroy_s3
   billing_tag_value = "notification-canada-ca-${var.env}"
-  versioning_status = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
@@ -368,7 +365,7 @@ module "athena_logs_bucket" {
 }
 
 module "cbs_logs_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.0.3"
   count  = var.create_cbs_bucket ? 1 : 0
 
   bucket_name                    = var.cbs_satellite_bucket_name
@@ -376,7 +373,6 @@ module "cbs_logs_bucket" {
   billing_tag_value              = "notification-canada-ca-${var.env}"
   attach_lb_log_delivery_policy  = true
   attach_elb_log_delivery_policy = true
-  versioning_status              = "Enabled"
 
   lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
 
@@ -386,7 +382,7 @@ module "cbs_logs_bucket" {
 }
 
 module "sns_sms_usage_report_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs"
   force_destroy     = var.force_destroy_s3
@@ -466,7 +462,7 @@ module "sns_sms_usage_report_bucket_us_west_2" {
     aws = aws.us-west-2
   }
 
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs"
   force_destroy     = var.force_destroy_s3
@@ -544,7 +540,7 @@ POLICY
 }
 
 module "sns_sms_usage_report_sanitized_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs-san"
   force_destroy     = var.force_destroy_s3
@@ -561,7 +557,7 @@ module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
     aws = aws.us-west-2
   }
 
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.2.3"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs-san"
   force_destroy     = var.force_destroy_s3
