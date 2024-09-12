@@ -35,24 +35,28 @@ variable "scratch_account_id" {
 
 variable "production_account_id" {
   type        = string
+  default     = var.production_account_id
   description = "production account id"
   sensitive   = true
 }
 
 variable "staging_account_id" {
   type        = string
+  default     = var.staging_account_id
   description = "staging account id"
   sensitive   = true
 }
 
 variable "sandbox_account_id" {
   type        = string
+  default     = var.sandbox_account_id
   description = "sandbox account id"
   sensitive   = true
 }
 
 variable "dev_account_id" {
   type        = string
+  default     = var.dev_account_id
   description = "dev account id"
   sensitive   = true
 }
