@@ -267,7 +267,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/cloudfront
           terragrunt init
-          TF_LOG=DEBUG terragrunt plan --terragrunt-non-interactive
+          terragrunt plan --terragrunt-non-interactive
  
   terragrunt-plan-eks:
     if: |
