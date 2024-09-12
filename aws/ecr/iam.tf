@@ -1,5 +1,5 @@
 module "oidc" {
-  source            = "github.com/cds-snc/terraform-modules?ref=v2.0.1//gh_oidc_role"
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=v2.0.5"
   billing_tag_key   = "CostCentre"
   billing_tag_value = "notification-canada-ca-${var.env}"
   oidc_exists       = true
