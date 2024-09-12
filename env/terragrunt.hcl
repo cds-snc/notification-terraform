@@ -95,67 +95,6 @@ provider "aws" {
 EOF
 }
 
-generate "common_variables" {
-  path      = "common_variables.tf"
-  if_exists = "overwrite"
-  contents  = <<EOF
-variable "account_id" {
-  description = "(Required) The account ID to perform actions on."
-  type        = string
-}
-
-variable "domain" {
-  description = "The current domain"
-  type        = string
-}
-
-variable "alt_domain" {
-  description = "The alternative domain, if it exists"
-  type        = string
-}
-
-variable "env" {
-  description = "The current running environment"
-  type        = string
-}
-
-variable "region" {
-  description = "The current AWS region"
-  type        = string
-}
-
-# https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions
-variable "elb_account_ids" {
-  description = "AWS account IDs used by load balancers"
-  type        = map(string)
-}
-
-variable "cbs_satellite_bucket_name" {
-  description = "Name of the Cloud Based Sensor S3 satellite bucket"
-  type        = string
-}
-
-variable "cloudwatch_enabled" {
-  type        = bool
-  default     = true
-  description = "Use this flag to enable/disable cloudwatch logs. Useful for saving money on scratch accounts"
-}
-
-variable "log_retention_period_days" {
-  description = "Log retention period in days for normal logs"
-  type        = number
-  default     = 0
-}
-
-variable "sensitive_log_retention_period_days" {
-  description = "Log retention period in days for logs with sensitive information"
-  type        = number
-  default     = 7
-}
-
-EOF
-}
-
 remote_state {
   backend = "s3"
   generate = {
