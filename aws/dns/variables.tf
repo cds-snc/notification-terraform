@@ -42,7 +42,7 @@ variable "production_account_id" {
 variable "staging_account_id" {
   type        = string
   description = "staging account id"
-  sensitive   = true 
+  sensitive   = true
 }
 
 variable "sandbox_account_id" {
