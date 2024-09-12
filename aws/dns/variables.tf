@@ -26,3 +26,33 @@ variable "hosted_zone_id" {
   description = "Used to associate the internal DNS with the VPC"
   default     = "Z04028033PLSHVOO9ZJ1Z"
 }
+
+variable "scratch_account_id" {
+  type        = string
+  description = "scratch account id"
+  sensitive   = true
+}
+
+variable "production_account_id" {
+  type        = string
+  description = "production account id"
+  sensitive   = true
+}
+
+variable "staging_account_id" {
+  type        = string
+  description = "staging account id"
+  sensitive   = true 
+}
+
+variable "sandbox_account_id" {
+  type        = string
+  description = "sandbox account id"
+  sensitive   = true
+}
+
+variable "dev_account_id" {
+  type        = string
+  description = "dev account id"
+  sensitive   = true
+}
