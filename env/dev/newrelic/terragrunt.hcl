@@ -1,3 +1,7 @@
+dependencies {
+  paths = ["../common"]
+}
+
 terraform {
   source = "../../../aws//newrelic"
 }
