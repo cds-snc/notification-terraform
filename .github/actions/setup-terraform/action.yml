@@ -33,7 +33,7 @@ runs:
       env: # In case you want to override default versions
           CONFTEST_VERSION: 0.30.0 
           TERRAFORM_VERSION: 1.9.5
-          TERRAGRUNT_VERSION: 0.66.9
+          TERRAGRUNT_VERSION: 0.67.4
           TF_SUMMARIZE_VERSION: 0.2.3                    
 
     - name: Setup Infrastructure Version
