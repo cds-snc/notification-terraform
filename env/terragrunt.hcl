@@ -14,11 +14,6 @@ inputs = merge(
 
 terraform {
 
-  before_hook "before_hook" {
-    commands     = local.inputs.env == "dev" ? ["apply", "plan"] : []
-    execute      = [find_in_parent_folders("./scripts/checkEnvFile.sh"), find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars", "/var/tmp/${get_env("ENVIRONMENT")}.tfvars")]
-  }
-
 }
 
 generate "provider" {
@@ -30,7 +25,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 5.66"
     }
     tls = {
       source  = "hashicorp/tls"

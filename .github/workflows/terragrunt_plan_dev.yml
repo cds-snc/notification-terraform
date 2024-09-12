@@ -257,17 +257,22 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformDevPlan        
+          role_session_name: NotifyTerraformDevPlan      
+
       - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb          
-      - name: terragrunt plan cloudfront
-        run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
-          cd env/${{env.ENVIRONMENT}}/cloudfront
-          terragrunt init
-          terragrunt plan --terragrunt-non-interactive --terragrunt-log-level debug
+          sudo dpkg -i 1pass.deb  
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars        
+
+      - name: Terragrunt plan ses_receiving_emails
+        uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/cloudfront"
+          comment-delete: "true"
+          comment-title: "Dev: Cloudfront"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"          
  
   terragrunt-plan-eks:
     if: |
