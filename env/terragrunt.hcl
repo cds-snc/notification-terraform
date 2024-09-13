@@ -61,7 +61,7 @@ provider "aws" {
 
 %{ if local.inputs.env == "dev" }
 provider "aws" {
-  alias  = "staging"
+  alias  = "dns"
   region = "ca-central-1"
   assume_role {
     role_arn = "arn:aws:iam::${local.inputs.staging_account_id}:role/${local.inputs.env}_dns_manager_role"
