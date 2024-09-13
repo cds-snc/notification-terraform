@@ -130,7 +130,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
+          role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
           echo "SHOW WORKING DIRECTORY"
@@ -163,7 +163,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
+          role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
           echo "SHOW WORKING DIRECTORY"
@@ -197,7 +197,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
+          role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
           echo "SHOW WORKING DIRECTORY"
@@ -231,7 +231,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
+          role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
           echo "SHOW WORKING DIRECTORY"
@@ -265,7 +265,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
+          role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
           echo "SHOW WORKING DIRECTORY"
@@ -299,7 +299,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
+          role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
           echo "SHOW WORKING DIRECTORY"
