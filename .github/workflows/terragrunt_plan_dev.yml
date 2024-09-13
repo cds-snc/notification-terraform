@@ -145,7 +145,9 @@ jobs:
           comment-delete: "true"
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"         
+          terragrunt: "true"      
+          terraform-init: |
+            -upgrade   
 
   terragrunt-plan-ecr:
     if: |
@@ -177,6 +179,8 @@ jobs:
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"     
+          terraform-init: |
+            -upgrade
 
   terragrunt-plan-ses_receiving_emails:
     if: |
@@ -209,6 +213,8 @@ jobs:
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"     
+          terraform-init: |
+            -upgrade
 
   terragrunt-plan-dns:
     if: |
@@ -241,6 +247,8 @@ jobs:
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"     
+          terraform-init: |
+            -upgrade
 
   terragrunt-plan-ses_validation_dns_entries:
     if: |
@@ -273,6 +281,8 @@ jobs:
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"     
+          terraform-init: |
+            -upgrade
 
   terragrunt-plan-cloudfront:
     if: |
@@ -304,7 +314,10 @@ jobs:
           comment-delete: "true"
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"     
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
  
   # terragrunt-plan-eks:
   #   if: |
