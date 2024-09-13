@@ -290,8 +290,10 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
-      - name: Install 1Pass CLI
+      - name: Install 1Pass CLI and Download TFVars
         run: |
+          echo "SHOW WORKING DIRECTORY"
+          echo $PWD
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           mkdir -p env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}/config
