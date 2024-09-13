@@ -137,7 +137,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/common
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ecr:
@@ -162,7 +162,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ecr
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ses_receiving_emails:
@@ -188,7 +188,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-dns:
@@ -214,7 +214,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/dns
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ses_validation_dns_entries:
@@ -240,7 +240,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-cloudfront:
@@ -270,7 +270,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/cloudfront
           terragrunt init
-          terragrunt plan --terragrunt-non-interactive -detailed-exitcode
+          terragrunt plan f--terragrunt-non-interactive -detailed-exitcode
 
       # - name: Terragrunt plan ses_receiving_emails
       #   uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
@@ -305,7 +305,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/eks
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-elasticache:
@@ -331,7 +331,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/elasticache
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-rds:
@@ -357,7 +357,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/rds
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-lambda-api:
@@ -383,7 +383,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/lambda-api
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-lambda-admin-pr:
@@ -409,7 +409,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-performance-test:
@@ -435,7 +435,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/performance-test
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-heartbeat:
@@ -461,7 +461,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/heartbeat
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-database-tools:
@@ -487,7 +487,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/database-tools
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-quicksight:
@@ -513,7 +513,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/quicksight
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-lambda-google-cidr:
@@ -539,7 +539,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-ses_to_sqs_email_callbacks:
@@ -565,7 +565,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-sns_to_sqs_sms_callbacks:
@@ -591,7 +591,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive -refresh=false
 
   terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
@@ -617,7 +617,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-system_status:
@@ -643,7 +643,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/system_status
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-system_status_static_site:
@@ -669,7 +669,7 @@ jobs:
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/system_status_static_site
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive
 
   terragrunt-plan-newrelic:
@@ -695,5 +695,5 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/newrelic
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
-          terragrunt init
+          terragrunt init -upgrade
           terragrunt plan --terragrunt-non-interactive

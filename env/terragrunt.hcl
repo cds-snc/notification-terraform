@@ -148,8 +148,40 @@ variable "sensitive_log_retention_period_days" {
   default     = 7
 }
 
+variable "production_account_id" {
+  description = "The account ID for the production account"
+  type        = string
+}
+
+variable "staging_account_id" {
+  description = "The account ID for the staging account"
+  type        = string
+}
+
+variable "sandbox_account_id" {
+  description = "The account ID for the Sandbox account"
+  type        = string
+}
+
+variable "dev_account_id" {
+  description = "The account ID for the Dev account"
+  type        = string
+}
+
+variable "scratch_account_id" {
+  description = "The account ID for the Scratch account"
+  type        = string
+}
+
+variable "scratch_account_ids" {
+  description = "The account ID for the Scratch account"
+  type        = string
+}
+
 EOF
 }
+
+
 
 remote_state {
   backend = "s3"
