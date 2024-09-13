@@ -163,10 +163,10 @@ resource "aws_iam_role" "dev_dns_manager" {
         Effect = "Allow",
         Principal = {
           AWS = [
-            "800095993820",
-            "arn:aws:iam::800095993820:role/notification-terraform-apply",
-            "arn:aws:iam::800095993820:role/notification-terraform-plan",
-            "arn:aws:sts::800095993820:assumed-role/notification-terraform-plan/NotifyTerraformPlan"
+            "${var.dev_account_id}",
+            "arn:aws:iam::${var.dev_account_id}:role/notification-terraform-apply",
+            "arn:aws:iam::${var.dev_account_id}:role/notification-terraform-plan",
+            "arn:aws:sts::${var.dev_account_id}:assumed-role/notification-terraform-plan/NotifyTerraformPlan"
           ]
         },
         Action = "sts:AssumeRole"
