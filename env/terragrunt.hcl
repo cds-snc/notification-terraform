@@ -147,6 +147,36 @@ variable "sensitive_log_retention_period_days" {
   default     = 7
 }
 
+variable "production_account_id" {
+  description = "The production Account ID"
+  type        = string
+}
+
+variable "staging_account_id" {
+  description = "The staging Account ID"
+  type        = string
+}
+
+variable "dev_account_id" {
+  description = "The dev Account ID"
+  type        = string
+}
+
+variable "sandbox_account_id" {
+  description = "The sandbox Account ID"
+  type        = string
+}
+
+variable "scratch_account_id" {
+  description = "The scratch Account ID"
+  type        = string
+}
+
+variable "scratch_account_ids" {
+  description = "The scratch Account IDs"
+  type        = list(string)
+}
+
 EOF
 }
 
