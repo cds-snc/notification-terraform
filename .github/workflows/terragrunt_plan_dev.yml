@@ -270,7 +270,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
           cd env/${{env.ENVIRONMENT}}/cloudfront
           terragrunt init
-          TF_LOG=DEBUG terragrunt plan --terragrunt-non-interactive -detailed-exitcode
+          terragrunt plan --terragrunt-non-interactive -detailed-exitcode
 
       # - name: Terragrunt plan ses_receiving_emails
       #   uses: cds-snc/terraform-plan@2aa797a64e4a37d05fcee5a62195f4c2bde5a0ba
