@@ -304,7 +304,7 @@ jobs:
           comment-delete: "true"
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"          
+          terragrunt: "true"        
  
   # terragrunt-plan-eks:
   #   if: |
