@@ -1,9 +1,3 @@
-variable "scratch_account_ids" {
-  type        = string
-  description = "Used by staging DNS zone to set up cross account IAM"
-  sensitive   = true
-}
-
 variable "route53_zone_id" {
   type        = string
   description = "Used by the scratch environment to reference cdssandbox in staging"
