@@ -156,6 +156,7 @@ resource "aws_iam_role_policy" "dev_dns_manager_policy" {
 resource "aws_iam_role" "dev_dns_manager" {
   count = var.env == "staging" ? 1 : 0
   name  = "dev_dns_manager_role"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -163,7 +164,7 @@ resource "aws_iam_role" "dev_dns_manager" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "800095993820"
+        "AWS": "${var.dev_account_id}"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -172,6 +173,7 @@ resource "aws_iam_role" "dev_dns_manager" {
 }
 EOF
 }
+
 
 resource "aws_iam_role_policy" "sandbox_dns_manager_policy" {
   count = var.env == "staging" ? 1 : 0
