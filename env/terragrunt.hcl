@@ -67,7 +67,6 @@ provider "aws" {
   }
 }
 
-
 %{ if local.inputs.env == "production" }
 provider "aws" {
   alias  = "dns"
@@ -82,7 +81,7 @@ provider "aws" {
   alias  = "staging"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/${local.inputs.env}_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.inputs.staging_account_id}:role/${local.inputs.env}_dns_manager_role"
   }
 }
 
