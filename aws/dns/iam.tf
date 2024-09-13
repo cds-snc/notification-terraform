@@ -156,23 +156,21 @@ resource "aws_iam_role_policy" "dev_dns_manager_policy" {
 resource "aws_iam_role" "dev_dns_manager" {
   count = var.env == "staging" ? 1 : 0
   name  = "dev_dns_manager_role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          AWS = [
-            "${var.dev_account_id}",
-            "arn:aws:iam::${var.dev_account_id}:role/notification-terraform-apply",
-            "arn:aws:iam::${var.dev_account_id}:role/notification-terraform-plan",
-            "arn:aws:sts::${var.dev_account_id}:assumed-role/notification-terraform-plan/NotifyTerraformPlan"
-          ]
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "AWS": "800095993820"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_iam_role_policy" "sandbox_dns_manager_policy" {
