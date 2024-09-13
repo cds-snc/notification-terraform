@@ -256,8 +256,8 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
-          role_session_name: NotifyTerraformDevApply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformDevPlan
 
       - name: Install 1Pass CLI
         run: |
