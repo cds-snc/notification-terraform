@@ -131,13 +131,14 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraform${{env.ENVIRONMENT}}Plan
-      - name: Install 1Pass CLI
+      - name: Install 1Pass CLI and Download TFVars
         run: |
+          echo "SHOW WORKING DIRECTORY"
+          echo $PWD
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           mkdir -p env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}/config
-          cd env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}/config
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}/config/${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -146,6 +147,8 @@ jobs:
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"      
+          terraform-init:
+            -var-file=config/${{env.ENVIRONMENT}}.tfvars       
 
   terragrunt-plan-ecr:
     if: |
