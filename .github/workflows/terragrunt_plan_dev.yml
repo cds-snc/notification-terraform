@@ -133,7 +133,7 @@ jobs:
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
-          cd env/${{env.ENVIRONMENT}}/common
+          cd env/${{env.ENVIRONMENT}}/common/config
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan common
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
