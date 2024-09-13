@@ -174,7 +174,7 @@ variable "scratch_account_id" {
 
 variable "scratch_account_ids" {
   description = "The scratch Account IDs"
-  type        = list(string)
+  type        = string
 }
 
 EOF
