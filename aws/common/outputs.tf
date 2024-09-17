@@ -153,42 +153,42 @@ output "sns_alert_ok_arn_us_east_1" {
 }
 
 output "sns_deliveries_ca_central_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].arn : ""
   sensitive = true
 }
 
 output "sns_deliveries_ca_central_name" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].name : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].name : ""
   sensitive = true
 }
 
 output "sns_deliveries_failures_ca_central_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].arn : ""
   sensitive = true
 }
 
 output "sns_deliveries_failures_ca_central_name" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].name : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].name : ""
   sensitive = true
 }
 
 output "sns_deliveries_us_west_2_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].arn : ""
   sensitive = true
 }
 
 output "sns_deliveries_us_west_2_name" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].name : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].name : ""
   sensitive = true
 }
 
 output "sns_deliveries_failures_us_west_2_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].arn : ""
   sensitive = true
 }
 
 output "sns_deliveries_failures_us_west_2_name" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].name : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].name : ""
   sensitive = true
 }
 
@@ -198,7 +198,7 @@ output "sqs_notify_internal_tasks_arn" {
 }
 
 output "cbs_satellite_bucket_name" {
-  value = var.create_cbs_bucket ? var.cbs_satellite_bucket_name : ""
+  value     = var.create_cbs_bucket ? var.cbs_satellite_bucket_name : ""
   sensitive = true
 }
 
@@ -249,51 +249,51 @@ output "sqs_deliver_receipts_queue_arn" {
 }
 
 output "subnet_ids" {
-  value = aws_subnet.notification-canada-ca-private[*].id
+  value     = aws_subnet.notification-canada-ca-private[*].id
   sensitive = true
 }
 
 output "subnet_cidr_blocks" {
-  value = aws_subnet.notification-canada-ca-private[*].cidr_block
+  value     = aws_subnet.notification-canada-ca-private[*].cidr_block
   sensitive = true
 }
 
 output "sns_monthly_spend_limit" {
-  value = var.sns_monthly_spend_limit
+  value     = var.sns_monthly_spend_limit
   sensitive = true
 }
 
 output "celery_queue_prefix" {
-  value = var.celery_queue_prefix
+  value     = var.celery_queue_prefix
   sensitive = true
 }
 
 output "sqs_send_sms_high_queue_delay_warning_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0].arn : ""
   sensitive = true
 }
 
 output "sqs_send_sms_high_queue_delay_critical_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0].arn : ""
   sensitive = true
 }
 
 output "sqs_send_sms_medium_queue_delay_warning_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0].arn : ""
   sensitive = true
 }
 
 output "sqs_send_sms_medium_queue_delay_critical_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-critical[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-critical[0].arn : ""
   sensitive = true
 }
 
 output "sqs_send_sms_low_queue_delay_warning_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-warning[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-warning[0].arn : ""
   sensitive = true
 }
 
 output "sqs_send_sms_low_queue_delay_critical_arn" {
-  value = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-critical[0].arn : ""
+  value     = var.cloudwatch_enabled ? aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-critical[0].arn : ""
   sensitive = true
 }
