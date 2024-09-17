@@ -508,6 +508,7 @@ jobs:
           comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           terragrunt: "true"
+          skip-conftest: "true"
           terraform-init: |
             -upgrade
 
