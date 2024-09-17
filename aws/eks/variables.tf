@@ -94,11 +94,6 @@ variable "non_api_waf_rate_limit" {
   type        = number
 }
 
-variable "api_waf_rate_limit" {
-  description = "Fall back rate limit for api and document download api"
-  type        = number
-}
-
 variable "sign_in_waf_rate_limit" {
   description = "Rate limit for /register, /sigh-in, and /forgot-password"
   type        = number
