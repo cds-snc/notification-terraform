@@ -204,6 +204,73 @@ variable "system_status_bucket_name" {
   description = "bucket name"
 }
 
+# lambda-api
+variable "api_image_tag" {
+  type        = string
+  description = "The tag of the image to deploy"
+}
+
+variable "redis_enabled" {
+  type        = number
+  description = "Enable Redis"
+}
+
+variable "low_demand_min_concurrency" {
+  type        = number
+  description = "Low demand min concurrency"
+}
+
+variable "low_demand_max_concurrency" {
+  type        = number
+  description = "Low demand max concurrency"
+}
+
+variable "high_demand_min_concurrency" {
+  type        = number
+  description = "High demand min concurrency"
+}
+
+variable "high_demand_max_concurrency" {
+  type        = number
+  description = "High demand max concurrency"
+}
+
+variable "new_relic_account_id" {
+  type        = string
+  description = "The New Relic account ID"
+}
+
+variable "new_relic_app_name" {
+  type        = string
+  description = "The name of the New Relic application"
+}
+
+variable "new_relic_distribution_tracing_enabled" {
+  type        = string
+  description = "Enable New Relic distribution tracing"
+}
+
+variable "notification_queue_prefix" {
+  type        = string
+  description = "The prefix for the notification queue"
+}
+
+variable "ff_cloudwatch_metrics_enabled" {
+  type        = string
+  description = "Enable FF Cloudwatch metrics"
+}
+
+variable "api_waf_rate_limit" {
+  type        = number
+  description = "The rate limit for the WAF"
+}
+
+variable "aws_xray_sdk_enabled" {
+  type        = bool
+  description = "Boolean value to decide whether or not to enable AWS X-Ray SDK"
+  default     = false
+}
+
 EOF
 }
 
