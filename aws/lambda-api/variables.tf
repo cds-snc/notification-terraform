@@ -1,30 +1,10 @@
-variable "alt_base_domain" {
-  type = string
-}
-
 variable "csv_upload_bucket_arn" {
-  type = string
-}
-
-variable "new_relic_app_name" {
-  type = string
-}
-
-variable "new_relic_distribution_tracing_enabled" {
   type = string
 }
 
 variable "new_relic_license_key" {
   type      = string
   sensitive = true
-}
-
-variable "notification_queue_prefix" {
-  type = string
-}
-
-variable "redis_enabled" {
-  type = string
 }
 
 variable "vpc_private_subnets" {
@@ -41,27 +21,6 @@ variable "firehose_waf_logs_iam_role_arn" {
 
 variable "base_domain" {
   type = string
-}
-
-variable "api_image_tag" {
-  type    = string
-  default = "bootstrap"
-}
-
-variable "low_demand_min_concurrency" {
-  type = number
-}
-
-variable "low_demand_max_concurrency" {
-  type = number
-}
-
-variable "high_demand_min_concurrency" {
-  type = number
-}
-
-variable "high_demand_max_concurrency" {
-  type = number
 }
 
 variable "certificate_arn" {
@@ -84,14 +43,6 @@ locals {
   api_lambda_log_group = "/aws/lambda/api-lambda"
 }
 
-variable "new_relic_account_id" {
-  type = string
-}
-
-variable "ff_cloudwatch_metrics_enabled" {
-  type = bool
-}
-
 variable "ip_blocklist_arn" {
   description = "Block all the IPs on this list from accessing admin and api"
   type        = string
@@ -100,11 +51,6 @@ variable "ip_blocklist_arn" {
 variable "re_api_arn" {
   description = "Regular expression to match the api urls"
   type        = string
-}
-
-variable "api_waf_rate_limit" {
-  description = "Fall back rate limit for api and document download api"
-  type        = number
 }
 
 variable "waf_secret" {
@@ -138,12 +84,6 @@ variable "bootstrap" {
   default     = false
 }
 
-variable "api_enable_new_relic" {
-  description = "Boolean value to decide whether or not new relic is enabled"
-  type        = bool
-  default     = true
-}
-
 variable "database_read_only_proxy_endpoint" {
   type        = string
   description = "Base read only endpoint for rds proxy"
@@ -163,10 +103,4 @@ variable "app_db_user_password" {
 variable "alb_arn_suffix" {
   type        = string
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
-}
-
-variable "aws_xray_sdk_enabled" {
-  type        = bool
-  description = "Boolean value to decide whether or not to enable AWS X-Ray SDK"
-  default     = false
 }
