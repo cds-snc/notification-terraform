@@ -156,31 +156,52 @@ variable "sensitive_log_retention_period_days" {
 variable "production_account_id" {
   description = "The production Account ID"
   type        = string
+  sensitive   = true
 }
 
 variable "staging_account_id" {
   description = "The staging Account ID"
   type        = string
+  sensitive   = true
 }
 
 variable "dev_account_id" {
   description = "The dev Account ID"
   type        = string
+  sensitive   = true
 }
 
 variable "sandbox_account_id" {
   description = "The sandbox Account ID"
   type        = string
+  sensitive   = true
 }
 
 variable "scratch_account_id" {
   description = "The scratch Account ID"
   type        = string
+  sensitive   = true
 }
 
 variable "scratch_account_ids" {
   description = "The scratch Account IDs"
   type        = string
+  sensitive   = true
+}
+
+variable "system_status_admin_url" {
+  type        = string
+  description = "Admin URL"
+}
+
+variable "system_status_api_url" {
+  type        = string
+  description = "API URL"
+}
+
+variable "system_status_bucket_name" {
+  type        = string
+  description = "bucket name"
 }
 
 EOF

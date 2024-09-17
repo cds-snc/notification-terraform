@@ -2,18 +2,6 @@ variable "billing_tag_value" {
   type        = string
   description = "Identifies the billing code."
 }
-variable "system_status_admin_url" {
-  type        = string
-  description = "Admin URL"
-}
-variable "system_status_api_url" {
-  type        = string
-  description = "API URL"
-}
-variable "system_status_bucket_name" {
-  type        = string
-  description = "bucket name"
-}
 
 variable "schedule_expression" {
   type        = string
