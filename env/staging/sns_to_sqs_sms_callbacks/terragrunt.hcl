@@ -33,7 +33,6 @@ include {
 }
 
 inputs = {
-  billing_tag_value                        = "notification-canada-ca-staging"
   sns_deliveries_ca_central_arn            = dependency.common.outputs.sns_deliveries_ca_central_arn
   sns_deliveries_ca_central_name           = dependency.common.outputs.sns_deliveries_ca_central_name
   sns_deliveries_failures_ca_central_arn   = dependency.common.outputs.sns_deliveries_failures_ca_central_arn

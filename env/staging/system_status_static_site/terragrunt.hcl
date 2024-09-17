@@ -25,8 +25,5 @@ dependency "dns" {
 }
 
 inputs = {
-  env                                    = "staging"
-  billing_tag_value                      = "notification-canada-ca-staging"
-  status_cert_created                    = true
   route53_zone_id                        = dependency.dns.outputs.route53_zone_id
 }
