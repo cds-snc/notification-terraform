@@ -133,8 +133,6 @@ jobs:
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          echo "SHOW WORKING DIRECTORY"
-          echo $PWD
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
@@ -167,8 +165,6 @@ jobs:
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          echo "SHOW WORKING DIRECTORY"
-          echo $PWD
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
@@ -203,8 +199,6 @@ jobs:
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          echo "SHOW WORKING DIRECTORY"
-          echo $PWD
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
@@ -238,8 +232,6 @@ jobs:
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          echo "SHOW WORKING DIRECTORY"
-          echo $PWD
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
@@ -273,8 +265,6 @@ jobs:
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          echo "SHOW WORKING DIRECTORY"
-          echo $PWD
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
@@ -308,8 +298,534 @@ jobs:
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          echo "SHOW WORKING DIRECTORY"
-          echo $PWD
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-eks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
+    env:
+      COMPONENT: "eks"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-elasticache:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-eks]
+    env:
+      COMPONENT: "elasticache"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-rds:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-eks]
+    env:
+      COMPONENT: "rds"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-lambda-api:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
+    env:
+      COMPONENT: "lambda-api"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-lambda-admin-pr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
+    env:
+      COMPONENT: "lambda-admin-pr"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-performance-test:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
+    env:
+      COMPONENT: "performance-test"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-heartbeat:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    env:
+      COMPONENT: "heartbeat"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-database-tools:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
+    env:
+      COMPONENT: "database-tools"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-quicksight:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
+    env:
+      COMPONENT: "quicksight"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-lambda-google-cidr:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
+    env:
+      COMPONENT: "lambda-google-cidr"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-ses_to_sqs_email_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    env:
+      COMPONENT: "ses_to_sqs_email_callbacks"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-sns_to_sqs_sms_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    env:
+      COMPONENT: "sns_to_sqs_sms_callbacks"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-pinpoint_to_sqs_sms_callbacks:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    env:
+      COMPONENT: "pinpoint_to_sqs_sms_callbacks"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-system_status:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
+    env:
+      COMPONENT: "system_status"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-system_status_static_site:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-plan-common,terragrunt-plan-system_status]
+    runs-on: ubuntu-latest  
+    env:
+      COMPONENT: "system_status_static_site"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-newrelic:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-plan-common]
+    runs-on: ubuntu-latest  
+    env:
+      COMPONENT: "newrelic"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
