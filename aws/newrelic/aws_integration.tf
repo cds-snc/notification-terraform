@@ -202,7 +202,7 @@ EOF
 
 resource "aws_cloudwatch_metric_stream" "newrelic_metric_stream" {
   # Disabled for now
-  count         = 0
+  count         = var.enable_new_relic && var.env == "staging" ? 1 : 0
   name          = "newrelic-metric-stream-${var.env}"
   role_arn      = aws_iam_role.metric_stream_to_firehose[0].arn
   firehose_arn  = aws_kinesis_firehose_delivery_stream.newrelic_firehose_stream[0].arn
