@@ -78,12 +78,6 @@ variable "private-links-gateway-prefix-list-ids" {
   description = "private links gateway"
 }
 
-variable "notify_k8s_namespace" {
-  type        = string
-  description = "Kubernetes namespace where GC Notify is installed"
-  default     = "notification-canada-ca"
-}
-
 variable "notification_base_url_regex_arn" {
   type        = string
   description = "The ARN of the regex for the notify base URL"

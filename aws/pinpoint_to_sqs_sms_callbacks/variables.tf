@@ -15,12 +15,6 @@ variable "sqs_deliver_receipts_queue_arn" {
   description = "The arn of the SQS queue for receipts processing celery tasks"
 }
 
-variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
-  type        = string
-  description = "Set this to specify the image version"
-  default     = "bootstrap"
-}
-
 variable "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"

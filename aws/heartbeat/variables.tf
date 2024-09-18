@@ -13,8 +13,3 @@ variable "heartbeat_ecr_repository_url" {
   type        = string
   description = "Inherited from ecr dependency"
 }
-variable "heartbeat_docker_tag" {
-  type        = string
-  description = "Set this to specify the image version"
-  default     = "bootstrap"
-}

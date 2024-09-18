@@ -16,12 +16,6 @@ variable "system_status_ecr_repository_url" {
   description = "Inherited from ecr dependency"
 }
 
-variable "system_status_docker_tag" {
-  type        = string
-  description = "Set this to specify the image version"
-  default     = "bootstrap"
-}
-
 variable "database_read_only_proxy_endpoint" {
   type        = string
   description = "Base read only endpoint for rds proxy"

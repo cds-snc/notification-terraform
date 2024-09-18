@@ -1,8 +1,3 @@
-variable "name" {
-  type    = string
-  default = "perf-test"
-}
-
 variable "vpc_id" {
   type = string
 }

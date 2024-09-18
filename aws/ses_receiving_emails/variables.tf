@@ -23,9 +23,3 @@ variable "ses_receiving_emails_ecr_arn" {
   type        = string
   description = "Inherited from ecr dependency"
 }
-
-variable "ses_receiving_emails_docker_tag" {
-  type        = string
-  description = "Set this to specify the image version"
-  default     = "bootstrap"
-}
