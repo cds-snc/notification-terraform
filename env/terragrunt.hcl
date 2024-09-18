@@ -124,6 +124,7 @@ variable "elb_account_id" {
 
 variable "elb_account_ids" {
   type = map(string)
+  sensitive = true
 }
 
 variable "cbs_satellite_bucket_name" {
@@ -401,7 +402,6 @@ variable "elasticache_node_type" {
 
 variable "client_vpn_access_group_id" {
   type      = string
-  sensitive = true
 }
 
 variable "client_vpn_saml_metadata" {
@@ -453,6 +453,7 @@ variable "budget_sre_bot_webhook" {
 
 variable "cloudwatch_opsgenie_alarm_webhook" {
   type = string
+  sensitive = true
 }
 
 variable "new_relic_license_key" {
@@ -507,7 +508,6 @@ variable "heartbeat_api_key" {
 
 variable "heartbeat_sms_number" {
   type      = string
-  sensitive = true
 }
 
 variable "schedule_expression" {
@@ -540,6 +540,7 @@ variable "quicksight_db_user_password" {
 
 variable "quicksight_db_user_name" {
   type = string
+  sensitive = true
 }
 
 variable "rds_cluster_password" {
@@ -588,7 +589,6 @@ variable "ff_redis_batch_saving" {
 
 variable "redis_url" {
   type      = string
-  sensitive = true
 }
 
 variable "secret_key" {
@@ -606,7 +606,6 @@ variable "sqs_region" {
 
 variable "gc_notify_service_email" {
   type      = string
-  sensitive = true
 }
 
 variable "aws_pinpoint_region" {
@@ -615,12 +614,10 @@ variable "aws_pinpoint_region" {
 
 variable "perf_test_phone_number" {
   type      = string
-  sensitive = true
 }
 
 variable "perf_test_email" {
   type      = string
-  sensitive = true
 }
 
 variable "perf_test_auth_header" {
@@ -638,7 +635,6 @@ variable "perf_schedule_expression" {
 
 variable "perf_test_aws_s3_bucket" {
   type      = string
-  sensitive = true
 }
 
 variable "perf_test_csv_directory_path" {
@@ -647,12 +643,10 @@ variable "perf_test_csv_directory_path" {
 
 variable "perf_test_sms_template_id" {
   type      = string
-  sensitive = true
 }
 
 variable "perf_test_bulk_email_template_id" {
   type      = string
-  sensitive = true
 }
 
 variable "alarm_warning_bulk_bulk_processed_created_delta_threshold" {
@@ -824,17 +818,14 @@ variable "account_budget_alert_emails" {
 
 variable "perf_test_email_template_id" {
   type      = string
-  sensitive = true
 }
 
 variable "perf_test_email_with_attachment_template_id" {
   type      = string
-  sensitive = true
 }
 
 variable "perf_test_email_with_link_template_id" {
   type      = string
-  sensitive = true
 }
 
 variable "pr_bot_app_id" {
