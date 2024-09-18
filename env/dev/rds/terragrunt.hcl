@@ -7,7 +7,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     kms_arn = ""
     vpc_private_subnets = [
@@ -24,7 +24,7 @@ dependency "eks" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     eks-cluster-securitygroup                 = "sg-0e2c3ef6c5c75b74c"
     sentinel_forwarder_cloudwatch_lambda_arn  = "arn:aws:lambda:ca-central-1:123456789012:function:sentinel-cloud-watch-forwarder"
@@ -39,12 +39,8 @@ include {
 inputs = {
   eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
   kms_arn                   = dependency.common.outputs.kms_arn
-  rds_instance_count        = 3
-  rds_instance_type         = "db.t3.medium"
   vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
   sns_alert_general_arn     = dependency.common.outputs.sns_alert_general_arn
-  rds_database_name         = "NotificationCanadaCastaging"
-
   sentinel_forwarder_cloudwatch_lambda_arn  = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_arn
   sentinel_forwarder_cloudwatch_lambda_name = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_name
 }

@@ -5,7 +5,7 @@ dependencies {
 dependency "common" {
   config_path = "../common"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     private-links-gateway-prefix-list-ids     = []
@@ -14,25 +14,18 @@ dependency "common" {
   }
 }
 
-dependency "ecr" {
-  config_path = "../ecr"
-  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
-
-  mock_outputs = {
-    notify_admin_ecr_arn = ""
-  }
-
-}
-
-
 dependency "elasticache" {
   config_path = "../elasticache"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     redis_cluster_security_group_id = ""
   }
+}
+
+dependency "ecr" {
+  config_path = "../ecr"
 }
 
 include {
