@@ -253,6 +253,10 @@ variable "rds_snapshot_identifier" {
   sensitive = true
 }
 
+variable "rds_version" {
+  type        = string
+}
+
 variable "aws_xray_sdk_enabled" {
   type = bool
 }
