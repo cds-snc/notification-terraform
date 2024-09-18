@@ -1,8 +1,3 @@
-variable "route53_zone_id" {
-  type        = string
-  description = "Used by the scratch environment to reference cdssandbox in staging"
-}
-
 variable "custom_sending_domains_dkim" {
   type        = string
   description = "Used to fetch the validation tokens for dkim for custom sending domains"
