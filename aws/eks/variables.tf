@@ -1,29 +1,3 @@
-variable "primary_worker_desired_size" {
-  type = number
-}
-
-variable "primary_worker_instance_types" {
-  type = list(any)
-}
-
-variable "secondary_worker_instance_types" {
-  type = list(any)
-}
-
-variable "node_upgrade" {
-  type        = bool
-  description = "Set to true when wanting to upgrade Node sizes"
-  default     = false
-}
-
-variable "primary_worker_max_size" {
-  type = number
-}
-
-variable "primary_worker_min_size" {
-  type = number
-}
-
 variable "vpc_id" {
   type = string
 }
@@ -56,53 +30,8 @@ variable "cloudfront_assets_arn" {
   type = string
 }
 
-variable "eks_cluster_name" {
-  type = string
-}
-
-variable "eks_cluster_version" {
-  description = "Kubernetes version of the cluster"
-  type        = string
-}
-
-variable "eks_addon_coredns_version" {
-  description = "CoreDNS EKS addon version"
-  type        = string
-}
-
-variable "eks_addon_kube_proxy_version" {
-  description = "kube-proxy EKS addon version"
-  type        = string
-}
-
-variable "eks_addon_vpc_cni_version" {
-  description = "VPC-CNI EKS addon version"
-  type        = string
-}
-
 variable "firehose_waf_logs_iam_role_arn" {
   type = string
-}
-
-variable "eks_node_ami_version" {
-  description = "The Amazon Machine Image version used by the EKS EC2 nodes" # https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html
-  type        = string
-}
-
-variable "non_api_waf_rate_limit" {
-  description = "Fall back rate limit for everything except api and document download api"
-  type        = number
-}
-
-variable "sign_in_waf_rate_limit" {
-  description = "Rate limit for /register, /sigh-in, and /forgot-password"
-  type        = number
-}
-
-variable "waf_secret" {
-  description = "secret the admin sends in the header so the WAF does not rate limit"
-  type        = string
-  sensitive   = true
 }
 
 locals {
@@ -149,96 +78,15 @@ variable "private-links-gateway-prefix-list-ids" {
   description = "private links gateway"
 }
 
-variable "sentinel_customer_id" {
-  type        = string
-  description = "sentinel customer id"
-  sensitive   = true
-}
-
-variable "sentinel_shared_key" {
-  type        = string
-  description = "sentinel shared key"
-  sensitive   = true
-}
-
 variable "notify_k8s_namespace" {
   type        = string
   description = "Kubernetes namespace where GC Notify is installed"
   default     = "notification-canada-ca"
 }
 
-variable "route53_zone_id" {
-  type        = string
-  description = "Used by the scratch environment to reference cdssandbox in staging"
-}
-
-variable "enable_delete_protection" {
-  type        = bool
-  description = "Flag to enable or disable delete protection on resources."
-  default     = true
-}
-
 variable "notification_base_url_regex_arn" {
   type        = string
   description = "The ARN of the regex for the notify base URL"
-}
-
-variable "sqs_send_email_high_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-high"
-}
-
-variable "sqs_send_email_medium_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-medium"
-}
-
-variable "sqs_send_email_low_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-low"
-}
-
-variable "sqs_send_sms_high_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-high"
-}
-
-variable "sqs_send_sms_medium_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-medium"
-}
-
-variable "sqs_send_sms_low_queue_name" {
-  type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-low"
-}
-
-variable "celery_queue_prefix" {
-  type        = string
-  description = "Celery queue prefix"
-}
-
-variable "eks_addon_ebs_driver_version" {
-  type        = string
-  description = "Version for EBS driver addon for EKS (Persistence)"
-}
-
-variable "force_upgrade" {
-  type        = bool
-  description = "Force k8s upgrade even though not all pods were able to be evicted"
-  default     = false
 }
 
 variable "internal_dns_certificate_arn" {
@@ -256,50 +104,6 @@ variable "internal_dns_name" {
   description = "The fqdn for the internal DNS"
 }
 
-variable "pr_bot_private_key" {
-  type        = string
-  description = "The Private Key for PR Bot, used by Github ARC"
-  sensitive   = true
-}
-
-variable "pr_bot_app_id" {
-  type        = string
-  description = "The AppID for PR Bot, used by Github ARC"
-  sensitive   = true
-}
-
-variable "pr_bot_installation_id" {
-  type        = string
-  description = "The installation ID for PR Bot, used by Github ARC"
-  sensitive   = true
-}
-
-variable "base_domain" {
-  type        = string
-  description = "The base domain for the environment"
-}
-
-variable "client_vpn_self_service_saml_metadata" {
-  type        = string
-  description = "The SAML metadata for the client VPN self service"
-}
-
-variable "client_vpn_saml_metadata" {
-  type        = string
-  description = "The SAML metadata for the client VPN"
-}
-
-variable "client_vpn_access_group_id" {
-  type        = string
-  description = "The access group ID for the client VPN"
-}
-
-variable "vpc_cidr_block" {
-  type        = string
-  description = "The CIDR block for the VPC"
-  default     = "10.0.0.0/16"
-}
-
 variable "subnet_cidr_blocks" {
   type        = list(string)
   description = "The CIDR blocks for the subnets"
@@ -308,9 +112,4 @@ variable "subnet_cidr_blocks" {
 variable "subnet_ids" {
   type        = list(string)
   description = "The IDs for the subnets"
-}
-
-variable "eks_karpenter_ami_id" {
-  type        = string
-  description = "The AMI ID for the Karpenter nodes"
 }
