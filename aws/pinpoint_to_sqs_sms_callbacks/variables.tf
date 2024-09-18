@@ -1,7 +1,3 @@
-variable "billing_tag_value" {
-  type        = string
-  description = "Identifies the billing code."
-}
 variable "sns_alert_warning_arn" {
   type = string
 }
@@ -38,23 +34,6 @@ variable "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
 variable "sms_monthly_spend_limit" {
   type        = number
   description = "The total monthly spending limit for SMS (SNS plus Pinpoint)"
-}
-
-variable "force_delete_ecr" {
-  description = "Boolean value to decide whether or not to force delete a non-empty ECR"
-  type        = bool
-  default     = false
-}
-
-variable "bootstrap" {
-  description = "Boolean value to decide whether or not to build images"
-  type        = bool
-  default     = false
-}
-
-variable "celery_queue_prefix" {
-  description = "The prefix for the celery queue"
-  type        = string
 }
 
 variable "sqs_send_sms_high_queue_delay_warning_arn" {
