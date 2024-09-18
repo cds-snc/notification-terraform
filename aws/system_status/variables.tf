@@ -1,13 +1,3 @@
-variable "billing_tag_value" {
-  type        = string
-  description = "Identifies the billing code."
-}
-
-variable "schedule_expression" {
-  type        = string
-  description = "This aws cloudwatch event rule scheule expression that specifies when the scheduler runs."
-}
-
 variable "sns_alert_warning_arn" {
   type = string
 }
@@ -32,12 +22,6 @@ variable "system_status_docker_tag" {
   default     = "bootstrap"
 }
 
-variable "app_db_user_password" {
-  type        = string
-  sensitive   = true
-  description = "Password for rds cluster"
-}
-
 variable "database_read_only_proxy_endpoint" {
   type        = string
   description = "Base read only endpoint for rds proxy"
@@ -49,10 +33,4 @@ variable "eks_cluster_securitygroup" {
 
 variable "vpc_private_subnets" {
   type = list(any)
-}
-
-variable "bootstrap" {
-  type        = bool
-  description = "Set this to true to deploy the bootstrap image"
-  default     = false
 }
