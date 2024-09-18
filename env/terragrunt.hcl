@@ -99,539 +99,538 @@ generate "common_variables" {
   path      = "common_variables.tf"
   if_exists = "overwrite"
   contents  = <<EOF
-## AWS (All Account Ids are needed in various places)
 variable "env" {
-    type = string
+  type = string
 }
 
 variable "account_budget_limit" {
-    type = number
+  type = number
 }
 
 variable "account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "dns_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "elb_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "elb_account_ids" {
-    type = map(string)
+  type = map(string)
 }
 
 variable "cbs_satellite_bucket_name" {
-    type = string
+  type = string
 }
 
 variable "dev_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "staging_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "production_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "sandbox_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "scratch_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "scratch_account_ids" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "region" {
-    type = string
+  type = string
 }
 
 variable "billing_tag_value" {
-    type = string
+  type = string
 }
 
 variable "api_image_tag" {
-    type = string
+  type = string
 }
 
 variable "redis_enabled" {
-    type = string
+  type = string
 }
 
 variable "low_demand_min_concurrency" {
-    type = number
+  type = number
 }
 
 variable "low_demand_max_concurrency" {
-    type = number
+  type = number
 }
 
 variable "high_demand_min_concurrency" {
-    type = number
+  type = number
 }
 
 variable "high_demand_max_concurrency" {
-    type = number
+  type = number
 }
 
 variable "new_relic_app_name" {
-    type = string
+  type = string
 }
 
 variable "new_relic_distribution_tracing_enabled" {
-    type = string
+  type = string
 }
 
 variable "notification_queue_prefix" {
-    type = string
+  type = string
 }
 
 variable "enable_new_relic" {
-    type = bool
+  type = bool
 }
 
 variable "create_cbs_bucket" {
-    type = bool
+  type = bool
 }
 
 variable "force_destroy_s3" {
-    type = bool
+  type = bool
 }
 
 variable "force_delete_ecr" {
-    type = bool
+  type = bool
 }
 
 variable "force_destroy_athena" {
-    type = bool
+  type = bool
 }
 
 variable "bootstrap" {
-    type = bool
+  type = bool
 }
 
 variable "enable_sentinel_forwarding" {
-    type = bool
+  type = bool
 }
 
 variable "enable_delete_protection" {
-    type = bool
+  type = bool
 }
 
 variable "api_enable_new_relic" {
-    type = bool
+  type = bool
 }
 
 variable "cloudwatch_enabled" {
-    type = bool
+  type = bool
 }
 
 variable "recovery" {
-    type = bool
+  type = bool
 }
 
 variable "rds_snapshot_identifier" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "aws_xray_sdk_enabled" {
-    type = bool
+  type = bool
 }
 
 variable "route53_zone_id" {
-    type = string
+  type = string
 }
 
 variable "alt_domain" {
-    type = string
+  type = string
 }
 
 variable "domain" {
-    type = string
+  type = string
 }
 
 variable "base_domain" {
-    type = string
+  type = string
 }
 
 variable "perf_test_domain" {
-    type = string
+  type = string
 }
 
 variable "ses_custom_sending_domains" {
-    type = set(string)
+  type = set(string)
 }
 
 variable "log_retention_period_days" {
-    type = number
+  type = number
 }
 
 variable "sensitive_log_retention_period_days" {
-    type = number
+  type = number
 }
 
 variable "vpc_cidr_block" {
-    type = string
+  type = string
 }
 
 variable "waf_secret" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "primary_worker_desired_size" {
-    type = number
+  type = number
 }
 
 variable "primary_worker_instance_types" {
-    type = list(string)
+  type = list(string)
 }
 
 variable "secondary_worker_instance_types" {
-    type = list(string)
+  type = list(string)
 }
 
 variable "node_upgrade" {
-    type = bool
+  type = bool
 }
 
 variable "force_upgrade" {
-    type = bool
+  type = bool
 }
 
 variable "primary_worker_max_size" {
-    type = number
+  type = number
 }
 
 variable "primary_worker_min_size" {
-    type = number
+  type = number
 }
 
 variable "eks_cluster_name" {
-    type = string
+  type = string
 }
 
 variable "eks_cluster_version" {
-    type = string
+  type = string
 }
 
 variable "eks_addon_coredns_version" {
-    type = string
+  type = string
 }
 
 variable "eks_addon_kube_proxy_version" {
-    type = string
+  type = string
 }
 
 variable "eks_addon_vpc_cni_version" {
-    type = string
+  type = string
 }
 
 variable "eks_addon_ebs_driver_version" {
-    type = string
+  type = string
 }
 
 variable "eks_node_ami_version" {
-    type = string
+  type = string
 }
 
 variable "eks_karpenter_ami_id" {
-    type = string
+  type = string
 }
 
 variable "non_api_waf_rate_limit" {
-    type = number
+  type = number
 }
 
 variable "api_waf_rate_limit" {
-    type = number
+  type = number
 }
 
 variable "sign_in_waf_rate_limit" {
-    type = number
+  type = number
 }
 
 variable "celery_queue_prefix" {
-    type = string
+  type = string
 }
 
 variable "elasticache_node_count" {
-    type = number
+  type = number
 }
 
 variable "elasticache_node_number_cache_clusters" {
-    type = number
+  type = number
 }
 
 variable "elasticache_node_type" {
-    type = string
+  type = string
 }
 
 variable "client_vpn_access_group_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "client_vpn_saml_metadata" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "client_vpn_self_service_saml_metadata" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "blazer_slack_webhook_general_topic" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "cloudwatch_slack_webhook_warning_topic" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "cloudwatch_slack_webhook_critical_topic" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "cloudwatch_slack_webhook_general_topic" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "slack_channel_warning_topic" {
-    type = string
+  type = string
 }
 
 variable "slack_channel_critical_topic" {
-    type = string
+  type = string
 }
 
 variable "slack_channel_general_topic" {
-    type = string
+  type = string
 }
 
 variable "budget_sre_bot_webhook" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "cloudwatch_opsgenie_alarm_webhook" {
-    type = string
+  type = string
 }
 
 variable "new_relic_license_key" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "new_relic_account_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "new_relic_api_key" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "new_relic_slack_webhook_url" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "notify_o11y_google_oauth_client_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "notify_o11y_google_oauth_client_secret" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "sentinel_customer_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "sentinel_shared_key" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "heartbeat_api_key" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "heartbeat_sms_number" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "schedule_expression" {
-    type = string
+  type = string
 }
 
 variable "google_cidr_schedule_expression" {
-    type = string
+  type = string
 }
 
 variable "app_db_user" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "app_db_user_password" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "dbtools_password" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "quicksight_db_user_password" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "rds_cluster_password" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "rds_instance_count" {
-    type = number
+  type = number
 }
 
 variable "rds_instance_type" {
-    type = string
+  type = string
 }
 
 variable "rds_database_name" {
-    type = string
+  type = string
 }
 
 variable "admin_client_secret" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "auth_tokens" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "dangerous_salt" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "ff_batch_insertion" {
-    type = string
+  type = string
 }
 
 variable "ff_cloudwatch_metrics_enabled" {
-    type = string
+  type = string
 }
 
 variable "ff_redis_batch_saving" {
-    type = string
+  type = string
 }
 
 variable "redis_url" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "secret_key" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "notify_sending_domain" {
-    type = string
+  type = string
 }
 
 variable "sqs_region" {
-    type = string
+  type = string
 }
 
 variable "gc_notify_service_email" {
-    type      = string
-    sensitive = true    
+  type      = string
+  sensitive = true
 }
 
 variable "aws_pinpoint_region" {
-    type = string
+  type = string
 }
 
 variable "perf_test_phone_number" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "perf_test_email" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "perf_test_auth_header" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "billing_tag_key" {
-    type = string
+  type = string
 }
 
 variable "perf_schedule_expression" {
-    type = string
+  type = string
 }
 
 variable "perf_test_aws_s3_bucket" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "perf_test_csv_directory_path" {
-    type = string
+  type = string
 }
 
 variable "perf_test_sms_template_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "perf_test_bulk_email_template_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "alarm_warning_bulk_bulk_processed_created_delta_threshold" {
@@ -643,7 +642,6 @@ variable "alarm_critical_bulk_bulk_processed_created_delta_threshold" {
   description = "Critical alarm threshold for the difference between processed and created bulk sends"
   type        = number
 }
-
 
 variable "alarm_warning_inflight_processed_created_delta_threshold" {
   description = "Warning alarm threshold for the difference between processed and created inflights"
@@ -728,89 +726,52 @@ variable "sns_monthly_spend_limit_us_west_2" {
   type = number
 }
 
-
 variable "sqs_visibility_timeout_default" {
   type = number
-  # See SQS visibility timeout
-  # https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
-  default = 305
 }
 
 variable "sqs_visibility_timeout_priority_high" {
   type = number
-  # See SQS visibility timeout
-  # https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
-  default = 26
 }
 
 variable "sqs_send_email_high_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-high"
 }
 
 variable "sqs_send_email_medium_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-medium"
 }
 
 variable "sqs_send_email_low_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-email-low"
 }
 
 variable "sqs_send_sms_high_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-high"
 }
 
 variable "sqs_send_sms_medium_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-medium"
 }
 
 variable "sqs_send_sms_low_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-sms-low"
 }
 
 variable "sqs_priority_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "priority-tasks"
 }
 
 variable "sqs_bulk_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "bulk-tasks"
 }
 
 variable "sqs_throttled_sms_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "send-throttled-sms-tasks"
 }
 
 variable "sqs_db_tasks_queue_name" {
   type = string
-  # See QueueNames in
-  # https://github.com/cds-snc/notification-api/blob/master/app/config.py
-  default = "database-tasks"
 }
 
 variable "sqs_priority_db_tasks_queue_name" {
@@ -832,63 +793,61 @@ variable "alarm_warning_document_download_bucket_size_gb" {
 variable "athena_workgroup_name" {
   description = "Set the name for the athena workgroup"
   type        = string
-  default     = "primary"
 }
 
 variable "account_budget_alert_emails" {
   description = "List of people who should be alerted when budget thresholds are met"
-  type        = list(any)
-  default     = ["jimmy.royer@cds-snc.ca", "stephen.astels@cds-snc.ca", "ben.larabie@cds-snc.ca", "michael.pond@cds-snc.ca"]
+  type        = list(string)
 }
 
 variable "perf_test_email_template_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "perf_test_email_with_attachment_template_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "perf_test_email_with_link_template_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "pr_bot_app_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "pr_bot_private_key" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "pr_bot_installation_id" {
-    type      = string
-    sensitive = true
+  type      = string
+  sensitive = true
 }
 
 variable "system_status_api_url" {
-    type = string
+  type = string
 }
 
 variable "system_status_bucket_name" {
-    type = string
+  type = string
 }
 
 variable "system_status_admin_url" {
-    type = string
+  type = string
 }
 
 variable "status_cert_created" {
-    type = string
+  type = string
 }
 
 variable "blazer_image_tag" {
-    type = string
+  type = string
 }
 
 EOF
