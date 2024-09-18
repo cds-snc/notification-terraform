@@ -28,9 +28,3 @@ variable "sns_alert_warning_arn" {
   description = "value of the sns alert warning arn"
   type        = string
 }
-
-variable "rds_version" {
-  description = "The version of the RDS instance"
-  type        = string
-  default     = "15.5"
-}
