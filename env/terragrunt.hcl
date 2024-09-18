@@ -811,11 +811,6 @@ variable "athena_workgroup_name" {
   type        = string
 }
 
-variable "account_budget_alert_emails" {
-  description = "List of people who should be alerted when budget thresholds are met"
-  type        = list(string)
-}
-
 variable "perf_test_email_template_id" {
   type = string
 }
@@ -852,10 +847,6 @@ variable "system_status_bucket_name" {
 }
 
 variable "system_status_admin_url" {
-  type = string
-}
-
-variable "status_cert_created" {
   type = string
 }
 
