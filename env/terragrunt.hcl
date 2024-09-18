@@ -254,7 +254,7 @@ variable "rds_snapshot_identifier" {
 }
 
 variable "rds_version" {
-  type        = string
+  type = string
 }
 
 variable "aws_xray_sdk_enabled" {
@@ -853,7 +853,6 @@ variable "status_cert_created" {
 variable "blazer_image_tag" {
   type = string
 }
-
 EOF
 }
 
