@@ -129,6 +129,7 @@ output "sns_deliveries_ca_central_arn" {
 
 output "sns_deliveries_ca_central_name" {
   value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries[0].name : ""
+  sensitive = true
 }
 
 output "sns_deliveries_failures_ca_central_arn" {
@@ -137,6 +138,7 @@ output "sns_deliveries_failures_ca_central_arn" {
 
 output "sns_deliveries_failures_ca_central_name" {
   value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures[0].name : ""
+  sensitive = true
 }
 
 output "sns_deliveries_us_west_2_arn" {
@@ -145,6 +147,7 @@ output "sns_deliveries_us_west_2_arn" {
 
 output "sns_deliveries_us_west_2_name" {
   value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_us_west_2[0].name : ""
+  sensitive = true
 }
 
 output "sns_deliveries_failures_us_west_2_arn" {
@@ -153,6 +156,7 @@ output "sns_deliveries_failures_us_west_2_arn" {
 
 output "sns_deliveries_failures_us_west_2_name" {
   value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].name : ""
+  sensitive = true
 }
 
 output "sqs_notify_internal_tasks_arn" {
