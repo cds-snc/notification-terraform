@@ -3,7 +3,7 @@ locals {
 }
 
 module "system_status" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.0.4"
+  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.6.4"
   name                   = "system_status"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
