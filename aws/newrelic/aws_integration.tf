@@ -202,7 +202,7 @@ EOF
 
 resource "aws_cloudwatch_metric_stream" "newrelic_metric_stream" {
   # Disabled for now
-  count         = 0
+  count         = var.enable_new_relic && var.env == "staging" ? 1 : 0
   name          = "newrelic-metric-stream-${var.env}"
   role_arn      = aws_iam_role.metric_stream_to_firehose[0].arn
   firehose_arn  = aws_kinesis_firehose_delivery_stream.newrelic_firehose_stream[0].arn
@@ -222,57 +222,9 @@ resource "newrelic_cloud_aws_integrations" "newrelic_cloud_integration_pull" {
   count             = var.env == "staging" ? 1 : 0
   account_id        = var.new_relic_account_id
   linked_account_id = newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0].id
-  billing {}
-  cloudtrail {}
-  health {}
-  trusted_advisor {}
-  vpc {}
-  x_ray {}
-  s3 {}
-  doc_db {}
-  sqs {}
-  ebs {}
-  alb {}
-  elasticache {}
-  api_gateway {}
-  auto_scaling {}
-  aws_app_sync {}
-  aws_athena {}
-  aws_cognito {}
-  aws_connect {}
-  aws_direct_connect {}
-  aws_fsx {}
-  aws_glue {}
-  aws_kinesis_analytics {}
-  aws_media_convert {}
-  aws_media_package_vod {}
-  aws_mq {}
-  aws_msk {}
-  aws_neptune {}
-  aws_qldb {}
-  aws_route53resolver {}
-  aws_states {}
-  aws_transit_gateway {}
-  aws_waf {}
-  aws_wafv2 {}
-  cloudfront {}
-  dynamodb {}
-  ec2 {}
-  ecs {}
-  efs {}
-  elasticbeanstalk {}
-  elasticsearch {}
-  emr {}
-  iam {}
-  iot {}
-  kinesis {}
-  kinesis_firehose {}
+
   lambda {}
-  rds {}
-  redshift {}
-  route53 {}
-  ses {}
-  sns {}
+
 }
 
 resource "aws_s3_bucket" "newrelic_configuration_recorder_s3" {
