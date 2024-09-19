@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage:
-# . get_long_codes.sh numberOfLongCodes poolId
+# . request_long_codes.sh numberOfLongCodes poolId
 
 # This script requests a number of long codes from Pinpoint SMS and assigns them to a pool
 
@@ -25,6 +25,21 @@ if ! aws pinpoint-sms-voice-v2 describe-pools --pool-ids $2; then
 fi
 numberOfLongCodes=$1
 poolId=$2
+
+
+printf "\n------------------------------------------------------------\n"
+printf "                        WARNING!!!!\n"
+printf "  This will add new phone numbers to a Pinpoint pool\n"
+printf "    You might not want to run this in production!\n"
+printf "\n------------------------------------------------------------\n"
+printf "Are you sure you want to continue?"
+echo -n "If so, type 'request'> "
+read -r check
+
+if [ "$check" != "request" ]; then
+    echo "Exiting..."
+    exit 1
+fi
 
 for i in $(seq 1 $numberOfLongCodes); do
     number=$(aws pinpoint-sms-voice-v2 request-phone-number \

@@ -5,9 +5,25 @@
 
 # This script will remove and release all but one number from a Pinpoint pool
 
+set -e
+
 if [ -z "$1" ]; then
     echo "Usage: . drain_pool.sh <pool_id>"
     return
+fi
+
+printf "\n------------------------------------------------------------\n"
+printf "                         WARNING!!!!\n"
+printf "  This will delete all but one long code from a Pinpoint pool!\n"
+printf "         You do not want to run this or production!\n"
+printf "\n------------------------------------------------------------\n"
+printf "Are you sure you want to continue?"
+echo -n "If so, type 'drain'> "
+read -r check
+
+if [ "$check" != "drain" ]; then
+    echo "Exiting..."
+    exit 1
 fi
 
 if aws pinpoint-sms-voice-v2 describe-pools --pool-ids $1; then    
