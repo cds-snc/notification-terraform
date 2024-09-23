@@ -1,14 +1,13 @@
 name: AI Code Review
 
-# Disabled the AI code reviewer for now
-# on:
-#   pull_request:
-#     types:
-#       - opened
-#       - synchronize
+on:
+  push:
+    branches-ignore:
+      - main
 
 jobs:
   ai_code_review:
+    if: contains(github.event.head_commit.message, '[review]')
     runs-on: ubuntu-latest
 
     steps:
