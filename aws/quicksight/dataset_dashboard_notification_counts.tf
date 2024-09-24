@@ -1,9 +1,9 @@
 # valid column types are [STRING INTEGER DECIMAL DATETIME BIT BOOLEAN JSON]
 
 resource "aws_quicksight_data_set" "dashboard-notification-counts" {
-    data_set_id = "dashboard-notification-counts"
-    name        = "Dashboard notification counts"
-    import_mode = "SPICE"
+  data_set_id = "dashboard-notification-counts"
+  name        = "Dashboard notification counts"
+  import_mode = "SPICE"
 
   physical_table_map {
     physical_table_map_id = "notification-counts"
@@ -13,47 +13,47 @@ resource "aws_quicksight_data_set" "dashboard-notification-counts" {
       sql_query       = <<EOF
         WITH n AS (
           SELECT
-              service_id,
-              COUNT(id) AS n_count,
-              DATE_PART('day', created_at) AS day
+            service_id,
+            COUNT(id) AS n_count,
+            DATE_PART('day', created_at) AS day
           FROM notifications
           WHERE
-              created_at >= '2024-09-01T00:00:00Z'
-              AND created_at <= '2024-09-30T00:00:00Z'
-              AND key_type <> 'test'
+            created_at >= '2024-09-01T00:00:00Z'
+            AND created_at <= NOW()
+            AND key_type <> 'test'
           GROUP BY
-              DATE_PART('day', created_at),
-              service_id
+            DATE_PART('day', created_at),
+            service_id
           ORDER BY day
         ),
         nh AS (
           SELECT
-              service_id,
-              COUNT(id) AS nh_count,
-              DATE_PART('day', created_at) AS day
+            service_id,
+            COUNT(id) AS nh_count,
+            DATE_PART('day', created_at) AS day
           FROM notification_history
           WHERE
-              created_at >= '2024-09-01T00:00:00Z'
-              AND created_at <= '2024-09-30T00:00:00Z'
-              AND key_type <> 'test'
+            created_at >= '2024-09-01T00:00:00Z'
+            AND created_at <= NOW()
+            AND key_type <> 'test'
           GROUP BY
-              DATE_PART('day', created_at),
-              service_id
+            DATE_PART('day', created_at),
+            service_id
           ORDER BY day, service_id
         ),
         ft AS (
           SELECT
-              service_id,
-              SUM(notification_count) AS ft_count,
-              DATE_PART('day', bst_date) AS day
+            service_id,
+            SUM(notification_count) AS ft_count,
+            DATE_PART('day', bst_date) AS day
           FROM ft_notification_status
           WHERE
-              bst_date >= '2024-09-01T00:00:00Z'
-              AND bst_date <= '2024-09-30T00:00:00Z'
-              AND key_type <> 'test'
+            bst_date >= '2024-09-01T00:00:00Z'
+            AND bst_date <= NOW()
+            AND key_type <> 'test'
           GROUP BY
-              DATE_PART('day', bst_date),
-              service_id
+            DATE_PART('day', bst_date),
+            service_id
           ORDER BY day
         )
         SELECT
@@ -97,10 +97,12 @@ resource "aws_quicksight_data_set" "dashboard-notification-counts" {
       }
       columns {
         name = "count_comparison"
-        type = "INTEGER"
+        type = "STRING"
       }
+
     }
   }
+
   permissions {
     actions   = local.dataset_viewer_permissions
     principal = aws_quicksight_group.dataset_viewer.arn
