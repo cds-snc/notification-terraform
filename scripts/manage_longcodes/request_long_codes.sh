@@ -19,6 +19,10 @@ if [ -z "$2" ]; then
     echo "Please provide the pool ID to assign the long codes to"
     exit 1
 fi
+if ! aws pinpoint-sms-voice-v2 describe-pools --pool-ids $2 > /dev/null; then
+    echo "Pool $2 does not exist"
+    exit 1
+fi
 
 numberOfLongCodes=$1
 poolId=$2
@@ -28,19 +32,12 @@ printf "                        WARNING!!!!\n"
 printf "  This will add new phone numbers to a Pinpoint pool\n"
 printf "    You might not want to run this in production!\n"
 printf "\n------------------------------------------------------------\n"
-printf "Are you sure you want to continue?\n"
-echo -n "If so, type 'request'> "
-read -r check
+read -p "If so, type 'request'> " check
 
 if [ "$check" != "request" ]; then
     echo "Exiting..."
     exit 1
 fi
-
-# if ! aws pinpoint-sms-voice-v2 describe-pools --pool-ids $poolId > /dev/null 2>&1; then
-#     echo "Pool $poolId does not exist"
-#     exit 1
-# fi
 
 for i in $(seq 1 $numberOfLongCodes); do
     number=$(aws pinpoint-sms-voice-v2 request-phone-number \
@@ -49,5 +46,10 @@ for i in $(seq 1 $numberOfLongCodes); do
       --number-capabilities SMS \
       --number-type LONG_CODE \
       | jq -r ".PhoneNumberId")
-    echo "Requested $number"
+    if !aws pinpoint-sms-voice-v2 describe-phone-numbers --phone-number-ids $number > /dev/null; then
+        echo "Failed to request number $number"
+        continue
+    else
+        echo "Requested $number"
+    fi
 done
