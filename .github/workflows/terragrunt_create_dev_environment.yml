@@ -770,8 +770,10 @@ jobs:
 
       - name: Retrieve VPN Config
         run: |
+          sudo mkdir -p aws
+          cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > /var/tmp/${{env.ENVIRONMENT}}.tfvars
-          cd env/${{env.ENVIRONMENT}}/eks
+          cd ../env/${{env.ENVIRONMENT}}/eks
           ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
           CERT=$(terragrunt output --raw gha_vpn_certificate)
           KEY=$(terragrunt output --raw gha_vpn_key)
