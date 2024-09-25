@@ -11,7 +11,7 @@ resource "aws_cloudwatch_query_definition" "celery-errors" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^celery/
-| filter @message like /ERROR\/.*Worker/ or @message like /ERROR\/MainProcess/ 
+| filter @message like /ERROR\/.*Worker/ or @message like /ERROR\/MainProcess/
 | sort @timestamp desc
 | limit 20
 QUERY
@@ -284,7 +284,7 @@ resource "aws_cloudwatch_query_definition" "callback-max-retry-failures-by-servi
 fields @timestamp, @service_id, @callback_url, @notification_id
 | filter kubernetes.container_name like /^celery/
 | filter @message like /send_delivery_status_to_service has retried the max num of times for callback url/
-| parse @message 'Retry: send_delivery_status_to_service has retried the max num of times for callback url * and notification_id: * for service: *' as @callback_url, @notification_id, @service_id
+| parse @message 'Retry: send_delivery_status_to_service has retried the max num of times for callback url * and notification_id: * service: *' as @callback_url, @notification_id, @service_id
 | sort @timestamp desc
 | stats count(@service_id) by @service_id, bin(30m)
 | limit 10000
@@ -303,7 +303,7 @@ resource "aws_cloudwatch_query_definition" "callback-failures" {
 fields @timestamp, @notification_id, @url, @error
 | filter kubernetes.container_name like /^celery/
 | filter @message like /send_delivery_status_to_service request failed for notification_id:/
-| parse @message 'send_delivery_status_to_service request failed for notification_id: * and url: * exc: *' as @notification_id, @url, @error
+| parse @message 'send_delivery_status_to_service request failed for notification_id: * and url: * service: * exc: *' as @notification_id, @url, @service_id, @error
 | limit 10000
 QUERY
 }
