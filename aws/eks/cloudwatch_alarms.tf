@@ -984,3 +984,33 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-criti
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "throttling-exception-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "throttling-exception-warning"
+  alarm_description   = "Have received a throttling exception in the last minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.throttling-exceptions[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.throttling-exceptions[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "many-throttling-exceptions-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "many-throttling-exceptions-warning"
+  alarm_description   = "Have received 100 throttling exception in the last minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.throttling-exceptions[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.throttling-exceptions[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 100
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
