@@ -972,7 +972,7 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warni
 
 resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "service-callback-too-many-failures-warning"
+  alarm_name          = "service-callback-too-many-failures-critical"
   alarm_description   = "Service reached the max number of callback retries 100 times in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
