@@ -1,3 +1,7 @@
+terraform {
+  source = "../../../aws//heartbeat"
+}
+
 dependencies {
   paths = ["../common", "../ecr"]
 }
@@ -17,6 +21,8 @@ dependency "ecr" {
   config_path = "../ecr"
 }
 
+
+
 include {
   path = find_in_parent_folders()
 }
@@ -28,8 +34,4 @@ inputs = {
   sns_alert_critical_arn = dependency.common.outputs.sns_alert_critical_arn
   heartbeat_ecr_repository_url = dependency.ecr.outputs.heartbeat_ecr_repository_url
   heartbeat_ecr_arn            = dependency.ecr.outputs.heartbeat_ecr_arn
-}
-
-terraform {
-  source = "../../../aws//heartbeat"
 }

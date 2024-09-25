@@ -40,6 +40,7 @@ dependency "ecr" {
   config_path = "../ecr"
 }
 
+
 include {
   path = find_in_parent_folders()
 }
@@ -64,5 +65,3 @@ inputs = {
   private-links-gateway-prefix-list-ids       = dependency.common.outputs.private-links-gateway-prefix-list-ids
   performance_test_ecr_repository_url         = dependency.ecr.outputs.performance_test_ecr_repository_url
 }
-
-

@@ -6,7 +6,6 @@ dependency "common" {
   config_path = "../common"
 }
 
-
 dependency "ecr" {
   config_path = "../ecr"
 }

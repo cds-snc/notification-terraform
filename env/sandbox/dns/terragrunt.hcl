@@ -39,6 +39,5 @@ inputs = {
 
 terraform {
   source = "../../../aws//dns"
-
 }
 

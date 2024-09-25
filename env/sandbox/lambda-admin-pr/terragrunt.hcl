@@ -14,11 +14,6 @@ dependency "common" {
   }
 }
 
-dependency "ecr" {
-  config_path = "../ecr"
-}
-
-
 dependency "elasticache" {
   config_path = "../elasticache"
 
@@ -27,6 +22,10 @@ dependency "elasticache" {
   mock_outputs = {
     redis_cluster_security_group_id = ""
   }
+}
+
+dependency "ecr" {
+  config_path = "../ecr"
 }
 
 include {

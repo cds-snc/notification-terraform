@@ -30,11 +30,9 @@ dependency "rds" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    rds_instance_id     = "id"
-    database_name       = "database"
-    database_subnet_ids = ["subnet-1", "subnet-2"]
-    database_read_write_proxy_endpoint = "changeme"
-    database_read_write_proxy_endpoint_host = "changeme"
+    kms_arn                          = ""
+    s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
+    vpc_id                           = ""
   }
 }
 

@@ -25,6 +25,7 @@ dependency "ecr" {
   config_path = "../ecr"
 }
 
+
 include {
   path = find_in_parent_folders()
 }
@@ -40,8 +41,8 @@ inputs = {
   celery_queue_prefix                     = "eks-notification-canada-ca"
   gc_notify_service_email                 = "gc.notify.notification.gc@sandbox.notification.cdssandbox.xyz"
   sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
+  sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
   ses_receiving_emails_ecr_repository_url = dependency.ecr.outputs.ses_receiving_emails_ecr_repository_url
-  ses_receiving_emails_ecr_arn            = dependency.ecr.outputs.ses_receiving_emails_ecr_arn
-
+  ses_receiving_emails_ecr_arn            = dependency.ecr.outputs.ses_receiving_emails_ecr_arn  
 }
 
