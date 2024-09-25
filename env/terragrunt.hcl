@@ -501,6 +501,10 @@ variable "sentinel_shared_key" {
   sensitive = true
 }
 
+variable "sentinel_layer_version" {
+  type = string
+}
+
 variable "heartbeat_api_key" {
   type      = string
   sensitive = true
