@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/lambda-admin-pr?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//lambda-admin-pr"}"
+}
+
 dependencies {
   paths = ["../common", "../elasticache", "../ecr"]
 }
@@ -40,6 +44,3 @@ inputs = {
   notify_admin_ecr_arn                 = dependency.ecr.outputs.notify_admin_ecr_arn
 }
 
-terraform {
-  source = "../../../aws//lambda-admin-pr"
-}

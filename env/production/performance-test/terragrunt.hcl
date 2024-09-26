@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//performance-test"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/performance-test?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//performance-test"}"
 }
 
 dependencies {

@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//system_status_static_site"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/system_status_static_site?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//system_status_static_site"}"
 }
 
 include {

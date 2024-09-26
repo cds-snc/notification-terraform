@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//ses_receiving_emails"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ses_receiving_emails?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ses_receiving_emails"}"
 }
 
 dependencies {

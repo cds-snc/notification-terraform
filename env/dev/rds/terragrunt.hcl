@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/rds?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//rds"}"
+}
+
 dependencies {
   paths = ["../common", "../eks"]
 }
@@ -43,8 +47,4 @@ inputs = {
   sns_alert_general_arn     = dependency.common.outputs.sns_alert_general_arn
   sentinel_forwarder_cloudwatch_lambda_arn  = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_arn
   sentinel_forwarder_cloudwatch_lambda_name = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_name
-}
-
-terraform {
-  source = "../../../aws//rds"
 }

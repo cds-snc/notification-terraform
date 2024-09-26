@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/eks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//eks"}"
+}
+
 dependencies {
   paths = ["../common", "../cloudfront"]
 }
@@ -122,9 +126,4 @@ inputs = {
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks  
   route53_zone_id                           = dependency.dns.outputs.route53_zone_id
-}
-
-
-terraform {
-  source = "../../../aws//eks"
 }

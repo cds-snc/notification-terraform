@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/elasticache?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//elasticache"}"
+}
+
 dependencies {
   paths = ["../common", "../eks"]
 }
@@ -40,8 +44,4 @@ inputs = {
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   vpc_id                                 = dependency.common.outputs.vpc_id
   kms_arn                                = dependency.common.outputs.kms_arn  
-}
-
-terraform {
-  source = "../../../aws//elasticache"
 }

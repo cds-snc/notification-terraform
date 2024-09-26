@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//ses_to_sqs_email_callbacks"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ses_to_sqs_email_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ses_to_sqs_email_callbacks"}"
 }
 
 dependencies {

@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/database-tools?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//database-tools"}"
+}
+
 dependencies {
   paths = ["../common", "../eks", "../rds"]
 }
@@ -47,8 +51,4 @@ inputs = {
   database-tools-db-securitygroup   = dependency.eks.outputs.database-tools-db-securitygroup
   database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
   sns_alert_warning_arn             = dependency.common.outputs.sns_alert_warning_arn
-}
-
-terraform {
-  source = "../../../aws//database-tools"
 }

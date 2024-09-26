@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/sns_to_sqs_sms_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//sns_to_sqs_sms_callbacks"}"
+}
+
 dependencies {
   paths = ["../common", "../ecr"]
 }
@@ -46,8 +50,4 @@ inputs = {
   sns_alert_ok_arn                         = dependency.common.outputs.sns_alert_ok_arn
   sns_to_sqs_sms_callbacks_ecr_repository_url   = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_repository_url
   sns_to_sqs_sms_callbacks_ecr_arn              = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_arn
-}
-
-terraform {
-  source = "../../../aws//sns_to_sqs_sms_callbacks"
 }

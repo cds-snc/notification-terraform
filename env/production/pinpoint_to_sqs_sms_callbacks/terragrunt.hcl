@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/pinpoint_to_sqs_sms_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//pinpoint_to_sqs_sms_callbacks"}"
+}
+
 dependencies {
   paths = ["../common", "../ecr"]
 }
@@ -54,8 +58,4 @@ inputs = {
   sqs_send_sms_medium_queue_delay_critical_arn       = dependency.common.outputs.sqs_send_sms_medium_queue_delay_critical_arn
   sqs_send_sms_low_queue_delay_warning_arn           = dependency.common.outputs.sqs_send_sms_low_queue_delay_warning_arn
   sqs_send_sms_low_queue_delay_critical_arn          = dependency.common.outputs.sqs_send_sms_low_queue_delay_critical_arn
-}
-
-terraform {
-  source = "../../../aws//pinpoint_to_sqs_sms_callbacks"
 }

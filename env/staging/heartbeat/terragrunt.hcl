@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//heartbeat"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/heartbeat?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//heartbeat"}"
 }
 
 dependencies {
