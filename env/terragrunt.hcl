@@ -77,7 +77,10 @@ provider "aws" {
 
 provider "aws" {
   alias  = "dns"
-  region = "ca-central-1"${local.dns_role}
+  region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::239043911459:role/${local.vars.inputs.env}_dns_manager_role"
+  }
 }
 
 provider "aws" {
