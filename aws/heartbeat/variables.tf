@@ -56,4 +56,5 @@ variable "bootstrap" {
 variable "critical_government_password" {
   type        = string
   description = "Identifies the critical government password."
+  default     = "cranky-hippo"
 }
