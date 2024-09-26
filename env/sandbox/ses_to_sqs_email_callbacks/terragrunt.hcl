@@ -30,13 +30,12 @@ include {
 }
 
 inputs = {
-  billing_tag_value                                   = "notification-canada-ca-sandbox"
-  notification_canada_ca_ses_callback_arn             = dependency.common.outputs.notification_canada_ca_ses_callback_arn
-  sns_alert_warning_arn                               = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                              = dependency.common.outputs.sns_alert_critical_arn
-  sns_alert_ok_arn                                    = dependency.common.outputs.sns_alert_ok_arn
+  notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
+  sns_alert_warning_arn                   = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn                  = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                        = dependency.common.outputs.sns_alert_ok_arn
   sqs_eks_notification_canada_cadelivery_receipts_arn = dependency.common.outputs.sqs_eks_notification_canada_cadelivery_receipts_arn
   ses_to_sqs_email_callbacks_ecr_arn                  = dependency.ecr.outputs.ses_to_sqs_email_callbacks_ecr_arn
   ses_to_sqs_email_callbacks_ecr_repository_url       = dependency.ecr.outputs.ses_to_sqs_email_callbacks_ecr_repository_url
-}
 
+}

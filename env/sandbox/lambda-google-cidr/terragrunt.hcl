@@ -6,7 +6,6 @@ dependency "common" {
   config_path = "../common"
 }
 
-
 dependency "ecr" {
   config_path = "../ecr"
 }
@@ -28,8 +27,6 @@ include {
 }
 
 inputs = {
-  billing_tag_value                  = "notification-canada-ca-sandbox"
-  google_cidr_schedule_expression    = "rate(1 day)"
   google_cidr_prefix_list_id         = dependency.eks.outputs.google_cidr_prefix_list_id
   google_cidr_ecr_repository_url     = dependency.ecr.outputs.google_cidr_ecr_repository_url
   google_cidr_ecr_arn                = dependency.ecr.outputs.google_cidr_ecr_arn
