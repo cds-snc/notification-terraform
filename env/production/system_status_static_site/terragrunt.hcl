@@ -1,3 +1,7 @@
+terraform {
+  source = "../../../aws//system_status_static_site"
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -21,12 +25,5 @@ dependency "dns" {
 }
 
 inputs = {
-  env                                    = "production"
-  billing_tag_value                      = "notification-canada-ca-production"
-  status_cert_created                    = true    
   route53_zone_id                        = dependency.dns.outputs.route53_zone_id
-}
-
-terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/system_status_static_site?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }

@@ -1,8 +1,3 @@
-# Uses GitHub tags for release management
-terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/pinpoint_to_sqs_sms_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
-}
-
 dependencies {
   paths = ["../common", "../ecr"]
 }
@@ -45,7 +40,6 @@ include {
 }
 
 inputs = {
-  billing_tag_value                                  = "notification-canada-ca-production"
   sns_alert_warning_arn                              = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                             = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_ok_arn                                   = dependency.common.outputs.sns_alert_ok_arn
@@ -60,4 +54,8 @@ inputs = {
   sqs_send_sms_medium_queue_delay_critical_arn       = dependency.common.outputs.sqs_send_sms_medium_queue_delay_critical_arn
   sqs_send_sms_low_queue_delay_warning_arn           = dependency.common.outputs.sqs_send_sms_low_queue_delay_warning_arn
   sqs_send_sms_low_queue_delay_critical_arn          = dependency.common.outputs.sqs_send_sms_low_queue_delay_critical_arn
+}
+
+terraform {
+  source = "../../../aws//pinpoint_to_sqs_sms_callbacks"
 }
