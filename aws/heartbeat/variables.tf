@@ -58,3 +58,10 @@ variable "critical_government_password" {
   description = "Identifies the critical government password."
   default     = "cranky-hippo"
 }
+
+
+variable "google_url" {
+  type        = string
+  description = "Identifies the Google url."
+  default     = "https://www.google.com/"
+}
