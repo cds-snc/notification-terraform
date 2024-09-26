@@ -32,7 +32,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
-          role_session_name: NotifyTerraformDevAppply
+          role_session_name: NotifyTerraformDevApply
 
       - name: Install 1Pass CLI
         run: |
@@ -80,7 +80,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
-          role_session_name: NotifyTerraformDevAppply        
+          role_session_name: NotifyTerraformDevApply        
 
       - name: Install 1Pass CLI
         run: |
