@@ -11,15 +11,15 @@ resource "aws_quicksight_data_set" "dashboard-notification-counts" {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "dashboard-notification-counts"
       sql_query       = <<EOF
-        WITH n AS (
+WITH n AS (
           SELECT
             service_id,
             COUNT(id) AS n_count,
             DATE_PART('day', created_at) AS day
           FROM notifications
           WHERE
-            created_at >= '2024-09-01T00:00:00Z'
-            AND created_at <= NOW()
+            created_at >= DATE_TRUNC('day', NOW()) - interval '14 days'
+            AND created_at <= (DATE_TRUNC('day', NOW()) + interval '1 day' - interval '1 second')
             AND key_type <> 'test'
           GROUP BY
             DATE_PART('day', created_at),
@@ -33,8 +33,8 @@ resource "aws_quicksight_data_set" "dashboard-notification-counts" {
             DATE_PART('day', created_at) AS day
           FROM notification_history
           WHERE
-            created_at >= '2024-09-01T00:00:00Z'
-            AND created_at <= NOW()
+            created_at >= DATE_TRUNC('day', NOW()) - interval '14 days'
+            AND created_at <= (DATE_TRUNC('day', NOW()) + interval '1 day' - interval '1 second')
             AND key_type <> 'test'
           GROUP BY
             DATE_PART('day', created_at),
@@ -48,8 +48,8 @@ resource "aws_quicksight_data_set" "dashboard-notification-counts" {
             DATE_PART('day', bst_date) AS day
           FROM ft_notification_status
           WHERE
-            bst_date >= '2024-09-01T00:00:00Z'
-            AND bst_date <= NOW()
+            bst_date >= DATE_TRUNC('day', NOW()) - interval '14 days'
+            AND bst_date <= (DATE_TRUNC('day', NOW()) + interval '1 day' - interval '1 second')
             AND key_type <> 'test'
           GROUP BY
             DATE_PART('day', bst_date),
