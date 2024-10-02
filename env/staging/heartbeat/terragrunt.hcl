@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//heartbeat"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/heartbeat?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//heartbeat"}"
 }
 
 dependencies {
@@ -28,8 +28,6 @@ include {
 }
 
 inputs = {
-  billing_tag_value      = "notification-canada-ca-staging"
-  schedule_expression    = "rate(1 minute)"
   sns_alert_warning_arn  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn = dependency.common.outputs.sns_alert_critical_arn
   heartbeat_ecr_repository_url = dependency.ecr.outputs.heartbeat_ecr_repository_url

@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/lambda-admin-pr?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//lambda-admin-pr"}"
+}
+
 dependencies {
   paths = ["../common", "../elasticache", "../ecr"]
 }
@@ -14,11 +18,6 @@ dependency "common" {
   }
 }
 
-dependency "ecr" {
-  config_path = "../ecr"
-}
-
-
 dependency "elasticache" {
   config_path = "../elasticache"
 
@@ -27,6 +26,10 @@ dependency "elasticache" {
   mock_outputs = {
     redis_cluster_security_group_id = ""
   }
+}
+
+dependency "ecr" {
+  config_path = "../ecr"
 }
 
 include {
@@ -41,6 +44,3 @@ inputs = {
   notify_admin_ecr_arn                 = dependency.ecr.outputs.notify_admin_ecr_arn
 }
 
-terraform {
-  source = "../../../aws//lambda-admin-pr"
-}
