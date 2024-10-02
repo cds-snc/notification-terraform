@@ -7,8 +7,8 @@ on:
       - ".github/workflows/infrastructure_version.txt"
 
 permissions:
-  id-token: write # This is required for requesting the OIDC JWT
-  contents: write # This is required for actions/checkout
+  id-token: write
+  contents: write
   pull-requests: write
 
 env:
