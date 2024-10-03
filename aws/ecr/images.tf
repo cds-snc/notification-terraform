@@ -158,32 +158,32 @@ resource "null_resource" "push_google_cidr_docker_image" {
 
 # SES Receiving Emails Build and Push
 
-# resource "null_resource" "build_ses_receiving_emails_docker_image" {
-#   count = var.bootstrap ? 1 : 0
+resource "null_resource" "build_ses_receiving_emails_docker_image" {
+  count = var.bootstrap ? 1 : 0
 
-#   triggers = {
-#     always_run = "${timestamp()}"
-#   }
+  triggers = {
+    always_run = "${timestamp()}"
+  }
 
-#   depends_on = [
-#     null_resource.lambda_repo_clone
-#   ]
+  depends_on = [
+    null_resource.lambda_repo_clone
+  ]
 
-#   provisioner "local-exec" {
-#     command = "cd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesreceivingemails/Dockerfile ."
-#   }
+  provisioner "local-exec" {
+    command = "cd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesreceivingemails/Dockerfile ."
+  }
 
-# }
+}
 
-# resource "null_resource" "push_ses_receiving_emails_docker_image" {
-#   count      = var.bootstrap ? 1 : 0
-#   depends_on = [null_resource.build_ses_receiving_emails_docker_image]
+resource "null_resource" "push_ses_receiving_emails_docker_image" {
+  count      = var.bootstrap ? 1 : 0
+  depends_on = [null_resource.build_ses_receiving_emails_docker_image]
 
-#   provisioner "local-exec" {
-#     command = "docker push ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap"
-#   }
+  provisioner "local-exec" {
+    command = "docker push ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap"
+  }
 
-# }
+}
 
 # SES Receiving Emails Build and Push
 
@@ -245,31 +245,31 @@ resource "null_resource" "push_sns_to_sqs_sms_callbacks_docker_image" {
 
 #System status Build and Push
 
-# resource "null_resource" "build_system_status_docker_image" {
-#   count = var.bootstrap ? 1 : 0
+resource "null_resource" "build_system_status_docker_image" {
+  count = var.bootstrap ? 1 : 0
 
-#   triggers = {
-#     always_run = "${timestamp()}"
-#   }
+  triggers = {
+    always_run = "${timestamp()}"
+  }
 
-#   depends_on = [
-#     null_resource.lambda_repo_clone
-#   ]
+  depends_on = [
+    null_resource.lambda_repo_clone
+  ]
 
-#   provisioner "local-exec" {
-#     command = "cd /var/tmp/notification-lambdas/system_status && docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap -f /var/tmp/notification-lambdas/system_status/Dockerfile ."
-#   }
-# }
+  provisioner "local-exec" {
+    command = "cd /var/tmp/notification-lambdas/system_status && docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap -f /var/tmp/notification-lambdas/system_status/Dockerfile ."
+  }
+}
 
-# resource "null_resource" "push_system_status_docker_image" {
-#   count      = var.bootstrap ? 1 : 0
-#   depends_on = [null_resource.build_system_status_docker_image]
+resource "null_resource" "push_system_status_docker_image" {
+  count      = var.bootstrap ? 1 : 0
+  depends_on = [null_resource.build_system_status_docker_image]
 
-#   provisioner "local-exec" {
-#     command = "docker push ${aws_ecr_repository.system_status.repository_url}:bootstrap"
-#   }
+  provisioner "local-exec" {
+    command = "docker push ${aws_ecr_repository.system_status.repository_url}:bootstrap"
+  }
 
-# }
+}
 
 # Pinpoint to SQS Queue Build and Push
 
