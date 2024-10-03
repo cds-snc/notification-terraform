@@ -12,7 +12,7 @@ module "sentinel_forwarder" {
   function_name     = "sentinel-cloud-watch-forwarder"
   billing_tag_value = "notification-canada-ca-${var.env}"
 
-  layer_arn = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:163"
+  layer_arn = "arn:aws:lambda:ca-central-1:283582579564:layer:aws-sentinel-connector-layer:${var.sentinel_layer_version}"
 
   customer_id = var.sentinel_customer_id
   shared_key  = var.sentinel_shared_key

@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//system_status_static_site"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/system_status_static_site?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//system_status_static_site"}"
 }
 
 include {
@@ -25,8 +25,5 @@ dependency "dns" {
 }
 
 inputs = {
-  env                                    = "sandbox"
-  billing_tag_value                      = "notification-canada-ca-sandbox"
-  status_cert_created                    = true
   route53_zone_id                        = dependency.dns.outputs.route53_zone_id
 }

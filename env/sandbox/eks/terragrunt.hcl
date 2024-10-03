@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/eks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//eks"}"
+}
+
 dependencies {
   paths = ["../common", "../cloudfront"]
 }
@@ -70,7 +74,7 @@ dependency "dns" {
   mock_outputs = {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
-    internal_dns_name = "sandbox.notification.internal.com"
+    internal_dns_name = "staging.notification.internal.com"
     route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
 }
@@ -92,13 +96,6 @@ include {
 }
 
 inputs = {
-  primary_worker_desired_size               = 5
-  primary_worker_instance_types             = ["r5.large"]
-  secondary_worker_instance_types           = ["r5.large"]
-  node_upgrade                              = false
-  force_upgrade                             = true
-  primary_worker_max_size                   = 7
-  primary_worker_min_size                   = 4
   vpc_id                                    = dependency.common.outputs.vpc_id
   vpc_private_subnets                       = dependency.common.outputs.vpc_private_subnets
   vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
@@ -108,17 +105,6 @@ inputs = {
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn
   firehose_waf_logs_iam_role_arn            = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                     = dependency.cloudfront.outputs.cloudfront_assets_arn
-  eks_cluster_name                          = "notification-canada-ca-sandbox-eks-cluster"
-  eks_cluster_version                       = "1.30"
-  eks_addon_coredns_version                 = "v1.11.1-eksbuild.9"
-  eks_addon_kube_proxy_version              = "v1.30.0-eksbuild.3"
-  eks_addon_vpc_cni_version                 = "v1.18.1-eksbuild.3"
-  eks_addon_ebs_driver_version              = "v1.31.0-eksbuild.1"
-  eks_node_ami_version                      = "1.30.4-20240917"
-  eks_karpenter_ami_id                      = "ami-0d94e40728580643b"
-  non_api_waf_rate_limit                    = 500
-  api_waf_rate_limit                        = 30000
-  sign_in_waf_rate_limit                    = 100
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn
   re_admin_arn                              = dependency.common.outputs.re_admin_arn
   re_admin_arn2                             = dependency.common.outputs.re_admin_arn2
@@ -134,16 +120,10 @@ inputs = {
   sqs_send_sms_low_queue_name               = dependency.common.outputs.sqs_send_sms_low_queue_name
   sqs_send_sms_medium_queue_name            = dependency.common.outputs.sqs_send_sms_medium_queue_name
   sqs_send_sms_high_queue_name              = dependency.common.outputs.sqs_send_sms_high_queue_name
-  celery_queue_prefix                       = "eks-notification-canada-ca" 
   internal_dns_certificate_arn              = dependency.dns.outputs.internal_dns_certificate_arn
   internal_dns_zone_id                      = dependency.dns.outputs.internal_dns_zone_id
   internal_dns_name                         = dependency.dns.outputs.internal_dns_name
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks  
   route53_zone_id                           = dependency.dns.outputs.route53_zone_id
-}
-
-
-terraform {
-  source = "../../../aws//eks"
 }
