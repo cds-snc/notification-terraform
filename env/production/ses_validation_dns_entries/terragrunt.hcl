@@ -1,5 +1,5 @@
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/ses_validation_dns_entries?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ses_validation_dns_entries?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ses_validation_dns_entries"}"
 }
 
 dependencies {
@@ -29,7 +29,7 @@ dependency "dns" {
     notification_canada_ca_receiving_dkim = []
     notification_canada_ca_dkim = []
     cic_trvapply_vrtdemande_dkim = []
-    custom_sending_domains_dkim = []    
+    custom_sending_domains_dkim = []
     route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
 }

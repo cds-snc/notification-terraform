@@ -4,7 +4,7 @@ resource "aws_route53_zone" "notification-sandbox" {
 }
 
 resource "aws_route53_record" "notification-sandbox-MX" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = var.domain
@@ -14,7 +14,7 @@ resource "aws_route53_record" "notification-sandbox-MX" {
 }
 
 resource "aws_route53_record" "bounce-notification-sandbox-MX" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = "bounce.${var.domain}"
@@ -24,7 +24,7 @@ resource "aws_route53_record" "bounce-notification-sandbox-MX" {
 }
 
 resource "aws_route53_record" "bounce-custom-notification-sandbox-MX" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = "bounce.custom-sending-domain.${var.domain}"
@@ -34,7 +34,7 @@ resource "aws_route53_record" "bounce-custom-notification-sandbox-MX" {
 }
 
 resource "aws_route53_record" "ses-notification-sandbox-TXT" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = "_amazonses.${var.domain}"
@@ -46,7 +46,7 @@ resource "aws_route53_record" "ses-notification-sandbox-TXT" {
 }
 
 resource "aws_route53_record" "dmarc-notification-sandbox-TXT" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = "_dmarc.${var.domain}"
@@ -56,7 +56,7 @@ resource "aws_route53_record" "dmarc-notification-sandbox-TXT" {
 }
 
 resource "aws_route53_record" "notification-sandbox-TXT" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = var.domain
@@ -68,7 +68,7 @@ resource "aws_route53_record" "notification-sandbox-TXT" {
 }
 
 resource "aws_route53_record" "bounce-notification-sandbox-TXT" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = "bounce.${var.domain}"
@@ -78,7 +78,7 @@ resource "aws_route53_record" "bounce-notification-sandbox-TXT" {
 }
 
 resource "aws_route53_record" "custom-domain-aws-ses-sandbox-TXT" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   provider = aws.dns
   name     = "_amazonses.custom-sending-domain.${var.domain}"
@@ -88,7 +88,7 @@ resource "aws_route53_record" "custom-domain-aws-ses-sandbox-TXT" {
 }
 
 resource "aws_route53_record" "custom-domain-ses-sandbox-TXT" {
-  count    = var.env == "production" ? 0 : 1
+  count    = var.env == "staging" ? 1 : 0
   provider = aws.dns
   zone_id  = var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
   name     = "custom-sending-domain.${var.domain}"

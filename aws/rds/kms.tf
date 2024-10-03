@@ -54,7 +54,7 @@ resource "aws_kms_key" "rds_snapshot" {
                     "arn:aws:iam::${var.account_id}:role/aws-reserved/sso.amazonaws.com/ca-central-1/AWSReservedSSO_AWSAdministratorAccess_4085b2fdb6f29f43",
                     "arn:aws:iam::${var.account_id}:role/notification-terraform-apply",
                     "arn:aws:iam::${var.account_id}:role/notification-terraform-plan",
-                    "arn:aws:iam::800095993820:root"
+                    "arn:aws:iam::${var.dev_account_id}:root"
                 ]
             },
             "Action": [
@@ -74,7 +74,7 @@ resource "aws_kms_key" "rds_snapshot" {
                     "arn:aws:iam::${var.account_id}:role/aws-reserved/sso.amazonaws.com/ca-central-1/AWSReservedSSO_AWSAdministratorAccess_4085b2fdb6f29f43",
                     "arn:aws:iam::${var.account_id}:role/notification-terraform-apply",
                     "arn:aws:iam::${var.account_id}:role/notification-terraform-plan",
-                    "arn:aws:iam::800095993820:root"
+                    "arn:aws:iam::${var.dev_account_id}:root"
                 ]
             },
             "Action": [

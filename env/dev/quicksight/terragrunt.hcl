@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//quicksight"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/quicksight?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//quicksight"}"
 }
 
 dependencies {
@@ -10,7 +10,7 @@ dependency "common" {
   config_path = "../common"
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     kms_arn                                     = ""
@@ -27,18 +27,18 @@ dependency "common" {
 
 dependency "rds" {
   config_path                             = "../rds"
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    rds_instance_id     = "id"
-    database_name       = "database"
-    database_subnet_ids = ["subnet-1", "subnet-2"]
+    kms_arn                          = ""
+    s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
+    vpc_id                           = ""
   }
 }
 
 dependency "eks" {
   config_path                             = "../eks"
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     quicksight_security_group_id = "sg-1"

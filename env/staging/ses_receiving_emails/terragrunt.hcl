@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//ses_receiving_emails"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ses_receiving_emails?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ses_receiving_emails"}"
 }
 
 dependencies {
@@ -31,15 +31,9 @@ include {
 }
 
 inputs = {
-  billing_tag_value                       = "notification-canada-ca-staging"
-  schedule_expression                     = "rate(1 minute)"
   sns_alert_warning_arn_us_east_1         = dependency.common.outputs.sns_alert_warning_arn_us_east_1
   sns_alert_critical_arn_us_east_1        = dependency.common.outputs.sns_alert_critical_arn_us_east_1
   sns_alert_ok_arn_us_east_1              = dependency.common.outputs.sns_alert_ok_arn_us_east_1
-  notify_sending_domain                   = "staging.notification.cdssandbox.xyz"
-  sqs_region                              = "ca-central-1"
-  celery_queue_prefix                     = "eks-notification-canada-ca"
-  gc_notify_service_email                 = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
   sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
   sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
   ses_receiving_emails_ecr_repository_url = dependency.ecr.outputs.ses_receiving_emails_ecr_repository_url
