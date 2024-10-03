@@ -336,7 +336,7 @@ jobs:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-        - name: Install 1Pass CLI
+      - name: Install 1Pass CLI
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
