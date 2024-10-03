@@ -1,5 +1,5 @@
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/quicksight?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//quicksight"}"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/quicksight?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {
@@ -30,9 +30,9 @@ dependency "rds" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    kms_arn                          = ""
-    s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
-    vpc_id                           = ""
+    rds_instance_id     = "id"
+    database_name       = "database"
+    database_subnet_ids = ["subnet-1", "subnet-2"]
   }
 }
 

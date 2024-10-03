@@ -1,7 +1,3 @@
-terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ses_validation_dns_entries?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ses_validation_dns_entries"}"
-}
-
 dependencies {
   paths = ["../common", "../dns"]
 }
@@ -29,8 +25,7 @@ dependency "dns" {
     notification_canada_ca_receiving_dkim = []
     notification_canada_ca_dkim = []
     cic_trvapply_vrtdemande_dkim = []
-    custom_sending_domains_dkim = []
-    route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
+    custom_sending_domains_dkim = []    
   }
 }
 
@@ -44,5 +39,8 @@ inputs = {
   cic_trvapply_vrtdemande_dkim  = dependency.dns.outputs.cic_trvapply_vrtdemande_dkim
   notification_canada_ca_dkim   = dependency.dns.outputs.notification_canada_ca_dkim
   notification_canada_ca_receiving_dkim   = dependency.dns.outputs.notification_canada_ca_receiving_dkim
-  route53_zone_id                        = dependency.dns.outputs.route53_zone_id
+}
+
+terraform {
+  source = "../../../aws//ses_validation_dns_entries"
 }

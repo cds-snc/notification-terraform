@@ -1,5 +1,6 @@
+# Uses GitHub tags for release management
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/pinpoint_to_sqs_sms_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//pinpoint_to_sqs_sms_callbacks"}"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/pinpoint_to_sqs_sms_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {
@@ -44,6 +45,7 @@ include {
 }
 
 inputs = {
+  billing_tag_value                                  = "notification-canada-ca-production"
   sns_alert_warning_arn                              = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                             = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_ok_arn                                   = dependency.common.outputs.sns_alert_ok_arn

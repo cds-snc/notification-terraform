@@ -1,5 +1,7 @@
+# Uses GitHub tags for release management
+#
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/newrelic?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//newrelic"}"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/newrelic?ref=v${get_env("INFRASTRUCTURE_VERSION")}" 
 }
 
 include {

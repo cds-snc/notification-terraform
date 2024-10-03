@@ -1,5 +1,6 @@
+# Uses GitHub tags for release management
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//dns"}"
+  source = "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
 }
 
 dependencies {
@@ -29,7 +30,6 @@ dependency "ses_receiving_emails" {
   }
 }
 
-
 include {
   path = find_in_parent_folders()
 }
@@ -37,6 +37,6 @@ include {
 inputs = {
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
   vpc_id                                  = dependency.common.outputs.vpc_id
+  ses_custom_sending_domains              = ["notification.gov.bc.ca", "notify.novascotia.ca"]
   lambda_ses_receiving_emails_image_arn   = dependency.ses_receiving_emails.outputs.lambda_ses_receiving_emails_image_arn
 }
-

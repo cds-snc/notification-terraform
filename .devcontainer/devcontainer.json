@@ -5,8 +5,8 @@
     "context": "..",
     "args": {
       "AWS_CLI_VERSION": "2.2.29",
-      "TERRAFORM_VERSION": "1.9.5",
-      "TERRAGRUNT_VERSION": "0.66.9"
+      "TERRAFORM_VERSION": "1.6.2",
+      "TERRAGRUNT_VERSION": "0.44.4"
     }
   },
   "containerEnv": {

@@ -1,7 +1,3 @@
-terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ses_validation_dns_entries?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ses_validation_dns_entries"}"
-}
-
 dependencies {
   paths = ["../common", "../dns"]
 }
@@ -11,7 +7,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
   }
@@ -22,7 +18,7 @@ dependency "dns" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     lambda_ses_receiving_emails_image_arn = ""
@@ -45,4 +41,8 @@ inputs = {
   notification_canada_ca_dkim   = dependency.dns.outputs.notification_canada_ca_dkim
   notification_canada_ca_receiving_dkim   = dependency.dns.outputs.notification_canada_ca_receiving_dkim
   route53_zone_id                        = dependency.dns.outputs.route53_zone_id
+}
+
+terraform {
+  source = "../../../aws//ses_validation_dns_entries"
 }

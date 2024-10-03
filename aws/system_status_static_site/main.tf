@@ -1,3 +1,9 @@
+variable "billing_tag_value" {
+  type        = string
+  description = "The value of the billing tag"
+
+}
+
 module "system_status_static_site" {
   source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.6.4"
 

@@ -32,7 +32,7 @@ resource "aws_iam_role" "scratch_dns_manager" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "${var.scratch_account_id}"
+        "AWS": "419291849580"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -76,7 +76,7 @@ resource "aws_iam_role" "staging_dns_manager" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "${var.staging_account_id}"
+        "AWS": "239043911459"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -120,7 +120,7 @@ resource "aws_iam_role" "production_dns_manager" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "${var.production_account_id}"
+        "AWS": "296255494825"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -164,7 +164,7 @@ resource "aws_iam_role" "dev_dns_manager" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "${var.dev_account_id}"
+        "AWS": "800095993820"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -173,7 +173,6 @@ resource "aws_iam_role" "dev_dns_manager" {
 }
 EOF
 }
-
 
 resource "aws_iam_role_policy" "sandbox_dns_manager_policy" {
   count = var.env == "staging" ? 1 : 0
@@ -209,7 +208,7 @@ resource "aws_iam_role" "sandbox_dns_manager" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "${var.sandbox_account_id}"
+        "AWS": "891376947407"
       },
       "Effect": "Allow",
       "Sid": ""

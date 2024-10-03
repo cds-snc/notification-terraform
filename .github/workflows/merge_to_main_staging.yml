@@ -17,11 +17,51 @@ defaults:
     shell: bash
 
 env:
-  ACCOUNT_ID: ${{ secrets.STAGING_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
-  ENVIRONMENT: staging
-  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-  WORKFLOW: true
+  TF_VAR_new_relic_api_key: ${{ secrets.STAGING_NEW_RELIC_API_KEY }}
+  TF_VAR_new_relic_account_id: ${{ secrets.STAGING_NEW_RELIC_ACCOUNT_ID }}
+  TF_VAR_new_relic_slack_webhook_url: ${{ secrets.STAGING_NEW_RELIC_SLACK_WEBHOOK_URL }}
+  TF_VAR_base_domain: ${{secrets.STAGING_BASE_DOMAIN}}
+  TF_VAR_alt_base_domain: ${{secrets.STAGING_ALT_BASE_DOMAIN}}
+  TF_VAR_dbtools_password: ${{ secrets.STAGING_DBTOOLS_PASSWORD }}
+  TF_VAR_heartbeat_api_key: ${{ secrets.STAGING_HEARTBEAT_API_KEY }}
+  TF_VAR_heartbeat_sms_number: ${{ secrets.STAGING_HEARTBEAT_SMS_NUMBER }}
+  TF_VAR_rds_cluster_password: ${{ secrets.STAGING_RDS_CLUSTER_PASSWORD }}
+  TF_VAR_app_db_user_password: ${{ secrets.STAGING_APP_DB_USER_PASSWORD }}
+  TF_VAR_quicksight_db_user_password: ${{ secrets.STAGING_QUICKSIGHT_DB_USER_PASSWORD }}
+  TF_VAR_cloudwatch_slack_webhook_warning_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_cloudwatch_slack_webhook_critical_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_cloudwatch_slack_webhook_general_topic: ${{ secrets.STAGING_CLOUDWATCH_SLACK_WEBHOOK }}
+  TF_VAR_notify_o11y_google_oauth_client_id: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_ID_STAGING }}
+  TF_VAR_notify_o11y_google_oauth_client_secret: ${{ secrets.NOTIFY_O11Y_GOOGLE_OAUTH_CLIENT_SECRET_STAGING }}
+  TF_VAR_sentinel_customer_id: ${{ secrets.SENTINEL_CUSTOMER_ID }}
+  TF_VAR_sentinel_shared_key: ${{ secrets.SENTINEL_SHARED_KEY }}
+  TF_VAR_slack_channel_warning_topic: "notification-staging-ops"
+  TF_VAR_slack_channel_critical_topic: "notification-staging-ops"
+  TF_VAR_slack_channel_general_topic: "notification-staging-ops"
+  TF_VAR_sqlalchemy_database_reader_uri: ${{ secrets.STAGING_SQLALCHEMY_DATABASE_READER_URI }}
+  TF_VAR_system_status_admin_url: "https://staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_api_url: "https://api.staging.notification.cdssandbox.xyz"
+  TF_VAR_system_status_bucket_name: "notification-canada-ca-staging-system-status"
+  TF_VAR_cloudwatch_opsgenie_alarm_webhook: ""
+  TF_VAR_new_relic_license_key: ${{ secrets.STAGING_NEW_RELIC_LICENSE_KEY }}
+  TF_VAR_perf_test_phone_number: ${{ secrets.PERF_TEST_PHONE_NUMBER }}
+  TF_VAR_perf_test_email: ${{ secrets.PERF_TEST_EMAIL }}
+  TF_VAR_perf_test_domain: ${{ secrets.PERF_TEST_DOMAIN }}
+  TF_VAR_perf_test_auth_header: ${{ secrets.PERF_TEST_AUTH_HEADER }}
+  TF_VAR_waf_secret: ${{secrets.STAGING_WAF_SECRET}}
+  # Prevents repeated creation of the Slack lambdas if already existing.
+  # See: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/84
+  TF_RECREATE_MISSING_LAMBDA_PACKAGE: false
+  TF_VAR_client_vpn_access_group_id: ${{ secrets.STAGING_CLIENT_VPN_ACCESS_GROUP_ID }}
+  TF_VAR_client_vpn_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SAML_METADATA }}
+  TF_VAR_client_vpn_self_service_saml_metadata: ${{ secrets.STAGING_CLIENT_VPN_SELF_SERVICE_SAML_METADATA }}
+  TF_VAR_pr_bot_installation_id: ${{ secrets.NOTIFY_PR_BOT_INSTALLATION_ID_MANIFESTS }}
+  TF_VAR_pr_bot_app_id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
+  TF_VAR_pr_bot_private_key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
+  TF_VAR_budget_sre_bot_webhook: ${{ secrets.STAGING_BUDGET_SRE_BOT_WEBHOOK }}
+  TF_VAR_enable_sentinel_forwarding: true
+  TF_VAR_aws_xray_sdk_enabled: true
 
 permissions:
   id-token: write
@@ -39,20 +79,12 @@ jobs:
 
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
-          role_session_name: NotifyTerraformDevApply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply common
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply COMMON
-        run: |
-          cd env/${{env.ENVIRONMENT}}/common
+          cd env/staging/common
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr:
@@ -65,42 +97,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-
-      - name: Configure credentials to Notify Private ECR using OIDC
-        uses: aws-actions/configure-aws-credentials@master
-        with:
-          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
-          role-session-name: NotifyApiGitHubActions
-          aws-region: "ca-central-1"        
-
-      - name: Configure credentials to Notify Private ECR using OIDC
-        uses: aws-actions/configure-aws-credentials@master
-        with:
-          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
-          role-session-name: NotifyApiGitHubActions
-          aws-region: "us-east-1"  
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-          
+        
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
-          role_session_name: NotifyTerraformDevApply        
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply ECR
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply ECR
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ecr
+          cd env/staging/ecr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_receiving_emails:
@@ -118,20 +124,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply ses_receiving_emails
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-  
-      - name: terragrunt apply ses_receiving_emails
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
+          cd env/staging/ses_receiving_emails
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-dns:
@@ -149,20 +147,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply            
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply dns
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply dns
-        run: |
-          cd env/${{env.ENVIRONMENT}}/dns
+          cd env/staging/dns
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_validation_dns_entries:
@@ -180,20 +170,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply ses_validation_dns_entries
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply ses_validation_dns_entries
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
+          cd env/staging/ses_validation_dns_entries
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
 
@@ -212,21 +194,13 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply cloudfront
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-
-      - name: terragrunt apply cloudfront
-        run: |
-          cd env/${{env.ENVIRONMENT}}/cloudfront
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          cd env/staging/cloudfront
+          terragrunt apply --terragrunt-non-interactive -auto-approve 
 
   terragrunt-apply-eks:
     if: |
@@ -239,24 +213,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
-       
+        
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply           
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply eks
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply eks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/eks
+          cd env/staging/eks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-elasticache:
@@ -274,20 +240,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply elasticache
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply elasticache
-        run: |
-          cd env/${{env.ENVIRONMENT}}/elasticache
+          cd env/staging/elasticache
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-rds:
@@ -305,20 +263,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply rds
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply rds
-        run: |
-          cd env/${{env.ENVIRONMENT}}/rds
+          cd env/staging/rds
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-api:
@@ -336,20 +286,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-        - name: Install 1Pass CLI
+      - name: Terragrunt apply lambda-api
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply lambda-api
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-api
+          cd env/staging/lambda-api
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-admin-pr:
@@ -367,20 +309,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply lambda-admin-pr
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply lambda-admin-pr
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
+          cd env/staging/lambda-admin-pr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-performance-test:
@@ -398,20 +332,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply           
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply performance-test
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply performance-test
-        run: |
-          cd env/${{env.ENVIRONMENT}}/performance-test
+          cd env/staging/performance-test
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-heartbeat:
@@ -429,20 +355,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply heartbeat
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply heartbeat
-        run: |
-          cd env/${{env.ENVIRONMENT}}/heartbeat
+          cd env/staging/heartbeat
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-database-tools:
@@ -460,20 +378,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply          
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply database-tools
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
-
-      - name: terragrunt apply database-tools
-        run: |
-          cd env/${{env.ENVIRONMENT}}/database-tools
+          cd env/staging/database-tools
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-quicksight:
@@ -491,20 +401,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply                  
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply quicksight
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply quicksight
-        run: |
-          cd env/${{env.ENVIRONMENT}}/quicksight
+          cd env/staging/quicksight
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-google-cidr:
@@ -522,20 +424,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply lambda-google-cidr
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-  
-      - name: terragrunt apply lambda-google-cidr
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
+          cd env/staging/lambda-google-cidr
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_to_sqs_email_callbacks:
@@ -553,20 +447,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply ses_to_sqs_email_callbacks
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply ses_to_sqs_email_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
+          cd env/staging/ses_to_sqs_email_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-sns_to_sqs_sms_callbacks:
@@ -584,20 +470,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply sns_to_sqs_sms_callbacks
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply sns_to_sqs_sms_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
+          cd env/staging/sns_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-pinpoint_to_sqs_sms_callbacks:
@@ -615,20 +493,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply pinpoint_to_sqs_sms_callbacks
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
+          cd env/staging/pinpoint_to_sqs_sms_callbacks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status:
@@ -646,20 +516,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply system_status
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply system_status
-        run: |
-          cd env/${{env.ENVIRONMENT}}/system_status
+          cd env/staging/system_status
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status_static_site:
@@ -677,20 +539,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply         
 
-      - name: Install 1Pass CLI
+      - name: Terragrunt apply aws/system_status_static_site
         run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply system_status_static_site
-        run: |
-          cd env/${{env.ENVIRONMENT}}/system_status_static_site
+          cd env/staging/system_status_static_site
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-newrelic:
@@ -708,20 +562,12 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::239043911459:role/notification-terraform-apply
           role_session_name: NotifyTerraformApply        
-      
-      - name: Install 1Pass CLI
-        run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
-      - name: terragrunt apply newrelic
+      - name: Terragrunt apply aws/newrelic
         run: |
-          cd env/${{env.ENVIRONMENT}}/newrelic
+          cd env/staging/newrelic
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   bump-version-and-push-tag:
