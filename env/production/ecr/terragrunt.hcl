@@ -2,12 +2,8 @@ include {
   path = find_in_parent_folders()
 }
 
-locals {
-  vars = read_terragrunt_config("../env_vars.hcl")
-}
-
 terraform {
-  source = "git::https://github.com/cds-snc/notification-terraform//aws/ecr?ref=v${get_env("INFRASTRUCTURE_VERSION")}"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ecr?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ecr"}"
 
   after_hook "cleanup-admin" {
     commands     = ["apply"]

@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/dns?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//dns"}"
+}
+
 dependencies {
   paths = ["../common", "../ses_receiving_emails"]
 }
@@ -33,12 +37,6 @@ include {
 inputs = {
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
   vpc_id                                  = dependency.common.outputs.vpc_id
-  ses_custom_sending_domains              = ["custom-sending-domain.sandbox.notification.cdssandbox.xyz"]
   lambda_ses_receiving_emails_image_arn   = dependency.ses_receiving_emails.outputs.lambda_ses_receiving_emails_image_arn
-}
-
-terraform {
-  source = "../../../aws//dns"
-
 }
 
