@@ -10,6 +10,7 @@ defaults:
 env:
   AWS_REGION: ca-central-1
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  ENVIRONMENT: dev
 
 permissions:
   id-token: write
@@ -40,8 +41,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb          
 
-      - name: terragrunt destroy dns
+      - name: Destroy notify dev environment
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-          cd env/dev/dns
-          terragrunt destroy --var-file /var/tmp/dev.tfvars --terragrunt-non-interactive -auto-approve
+          ./scripts/deleteEnvironment.sh dev 800095993820
