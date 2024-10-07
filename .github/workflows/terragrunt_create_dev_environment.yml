@@ -65,8 +65,6 @@ jobs:
           role-session-name: NotifyApiGitHubActions
           aws-region: "ca-central-1"        
 
-<<<<<<< HEAD
-=======
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
@@ -74,7 +72,6 @@ jobs:
           role-session-name: NotifyApiGitHubActions
           aws-region: "us-east-1"  
 
->>>>>>> origin/main
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
