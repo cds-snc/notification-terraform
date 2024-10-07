@@ -60,7 +60,7 @@ echo "Done."
 
 # Run the second round of aws-nuke. This should delete all remaining resources.
 echo "Starting second round of aws-nuke..."
-aws-nuke run -c awsNuke.cfg --quiet --no-dry-run --max-wait-retries 100 --force
+aws-nuke run -c awsNuke.cfg --quiet --no-dry-run --force
 echo "Done."
 
 # aws-nuke can't delete the below resources because they are part of a account-wide blacklist in the aws-nuke config
