@@ -9,6 +9,8 @@ defaults:
 
 env:
   AWS_REGION: ca-central-1
+  AWS_NUKE_VERSION: 3.24.0
+  AWS_NUKE_CONFIG_PLACEHOLDER: SCRATCH_ACCOUNT_ID
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
   ENVIRONMENT: dev
 
@@ -35,6 +37,14 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy            
+
+      - name: Install AWS nuke
+        run: |
+          mkdir bin
+          curl -Lo aws-nuke.tar.gz https://github.com/rebuy-de/aws-nuke/releases/download/v${{ env.AWS_NUKE_VERSION }}/aws-nuke-v${{ env.AWS_NUKE_VERSION }}-linux-amd64.tar.gz
+          tar -xzf aws-nuke.tar.gz -C bin
+          chmod +x bin/*
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
       - name: Install 1Pass CLI
         run: |

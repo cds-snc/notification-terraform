@@ -21,6 +21,11 @@ if [ -z "$ACCOUNT_ID" ]; then
     exit 1
 fi
 
+# Set the account id in AWS Nuke config
+echo "Configuring AWS Nuke"
+sed -i 's/SCRATCH_ACCOUNT_ID/$ACCOUNT_ID/g' scripts/awsNuke.cfg
+echo "Done."
+
 echo "Deleting environment $ENVIRONMENT in account $ACCOUNT_ID"
 
 # We need to destroy cloudfront distributions and base DNS records using Terraform since they are in a different account
@@ -60,7 +65,7 @@ echo "Done."
 
 # Run the second round of aws-nuke. This should delete all remaining resources.
 echo "Starting second round of aws-nuke..."
-aws-nuke run -c awsNuke.cfg --quiet --no-dry-run --force
+aws-nuke run -c awsNuke.cfg --quiet --no-dry-run --max-wait-retries 300 --force
 echo "Done."
 
 # aws-nuke can't delete the below resources because they are part of a account-wide blacklist in the aws-nuke config
