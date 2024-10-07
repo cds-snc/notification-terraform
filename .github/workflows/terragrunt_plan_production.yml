@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -60,7 +60,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -94,7 +94,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -127,7 +127,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -160,7 +160,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -193,7 +193,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -226,7 +226,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -259,7 +259,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -292,7 +292,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -325,7 +325,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -358,7 +358,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -391,7 +391,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -425,7 +425,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -458,7 +458,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -491,7 +491,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -524,7 +524,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -557,7 +557,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -590,7 +590,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -623,7 +623,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -656,7 +656,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -689,7 +689,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
@@ -722,7 +722,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
