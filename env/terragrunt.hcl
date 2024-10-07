@@ -87,7 +87,7 @@ provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_${local.inputs.env}_dns_manager"
+    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_prod_dns_manager"
   }
 }
 %{ endif }
