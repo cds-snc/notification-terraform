@@ -59,7 +59,7 @@ provider "aws" {
 # Production uses the DNS from the Production account, but also has a 
 # different name :/  So we need to handle that here with if Logic
 
-%{ if local.inputs.env == "dev" }
+%{ if local.inputs.env != "production" && local.inputs.env != "staging" }
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
