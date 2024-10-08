@@ -54,4 +54,5 @@ jobs:
       - name: Destroy notify dev environment
         run: |
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-          ./scripts/deleteEnvironment.sh dev 800095993820
+          cd scripts
+          ./deleteEnvironment.sh dev 800095993820
