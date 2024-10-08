@@ -23,7 +23,7 @@ fi
 
 # Set the account id in AWS Nuke config
 echo "Configuring AWS Nuke"
-sed -i 's/SCRATCH_ACCOUNT_ID/$ACCOUNT_ID/g' scripts/awsNuke.cfg
+sed -i'' -e "s/SCRATCH_ACCOUNT_ID/$ACCOUNT_ID/g" awsNuke.cfg 
 echo "Done."
 
 echo "Deleting environment $ENVIRONMENT in account $ACCOUNT_ID"
