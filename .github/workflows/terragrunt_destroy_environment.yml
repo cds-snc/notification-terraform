@@ -21,7 +21,7 @@ permissions:
 
 jobs:
 
-  terragrunt-destroy-dns:
+  delete-dev-environment:
     if: |
       always() &&
 
@@ -41,7 +41,7 @@ jobs:
       - name: Install AWS nuke
         run: |
           mkdir bin
-          curl -Lo aws-nuke.tar.gz https://github.com/rebuy-de/aws-nuke/releases/download/v${{ env.AWS_NUKE_VERSION }}/aws-nuke-v${{ env.AWS_NUKE_VERSION }}-linux-amd64.tar.gz
+          curl -Lo aws-nuke.tar.gz https://github.com/ekristen/aws-nuke/releases/download/v${{ env.AWS_NUKE_VERSION }}/aws-nuke-v${{ env.AWS_NUKE_VERSION }}-linux-amd64.tar.gz
           tar -xzf aws-nuke.tar.gz -C bin
           chmod +x bin/*
           echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
