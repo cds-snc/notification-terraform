@@ -14,6 +14,7 @@ resource "aws_quicksight_data_set" "notifications" {
         with notification_data as (
             select 
               id as notification_id,
+              billable_units as notification_billable_units,
               created_at as notification_created_at,
               queue_name as notification_queue_name,
               sent_at as notification_sent_at,
@@ -30,6 +31,7 @@ resource "aws_quicksight_data_set" "notifications" {
           union
             select 
               id as notification_id,
+              billable_units as notification_billable_units,
               created_at as notification_created_at,
               queue_name as notification_queue_name,
               sent_at as notification_sent_at,
@@ -75,7 +77,7 @@ resource "aws_quicksight_data_set" "notifications" {
           left outer join template_categories tc on tc.id = t.template_category_id
         )
         select
-          notification_id, notification_created_at, notification_sent_at, notification_status,
+          notification_id, notification_billable_units, notification_created_at, notification_sent_at, notification_status,
           notification_queue_name, notification_type, notification_updated_at, 
           notification_reference, job_id, api_key_id, api_key_type,
           s.*, t.*
@@ -87,6 +89,10 @@ resource "aws_quicksight_data_set" "notifications" {
       columns {
         name = "notification_id"
         type = "STRING"
+      }
+      columns {
+        name = "notification_billable_units"
+        type = "INTEGER"
       }
       columns {
         name = "notification_created_at"
