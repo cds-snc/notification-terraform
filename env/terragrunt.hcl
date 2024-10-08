@@ -59,7 +59,7 @@ provider "aws" {
 # Production uses the DNS from the Production account, but also has a 
 # different name :/  So we need to handle that here with if Logic
 
-%{ if local.inputs.env == "dev" }
+%{ if local.inputs.env != "production" && local.inputs.env != "staging" }
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
@@ -87,7 +87,7 @@ provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_${local.inputs.env}_dns_manager"
+    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_prod_dns_manager"
   }
 }
 %{ endif }
