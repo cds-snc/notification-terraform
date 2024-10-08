@@ -28,7 +28,7 @@ resource "aws_cloudwatch_query_definition" "pinpoint-failures-by-carrier" {
   query_string = <<QUERY
 filter isFinal
 | filter messageStatus not like /DELIVERED|SUCCESSFUL/
-| stats count(*) as Total by carrierName, messageStatus
+| stats count(*) as Total by coalesce(carrierName, 'Unknown/VOIP') as Carrier, messageStatus as MessageStatus
 | sort by Total desc
 QUERY
 }
