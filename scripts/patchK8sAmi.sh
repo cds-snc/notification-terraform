@@ -21,10 +21,25 @@ IFS=','
 
 # Iterate over each environment
 for ENV in $ENVIRONMENTS; do
-  echo "Patching EKS terragrunt.hcl file for $ENV"
-  cd ../env/$ENV/eks
+  echo "Patching env vars file for $ENV"
+  
+  if [ $ENV != "production" ]; then 
+    VAULT=4eyyuwddp6w4vxlabrr2i2duxm
+  else
+    VAULT=ppnxsriom3alsxj4ogikyjxlzi
+  fi
 
-  sed -E -i '' "s/[0-9].[0-9]{2}.[0-9]*-[0-9]{8}/$NEW_IMAGE_VERSION/" terragrunt.hcl
-  sed -E -i '' "s/ami-[A-Fa-f0-9]+/$NEW_AMI_ID/" terragrunt.hcl
-  cd ../../../scripts
+  pushd ../aws
+  op read op://$VAULT/"TFVars - $ENV"/notesPlain > $ENV.tfvars.temp
+
+  sed -E -i '' "s/[0-9].[0-9]{2}.[0-9]*-[0-9]{8}/$NEW_IMAGE_VERSION/" $ENV.tfvars.temp
+  sed -E -i '' "s/ami-[A-Fa-f0-9]+/$NEW_AMI_ID/" $ENV.tfvars.temp
+
+  if op item edit "TFVars - $ENV" notesPlain="$(cat $ENV.tfvars.temp)" > /dev/null ; then
+    echo "Done."
+  else
+    echo "WARNING: UPDATE FAILED"
+  fi
+  mv $ENV.tfvars.temp $ENV.tfvars
+  popd 
 done
