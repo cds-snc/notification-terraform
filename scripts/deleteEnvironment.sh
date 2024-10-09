@@ -80,7 +80,8 @@ echo "Done."
 BUCKETS=$(aws s3 ls | awk '{print $3}')
 for bucket in $BUCKETS; do
   echo "Deleting S3 Bucket $bucket"
-  aws s3 rb s3://$bucket --force  
+  aws s3 rb s3://$bucket --force
+  aws s3 rm s3://$bucket --recursive  
   echo "Done."
 done
 
