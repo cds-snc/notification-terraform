@@ -76,6 +76,14 @@ echo "Starting second round of aws-nuke..."
 aws-nuke run -c awsNuke.cfg --quiet --no-dry-run --max-wait-retries 300 --force 
 echo "Done."
 
+# AWS Nuke chokes on large S3 Buckets, Deleting them manually
+BUCKETS=$(aws s3 ls | awk '{print $3}')
+for bucket in $BUCKETS; do
+  echo "Deleting S3 Bucket $bucket"
+  aws s3 rb s3://$bucket --force  
+  echo "Done."
+done
+
 # aws-nuke can't delete the below resources because they are part of a account-wide blacklist in the aws-nuke config
 # This is because there are resources for the account guardrails set up by SRE that should not be deleted
 
