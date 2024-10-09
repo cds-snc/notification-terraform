@@ -52,6 +52,14 @@ terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --terragrunt-non-interactive
 popd
 echo "Done."
 
+# Delete Cloud Based Sensor Bucket
+echo "Deleting Cloud Based Sensor S3 Bucket..."
+pushd ../env/$ENVIRONMENT/common
+terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
+popd
+echo "Done."
+
+
 # Run the first round of aws-nuke. It will eventually end up in a loop where it can't delete some resources. This is expected.
 # After 100 retries, it will stop and we will run it again.
 echo "Starting first round of aws-nuke..."
