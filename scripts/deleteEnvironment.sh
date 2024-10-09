@@ -79,7 +79,7 @@ echo "Done."
 # AWS Nuke chokes on large S3 Buckets, Deleting them manually
 BUCKETS=$(aws s3 ls | awk '{print $3}')
 for bucket in $BUCKETS; do
-  echo "Deleting S3 Bucket $bucket"
+  echo "Deleting S3 Bucket $bucket manually"
   python deleteS3.py $bucket
   aws s3 rm s3://$bucket --recursive  
   aws s3 rb s3://$bucket --force
