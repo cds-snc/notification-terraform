@@ -59,6 +59,15 @@ terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_buc
 popd
 echo "Done."
 
+# AWS Nuke chokes on large S3 Buckets, Deleting them manually
+BUCKETS=$(aws s3 ls | awk '{print $3}')
+for bucket in $BUCKETS; do
+  echo "Deleting S3 Bucket $bucket manually"
+  python deleteS3.py $bucket
+  aws s3 rm s3://$bucket --recursive  
+  aws s3 rb s3://$bucket --force
+  echo "Done."
+done
 
 # Run the first round of aws-nuke. It will eventually end up in a loop where it can't delete some resources. This is expected.
 # After 100 retries, it will stop and we will run it again.
@@ -75,16 +84,6 @@ echo "Done."
 echo "Starting second round of aws-nuke..."
 aws-nuke run -c awsNuke.cfg --quiet --no-dry-run --max-wait-retries 300 --force 
 echo "Done."
-
-# AWS Nuke chokes on large S3 Buckets, Deleting them manually
-BUCKETS=$(aws s3 ls | awk '{print $3}')
-for bucket in $BUCKETS; do
-  echo "Deleting S3 Bucket $bucket manually"
-  python deleteS3.py $bucket
-  aws s3 rm s3://$bucket --recursive  
-  aws s3 rb s3://$bucket --force
-  echo "Done."
-done
 
 # aws-nuke can't delete the below resources because they are part of a account-wide blacklist in the aws-nuke config
 # This is because there are resources for the account guardrails set up by SRE that should not be deleted
