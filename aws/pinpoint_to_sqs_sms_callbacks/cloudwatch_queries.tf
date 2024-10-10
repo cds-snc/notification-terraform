@@ -135,7 +135,7 @@ messageStatusDescription as `Message status description`, @message
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "pinpoint-sms-logs" {
+resource "aws_cloudwatch_query_definition" "pinpoint-sms-get-logs" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Logs"
 
