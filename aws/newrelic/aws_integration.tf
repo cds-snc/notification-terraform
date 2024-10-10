@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "newrelic_assume_policy" {
     principals {
       type = "AWS"
       // This is the unique identifier for New Relic account on AWS, there is no need to change this
-      identifiers = [754728514883]
+      identifiers = [var.new_relic_aws_account_id]
     }
 
     condition {
