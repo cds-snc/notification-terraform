@@ -1,11 +1,3 @@
-output "ses_receiving_emails_ecr_arn" {
-  description = "arn of ses_receiving_emails ECR"
-  value       = aws_ecr_repository.ses_receiving_emails.arn
-}
-output "ses_receiving_emails_ecr_repository_url" {
-  description = "Repository URL of ses_receiving_emails ECR"
-  value       = aws_ecr_repository.ses_receiving_emails.repository_url
-}
 output "ses_to_sqs_email_callbacks_ecr_arn" {
   description = "arn of ses_to_sqs_email_callbacks ECR"
   value       = aws_ecr_repository.ses_to_sqs_email_callbacks.arn
