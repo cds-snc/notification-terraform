@@ -127,6 +127,11 @@ variable "elb_account_ids" {
   sensitive = true
 }
 
+variable "scan_files_account_id" {
+  type      = string
+  sensitive = true
+}
+
 variable "cbs_satellite_bucket_name" {
   type = string
 }
