@@ -1,14 +1,15 @@
 locals {
-  inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars")))
+  secret_inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars")))
+  config_inputs = jsondecode(read_tfvars_file("../../${get_env("ENVIRONMENT")}_config.vars"))
 }
 
 inputs = merge(
-  local.inputs,
+  local.secret_inputs,local.config_inputs,
   {
     elb_account_ids = {
-      "${local.inputs.region}" = "${local.inputs.elb_account_id}"
+      "${local.config_inputs.region}" = "${local.secret_inputs.elb_account_id}"
     }
-    cbs_satellite_bucket_name = "cbs-satellite-${local.inputs.account_id}"
+    cbs_satellite_bucket_name = "cbs-satellite-${local.secret_inputs.account_id}"
   }
 )
 
@@ -39,36 +40,36 @@ terraform {
 }
 
 provider "aws" {
-  region              = "${local.inputs.region}"
-  allowed_account_ids = [${local.inputs.account_id}]
+  region              = "${local.config_inputs.region}"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
 }
 
 provider "aws" {
   alias               = "us-west-2"
   region              = "us-west-2"
-  allowed_account_ids = [${local.inputs.account_id}]
+  allowed_account_ids = [${local.secret_inputs.account_id}]
 }
 
 provider "aws" {
   alias               = "us-east-1"
   region              = "us-east-1"
-  allowed_account_ids = [${local.inputs.account_id}]
+  allowed_account_ids = [${local.secret_inputs.account_id}]
 }
 
 # For whatever reason, Dev uses the DNS from the Staging account and 
 # Production uses the DNS from the Production account, but also has a 
 # different name :/  So we need to handle that here with if Logic
 
-%{ if local.inputs.env != "production" && local.inputs.env != "staging" }
+%{ if local.config_inputs.env != "production" && local.config_inputs.env != "staging" }
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.staging_account_id}:role/${local.inputs.env}_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
   }
 }
 %{ endif }
-%{ if local.inputs.env == "staging" }
+%{ if local.config_inputs.env == "staging" }
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
@@ -78,16 +79,16 @@ provider "aws" {
   alias  = "staging"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.staging_account_id}:role/${local.inputs.env}_dns_manager_role"
+    role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
   }
 }
 %{ endif }
-%{ if local.inputs.env == "production" }
+%{ if local.config_inputs.env == "production" }
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
   assume_role {
-    role_arn = "arn:aws:iam::${local.inputs.dns_account_id}:role/notify_prod_dns_manager"
+    role_arn = "arn:aws:iam::${local.secret_inputs.dns_account_id}:role/notify_prod_dns_manager"
   }
 }
 %{ endif }
@@ -896,11 +897,11 @@ remote_state {
   }
   config = {
     encrypt             = true
-    bucket              = "notification-canada-ca-${local.inputs.env}-tf"
+    bucket              = "notification-canada-ca-${local.config_inputs.env}-tf"
     dynamodb_table      = "terraform-state-lock-dynamo"
     region              = "ca-central-1"
     key                 = "${path_relative_to_include()}/terraform.tfstate"
-    s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.inputs.env}" }
-    dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.inputs.env}" }
+    s3_bucket_tags      = { CostCenter : "notification-canada-ca-${local.config_inputs.env}" }
+    dynamodb_table_tags = { CostCenter : "notification-canada-ca-${local.config_inputs.env}" }
   }
 }
