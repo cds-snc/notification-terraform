@@ -1,6 +1,5 @@
 import boto3
 
-# PROFILE = "dev"
 BUCKET = name = sys.argv[1]
 
 session = boto3.Session()
