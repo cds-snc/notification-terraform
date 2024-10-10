@@ -65,7 +65,7 @@ fields @timestamp as Timestamp, status as Status, notification.messageId as `Mes
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "sms-interntional-sending-status" {
+resource "aws_cloudwatch_query_definition" "sms-international-sending-status" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / International sending status"
 
@@ -75,14 +75,10 @@ resource "aws_cloudwatch_query_definition" "sms-interntional-sending-status" {
   ]
 
   query_string = <<QUERY
-fields @timestamp, @message
-| parse @message /"isoCountryCode":"(?<Country>[^"]+)"/
-| parse @message /"eventType":"(?<Event_Type>[^"]+)"/
-| parse @message /"isFinal":(?<Is_Final>\w+)/
-| filter Is_Final = "true"
-| stats count(*) as Event_Count by Country, Event_Type
-| display Country, Event_Type, Event_Count
-| sort Country asc
+fields @timestamp, @message, delivery.mcc as CountryCode, status
+| stats count(*) as Event_Count by CountryCode, status
+| display CountryCode, status, Event_Count
+| sort CountryCode asc
 | limit 200
 QUERY
 }
