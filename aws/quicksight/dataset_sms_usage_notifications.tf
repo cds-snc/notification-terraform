@@ -50,7 +50,6 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
             }
           ],
 
-
           LogicalTableMap = {
 
             sms-usage-notifications = {
