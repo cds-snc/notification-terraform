@@ -1,4 +1,5 @@
 import boto3
+import sys
 
 BUCKET = name = sys.argv[1]
 
