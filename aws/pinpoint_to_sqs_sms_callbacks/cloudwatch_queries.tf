@@ -54,7 +54,7 @@ filter isFinal
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "pintpoint-sms-get-failures" {
+resource "aws_cloudwatch_query_definition" "pinpoint-sms-get-failures" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Get failures"
 
