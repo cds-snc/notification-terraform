@@ -22,7 +22,7 @@ dependency "common" {
 }
 
 dependency "ecr-us-east" {
-  config_path = "../ec-us-east"
+  config_path = "../ecr-us-east"
 }
 
 
