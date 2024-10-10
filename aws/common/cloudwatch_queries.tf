@@ -1,9 +1,9 @@
-resource "aws_cloudwatch_query_definition" "sms-blocked-as-spam" {
+resource "aws_cloudwatch_query_definition" "sms-sns-blocked-as-spam" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Block as spam"
 
   log_group_names = [
-    aws_cloudwatch_log_group.sns_deliveries_failures.name
+    aws_cloudwatch_log_group.sns_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -15,13 +15,13 @@ fields @timestamp as Timestamp, delivery.phoneCarrier as Carrier, delivery.provi
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "sms-carrier-dwell-times" {
+resource "aws_cloudwatch_query_definition" "sms-sns-carrier-dwell-times" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Carrier dwell times"
 
   log_group_names = [
-    aws_cloudwatch_log_group.sns_deliveries.name,
-    aws_cloudwatch_log_group.sns_deliveries_failures.name
+    aws_cloudwatch_log_group.sns_deliveries[0].name,
+    aws_cloudwatch_log_group.sns_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -30,12 +30,12 @@ stats avg(delivery.dwellTimeMsUntilDeviceAck / 1000 / 60) as Avg_carrier_time_mi
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "sms-get-failures" {
+resource "aws_cloudwatch_query_definition" "sms-sns-get-failures" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Get failures"
 
   log_group_names = [
-    aws_cloudwatch_log_group.sns_deliveries_failures.name
+    aws_cloudwatch_log_group.sns_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -46,13 +46,13 @@ fields @timestamp as Timestamp, status, delivery.phoneCarrier as Carrier, delive
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "sms-get-sms-logs-by-phone-number" {
+resource "aws_cloudwatch_query_definition" "sms-sns-get-sms-logs-by-phone-number" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Get SMS logs by phone number"
 
   log_group_names = [
-    aws_cloudwatch_log_group.sns_deliveries.name,
-    aws_cloudwatch_log_group.sns_deliveries_failures.name
+    aws_cloudwatch_log_group.sns_deliveries[0].name,
+    aws_cloudwatch_log_group.sns_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -65,13 +65,13 @@ fields @timestamp as Timestamp, status as Status, notification.messageId as `Mes
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "sms-international-sending-status" {
+resource "aws_cloudwatch_query_definition" "sms-sns-international-sending-status" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / International sending status"
 
   log_group_names = [
-    aws_cloudwatch_log_group.sns_deliveries.name,
-    aws_cloudwatch_log_group.sns_deliveries_failures.name
+    aws_cloudwatch_log_group.sns_deliveries[0].name,
+    aws_cloudwatch_log_group.sns_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -83,13 +83,13 @@ fields @timestamp, @message, delivery.mcc as CountryCode, status
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "sms-success-vs-unreachable" {
+resource "aws_cloudwatch_query_definition" "sms-sns-success-vs-unreachable" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Success vs Unreachable"
 
   log_group_names = [
-    aws_cloudwatch_log_group.sns_deliveries.name,
-    aws_cloudwatch_log_group.sns_deliveries_failures.name
+    aws_cloudwatch_log_group.sns_deliveries[0].name,
+    aws_cloudwatch_log_group.sns_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -101,12 +101,12 @@ fields @timestamp, delivery.providerResponse
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "sms-unreachable-phone-numbers" {
+resource "aws_cloudwatch_query_definition" "sms-sns-unreachable-phone-numbers" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Success vs Unreachable"
 
   log_group_names = [
-    aws_cloudwatch_log_group.sns_deliveries_failures.name
+    aws_cloudwatch_log_group.sns_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY

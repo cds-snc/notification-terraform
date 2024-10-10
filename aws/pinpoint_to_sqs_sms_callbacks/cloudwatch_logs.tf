@@ -3,6 +3,7 @@
 #
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
+  # REVIEW: We might want the count attribute present to disable this resource
   name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -11,6 +12,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
+  # REVIEW: We might want the count attribute present to disable this resource
   name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
