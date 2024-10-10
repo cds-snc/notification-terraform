@@ -59,6 +59,8 @@ terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_buc
 popd
 echo "Done."
 
+pip install boto3
+
 # AWS Nuke chokes on large S3 Buckets, Deleting them manually
 BUCKETS=$(aws s3 ls | awk '{print $3}')
 for bucket in $BUCKETS; do
