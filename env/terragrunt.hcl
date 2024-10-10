@@ -516,7 +516,8 @@ variable "sentinel_layer_version" {
 }
 
 variable "sentinel_sre_aws_account_id" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "heartbeat_api_key" {
