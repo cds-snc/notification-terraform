@@ -35,7 +35,7 @@ jobs:
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::800095993820:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{ secrets.DEV_ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformDestroy            
 
       - name: Install AWS nuke
