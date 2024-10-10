@@ -127,6 +127,11 @@ variable "elb_account_ids" {
   sensitive = true
 }
 
+variable "scan_files_account_id" {
+  type      = string
+  sensitive = true
+}
+
 variable "cbs_satellite_bucket_name" {
   type = string
 }
@@ -456,6 +461,11 @@ variable "cloudwatch_opsgenie_alarm_webhook" {
   sensitive = true
 }
 
+variable "new_relic_aws_account_id" {
+  type      = string
+  sensitive = true
+}
+
 variable "new_relic_license_key" {
   type      = string
   sensitive = true
@@ -503,6 +513,11 @@ variable "sentinel_shared_key" {
 
 variable "sentinel_layer_version" {
   type = string
+}
+
+variable "sentinel_sre_aws_account_id" {
+  type      = string
+  sensitive = true
 }
 
 variable "heartbeat_api_key" {
