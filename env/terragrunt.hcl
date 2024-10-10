@@ -456,6 +456,11 @@ variable "cloudwatch_opsgenie_alarm_webhook" {
   sensitive = true
 }
 
+variable "new_relic_aws_account_id" {
+  type      = string
+  sensitive = true
+}
+
 variable "new_relic_license_key" {
   type      = string
   sensitive = true
