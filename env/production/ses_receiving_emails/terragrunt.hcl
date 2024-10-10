@@ -21,8 +21,8 @@ dependency "common" {
   }
 }
 
-dependency "ecr" {
-  config_path = "../ecr"
+dependency "ecr-us-east" {
+  config_path = "../ec-us-east"
 }
 
 
@@ -35,8 +35,7 @@ inputs = {
   sns_alert_critical_arn_us_east_1        = dependency.common.outputs.sns_alert_critical_arn_us_east_1
   sns_alert_ok_arn_us_east_1              = dependency.common.outputs.sns_alert_ok_arn_us_east_1
   sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
-  sqs_notify_internal_tasks_arn           = dependency.common.outputs.sqs_notify_internal_tasks_arn
-  ses_receiving_emails_ecr_repository_url = dependency.ecr.outputs.ses_receiving_emails_ecr_repository_url
-  ses_receiving_emails_ecr_arn            = dependency.ecr.outputs.ses_receiving_emails_ecr_arn  
+  ses_receiving_emails_ecr_repository_url = dependency.ecr-us-east.outputs.ses_receiving_emails_ecr_repository_url
+  ses_receiving_emails_ecr_arn            = dependency.ecr-us-east.outputs.ses_receiving_emails_ecr_arn  
 }
 
