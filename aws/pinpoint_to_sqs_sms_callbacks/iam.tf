@@ -48,8 +48,8 @@ data "aws_iam_policy_document" "pinpoint_logs" {
       "logs:PutLogEvents"
     ]
     resources = [
-      "${aws_cloudwatch_log_group.pinpoint_deliveries.arn}:*",
-      "${aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn}:*"
+      "${aws_cloudwatch_log_group.pinpoint_deliveries[0].arn}:*",
+      "${aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].arn}:*"
     ]
   }
 }

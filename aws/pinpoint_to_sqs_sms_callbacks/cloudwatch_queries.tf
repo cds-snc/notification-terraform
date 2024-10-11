@@ -3,7 +3,7 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-blocked-as-spam" {
   name  = "SMS (Pinpoint) / Block as spam"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -24,8 +24,8 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-carrier-dwell-times" {
   name  = "SMS (Pinpoint) / Carrier dwell times"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name,
+    aws_cloudwatch_log_group.pinpoint_deliveries[0].name,
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name,
   ]
 
   query_string = <<QUERY
@@ -42,8 +42,8 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-failures-by-carrier" {
   name  = "SMS (Pinpoint) / Failures by carrier"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name,
+    aws_cloudwatch_log_group.pinpoint_deliveries[0].name,
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name,
   ]
 
   query_string = <<QUERY
@@ -59,7 +59,7 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-get-failures" {
   name  = "SMS (Pinpoint) / Get failures"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -78,8 +78,8 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-international-sending-s
   name  = "SMS (Pinpoint) / International sending status"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries[0].name,
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -100,8 +100,8 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-get-sms-logs-by-dest-ph
   name  = "SMS (Pinpoint) / Get SMS logs by destination phone number"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries[0].name,
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -120,8 +120,8 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-get-sms-logs-by-orig-ph
   name  = "SMS (Pinpoint) / Get SMS logs by origination phone number"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries[0].name,
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -140,8 +140,8 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-get-logs" {
   name  = "SMS (Pinpoint) / Logs"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries[0].name,
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
@@ -160,8 +160,8 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-success-vs-unreachable"
   name  = "SMS (Pinpoint) / Success vs Unreachable"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries[0].name,
+    aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
   ]
 
   query_string = <<QUERY
