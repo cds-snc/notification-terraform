@@ -32,4 +32,5 @@ module "eks" {
 variable "role_name" {
   type        = string
   description = "The name of the role to create"
+  default     = "AWSReservedSSO_AWSAdministratorAccess_e6e62a284c3c35fc"
 }
