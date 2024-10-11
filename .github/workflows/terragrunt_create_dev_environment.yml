@@ -836,7 +836,6 @@ jobs:
           kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-dev-eks-cluster dev
 
       - name: terragrunt apply k8s-fix
-        continue-on-error: true 
         run: |
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
