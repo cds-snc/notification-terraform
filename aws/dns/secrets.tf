@@ -27,3 +27,13 @@ resource "aws_secretsmanager_secret_version" "internal_dns_fqdn" {
   secret_id     = aws_secretsmanager_secret.internal_dns_fqdn.id
   secret_string = aws_route53_zone.internal_dns.name
 }
+
+resource "aws_secretsmanager_secret" "aws_route53_zone" {
+  name                    = "AWS_ROUTE53_ZONE"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "aws_route53_zone" {
+  secret_id     = aws_secretsmanager_secret.aws_route53_zone.id
+  secret_string = var.route53_zone_id
+}

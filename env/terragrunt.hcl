@@ -627,10 +627,6 @@ variable "gc_notify_service_email" {
   type = string
 }
 
-variable "aws_pinpoint_region" {
-  type = string
-}
-
 variable "perf_test_phone_number" {
   type = string
 }
@@ -899,6 +895,124 @@ variable "ses_receiving_emails_docker_tag" {
 
 variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
   type = string
+}
+
+variable "allow_html_service_ids" {
+  type = string
+}
+
+variable "aws_pinpoint_region" {
+  type = string
+}
+
+variable "ses_access_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "ses_secret_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "crm_github_personal_access_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "salesforce_engagement_product_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "salesforce_engagement_record_type" {
+  type      = string
+  sensitive = true
+}
+
+variable "salesforce_engagement_standard_pricebook_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "salesforce_generic_account_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "salesforce_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "salesforce_security_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "salesforce_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "sendgrid_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "aws_us_toll_free_number" {
+  type      = string
+  sensitive = true
+}
+
+variable "zendesk_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "zendesk_api_url" {
+  type      = string
+  sensitive = true
+}
+
+variable "zendesk_sell_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "zendesk_sell_api_url" {
+  type      = string
+  sensitive = true
+}
+
+variable "fresh_desk_api_url" {
+  type      = string
+  sensitive = true
+}
+
+variable "fresh_desk_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "fresh_desk_product_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "debug_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "sre_client_secret" {
+  type      = string
+  sensitive = true
+}
+
+variable "sentry_url" {
+  type      = string
+  sensitive = true
 }
 EOF
 }
