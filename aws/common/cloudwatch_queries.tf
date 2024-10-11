@@ -103,7 +103,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "sms-sns-unreachable-phone-numbers" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "SMS (SNS) / Success vs Unreachable"
+  name  = "SMS (SNS) / Unreachable phone numbers"
 
   log_group_names = [
     aws_cloudwatch_log_group.sns_deliveries_failures[0].name
