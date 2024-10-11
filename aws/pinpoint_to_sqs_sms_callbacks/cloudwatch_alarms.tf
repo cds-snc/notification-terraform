@@ -151,7 +151,7 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical" {
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-bell-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-bell-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for Bell Cellular Inc. / Aliant Telecom."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -172,7 +172,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-bell-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-bragg-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-bragg-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for BRAGG Communications INC."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -193,7 +193,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-bragg-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-freedom-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-freedom-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for Freedom Mobile Inc."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -214,7 +214,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-freedom-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-iristel-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-iristel-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for Iristel Inc."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -235,7 +235,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-iristel-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-maritime-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-maritime-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for Maritime Telephone & Telegraph Ltd."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -256,7 +256,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-maritime-warning" 
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-mts-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-mts-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for MTS Communications Inc."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -277,7 +277,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-mts-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-rogers-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-rogers-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for Rogers Communications Canada Inc."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -319,7 +319,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-telus-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-videotron-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_name          = "pinpoint-sms-failures-videotron-warning"
   alarm_description   = "Pinpoint SMS failures are more than 50 for Videotron Ltd."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
