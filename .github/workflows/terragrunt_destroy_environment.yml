@@ -53,7 +53,7 @@ jobs:
 
       - name: Fetch secrets from 1Password
         run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > aws/dev.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_DEV"/notesPlain > aws/dev.tfvars
 
       - name: Destroy notify dev environment
         run: |

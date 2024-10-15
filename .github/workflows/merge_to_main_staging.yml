@@ -48,7 +48,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply COMMON
         run: |
@@ -89,7 +89,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR
         run: |
@@ -130,7 +130,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR
         run: |
@@ -162,7 +162,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply ses_receiving_emails
         run: |
@@ -193,7 +193,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply dns
         run: |
@@ -224,7 +224,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_validation_dns_entries
         run: |
@@ -256,7 +256,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: terragrunt apply cloudfront
         run: |
@@ -287,7 +287,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply eks
         run: |
@@ -318,7 +318,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply elasticache
         run: |
@@ -349,7 +349,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply rds
         run: |
@@ -380,7 +380,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply lambda-api
         run: |
@@ -411,7 +411,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply lambda-admin-pr
         run: |
@@ -442,7 +442,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply performance-test
         run: |
@@ -473,7 +473,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply heartbeat
         run: |
@@ -504,7 +504,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
 
       - name: terragrunt apply database-tools
         run: |
@@ -535,7 +535,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply quicksight
         run: |
@@ -566,7 +566,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply lambda-google-cidr
         run: |
@@ -597,7 +597,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_to_sqs_email_callbacks
         run: |
@@ -628,7 +628,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply sns_to_sqs_sms_callbacks
         run: |
@@ -659,7 +659,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
         run: |
@@ -690,7 +690,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status
         run: |
@@ -721,7 +721,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status_static_site
         run: |
@@ -752,7 +752,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply newrelic
         run: |
