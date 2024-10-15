@@ -1,6 +1,6 @@
 locals {
   secret_inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars")))
-  config_inputs = jsondecode(read_tfvars_file("../../${get_env("ENVIRONMENT")}_config.vars"))
+  config_inputs = jsondecode(read_tfvars_file("../../${get_env("ENVIRONMENT")}_config.tfvars"))
 }
 
 inputs = merge(
