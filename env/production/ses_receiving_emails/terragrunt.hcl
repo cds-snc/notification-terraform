@@ -23,6 +23,13 @@ dependency "common" {
 
 dependency "ecr-us-east" {
   config_path = "../ecr-us-east"
+
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    ses_receiving_emails_ecr_repository_url = ""
+    ses_receiving_emails_ecr_arn = ""
+  }
 }
 
 
