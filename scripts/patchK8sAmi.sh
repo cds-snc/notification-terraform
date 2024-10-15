@@ -30,12 +30,12 @@ for ENV in $ENVIRONMENTS; do
   fi
 
   pushd ../aws
-  op read op://$VAULT/"TFVars - $ENV"/notesPlain > $ENV.tfvars.temp
+  op read op://$VAULT/"TERRAFORM_SECRETS_$ENV"/notesPlain > $ENV.tfvars.temp
 
   sed -E -i '' "s/[0-9].[0-9]{2}.[0-9]*-[0-9]{8}/$NEW_IMAGE_VERSION/" $ENV.tfvars.temp
   sed -E -i '' "s/ami-[A-Fa-f0-9]+/$NEW_AMI_ID/" $ENV.tfvars.temp
 
-  if op item edit "TFVars - $ENV" notesPlain="$(cat $ENV.tfvars.temp)" > /dev/null ; then
+  if op item edit "TERRAFORM_SECRETS_$ENV" notesPlain="$(cat $ENV.tfvars.temp)" > /dev/null ; then
     echo "Done."
   else
     echo "WARNING: UPDATE FAILED"
