@@ -71,10 +71,6 @@ elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
 
-## LOGGING
-log_retention_period_days           = 365
-sensitive_log_retention_period_days = 14
-
 ## SLACK INTEGRATION
 slack_channel_warning_topic             = "notification-dev-ops"
 slack_channel_critical_topic            = "notification-dev-ops"
@@ -109,11 +105,6 @@ ff_redis_batch_saving           = "true"
 notify_sending_domain   = "staging.notification.cdssandbox.xyz"
 sqs_region              = "ca-central-1"
 gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
-
-## SYSTEM STATUS
-system_status_api_url     = "https://api.staging.notification.cdssandbox.xyz"
-system_status_bucket_name = "notification-canada-ca-staging-system-status"
-system_status_admin_url   = "https://staging.notification.cdssandbox.xyz"
 
 ## PERF TEST
 aws_pinpoint_region                         = "ca-central-1"
