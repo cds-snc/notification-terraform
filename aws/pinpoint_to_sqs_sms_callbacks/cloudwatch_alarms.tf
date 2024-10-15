@@ -149,6 +149,195 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-bell-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-bell-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for Bell Cellular Inc. / Aliant Telecom."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "Bell Cellular Inc. / Aliant Telecom"
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-bragg-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-bragg-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for BRAGG Communications INC."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "BRAGG Communications INC."
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-freedom-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-freedom-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for Freedom Mobile Inc."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "Freedom Mobile Inc."
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-iristel-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-iristel-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for Iristel Inc."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "Iristel Inc."
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-maritime-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-maritime-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for Maritime Telephone & Telegraph Ltd."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "Maritime Telephone & Telegraph Ltd"
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-mts-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-mts-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for MTS Communications Inc."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "MTS Communications Inc."
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-rogers-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-rogers-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for Rogers Communications Canada Inc."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "Rogers Communications Canada Inc."
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-telus-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-telus-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for Telus Communications"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "Telus Communications"
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-failures-videotron-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "pinpoint-sms-failures-videotron-warning"
+  alarm_description   = "Pinpoint SMS failures are more than 50 for Videotron Ltd."
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-failures-carriers[0].metric_transformation[0].name
+  namespace           = "LogMetrics"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "50" # 50 over a period of 5 minutes
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    Carrier = "Videotron Ltd."
+  }
+
+  alarm_actions = [var.sns_alert_warning_arn]
+  ok_actions    = [var.sns_alert_warning_arn]
+}
+
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "pinpoint-sms-success-rate-warning"
