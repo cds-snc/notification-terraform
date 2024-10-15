@@ -4,7 +4,8 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
-/aws/*.tfvars
+*.tfvars
+!/env/*.tfvars
 *.yaml
 !.checkov.yaml
 !.checkov.yml
