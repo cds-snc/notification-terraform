@@ -80,7 +80,17 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul"
+    regex_string = <<EOF
+/.*-contact-information|
+/.*-a-jour-les-coordonnees|
+/delivery-and-failure|
+/livraison-.*-et-echec|
+/system-status|
+/etat-du-systeme|
+/comprendre-.*-livraison|
+/sending-custom-content|
+/utiliser-.*-de-calcul
+EOF
   }
 
   tags = {
@@ -98,7 +108,19 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids"
+    regex_string = <<EOF
+/notifications.*|
+/organisation.*|
+/organisations.*|
+/platform-stats.*|
+/provider-details.*|
+/service.*|
+/static.*|
+/user.*|
+/v2.*|
+/cache-clear|
+/support/find-ids
+EOF
   }
 
   tags = {
