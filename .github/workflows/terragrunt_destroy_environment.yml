@@ -21,7 +21,7 @@ permissions:
 
 jobs:
 
-  terragrunt-destroy-dns:
+  delete-dev-environment:
     if: |
       always() &&
 
@@ -41,7 +41,7 @@ jobs:
       - name: Install AWS nuke
         run: |
           mkdir bin
-          curl -Lo aws-nuke.tar.gz https://github.com/rebuy-de/aws-nuke/releases/download/v${{ env.AWS_NUKE_VERSION }}/aws-nuke-v${{ env.AWS_NUKE_VERSION }}-linux-amd64.tar.gz
+          curl -Lo aws-nuke.tar.gz https://github.com/ekristen/aws-nuke/releases/download/v${{ env.AWS_NUKE_VERSION }}/aws-nuke-v${{ env.AWS_NUKE_VERSION }}-linux-amd64.tar.gz
           tar -xzf aws-nuke.tar.gz -C bin
           chmod +x bin/*
           echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
@@ -51,7 +51,11 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb          
 
+      - name: Fetch secrets from 1Password
+        run: |
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > aws/dev.tfvars
+
       - name: Destroy notify dev environment
         run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/dev.tfvars
-          ./scripts/deleteEnvironment.sh dev 800095993820
+          cd scripts
+          ./deleteEnvironment.sh dev 800095993820
