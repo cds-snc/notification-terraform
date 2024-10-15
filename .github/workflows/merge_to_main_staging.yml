@@ -10,6 +10,7 @@ on:
       - ".env"
       - "aws/**"
       - "env/staging/**"
+      - "env/staging_config.tfvars"
       - ".github/workflows/merge_to_main_staging.yml"
 
 defaults:
