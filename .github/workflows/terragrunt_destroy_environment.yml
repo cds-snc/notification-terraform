@@ -58,4 +58,4 @@ jobs:
       - name: Destroy notify dev environment
         run: |
           cd scripts
-          ./deleteEnvironment.sh dev 800095993820
+          ./deleteEnvironment.sh dev ${{ secrets.DEV_ACCOUNT_ID}}
