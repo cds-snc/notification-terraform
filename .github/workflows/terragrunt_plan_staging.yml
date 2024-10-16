@@ -15,6 +15,7 @@ on:
       - "aws/**"
       - "env/$ENVIRONMENT/**"
       - "env/terragrunt.hcl"
+      - "env/*.tfvars"
       - ".github/workflows/terragrunt_plan_$ENVIRONMENT.yml"
 
 permissions:
