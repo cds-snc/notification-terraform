@@ -101,14 +101,9 @@ ff_cloudwatch_metrics_enabled   = "true"
 ff_redis_batch_saving           = "true"
 
 ## SES_RECEIVING_EMAILS
-notify_sending_domain   = "staging.notification.cdssandbox.xyz"
+notify_sending_domain   = "notification.canada.ca"
 sqs_region              = "ca-central-1"
-gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
-
-## SYSTEM STATUS
-system_status_api_url     = "https://api.staging.notification.cdssandbox.xyz"
-system_status_bucket_name = "notification-canada-ca-staging-system-status"
-system_status_admin_url   = "https://staging.notification.cdssandbox.xyz"
+gc_notify_service_email = "gc.notify.notification.gc@notification.canada.ca"
 
 ## PERF TEST (These are not in production)
 aws_pinpoint_region                         = "changeme"
