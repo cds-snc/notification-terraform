@@ -284,8 +284,8 @@ resource "aws_cloudwatch_query_definition" "callback-errors-by-url" {
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^celery/
 | filter @message like /send_delivery_status_to_service request failed for notification_id/
-| parse log / to url: (?<url>.*) service: (?<service>.*) exc:.*/
-| stats count() as failed_callbacks by url, service
+| parse log "to url: * service: * exc:" as @url, @service_id
+| stats count() as failed_callbacks by @url, @service_id
 | order by failed_callbacks desc
 QUERY
 }
