@@ -6,14 +6,16 @@ resource "aws_iam_role" "pinpoint_logs" {
 }
 
 resource "aws_iam_policy" "pinpoint_logs" {
+  count  = var.cloudwatch_enabled ? 1 : 0
   name   = "PinpointLogsPolicy"
   path   = "/"
-  policy = data.aws_iam_policy_document.pinpoint_logs.json
+  policy = data.aws_iam_policy_document.pinpoint_logs[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "pinpoint_logs" {
+  count      = var.cloudwatch_enabled ? 1 : 0
   role       = aws_iam_role.pinpoint_logs.name
-  policy_arn = aws_iam_policy.pinpoint_logs.arn
+  policy_arn = aws_iam_policy.pinpoint_logs[0].arn
 }
 
 data "aws_iam_policy_document" "pinpoint_assume" {
