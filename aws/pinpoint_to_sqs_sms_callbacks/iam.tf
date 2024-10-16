@@ -40,6 +40,7 @@ data "aws_iam_policy_document" "pinpoint_assume" {
 }
 
 data "aws_iam_policy_document" "pinpoint_logs" {
+  count = var.cloudwatch_enabled ? 1 : 0
   statement {
     effect = "Allow"
     actions = [
