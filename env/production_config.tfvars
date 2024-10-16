@@ -71,10 +71,6 @@ elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
 
-## LOGGING
-log_retention_period_days           = 365
-sensitive_log_retention_period_days = 14
-
 ## SLACK INTEGRATION
 slack_channel_warning_topic             = "notification-ops"
 slack_channel_critical_topic            = "notification-ops"
