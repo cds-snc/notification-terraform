@@ -272,6 +272,24 @@ fields @timestamp, @service_id, @bounce_type
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "callback-errors-by-url" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Callbacks / Callback errors by URL"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^celery/
+| filter @message like /send_delivery_status_to_service request failed for notification_id/
+| parse log "to url: * service: * exc:" as @url, @service_id
+| stats count() as failed_callbacks by @url, @service_id
+| order by failed_callbacks desc
+QUERY
+}
+
 resource "aws_cloudwatch_query_definition" "callback-max-retry-failures-by-service" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Callbacks / Callbacks that exceeded MaxRetries by service"
