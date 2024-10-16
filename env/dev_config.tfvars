@@ -40,7 +40,7 @@ notification_queue_prefix              = "eks-notification-canada-ca"
 
 # ENVIRONMENT
 enable_new_relic           = true
-create_cbs_bucket          = false
+create_cbs_bucket          = true
 force_destroy_s3           = true
 force_delete_ecr           = true
 force_destroy_athena       = true
@@ -77,7 +77,7 @@ slack_channel_critical_topic            = "notification-dev-ops"
 slack_channel_general_topic             = "notification-dev-ops"
 
 ## MONITORING
-athena_workgroup_name                  = "primary"
+athena_workgroup_name                  = "dev"
 cloudwatch_opsgenie_alarm_webhook      = ""
 aws_config_recorder_name               = "aws-controltower-BaselineConfigRecorder"
 sentinel_layer_version                 = "165"
