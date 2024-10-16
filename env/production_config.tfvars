@@ -71,10 +71,6 @@ elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
 
-## LOGGING
-log_retention_period_days           = 365
-sensitive_log_retention_period_days = 14
-
 ## SLACK INTEGRATION
 slack_channel_warning_topic             = "notification-ops"
 slack_channel_critical_topic            = "notification-ops"
@@ -83,7 +79,7 @@ slack_channel_general_topic             = "notification-ops"
 ## MONITORING
 athena_workgroup_name                  = "primary"
 aws_config_recorder_name               = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version                 = "163"
+sentinel_layer_version                 = "166"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
@@ -105,14 +101,9 @@ ff_cloudwatch_metrics_enabled   = "true"
 ff_redis_batch_saving           = "true"
 
 ## SES_RECEIVING_EMAILS
-notify_sending_domain   = "staging.notification.cdssandbox.xyz"
+notify_sending_domain   = "notification.canada.ca"
 sqs_region              = "ca-central-1"
-gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
-
-## SYSTEM STATUS
-system_status_api_url     = "https://api.staging.notification.cdssandbox.xyz"
-system_status_bucket_name = "notification-canada-ca-staging-system-status"
-system_status_admin_url   = "https://staging.notification.cdssandbox.xyz"
+gc_notify_service_email = "gc.notify.notification.gc@notification.canada.ca"
 
 ## PERF TEST (These are not in production)
 aws_pinpoint_region                         = "changeme"
