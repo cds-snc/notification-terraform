@@ -30,13 +30,13 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_successes" {
   action        = "lambda:InvokeFunction"
   function_name = module.pinpoint_to_sqs_sms_callbacks.function_name
   principal     = "logs.${var.region}.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_log_group.pinpoint_deliveries[0].arn}:*"
+  source_arn    = "${aws_cloudwatch_log_group.pinpoint_deliveries.arn}:*"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_ca_central_to_lambda" {
   count           = var.cloudwatch_enabled ? 1 : 0
   name            = "pinpoint_deliveries_ca_central"
-  log_group_name  = aws_cloudwatch_log_group.pinpoint_deliveries[0].name
+  log_group_name  = aws_cloudwatch_log_group.pinpoint_deliveries.name
   filter_pattern  = ""
   destination_arn = module.pinpoint_to_sqs_sms_callbacks.function_arn
 }
@@ -46,13 +46,13 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_failures" {
   action        = "lambda:InvokeFunction"
   function_name = module.pinpoint_to_sqs_sms_callbacks.function_name
   principal     = "logs.${var.region}.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].arn}:*"
+  source_arn    = "${aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn}:*"
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_failures_ca_central_to_lambda" {
   count           = var.cloudwatch_enabled ? 1 : 0
   name            = "pinpoint_deliveries_failures_ca_central"
-  log_group_name  = aws_cloudwatch_log_group.pinpoint_deliveries_failures[0].name
+  log_group_name  = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
   filter_pattern  = ""
   destination_arn = module.pinpoint_to_sqs_sms_callbacks.function_arn
 }
