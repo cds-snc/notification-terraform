@@ -504,7 +504,7 @@ EOF
 
 resource "aws_cloudwatch_dashboard" "sms-send-rate" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  dashboard_name = "SMS Send Rate"
+  dashboard_name = "Specialized-sms-send-rate"
   dashboard_body = <<EOF
 {
     "widgets": [
