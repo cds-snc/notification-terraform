@@ -1,9 +1,9 @@
 ## GENERAL
-env                   = "dev"
-account_budget_limit  = 5000
-region                = "ca-central-1"
-billing_tag_value     = "notification-canada-ca-dev"
-billing_tag_key       = "CostCenter"
+env                  = "dev"
+account_budget_limit = 5000
+region               = "ca-central-1"
+billing_tag_value    = "notification-canada-ca-dev"
+billing_tag_key      = "CostCenter"
 
 ## EKS     
 primary_worker_desired_size     = 4
@@ -72,15 +72,15 @@ elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
 
 ## SLACK INTEGRATION
-slack_channel_warning_topic             = "notification-dev-ops"
-slack_channel_critical_topic            = "notification-dev-ops"
-slack_channel_general_topic             = "notification-dev-ops"
+slack_channel_warning_topic  = "notification-dev-ops"
+slack_channel_critical_topic = "notification-dev-ops"
+slack_channel_general_topic  = "notification-dev-ops"
 
 ## MONITORING
-athena_workgroup_name                  = "dev"
-cloudwatch_opsgenie_alarm_webhook      = ""
-aws_config_recorder_name               = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version                 = "166"
+athena_workgroup_name             = "dev"
+cloudwatch_opsgenie_alarm_webhook = ""
+aws_config_recorder_name          = "aws-controltower-BaselineConfigRecorder"
+sentinel_layer_version            = "166"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
@@ -90,10 +90,10 @@ schedule_expression  = "rate(1 minute)"
 google_cidr_schedule_expression = "rate(1 day)"
 
 ## RDS
-rds_instance_count          = 3
-rds_instance_type           = "db.t3.medium"
-rds_database_name           = "NotificationCanadaCastaging"
-rds_version                 = "15.5"
+rds_instance_count = 3
+rds_instance_type  = "db.t3.medium"
+rds_database_name  = "NotificationCanadaCastaging"
+rds_version        = "15.5"
 
 ## NOTIFY-API/CELERY               
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
@@ -107,12 +107,12 @@ sqs_region              = "ca-central-1"
 gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
 
 ## PERF TEST
-aws_pinpoint_region                         = "ca-central-1"
-perf_test_phone_number                      = "16132532222"
-perf_test_email                             = "success@simulator.amazonses.com"
-perf_schedule_expression                    = "cron(0 0 * * ? *)"
-perf_test_aws_s3_bucket                     = "notify-performance-test-results-dev"
-perf_test_csv_directory_path                = "/tmp/notify_performance_test"
+aws_pinpoint_region          = "ca-central-1"
+perf_test_phone_number       = "16132532222"
+perf_test_email              = "success@simulator.amazonses.com"
+perf_schedule_expression     = "cron(0 0 * * ? *)"
+perf_test_aws_s3_bucket      = "notify-performance-test-results-dev"
+perf_test_csv_directory_path = "/tmp/notify_performance_test"
 
 ## SYSTEM STATUS
 system_status_api_url     = "https://api.dev.notification.cdssandbox.xyz"

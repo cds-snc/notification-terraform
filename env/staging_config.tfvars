@@ -1,9 +1,9 @@
 ## GENERAL
-env                   = "staging"
-account_budget_limit  = 5000
-region                = "ca-central-1"
-billing_tag_value     = "notification-canada-ca-staging"
-billing_tag_key       = "CostCenter"
+env                  = "staging"
+account_budget_limit = 5000
+region               = "ca-central-1"
+billing_tag_value    = "notification-canada-ca-staging"
+billing_tag_key      = "CostCenter"
 
 ## EKS     
 primary_worker_desired_size     = 5
@@ -72,15 +72,15 @@ log_retention_period_days           = 365
 sensitive_log_retention_period_days = 14
 
 ## SLACK INTEGRATION
-slack_channel_warning_topic             = "notification-staging-ops"
-slack_channel_critical_topic            = "notification-staging-ops"
-slack_channel_general_topic             = "notification-staging-ops"
+slack_channel_warning_topic  = "notification-staging-ops"
+slack_channel_critical_topic = "notification-staging-ops"
+slack_channel_general_topic  = "notification-staging-ops"
 
 ## MONITORING
-athena_workgroup_name                  = "primary"
-cloudwatch_opsgenie_alarm_webhook      = ""
-aws_config_recorder_name               = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version                 = "166"
+athena_workgroup_name             = "primary"
+cloudwatch_opsgenie_alarm_webhook = ""
+aws_config_recorder_name          = "aws-controltower-BaselineConfigRecorder"
+sentinel_layer_version            = "166"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
@@ -90,10 +90,10 @@ schedule_expression  = "rate(1 minute)"
 google_cidr_schedule_expression = "rate(1 day)"
 
 ## RDS
-rds_instance_count          = 3
-rds_instance_type           = "db.r6g.xlarge"
-rds_database_name           = "NotificationCanadaCastaging"
-rds_version                 = "15.5"
+rds_instance_count = 3
+rds_instance_type  = "db.r6g.xlarge"
+rds_database_name  = "NotificationCanadaCastaging"
+rds_version        = "15.5"
 
 ## NOTIFY-API/CELERY               
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
@@ -112,12 +112,12 @@ system_status_bucket_name = "notification-canada-ca-staging-system-status"
 system_status_admin_url   = "https://staging.notification.cdssandbox.xyz"
 
 ## PERF TEST
-aws_pinpoint_region                         = "ca-central-1"
-perf_test_phone_number                      = "16132532222"
-perf_test_email                             = "success@simulator.amazonses.com"
-perf_schedule_expression                    = "cron(0 0 * * ? *)"
-perf_test_aws_s3_bucket                     = "notify-performance-test-results-staging"
-perf_test_csv_directory_path                = "/tmp/notify_performance_test"
+aws_pinpoint_region          = "ca-central-1"
+perf_test_phone_number       = "16132532222"
+perf_test_email              = "success@simulator.amazonses.com"
+perf_schedule_expression     = "cron(0 0 * * ? *)"
+perf_test_aws_s3_bucket      = "notify-performance-test-results-staging"
+perf_test_csv_directory_path = "/tmp/notify_performance_test"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 100
