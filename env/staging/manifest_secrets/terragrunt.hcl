@@ -17,5 +17,5 @@ include {
 inputs = {
   database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
   database_read_write_proxy_endpoint = dependency.rds.outputs.database_read_write_proxy_endpoint
-  database_proxy_target_port = dependency.rds.outputs.rds_proxy_target_port
+  postgres_rds_instance_id = dependency.rds.outputs.rds_instance_id
 }

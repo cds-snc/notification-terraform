@@ -138,26 +138,6 @@ resource "aws_secretsmanager_secret_version" "manifest_new_relic_license_key_ver
   secret_string = var.manifest_new_relic_license_key
 }
 
-resource "aws_secretsmanager_secret" "manifest_postgres_host" {
-  name                    = "MANIFEST_POSTGRES_HOST"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_postgres_host.id
-  secret_string = var.manifest_postgres_host
-}
-
-resource "aws_secretsmanager_secret" "manifest_postgres_sql" {
-  name                    = "MANIFEST_POSTGRES_SQL"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_postgres_sql.id
-  secret_string = var.manifest_postgres_sql
-}
-
 resource "aws_secretsmanager_secret" "manifest_redis_url" {
   name                    = "MANIFEST_REDIS_URL"
   recovery_window_in_days = 0
@@ -288,16 +268,6 @@ resource "aws_secretsmanager_secret_version" "manifest_sendgrid_api_key_version"
   secret_string = var.manifest_sendgrid_api_key
 }
 
-resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_reader_uri" {
-  name                    = "MANIFEST_SQLALCHEMY_DATABASE_READER_URI"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_reader_uri_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_sqlalchemy_database_reader_uri.id
-  secret_string = var.manifest_sqlalchemy_database_reader_uri
-}
-
 resource "aws_secretsmanager_secret" "manifest_waf_secret" {
   name                    = "MANIFEST_WAF_SECRET"
   recovery_window_in_days = 0
@@ -385,7 +355,7 @@ resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri" {
   secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri.id
-  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${inputs.database_read_write_proxy_endpoint}:${inputs.database_proxy_target_port}/${var.app_db_database_name}"
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri" {
@@ -395,5 +365,15 @@ resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri" 
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_reader_uri" {
   secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_reader_uri.id
-  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${inputs.database_read_only_proxy_endpoint}:${inputs.database_proxy_target_port}/${var.app_db_database_name}"
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_postgres_host" {
+  name                   = "MANIFEST_POSTGRES_HOST"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
+  secret_id     = aws_secretsmanager_secret.manifest_postgres_host.id
+  secret_string = "notification-canada-ca-${var.env}-cluster.${var.postgres_rds_instance_id}.${var.region}.rds.amazonaws.com"
 }

@@ -962,14 +962,6 @@ variable "manifest_new_relic_license_key" {
   type = string
 }
 
-variable "manifest_postgres_host" {
-  type = string
-}
-
-variable "manifest_postgres_sql" {
-  type = string
-}
-
 variable "manifest_redis_url" {
   type = string
 }
@@ -1019,10 +1011,6 @@ variable "manifest_secret_key" {
 }
 
 variable "manifest_sendgrid_api_key" {
-  type = string
-}
-
-variable "manifest_sqlalchemy_database_reader_uri" {
   type = string
 }
 
