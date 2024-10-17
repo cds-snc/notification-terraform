@@ -13,3 +13,6 @@ output "database_subnet_ids" {
 output "rds_instance_id" {
   value = aws_rds_cluster_instance.notification-canada-ca-instances[0].identifier
 }
+output "rds_proxy_target_port" {
+  value = module.rds_proxy.proxy_target_port
+}

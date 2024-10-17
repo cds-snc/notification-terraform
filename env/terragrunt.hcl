@@ -548,6 +548,10 @@ variable "app_db_user_password" {
   sensitive = true
 }
 
+variable "app_db_database_name" {
+  type = string
+}
+
 variable "dbtools_password" {
   type      = string
   sensitive = true

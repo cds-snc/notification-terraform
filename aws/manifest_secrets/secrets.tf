@@ -377,3 +377,23 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool
   secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_default_pool_id.id
   secret_string = var.manifest_aws_pinpoint_default_pool_id
 }
+
+resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
+  name                    = "SQLALCHEMY_DATABASE_URI"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri" {
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri.id
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${inputs.database_read_write_proxy_endpoint}:${inputs.database_proxy_target_port}/${var.app_db_database_name}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri" {
+  name                    = "SQLALCHEMY_DATABASE_READER_URI"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_reader_uri" {
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_reader_uri.id
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${inputs.database_read_only_proxy_endpoint}:${inputs.database_proxy_target_port}/${var.app_db_database_name}"
+}
