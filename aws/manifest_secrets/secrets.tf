@@ -138,26 +138,6 @@ resource "aws_secretsmanager_secret_version" "manifest_new_relic_license_key_ver
   secret_string = var.manifest_new_relic_license_key
 }
 
-resource "aws_secretsmanager_secret" "manifest_redis_url" {
-  name                    = "MANIFEST_REDIS_URL"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_redis_url_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_redis_url.id
-  secret_string = var.manifest_redis_url
-}
-
-resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
-  name                    = "MANIFEST_REDIS_PUBLISH_URL"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url.id
-  secret_string = var.manifest_redis_publish_url
-}
-
 resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token" {
   name                    = "MANIFEST_CRM_GITHUB_PERSONAL_ACCESS_TOKEN"
   recovery_window_in_days = 0
@@ -376,4 +356,22 @@ resource "aws_secretsmanager_secret" "manifest_postgres_host" {
 resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
   secret_id     = aws_secretsmanager_secret.manifest_postgres_host.id
   secret_string = "notification-canada-ca-${var.env}-cluster.${var.postgres_rds_instance_id}.${var.region}.rds.amazonaws.com"
+}
+
+resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
+  name = "MANIFEST_REDIS_PUBLISH_URL"
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url" {
+  secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url.id
+  secret_string = "redis://notify-${var.env}-cluster-cache-az.${var.redis_cluster_security_group_id}.ng.0001.cac1.cache.amazonaws.com:6379"
+}
+
+resource "aws_secretsmanager_secret" "manifest_redis_url" {
+  name = "MANIFEST_REDIS_URL"
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_redis_url" {
+  secret_id     = aws_secretsmanager_secret.manifest_redis_url.id
+  secret_string = "redis://notify-${var.env}-cluster-cache-az.${var.redis_cluster_security_group_id}.ng.0001.cac1.cache.amazonaws.com:6379"
 }

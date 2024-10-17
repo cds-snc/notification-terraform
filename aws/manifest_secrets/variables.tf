@@ -9,3 +9,7 @@ variable "database_read_only_proxy_endpoint" {
 variable "postgres_rds_instance_id" {
   type = string
 }
+
+variable "redis_cluster_security_group_id" {
+  type = string
+}

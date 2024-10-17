@@ -962,14 +962,6 @@ variable "manifest_new_relic_license_key" {
   type = string
 }
 
-variable "manifest_redis_url" {
-  type = string
-}
-
-variable "manifest_redis_publish_url" {
-  type = string
-}
-
 variable "manifest_crm_github_personal_access_token" {
   type = string
 }
