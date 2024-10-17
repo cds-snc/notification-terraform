@@ -496,6 +496,46 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "period": 60,
                 "title": "Number of messages visible in send-sms-medium"
             }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 54,
+            "width": 24,
+            "height": 9,
+            "properties": {
+                "sparkline": true,
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Bell Cellular Inc. / Aliant Telecom" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "BRAGG Communications INC." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Chunghwa Telecom LDM" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Farmers Mutual Telephone Company Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Freedom Mobile Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Iristel Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Maritime Telephone & Telegraph Ltd" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "MTS Communications Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Rogers Communications Canada Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "SK Telecom" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Taiwan Mobile Co Ltd." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Telus Communications" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "TIM Celular S.A." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "TURKCELL" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Videotron Ltd." ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "start": "-PT24H",
+                "region": "ca-central-1",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 15
+                    }
+                },
+                "stat": "Sum",
+                "period": 86400,
+                "title": "Carrier failures over the past day"
+            }
         }
     ]
 }
