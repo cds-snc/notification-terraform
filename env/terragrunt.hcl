@@ -906,10 +906,6 @@ variable "manifest_admin_client_secret" {
   type = string
 }
 
-variable "manifest_allow_html_service_ids" {
-  type = string
-}
-
 variable "manifest_auth_tokens" {
   type = string
 }
@@ -927,10 +923,6 @@ variable "manifest_aws_ses_access_key" {
 }
 
 variable "manifest_aws_ses_secret_key" {
-  type = string
-}
-
-variable "manifest_bulk_send_test_service_id" {
   type = string
 }
 

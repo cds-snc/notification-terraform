@@ -5,17 +5,7 @@ resource "aws_secretsmanager_secret" "manifest_admin_client_secret" {
 
 resource "aws_secretsmanager_secret_version" "manifest_admin_client_secret_version" {
   secret_id     = aws_secretsmanager_secret.manifest_admin_client_secret.id
-  secret_string = vars.manifest_admin_client_secret
-}
-
-resource "aws_secretsmanager_secret" "manifest_allow_html_service_ids" {
-  name                    = "MANIFEST_ALLOW_HTML_SERVICE_IDS"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_allow_html_service_ids_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_allow_html_service_ids.id
-  secret_string = vars.manifest_allow_html_service_ids
+  secret_string = var.manifest_admin_client_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_auth_tokens" {
@@ -25,7 +15,7 @@ resource "aws_secretsmanager_secret" "manifest_auth_tokens" {
 
 resource "aws_secretsmanager_secret_version" "manifest_auth_tokens_version" {
   secret_id     = aws_secretsmanager_secret.manifest_auth_tokens.id
-  secret_string = vars.manifest_auth_tokens
+  secret_string = var.manifest_auth_tokens
 }
 
 resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
@@ -35,7 +25,7 @@ resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_document_download_api_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_document_download_api_key.id
-  secret_string = vars.manifest_document_download_api_key
+  secret_string = var.manifest_document_download_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_route53_zone" {
@@ -45,7 +35,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_route53_zone" {
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_route53_zone_version" {
   secret_id     = aws_secretsmanager_secret.manifest_aws_route53_zone.id
-  secret_string = vars.manifest_aws_route53_zone
+  secret_string = var.manifest_aws_route53_zone
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_ses_access_key" {
@@ -55,7 +45,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_ses_access_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_ses_access_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_aws_ses_access_key.id
-  secret_string = vars.manifest_aws_ses_access_key
+  secret_string = var.manifest_aws_ses_access_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_ses_secret_key" {
@@ -65,17 +55,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_ses_secret_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_ses_secret_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_aws_ses_secret_key.id
-  secret_string = vars.manifest_aws_ses_secret_key
-}
-
-resource "aws_secretsmanager_secret" "manifest_bulk_send_test_service_id" {
-  name                    = "MANIFEST_BULK_SEND_TEST_SERVICE_ID"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_bulk_send_test_service_id_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_bulk_send_test_service_id.id
-  secret_string = vars.manifest_bulk_send_test_service_id
+  secret_string = var.manifest_aws_ses_secret_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_dangerous_salt" {
@@ -85,7 +65,7 @@ resource "aws_secretsmanager_secret" "manifest_dangerous_salt" {
 
 resource "aws_secretsmanager_secret_version" "manifest_dangerous_salt_version" {
   secret_id     = aws_secretsmanager_secret.manifest_dangerous_salt.id
-  secret_string = vars.manifest_dangerous_salt
+  secret_string = var.manifest_dangerous_salt
 }
 
 resource "aws_secretsmanager_secret" "manifest_debug_key" {
@@ -95,7 +75,7 @@ resource "aws_secretsmanager_secret" "manifest_debug_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_debug_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_debug_key.id
-  secret_string = vars.manifest_debug_key
+  secret_string = var.manifest_debug_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_fresh_desk_product_id" {
@@ -105,7 +85,7 @@ resource "aws_secretsmanager_secret" "manifest_fresh_desk_product_id" {
 
 resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_product_id_version" {
   secret_id     = aws_secretsmanager_secret.manifest_fresh_desk_product_id.id
-  secret_string = vars.manifest_fresh_desk_product_id
+  secret_string = var.manifest_fresh_desk_product_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_fresh_desk_api_key" {
@@ -115,7 +95,7 @@ resource "aws_secretsmanager_secret" "manifest_fresh_desk_api_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_api_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_fresh_desk_api_key.id
-  secret_string = vars.manifest_fresh_desk_api_key
+  secret_string = var.manifest_fresh_desk_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_username" {
@@ -125,7 +105,7 @@ resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_username" {
 
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_username_version" {
   secret_id     = aws_secretsmanager_secret.manifest_gc_articles_api_auth_username.id
-  secret_string = vars.manifest_gc_articles_api_auth_username
+  secret_string = var.manifest_gc_articles_api_auth_username
 }
 
 resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_password" {
@@ -135,7 +115,7 @@ resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_password" {
 
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_password_version" {
   secret_id     = aws_secretsmanager_secret.manifest_gc_articles_api_auth_password.id
-  secret_string = vars.manifest_gc_articles_api_auth_password
+  secret_string = var.manifest_gc_articles_api_auth_password
 }
 
 resource "aws_secretsmanager_secret" "manifest_mixpanel_project_token" {
@@ -145,7 +125,7 @@ resource "aws_secretsmanager_secret" "manifest_mixpanel_project_token" {
 
 resource "aws_secretsmanager_secret_version" "manifest_mixpanel_project_token_version" {
   secret_id     = aws_secretsmanager_secret.manifest_mixpanel_project_token.id
-  secret_string = vars.manifest_mixpanel_project_token
+  secret_string = var.manifest_mixpanel_project_token
 }
 
 resource "aws_secretsmanager_secret" "manifest_new_relic_license_key" {
@@ -155,7 +135,7 @@ resource "aws_secretsmanager_secret" "manifest_new_relic_license_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_new_relic_license_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_new_relic_license_key.id
-  secret_string = vars.manifest_new_relic_license_key
+  secret_string = var.manifest_new_relic_license_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_postgres_host" {
@@ -165,7 +145,7 @@ resource "aws_secretsmanager_secret" "manifest_postgres_host" {
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
   secret_id     = aws_secretsmanager_secret.manifest_postgres_host.id
-  secret_string = vars.manifest_postgres_host
+  secret_string = var.manifest_postgres_host
 }
 
 resource "aws_secretsmanager_secret" "manifest_postgres_sql" {
@@ -175,7 +155,7 @@ resource "aws_secretsmanager_secret" "manifest_postgres_sql" {
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
   secret_id     = aws_secretsmanager_secret.manifest_postgres_sql.id
-  secret_string = vars.manifest_postgres_sql
+  secret_string = var.manifest_postgres_sql
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_url" {
@@ -185,7 +165,7 @@ resource "aws_secretsmanager_secret" "manifest_redis_url" {
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_url_version" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_url.id
-  secret_string = vars.manifest_redis_url
+  secret_string = var.manifest_redis_url
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
@@ -195,7 +175,7 @@ resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url_version" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url.id
-  secret_string = vars.manifest_redis_publish_url
+  secret_string = var.manifest_redis_publish_url
 }
 
 resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token" {
@@ -205,7 +185,7 @@ resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token"
 
 resource "aws_secretsmanager_secret_version" "manifest_crm_github_personal_access_token_version" {
   secret_id     = aws_secretsmanager_secret.manifest_crm_github_personal_access_token.id
-  secret_string = vars.manifest_crm_github_personal_access_token
+  secret_string = var.manifest_crm_github_personal_access_token
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_username" {
@@ -215,7 +195,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_username" {
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_username_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_username.id
-  secret_string = vars.manifest_salesforce_username
+  secret_string = var.manifest_salesforce_username
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_password" {
@@ -225,7 +205,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_password" {
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_password_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_password.id
-  secret_string = vars.manifest_salesforce_password
+  secret_string = var.manifest_salesforce_password
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_security_token" {
@@ -235,7 +215,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_security_token" {
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_security_token_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_security_token.id
-  secret_string = vars.manifest_salesforce_security_token
+  secret_string = var.manifest_salesforce_security_token
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_client_privatekey" {
@@ -245,7 +225,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_client_privatekey" {
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_client_privatekey_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_client_privatekey.id
-  secret_string = vars.manifest_salesforce_client_privatekey
+  secret_string = var.manifest_salesforce_client_privatekey
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_engagement_product_id" {
@@ -255,7 +235,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_engagement_product_id"
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_engagement_product_id_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_engagement_product_id.id
-  secret_string = vars.manifest_salesforce_engagement_product_id
+  secret_string = var.manifest_salesforce_engagement_product_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_engagement_record_type" {
@@ -265,7 +245,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_engagement_record_type
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_engagement_record_type_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_engagement_record_type.id
-  secret_string = vars.manifest_salesforce_engagement_record_type
+  secret_string = var.manifest_salesforce_engagement_record_type
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_engagement_standard_pricebook_id" {
@@ -275,7 +255,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_engagement_standard_pr
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_engagement_standard_pricebook_id_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_engagement_standard_pricebook_id.id
-  secret_string = vars.manifest_salesforce_engagement_standard_pricebook_id
+  secret_string = var.manifest_salesforce_engagement_standard_pricebook_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_salesforce_generic_account_id" {
@@ -285,7 +265,7 @@ resource "aws_secretsmanager_secret" "manifest_salesforce_generic_account_id" {
 
 resource "aws_secretsmanager_secret_version" "manifest_salesforce_generic_account_id_version" {
   secret_id     = aws_secretsmanager_secret.manifest_salesforce_generic_account_id.id
-  secret_string = vars.manifest_salesforce_generic_account_id
+  secret_string = var.manifest_salesforce_generic_account_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_secret_key" {
@@ -295,7 +275,7 @@ resource "aws_secretsmanager_secret" "manifest_secret_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_secret_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_secret_key.id
-  secret_string = vars.manifest_secret_key
+  secret_string = var.manifest_secret_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_sendgrid_api_key" {
@@ -305,7 +285,7 @@ resource "aws_secretsmanager_secret" "manifest_sendgrid_api_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_sendgrid_api_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_sendgrid_api_key.id
-  secret_string = vars.manifest_sendgrid_api_key
+  secret_string = var.manifest_sendgrid_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_reader_uri" {
@@ -315,7 +295,7 @@ resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_reader_uri" {
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_reader_uri_version" {
   secret_id     = aws_secretsmanager_secret.manifest_sqlalchemy_database_reader_uri.id
-  secret_string = vars.manifest_sqlalchemy_database_reader_uri
+  secret_string = var.manifest_sqlalchemy_database_reader_uri
 }
 
 resource "aws_secretsmanager_secret" "manifest_waf_secret" {
@@ -325,7 +305,7 @@ resource "aws_secretsmanager_secret" "manifest_waf_secret" {
 
 resource "aws_secretsmanager_secret_version" "manifest_waf_secret_version" {
   secret_id     = aws_secretsmanager_secret.manifest_waf_secret.id
-  secret_string = vars.manifest_waf_secret
+  secret_string = var.manifest_waf_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_zendesk_api_key" {
@@ -335,7 +315,7 @@ resource "aws_secretsmanager_secret" "manifest_zendesk_api_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_zendesk_api_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_zendesk_api_key.id
-  secret_string = vars.manifest_zendesk_api_key
+  secret_string = var.manifest_zendesk_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_zendesk_sell_api_key" {
@@ -345,7 +325,7 @@ resource "aws_secretsmanager_secret" "manifest_zendesk_sell_api_key" {
 
 resource "aws_secretsmanager_secret_version" "manifest_zendesk_sell_api_key_version" {
   secret_id     = aws_secretsmanager_secret.manifest_zendesk_sell_api_key.id
-  secret_string = vars.manifest_zendesk_sell_api_key
+  secret_string = var.manifest_zendesk_sell_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_sre_client_secret" {
@@ -355,7 +335,7 @@ resource "aws_secretsmanager_secret" "manifest_sre_client_secret" {
 
 resource "aws_secretsmanager_secret_version" "manifest_sre_client_secret_version" {
   secret_id     = aws_secretsmanager_secret.manifest_sre_client_secret.id
-  secret_string = vars.manifest_sre_client_secret
+  secret_string = var.manifest_sre_client_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_cache_clear_client_secret" {
@@ -365,7 +345,7 @@ resource "aws_secretsmanager_secret" "manifest_cache_clear_client_secret" {
 
 resource "aws_secretsmanager_secret_version" "manifest_cache_clear_client_secret_version" {
   secret_id     = aws_secretsmanager_secret.manifest_cache_clear_client_secret.id
-  secret_string = vars.manifest_cache_clear_client_secret
+  secret_string = var.manifest_cache_clear_client_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_pool_id" {
@@ -375,7 +355,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_pool_id" {
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_pool_id_version" {
   secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_sc_pool_id.id
-  secret_string = vars.manifest_aws_pinpoint_sc_pool_id
+  secret_string = var.manifest_aws_pinpoint_sc_pool_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_template_ids" {
@@ -385,7 +365,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_template_ids" {
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_template_ids_version" {
   secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_sc_template_ids.id
-  secret_string = vars.manifest_aws_pinpoint_sc_template_ids
+  secret_string = var.manifest_aws_pinpoint_sc_template_ids
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_default_pool_id" {
@@ -395,5 +375,5 @@ resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_default_pool_id" {
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool_id_version" {
   secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_default_pool_id.id
-  secret_string = vars.manifest_aws_pinpoint_default_pool_id
+  secret_string = var.manifest_aws_pinpoint_default_pool_id
 }
