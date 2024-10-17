@@ -369,7 +369,7 @@ resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_read
 }
 
 resource "aws_secretsmanager_secret" "manifest_postgres_host" {
-  name                   = "MANIFEST_POSTGRES_HOST"
+  name                    = "MANIFEST_POSTGRES_HOST"
   recovery_window_in_days = 0
 }
 
