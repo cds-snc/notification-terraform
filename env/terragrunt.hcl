@@ -933,7 +933,7 @@ variable "manifest_aws_ses_access_key" {
 }
 
 variable "manifest_aws_ses_secret_key" {
-  type      = string
+  type = string
   sensitive = true
 }
 
