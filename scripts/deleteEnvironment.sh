@@ -114,5 +114,9 @@ aws events delete-rule --name dailyBudgetSpend
 aws events remove-targets --rule weeklyBudgetSpend --ids $(aws events list-targets-by-rule --rule weeklyBudgetSpend --query 'Targets[].Id' --output text)
 aws events delete-rule --name weeklyBudgetSpend
 
+aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
+aws events delete-rule --name google_cidr_testing
+
+
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."
