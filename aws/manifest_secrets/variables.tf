@@ -10,10 +10,6 @@ variable "postgres_rds_instance_id" {
   type = string
 }
 
-variable "redis_cluster_security_group_id" {
-  type = string
-}
-
 variable "postgres_cluster_endpoint" {
   type = string
 }
