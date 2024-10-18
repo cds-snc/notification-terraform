@@ -422,7 +422,7 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "100 * m1 / (m2 + 1)", "label": "Notify bounce rate", "id": "e1", "region": "${var.region}", "period": 900 } ],
+                    [ { "expression": "100 * m1 / m2", "label": "Notify bounce rate", "id": "e1", "region": "${var.region}", "period": 900 } ],
                     [ "AWS/SES", "Bounce", { "color": "#1f77b4", "region": "${var.region}", "id": "m1", "visible": false } ],
                     [ ".", "Send", { "id": "m2", "region": "${var.region}", "yAxis": "right", "label": "Total sent", "visible": false } ]
                 ],
@@ -451,7 +451,7 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "x": 0,
             "type": "text",
             "properties": {
-                "markdown": "# Notes\n\n\nThe Notify bounce rate is the percentage of emails from Notify that failed (for any reason).\n\n\nThe SES reputation bounce rate is a rolling score based on hard bounces (ie not including emails to addresses on our supression list).\n"
+                "markdown": "# Notes\nThe Notify bounce rate is the percentage of emails from Notify that failed (for any reason).\n\nThe SES reputation bounce rate is a rolling score based on hard bounces (ie not including emails to addresses on our supression list).\n"
             }
         },
         {
