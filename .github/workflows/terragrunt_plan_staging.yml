@@ -886,7 +886,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-plan-rds]
+    needs: [terragrunt-plan-rds, terragrunt-plan-elasticache]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "manifest_secrets"

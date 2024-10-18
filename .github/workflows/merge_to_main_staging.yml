@@ -765,7 +765,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-rds]
+    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache]
     runs-on: ubuntu-latest  
 
     steps:

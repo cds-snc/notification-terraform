@@ -366,24 +366,26 @@ resource "aws_secretsmanager_secret" "manifest_postgres_sql" {
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_postgres_host.id
+  secret_id     = aws_secretsmanager_secret.manifest_postgres_sql.id
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
-  name = "MANIFEST_REDIS_PUBLISH_URL"
+  name                    = "MANIFEST_REDIS_PUBLISH_URL"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url.id
-  secret_string = "redis:// ${var.redis_primary_endpoint_address}"
+  secret_string = "redis://${var.redis_primary_endpoint_address}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_url" {
-  name = "MANIFEST_REDIS_URL"
+  name                    = "MANIFEST_REDIS_URL"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_url" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_url.id
-  secret_string = "redis:// ${var.redis_primary_endpoint_address}"
+  secret_string = "redis://${var.redis_primary_endpoint_address}"
 }
