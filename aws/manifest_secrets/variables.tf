@@ -13,3 +13,11 @@ variable "postgres_rds_instance_id" {
 variable "redis_cluster_security_group_id" {
   type = string
 }
+
+variable "cluster_endpoint" {
+  type = string
+}
+
+variable "redis_primary_endpoint_address" {
+  type = string
+}

@@ -21,6 +21,6 @@ include {
 inputs = {
   database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
   database_read_write_proxy_endpoint = dependency.rds.outputs.database_read_write_proxy_endpoint
-  postgres_rds_instance_id = dependency.rds.outputs.rds_instance_id
-  redis_cluster_security_group_id = dependency.elasticache.outputs.redis_cluster_security_group_id
+  cluster_endpoint = dependency.rds.outputs.cluster_endpoint
+  redis_primary_endpoint_address = dependency.elasticache.outputs.redis_primary_endpoint_address
 }
