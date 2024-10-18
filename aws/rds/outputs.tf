@@ -14,5 +14,6 @@ output "rds_instance_id" {
   value = aws_rds_cluster_instance.notification-canada-ca-instances[0].identifier
 }
 output "cluster_endpoint" {
-  value = aws_rds_cluster.notification-canada-ca.endpoint
+  value     = aws_rds_cluster.notification-canada-ca.endpoint
+  sensitive = true
 }
