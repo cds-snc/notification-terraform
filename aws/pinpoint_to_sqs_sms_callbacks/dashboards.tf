@@ -607,7 +607,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "x": 16,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms/\n| filter @message like /succeeded/\n| fields strcontains(@message, 'Task deliver_throttled_sms') as is_throttled_sms\n| fields strcontains(@message, 'Task deliver_sms') as is_normal_sms\n| stats sum(is_normal_sms) as normal_sms, sum(is_throttled_sms)as throttled_sms by bin(1m)",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms/\n| filter @message like /succeeded/\n| fields strcontains(@message, 'Task deliver_throttled_sms') as is_throttled_sms\n| fields strcontains(@message, 'Task deliver_sms') as is_normal_sms\n| stats sum(is_normal_sms) as normal_sms, sum(is_throttled_sms) as throttled_sms by bin(1m)",
                 "queryLanguage": "LOGSQL",
                 "region": "${var.region}",
                 "title": "Normal vs Throttled SMS",
