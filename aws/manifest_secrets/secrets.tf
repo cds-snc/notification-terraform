@@ -329,9 +329,11 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool
 }
 
 resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
-  name                    = "SQLALCHEMY_DATABASE_URI"
+  name                    = "MANIFEST_SQLALCHEMY_DATABASE_URI"
   recovery_window_in_days = 0
 }
+
+# THESE BELOW ARE ARE DEPENDENT ON DYNAMICALLY GENERATED AWS INFORMATION
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri" {
   secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri.id
@@ -339,7 +341,7 @@ resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri"
 }
 
 resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri" {
-  name                    = "SQLALCHEMY_DATABASE_READER_URI"
+  name                    = "MANIFEST_SQLALCHEMY_DATABASE_READER_URI"
   recovery_window_in_days = 0
 }
 
@@ -355,23 +357,35 @@ resource "aws_secretsmanager_secret" "manifest_postgres_host" {
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
   secret_id     = aws_secretsmanager_secret.manifest_postgres_host.id
-  secret_string = "notification-canada-ca-${var.env}-cluster.${var.postgres_rds_instance_id}.${var.region}.rds.amazonaws.com"
+  secret_string = var.postgres_cluster_endpoint
+}
+
+resource "aws_secretsmanager_secret" "manifest_postgres_sql" {
+  name                    = "MANIFEST_POSTGRES_SQL"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
+  secret_id     = aws_secretsmanager_secret.manifest_postgres_sql.id
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
-  name = "MANIFEST_REDIS_PUBLISH_URL"
+  name                    = "MANIFEST_REDIS_PUBLISH_URL"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url.id
-  secret_string = "redis://notify-${var.env}-cluster-cache-az.${var.redis_cluster_security_group_id}.ng.0001.cac1.cache.amazonaws.com:6379"
+  secret_string = "redis://${var.redis_primary_endpoint_address}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_url" {
-  name = "MANIFEST_REDIS_URL"
+  name                    = "MANIFEST_REDIS_URL"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_url" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_url.id
-  secret_string = "redis://notify-${var.env}-cluster-cache-az.${var.redis_cluster_security_group_id}.ng.0001.cac1.cache.amazonaws.com:6379"
+  secret_string = "redis://${var.redis_primary_endpoint_address}"
 }
