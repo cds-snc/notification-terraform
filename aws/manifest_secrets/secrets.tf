@@ -357,7 +357,7 @@ resource "aws_secretsmanager_secret" "manifest_postgres_host" {
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
   secret_id     = aws_secretsmanager_secret.manifest_postgres_host.id
-  secret_string = var.cluster_endpoint
+  secret_string = var.postgres_cluster_endpoint
 }
 
 resource "aws_secretsmanager_secret" "manifest_postgres_sql" {

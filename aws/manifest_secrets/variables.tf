@@ -14,7 +14,7 @@ variable "redis_cluster_security_group_id" {
   type = string
 }
 
-variable "cluster_endpoint" {
+variable "postgres_cluster_endpoint" {
   type = string
 }
 
