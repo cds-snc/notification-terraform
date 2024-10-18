@@ -8,10 +8,20 @@ dependencies {
 
 dependency "rds" {
   config_path = "../rds"
+  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
+  mock_outputs = {
+    database_read_only_proxy_endpoint = "thisisamockstring_database_read_only_proxy_endpoint"
+    database_read_write_proxy_endpoint = "thisisamockstring_database_read_write_proxy_endpoint"
+    postgres_cluster_endpoint = "thisisamockstring_postgres_cluster_endpoint"
+  }
 }
 
 dependency "elasticache" {
   config_path = "../elasticache"
+  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
+  mock_outputs = {
+    redis_primary_endpoint_address = "thisisamockstring_redis_primary_endpoint_address"
+  }
 }
 
 include {
