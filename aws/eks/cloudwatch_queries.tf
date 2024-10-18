@@ -230,7 +230,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /admin|api/
+| filter kubernetes.container_name like /celery-email/
 | filter @message like "critical bounce rate threshold of 10"
 | sort @timestamp desc
 | limit 20
@@ -247,7 +247,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /admin|api/
+| filter kubernetes.container_name like /celery-email/
 | filter @message like "warning bounce rate threshold of 5"
 | sort @timestamp desc
 | limit 20
@@ -264,7 +264,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-warnings-and-criticals" 
 
   query_string = <<QUERY
 fields @timestamp, @service_id, @bounce_type
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^celery-email/
 | filter @message like /bounce rate threshold of/
 | parse @message "Service: * has met or exceeded a * bounce rate" as @service_id, @bounce_type
 | stats count(*) by @service_id, @bounce_type
