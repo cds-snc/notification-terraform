@@ -15,4 +15,5 @@ output "rds_instance_id" {
 }
 output "cluster_endpoint" {
   value = aws_rds_cluster.notification-canada-ca.endpoint
+  sensitive = true
 }
