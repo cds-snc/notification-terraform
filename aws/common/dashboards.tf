@@ -768,6 +768,46 @@ resource "aws_cloudwatch_dashboard" "sms" {
                 "period": 60,
                 "title": "Number of messages visible in send-sms-medium"
             }
+        },
+        {
+            "height": 9,
+            "width": 24,
+            "y": 57,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "sparkline": true,
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Bell Cellular Inc. / Aliant Telecom" ],
+                    [ "...", "BRAGG Communications INC." ],
+                    [ "...", "Chunghwa Telecom LDM" ],
+                    [ "...", "Farmers Mutual Telephone Company Inc." ],
+                    [ "...", "Freedom Mobile Inc." ],
+                    [ "...", "Iristel Inc." ],
+                    [ "...", "Maritime Telephone & Telegraph Ltd" ],
+                    [ "...", "MTS Communications Inc." ],
+                    [ "...", "Rogers Communications Canada Inc." ],
+                    [ "...", "SK Telecom" ],
+                    [ "...", "Taiwan Mobile Co Ltd." ],
+                    [ "...", "Telus Communications" ],
+                    [ "...", "TIM Celular S.A." ],
+                    [ "...", "TURKCELL" ],
+                    [ "...", "Videotron Ltd." ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "start": "-PT24H",
+                "region": "ca-central-1",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 15
+                    }
+                },
+                "stat": "Sum",
+                "period": 86400,
+                "title": "Carrier failures over the past day"
+            }
         }
     ]
 }
