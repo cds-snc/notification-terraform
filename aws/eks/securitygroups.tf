@@ -351,27 +351,6 @@ resource "aws_ec2_tag" "eks_created_security_group_tag" {
   value       = var.eks_cluster_name
 }
 
-# Client VPN access
-
-resource "aws_security_group_rule" "client-vpn-ingress-database" {
-  description              = "Client VPN ingress to the database"
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  source_security_group_id = module.vpn.client_vpn_security_group_id
-  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
-}
-
-resource "aws_security_group_rule" "client-vpn-ingress-redis" {
-  description              = "Client VPN ingress to the redis cluster"
-  type                     = "ingress"
-  from_port                = 6379
-  to_port                  = 6379
-  protocol                 = "tcp"
-  source_security_group_id = module.vpn.client_vpn_security_group_id
-  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
-}
 
 # Security Group For Internal
 resource "aws_security_group" "notification_internal" {
@@ -429,14 +408,4 @@ resource "aws_security_group_rule" "internal_alb_http_egress" {
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.notification_internal.id
   security_group_id        = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
-}
-
-resource "aws_security_group_rule" "vpn_k8s_api_access" {
-  description       = "Internal access to port 443 for private K8s API"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  type              = "ingress"
-  cidr_blocks       = ["10.0.0.0/16"]
-  security_group_id = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }

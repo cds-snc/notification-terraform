@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../cloudfront"]
+  paths = ["../common", "../cloudfront", "../vpn"]
 }
 
 dependency "common" {

@@ -1,5 +1,5 @@
 locals {
-  application_log_group_arn = "arn:aws:logs:${var.region}:${var.account_id}:log-group:${local.eks_application_log_group}"
+  application_log_group_arn = "arn:aws:logs:${var.region}:${var.account_id}:log-group:${var.eks_application_log_group}"
   client_vpn_log_group_arn  = "arn:aws:logs:${var.region}:${var.account_id}:log-group:${module.vpn.client_vpn_cloudwatch_log_group_name}"
   blazer_log_group_arn      = "arn:aws:logs:${var.region}:${var.account_id}:log-group:blazer"
 }
@@ -24,11 +24,10 @@ module "sentinel_forwarder" {
   ]
 }
 
-
 resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
   count           = var.cloudwatch_enabled ? 1 : 0
   name            = "Admin API request"
-  log_group_name  = local.eks_application_log_group
+  log_group_name  = var.eks_application_log_group
   filter_pattern  = "Admin API request"
   destination_arn = module.sentinel_forwarder.lambda_arn
   distribution    = "Random"

@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common"]
+  paths = ["../common", "../eks"]
 }
 
 dependency "common" {
@@ -31,6 +31,18 @@ dependency "common" {
   }
 }
 
+dependency "eks" {
+  config_path = "../eks"
+
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "pull"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    eks_securitygroup_rds = "sg-0a7094caf5b990eb3"
+    eks_cluster_securitygroup_id = "sg-0a7094caf5b990eb3"
+    eks_application_log_group = ""
+  }
+}
+
 include {
   path = find_in_parent_folders()
 }
@@ -39,4 +51,7 @@ inputs = {
   vpc_id                                    = dependency.common.outputs.vpc_id
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks  
+  eks_securitygroup_rds                     = dependency.eks.outputs.eks_securitygroup_rds
+  eks_cluster_securitygroup_id              = dependency.eks.outputs.eks_cluster_securitygroup_id
+  eks_application_log_group                 = dependency.eks.outputs.eks_application_log_group
 }

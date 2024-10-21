@@ -90,26 +90,12 @@ output "quicksight_security_group_id" {
   value = aws_security_group.quicksight.id
 }
 
-# Sentinel
-output "sentinel_forwarder_cloudwatch_lambda_arn" {
-  value = module.sentinel_forwarder.lambda_arn
+# Dependencies for VPN
+
+output "eks_securitygroup_rds" {
+  value = data.aws_security_group.eks-securitygroup-rds.id
 }
 
-output "sentinel_forwarder_cloudwatch_lambda_name" {
-  value = module.sentinel_forwarder.lambda_name
-}
-
-# GHA VPN
-output "gha_vpn_id" {
-  value = module.gha_vpn.client_vpn_endpoint_id
-}
-
-output "gha_vpn_certificate" {
-  sensitive = true
-  value     = module.gha_vpn.client_vpn_certificate_pem
-}
-
-output "gha_vpn_key" {
-  sensitive = true
-  value     = module.gha_vpn.client_vpn_private_key_pem
+output "eks_cluster_securitygroup_id" {
+  value = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }

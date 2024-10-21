@@ -107,3 +107,10 @@ variable "subnet_ids" {
   type        = list(string)
   description = "The IDs for the subnets"
 }
+
+variable "client_vpn_log_group_arn" {
+  type        = string
+  description = "The ARN for the client VPN log group"
+  sensitive   = true
+  default     = "arn:aws:logs:ca-central-1:123456789012:log-group:/aws/client-vpn-endpoint/gha-vpn:*"
+}
