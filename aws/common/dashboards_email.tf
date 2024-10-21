@@ -422,13 +422,13 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "100 * m1 / (m2 + 1)", "label": "Notify bounce rate", "id": "e1", "region": ${var.region}, "period": 900 } ],
-                    [ "AWS/SES", "Bounce", { "color": "#1f77b4", "region": ${var.region}, "id": "m1", "visible": false } ],
-                    [ ".", "Send", { "id": "m2", "region": ${var.region}, "yAxis": "right", "label": "Total sent", "visible": false } ]
+                    [ { "expression": "100 * m1 / (m2 + 1)", "label": "Notify bounce rate", "id": "e1", "region": "${var.region}", "period": 900 } ],
+                    [ "AWS/SES", "Bounce", { "color": "#1f77b4", "region": "${var.region}", "id": "m1", "visible": false } ],
+                    [ ".", "Send", { "id": "m2", "region": "${var.region}", "yAxis": "right", "label": "Total sent", "visible": false } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
-                "region": ${var.region},
+                "region": "${var.region}",
                 "stat": "Sum",
                 "period": 900,
                 "title": "Notify bounce rate",
