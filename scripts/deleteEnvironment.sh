@@ -107,5 +107,16 @@ aws logs delete-query-definition --query-definition-id $(aws logs describe-query
 aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-provider/client-vpn
 
 aws iam delete-user --user-name ecr-user
+
+aws events remove-targets --rule dailyBudgetSpend --ids $(aws events list-targets-by-rule --rule dailyBudgetSpend --query 'Targets[].Id' --output text)
+aws events delete-rule --name dailyBudgetSpend
+
+aws events remove-targets --rule weeklyBudgetSpend --ids $(aws events list-targets-by-rule --rule weeklyBudgetSpend --query 'Targets[].Id' --output text)
+aws events delete-rule --name weeklyBudgetSpend
+
+aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
+aws events delete-rule --name google_cidr_testing
+
+
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."

@@ -1,9 +1,9 @@
 ## GENERAL
-env                   = "production"
-account_budget_limit  = 15000
-region                = "ca-central-1"
-billing_tag_value     = "notification-canada-ca-production"
-billing_tag_key       = "CostCenter"
+env                  = "production"
+account_budget_limit = 15000
+region               = "ca-central-1"
+billing_tag_value    = "notification-canada-ca-production"
+billing_tag_key      = "CostCenter"
 
 ## EKS     
 primary_worker_desired_size     = 5
@@ -72,14 +72,14 @@ elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
 
 ## SLACK INTEGRATION
-slack_channel_warning_topic             = "notification-ops"
-slack_channel_critical_topic            = "notification-ops"
-slack_channel_general_topic             = "notification-ops"
+slack_channel_warning_topic  = "notification-ops"
+slack_channel_critical_topic = "notification-ops"
+slack_channel_general_topic  = "notification-ops"
 
 ## MONITORING
-athena_workgroup_name                  = "primary"
-aws_config_recorder_name               = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version                 = "166"
+athena_workgroup_name    = "primary"
+aws_config_recorder_name = "aws-controltower-BaselineConfigRecorder"
+sentinel_layer_version   = "166"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
@@ -89,10 +89,10 @@ schedule_expression  = "rate(1 minute)"
 google_cidr_schedule_expression = "rate(1 day)"
 
 ## RDS
-rds_instance_count              = 3
-rds_instance_type               = "db.r6g.xlarge"
-rds_database_name               = "NotificationCanadaCaproduction"
-rds_version                     = "15.5"
+rds_instance_count = 3
+rds_instance_type  = "db.r6g.xlarge"
+rds_database_name  = "NotificationCanadaCaproduction"
+rds_version        = "15.5"
 
 ## NOTIFY-API/CELERY               
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
