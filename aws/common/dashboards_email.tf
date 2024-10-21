@@ -432,7 +432,7 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
                             "value": 5
                         },
                         {
-                            "color": "#d62728",
+                            "color": "red",
                             "label": "AWS cutoff",
                             "value": 10
                         }
