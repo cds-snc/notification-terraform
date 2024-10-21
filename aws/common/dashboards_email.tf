@@ -401,44 +401,17 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "m1 * 100", "label": "AWS Reputation Bounce Rate Score", "id": "e1", "region": ${var.region} } ],
-                    [ "AWS/SES", "Reputation.BounceRate", { "region": ${var.region}, "id": "m1", "visible": false } ]
+                    [ "AWS/SES", "Reputation.BounceRate", { "stat": "Average", "region": "${var.region}" } ]
                 ],
                 "legend": {
                     "position": "hidden"
                 },
-                "region": ${var.region},
+                "region": "${var.region}",
                 "liveData": false,
                 "title": "SES reputation bounce rate",
                 "view": "timeSeries",
                 "stacked": false,
-                "period": 900,
-                "yAxis": {
-                    "left": {
-                        "max": 10,
-                        "min": 0,
-                        "label": "%",
-                        "showUnits": false
-                    }
-                },
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "critical",
-                            "value": 7
-                        },
-                        {
-                            "label": "warning",
-                            "value": 5
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "AWS cutoff",
-                            "value": 10
-                        }
-                    ]
-                },
-                "stat": "Average"
+                "period": 900
             }
         },
         {
