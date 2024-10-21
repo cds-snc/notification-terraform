@@ -401,13 +401,13 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "m1 * 100", "label": "AWS Reputation Bounce Rate Score", "id": "e1", "region": ${var.region} } ],
-                    [ "AWS/SES", "Reputation.BounceRate", { "region": ${var.region}, "id": "m1", "visible": false } ]
+                    [ { "expression": "m1 * 100", "label": "AWS Reputation Bounce Rate Score", "id": "e1", "region": "${var.region}" } ],
+                    [ "AWS/SES", "Reputation.BounceRate", { "region": "${var.region}", "id": "m1", "visible": false } ]
                 ],
                 "legend": {
                     "position": "hidden"
                 },
-                "region": ${var.region},
+                "region": "${var.region}",
                 "liveData": false,
                 "title": "SES reputation bounce rate",
                 "view": "timeSeries",
@@ -449,7 +449,7 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ { "expression": "100 * m1 / (m2 + 1)", "label": "Notify bounce rate", "id": "e1", "region": "${var.region}", "period": 900 } ],
+                    [ { "expression": "100 * m1 / m2", "label": "Notify bounce rate", "id": "e1", "region": "${var.region}", "period": 900 } ],
                     [ "AWS/SES", "Bounce", { "color": "#1f77b4", "region": "${var.region}", "id": "m1", "visible": false } ],
                     [ ".", "Send", { "id": "m2", "region": "${var.region}", "yAxis": "right", "label": "Total sent", "visible": false } ]
                 ],
