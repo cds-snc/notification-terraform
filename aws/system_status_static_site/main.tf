@@ -1,5 +1,5 @@
 module "system_status_static_site" {
-  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//simple_static_website?ref=v9.6.7"
 
   domain_name_source                 = var.env == "production" ? "status.notification.canada.ca" : "status.${var.env}.notification.cdssandbox.xyz"
   billing_tag_value                  = var.billing_tag_value
