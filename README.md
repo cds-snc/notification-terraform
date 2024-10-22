@@ -52,8 +52,8 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 #### Production
 
 - All pull requests run a `terraform plan` on all modules against `production` and report changes if there are any
-- The production infrastructure version located at [.github/workflows/infrastructure_version.txt](`.github/workflows/infrastructure_version.txt`) is manually populated with the `tag` used to deploy to production
-- [pull_request.yml](`.github/workflows/pull_request.yml`) and [merge_to_main_production.yml](`.github/workflows/merge_to_main_production.yml`) use `infrastructure_version.txt` to perform `plan` and `apply`, respectively, to production
+- The production infrastructure version located at [.github/workflows/infrastructure_version.txt](.github/workflows/infrastructure_version.txt) is manually populated with the `tag` used to deploy to production
+- [pull_request.yml](`.github/workflows/pull_request.yml`) and [merge_to_main_production.yml](.github/workflows/merge_to_main_production.yml) use `infrastructure_version.txt` to perform `plan` and `apply`, respectively, to production
 - CI detects changes in `env/production` and runs `terraform apply` to apply changes to `production`
 
 #### Necessary additional steps
@@ -120,7 +120,7 @@ Assets to create a working Elastic Kubernetes Service (EKS):
 
 #### `aws/elasticache`
 
-Assets an Elasticache Redis cluster.
+Assets for an Elasticache Redis cluster.
 
 #### `aws/lambda-api`
 
@@ -132,7 +132,7 @@ To add or change environment variables we
   - for example, `PRODUCTION_NEW_VARIABLE` and `STAGING_NEW_VARIABLE`
 - add then to the staging and production plan and merge GitHub actions
   - for example, adding lines such as `TF_VAR_new_variable: ${{ secrets.STAGING_NEW_VARIABLE }} to the actions
-- add new variable declarations to terraform, by adding to the `variables.tf` file. Be sure to mark any sensitive variables with `sensitive = true`. This should prevent them from being revealed in the terrafrom plan.
+- add new variable declarations to terraform, by adding to the `variables.tf` file. Be sure to mark any sensitive variables with `sensitive = true`. This should prevent them from being revealed in the Terraform plan.
 - add new variables to `lambda.tf` by adding a line such as `NEW_VARIABLE = var.new_variable`
 
 #### `aws/rds`
