@@ -19,8 +19,10 @@ locals {
 
 }
 
-resource "aws_ses_domain_identity" "notification-canada-ca" {
-  domain = var.domain
+
+
+resource "aws_sesv2_email_identity" "notification-canada-ca" {
+  email_identity = var.domain
 }
 
 resource "aws_ses_domain_dkim" "notification-canada-ca" {
@@ -33,40 +35,40 @@ resource "aws_ses_domain_dkim" "notification-canada-ca" {
 resource "aws_ses_identity_notification_topic" "notification-canada-ca-bounce-topic" {
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Bounce"
-  identity                 = aws_ses_domain_identity.notification-canada-ca.domain
+  identity                 = aws_sesv2_email_identity.notification-canada-ca.email_identity
   include_original_headers = false
 }
 
 resource "aws_ses_identity_notification_topic" "notification-canada-ca-delivery-topic" {
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Delivery"
-  identity                 = aws_ses_domain_identity.notification-canada-ca.domain
+  identity                 = aws_sesv2_email_identity.notification-canada-ca.email_identity
   include_original_headers = false
 }
 
 resource "aws_ses_identity_notification_topic" "notification-canada-ca-complaint-topic" {
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Complaint"
-  identity                 = aws_ses_domain_identity.notification-canada-ca.domain
+  identity                 = aws_sesv2_email_identity.notification-canada-ca.email_identity
   include_original_headers = false
 }
 
 resource "aws_ses_domain_mail_from" "notification-canada-ca" {
-  domain           = aws_ses_domain_identity.notification-canada-ca.domain
-  mail_from_domain = "bounce.${aws_ses_domain_identity.notification-canada-ca.domain}"
+  domain           = aws_sesv2_email_identity.notification-canada-ca.email_identity
+  mail_from_domain = "bounce.${aws_sesv2_email_identity.notification-canada-ca.email_identity}"
 }
 
 ###
 # Receiving emails
 ###
 
-resource "aws_ses_domain_identity" "notification-canada-ca-receiving" {
+resource "aws_sesv2_email_identity" "notification-canada-ca-receiving" {
   # Email receiving with SES is available in only 3 regions
   # so we use us-east-1
   # https://docs.aws.amazon.com/general/latest/gr/ses.html
   provider = aws.us-east-1
 
-  domain = var.domain
+  email_identity = var.domain
 }
 
 resource "aws_ses_domain_dkim" "notification-canada-ca-receiving" {
@@ -98,9 +100,9 @@ resource "aws_ses_active_receipt_rule_set" "main" {
 # `ses_custom_sending_domains`.
 ###
 
-resource "aws_ses_domain_identity" "cic-trvapply-vrtdemande" {
-  count  = var.env == "production" ? 1 : 0
-  domain = "trvapply-vrtdemande.apps.cic.gc.ca"
+resource "aws_sesv2_email_identity" "cic-trvapply-vrtdemande" {
+  count          = var.env == "production" ? 1 : 0
+  email_identity = "trvapply-vrtdemande.apps.cic.gc.ca"
 }
 
 resource "aws_ses_domain_dkim" "cic-trvapply-vrtdemande" {
@@ -112,7 +114,7 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-bounce-t
   count                    = var.env == "production" ? 1 : 0
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Bounce"
-  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande[0].domain
+  identity                 = aws_sesv2_email_identity.cic-trvapply-vrtdemande[0].email_identity
   include_original_headers = false
 }
 
@@ -120,7 +122,7 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-delivery
   count                    = var.env == "production" ? 1 : 0
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Delivery"
-  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande[0].domain
+  identity                 = aws_sesv2_email_identity.cic-trvapply-vrtdemande[0].email_identity
   include_original_headers = false
 }
 
@@ -128,13 +130,13 @@ resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-complain
   count                    = var.env == "production" ? 1 : 0
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Complaint"
-  identity                 = aws_ses_domain_identity.cic-trvapply-vrtdemande[0].domain
+  identity                 = aws_sesv2_email_identity.cic-trvapply-vrtdemande[0].email_identity
   include_original_headers = false
 }
 
-resource "aws_ses_domain_identity" "custom_sending_domains" {
-  for_each = var.ses_custom_sending_domains
-  domain   = each.value
+resource "aws_sesv2_email_identity" "custom_sending_domains" {
+  for_each       = var.ses_custom_sending_domains
+  email_identity = each.value
 }
 
 resource "aws_ses_domain_dkim" "custom_sending_domains" {
@@ -146,7 +148,7 @@ resource "aws_ses_identity_notification_topic" "custom_sending_domains_bounce_to
   for_each                 = var.ses_custom_sending_domains
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Bounce"
-  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  identity                 = aws_sesv2_email_identity.custom_sending_domains[each.value].email_identity
   include_original_headers = false
 }
 
@@ -154,7 +156,7 @@ resource "aws_ses_identity_notification_topic" "custom_sending_domains_delivery_
   for_each                 = var.ses_custom_sending_domains
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Delivery"
-  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  identity                 = aws_sesv2_email_identity.custom_sending_domains[each.value].email_identity
   include_original_headers = false
 }
 
@@ -162,14 +164,14 @@ resource "aws_ses_identity_notification_topic" "custom_sending_domains_complaint
   for_each                 = var.ses_custom_sending_domains
   topic_arn                = var.notification_canada_ca_ses_callback_arn
   notification_type        = "Complaint"
-  identity                 = aws_ses_domain_identity.custom_sending_domains[each.value].domain
+  identity                 = aws_sesv2_email_identity.custom_sending_domains[each.value].email_identity
   include_original_headers = false
 }
 
 resource "aws_ses_domain_mail_from" "custom_sending_domains" {
   for_each         = var.ses_custom_sending_domains
-  domain           = aws_ses_domain_identity.custom_sending_domains[each.value].domain
-  mail_from_domain = "bounce.${aws_ses_domain_identity.custom_sending_domains[each.value].domain}"
+  domain           = aws_sesv2_email_identity.custom_sending_domains[each.value].email_identity
+  mail_from_domain = "bounce.${aws_sesv2_email_identity.custom_sending_domains[each.value].email_identity}"
 }
 
 
