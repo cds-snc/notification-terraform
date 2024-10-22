@@ -886,7 +886,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-plan-rds]
+    needs: [terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "manifest_secrets"
