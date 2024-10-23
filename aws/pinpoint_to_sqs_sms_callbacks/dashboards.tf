@@ -496,6 +496,46 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "period": 60,
                 "title": "Number of messages visible in ${var.sqs_send_sms_medium_queue_name}"
             }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 54,
+            "width": 24,
+            "height": 9,
+            "properties": {
+                "sparkline": true,
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Bell Cellular Inc. / Aliant Telecom" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "BRAGG Communications INC." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Chunghwa Telecom LDM" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Farmers Mutual Telephone Company Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Freedom Mobile Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Iristel Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Maritime Telephone & Telegraph Ltd" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "MTS Communications Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Rogers Communications Canada Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "SK Telecom" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Taiwan Mobile Co Ltd." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Telus Communications" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "TIM Celular S.A." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "TURKCELL" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Videotron Ltd." ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "start": "-PT24H",
+                "region": "ca-central-1",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 15
+                    }
+                },
+                "stat": "Sum",
+                "period": 86400,
+                "title": "Carrier failures over the past day"
+            }
         }
     ]
 }
@@ -551,8 +591,8 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-production-eks-cluster", "deployment", "celery-sms-send-primary", { "region": "${var.region}", "label": "celery-sms-send-primary" } ],
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-production-eks-cluster", "deployment", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "celery-sms-send-primary", { "region": "${var.region}", "label": "celery-sms-send-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -570,7 +610,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "NotificationCanadaCa", "production_notifications_celery_sms_total-time", "metric_type", "timing", { "region": "${var.region}", "label": "time" } ]
+                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_sms_total-time", "metric_type", "timing", { "region": "${var.region}", "label": "time" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -593,7 +633,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-production-eks-cluster/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery-sms-send/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery-sms-send/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "SMS Sending Celery Errors",
@@ -607,7 +647,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "x": 16,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-production-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms/\n| filter @message like /succeeded/\n| fields strcontains(@message, 'Task deliver_throttled_sms') as is_throttled_sms\n| fields strcontains(@message, 'Task deliver_sms') as is_normal_sms\n| stats sum(is_normal_sms) as normal_sms, sum(is_throttled_sms)as throttled_sms by bin(1m)",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms/\n| filter @message like /succeeded/\n| fields strcontains(@message, 'Task deliver_throttled_sms') as is_throttled_sms\n| fields strcontains(@message, 'Task deliver_sms') as is_normal_sms\n| stats sum(is_normal_sms) as normal_sms, sum(is_throttled_sms) as throttled_sms by bin(1m)",
                 "queryLanguage": "LOGSQL",
                 "region": "${var.region}",
                 "title": "Normal vs Throttled SMS",
