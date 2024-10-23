@@ -284,12 +284,6 @@ jobs:
           sudo mkdir -p aws
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: Import Private Cert
-        run: |
-          cd env/${{env.ENVIRONMENT}}/eks
-          PCA_ARN=$(aws acm-pca list-certificate-authorities --query 'CertificateAuthorities[?Status == `ACTIVE`].Arn' --output text)
-          terragrunt import aws_acmpca_certificate_authority.client_vpn $PCA_ARN
           
       - name: terragrunt apply eks
         run: |
