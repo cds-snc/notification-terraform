@@ -93,8 +93,9 @@ resource "aws_acmpca_certificate" "client_vpn" {
 }
 
 data "external" "get_pca_arn" {
-  # return the commit hash as a map: {"commit" = "05eda5d"}
-  program = ["/Users/benlarabie/projects/notification-terraform/scripts/getPCAARN.sh"]
+  # Get the PCA ARN
+  # Yes this is horrific. I'm sorry.
+  program = ["../../../../../../../scripts/getPCAARN.sh"]
 }
 
 import {
