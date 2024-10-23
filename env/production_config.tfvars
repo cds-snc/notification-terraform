@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.11.1-eksbuild.9"
 eks_addon_kube_proxy_version    = "v1.30.0-eksbuild.3"
 eks_addon_vpc_cni_version       = "v1.18.1-eksbuild.3"
 eks_addon_ebs_driver_version    = "v1.31.0-eksbuild.1"
-eks_node_ami_version            = "1.30.4-20240928"
-eks_karpenter_ami_id            = "ami-0b8c155565d6309ce"
+eks_node_ami_version            = "1.30.4-20241011"
+eks_karpenter_ami_id            = "ami-0d8bd10d9dede6336"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -79,7 +79,7 @@ slack_channel_general_topic  = "notification-ops"
 ## MONITORING
 athena_workgroup_name    = "primary"
 aws_config_recorder_name = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version   = "166"
+sentinel_layer_version   = "168"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
