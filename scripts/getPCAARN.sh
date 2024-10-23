@@ -6,3 +6,4 @@ PCA=$(aws acm-pca list-certificate-authorities --query 'CertificateAuthorities[?
 jq --null-input \
   --arg arn "$PCA" \
   '{"arn": $arn}'
+  
