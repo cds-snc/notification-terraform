@@ -92,6 +92,16 @@ resource "aws_acmpca_certificate" "client_vpn" {
   }
 }
 
+data "external" "get_pca_arn" {
+  # return the commit hash as a map: {"commit" = "05eda5d"}
+  program = ["/Users/benlarabie/projects/notification-terraform/scripts/getPCAARN.sh"]
+}
+
+import {
+  to = aws_acmpca_certificate_authority.client_vpn
+  id = data.external.get_pca_arn.result.arn
+}
+
 resource "aws_acmpca_certificate_authority" "client_vpn" {
   type = "ROOT"
 
