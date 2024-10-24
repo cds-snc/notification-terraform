@@ -43,7 +43,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply COMMON
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -89,9 +89,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ecr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ecr
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr-us-east:
     if: |
@@ -130,9 +135,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR US East
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ecr-us-east
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ecr-us-east
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_receiving_emails:
     if: |
@@ -161,9 +171,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply ses_receiving_emails
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-dns:
     if: |
@@ -192,9 +207,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply dns
-        run: |
-          cd env/${{env.ENVIRONMENT}}/dns
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/dns
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_validation_dns_entries:
     if: |
@@ -223,9 +243,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_validation_dns_entries
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
 
   terragrunt-apply-cloudfront:
@@ -255,9 +280,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: terragrunt apply cloudfront
-        run: |
-          cd env/${{env.ENVIRONMENT}}/cloudfront
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/cloudfront
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-eks:
     if: |
@@ -284,17 +314,16 @@ jobs:
           sudo mkdir -p aws
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: Import Private Cert
-        run: |
-          cd env/${{env.ENVIRONMENT}}/eks
-          PCA_ARN=$(aws acm-pca list-certificate-authorities --query 'CertificateAuthorities[?Status == `ACTIVE`].Arn' --output text)
-          terragrunt import aws_acmpca_certificate_authority.client_vpn $PCA_ARN
           
       - name: terragrunt apply eks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/eks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 6000
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/eks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-elasticache:
     if: |
@@ -323,9 +352,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply elasticache
-        run: |
-          cd env/${{env.ENVIRONMENT}}/elasticache
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 3000
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/elasticache
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-rds:
     if: |
@@ -354,9 +388,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply rds
-        run: |
-          cd env/${{env.ENVIRONMENT}}/rds
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 6000
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/rds
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   # terragrunt-apply-lambda-api:
   #   if: |
@@ -416,9 +455,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply lambda-admin-pr
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-performance-test:
     if: |
@@ -447,9 +491,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply performance-test
-        run: |
-          cd env/${{env.ENVIRONMENT}}/performance-test
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/performance-test
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-heartbeat:
     if: |
@@ -478,9 +527,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply heartbeat
-        run: |
-          cd env/${{env.ENVIRONMENT}}/heartbeat
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/heartbeat
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-database-tools:
     if: |
@@ -520,9 +574,14 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2   
 
       - name: terragrunt apply database-tools
-        run: |
-          cd env/${{env.ENVIRONMENT}}/database-tools
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/database-tools
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   # terragrunt-apply-quicksight:
   #   if: |
@@ -582,9 +641,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply lambda-google-cidr
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_to_sqs_email_callbacks:
     if: |
@@ -613,9 +677,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_to_sqs_email_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-sns_to_sqs_sms_callbacks:
     if: |
@@ -644,9 +713,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply sns_to_sqs_sms_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-pinpoint_to_sqs_sms_callbacks:
     if: |
@@ -675,9 +749,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status:
     if: |
@@ -706,9 +785,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status
-        run: |
-          cd env/${{env.ENVIRONMENT}}/system_status
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/system_status
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status_static_site:
     if: |
@@ -737,9 +821,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status_static_site
-        run: |
-          cd env/${{env.ENVIRONMENT}}/system_status_static_site
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/system_status_static_site
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   # terragrunt-apply-newrelic:
   #   if: |
@@ -799,9 +888,14 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply manifest_secrets
-        run: |
-          cd env/${{env.ENVIRONMENT}}/manifest_secrets
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/manifest_secrets
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   deploy-application:
     if: |
