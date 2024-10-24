@@ -43,7 +43,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply COMMON
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -89,7 +89,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -135,7 +135,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR US East
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -171,7 +171,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply ses_receiving_emails
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -207,7 +207,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply dns
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -243,7 +243,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_validation_dns_entries
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -280,7 +280,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: terragrunt apply cloudfront
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -316,7 +316,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
           
       - name: terragrunt apply eks
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 6000
           max_attempts: 3
@@ -352,7 +352,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply elasticache
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 3000
           max_attempts: 3
@@ -388,7 +388,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply rds
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 6000
           max_attempts: 3
@@ -455,7 +455,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply lambda-admin-pr
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -491,7 +491,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply performance-test
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -527,7 +527,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply heartbeat
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -574,7 +574,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2   
 
       - name: terragrunt apply database-tools
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -641,7 +641,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply lambda-google-cidr
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -677,7 +677,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_to_sqs_email_callbacks
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -713,7 +713,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply sns_to_sqs_sms_callbacks
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -749,7 +749,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -785,7 +785,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -821,7 +821,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status_static_site
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
@@ -888,7 +888,7 @@ jobs:
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply manifest_secrets
-        uses: nick-fields/retry@7152eba # V3.0
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 1200
           max_attempts: 3
