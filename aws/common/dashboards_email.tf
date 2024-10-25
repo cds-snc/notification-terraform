@@ -401,7 +401,8 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SES", "Reputation.BounceRate", { "stat": "Average", "region": "${var.region}" } ]
+                    [ { "expression": "m1 * 100", "label": "AWS Reputation Bounce Rate Score", "id": "e1", "region": "${var.region}" } ],
+                    [ "AWS/SES", "Reputation.BounceRate", { "region": "${var.region}", "id": "m1", "visible": false } ]
                 ],
                 "legend": {
                     "position": "hidden"
@@ -411,7 +412,33 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
                 "title": "SES reputation bounce rate",
                 "view": "timeSeries",
                 "stacked": false,
-                "period": 900
+                "period": 900,
+                "yAxis": {
+                    "left": {
+                        "max": 10,
+                        "min": 0,
+                        "label": "%",
+                        "showUnits": false
+                    }
+                },
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "critical",
+                            "value": 7
+                        },
+                        {
+                            "label": "warning",
+                            "value": 5
+                        },
+                        {
+                            "color": "red",
+                            "label": "AWS cutoff",
+                            "value": 10
+                        }
+                    ]
+                },
+                "stat": "Average"
             }
         },
         {
@@ -436,11 +463,24 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
                     "left": {
                         "label": "%",
                         "min": 0,
-                        "showUnits": false
+                        "showUnits": false,
+                        "max": 15
                     }
                 },
                 "legend": {
                     "position": "hidden"
+                },
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "service critical",
+                            "value": 10
+                        },
+                        {
+                            "label": "service warning",
+                            "value": 5
+                        }
+                    ]
                 }
             }
         },
