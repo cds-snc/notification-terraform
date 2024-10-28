@@ -18,11 +18,11 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
   scope       = "REGIONAL"
 
   regular_expression {
-    regex_string = var.env == "production" ? "/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*|/template-category.*" : "/_debug|/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*|/template-category.*"
+    regex_string = var.env == "production" ? "/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*|/template-category.*" : "/_debug|/_status.*|/api-key.*|/complaint.*|/email-branding.*|/events.*|/inbound-number.*|/invite.*|/letter-branding.*|/letters.*|/template-category.*|/cypress.*"
   }
 
   regular_expression {
-    regex_string = "/notifications.*|/organisation.*|/organisations.*|/platform-stats.*|/provider-details.*|/service.*|/static.*|/user.*|/v2.*|/cache-clear"
+    regex_string = "/notifications.*|/organisation.*|/organisations.*|/platform-stats.*|/provider-details.*|/service.*|/static.*|/user.*|/v2.*|/cache-clear|/support/find-ids"
   }
 
   tags = {
@@ -98,7 +98,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels"
+    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids"
   }
 
   tags = {

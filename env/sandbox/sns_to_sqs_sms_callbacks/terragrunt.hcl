@@ -1,5 +1,13 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/sns_to_sqs_sms_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//sns_to_sqs_sms_callbacks"}"
+}
+
 dependencies {
   paths = ["../common", "../ecr"]
+}
+
+dependency "ecr" {
+  config_path = "../ecr"
 }
 
 dependency "common" {
@@ -24,31 +32,22 @@ dependency "common" {
   }
 }
 
-dependency "ecr" {
-  config_path = "../ecr"
-}
-
 include {
   path = find_in_parent_folders()
 }
 
 inputs = {
-  billing_tag_value                             = "notification-canada-ca-sandbox"
-  sns_deliveries_ca_central_arn                 = dependency.common.outputs.sns_deliveries_ca_central_arn
-  sns_deliveries_ca_central_name                = dependency.common.outputs.sns_deliveries_ca_central_name
-  sns_deliveries_failures_ca_central_arn        = dependency.common.outputs.sns_deliveries_failures_ca_central_arn
-  sns_deliveries_failures_ca_central_name       = dependency.common.outputs.sns_deliveries_failures_ca_central_name
-  sns_deliveries_us_west_2_arn                  = dependency.common.outputs.sns_deliveries_us_west_2_arn
-  sns_deliveries_us_west_2_name                 = dependency.common.outputs.sns_deliveries_us_west_2_name
-  sns_deliveries_failures_us_west_2_arn         = dependency.common.outputs.sns_deliveries_failures_us_west_2_arn
-  sns_deliveries_failures_us_west_2_name        = dependency.common.outputs.sns_deliveries_failures_us_west_2_name
-  sns_alert_warning_arn                         = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                        = dependency.common.outputs.sns_alert_critical_arn
-  sns_alert_ok_arn                              = dependency.common.outputs.sns_alert_ok_arn
+  sns_deliveries_ca_central_arn            = dependency.common.outputs.sns_deliveries_ca_central_arn
+  sns_deliveries_ca_central_name           = dependency.common.outputs.sns_deliveries_ca_central_name
+  sns_deliveries_failures_ca_central_arn   = dependency.common.outputs.sns_deliveries_failures_ca_central_arn
+  sns_deliveries_failures_ca_central_name  = dependency.common.outputs.sns_deliveries_failures_ca_central_name
+  sns_deliveries_us_west_2_arn             = dependency.common.outputs.sns_deliveries_us_west_2_arn
+  sns_deliveries_us_west_2_name            = dependency.common.outputs.sns_deliveries_us_west_2_name
+  sns_deliveries_failures_us_west_2_arn    = dependency.common.outputs.sns_deliveries_failures_us_west_2_arn
+  sns_deliveries_failures_us_west_2_name   = dependency.common.outputs.sns_deliveries_failures_us_west_2_name
+  sns_alert_warning_arn                    = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn                   = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                         = dependency.common.outputs.sns_alert_ok_arn
   sns_to_sqs_sms_callbacks_ecr_repository_url   = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_repository_url
   sns_to_sqs_sms_callbacks_ecr_arn              = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_arn
-}
-
-terraform {
-  source = "../../../aws//sns_to_sqs_sms_callbacks"
 }

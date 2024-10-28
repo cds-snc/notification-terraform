@@ -40,7 +40,7 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error"
-  pattern        = "?\"ERROR/*Worker\" ?\"ERROR/MainProcess\""
+  pattern        = "%ERROR/.*Worker|ERROR/MainProcess%"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
@@ -188,6 +188,19 @@ resource "aws_cloudwatch_log_metric_filter" "callback-request-failures" {
 
   metric_transformation {
     name      = "callback-max-retry-failures"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "throttling-exceptions" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "throttling-exceptions"
+  pattern        = "ThrottlingException"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "throttling-exceptions"
     namespace = "LogMetrics"
     value     = "1"
   }

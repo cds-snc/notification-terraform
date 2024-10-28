@@ -52,6 +52,8 @@ module "gha_vpn" {
 }
 
 resource "aws_acm_certificate" "client_vpn" {
+  depends_on = [time_sleep.wait_for_cert_authority]
+
   certificate_authority_arn = aws_acmpca_certificate_authority.client_vpn.arn
   domain_name               = "${var.env}.notification.canada.ca"
 
@@ -62,6 +64,12 @@ resource "aws_acm_certificate" "client_vpn" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "time_sleep" "wait_for_cert_authority" {
+  depends_on = [aws_acmpca_certificate_authority.client_vpn]
+
+  create_duration = "30s"
 }
 
 resource "aws_acmpca_certificate_authority_certificate" "client_vpn" {
@@ -82,6 +90,18 @@ resource "aws_acmpca_certificate" "client_vpn" {
     type  = "YEARS"
     value = 5
   }
+}
+
+data "external" "get_pca_arn" {
+  # Get the PCA ARN
+  # Yes this is horrific. I'm sorry.
+  program = [var.env == "production" ? "../../../../../../../../scripts/getPCAARN.sh" : "../../../../../../../scripts/getPCAARN.sh"]
+
+}
+
+import {
+  to = aws_acmpca_certificate_authority.client_vpn
+  id = data.external.get_pca_arn.result.arn
 }
 
 resource "aws_acmpca_certificate_authority" "client_vpn" {

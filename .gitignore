@@ -5,6 +5,7 @@
 *.tfstate
 *.tfstate.*
 *.tfvars
+!/env/*.tfvars
 *.yaml
 !.checkov.yaml
 !.checkov.yml

@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../aws//ses_to_sqs_email_callbacks"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ses_to_sqs_email_callbacks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ses_to_sqs_email_callbacks"}"
 }
 
 dependencies {
@@ -30,7 +30,6 @@ include {
 }
 
 inputs = {
-  billing_tag_value                       = "notification-canada-ca-staging"
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
   sns_alert_warning_arn                   = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                  = dependency.common.outputs.sns_alert_critical_arn

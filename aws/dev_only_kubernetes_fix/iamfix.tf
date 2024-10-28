@@ -22,6 +22,36 @@ module "eks" {
       username = "AWSAdministratorAccess:{{SessionName}}"
       groups   = ["system:masters"]
     },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-admin-apply"
+      username = "notification-admin-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-api-apply"
+      username = "notification-api-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-document-download-api-apply"
+      username = "notification-document-download-api-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-documentation-apply"
+      username = "notification-documentation-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-apply"
+      username = "notification-manifests-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/ipv4-geolocate-webservice-apply"
+      username = "ipv4-geolocate-webservice-apply"
+      groups   = ["system:masters"]
+    },
   ]
 
   aws_auth_accounts = [

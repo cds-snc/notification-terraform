@@ -10,8 +10,9 @@ data "aws_ami" "ubuntu" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
-  owners = ["099720109477"] # Canonical
+  # Canonical Owner ID
+  # https://documentation.ubuntu.com/aws/en/latest/aws-how-to/instances/find-ubuntu-images/#ownership-verification
+  owners = ["099720109477"]
 }
 
 # Create EC2 instance

@@ -21,10 +21,12 @@ IFS=','
 
 # Iterate over each environment
 for ENV in $ENVIRONMENTS; do
-  echo "Patching EKS terragrunt.hcl file for $ENV"
-  cd ../env/$ENV/eks
+  echo "Patching env vars file for $ENV"
+  
+  pushd ../env
 
-  sed -E -i '' "s/[0-9].[0-9]{2}.[0-9]*-[0-9]{8}/$NEW_IMAGE_VERSION/" terragrunt.hcl
-  sed -E -i '' "s/ami-[A-Fa-f0-9]+/$NEW_AMI_ID/" terragrunt.hcl
-  cd ../../../scripts
+  sed -E -i '' "s/[0-9].[0-9]{2}.[0-9]*-[0-9]{8}/$NEW_IMAGE_VERSION/" "$ENV"_config.tfvars
+  sed -E -i '' "s/ami-[A-Fa-f0-9]+/$NEW_AMI_ID/" "$ENV"_config.tfvars
+
+  popd 
 done

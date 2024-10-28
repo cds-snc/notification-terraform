@@ -1,3 +1,7 @@
+terraform {
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/elasticache?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//elasticache"}"
+}
+
 dependencies {
   paths = ["../common", "../eks"]
 }
@@ -7,7 +11,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     vpc_id = ""
     vpc_private_subnets = [
@@ -15,9 +19,6 @@ dependency "common" {
       "subnet-08de34a9e1a7458dc",
       "subnet-0af8b8402f1d605ff",
     ]
-    sns_alert_warning_arn = ""
-    sns_alert_critical_arn = ""
-    kms_arn = ""
   }
 }
 
@@ -26,7 +27,7 @@ dependency "eks" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate", "destroy"]
+  mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     eks-cluster-securitygroup = "sg-0e2c3ef6c5c75b74c"
   }
@@ -38,16 +39,9 @@ include {
 
 inputs = {
   eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
-  elasticache_node_count                 = 1
-  elasticache_node_number_cache_clusters = 3
-  elasticache_node_type                  = "cache.t3.micro"
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
   vpc_id                                 = dependency.common.outputs.vpc_id
-  kms_arn                                = dependency.common.outputs.kms_arn
-}
-
-terraform {
-  source = "../../../aws//elasticache"
+  kms_arn                                = dependency.common.outputs.kms_arn  
 }

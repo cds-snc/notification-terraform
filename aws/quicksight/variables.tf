@@ -25,20 +25,6 @@ variable "database_name" {
   type = string
 }
 
-variable "quicksight_db_user_name" {
-  type    = string
-  default = "quicksight_db_user"
-}
-
-variable "quicksight_db_user_password" {
-  type      = string
-  sensitive = true
-}
-
-# variable "vpc_private_subnets" {
-#   type = list(any)
-# }
-
 variable "vpc_id" {
   type = string
 }
