@@ -7,10 +7,6 @@ output "custom_sending_domains_dkim" {
   value = local.custom_sending_domain_dkim_records
 }
 
-output "cic_trvapply_vrtdemande_dkim" {
-  value = local.ses_cic_trvapply_vrtdemande_dkim_records
-}
-
 output "notification_canada_ca_dkim" {
   value = aws_ses_domain_dkim.notification-canada-ca.dkim_tokens
 
