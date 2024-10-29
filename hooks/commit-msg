@@ -2,8 +2,5 @@ COMMIT_MSG=`head -n1 $ARGS`
 PATTERN="\[review\]"
 if ! [[ "$COMMIT_MSG" =~ $PATTERN ]]; then
   echo "Missing the review tag. Adding it in automatically."
-  read RESPONSE
-  if [ "$RESPONSE" == "y" ]; then
-     echo "[review]" >> $1
-  fi
+  echo "[review]" >> $1
 fi
