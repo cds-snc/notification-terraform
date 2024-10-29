@@ -13,7 +13,7 @@ while true; do
   fi
   case $yn in
       [Yy] ) echo "[review]" >> $1; break;;
-      [Nn] ) echo "Not adding review tag";;
+      [Nn] ) echo "Not adding review tag"; break;;
       * ) echo "Please answer y or n for yes or no.";;
   esac
 done
