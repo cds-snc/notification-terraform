@@ -1,3 +1,4 @@
+#!/bin/bash
 COMMIT_MSG=`head -n1 $ARGS`
 PATTERN="\[review\]"
 # Allows us to read user input below, assigns stdin to keyboard
