@@ -389,3 +389,23 @@ resource "aws_secretsmanager_secret_version" "manifest_redis_url" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_url.id
   secret_string = "redis://${var.redis_primary_endpoint_address}"
 }
+
+resource "aws_secretsmanager_secret" "manifest_cypress_user_pw_secret" {
+  name                    = "MANIFEST_CYPRESS_USER_PW_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cypress_user_pw_secret" {
+  secret_id     = aws_secretsmanager_secret.manifest_cypress_user_pw_secret.id
+  secret_string = var.manifest_cypress_user_pw_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_cypress_auth_client_secret" {
+  name                    = "MANIFEST_CYPRESS_AUTH_CLIENT_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cypress_auth_client_secret" {
+  secret_id     = aws_secretsmanager_secret.manifest_cypress_auth_client_secret.id
+  secret_string = var.manifest_cypress_auth_client_secret
+}
