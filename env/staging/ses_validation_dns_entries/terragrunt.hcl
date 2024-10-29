@@ -28,7 +28,6 @@ dependency "dns" {
     lambda_ses_receiving_emails_image_arn = ""
     notification_canada_ca_receiving_dkim = []
     notification_canada_ca_dkim = []
-    cic_trvapply_vrtdemande_dkim = []
     custom_sending_domains_dkim = []
     route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
   }
@@ -41,7 +40,6 @@ include {
 
 inputs = {
   custom_sending_domains_dkim   = dependency.dns.outputs.custom_sending_domains_dkim
-  cic_trvapply_vrtdemande_dkim  = dependency.dns.outputs.cic_trvapply_vrtdemande_dkim
   notification_canada_ca_dkim   = dependency.dns.outputs.notification_canada_ca_dkim
   notification_canada_ca_receiving_dkim   = dependency.dns.outputs.notification_canada_ca_receiving_dkim
   route53_zone_id                        = dependency.dns.outputs.route53_zone_id
