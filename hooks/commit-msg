@@ -1,6 +1,19 @@
 COMMIT_MSG=`head -n1 $ARGS`
 PATTERN="\[review\]"
+# Allows us to read user input below, assigns stdin to keyboard
+exec < /dev/tty
+
 if ! [[ "$COMMIT_MSG" =~ $PATTERN ]]; then
-  echo "Missing the review tag. Adding it in automatically."
-  echo "[review]" >> $1
+while true; do
+
+  read -p "[post-commit hook] Missing the review tag. Add it automatically? (Y/n) " yn
+  if [ "$yn" = "" ]; then
+    yn='Y'
+  fi
+  case $yn in
+      [Yy] ) echo "[review]" >> $1; break;;
+      [Nn] ) echo "Not adding review tag";;
+      * ) echo "Please answer y or n for yes or no.";;
+  esac
+done
 fi
