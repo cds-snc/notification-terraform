@@ -1,0 +1,9 @@
+COMMIT_MSG=`head -n1 $ARGS`
+PATTERN="\[review\]"
+if ! [[ "$COMMIT_MSG" =~ $PATTERN ]]; then
+  echo "I noticed you didn't add [review] to your commit message. Do you want to trigger the AI reivew bot? (y/n)"
+  read RESPONSE
+  if [ "$RESPONSE" == "y" ]; then
+     echo "[review]" >> $1
+  fi
+fi
