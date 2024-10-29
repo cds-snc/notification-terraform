@@ -99,7 +99,7 @@ EOF
 generate "common_variables" {
   path      = "common_variables.tf"
   if_exists = "overwrite"
-  contents  = file("terragrunt_secrets.tf")
+  contents  = file("variables.tf")
 }
 
 remote_state {
