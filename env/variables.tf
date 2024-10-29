@@ -969,3 +969,13 @@ variable "manifest_aws_pinpoint_default_pool_id" {
   type      = string
   sensitive = true
 }
+
+variable "manifest_cypress_user_pw_secret" {
+  type      = string
+  sensitive = true
+}
+
+variable "manifest_cypress_auth_client_secret" {
+  type      = string
+  sensitive = true
+}
