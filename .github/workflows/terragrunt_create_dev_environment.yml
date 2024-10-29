@@ -4,7 +4,7 @@ name: "Create Dev Environment"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 22 * * 7"
+    - cron: "0 22 * * 0"
 
 defaults:
   run:

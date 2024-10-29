@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 22 * * 5"
-
+    
 defaults:
   run:
     shell: bash
