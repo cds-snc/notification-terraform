@@ -122,3 +122,20 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-failures" {
     default_value = "0"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-failures-carriers" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+
+  name    = "pinpoint-sms-failures-carriers"
+  pattern = "{ ($.isFinal IS TRUE) && ($.carrierName != \"\" && ( ($.messageStatus != \"SUCCESSFUL\") && ($.messageStatus != \"DELIVERED\") )) }"
+
+  metric_transformation {
+    name      = "pinpoint-sms-failures-carriers"
+    namespace = "LogMetrics"
+    value     = "1"
+    dimensions = {
+      Carrier = "$.carrierName"
+    }
+  }
+}

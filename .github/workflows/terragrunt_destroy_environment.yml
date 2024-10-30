@@ -2,6 +2,9 @@ name: "Delete Dev Environment"
 
 on:
   workflow_dispatch:
+  schedule:
+    # 17:00 UTC = 22:00 EST
+    - cron: "0 22 * * 5"
 
 defaults:
   run:
@@ -53,9 +56,9 @@ jobs:
 
       - name: Fetch secrets from 1Password
         run: |
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > aws/dev.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_DEV"/notesPlain > aws/dev.tfvars
 
       - name: Destroy notify dev environment
         run: |
           cd scripts
-          ./deleteEnvironment.sh dev 800095993820
+          ./deleteEnvironment.sh dev ${{ secrets.DEV_ACCOUNT_ID}}

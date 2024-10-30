@@ -70,7 +70,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-cadelivery-receipts" ]
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}delivery-receipts" ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -104,7 +104,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-cadelivery-receipts" ]
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "${var.celery_queue_prefix}delivery-receipts" ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
@@ -334,12 +334,12 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-sms-high", { "region": "${var.region}" } ]
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}", { "region": "${var.region}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
-                "title": "Approximate age of oldest message in send-sms-high",
+                "title": "Approximate age of oldest message in ${var.sqs_send_sms_high_queue_name}",
                 "stat": "Average",
                 "period": 60,
                 "annotations": {
@@ -373,12 +373,12 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-sms-medium", { "region": "${var.region}" } ]
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}", { "region": "${var.region}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
-                "title": "Approximate age of oldest message in send-sms-medium",
+                "title": "Approximate age of oldest message in ${var.sqs_send_sms_medium_queue_name}",
                 "stat": "Average",
                 "period": 60,
                 "annotations": {
@@ -407,12 +407,12 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "eks-notification-canada-casend-sms-low", { "region": "${var.region}" } ]
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}", { "region": "${var.region}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
-                "title": "Approximate age of oldest message in send-sms-low",
+                "title": "Approximate age of oldest message in ${var.sqs_send_sms_low_queue_name}",
                 "stat": "Average",
                 "period": 60,
                 "annotations": {
@@ -451,14 +451,14 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-sms-high", { "region": "${var.region}" } ]
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}", { "region": "${var.region}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
-                "title": "Number of messages visible in send-sms-high"
+                "title": "Number of messages visible in ${var.sqs_send_sms_high_queue_name}"
             }
         },
         {
@@ -469,14 +469,14 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-sms-low", { "region": "${var.region}" } ]
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}", { "region": "${var.region}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
-                "title": "Number of messages visible in send-sms-low"
+                "title": "Number of messages visible in ${var.sqs_send_sms_low_queue_name}"
             }
         },
         {
@@ -487,14 +487,54 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "eks-notification-canada-casend-sms-medium", { "region": "${var.region}" } ]
+                    [ "AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}", { "region": "${var.region}" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "${var.region}",
                 "stat": "Average",
                 "period": 60,
-                "title": "Number of messages visible in send-sms-medium"
+                "title": "Number of messages visible in ${var.sqs_send_sms_medium_queue_name}"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 54,
+            "width": 24,
+            "height": 9,
+            "properties": {
+                "sparkline": true,
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Bell Cellular Inc. / Aliant Telecom" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "BRAGG Communications INC." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Chunghwa Telecom LDM" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Farmers Mutual Telephone Company Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Freedom Mobile Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Iristel Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Maritime Telephone & Telegraph Ltd" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "MTS Communications Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Rogers Communications Canada Inc." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "SK Telecom" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Taiwan Mobile Co Ltd." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Telus Communications" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "TIM Celular S.A." ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "TURKCELL" ],
+                    [ "LogMetrics", "pinpoint-sms-failures-carriers", "Carrier", "Videotron Ltd." ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "start": "-PT24H",
+                "region": "ca-central-1",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 15
+                    }
+                },
+                "stat": "Sum",
+                "period": 86400,
+                "title": "Carrier failures over the past day"
             }
         }
     ]
@@ -502,3 +542,130 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
 EOF
 }
 
+resource "aws_cloudwatch_dashboard" "sms-send-rate" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  dashboard_name = "Specialized-sms-send-rate"
+  dashboard_body = <<EOF
+{
+    "widgets": [
+        {
+            "height": 6,
+            "width": 8,
+            "y": 0,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE 'sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber' | filter isFinal = 1 \n| stats sum(totalMessageParts) as fragments, count(*) as sms by datefloor(messageRequestTimestamp, 1m)",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "SMS Send Rate Per Minute",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 6,
+            "x": 12,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_high_queue_name}", { "region": "${var.region}", "label": "High" } ],
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_medium_queue_name}", { "region": "${var.region}", "label": "Medium" } ],
+                    [ "AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", "${var.celery_queue_prefix}${var.sqs_send_sms_low_queue_name}", { "region": "${var.region}", "label": "Low" } ]
+                ],
+                "view": "singleValue",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "SMS SQS Queues Delays",
+                "period": 60,
+                "stat": "Maximum",
+                "sparkline": true
+            }
+        },
+        {
+            "height": 6,
+            "width": 6,
+            "y": 6,
+            "x": 18,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "celery-sms-send-primary", { "region": "${var.region}", "label": "celery-sms-send-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
+                ],
+                "sparkline": true,
+                "view": "singleValue",
+                "region": "${var.region}",
+                "title": "Pods",
+                "period": 60,
+                "stat": "Maximum"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 0,
+            "x": 8,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "NotificationCanadaCa", "${var.env}_notifications_celery_sms_total-time", "metric_type", "timing", { "region": "${var.region}", "label": "time" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "Average Notify SMS Send Time",
+                "period": 60,
+                "stat": "Average",
+                "yAxis": {
+                    "left": {
+                        "showUnits": false,
+                        "label": "seconds"
+                    }
+                }
+            }
+        },
+        {
+            "height": 6,
+            "width": 12,
+            "y": 6,
+            "x": 0,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery-sms-send/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "SMS Sending Celery Errors",
+                "view": "table"
+            }
+        },
+        {
+            "height": 6,
+            "width": 8,
+            "y": 0,
+            "x": 16,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms/\n| filter @message like /succeeded/\n| fields strcontains(@message, 'Task deliver_throttled_sms') as is_throttled_sms\n| fields strcontains(@message, 'Task deliver_sms') as is_normal_sms\n| stats sum(is_normal_sms) as normal_sms, sum(is_throttled_sms) as throttled_sms by bin(1m)",
+                "queryLanguage": "LOGSQL",
+                "region": "${var.region}",
+                "title": "Normal vs Throttled SMS",
+                "view": "timeSeries",
+                "stacked": false
+            }
+        },
+        {
+            "height": 6,
+            "width": 24,
+            "y": 12,
+            "x": 0,
+            "type": "text",
+            "properties": {
+                "markdown": "# Notes\n\n- send time will go up substantially while sending throttled SMS\n"
+            }
+        }
+    ]
+}
+EOF
+}

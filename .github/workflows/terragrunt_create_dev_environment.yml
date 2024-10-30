@@ -3,6 +3,9 @@ name: "Create Dev Environment"
 
 on:
   workflow_dispatch:
+  schedule:
+    # 17:00 UTC = 22:00 EST
+    - cron: "0 17 * * 0"
 
 defaults:
   run:
@@ -40,10 +43,10 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply COMMON
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 600
           max_attempts: 3
@@ -86,12 +89,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ecr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ecr
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr-us-east:
     if: |
@@ -127,12 +135,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ECR US East
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ecr-us-east
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ecr-us-east
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_receiving_emails:
     if: |
@@ -158,12 +171,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply ses_receiving_emails
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-dns:
     if: |
@@ -189,12 +207,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply dns
-        run: |
-          cd env/${{env.ENVIRONMENT}}/dns
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/dns
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_validation_dns_entries:
     if: |
@@ -220,12 +243,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_validation_dns_entries
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
 
   terragrunt-apply-cloudfront:
@@ -252,12 +280,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: terragrunt apply cloudfront
-        run: |
-          cd env/${{env.ENVIRONMENT}}/cloudfront
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/cloudfront
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-eks:
     if: |
@@ -283,12 +316,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          
       - name: terragrunt apply eks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/eks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 6000
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/eks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-elasticache:
     if: |
@@ -314,12 +352,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply elasticache
-        run: |
-          cd env/${{env.ENVIRONMENT}}/elasticache
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 3000
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/elasticache
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-rds:
     if: |
@@ -345,12 +388,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply rds
-        run: |
-          cd env/${{env.ENVIRONMENT}}/rds
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 6000
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/rds
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   # terragrunt-apply-lambda-api:
   #   if: |
@@ -376,7 +424,7 @@ jobs:
       #     sudo dpkg -i 1pass.deb
       #     sudo mkdir -p aws
       #     cd aws
-      #     op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+      #     op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       # - name: terragrunt apply lambda-api
       #   run: |
@@ -407,12 +455,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply lambda-admin-pr
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-performance-test:
     if: |
@@ -438,12 +491,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply performance-test
-        run: |
-          cd env/${{env.ENVIRONMENT}}/performance-test
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/performance-test
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-heartbeat:
     if: |
@@ -469,12 +527,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply heartbeat
-        run: |
-          cd env/${{env.ENVIRONMENT}}/heartbeat
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/heartbeat
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-database-tools:
     if: |
@@ -500,7 +563,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
 
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
@@ -514,9 +577,14 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2   
 
       - name: terragrunt apply database-tools
-        run: |
-          cd env/${{env.ENVIRONMENT}}/database-tools
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/database-tools
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   # terragrunt-apply-quicksight:
   #   if: |
@@ -542,7 +610,7 @@ jobs:
   #         sudo dpkg -i 1pass.deb
   #         sudo mkdir -p aws
   #         cd aws
-  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
   #     - name: terragrunt apply quicksight
   #       run: |
@@ -573,12 +641,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
   
       - name: terragrunt apply lambda-google-cidr
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_to_sqs_email_callbacks:
     if: |
@@ -604,12 +677,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply ses_to_sqs_email_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-sns_to_sqs_sms_callbacks:
     if: |
@@ -635,12 +713,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply sns_to_sqs_sms_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-pinpoint_to_sqs_sms_callbacks:
     if: |
@@ -666,12 +749,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
-        run: |
-          cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status:
     if: |
@@ -697,12 +785,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status
-        run: |
-          cd env/${{env.ENVIRONMENT}}/system_status
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/system_status
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status_static_site:
     if: |
@@ -728,12 +821,17 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
       - name: terragrunt apply system_status_static_site
-        run: |
-          cd env/${{env.ENVIRONMENT}}/system_status_static_site
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/system_status_static_site
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   # terragrunt-apply-newrelic:
   #   if: |
@@ -759,12 +857,48 @@ jobs:
   #         sudo dpkg -i 1pass.deb
   #         sudo mkdir -p aws
   #         cd aws
-  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+  #         op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
 
   #     - name: terragrunt apply newrelic
   #       run: |
   #         cd env/${{env.ENVIRONMENT}}/newrelic
   #         terragrunt apply --terragrunt-non-interactive -auto-approve
+
+  terragrunt-apply-manifest_secrets:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-apply-common, terragrunt-apply-eks, terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-ecr, terragrunt-apply-ecr-us-east, terragrunt-apply-lambda-admin-pr, terragrunt-apply-performance-test, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply         
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws
+          cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+
+      - name: terragrunt apply manifest_secrets
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 3
+          retry_on: error
+          command: |
+            cd env/${{env.ENVIRONMENT}}/manifest_secrets
+            terragrunt apply --terragrunt-non-interactive -auto-approve
 
   deploy-application:
     if: |
@@ -811,7 +945,7 @@ jobs:
         run: |
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
           cd ../env/${{env.ENVIRONMENT}}/eks
           ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
           CERT=$(terragrunt output --raw gha_vpn_certificate)
@@ -841,7 +975,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars  
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars  
           cd ../env/${{env.ENVIRONMENT}}/${{env.ENVIRONMENT}}_only_kubernetes_fix
           export TF_VAR_role_name=$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSReservedSSO_AWSAdministratorAccess_*")) | .RoleName')
           terragrunt apply --terragrunt-non-interactive -auto-approve

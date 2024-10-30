@@ -35,7 +35,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -68,7 +68,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -101,7 +101,7 @@ jobs:
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -134,7 +134,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -167,7 +167,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -200,7 +200,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -233,7 +233,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -266,7 +266,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -299,7 +299,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -332,7 +332,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -365,7 +365,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -398,7 +398,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -431,7 +431,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -464,7 +464,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -497,7 +497,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -530,7 +530,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -563,7 +563,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -596,7 +596,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -629,7 +629,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -662,7 +662,7 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:
@@ -695,7 +695,40 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TFVars - ${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-manifest_secrets:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    needs: [terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
+    runs-on: ubuntu-latest  
+    env:
+      COMPONENT: "manifest_secrets"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
         with:

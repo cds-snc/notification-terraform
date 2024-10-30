@@ -19,7 +19,7 @@ fi
 if [ "$CHECK" = true ] ;
 then
   echo "Checking for configuration changes between local and remote TFVars..."
-  op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > /var/tmp/op_secret
+  op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_DEV"/notesPlain > /var/tmp/op_secret
   cat $VARFILE > /var/tmp/local_secret
   DIFF=$(diff /var/tmp/op_secret /var/tmp/local_secret)
   if [ "$DIFF" != "" ] 
@@ -38,7 +38,7 @@ then
       if [ "$RESPONSE" == "push" ]; then
         echo "Updating Remote."
         
-        if op item edit "TFVars - Dev" notesPlain="$(cat $VARFILE)" > /dev/null ; then
+        if op item edit "TERRAFORM_SECRETS_DEV" notesPlain="$(cat $VARFILE)" > /dev/null ; then
           echo "Done."
         else
           echo "WARNING: UPDATE FAILED"
@@ -46,7 +46,7 @@ then
         
       elif [ "$RESPONSE" == "pull" ]; then
         echo "Updating local file"
-        op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > $VARFILE
+        op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_DEV"/notesPlain > $VARFILE
         echo "Done."
         echo "STOPPING THIS RUN. TERRAFORM NEEDS TO BE RE-RUN TO PICK UP THE DEV FILE."
         echo "PLEASE RE-RUN YOUR COMMAND."
@@ -58,7 +58,7 @@ then
     echo "No Changes Detected..."
   fi
 else 
-  op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TFVars - Dev"/notesPlain > $VARFILE
+  op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_DEV"/notesPlain > $VARFILE
   echo "Done."
   echo "STOPPING THIS RUN. TERRAFORM NEEDS TO BE RE-RUN TO PICK UP THE DEV FILE."
   echo "PLEASE RE-RUN YOUR COMMAND."
