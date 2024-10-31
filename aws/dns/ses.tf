@@ -7,16 +7,6 @@ locals {
       }
     ]
   ]))
-
-  ses_cic_trvapply_vrtdemande_dkim_records = distinct(flatten([
-    for cd in aws_ses_domain_dkim.cic-trvapply-vrtdemande : [
-      for token in cd.dkim_tokens : {
-        domain = cd.domain
-        token  = token
-      }
-    ]
-  ]))
-
 }
 
 
@@ -91,48 +81,8 @@ resource "aws_ses_active_receipt_rule_set" "main" {
 
 ###
 # Additional custom sending domains for emails
-# trvapply-vrtdemande.apps.cic.gc.ca is alone for historic reasons
-# and is not refactored to make sure the ressource is not destroyed/recreated.
-# Read the section "Refactoring Can Be Tricky"
-# https://blog.gruntwork.io/terraform-tips-tricks-loops-if-statements-and-gotchas-f739bbae55f9
-#
-# Afterwards there is a more automated way, using the set variable
-# `ses_custom_sending_domains`.
 ###
 
-resource "aws_sesv2_email_identity" "cic-trvapply-vrtdemande" {
-  count          = var.env == "production" ? 1 : 0
-  email_identity = "trvapply-vrtdemande.apps.cic.gc.ca"
-}
-
-resource "aws_ses_domain_dkim" "cic-trvapply-vrtdemande" {
-  count  = var.env == "production" ? 1 : 0
-  domain = "trvapply-vrtdemande.apps.cic.gc.ca"
-}
-
-resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-bounce-topic" {
-  count                    = var.env == "production" ? 1 : 0
-  topic_arn                = var.notification_canada_ca_ses_callback_arn
-  notification_type        = "Bounce"
-  identity                 = aws_sesv2_email_identity.cic-trvapply-vrtdemande[0].email_identity
-  include_original_headers = false
-}
-
-resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-delivery-topic" {
-  count                    = var.env == "production" ? 1 : 0
-  topic_arn                = var.notification_canada_ca_ses_callback_arn
-  notification_type        = "Delivery"
-  identity                 = aws_sesv2_email_identity.cic-trvapply-vrtdemande[0].email_identity
-  include_original_headers = false
-}
-
-resource "aws_ses_identity_notification_topic" "cic-trvapply-vrtdemande-complaint-topic" {
-  count                    = var.env == "production" ? 1 : 0
-  topic_arn                = var.notification_canada_ca_ses_callback_arn
-  notification_type        = "Complaint"
-  identity                 = aws_sesv2_email_identity.cic-trvapply-vrtdemande[0].email_identity
-  include_original_headers = false
-}
 
 resource "aws_sesv2_email_identity" "custom_sending_domains" {
   for_each       = var.ses_custom_sending_domains
