@@ -195,7 +195,7 @@ resource "aws_iam_role_policy_attachment" "parameters_csi_github" {
 # NOTIFY-API
 #
 
-data "aws_iam_policy_document" "secrets_csi_assume_role_policy_api" {
+data "aws_iam_policy_document" "assume_role_policy_api" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -220,20 +220,25 @@ data "aws_iam_policy_document" "secrets_csi_assume_role_policy_api" {
 }
 
 # Role
-resource "aws_iam_role" "secrets_csi_api" {
-  assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy_api.json
-  name               = "secrets-csi-role-api"
+resource "aws_iam_role" "api" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_api.json
+  name               = "api-eks-role"
 }
 
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_api" {
   policy_arn = aws_iam_policy.secrets_csi.arn
-  role       = aws_iam_role.secrets_csi_api.name
+  role       = aws_iam_role.api.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_api" {
   policy_arn = aws_iam_policy.parameters_csi.arn
-  role       = aws_iam_role.secrets_csi_api.name
+  role       = aws_iam_role.api.name
+}
+
+resource "aws_iam_role_policy_attachment" "api_worker" {
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.api.name
 }
