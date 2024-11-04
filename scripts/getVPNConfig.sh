@@ -22,6 +22,19 @@ while getopts 'c:u:' opt; do
 done
 shift "$(($OPTIND -1))"
 
+if ((OPTIND == 1))
+then
+    echo "Usage: -c <profile name> for create -u for update <profile name>"
+    exit 1
+fi
+
+shift $((OPTIND - 1))
+
+if (($# == 0))
+then
+echo "Usage: -c <profile name> for create -u for update <profile name>"
+fi
+
 echo "$FILE_NAME"
 #Find the logged in user
 LOGGED_USER=$(stat -f %Su /dev/console)
@@ -30,6 +43,12 @@ export FULL_PATH="/Users/$LOGGED_USER/.config/AWSVPNClient/OpenVpnConfigs/$FILE_
 
 echo "Getting SAML VPN Config for AWS Profile: $AWS_PROFILE"
 VPN_ID=$(aws ec2 describe-client-vpn-endpoints --query 'ClientVpnEndpoints[? Description == `private-subnets`].ClientVpnEndpointId' --output text)
+
+if [[ -z "$VPN_ID" ]]
+then
+  echo "Error finding VPN ID. Exiting..."
+  exit 1
+fi
 
 # Fetch the OVPN Config
 aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $VPN_ID --output text | sed '/auth-federate/d' > /Users/$LOGGED_USER/.config/AWSVPNClient/OpenVpnConfigs/"$FILE_NAME"
