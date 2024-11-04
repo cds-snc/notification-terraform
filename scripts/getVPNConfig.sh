@@ -6,12 +6,12 @@ while getopts 'c:u:' opt; do
   case "$opt" in
     c)
       CREATE=true
-      FILE_NAME=${OPTARG}
+      export FILE_NAME=${OPTARG}
       ;;
 
     u)
       UPDATE=true
-      FILE_NAME=${OPTARG}
+      export FILE_NAME=${OPTARG}
       ;;
 
     ?|h)
@@ -42,7 +42,7 @@ LOGGED_USER=$(stat -f %Su /dev/console)
 export FULL_PATH="/Users/$LOGGED_USER/.config/AWSVPNClient/OpenVpnConfigs/$FILE_NAME"
 
 echo "Getting SAML VPN Config for AWS Profile: $AWS_PROFILE"
-VPN_ID=$(aws ec2 describe-client-vpn-endpoints --query 'ClientVpnEndpoints[? Description == `private-subnets`].ClientVpnEndpointId' --output text)
+export VPN_ID=$(aws ec2 describe-client-vpn-endpoints --query 'ClientVpnEndpoints[? Description == `private-subnets`].ClientVpnEndpointId' --output text)
 
 if [[ -z "$VPN_ID" ]]
 then
