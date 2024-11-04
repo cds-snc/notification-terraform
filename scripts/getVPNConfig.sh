@@ -30,11 +30,6 @@ fi
 
 shift $((OPTIND - 1))
 
-if (($# == 0))
-then
-echo "Usage: -c <profile name> for create -u for update <profile name>"
-fi
-
 echo "$FILE_NAME"
 #Find the logged in user
 LOGGED_USER=$(stat -f %Su /dev/console)
