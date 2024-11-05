@@ -94,8 +94,7 @@ resource "aws_acmpca_certificate" "client_vpn" {
 
 data "external" "get_pca_arn" {
   # Get the PCA ARN
-  # Yes this is horrific. I'm sorry.
-  program = [var.env == "production" ? "../../../../../../../../scripts/getPCAARN.sh" : "../../../../../../../scripts/getPCAARN.sh"]
+  program = ["helper_scripts/getPCAARN.sh"]
 
 }
 
