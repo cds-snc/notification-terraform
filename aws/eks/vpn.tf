@@ -92,6 +92,18 @@ resource "aws_acmpca_certificate" "client_vpn" {
   }
 }
 
+data "external" "get_pca_arn" {
+  # Get the PCA ARN
+  # Yes this is horrific. I'm sorry.
+  program = [var.env == "production" ? "../../../../../../../../scripts/getPCAARN.sh" : "../../../../../../../scripts/getPCAARN.sh"]
+
+}
+
+import {
+  to = aws_acmpca_certificate_authority.client_vpn
+  id = data.external.get_pca_arn.result.arn
+}
+
 resource "aws_acmpca_certificate_authority" "client_vpn" {
   type = "ROOT"
 

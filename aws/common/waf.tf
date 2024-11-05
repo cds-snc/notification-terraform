@@ -98,7 +98,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids"
+    regex_string = var.env == "production" ? "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids" : "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids|/_storybook.*"
   }
 
   tags = {
