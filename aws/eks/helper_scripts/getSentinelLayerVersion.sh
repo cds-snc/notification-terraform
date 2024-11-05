@@ -19,6 +19,11 @@ VERSION=$(aws lambda list-layer-versions \
   --query "max_by(LayerVersions, &Version)" | \
   jq '.Version')
 
+if [-z "$VERSION"]; then
+  echo "Error: Could not get the latest version of the aws-sentinel-connector-layer"
+  exit 1
+fi
+
 jq --null-input \
   --arg version "$VERSION" \
   '{"version": $version}'
