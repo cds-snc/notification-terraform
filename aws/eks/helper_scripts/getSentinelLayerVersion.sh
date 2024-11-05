@@ -27,4 +27,3 @@ fi
 jq --null-input \
   --arg version "$VERSION" \
   '{"version": $version}'
-  
