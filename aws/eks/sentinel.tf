@@ -4,6 +4,13 @@ locals {
   blazer_log_group_arn      = "arn:aws:logs:${var.region}:${var.account_id}:log-group:blazer"
 }
 
+data "external" "get_sentinel_layer_version" {
+  # Get the Latest Sentinel Layer version
+  program = ["helper_scripts/getSentinelLayerVersion.sh", var.sentinel_sre_aws_account_id]
+
+}
+
+
 # The sentinel_forwarder module fails to Terraform apply if the layer_arn being used is not the most recently published layer version
 # see https://github.com/cds-snc/terraform-modules/issues/203 
 # and https://docs.google.com/document/d/16LLelZ7WEKrnbocrl0Az74JqkCv5DBZ9QILRBUFJQt8/edit#heading=h.z87ipkd84djw
@@ -12,7 +19,7 @@ module "sentinel_forwarder" {
   function_name     = "sentinel-cloud-watch-forwarder"
   billing_tag_value = "notification-canada-ca-${var.env}"
 
-  layer_arn = "arn:aws:lambda:ca-central-1:${var.sentinel_sre_aws_account_id}:layer:aws-sentinel-connector-layer:${var.sentinel_layer_version}"
+  layer_arn = "arn:aws:lambda:ca-central-1:${var.sentinel_sre_aws_account_id}:layer:aws-sentinel-connector-layer:${data.external.get_sentinel_layer_version.result.version}"
 
   customer_id = var.sentinel_customer_id
   shared_key  = var.sentinel_shared_key
