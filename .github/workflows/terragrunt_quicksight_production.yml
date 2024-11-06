@@ -4,8 +4,8 @@ on:
   # This will be used to dispatch this workflow from the manifest repo when environment variables change
   workflow_dispatch:
   schedule:
-    # 03:00 UTC = 22:00 EST
-    - cron: "0 3 * * 1-4"
+    # 02:00 UTC = 21:00 EST
+    - cron: "0 2 * * 1-4"
 
 defaults:
   run:
