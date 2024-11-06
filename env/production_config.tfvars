@@ -79,7 +79,6 @@ slack_channel_general_topic  = "notification-ops"
 ## MONITORING
 athena_workgroup_name    = "primary"
 aws_config_recorder_name = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version   = "169"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"

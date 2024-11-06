@@ -410,10 +410,6 @@ variable "sentinel_shared_key" {
   sensitive = true
 }
 
-variable "sentinel_layer_version" {
-  type = string
-}
-
 variable "sentinel_sre_aws_account_id" {
   type      = string
   sensitive = true
