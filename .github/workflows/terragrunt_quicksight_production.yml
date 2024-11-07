@@ -1,0 +1,56 @@
+name: "Release Quicksight To Production"
+
+on:
+  # This will be used to dispatch this workflow from the manifest repo when environment variables change
+  workflow_dispatch:
+  schedule:
+    # 02:00 UTC = 21:00 EST
+    - cron: "0 2 * * 1-4"
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  ACCOUNT_ID: ${{ secrets.PRODUCTION_ACCOUNT_ID }}
+  AWS_REGION: ca-central-1
+  ENVIRONMENT: production
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.PRODUCTION_OP_SERVICE_ACCOUNT_TOKEN }}
+  WORKFLOW: true
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+
+  terragrunt-apply-quicksight:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply                  
+
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws
+          cd aws
+          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
+
+      - name: terragrunt apply quicksight
+        run: |
+          cd env/${{env.ENVIRONMENT}}/quicksight
+          terragrunt apply --terragrunt-non-interactive -auto-approve
