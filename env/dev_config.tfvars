@@ -80,7 +80,6 @@ slack_channel_general_topic  = "notification-dev-ops"
 athena_workgroup_name             = "dev"
 cloudwatch_opsgenie_alarm_webhook = ""
 aws_config_recorder_name          = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version            = "169"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
