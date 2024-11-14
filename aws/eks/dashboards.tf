@@ -556,6 +556,20 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "title": "Failed Service Callbacks",
                 "view": "table"
             }
+        },
+        {
+            "type": "log",
+            "x": 12,
+            "y": 21,
+            "width": 12,
+            "height": 5,
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, @message, @logStream, @log,log_processed.firstTimestamp as timestamp, log_processed.involvedObject.name as pod, log_processed.involvedObject.namespace as namespace, log_processed.reason as reason, log_processed.type as level\n| filter kubernetes.container_name like /k8s-event-logger/\n| filter log_processed.involvedObject.kind like /Pod/\n| filter log_processed.type not like /Normal/\n| display timestamp, pod, namespace, reason, level\n| sort @timestamp desc\n| limit 100",
+                "region": "ca-central-1",
+                "stacked": false,
+                "view": "table",
+                "title": "Abnormal Kubernetes Events"
+            }
         }
     ]
 }
