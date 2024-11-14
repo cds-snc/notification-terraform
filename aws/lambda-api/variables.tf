@@ -73,3 +73,13 @@ variable "alb_arn_suffix" {
   type        = string
   description = "Suffix of the EKS ALB ARN. Used for dashboards."
 }
+
+variable "postgres_cluster_endpoint" {
+  type        = string
+  description = "Postgres cluster endpoint"
+}
+
+variable "redis_primary_endpoint_address" {
+  type        = string
+  description = "Primary endpoint address of the redis cluster"
+}
