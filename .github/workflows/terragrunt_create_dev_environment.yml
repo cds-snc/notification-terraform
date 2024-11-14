@@ -400,7 +400,7 @@ jobs:
             cd env/${{env.ENVIRONMENT}}/rds
             terragrunt apply --terragrunt-non-interactive -auto-approve
 
-  # terragrunt-apply-lambda-api:
+  terragrunt-apply-lambda-api:
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
