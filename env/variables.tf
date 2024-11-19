@@ -990,3 +990,23 @@ variable "github_app_pem_file" {
   type      = string
   sensitive = true
 }
+
+variable "notify_dev_slack_webhook" {
+  type      = string
+  sensitive = true
+}
+
+variable "op_service_account_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "aws_access_key_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "aws_secret_access_key"  {
+  type      = string
+  sensitive = true
+}
