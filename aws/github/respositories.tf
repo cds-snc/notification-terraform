@@ -1,23 +1,23 @@
 data "github_repository" "notification_terraform" {
-  full_name = "cds-snc/notification-terraform"
+  name = "notification-terraform"
 }
 
 data "github_repository" "notification_manifests" {
-  full_name = "cds-snc/notification-manifests"
+  name = "notification-manifests"
 }
 
 data "github_repository" "notification_admin" {
-  full_name = "cds-snc/notification-admin"
+  name = "notification-admin"
 }
 
 data "github_repository" "notification_api" {
-  full_name = "cds-snc/notification-api"
+  name = "notification-api"
 }
 
 data "github_repository" "notification_documentation" {
-  full_name = "cds-snc/notification-documentation"
+  name = "notification-documentation"
 }
 
 data "github_repository" "notification_document_download" {
-  full_name = "cds-snc/notification-document-download"
+  name = "notification-document-download"
 }

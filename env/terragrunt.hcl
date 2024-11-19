@@ -97,7 +97,14 @@ provider "aws" {
 }
 %{ endif }
 
-provider "github" {}
+provider "github" {
+  owner = "cds-snc"
+  app_auth {
+    id              = ${local.secret_inputs.github_app_id}
+    installation_id = ${local.secret_inputs.github_app_installation_id}
+    pem_file        = "${base64decode(local.secret_inputs.github_app_pem_file)}"
+  }
+}
 
 EOF
 }
