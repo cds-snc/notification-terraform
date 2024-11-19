@@ -36,6 +36,10 @@ terraform {
       source  = "newrelic/newrelic"
       version = "~> 3.3"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
+    }
   }
 }
 
@@ -92,6 +96,8 @@ provider "aws" {
   }
 }
 %{ endif }
+
+provider "github" {}
 
 EOF
 }
