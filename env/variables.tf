@@ -994,6 +994,13 @@ variable "github_app_pem_file" {
 variable "notify_dev_slack_webhook" {
   type      = string
   sensitive = true
+  default   = "prodonly"
+}
+
+variable "openai_api_key" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
 }
 
 variable "op_service_account_token" {
