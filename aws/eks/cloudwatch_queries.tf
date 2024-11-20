@@ -230,7 +230,7 @@ resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
 
   query_string = <<QUERY
 filter @message like /Total gunicorn running time/
-| parse @message /Total gunicorn running time: (?<@gunicorn_time>.*?) seconds/
+| parse @message /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
 | order by @timestamp asc
 | display @timestamp, @gunicorn_time
 QUERY
