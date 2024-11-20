@@ -48,6 +48,7 @@ jobs:
       system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}
       newrelic: ${{ steps.filter.outputs.newrelic }}
       manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
+      github: ${{ steps.filter.outputs.github }}
 
     steps:
       - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
@@ -955,7 +956,7 @@ jobs:
       needs.terragrunt-filter.outputs.github == 'true' &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-filter]
+    needs: [terragrunt-filter,terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "github"
