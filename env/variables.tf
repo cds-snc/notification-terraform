@@ -975,3 +975,45 @@ variable "manifest_cypress_auth_client_secret" {
   type      = string
   sensitive = true
 }
+
+variable "github_app_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "github_app_installation_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "github_app_pem_file" {
+  type      = string
+  sensitive = true
+}
+
+variable "notify_dev_slack_webhook" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
+}
+
+variable "openai_api_key" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
+}
+
+variable "op_service_account_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "aws_access_key_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "aws_secret_access_key" {
+  type      = string
+  sensitive = true
+}
