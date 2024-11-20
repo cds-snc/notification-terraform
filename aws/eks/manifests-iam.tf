@@ -351,3 +351,57 @@ resource "aws_iam_role_policy_attachment" "document_download_worker" {
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.document_download.name
 }
+
+#
+# Celery
+#
+#
+# NOTIFY-Celery
+#
+
+data "aws_iam_policy_document" "assume_role_policy_celery" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:notification-canada-ca:notify-celery"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "celery" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_celery.json
+  name               = "celery-eks-role"
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "secrets_csi_celery" {
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.celery.name
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "parameters_csi_celery" {
+  policy_arn = aws_iam_policy.parameters_csi.arn
+  role       = aws_iam_role.celery.name
+}
+
+resource "aws_iam_role_policy_attachment" "celery_worker" {
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.celery.name
+}
