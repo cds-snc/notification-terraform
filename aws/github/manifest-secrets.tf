@@ -18,13 +18,6 @@ resource "github_actions_secret" "manifests_op_service_account_token" {
   plaintext_value = var.op_service_account_token
 }
 
-resource "github_actions_secret" "manifests_production_api_url" {
-  count           = var.env == "production" ? 1 : 0
-  repository      = data.github_repository.notification_manifests.name
-  secret_name     = "PRODUCTION_API_URL"
-  plaintext_value = var.op_service_account_token
-}
-
 resource "github_actions_secret" "manifests_aws_access_key_id" {
   count           = var.env == "production" || var.env == "staging" ? 1 : 0
   repository      = data.github_repository.notification_manifests.name
