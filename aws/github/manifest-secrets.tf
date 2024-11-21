@@ -50,14 +50,14 @@ resource "github_actions_secret" "manifests_cache_clear_client_secret" {
   count           = var.env == "production" || var.env == "staging" ? 1 : 0
   repository      = data.github_repository.notification_manifests.name
   secret_name     = "${upper(var.env)}_CACHE_CLEAR_CLIENT_SECRET"
-  plaintext_value = var.cache_clear_client_secret
+  plaintext_value = var.manifest_cache_clear_client_secret
 }
 
 resource "github_actions_secret" "manifests_cache_clear_user_name" {
   count           = var.env == "production" || var.env == "staging" ? 1 : 0
   repository      = data.github_repository.notification_manifests.name
   secret_name     = "${upper(var.env)}_CACHE_CLEAR_USER_NAME"
-  plaintext_value = var.cache_clear_user_name
+  plaintext_value = var.manifest_cache_clear_user_name
 }
 
 resource "github_actions_secret" "manifests_new_relic_api_key" {
