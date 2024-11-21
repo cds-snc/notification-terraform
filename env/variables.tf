@@ -946,12 +946,6 @@ variable "manifest_sre_client_secret" {
   sensitive = true
 }
 
-variable "manifest_cache_clear_user_name" {
-  type      = string
-  sensitive = true
-  default   = "prodstagingonly"
-}
-
 variable "manifest_cache_clear_client_secret" {
   type      = string
   sensitive = true
