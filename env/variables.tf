@@ -1017,3 +1017,15 @@ variable "aws_secret_access_key" {
   type      = string
   sensitive = true
 }
+
+variable "cache_clear_client_secret" {
+  type      = string
+  sensitive = true
+  default   = "prodstagingonly"
+}
+
+variable "cache_clear_user_name" {
+  type      = string
+  sensitive = true
+  default   = "prodstagingonly"
+}
