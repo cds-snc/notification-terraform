@@ -71,5 +71,5 @@ resource "github_actions_secret" "pr_bot_github_token" {
   count           = var.env == "staging" ? 1 : 0
   repository      = data.github_repository.notification_manifests.name
   secret_name     = "PR_BOT_GITHUB_TOKEN"
-  plaintext_value = var.manifests_pr_bot_github_token
+  plaintext_value = var.manifest_pr_bot_github_token
 }
