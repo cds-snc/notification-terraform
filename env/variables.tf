@@ -988,6 +988,12 @@ variable "manifest_smoke_admin_client_secret" {
   default   = "stagingonly"
 }
 
+variable "manifest_pr_bot_github_token" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
 variable "github_app_id" {
   type      = string
   sensitive = true
