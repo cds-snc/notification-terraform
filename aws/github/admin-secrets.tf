@@ -15,7 +15,7 @@ resource "github_actions_secret" "admin_aws_access_key" {
 resource "github_actions_secret" "admin_aws_secret_access_key" {
   count           = var.env == "production" || var.env == "staging" ? 1 : 0
   repository      = data.github_repository.notification_admin.name
-  secret_name     = "${upper(var.env)}_AWS_SECRET_ACCESS_KEY_ID"
+  secret_name     = "${upper(var.env)}_AWS_SECRET_ACCESS_KEY"
   plaintext_value = var.aws_secret_access_key
 }
 
