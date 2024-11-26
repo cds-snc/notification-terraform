@@ -14,7 +14,7 @@ dependency "lambda-admin-pr" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    admin_pr_review_env_security_group_ids = "sg-1234567890abcdef0"
+    admin_pr_security_group_id = "sg-1234567890abcdef0"
   }
 }
 
@@ -26,7 +26,7 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    admin_pr_review_env_subnet_ids = "subnet-1234567890abcdef0,subnet-1234567890abcdef1"
+    vpc_private_subnets = "subnet-1234567890abcdef0,subnet-1234567890abcdef1"
   }
 }
 
