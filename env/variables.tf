@@ -1039,7 +1039,7 @@ variable "aws_secret_access_key" {
 variable "admin_cypress_env_json" {
   type      = string
   sensitive = true
-  default   = "stagingonly"
+  default   = "c3RhZ2luZ29ubHkK"
 }
 
 variable "admin_pr_review_env_security_group_ids" {
