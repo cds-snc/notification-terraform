@@ -66,3 +66,10 @@ resource "github_actions_secret" "smoke_api_key" {
   secret_name     = "SMOKE_API_KEY"
   plaintext_value = var.manifest_smoke_api_key
 }
+
+resource "github_actions_secret" "pr_bot_github_token" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_manifests.name
+  secret_name     = "PR_BOT_GITHUB_TOKEN"
+  plaintext_value = var.manifest_pr_bot_github_token
+}
