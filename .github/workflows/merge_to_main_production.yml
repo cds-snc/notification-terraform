@@ -721,5 +721,5 @@ jobs:
 
       - name: terragrunt apply github
         run: |
-          cd env/${{env.ENVIRONMENT}}/manifest_secrets
+          cd env/${{env.ENVIRONMENT}}/github
           terragrunt apply --terragrunt-non-interactive -auto-approve      
