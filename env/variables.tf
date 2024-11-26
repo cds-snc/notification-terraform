@@ -1035,3 +1035,27 @@ variable "aws_secret_access_key" {
   type      = string
   sensitive = true
 }
+
+variable "admin_cypress_env_json" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
+variable "admin_pr_review_env_security_group_ids" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
+variable "admin_pr_review_env_subnet_ids" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
+variable "admin_a11y_tracker_key" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
+}
