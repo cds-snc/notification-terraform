@@ -976,7 +976,7 @@ variable "manifest_cypress_auth_client_secret" {
   sensitive = true
 }
 
-variable "manifest_smoke_admin_api_key" {
+variable "manifest_smoke_api_key" {
   type      = string
   sensitive = true
   default   = "stagingonly"
