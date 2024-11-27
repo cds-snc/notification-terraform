@@ -23,7 +23,7 @@ jobs:
     - name: Configure AWS credentials using OIDC
       uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
       with:
-        role-to-assume: arn:aws:iam::${{ secrets.STAGING_ACCOUNT_ID }}:role/notification-terraform-apply
+        role-to-assume: arn:aws:iam::${{ secrets.STAGING_AWS_ACCOUNT_ID }}:role/notification-terraform-apply
         role-session-name: RDSClusterUpdateCheck
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 

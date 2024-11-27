@@ -1,6 +1,6 @@
 resource "github_actions_secret" "api_account_id" {
   repository      = data.github_repository.notification_api.name
-  secret_name     = "${upper(var.env)}_ACCOUNT_ID"
+  secret_name     = "${upper(var.env)}_AWS_ACCOUNT_ID"
   plaintext_value = var.account_id
 }
 
