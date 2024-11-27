@@ -18,7 +18,7 @@ defaults:
     shell: bash
 
 env:
-  ACCOUNT_ID: ${{ secrets.STAGING_ACCOUNT_ID }}
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
   ENVIRONMENT: staging
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
@@ -40,7 +40,7 @@ jobs:
 
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{env.STAGING_AWS_ACCOUNT_ID}}:role/notification-terraform-apply
           role_session_name: NotifyTerraformDevApply
 
       - name: Install 1Pass CLI
