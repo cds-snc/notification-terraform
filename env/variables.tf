@@ -1060,3 +1060,8 @@ variable "admin_a11y_tracker_key" {
   default   = "prodonly"
 }
 
+variable "ipv4_maxmind_license_key" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
+}
