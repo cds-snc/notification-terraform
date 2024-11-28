@@ -21,3 +21,7 @@ data "github_repository" "notification_documentation" {
 data "github_repository" "notification_document_download" {
   name = "notification-document-download-api"
 }
+
+data "github_repository" "ipv4_geolocate" {
+  name = "ipv4-geolocate-webservice"
+}
