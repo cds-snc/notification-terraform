@@ -19,5 +19,5 @@ data "github_repository" "notification_documentation" {
 }
 
 data "github_repository" "notification_document_download" {
-  name = "notification-document-download"
+  name = "notification-document-download-api"
 }
