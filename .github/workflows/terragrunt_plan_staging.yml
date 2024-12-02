@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
+      config: ${{ steps.filter.outputs.config }}
       common: ${{ steps.filter.outputs.common }}
       ecr: ${{ steps.filter.outputs.ecr }}
       ecr-us-east: ${{ steps.filter.outputs.ecr-us-east }}
@@ -55,6 +56,8 @@ jobs:
         id: filter
         with:
           filters: |
+            config:
+              - 'env/*.tfvars'
             common:
               - '.github/workflows/terragrunt-plan-${{env.ENVIRONMENT}}.yml'
               - 'aws/common/**'
@@ -135,7 +138,8 @@ jobs:
 
   terragrunt-plan-common:
     if: |
-      needs.terragrunt-filter.outputs.common == 'true'
+      needs.terragrunt-filter.outputs.common == 'true' || 
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
     runs-on: ubuntu-latest  
     env:
@@ -169,7 +173,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ecr == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
     runs-on: ubuntu-latest 
     env:
@@ -204,7 +209,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ecr-us-east == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
     runs-on: ubuntu-latest 
     env:
@@ -240,7 +246,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "ses_receiving_emails"
@@ -274,7 +281,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.dns == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "dns"
@@ -308,7 +316,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "ses_validation_dns_entries"
@@ -342,7 +351,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.cloudfront == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common]
     env:
@@ -376,7 +386,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.eks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
     env:
@@ -410,7 +421,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.elasticache == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
     env:
@@ -444,7 +456,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.rds == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
     env:
@@ -478,7 +491,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.lambda-api == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
     env:
@@ -512,7 +526,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
     env:
@@ -546,7 +561,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.performance-test == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
@@ -581,7 +597,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.heartbeat == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
@@ -615,7 +632,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.database-tools == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
@@ -649,7 +667,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.quicksight == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
@@ -683,7 +702,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
@@ -717,7 +737,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
@@ -751,7 +772,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
@@ -785,7 +807,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
@@ -819,7 +842,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.system_status == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
     env:
@@ -853,7 +877,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.system_status_static_site == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-system_status]
     runs-on: ubuntu-latest  
     env:
@@ -887,7 +912,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.newrelic == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-common]
     runs-on: ubuntu-latest  
     env:
@@ -921,7 +947,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
     runs-on: ubuntu-latest  
     env:
@@ -955,7 +982,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.github == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
     runs-on: ubuntu-latest  
     env:
