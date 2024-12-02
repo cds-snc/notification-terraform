@@ -117,6 +117,9 @@ aws events delete-rule --name weeklyBudgetSpend
 aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
 aws events delete-rule --name google_cidr_testing
 
+AWS_REGION=us-east-1  aws ses set-active-receipt-rule-set
+
+AWS_REGION=us-east-1 aws ses delete-receipt-rule-set --rule-set-name main
 
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."
