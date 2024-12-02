@@ -138,6 +138,5 @@ for identity in $US_IDENTITIES; do
   echo "Done."
 done
 
-
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."
