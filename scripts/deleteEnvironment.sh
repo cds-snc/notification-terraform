@@ -117,6 +117,26 @@ aws events delete-rule --name weeklyBudgetSpend
 aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
 aws events delete-rule --name google_cidr_testing
 
+AWS_REGION=us-east-1  aws ses set-active-receipt-rule-set
+AWS_REGION=us-east-1 aws ses delete-receipt-rule-set --rule-set-name main
+
+IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
+
+for identity in $IDENTITIES; do
+  echo "Deleting ses email identity $identity"
+  aws sesv2 delete-email-identity --email-identity $identity
+  echo "Done."
+done
+
+# We have to switch to US-EAST-1 to delete the email identities
+export AWS_REGION=us-east-1
+US_IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
+
+for identity in $US_IDENTITIES; do
+  echo "Deleting ses email identity $identity"
+  aws sesv2 delete-email-identity --email-identity $identity
+  echo "Done."
+done
 
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."
