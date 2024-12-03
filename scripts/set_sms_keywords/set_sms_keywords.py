@@ -66,7 +66,7 @@ keywords_to_set = [
     },
     {
         "Keyword": "AIDE",
-        "KeywordMessage": "GC Notify: Visitez https://notification.canada.ca/contact Frais de msg/donnée std applicables. La fréquence des messages peut varier. Textez ARRET pour annuler.",
+        "KeywordMessage": "GC Notify: Visitez https://notification.canada.ca/contact Frais de msg/donnée std applicables. La fréquence des messages peut varier. Textez ARRÊT pour annuler.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
     },
     {
