@@ -51,17 +51,17 @@ keywords_to_set = [
     },
     {
         "Keyword": "ABONNER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pourvous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "ABONER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pourvous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "ABONNNER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pourvous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
