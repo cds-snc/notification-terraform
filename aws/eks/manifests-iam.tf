@@ -142,53 +142,6 @@ resource "aws_iam_role_policy_attachment" "parameters_csi_blazer" {
 }
 
 #
-# GITHUB
-#
-
-data "aws_iam_policy_document" "secrets_csi_assume_role_policy_github" {
-  statement {
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    effect  = "Allow"
-
-    condition {
-      test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:github-arc-controller:github-arc-gha-rs-controller"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
-      values   = ["sts.amazonaws.com"]
-    }
-
-    principals {
-      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
-      type        = "Federated"
-    }
-  }
-}
-
-# Role
-resource "aws_iam_role" "secrets_csi_github" {
-  assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy_github.json
-  name               = "secrets-csi-role-github"
-}
-
-
-# Policy Attachment
-resource "aws_iam_role_policy_attachment" "secrets_csi_github" {
-  policy_arn = aws_iam_policy.secrets_csi.arn
-  role       = aws_iam_role.secrets_csi_github.name
-}
-
-# Policy Attachment
-resource "aws_iam_role_policy_attachment" "parameters_csi_github" {
-  policy_arn = aws_iam_policy.parameters_csi.arn
-  role       = aws_iam_role.secrets_csi_github.name
-}
-
-#
 # API
 #
 #
