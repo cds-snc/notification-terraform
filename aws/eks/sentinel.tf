@@ -43,6 +43,7 @@ resource "aws_cloudwatch_log_subscription_filter" "admin_api_request" {
 
 resource "aws_cloudwatch_log_subscription_filter" "blazer_logging" {
   count           = var.cloudwatch_enabled ? 1 : 0
+  depends_on      = [aws_cloudwatch_log_group.blazer]
   name            = "Blazer logging"
   log_group_name  = "blazer"
   filter_pattern  = "Audit "

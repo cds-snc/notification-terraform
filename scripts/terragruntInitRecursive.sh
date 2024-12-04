@@ -18,7 +18,6 @@ runCommand()
 toApply="common,ecr,ses_receiving_emails,dns,ses_validation_dns_entries,cloudfront,eks,elasticache,rds,lambda-api,lambda-admin-pr,performance-test,heartbeat,database-tools,lambda-google-cidr,ses_to_sqs_email_callbacks,sns_to_sqs_sms_callbacks"
 
 ENVIRONMENT=$1
-VARFILE=$2
 
 IFS=', ' read -r -a folders <<< "$toApply"
 
