@@ -137,7 +137,7 @@ variable "manifest_new_api_key" {
 }
 ```
 
-3. Create an AWS Secret and AWS Secret Version in the manfifest_secrets terraform folder
+3. Create an AWS Secret and AWS Secret Version in the manifest_secrets terraform folder
 
 ```terraform
 resource "aws_secretsmanager_secret" "manifest_new_api_key" {
