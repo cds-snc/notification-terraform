@@ -6,7 +6,7 @@ billing_tag_value    = "notification-canada-ca-dev"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
-primary_worker_desired_size     = 4
+primary_worker_desired_size     = 5
 primary_worker_instance_types   = ["m5.large"]
 secondary_worker_instance_types = ["m5.large"]
 node_upgrade                    = false
@@ -48,7 +48,7 @@ bootstrap                  = true
 enable_sentinel_forwarding = true
 enable_delete_protection   = false
 api_enable_new_relic       = false
-cloudwatch_enabled         = false
+cloudwatch_enabled         = true
 recovery                   = true
 aws_xray_sdk_enabled       = true
 
