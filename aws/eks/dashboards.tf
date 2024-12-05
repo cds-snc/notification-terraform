@@ -12,8 +12,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-email-send-primary", { "region": "${var.region}", "label": "celery-email-send-primary" } ],
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-email-send-scalable", { "region": "${var.region}", "label": "celery-email-send-scalable" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-celery-email-send-primary", { "region": "${var.region}", "label": "notify-celery-email-send-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-celery-email-send-scalable", { "region": "${var.region}", "label": "notify-celery-email-send-scalable" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -48,7 +48,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 8,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^notify-celery/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Celery Errors",
@@ -130,7 +130,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "admin", { "label": "admin", "region": "${var.region}", "color": "#69ae34" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-admin", { "label": "notify-admin", "region": "${var.region}", "color": "#69ae34" } ],
                     [ "...", "document-download-api", { "region": "${var.region}", "label": "document-download-api" } ],
                     [ "...", "documentation", { "region": "${var.region}", "label": "documentation" } ],
                     [ "...", "api", { "region": "${var.region}", "label": "api-k8s" } ]
@@ -300,7 +300,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error) as errors by bin(1m)\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^notify-celery/\n| fields strcontains(@message, 'ERROR') as is_error\n| stats sum(is_error) as errors by bin(1m)\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Celery errors",
@@ -314,7 +314,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /^celery/\n| fields @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/ as is_error\n| stats sum(is_error) as errors by bin(1m)\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /^notify-celery/\n| fields @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/ as is_error\n| stats sum(is_error) as errors by bin(1m)\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "500s",
@@ -328,7 +328,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 8,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /celery/\n| filter @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/\n| sort @timestamp desc\n| limit 20\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name not like /notify-celery/\n| filter @message like /HTTP\\/\\d+\\.\\d+\\\\\" 50\\d/\n| sort @timestamp desc\n| limit 20\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "500s",
@@ -343,7 +343,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-primary", { "region": "${var.region}", "label": "celery-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-celery-primary", { "region": "${var.region}", "label": "notify-celery-primary" } ],
                     [ "...", "celery-scalable", { "region": "${var.region}", "label": "celery-scalable" } ]
                 ],
                 "sparkline": true,
@@ -362,7 +362,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "celery-sms-send-primary", { "region": "${var.region}", "label": "celery-sms-send-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-celery-sms-send-primary", { "region": "${var.region}", "label": "notify-celery-sms-send-primary" } ],
                     [ "...", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
                 ],
                 "sparkline": true,
@@ -550,7 +550,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | filter kubernetes.container_name like /^celery/\n| filter @message like /send_delivery_status_to_service request failed for notification_id/\n| parse log \"to url: https://* service: * exc: * \" as endpoint, service_id, error\n| stats count() as fails by service_id, endpoint, error\n| display fails, service_id, error, endpoint\n| order by fails desc\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | filter kubernetes.container_name like /^notify-celery/\n| filter @message like /send_delivery_status_to_service request failed for notification_id/\n| parse log \"to url: https://* service: * exc: * \" as endpoint, service_id, error\n| stats count() as fails by service_id, endpoint, error\n| display fails, service_id, error, endpoint\n| order by fails desc\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Failed Service Callbacks",
@@ -919,7 +919,7 @@ resource "aws_cloudwatch_dashboard" "errors" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.labels.app like /^celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.labels.app like /^notify-celery/\n| filter @message like /ERROR\\/.*Worker/\n| sort @timestamp desc\n| limit 20\n",
                 "region": "${var.region}",
                 "title": "Celery errors",
                 "view": "table"
@@ -1021,7 +1021,7 @@ resource "aws_cloudwatch_dashboard" "kubernetes" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights", "pod_memory_utilization_over_pod_limit", "PodName", "admin", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "Namespace", "notification-canada-ca" ],
+                    [ "ContainerInsights", "pod_memory_utilization_over_pod_limit", "PodName", "notify-admin", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "Namespace", "notification-canada-ca" ],
                     [ "...", "api", ".", ".", ".", "." ],
                     [ "...", "celery", ".", ".", ".", "." ],
                     [ "...", "document-download-api", ".", ".", ".", "." ]
@@ -1053,12 +1053,12 @@ resource "aws_cloudwatch_dashboard" "kubernetes" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights", "pod_cpu_utilization", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "Service", "api", "Namespace", "notification-canada-ca", { "yAxis": "right", "stat": "Average" } ],
-                    [ "...", "celery", ".", ".", { "yAxis": "right", "stat": "Average" } ],
-                    [ "...", "admin", ".", ".", { "stat": "Average", "yAxis": "right" } ],
-                    [ ".", "service_number_of_running_pods", ".", ".", ".", "celery", ".", ".", { "yAxis": "left" } ],
-                    [ "...", "api", ".", ".", { "yAxis": "left" } ],
-                    [ "...", "admin", ".", "." ]
+                    [ "ContainerInsights", "pod_cpu_utilization", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "Service", "notify-api", "Namespace", "notification-canada-ca", { "yAxis": "right", "stat": "Average" } ],
+                    [ "...", "notify-celery", ".", ".", { "yAxis": "right", "stat": "Average" } ],
+                    [ "...", "notify-admin", ".", ".", { "stat": "Average", "yAxis": "right" } ],
+                    [ ".", "service_number_of_running_pods", ".", ".", ".", "notify-celery", ".", ".", { "yAxis": "left" } ],
+                    [ "...", "notify-api", ".", ".", { "yAxis": "left" } ],
+                    [ "...", "notify-admin", ".", "." ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
