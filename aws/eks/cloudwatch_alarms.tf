@@ -464,7 +464,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-primary-replicas-unavailable" {
   alarm_description   = "Celery Primary Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -493,7 +493,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-scalable-replicas-unavailable" {
   alarm_description   = "Celery Scalable Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -521,7 +521,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
   alarm_description   = "Celery Beat Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -549,7 +549,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
   alarm_description   = "Celery SMS Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -577,7 +577,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-primary-replicas-unava
   alarm_description   = "Celery Email Send Primary Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -606,7 +606,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unav
   alarm_description   = "Celery Email Send Scalable Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -634,7 +634,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-primary-replicas-unavail
   alarm_description   = "Celery SMS Send Primary Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -663,7 +663,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavai
   alarm_description   = "Celery SMS Send Scalable Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -691,7 +691,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
   alarm_description   = "Notify Admin Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -719,7 +719,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
   alarm_description   = "Notify K8S API Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -747,7 +747,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
   alarm_description   = "Notify Documentation Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -775,7 +775,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
   alarm_description   = "Notify Document Download API Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
@@ -806,7 +806,7 @@ resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "notBreaching"
+  treat_missing_data        = "breaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -823,7 +823,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "notBreaching"
+  treat_missing_data        = "breaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -840,7 +840,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "notBreaching"
+  treat_missing_data        = "breaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -857,7 +857,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "notBreaching"
+  treat_missing_data        = "breaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -874,7 +874,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "notBreaching"
+  treat_missing_data        = "breaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -888,7 +888,7 @@ resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
   alarm_description   = "Karpenter Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "breaching"
   threshold          = 1
 
   metric_query {
