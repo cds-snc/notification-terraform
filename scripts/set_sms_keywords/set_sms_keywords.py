@@ -10,14 +10,64 @@ Set the keywords for phone numbers and pools.
 
 keywords_to_set = [
     {
-        "Keyword": "AIDE",
-        "KeywordMessage": "GC Notify: Visitez https://notification.canada.ca/contact Frais de msg/donnée std applicables. La fréquence des messages peut varier. Textez ARRET pour annuler.",
-        "KeywordAction": "AUTOMATIC_RESPONSE",
+        "Keyword": "STOP",
+        "KeywordMessage": "The Government of Canada will no longer text you from GC Notify. To resubscribe, text START. Standard message and data rates apply.",
+        "KeywordAction": "OPT_OUT",
+    },
+    {
+        "Keyword": "START",
+        "KeywordMessage": "You subscribed to texts from GC Notify. To unsubscribe, text STOP. Standard message and data rates apply.",
+        "KeywordAction": "OPT_IN",
+    },
+    {
+        "Keyword": "ARRÊT",
+        "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
+        "KeywordAction": "OPT_OUT",
+    },
+    {
+        "Keyword": "ARÊT",
+        "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
+        "KeywordAction": "OPT_OUT",
+    },
+    {
+        "Keyword": "ARRRÊT",
+        "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
+        "KeywordAction": "OPT_OUT",
     },
     {
         "Keyword": "ARRET",
-        "KeywordMessage": "GC Notify: Vous êtes désinscrit des notifications du gouvernement du Canada. Frais de msg/donnée std applicables.",
+        "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
         "KeywordAction": "OPT_OUT",
+    },
+    {
+        "Keyword": "ARET",
+        "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
+        "KeywordAction": "OPT_OUT",
+    },
+    {
+        "Keyword": "ARRRET",
+        "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
+        "KeywordAction": "OPT_OUT",
+    },
+    {
+        "Keyword": "ABONNER",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordAction": "OPT_IN",
+    },
+    {
+        "Keyword": "ABONER",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordAction": "OPT_IN",
+    },
+    {
+        "Keyword": "ABONNNER",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordAction": "OPT_IN",
+    },
+    {
+        "Keyword": "AIDE",
+        "KeywordMessage": "GC Notify: Visitez https://notification.canada.ca/contact Frais de msg/donnée std applicables. La fréquence des messages peut varier. Textez ARRÊT pour annuler.",
+        "KeywordAction": "AUTOMATIC_RESPONSE",
     },
     {
         "Keyword": "HELP",
@@ -28,12 +78,7 @@ keywords_to_set = [
         "Keyword": "INFO",
         "KeywordMessage": "GC Notify: More info at https://notification.canada.ca Data rates apply. Plus d’informations à https://notification.canada.ca Frais de msg/donnée std applicables.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
-    },
-    {
-        "Keyword": "STOP",
-        "KeywordMessage": "GC Notify: You have been unsubscribed from the Government of Canada Notify. Std msg & data rates apply.",
-        "KeywordAction": "OPT_OUT",
-    },
+    }
 ]
 
 
