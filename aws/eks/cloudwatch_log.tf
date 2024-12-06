@@ -2,10 +2,10 @@
 # AWS EKS Cloudwatch groups
 ###
 
-import {
-  to = aws_cloudwatch_log_group.blazer[0]
-  id = "blazer"
-}
+# import {
+#   to = aws_cloudwatch_log_group.blazer[0]
+#   id = "blazer"
+# }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
@@ -25,11 +25,11 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-prometheus-logs"
   retention_in_days = var.log_retention_period_days
 }
 
-resource "aws_cloudwatch_log_group" "blazer" {
-  count             = var.cloudwatch_enabled ? 1 : 0
-  name              = "blazer"
-  retention_in_days = 1827 # 5 years
-}
+# resource "aws_cloudwatch_log_group" "blazer" {
+#   count             = var.cloudwatch_enabled ? 1 : 0
+#   name              = "blazer"
+#   retention_in_days = 1827 # 5 years
+# }
 
 
 ###
