@@ -2,11 +2,6 @@
 # AWS EKS Cloudwatch groups
 ###
 
-import {
-  to = aws_cloudwatch_log_group.blazer[0]
-  id = "blazer"
-}
-
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/eks/${var.eks_cluster_name}/cluster"

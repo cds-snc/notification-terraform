@@ -489,11 +489,6 @@ variable "auth_tokens" {
   sensitive = true
 }
 
-variable "dangerous_salt" {
-  type      = string
-  sensitive = true
-}
-
 variable "ff_batch_insertion" {
   type = string
 }
@@ -504,15 +499,6 @@ variable "ff_cloudwatch_metrics_enabled" {
 
 variable "ff_redis_batch_saving" {
   type = string
-}
-
-variable "redis_url" {
-  type = string
-}
-
-variable "secret_key" {
-  type      = string
-  sensitive = true
 }
 
 variable "notify_sending_domain" {
