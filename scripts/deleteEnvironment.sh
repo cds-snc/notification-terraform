@@ -96,13 +96,14 @@ aws kms delete-alias --alias-name alias/s3_scan_object_queue
 
 aws iam delete-service-linked-role --role-name AWSServiceRoleForEC2Spot
 
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics / heartbeat`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - pinpoint_to_sqs_sms_callbacks`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - sns_to_sqs_sms_callbacks`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics / system_status`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - ses_to_sqs_email_callbacks`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - ses_receiving_emails`]'.queryDefinitionId --output text --region us-east-1) --region us-east-1
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`API / Services going over daily rate limits`]'.queryDefinitionId --output text)
+aws logs delete-log-group --log-group-name '/aws/eks/notification-canada-ca-dev-eks-cluster/cluster'
+aws logs delete-log-group --log-group-name '/aws/rds/cluster/notification-canada-ca-dev-cluster/postgresql'
+
+QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
+for query in $QUERIES; do
+  echo "Deleting cloudwatch query $query"
+  aws logs delete-query-definition --query-definition-id $query
+done
 
 aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-provider/client-vpn
 
@@ -136,6 +137,12 @@ for identity in $US_IDENTITIES; do
   echo "Deleting ses email identity $identity"
   aws sesv2 delete-email-identity --email-identity $identity
   echo "Done."
+done
+
+QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
+for query in $QUERIES; do
+  echo "Deleting cloudwatch query $query"
+  aws logs delete-query-definition --query-definition-id $query
 done
 
 echo "Done."
