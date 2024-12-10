@@ -806,7 +806,7 @@ resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "breaching"
+  treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -823,7 +823,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "breaching"
+  treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -840,7 +840,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "breaching"
+  treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -857,7 +857,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "breaching"
+  treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
@@ -874,7 +874,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
   period                    = "60"
   statistic                 = "Sum"
   threshold                 = 1
-  treat_missing_data        = "breaching"
+  treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]

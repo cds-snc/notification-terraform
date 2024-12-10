@@ -131,9 +131,9 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-admin", { "label": "notify-admin", "region": "${var.region}", "color": "#69ae34" } ],
-                    [ "...", "document-download-api", { "region": "${var.region}", "label": "document-download-api" } ],
-                    [ "...", "documentation", { "region": "${var.region}", "label": "documentation" } ],
-                    [ "...", "api", { "region": "${var.region}", "label": "api-k8s" } ]
+                    [ "...", "notify-document-download", { "region": "${var.region}", "label": "notify-document-download" } ],
+                    [ "...", "notify-documentation", { "region": "${var.region}", "label": "notify-documentation" } ],
+                    [ "...", "notify-api", { "region": "${var.region}", "label": "notify-api-k8s" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -344,7 +344,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-celery-primary", { "region": "${var.region}", "label": "notify-celery-primary" } ],
-                    [ "...", "celery-scalable", { "region": "${var.region}", "label": "celery-scalable" } ]
+                    [ "...", "notify-celery-scalable", { "region": "${var.region}", "label": "notify-celery-scalable" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -363,7 +363,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "notify-celery-sms-send-primary", { "region": "${var.region}", "label": "notify-celery-sms-send-primary" } ],
-                    [ "...", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
+                    [ "...", "notify-celery-sms-send-scalable", { "region": "${var.region}", "label": "notify-celery-sms-send-scalable" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -1022,9 +1022,9 @@ resource "aws_cloudwatch_dashboard" "kubernetes" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights", "pod_memory_utilization_over_pod_limit", "PodName", "notify-admin", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "Namespace", "notification-canada-ca" ],
-                    [ "...", "api", ".", ".", ".", "." ],
-                    [ "...", "celery", ".", ".", ".", "." ],
-                    [ "...", "document-download-api", ".", ".", ".", "." ]
+                    [ "...", "notify-api", ".", ".", ".", "." ],
+                    [ "...", "notify-celery", ".", ".", ".", "." ],
+                    [ "...", "notify-document-download", ".", ".", ".", "." ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
