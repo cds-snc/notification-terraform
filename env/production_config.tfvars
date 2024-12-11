@@ -89,7 +89,7 @@ google_cidr_schedule_expression = "rate(1 day)"
 
 ## RDS
 rds_instance_count = 3
-rds_instance_type  = "db.r6g.xlarge"
+rds_instance_type  = "db.r6g.2xlarge"
 rds_database_name  = "NotificationCanadaCaproduction"
 rds_version        = "15.5"
 
