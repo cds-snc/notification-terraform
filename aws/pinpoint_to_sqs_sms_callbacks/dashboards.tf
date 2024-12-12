@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_dashboard" "pinpoint" {
-  count          = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SMS-Pinpoint"
   dashboard_body = <<EOF
 {
@@ -543,7 +543,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "sms-send-rate" {
-  count          = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Specialized-sms-send-rate"
   dashboard_body = <<EOF
 {

@@ -5,7 +5,7 @@
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-1-500-error-1-minute-warning"
   alarm_description   = "One 500 error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -23,7 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-10-500-error-5-minutes-critical"
   alarm_description   = "Ten 500 errors in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -43,7 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-1-502-error-1-minute-warning"
   alarm_description   = "One 502 error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -61,7 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-10-502-error-5-minutes-critical"
   alarm_description   = "Ten 502 errors in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -80,7 +80,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-high-request-count-warning"
   alarm_description   = "More than 300 4XX requests in 10 minutes on ${aws_alb_target_group.notification-canada-ca-document-api.name} target group"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -99,7 +99,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-celery-error-1-minute-warning"
   alarm_description   = "One Celery error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -114,7 +114,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-1-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-celery-error-1-minute-critical"
   alarm_description   = "Ten Celery errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -130,7 +130,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning"
   alarm_description   = "One 500 error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -145,7 +145,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical"
   alarm_description   = "Ten 500 errors in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -161,7 +161,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "admin-pods-high-cpu-warning"
   alarm_description         = "Average CPU of admin pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -182,7 +182,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-pods-high-cpu-warning"
   alarm_description         = "Average CPU of API pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -203,7 +203,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-cpu-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-primary-pods-high-cpu-warning"
   alarm_description         = "Average CPU of Primary Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -224,7 +224,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-scalable-pods-high-cpu-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-scalable-pods-high-cpu-warning"
   alarm_description         = "Average CPU of Scalable Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -245,7 +245,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-scalable-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-sms-pods-high-cpu-warning"
   alarm_description         = "Average CPU of celery-sms pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -267,7 +267,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
 
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "admin-pods-high-memory-warning"
   alarm_description         = "Average memory of admin pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -288,7 +288,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-pods-high-memory-warning"
   alarm_description         = "Average memory of API pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -309,7 +309,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-memory-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-primary-pods-high-memory-warning"
   alarm_description         = "Average memory of Primary Celery pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -330,7 +330,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-memory-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-sms-pods-high-memory-warning"
   alarm_description         = "Average memory of celery-sms >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -351,7 +351,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "ddos-detected-load-balancer-critical"
   alarm_description   = "DDoS has been detected on the load balancer"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -370,7 +370,7 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-malware-detected-1-minute-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-malware-detected-1-minute-warning"
   alarm_description   = "One malware detected error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -385,7 +385,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-malware-detected-1-minute-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-malware-detected-1-minute-critical"
   alarm_description   = "Ten malware detected errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -401,7 +401,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-scanfiles-timeout-5-minutes-warning"
   alarm_description   = "One scanfiles timeout detected error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -416,7 +416,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-bounce-rate-critical"
   alarm_description   = "Bounce rate exceeding 10% in a 12 hour period"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -431,7 +431,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "kubernetes-failed-nodes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
@@ -457,7 +457,7 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-primary-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-primary-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -486,7 +486,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-primary-replicas-unavailable" {
 
 
 resource "aws_cloudwatch_metric_alarm" "celery-scalable-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-scalable-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
@@ -514,7 +514,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-scalable-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-beat-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -542,7 +542,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -570,7 +570,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-email-send-primary-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-email-send-primary-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -599,7 +599,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-primary-replicas-unava
 
 
 resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-email-send-scalable-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
@@ -627,7 +627,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unav
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-send-primary-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-send-primary-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -656,7 +656,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-primary-replicas-unavail
 
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-send-scalable-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
@@ -684,7 +684,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavai
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "admin-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -712,7 +712,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -740,7 +740,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "documentation-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -768,7 +768,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -796,7 +796,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-api-pods-detected"
   alarm_description         = "One or more Kubernetes API Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -813,7 +813,7 @@ resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-celery-pods-detected"
   alarm_description         = "One or more Kubernetes Celery Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -830,7 +830,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-admin-pods-detected"
   alarm_description         = "One or more Kubernetes Admin Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -847,7 +847,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-document-download-pods-detected"
   alarm_description         = "One or more Kubernetes Document Download Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -864,7 +864,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-documentation-pods-detected"
   alarm_description         = "One or more Kubernetes Documentation Pods is reporting as Evicted"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -881,7 +881,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "karpenter-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
@@ -909,7 +909,7 @@ resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-1-minute-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "aggregating-queues-not-active-1-minute-warning"
   alarm_description   = "Beat inbox tasks have not been active for one minute"
   comparison_operator = "LessThanThreshold"
@@ -924,7 +924,7 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-1-minute-w
 }
 
 resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "aggregating-queues-not-active-5-minutes-critical"
   alarm_description   = "Beat inbox tasks have not been active for 5 minutes"
   comparison_operator = "LessThanThreshold"
@@ -940,7 +940,7 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-
 }
 
 resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "service-callback-too-many-failures-warning"
   alarm_description   = "Service reached the max number of callback retries 25 times in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -955,7 +955,7 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-critical" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "service-callback-too-many-failures-critical"
   alarm_description   = "Service reached the max number of callback retries 100 times in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -970,7 +970,7 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-criti
 }
 
 resource "aws_cloudwatch_metric_alarm" "throttling-exception-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "throttling-exception-warning"
   alarm_description   = "Have received a throttling exception in the last minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -985,7 +985,7 @@ resource "aws_cloudwatch_metric_alarm" "throttling-exception-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "many-throttling-exceptions-warning" {
-  count               = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "many-throttling-exceptions-warning"
   alarm_description   = "Have received 100 throttling exception in the last minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
