@@ -176,7 +176,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-admin"
+    Service     = var.env == "production" ? "admin" : "notify-admin"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -197,7 +197,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-api"
+    Service     = var.env == "production" ? "api" : "notify-api"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -218,7 +218,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-cpu-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-celery-primary"
+    Service     = var.env == "production" ? "celery-primary" : "notify-celery-primary"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -239,7 +239,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-scalable-pods-high-cpu-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-celery-scalable"
+    Service     = var.env == "production" ? "celery-scalable" : "notify-celery-scalable"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -260,7 +260,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-cpu-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-celery-sms"
+    Service     = var.env == "production" ? "celery-sms" : "notify-celery-sms"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -282,7 +282,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-admin"
+    Service     = var.env == "production" ? "admin" : "notify-admin"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -303,7 +303,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-api"
+    Service     = var.env == "production" ? "api" : "notify-api"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -324,7 +324,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-primary-pods-high-memory-warning"
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-celery-primary"
+    Service     = var.env == "production" ? "celery-primary" : "notify-celery-primary"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -345,7 +345,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-pods-high-memory-warning" {
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-celery-sms"
+    Service     = var.env == "production" ? "celery-sms" : "notify-celery-sms"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -478,7 +478,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-primary-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-primary"
+        deployment  = var.env == "production" ? "celery-primary" : "notify-celery-primary"
       }
     }
   }
@@ -507,7 +507,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-scalable-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-scalable"
+        deployment  = var.env == "production" ? "celery-scalable" : "notify-celery-scalable"
       }
     }
   }
@@ -535,7 +535,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-beat"
+        deployment  = var.env == "production" ? "celery-beat" : "notify-celery-beat"
       }
     }
   }
@@ -563,7 +563,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-sms"
+        deployment  = var.env == "production" ? "celery-sms" : "notify-celery-sms"
       }
     }
   }
@@ -591,7 +591,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-primary-replicas-unava
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-email-send-primary"
+        deployment  = var.env == "production" ? "celery-email-send-primary" : "notify-celery-email-send-primary"
       }
     }
   }
@@ -620,7 +620,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unav
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-email-send-scalable"
+        deployment  = var.env == "production" ? "celery-email-send-scalable" : "notify-celery-email-send-scalable"
       }
     }
   }
@@ -648,7 +648,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-primary-replicas-unavail
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-sms-send-primary"
+        deployment  = var.env == "production" ? "celery-sms-send-primary" : "notify-celery-sms-send-primary"
       }
     }
   }
@@ -677,7 +677,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavai
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-sms-send-scalable"
+        deployment  = var.env == "production" ? "celery-sms-send-scalable" : "notify-celery-sms-send-scalable"
       }
     }
   }
@@ -705,7 +705,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-admin"
+        deployment  = var.env == "production" ? "admin" : "notify-admin"
       }
     }
   }
@@ -733,7 +733,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-api"
+        deployment  = var.env == "production" ? "api" : "notify-api"
       }
     }
   }
@@ -761,7 +761,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-documentation"
+        deployment  = var.env == "production" ? "documentation" : "notify-documentation"
       }
     }
   }
@@ -789,7 +789,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-document-download"
+        deployment  = var.env == "production" ? "document-download" : "notify-document-download"
       }
     }
   }
