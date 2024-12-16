@@ -91,7 +91,7 @@ resource "newrelic_api_access_key" "newrelic_aws_access_key" {
   count      = var.enable_new_relic && var.env != "production" ? 1 : 0
   account_id = var.new_relic_account_id
   key_type   = "USER"
-  name       = "notify_tf_provider"
+  name       = var.env == "staging" ? "notify_tf_provider" : "notify_tf_provider_${var.env}"
   notes      = "Used by Notify Terraform Code to create New Relic Resources"
 }
 
@@ -119,8 +119,8 @@ EOF
 resource "random_string" "s3-bucket-name" {
   count   = var.enable_new_relic && var.env != "production" ? 1 : 0
   length  = 8
-  special = true
-  upper   = true
+  special = false
+  upper   = false
 }
 
 resource "aws_s3_bucket" "newrelic_aws_bucket" {
