@@ -52,12 +52,18 @@ terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --terragrunt-non-interactive
 popd
 echo "Done."
 
-# Delete Cloud Based Sensor Bucket
+# Delete Cloud Based Sensor Bucket and New Relic resources
 echo "Deleting Cloud Based Sensor S3 Bucket..."
 pushd ../env/$ENVIRONMENT/common
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
+echo "Done." 
+echo "Deleting new relic resources..."
+terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_push[0]' --terragrunt-non-interactive -auto-approve
+terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_api_access_key.newrelic_aws_access_key[0]' --terragrunt-non-interactive -auto-approve
+terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0]' --terragrunt-non-interactive -auto-approve
 popd
 echo "Done."
+
 
 pip install boto3
 
@@ -117,6 +123,8 @@ aws events delete-rule --name weeklyBudgetSpend
 
 aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
 aws events delete-rule --name google_cidr_testing
+
+aws sesv2 delete-email-identity --email-identity dev.notification.cdssandbox.xyz
 
 AWS_REGION=us-east-1  aws ses set-active-receipt-rule-set
 AWS_REGION=us-east-1 aws ses delete-receipt-rule-set --rule-set-name main

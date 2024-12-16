@@ -88,11 +88,12 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_push" {
 }
 
 resource "newrelic_api_access_key" "newrelic_aws_access_key" {
-  count      = var.enable_new_relic && var.env != "production" ? 1 : 0
-  account_id = var.new_relic_account_id
-  key_type   = "USER"
-  name       = "notify_tf_provider"
-  notes      = "Used by Notify Terraform Code to create New Relic Resources"
+  count       = var.enable_new_relic && var.env != "production" ? 1 : 0
+  account_id  = var.new_relic_account_id
+  key_type    = var.env == "staging" ? "USER" : "INGEST"
+  ingest_type = var.env == "staging" ? null : "LICENSE"
+  name        = var.env == "staging" ? "notify_tf_provider" : "notify_tf_provider_${var.env}"
+  notes       = "Used by Notify Terraform Code to create New Relic Resources"
 }
 
 resource "aws_iam_role" "firehose_newrelic_role" {
@@ -119,8 +120,15 @@ EOF
 resource "random_string" "s3-bucket-name" {
   count   = var.enable_new_relic && var.env != "production" ? 1 : 0
   length  = 8
-  special = true
-  upper   = true
+  special = false
+  upper   = false
+  lifecycle {
+    ignore_changes = [
+      length,
+      upper,
+      special,
+    ]
+  }
 }
 
 resource "aws_s3_bucket" "newrelic_aws_bucket" {
