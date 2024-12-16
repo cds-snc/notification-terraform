@@ -90,7 +90,7 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_push" {
 resource "newrelic_api_access_key" "newrelic_aws_access_key" {
   count      = var.enable_new_relic && var.env != "production" ? 1 : 0
   account_id = var.new_relic_account_id
-  key_type   = "USER"
+  key_type   = var.env == "staging" ? "USER" : "INGEST"
   name       = var.env == "staging" ? "notify_tf_provider" : "notify_tf_provider_${var.env}"
   notes      = "Used by Notify Terraform Code to create New Relic Resources"
 }
