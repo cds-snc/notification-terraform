@@ -52,15 +52,18 @@ terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --terragrunt-non-interactive
 popd
 echo "Done."
 
-# Delete Cloud Based Sensor Bucket
+# Delete Cloud Based Sensor Bucket and New Relic resources
 echo "Deleting Cloud Based Sensor S3 Bucket..."
 pushd ../env/$ENVIRONMENT/common
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
+echo "Done." 
+echo "Deleting new relic resources..."
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_push[0]' --terragrunt-non-interactive -auto-approve
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_api_access_key.newrelic_aws_access_key[0]' --terragrunt-non-interactive -auto-approve
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0]' --terragrunt-non-interactive -auto-approve
 popd
 echo "Done."
+
 
 pip install boto3
 
