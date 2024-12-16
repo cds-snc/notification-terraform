@@ -9,7 +9,7 @@ inputs = merge(
     elb_account_ids = {
       "${local.config_inputs.region}" = "${local.secret_inputs.elb_account_id}"
     }
-    cbs_satellite_bucket_name = "cbs-satellite-${local.secret_inputs.account_id}"
+    cbs_satellite_bucket_name = local.config_inputs.env != "dev" ? "cbs-satellite-${local.secret_inputs.account_id}" : "cbs-satellite-notification-dev"
   }
 )
 
