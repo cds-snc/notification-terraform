@@ -122,6 +122,13 @@ resource "random_string" "s3-bucket-name" {
   length  = 8
   special = false
   upper   = false
+  lifecycle {
+    ignore_changes = [
+      length,
+      upper,
+      special,
+    ]
+  }
 }
 
 resource "aws_s3_bucket" "newrelic_aws_bucket" {
