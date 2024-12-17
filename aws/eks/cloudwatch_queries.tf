@@ -2,7 +2,7 @@ locals {
   celery_name            = var.env == "production" ? "celery" : "notify-celery"
   admin_name             = var.env == "production" ? "admin" : "notify-admin"
   api_name               = var.env == "production" ? "api" : "notify-api"
-  document_download_name = var.env == "production" ? "document-download" : "notify-document-download"
+  document_download_name = var.env == "production" ? "document-download-api" : "notify-document-download"
   documentation_name     = var.env == "production" ? "documentation" : "notify-documentation"
 
 }
