@@ -789,7 +789,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = var.env == "production" ? "document-download" : "notify-document-download"
+        deployment  = var.env == "production" ? "document-download-api" : "notify-document-download"
       }
     }
   }
