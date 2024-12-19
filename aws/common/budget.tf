@@ -24,7 +24,7 @@ resource "aws_budgets_budget" "notify_global" {
 }
 
 resource "aws_budgets_budget" "cloudwatch_data_scanned" {
-  name         = "coudwatch-data-scanned-budget"
+  name         = "cloudwatch-data-scanned-budget"
   budget_type  = "USAGE"
   limit_amount = "10000"
   limit_unit   = "GB"
