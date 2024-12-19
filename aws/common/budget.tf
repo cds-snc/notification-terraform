@@ -23,6 +23,38 @@ resource "aws_budgets_budget" "notify_global" {
   }
 }
 
+resource "aws_budgets_budget" "cloudwatch_data_scanned" {
+  name         = "coudwatch-data-scanned-budget"
+  budget_type  = "USAGE"
+  limit_amount = "10000"
+  limit_unit   = "GB"
+  time_unit    = "DAILY"
+
+  cost_filter {
+    name = "UsageType"
+    values = [
+      "CAN1-DataScanned-Bytes",
+    ]
+  }
+
+  notification {
+    comparison_operator       = "GREATER_THAN"
+    threshold                 = 100
+    threshold_type            = "PERCENTAGE"
+    notification_type         = "ACTUAL"
+    subscriber_sns_topic_arns = [aws_sns_topic.notification-canada-ca-alert-general.arn]
+  }
+
+  notification {
+    comparison_operator       = "GREATER_THAN"
+    threshold                 = 80
+    threshold_type            = "PERCENTAGE"
+    notification_type         = "ACTUAL"
+    subscriber_sns_topic_arns = [aws_sns_topic.notification-canada-ca-alert-general.arn]
+  }
+
+}
+
 module "budget_notifier" {
   source                     = "github.com/cds-snc/terraform-modules//spend_notifier?ref=v9.6.4"
   daily_spend_notifier_hook  = var.budget_sre_bot_webhook
