@@ -40,7 +40,47 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
   regular_expression {
-    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/callbacks.*|/contact.*|/documentation.*|/email.*|/email-branding.*|/email-not-received.*|/error.*|/features.*|/find-services-by-name.*|/find-users-by-email.*|/forced-password-reset.*|/forgot-password.*|/format.*|/inbound-sms-admin.*|/invitation.*|/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*|/register-from-org-invite.*|/registration-continue.*|/resend-email-verification.*|/roadmap.*|/robots.txt.*|/send-new-code.*|/send-new-email-token.*|/services.*|/services-or-dashboard.*|/set-lang.*|/static.*|/support.*|/templates.*|/text-not-received.*|/two-factor-email-sent.*|/two-factor-sms-sent.*|/user-profile.*|/users.*|/verify.*|/verify-email.*|/verify-mobile.*|/welcome.*|/why-notify.*|/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*|/using-a-spreadsheet|/new-f.*|/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/securit.+|/privacy.*|/confidentialite.*|/accessibility|/accessibilite|/nouvelles-fonc.*|/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/.*-delivery-.*|/etat-livraison-messages|/formatting-.*|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu|/sins.*demo|/other-services|/autres-services|/service-level-agreement|/accord-niveaux-de-service|/service-level-objectives|/objectifs-niveau-de-service|/pourquoi-notification-gc|/envoyer-.*-personnalise|/reg.*emo|/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul|/autre-services-2023*"
+    regex_string = "/.well-known.*|/_email.*|/_letter.*|/_status.*|/_styleguide.*|/a11y.*|/accounts.*|/accounts-or-dashboard.*|/activity.*|/add-service.*|/callbacks.*|/contact.*|/documentation.*|/email.*"
+  }
+
+  regular_expression {
+    regex_string = "/email-branding.*|/email-not-received.*|/error.*|/features.*|/find-services-by-name.*|/find-users-by-email.*|/forced-password-reset.*|/forgot-password.*|/format.*|/inbound-sms-admin.*|/invitation.*"
+  }
+
+  regular_expression {
+    regex_string = var.env == "production" ? "/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*" : "/_debug|/letters.*|/messages-status.*|/new-password.*|/organisation-invitation.*|/organisations.*|/personalise.*|/platform-admin.*|/preview.*|/pricing.*|/provider.*|/providers.*|/register.*"
+  }
+
+  regular_expression {
+    regex_string = "/register-from-org-invite.*|/registration-continue.*|/resend-email-verification.*|/roadmap.*|/robots.txt.*|/send-new-code.*|/send-new-email-token.*|/services.*|/services-or-dashboard.*|/set-lang.*"
+  }
+
+  regular_expression {
+    regex_string = "/static.*|/support.*|/templates.*|/text-not-received.*|/two-factor-email-sent.*|/two-factor-sms-sent.*|/user-profile.*|/users.*|/verify.*|/verify-email.*|/verify-mobile.*|/welcome.*|/why-notify.*"
+  }
+
+  regular_expression {
+    regex_string = "/design-patterns-content-guidance.*|/letter-branding.*|/register-from-invite.*|/sign-in.*|/sign-out.*|/sms.*|/archive-autres-services.*|/archived-version-other-services.*|/using-a-spreadsheet|/new-f.*"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/home|/accueil|/why-gc-notify|/pourquoi-gc-notification|/features|/fonctionnalites|/guidance|/guides-reference|/securit.+|/privacy.*|/confidentialite.*|/accessibility|/accessibilite|/nouvelles-fonc.*"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/.*-delivery-.*|/etat-livraison-messages|/formatting-.*|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu|/sins.*demo"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/other-services|/autres-services|/service-level-agreement|/accord-niveaux-de-service|/service-level-objectives|/objectifs-niveau-de-service|/pourquoi-notification-gc|/envoyer-.*-personnalise|/reg.*emo"
+  }
+
+  # GCA routes
+  regular_expression {
+    regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul"
   }
 
   tags = {
