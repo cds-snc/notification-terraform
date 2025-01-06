@@ -126,6 +126,31 @@ aws events delete-rule --name google_cidr_testing
 
 aws sesv2 delete-email-identity --email-identity dev.notification.cdssandbox.xyz
 
+SYSTEM_STATUS_TARGET=$(aws events list-targets-by-rule --rule system_status_testing --query 'Targets[].Id' --output text)
+
+for target in $SYSTEM_STATUS_TARGET; do
+  echo "Deleting event target $target"
+  aws events remove-targets --rule "system_status_testing" --ids "$target"
+  echo "Done."
+done
+
+HEARTBEAT_TESTING_TARGET=$(aws events list-targets-by-rule --rule heartbeat_testing --query 'Targets[].Id' --output text)
+
+for target in $HEARTBEAT_TESTING_TARGET; do
+  echo "Deleting event target $target"
+  aws events remove-targets --rule "heartbeat_testing" --ids "$target"
+  echo "Done."
+done
+
+PERFTEST_TARGET=$(aws events list-targets-by-rule --rule perf_test_event_rule --query 'Targets[].Id' --output text)
+
+for target in $PERFTEST_TARGET; do
+  echo "Deleting event target $target"
+  aws events remove-targets --rule "perf_test_event_rule" --ids "$target"
+  echo "Done."
+done
+
+
 AWS_REGION=us-east-1  aws ses set-active-receipt-rule-set
 AWS_REGION=us-east-1 aws ses delete-receipt-rule-set --rule-set-name main
 
