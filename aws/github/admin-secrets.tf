@@ -61,3 +61,9 @@ resource "github_actions_secret" "admin_slack_webhook" {
   plaintext_value = var.notify_dev_slack_webhook
 }
 
+resource "github_actions_secret" "admin_github_manifests_workflow_token" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_admin.name
+  secret_name     = "MANIFESTS_WORKFLOW_TOKEN"
+  plaintext_value = var.github_manifests_workflow_token
+}
