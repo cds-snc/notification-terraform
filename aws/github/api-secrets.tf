@@ -45,3 +45,10 @@ resource "github_actions_secret" "api_slack_webhook" {
   secret_name     = "SLACK_WEBHOOK"
   plaintext_value = var.notify_dev_slack_webhook
 }
+
+resource "github_actions_secret" "api_github_manifests_workflow_token" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_api.name
+  secret_name     = "MANIFESTS_WORKFLOW_TOKEN"
+  plaintext_value = var.github_manifests_workflow_token
+}
