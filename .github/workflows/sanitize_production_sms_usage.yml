@@ -37,5 +37,5 @@ jobs:
     - name: Notify Slack channel if this job failed
       if: ${{ failure() }}
       run: |
-        json="{'text':'<!here> Sanitize production SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
+        json='{"text":"<!here> Sanitize production SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !"}'
         curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
