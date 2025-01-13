@@ -1055,4 +1055,5 @@ variable "ipv4_maxmind_license_key" {
 variable "github_manifests_workflow_token" {
   type      = string
   sensitive = true
+  default   = "prodonly"
 }
