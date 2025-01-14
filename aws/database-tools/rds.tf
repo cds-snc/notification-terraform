@@ -17,7 +17,7 @@ resource "aws_db_instance" "database-tools" {
   allocated_storage   = 10
   db_name             = "database_tools"
   engine              = "postgres"
-  engine_version      = var.rds_version
+  engine_version      = var.blazer_rds_version
   instance_class      = "db.t3.micro"
   username            = "postgres"
   password            = var.dbtools_password
