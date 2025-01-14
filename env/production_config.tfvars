@@ -6,7 +6,7 @@ billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
-primary_worker_desired_size     = 5
+primary_worker_desired_size     = 8
 primary_worker_instance_types   = ["r5.large"]
 secondary_worker_instance_types = ["r5.large"]
 node_upgrade                    = false
