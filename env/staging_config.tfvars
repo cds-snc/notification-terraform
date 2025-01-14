@@ -163,5 +163,7 @@ sns_to_sqs_sms_callbacks_docker_tag      = "bootstrap"
 ses_to_sqs_callbacks_docker_tag          = "bootstrap"
 ses_receiving_emails_docker_tag          = "bootstrap"
 pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
+
 ## BLAZER
 blazer_image_tag = "latest"
+blazer_rds_version = 15.5

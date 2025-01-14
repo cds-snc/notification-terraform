@@ -162,6 +162,10 @@ variable "rds_version" {
   type = string
 }
 
+variable "blazer_rds_version" {
+  type = string
+}
+
 variable "aws_xray_sdk_enabled" {
   type = bool
 }
