@@ -999,10 +999,10 @@ resource "aws_cloudwatch_metric_alarm" "many-throttling-exceptions-warning" {
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "db-migration-failure-warning" {
+resource "aws_cloudwatch_metric_alarm" "db-migration-failure-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "db-migration-failure-warning"
-  alarm_description   = "The database migration in the api k8s pods has failed"
+  alarm_name          = "db-migration-failure-critical"
+  alarm_description   = "The database migration running in the api k8s pods has failed"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = aws_cloudwatch_log_metric_filter.db-migration-failure[0].metric_transformation[0].name
@@ -1011,5 +1011,5 @@ resource "aws_cloudwatch_metric_alarm" "db-migration-failure-warning" {
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_actions       = [var.sns_alert_critical_arn]
 }
