@@ -1004,7 +1004,7 @@ resource "aws_cloudwatch_metric_alarm" "db-migration-failure-warning" {
   alarm_name          = "db-migration-failure-warning"
   alarm_description   = "The database migration in the api k8s pods has failed"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = 1
   metric_name         = aws_cloudwatch_log_metric_filter.db-migration-failure[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.db-migration-failure[0].metric_transformation[0].namespace
   period              = 60
