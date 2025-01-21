@@ -571,3 +571,15 @@ module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
+
+resource "aws_s3_bucket" "gc_organisations_bucket" {
+  bucket        = "notification-canada-ca-${var.env}-gc-organisations"
+  force_destroy = var.force_destroy_s3
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+
+  #tfsec:ignore:AWS002 - No logging enabled
+  #tfsec:ignore:AWS077 - Versioning is not enabled
+}
