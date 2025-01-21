@@ -576,10 +576,24 @@ resource "aws_s3_bucket" "gc_organisations_bucket" {
   bucket        = "notification-canada-ca-${var.env}-gc-organisations"
   force_destroy = var.force_destroy_s3
 
+  logging {
+    target_prefix = var.env
+    target_bucket = module.csv_bucket_logs.s3_bucket_id
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 
   #tfsec:ignore:AWS002 - No logging enabled
   #tfsec:ignore:AWS077 - Versioning is not enabled
+}
+
+resource "aws_s3_bucket_public_access_block" "gc_organisations_bucket" {
+  bucket = aws_s3_bucket.gc_organisations_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
