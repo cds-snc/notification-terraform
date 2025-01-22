@@ -1,5 +1,5 @@
 locals {
-  celery_name = var.env == "production" ? "celery" : "notify-celery"
+  celery_name = "notify-celery"
 }
 
 resource "aws_cloudwatch_dashboard" "pinpoint" {

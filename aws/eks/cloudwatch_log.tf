@@ -98,7 +98,7 @@ resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
 resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "api-evicted-pods"
-  pattern        = var.env == "production" ? "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"api-*\") }" : "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-api-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-api-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -111,7 +111,7 @@ resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "celery-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-evicted-pods"
-  pattern        = var.env == "production" ? "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"celery-*\") }" : "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-celery-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-celery-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -124,7 +124,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "admin-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "admin-evicted-pods"
-  pattern        = var.env == "production" ? "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"admin-*\") }" : "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-admin-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-admin-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -137,7 +137,7 @@ resource "aws_cloudwatch_log_metric_filter" "admin-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "document-download-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "document-download-evicted-pods"
-  pattern        = var.env == "production" ? "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"document-download-*\") }" : "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-document-download-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-document-download-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -150,7 +150,7 @@ resource "aws_cloudwatch_log_metric_filter" "document-download-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "documentation-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "documentation-evicted-pods"
-  pattern        = var.env == "production" ? "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"documentation-*\") }" : "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-documentation-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-documentation-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
