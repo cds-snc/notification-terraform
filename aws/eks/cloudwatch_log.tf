@@ -198,3 +198,16 @@ resource "aws_cloudwatch_log_metric_filter" "throttling-exceptions" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "db-migration-failure" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "db-migration-failure"
+  pattern        = "database migration failed"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "db-migration-failure"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
