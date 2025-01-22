@@ -1,0 +1,77 @@
+# Note to maintainers:
+# Updating alarms? Update the Google Sheet also!
+# https://docs.google.com/spreadsheets/d/1gkrL3Trxw0xEkX724C1bwpfeRsTlK2X60wtCjF6MFRA/edit
+#
+# There are also alarms defined in aws/common/cloudwatch_alarms.tf
+
+resource "aws_cloudwatch_metric_alarm" "high-dbload-warning" {
+  count               = var.rds_instance_count
+  alarm_name          = "high-dbload-warning-instance-${count.index}"
+  alarm_description   = "DBLoad > 1. Check if there's a query that is causing this."
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "DBLoad"
+  namespace           = "AWS/RDS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 1
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "high-dbload-critical" {
+  count               = var.rds_instance_count
+  alarm_name          = "high-dbload-critical-instance-${count.index}"
+  alarm_description   = "DBLoad > 100. Check if there's a query that is causing this."
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "DBLoad"
+  namespace           = "AWS/RDS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 100
+  alarm_actions       = [var.sns_alert_critical_arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "high-db-cpu-warning" {
+  count               = var.rds_instance_count
+  alarm_name          = "high-db-cpu-warning-instance-${count.index}"
+  alarm_description   = "CPU usage of the RDS instance > 50%"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/RDS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 50
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "high-db-cpu-critical" {
+  count               = var.rds_instance_count
+  alarm_name          = "high-db-cpu-critical-instance-${count.index}"
+  alarm_description   = "CPU usage of the RDS instance > 80%"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/RDS"
+  period              = 60
+  statistic           = "Average"
+  threshold           = 80
+  alarm_actions       = [var.sns_alert_critical_arn]
+  treat_missing_data  = "notBreaching"
+  dimensions = {
+    DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
+  }
+}
