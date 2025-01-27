@@ -1,0 +1,20 @@
+[project]
+name = "s3bucketsize"
+version = "0.1.0"
+description = "Calculate given S3 buckets size and items number."
+authors = [
+    {name = "jimmy.royer@cds-snc.ca"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+boto = "2.49.0"
+python = "~3.12.7"
