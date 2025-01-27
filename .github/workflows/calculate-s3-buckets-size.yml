@@ -37,5 +37,5 @@ jobs:
         BUCKET_NAMES: ${{ secrets.BUCKET_NAMES }}
         OUTPUT_BUCKET: ${{ secrets.OUTPUT_BUCKET }}
         AWS_DEFAULT_REGION: 'ca-central-1'
-      run: poetry run python s3bucketsize.py
+      run: poetry run s3bucketsize
       working-directory: /workspaces/notification-terraform/scripts/s3bucketsize
