@@ -5,7 +5,7 @@ buckets and logs the results in a CSV file.
 The function runs once per day and performs the following steps:
 
 1. Retrieves the list of S3 bucket names from the environment variable 
-   `BUCKET_NAMES`.
+   `BUCKET_NAMES` and `OUTPUT_BUCKET` or from the .env file.
 2. Calculates the total size of objects in each specified S3 bucket.
 3. Appends the calculated sizes along with the current date to a CSV file.
 4. Checks if the CSV file already exists in the specified output S3 bucket
