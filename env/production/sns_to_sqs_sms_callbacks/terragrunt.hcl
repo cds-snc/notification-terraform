@@ -37,17 +37,17 @@ include {
 }
 
 inputs = {
-  sns_deliveries_ca_central_arn               = dependency.common.outputs.sns_deliveries_ca_central_arn
-  sns_deliveries_ca_central_name              = dependency.common.outputs.sns_deliveries_ca_central_name
-  sns_deliveries_failures_ca_central_arn      = dependency.common.outputs.sns_deliveries_failures_ca_central_arn
-  sns_deliveries_failures_ca_central_name     = dependency.common.outputs.sns_deliveries_failures_ca_central_name
-  sns_deliveries_us_west_2_arn                = dependency.common.outputs.sns_deliveries_us_west_2_arn
-  sns_deliveries_us_west_2_name               = dependency.common.outputs.sns_deliveries_us_west_2_name
-  sns_deliveries_failures_us_west_2_arn       = dependency.common.outputs.sns_deliveries_failures_us_west_2_arn
-  sns_deliveries_failures_us_west_2_name      = dependency.common.outputs.sns_deliveries_failures_us_west_2_name
-  sns_alert_warning_arn                       = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                      = dependency.common.outputs.sns_alert_critical_arn
-  sns_alert_ok_arn                            = dependency.common.outputs.sns_alert_ok_arn
-  sns_to_sqs_sms_callbacks_ecr_repository_url = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_repository_url
-  sns_to_sqs_sms_callbacks_ecr_arn            = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_arn
+  sns_deliveries_ca_central_arn            = dependency.common.outputs.sns_deliveries_ca_central_arn
+  sns_deliveries_ca_central_name           = dependency.common.outputs.sns_deliveries_ca_central_name
+  sns_deliveries_failures_ca_central_arn   = dependency.common.outputs.sns_deliveries_failures_ca_central_arn
+  sns_deliveries_failures_ca_central_name  = dependency.common.outputs.sns_deliveries_failures_ca_central_name
+  sns_deliveries_us_west_2_arn             = dependency.common.outputs.sns_deliveries_us_west_2_arn
+  sns_deliveries_us_west_2_name            = dependency.common.outputs.sns_deliveries_us_west_2_name
+  sns_deliveries_failures_us_west_2_arn    = dependency.common.outputs.sns_deliveries_failures_us_west_2_arn
+  sns_deliveries_failures_us_west_2_name   = dependency.common.outputs.sns_deliveries_failures_us_west_2_name
+  sns_alert_warning_arn                    = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn                   = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                         = dependency.common.outputs.sns_alert_ok_arn
+  sns_to_sqs_sms_callbacks_ecr_repository_url   = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_repository_url
+  sns_to_sqs_sms_callbacks_ecr_arn              = dependency.ecr.outputs.sns_to_sqs_sms_callbacks_ecr_arn
 }

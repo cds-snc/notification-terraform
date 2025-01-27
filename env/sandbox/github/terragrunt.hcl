@@ -31,8 +31,8 @@ dependency "common" {
 }
 
 inputs = {
-  admin_pr_review_env_security_group_ids = dependency.lambda-admin-pr.outputs.admin_pr_security_group_id
-  admin_pr_review_env_subnet_ids         = dependency.common.outputs.vpc_private_subnets
+  admin_pr_review_env_security_group_ids                              = dependency.lambda-admin-pr.outputs.admin_pr_security_group_id
+  admin_pr_review_env_subnet_ids                                      = dependency.common.outputs.vpc_private_subnets
 }
 
 include {

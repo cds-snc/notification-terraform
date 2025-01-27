@@ -22,7 +22,7 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    google_cidr_prefix_list_id = ""
+    google_cidr_prefix_list_id      = ""
   }
 }
 
@@ -31,7 +31,7 @@ include {
 }
 
 inputs = {
-  google_cidr_prefix_list_id     = dependency.eks.outputs.google_cidr_prefix_list_id
-  google_cidr_ecr_repository_url = dependency.ecr.outputs.google_cidr_ecr_repository_url
-  google_cidr_ecr_arn            = dependency.ecr.outputs.google_cidr_ecr_arn
+  google_cidr_prefix_list_id         = dependency.eks.outputs.google_cidr_prefix_list_id
+  google_cidr_ecr_repository_url     = dependency.ecr.outputs.google_cidr_ecr_repository_url
+  google_cidr_ecr_arn                = dependency.ecr.outputs.google_cidr_ecr_arn
 }

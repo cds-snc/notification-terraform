@@ -25,5 +25,5 @@ dependency "dns" {
 }
 
 inputs = {
-  route53_zone_id = dependency.dns.outputs.route53_zone_id
+  route53_zone_id                        = dependency.dns.outputs.route53_zone_id
 }

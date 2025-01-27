@@ -12,7 +12,7 @@ terraform {
     commands     = ["apply", "plan"]
     execute      = ["rm", "-rfd", "/var/tmp/notification-admin"]
     run_on_error = true
-  }
+  }  
 }
 
 include {

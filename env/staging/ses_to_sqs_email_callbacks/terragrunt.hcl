@@ -19,9 +19,9 @@ dependency "common" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
-    sns_alert_warning_arn                   = ""
-    sns_alert_critical_arn                  = ""
-    sns_alert_ok_arn                        = ""
+    sns_alert_warning_arn          = ""
+    sns_alert_critical_arn         = ""
+    sns_alert_ok_arn               = ""
   }
 }
 
@@ -30,10 +30,10 @@ include {
 }
 
 inputs = {
-  notification_canada_ca_ses_callback_arn             = dependency.common.outputs.notification_canada_ca_ses_callback_arn
-  sns_alert_warning_arn                               = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                              = dependency.common.outputs.sns_alert_critical_arn
-  sns_alert_ok_arn                                    = dependency.common.outputs.sns_alert_ok_arn
+  notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
+  sns_alert_warning_arn                   = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn                  = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                        = dependency.common.outputs.sns_alert_ok_arn
   sqs_eks_notification_canada_cadelivery_receipts_arn = dependency.common.outputs.sqs_eks_notification_canada_cadelivery_receipts_arn
   ses_to_sqs_email_callbacks_ecr_arn                  = dependency.ecr.outputs.ses_to_sqs_email_callbacks_ecr_arn
   ses_to_sqs_email_callbacks_ecr_repository_url       = dependency.ecr.outputs.ses_to_sqs_email_callbacks_ecr_repository_url

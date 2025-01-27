@@ -22,8 +22,8 @@ include {
 }
 
 inputs = {
-  asset_bucket_regional_domain_name = dependency.common.outputs.asset_bucket_regional_domain_name
-  s3_bucket_asset_bucket_id         = dependency.common.outputs.s3_bucket_asset_bucket_id
-  s3_bucket_asset_bucket_arn        = dependency.common.outputs.s3_bucket_asset_bucket_arn
+  asset_bucket_regional_domain_name         = dependency.common.outputs.asset_bucket_regional_domain_name
+  s3_bucket_asset_bucket_id                 = dependency.common.outputs.s3_bucket_asset_bucket_id
+  s3_bucket_asset_bucket_arn                = dependency.common.outputs.s3_bucket_asset_bucket_arn
 }
 
