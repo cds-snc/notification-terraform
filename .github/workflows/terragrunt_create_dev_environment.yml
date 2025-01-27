@@ -997,8 +997,6 @@ jobs:
           sleep 5
           helmfile -e dev -l step=4 apply
           sleep 5
-          helmfile -e dev -l step=5 apply
-          sleep 5
           cd ..
           make decrypt-dev
           cd env/${{env.ENVIRONMENT}}
@@ -1014,3 +1012,6 @@ jobs:
           cd env/${{env.ENVIRONMENT}}
           sleep 30
           kubectl apply -k . 
+          sleep 30
+          cd /var/tmp/notification-manifests/helmfile
+          helmfile -e dev -l step=5 apply
