@@ -1,0 +1,29 @@
+name: Calculate S3 Buckets Size
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch:
+
+jobs:
+  calculate_size:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: pip install boto3
+
+    - name: Run S3 bucket size script
+      env:
+        BUCKET_NAMES: ${{ secrets.BUCKET_NAMES }}
+        OUTPUT_BUCKET: ${{ secrets.OUTPUT_BUCKET }}
+        AWS_DEFAULT_REGION: 'us-west-2'
+      run: python /workspaces/notification-terraform/scripts/s3bucketsize/s3bucketsize.py
