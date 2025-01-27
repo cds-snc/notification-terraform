@@ -7,7 +7,8 @@ logged in a CSV file stored in an S3 bucket.
 ## Overview
 
 The script performs the following steps:
-1. Retrieves the list of S3 bucket names from the environment variable `BUCKET_NAMES`.
+1. Retrieves the list of S3 bucket names from the environment variables `BUCKET_NAMES`
+   and `OUTPUT_BUCKET`. These can also be stored in an .env file.
 2. Calculates the total size and number of objects in each specified S3 bucket.
 3. Appends the calculated sizes and item counts along with the current date to a CSV file.
 4. Checks if the CSV file already exists in the specified output S3 bucket (defined by the `OUTPUT_BUCKET` environment variable).
@@ -22,6 +23,7 @@ The script performs the following steps:
 ## CSV File Format
 
 The CSV file contains the following columns:
+
 - Date
 - BucketName
 - SizeInBytes
@@ -30,7 +32,9 @@ The CSV file contains the following columns:
 Example CSV Content:
 
 ```
-Date, BucketName, SizeInBytes, ItemCount 2023-10-01T00:00:00,example-bucket-1,123456789,1000 2023-10-01T00:00:00,example-bucket-2,987654321,2000
+Date,BucketName,SizeInBytes,ItemCount
+2023-10-01T00:00:00,example-bucket-1,123456789,1000
+2023-10-01T00:00:00,example-bucket-2,987654321,2000
 ```
 
 ## Usage
@@ -45,8 +49,7 @@ Date, BucketName, SizeInBytes, ItemCount 2023-10-01T00:00:00,example-bucket-1,12
 2. Initialize the project and install dependencies:
    ```bash
    cd /workspaces/notification-terraform/scripts/s3bucketsize
-   poetry init --no-interaction
-   poetry add boto3
+   poetry install
    ```
 
 3. Set the required environment variables:
