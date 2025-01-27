@@ -33,24 +33,35 @@ import csv
 import os
 from datetime import datetime
 import boto3
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 def main():
     s3 = boto3.client("s3")
     bucket_names = os.environ["BUCKET_NAMES"].split(",")
     output_bucket = os.environ["OUTPUT_BUCKET"]
 
+    print(f"Calculating sizes for buckets: {bucket_names}")
+    print(f"Output will be saved to bucket: {output_bucket}")
+
     # Prepare CSV data headers
-    csv_data = [["Date", "BucketName", "SizeInBytes"]]
+    csv_data = [["Date", "BucketName", "SizeInBytes", "ItemCount"]]
 
     for bucket_name in bucket_names:
+        print(f"Processing bucket: {bucket_name}")
         # Calculate the total size of the bucket
         total_size = 0
+        item_count = 0
         for obj in s3.list_objects_v2(Bucket=bucket_name)["Contents"]:
+            # print(f"Object: {obj['Key']}, Size: {obj['Size']} bytes")
             total_size += obj["Size"]
+            item_count += 1
 
+        print(f"Bucket: {bucket_name}, Size: {total_size} bytes, Items: {item_count}")
         # Append data for each bucket
-        csv_data.append([datetime.now().isoformat(), bucket_name, total_size])
+        csv_data.append([datetime.now().isoformat(), bucket_name, total_size, item_count])
 
     # Define the CSV file path in S3
     csv_file_key = "buckets-size.csv"
@@ -60,24 +71,30 @@ def main():
     try:
         s3.head_object(Bucket=output_bucket, Key=csv_file_key)
         file_exists = True
+        print(f"CSV file {csv_file_key} exists in bucket {output_bucket}. Downloading...")
     except s3.exceptions.ClientError:
         file_exists = False
+        print(f"CSV file {csv_file_key} does not exist in bucket {output_bucket}. Creating new file...")
 
     if file_exists:
         # Download the existing CSV file
         s3.download_file(output_bucket, csv_file_key, local_csv_file)
+        
         with open(local_csv_file, "a", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             # Append new data (excluding header)
             writer.writerows(csv_data[1:])
+        print(f"Appended new data to existing CSV file.")
     else:
         # Create a new CSV file
         with open(local_csv_file, "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerows(csv_data)
+        print(f"Created new CSV file with data.")
 
     # Upload the updated or new CSV file back to S3
     s3.upload_file(local_csv_file, output_bucket, csv_file_key)
+    print(f"Uploaded CSV file to bucket {output_bucket} with key {csv_file_key}.")
 
 
 if __name__ == "__main__":
