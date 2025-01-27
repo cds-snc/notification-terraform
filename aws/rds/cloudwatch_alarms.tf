@@ -86,7 +86,7 @@ resource "aws_cloudwatch_metric_alarm" "low-db-memory-warning" {
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 4
+  threshold           = 4 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
@@ -105,7 +105,7 @@ resource "aws_cloudwatch_metric_alarm" "low-db-memory-critical" {
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 2
+  threshold           = 2 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_critical_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
@@ -123,7 +123,7 @@ resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-warning" {
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 10 # GB
+  threshold           = 10 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
@@ -141,7 +141,7 @@ resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-critical" {
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 5 # GB
+  threshold           = 5 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_critical_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
