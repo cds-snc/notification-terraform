@@ -69,7 +69,7 @@ jobs:
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role-session-name: NotifyApiGitHubActions
           aws-region: "ca-central-1"        
 
@@ -115,7 +115,7 @@ jobs:
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role-session-name: NotifyApiGitHubActions
           aws-region: "us-east-1"  
 
@@ -568,7 +568,7 @@ jobs:
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-api-apply
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role-session-name: NotifyApiGitHubActions
           aws-region: "ca-central-1"        
 
