@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "api_policies" {
     resources = [
       "${var.csv_upload_bucket_arn}/*",
       "${var.gc_organisations_bucket_arn}/*",
-      ]
+    ]
   }
 
   statement {

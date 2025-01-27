@@ -21,7 +21,7 @@ dependency "common" {
       "",
     ]
     private-links-vpc-endpoints-securitygroup = ""
-    private-links-gateway-prefix-list-ids = []
+    private-links-gateway-prefix-list-ids     = []
   }
 }
 
@@ -46,10 +46,10 @@ include {
 }
 
 inputs = {
-  eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
-  vpc_public_subnets        = dependency.common.outputs.vpc_public_subnets
-  vpc_id                    = dependency.common.outputs.vpc_id
-  private-links-vpc-endpoints-securitygroup   = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
-  private-links-gateway-prefix-list-ids       = dependency.common.outputs.private-links-gateway-prefix-list-ids
-  performance_test_ecr_repository_url         = dependency.ecr.outputs.performance_test_ecr_repository_url
+  eks_cluster_securitygroup                 = dependency.eks.outputs.eks-cluster-securitygroup
+  vpc_public_subnets                        = dependency.common.outputs.vpc_public_subnets
+  vpc_id                                    = dependency.common.outputs.vpc_id
+  private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
+  private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
+  performance_test_ecr_repository_url       = dependency.ecr.outputs.performance_test_ecr_repository_url
 }

@@ -38,10 +38,10 @@ include {
 }
 
 inputs = {
-  eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
-  vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
-  sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
-  vpc_id                                 = dependency.common.outputs.vpc_id
-  kms_arn                                = dependency.common.outputs.kms_arn  
+  eks_cluster_securitygroup = dependency.eks.outputs.eks-cluster-securitygroup
+  vpc_private_subnets       = dependency.common.outputs.vpc_private_subnets
+  sns_alert_warning_arn     = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn    = dependency.common.outputs.sns_alert_critical_arn
+  vpc_id                    = dependency.common.outputs.vpc_id
+  kms_arn                   = dependency.common.outputs.kms_arn
 }
