@@ -509,7 +509,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-ecr-us-east]
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr-us-east, terragrunt-apply-ecr]
 
     steps:
       - name: Checkout
@@ -659,7 +659,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-ecr-us-east]
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr-us-east,terragrunt-apply-heartbeat]
 
     steps:
       - name: Checkout
