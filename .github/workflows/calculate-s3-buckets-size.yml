@@ -34,8 +34,8 @@ jobs:
 
     - name: Run S3 bucket size script
       env:
-        BUCKET_NAMES: ${{ secrets.BUCKET_NAMES }}
-        OUTPUT_BUCKET: ${{ secrets.OUTPUT_BUCKET }}
+        BUCKET_NAMES: notification-canada-ca-production-document-download,notification-canada-ca-production-document-download-scan-files
+        OUTPUT_BUCKET: notification-canada-ca-production-document-download-logs
         AWS_DEFAULT_REGION: 'ca-central-1'
       run: poetry run s3bucketsize
       working-directory: /workspaces/notification-terraform/scripts/s3bucketsize
