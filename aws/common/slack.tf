@@ -1,7 +1,7 @@
 # Doc: https://registry.terraform.io/modules/terraform-aws-modules/notify-slack/aws/
 module "notify_slack_warning" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "6.0.0"
+  version = "6.5.1"
 
   create_sns_topic = false
   sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-warning.name
@@ -19,7 +19,7 @@ module "notify_slack_warning" {
 
 module "notify_slack_ok" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "6.0.0"
+  version = "6.5.1"
 
   create_sns_topic = false
   sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-ok.name
@@ -37,7 +37,7 @@ module "notify_slack_ok" {
 
 module "notify_slack_critical" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "6.0.0"
+  version = "6.5.1"
 
   create_sns_topic = false
   sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-critical.name
@@ -56,7 +56,7 @@ module "notify_slack_critical" {
 # Shared generic slack webhook & topic.
 module "notify_slack_general" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "6.0.0"
+  version = "6.5.1"
 
   create_sns_topic = false
   sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-general.name
