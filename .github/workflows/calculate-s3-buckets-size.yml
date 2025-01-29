@@ -34,7 +34,7 @@ jobs:
 
     - name: Install dependencies
       run: poetry install
-      working-directory: /workspaces/notification-terraform/scripts/s3bucketsize
+      working-directory: scripts/s3bucketsize
 
     - name: Run S3 bucket size script
       env:
@@ -42,4 +42,4 @@ jobs:
         OUTPUT_BUCKET: notification-canada-ca-production-document-download-logs
         AWS_DEFAULT_REGION: 'ca-central-1'
       run: poetry run s3bucketsize
-      working-directory: /workspaces/notification-terraform/scripts/s3bucketsize
+      working-directory: scripts/s3bucketsize
