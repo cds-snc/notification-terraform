@@ -6,6 +6,10 @@ on:
   workflow_dispatch:
   pull_request: # Triggers on pull requests
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   calculate_size:
     runs-on: ubuntu-latest

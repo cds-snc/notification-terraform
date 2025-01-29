@@ -21,12 +21,12 @@ Environment Variables:
 - OUTPUT_BUCKET: The name of the S3 bucket where the CSV file will be saved.
 
 CSV File Format:
-- The CSV file contains the following columns: Date, BucketName, SizeInBytes.
+- The CSV file contains the following columns: Date, BucketName, SizeInBytes, ItemCount.
 
 Example CSV Content:
-Date, BucketName, SizeInBytes
-2023-10-01T00:00:00,example-bucket-1,123456789
-2023-10-01T00:00:00,example-bucket-2,987654321
+Date, BucketName, SizeInBytes, ItemCount
+2023-10-01T00:00:00,example-bucket-1,123456789,1234
+2023-10-01T00:00:00,example-bucket-2,987654321,5678
 """
 
 import csv
