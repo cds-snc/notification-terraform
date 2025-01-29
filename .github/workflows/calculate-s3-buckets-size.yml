@@ -1,0 +1,45 @@
+name: Calculate S3 Buckets Size
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  calculate_size:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+
+    - name: Configure credentials to Notify using OIDC
+      uses: aws-actions/configure-aws-credentials@master
+      with:
+        role-to-assume: arn:aws:iam::${{secrets.PRODUCTION_AWS_ACCOUNT_ID}}:role/notification-terraform-apply
+        role-session-name: NotifyApiGitHubActions
+        aws-region: "ca-central-1"     
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Poetry
+      run: curl -sSL https://install.python-poetry.org | python3 -
+
+    - name: Install dependencies
+      run: poetry install
+      working-directory: /workspaces/notification-terraform/scripts/s3bucketsize
+
+    - name: Run S3 bucket size script
+      env:
+        BUCKET_NAMES: notification-canada-ca-production-document-download,notification-canada-ca-production-document-download-scan-files
+        OUTPUT_BUCKET: notification-canada-ca-production-document-download-logs
+        AWS_DEFAULT_REGION: 'ca-central-1'
+      run: poetry run s3bucketsize
+      working-directory: /workspaces/notification-terraform/scripts/s3bucketsize
