@@ -79,3 +79,34 @@ resource "aws_cloudwatch_metric_alarm" "failed-login-count-5-minute-warning" {
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
+
+
+resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "api-gateway-1-timeout-5-minute-warning"
+  alarm_description   = "At least 1 API gateway time out in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.api-gateway-time-out[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.api-gateway-time-out[0].metric_transformation[0].namespace
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "api-gateway-1-timeout-5-minute-warning"
+  alarm_description   = "Requests to the API gateway timed out more than 5 times in 5 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.api-gateway-time-out[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.api-gateway-time-out[0].metric_transformation[0].namespace
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 5
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+}

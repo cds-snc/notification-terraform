@@ -28,3 +28,17 @@ filter (ispresent(application) or ispresent(kubernetes.host)) and @message like 
 | stats count(*) by service, limit_type
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "api-gateway-504-timeouts" {
+  name = "API Gateway 504 timeouts"
+
+  log_group_names = [
+    local.api_gateway_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message, @logStream
+| filter @message like /504/
+| sort @timestamp desc
+QUERY
+}

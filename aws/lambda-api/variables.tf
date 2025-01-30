@@ -38,6 +38,10 @@ locals {
   api_lambda_log_group = "/aws/lambda/api-lambda"
 }
 
+locals {
+  api_gateway_log_group = "api_gateway_log_group"
+}
+
 variable "ip_blocklist_arn" {
   description = "Block all the IPs on this list from accessing admin and api"
   type        = string
