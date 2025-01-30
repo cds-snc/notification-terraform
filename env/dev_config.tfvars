@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.11.3-eksbuild.1"
 eks_addon_kube_proxy_version    = "v1.31.0-eksbuild.5"
 eks_addon_vpc_cni_version       = "v1.18.5-eksbuild.1"
 eks_addon_ebs_driver_version    = "v1.35.0-eksbuild.1"
-eks_node_ami_version            = "1.31.3-20241225"
-eks_karpenter_ami_id            = "ami-085afaf8b90509f36"
+eks_node_ami_version            = "1.31.4-20250116"
+eks_karpenter_ami_id            = "ami-0149bca6ffeb7c227"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -94,6 +94,7 @@ rds_instance_type  = "db.t3.medium"
 rds_database_name  = "NotificationCanadaCastaging"
 rds_version        = "15.5"
 
+
 ## NOTIFY-API/CELERY               
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
 ff_batch_insertion              = "true"
@@ -166,3 +167,4 @@ pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
 blazer_image_tag = "latest"
+blazer_rds_version = "15.10"

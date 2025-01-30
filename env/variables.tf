@@ -162,6 +162,10 @@ variable "rds_version" {
   type = string
 }
 
+variable "blazer_rds_version" {
+  type = string
+}
+
 variable "aws_xray_sdk_enabled" {
   type = bool
 }
@@ -1055,4 +1059,5 @@ variable "ipv4_maxmind_license_key" {
 variable "github_manifests_workflow_token" {
   type      = string
   sensitive = true
+  default   = "prodonly"
 }

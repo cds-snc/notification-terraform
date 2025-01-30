@@ -25,6 +25,7 @@ dependency "common" {
     sns_alert_warning_arn           = ""
     sns_alert_critical_arn          = ""
     s3_bucket_csv_upload_bucket_arn = ""
+    s3_bucket_gc_organisations_bucket_arn = ""
     firehose_waf_logs_iam_role_arn  = ""
     ip_blocklist_arn                = ""
     re_api_arn                      = ""
@@ -87,6 +88,7 @@ include {
 inputs = {
   vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
   csv_upload_bucket_arn                  = dependency.common.outputs.s3_bucket_csv_upload_bucket_arn
+  gc_organisations_bucket_arn            = dependency.common.outputs.s3_bucket_gc_organisations_bucket_arn
   firehose_waf_logs_iam_role_arn         = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   certificate_arn                        = dependency.eks.outputs.aws_acm_notification_canada_ca_arn
   certificate_alt_arn                    = dependency.eks.outputs.aws_acm_alt_notification_canada_ca_arn
