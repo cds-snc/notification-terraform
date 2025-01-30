@@ -2,6 +2,10 @@ variable "csv_upload_bucket_arn" {
   type = string
 }
 
+variable "gc_organisations_bucket_arn" {
+  type = string
+}
+
 variable "vpc_private_subnets" {
   type = list(any)
 }
