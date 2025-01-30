@@ -30,15 +30,17 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "api-gateway-504-timeouts" {
-  name = "API Gateway 504 timeouts"
+  name = "API Gateway 504 timeouts grouped by hour"
 
   log_group_names = [
     local.api_gateway_log_group
   ]
 
   query_string = <<QUERY
-fields @timestamp, @message, @logStream
-| filter @message like /504/
+fields @timestamp, @message, @logStream, status
+| filter status = "504"
+| stats count() as error_count by bin(@timestamp, 1h)
 | sort @timestamp desc
+| limit 1000
 QUERY
 }
