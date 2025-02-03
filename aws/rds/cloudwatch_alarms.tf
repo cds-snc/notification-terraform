@@ -7,14 +7,14 @@
 resource "aws_cloudwatch_metric_alarm" "high-dbload-warning" {
   count               = var.rds_instance_count
   alarm_name          = "high-dbload-warning-instance-${count.index}"
-  alarm_description   = "DBLoad > 1. Check if there's a query that is causing this."
+  alarm_description   = "DBLoad > 10. Check if there's a query that is causing this."
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "DBLoad"
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 1
+  threshold           = 10
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
