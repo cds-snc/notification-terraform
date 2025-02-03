@@ -98,7 +98,7 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-warning" {
 
 resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "api-gateway-1-timeout-5-minute-warning"
+  alarm_name          = "api-gateway-1-timeout-5-minute-critical"
   alarm_description   = "Requests to the API gateway timed out more than 5 times in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
