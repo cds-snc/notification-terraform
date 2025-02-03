@@ -35,7 +35,8 @@ variable "sns_alert_critical_arn" {
 }
 
 locals {
-  api_lambda_log_group = "/aws/lambda/api-lambda"
+  api_lambda_log_group  = "/aws/lambda/api-lambda"
+  api_gateway_log_group = "api_gateway_log_group"
 }
 
 variable "ip_blocklist_arn" {
