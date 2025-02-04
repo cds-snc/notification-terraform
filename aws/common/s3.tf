@@ -179,13 +179,13 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
     }
   }
 
-  # expire all files after 1 day
+  # expire all files after 7 day
   lifecycle_rule {
     id      = "tf-s3-lifecycle-all-files"
     enabled = true
 
     expiration {
-      days = 1
+      days = 7
     }
   }
 
