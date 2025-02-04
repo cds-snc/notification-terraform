@@ -43,14 +43,14 @@ resource "aws_cloudwatch_metric_alarm" "high-dbload-critical" {
 resource "aws_cloudwatch_metric_alarm" "high-db-cpu-warning" {
   count               = var.rds_instance_count
   alarm_name          = "high-db-cpu-warning-instance-${count.index}"
-  alarm_description   = "CPU usage of the RDS instance > 50%"
+  alarm_description   = "CPU usage of the RDS instance > 80%"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 50
+  threshold           = 80
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
@@ -61,14 +61,14 @@ resource "aws_cloudwatch_metric_alarm" "high-db-cpu-warning" {
 resource "aws_cloudwatch_metric_alarm" "high-db-cpu-critical" {
   count               = var.rds_instance_count
   alarm_name          = "high-db-cpu-critical-instance-${count.index}"
-  alarm_description   = "CPU usage of the RDS instance > 80%"
+  alarm_description   = "CPU usage of the RDS instance > 95%"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 80
+  threshold           = 95
   alarm_actions       = [var.sns_alert_critical_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
