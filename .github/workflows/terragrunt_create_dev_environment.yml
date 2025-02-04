@@ -979,39 +979,3 @@ jobs:
           cd ../env/${{env.ENVIRONMENT}}/${{env.ENVIRONMENT}}_only_kubernetes_fix
           export TF_VAR_role_name=$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSReservedSSO_AWSAdministratorAccess_*")) | .RoleName')
           terragrunt apply --terragrunt-non-interactive -auto-approve
-
-      - name: Apply Manifests
-        continue-on-error: true 
-        run: |
-          git clone https://github.com/cds-snc/notification-manifests.git /var/tmp/notification-manifests
-          cd /var/tmp/notification-manifests
-          cd /var/tmp/notification-manifests/helmfile
-          source getContext.sh
-          helmfile -e dev -l step=0 apply
-          sleep 5
-          helmfile -e dev -l step=1 apply
-          sleep 5
-          helmfile -e dev -l step=2 apply
-          sleep 5
-          helmfile -e dev -l step=3 apply
-          sleep 5
-          helmfile -e dev -l step=4 apply
-          sleep 5
-          cd ..
-          make decrypt-dev
-          cd env/${{env.ENVIRONMENT}}
-          kubectl apply -k . 2>&1
-
-      - name: Apply Manifests Take 2
-        continue-on-error: true 
-        run: |
-          cd /var/tmp/notification-manifests/helmfile
-          source getContext.sh
-          cd ..
-          make decrypt-dev
-          cd env/${{env.ENVIRONMENT}}
-          sleep 30
-          kubectl apply -k . 
-          sleep 30
-          cd /var/tmp/notification-manifests/helmfile
-          helmfile -e dev -l step=5 apply
