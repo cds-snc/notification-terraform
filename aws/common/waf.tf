@@ -70,7 +70,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/.*-delivery-.*|/etat-livraison-messages|/formatting-.*|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu|/sins.*demo"
+    regex_string = "/terms|/conditions-dutilisation|/personalisation-guide|/guide-personnalisation|/.*-delivery-.*|/formatting-.*|/guide-mise-en-forme|/spreadsheets|/feuille-de-calcu|/sins.*demo"
   }
 
   # GCA routes
