@@ -998,7 +998,6 @@ jobs:
           helmfile -e dev -l step=4 apply
           sleep 5
           cd ..
-          make decrypt-dev
           cd env/${{env.ENVIRONMENT}}
           kubectl apply -k . 2>&1
 
@@ -1008,7 +1007,6 @@ jobs:
           cd /var/tmp/notification-manifests/helmfile
           source getContext.sh
           cd ..
-          make decrypt-dev
           cd env/${{env.ENVIRONMENT}}
           sleep 30
           kubectl apply -k . 
