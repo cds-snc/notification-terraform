@@ -861,6 +861,16 @@ variable "manifest_new_relic_license_key" {
   sensitive = true
 }
 
+variable "manifest_new_relic_account_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "manifest_new_relic_api_key" {
+  type      = string
+  sensitive = true
+}
+
 variable "manifest_crm_github_personal_access_token" {
   type      = string
   sensitive = true
