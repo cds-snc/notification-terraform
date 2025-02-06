@@ -114,6 +114,8 @@ resource "aws_iam_policy" "notification-worker-policy" {
         "mobiletargeting:*",
         "ses:SendEmail",
         "ses:SendRawEmail",
+        "ses:ListIdentities",
+        "ses:GetIdentityVerificationAttributes",
         "sqs:*",
         "sns:Publish",
         "sms-voice:SendTextMessage",

@@ -6,7 +6,7 @@ billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
-primary_worker_desired_size     = 5
+primary_worker_desired_size     = 8
 primary_worker_instance_types   = ["r5.large"]
 secondary_worker_instance_types = ["r5.large"]
 node_upgrade                    = false
@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.11.3-eksbuild.1"
 eks_addon_kube_proxy_version    = "v1.31.0-eksbuild.5"
 eks_addon_vpc_cni_version       = "v1.18.5-eksbuild.1"
 eks_addon_ebs_driver_version    = "v1.35.0-eksbuild.1"
-eks_node_ami_version            = "1.31.0-20241011"
-eks_karpenter_ami_id            = "ami-05e0e03f6050a7bd2"
+eks_node_ami_version            = "1.31.4-20250123"
+eks_karpenter_ami_id            = "ami-0dc3bc37f57642bbc"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -79,7 +79,6 @@ slack_channel_general_topic  = "notification-ops"
 ## MONITORING
 athena_workgroup_name    = "primary"
 aws_config_recorder_name = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version   = "169"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
@@ -172,3 +171,4 @@ pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
 blazer_image_tag = "latest"
+blazer_rds_version = "15.5"

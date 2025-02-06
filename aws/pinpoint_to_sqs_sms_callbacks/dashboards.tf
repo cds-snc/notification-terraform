@@ -1,3 +1,7 @@
+locals {
+  celery_name = "notify-celery"
+}
+
 resource "aws_cloudwatch_dashboard" "pinpoint" {
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SMS-Pinpoint"
@@ -591,8 +595,8 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "celery-sms-send-primary", { "region": "${var.region}", "label": "celery-sms-send-primary" } ],
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "celery-sms-send-scalable", { "region": "${var.region}", "label": "celery-sms-send-scalable" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-primary", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-scalable", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-scalable" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -633,7 +637,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^celery-sms-send/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp as Time, kubernetes.container_name as Deployment, log\n| filter kubernetes.container_name like /^${local.celery_name}-sms-send/\n| filter @message like /ERROR\\/.*Worker/ or @message like /ERROR\\/MainProcess/ \n| sort @timestamp desc\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "SMS Sending Celery Errors",
@@ -647,7 +651,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "x": 16,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^celery-sms/\n| filter @message like /succeeded/\n| fields strcontains(@message, 'Task deliver_throttled_sms') as is_throttled_sms\n| fields strcontains(@message, 'Task deliver_sms') as is_normal_sms\n| stats sum(is_normal_sms) as normal_sms, sum(is_throttled_sms) as throttled_sms by bin(1m)",
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /^${local.celery_name}-sms/\n| filter @message like /succeeded/\n| fields strcontains(@message, 'Task deliver_throttled_sms') as is_throttled_sms\n| fields strcontains(@message, 'Task deliver_sms') as is_normal_sms\n| stats sum(is_normal_sms) as normal_sms, sum(is_throttled_sms) as throttled_sms by bin(1m)",
                 "queryLanguage": "LOGSQL",
                 "region": "${var.region}",
                 "title": "Normal vs Throttled SMS",

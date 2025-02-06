@@ -6,7 +6,7 @@ billing_tag_value    = "notification-canada-ca-dev"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
-primary_worker_desired_size     = 4
+primary_worker_desired_size     = 5
 primary_worker_instance_types   = ["m5.large"]
 secondary_worker_instance_types = ["m5.large"]
 node_upgrade                    = false
@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.11.3-eksbuild.1"
 eks_addon_kube_proxy_version    = "v1.31.0-eksbuild.5"
 eks_addon_vpc_cni_version       = "v1.18.5-eksbuild.1"
 eks_addon_ebs_driver_version    = "v1.35.0-eksbuild.1"
-eks_node_ami_version            = "1.31.0-20241011"
-eks_karpenter_ami_id            = "ami-05e0e03f6050a7bd2"
+eks_node_ami_version            = "1.31.4-20250123"
+eks_karpenter_ami_id            = "ami-0dc3bc37f57642bbc"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -48,7 +48,7 @@ bootstrap                  = true
 enable_sentinel_forwarding = true
 enable_delete_protection   = false
 api_enable_new_relic       = false
-cloudwatch_enabled         = false
+cloudwatch_enabled         = true
 recovery                   = true
 aws_xray_sdk_enabled       = true
 
@@ -80,7 +80,6 @@ slack_channel_general_topic  = "notification-dev-ops"
 athena_workgroup_name             = "dev"
 cloudwatch_opsgenie_alarm_webhook = ""
 aws_config_recorder_name          = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version            = "169"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
@@ -94,6 +93,7 @@ rds_instance_count = 3
 rds_instance_type  = "db.t3.medium"
 rds_database_name  = "NotificationCanadaCastaging"
 rds_version        = "15.5"
+
 
 ## NOTIFY-API/CELERY               
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
@@ -167,3 +167,4 @@ pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
 blazer_image_tag = "latest"
+blazer_rds_version = "15.10"

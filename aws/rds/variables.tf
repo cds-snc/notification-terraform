@@ -23,3 +23,11 @@ variable "sentinel_forwarder_cloudwatch_lambda_arn" {
   type        = string
   description = "ARN of the Sentinel forwarder lambda function."
 }
+
+variable "sns_alert_warning_arn" {
+  type = string
+}
+
+variable "sns_alert_critical_arn" {
+  type = string
+}

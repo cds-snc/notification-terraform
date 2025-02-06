@@ -94,3 +94,16 @@ resource "aws_cloudwatch_log_metric_filter" "failed-login-count-more-than-10" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "api-gateway-time-out" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "api-gateway-time-out"
+  pattern        = "{ $.status = \"504\" }"
+  log_group_name = aws_cloudwatch_log_group.api_gateway_log_group.name
+
+  metric_transformation {
+    name      = "api-gateway-time-out"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}

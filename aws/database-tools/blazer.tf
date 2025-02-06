@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
-          "awslogs-group" : "${var.cloudwatch_enabled ? aws_cloudwatch_log_group.blazer[0].name : "none"}",
+          "awslogs-group" : "${var.cloudwatch_enabled ? "blazer" : "none"}",
           "awslogs-region" : "${var.region}",
           "awslogs-stream-prefix" : "blazer"
         }
