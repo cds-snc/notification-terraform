@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "notify_admin_pr" {
       "ssm:GetParameters",
     ]
     resources = [
-      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES"
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES_ADMIN"
     ]
   }
 
