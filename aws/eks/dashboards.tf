@@ -337,14 +337,15 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 4,
-            "width": 6,
+            "width": 9,
             "y": 13,
-            "x": 18,
+            "x": 15,
             "type": "metric",
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "${local.celery_name}-primary", { "region": "${var.region}", "label": "${local.celery_name}-primary" } ],
-                    [ "...", "${local.celery_name}-scalable", { "region": "${var.region}", "label": "${local.celery_name}-scalable" } ]
+                    [ "...", "${local.celery_name}-scalable", { "region": "${var.region}", "label": "${local.celery_name}-scalable" } ],
+                    [ "...", "${local.celery_name}-delivery-scalable", { "region": "${var.region}", "label": "${local.celery_name}-delivery-scalable" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -375,7 +376,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         },
         {
             "height": 4,
-            "width": 10,
+            "width": 7,
             "y": 13,
             "x": 8,
             "type": "metric",
