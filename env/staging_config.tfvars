@@ -112,7 +112,7 @@ system_status_admin_url   = "https://staging.notification.cdssandbox.xyz"
 
 ## PERF TEST
 aws_pinpoint_region          = "ca-central-1"
-perf_test_phone_number       = "16135550123"
+perf_test_phone_number       = "16135550123" # INTERNAL_TEST_NUMBER - does not send to AWS
 perf_test_email              = "success@simulator.amazonses.com"
 perf_schedule_expression     = "cron(0 0 * * ? *)"
 perf_test_aws_s3_bucket      = "notify-performance-test-results-staging"
