@@ -112,7 +112,7 @@ system_status_admin_url   = "https://staging.notification.cdssandbox.xyz"
 
 ## PERF TEST
 aws_pinpoint_region          = "ca-central-1"
-perf_test_phone_number       = "16132532222"
+perf_test_phone_number       = "16135550123"
 perf_test_email              = "success@simulator.amazonses.com"
 perf_schedule_expression     = "cron(0 0 * * ? *)"
 perf_test_aws_s3_bucket      = "notify-performance-test-results-staging"
@@ -165,5 +165,5 @@ ses_receiving_emails_docker_tag          = "bootstrap"
 pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
-blazer_image_tag = "latest"
+blazer_image_tag   = "latest"
 blazer_rds_version = "15.5"
