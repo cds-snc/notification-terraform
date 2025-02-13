@@ -11,24 +11,23 @@ resource "aws_quicksight_data_set" "send_rate" {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "send_rate"
       sql_query       = <<EOF
-        with
-          data_nh as (
+       with data_nh as (
             select
                 id,
                 notification_type,
                 sent_at, sent_at::date as day, round_minutes(sent_at, 5) as sent_minute,
-                billable_units
+                greatest(billable_units, 1) as billable_units
             from notification_history
-            where sent_at is not null
+            where sent_at is not null and sent_at >= CURRENT_DATE - INTERVAL '7 day'
         ),
         data_n as (
             select
                 id,
                 notification_type,
                 sent_at, sent_at::date as day, round_minutes(sent_at, 5) as sent_minute,
-                billable_units
+                greatest(billable_units, 1) as billable_units
             from notifications
-            where sent_at is not null
+            where sent_at is not null and sent_at >= CURRENT_DATE - INTERVAL '7 day'
         ),
         data as (
             select * from data_nh
@@ -37,7 +36,7 @@ resource "aws_quicksight_data_set" "send_rate" {
         ),
         rollup as (
             select day, notification_type, sent_minute, count(*) / 5 as notifications_per_minute, 
-              case when notification_type = 'sms' then sum(billable_units)/5 else count(*) / 5 end as fragments_per_minute
+              sum(billable_units)/5 as fragments_per_minute
             from data
             group by day, notification_type, sent_minute
         )
