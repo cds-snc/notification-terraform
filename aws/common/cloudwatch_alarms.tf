@@ -83,7 +83,6 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   }
 }
 
-
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-priority-db-tasks-stuck-in-queue-warning"
