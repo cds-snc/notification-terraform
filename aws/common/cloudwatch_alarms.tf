@@ -83,43 +83,6 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-db-tasks-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 5 minutes in a 1-minute period"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "ApproximateAgeOfOldestMessage"
-  namespace           = "AWS/SQS"
-  period              = 60
-  statistic           = "Maximum"
-  threshold           = 60 * 5
-  treat_missing_data  = "missing"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-db-tasks-stuck-in-queue-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in DB tasks queue is older than 15 minute for 1 minute"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "15"
-  metric_name               = "ApproximateAgeOfOldestMessage"
-  namespace                 = "AWS/SQS"
-  period                    = 60
-  statistic                 = "Maximum"
-  threshold                 = 60 * 15
-  treat_missing_data        = "missing"
-  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  dimensions = {
-    QueueName = "${var.celery_queue_prefix}${var.sqs_db_tasks_queue_name}"
-  }
-}
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
