@@ -1,3 +1,167 @@
+variable "manifest_admin_client_secret" {
+  type = string
+}
+
+variable "manifest_auth_tokens" {
+  type = string
+}
+
+variable "manifest_document_download_api_key" {
+  type = string
+}
+
+variable "manifest_aws_route53_zone" {
+  type = string
+}
+
+variable "manifest_aws_ses_access_key" {
+  type = string
+}
+
+variable "manifest_aws_ses_secret_key" {
+  type = string
+}
+
+variable "manifest_dangerous_salt" {
+  type = string
+}
+
+variable "manifest_debug_key" {
+  type = string
+}
+
+variable "manifest_fresh_desk_product_id" {
+  type = string
+}
+
+variable "manifest_fresh_desk_api_key" {
+  type = string
+}
+
+variable "manifest_gc_articles_api_auth_username" {
+  type = string
+}
+
+variable "manifest_gc_articles_api_auth_password" {
+  type = string
+}
+
+variable "manifest_mixpanel_project_token" {
+  type = string
+}
+
+variable "manifest_new_relic_license_key" {
+  type = string
+}
+
+variable "manifest_crm_github_personal_access_token" {
+  type = string
+}
+
+variable "manifest_salesforce_username" {
+  type = string
+}
+
+variable "manifest_salesforce_password" {
+  type = string
+}
+
+variable "manifest_salesforce_security_token" {
+  type = string
+}
+
+variable "manifest_salesforce_client_privatekey" {
+  type = string
+}
+
+variable "manifest_salesforce_engagement_product_id" {
+  type = string
+}
+
+variable "manifest_salesforce_engagement_record_type" {
+  type = string
+}
+
+variable "manifest_salesforce_engagement_standard_pricebook_id" {
+  type = string
+}
+
+variable "manifest_salesforce_generic_account_id" {
+  type = string
+}
+
+variable "manifest_secret_key" {
+  type = string
+}
+
+variable "manifest_sendgrid_api_key" {
+  type = string
+}
+
+variable "manifest_waf_secret" {
+  type = string
+}
+
+variable "manifest_zendesk_api_key" {
+  type = string
+}
+
+variable "manifest_zendesk_sell_api_key" {
+  type = string
+}
+
+variable "manifest_sre_client_secret" {
+  type = string
+}
+
+variable "manifest_cache_clear_client_secret" {
+  type = string
+}
+
+variable "manifest_aws_pinpoint_sc_pool_id" {
+  type = string
+}
+
+variable "manifest_aws_pinpoint_sc_template_ids" {
+  type = string
+}
+
+variable "manifest_aws_pinpoint_default_pool_id" {
+  type = string
+}
+
+variable "manifest_sqlalachemy_database_uri" {
+  type = string
+}
+
+variable "manifest_sqlalachemy_database_reader_uri" {
+  type = string
+}
+
+variable "manifest_postgres_host" {
+  type = string
+}
+
+variable "manifest_postgres_sql" {
+  type = string
+}
+
+variable "manifest_redis_publish_url" {
+  type = string
+}
+
+variable "manifest_redis_url" {
+  type = string
+}
+
+variable "manifest_cypress_user_pw_secret" {
+  type = string
+}
+
+variable "manifest_cypress_auth_client_secret" {
+  type = string
+}
+
 variable "secrets" {
   type = map(object({
     name  = string
