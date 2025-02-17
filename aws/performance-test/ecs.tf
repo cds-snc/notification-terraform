@@ -42,18 +42,15 @@ data "template_file" "perf_test_container_definition" {
     AWS_LOGS_STREAM_PREFIX = "${aws_ecs_cluster.perf_test.name}-task"
     ECR_REPOSITORY_URL     = var.performance_test_ecr_repository_url
 
-    PERF_TEST_AWS_S3_BUCKET                     = var.perf_test_aws_s3_bucket
-    PERF_TEST_CSV_DIRECTORY_PATH                = var.perf_test_csv_directory_path
-    PERF_TEST_SMS_TEMPLATE_ID                   = var.perf_test_sms_template_id
-    PERF_TEST_BULK_EMAIL_TEMPLATE_ID            = var.perf_test_bulk_email_template_id
-    PERF_TEST_EMAIL_TEMPLATE_ID                 = var.perf_test_email_template_id
-    PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID = var.perf_test_email_with_attachment_template_id
-    PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID       = var.perf_test_email_with_link_template_id
+    PERF_TEST_AWS_S3_BUCKET             = var.perf_test_aws_s3_bucket
+    PERF_TEST_CSV_DIRECTORY_PATH        = var.perf_test_csv_directory_path
+    PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR = var.PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR
+    PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR   = var.PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR
 
     PERF_TEST_PHONE_NUMBER_ARN = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_phone_number[0].arn
     PERF_TEST_EMAIL_ARN        = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn
     PERF_TEST_DOMAIN_ARN       = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_domain[0].arn
-    PERF_TEST_AUTH_HEADER_ARN  = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_auth_header[0].arn
+    PERF_TEST_API_KEY_ARN      = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_api_key[0].arn
   }
 }
 

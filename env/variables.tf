@@ -529,7 +529,7 @@ variable "perf_test_email" {
   type = string
 }
 
-variable "perf_test_auth_header" {
+variable "perf_test_api_key" {
   type      = string
   sensitive = true
 }
@@ -550,11 +550,7 @@ variable "perf_test_csv_directory_path" {
   type = string
 }
 
-variable "perf_test_sms_template_id" {
-  type = string
-}
-
-variable "perf_test_bulk_email_template_id" {
+variable "perf_test_sms_template_id_one_var" {
   type = string
 }
 
@@ -720,15 +716,7 @@ variable "athena_workgroup_name" {
   type        = string
 }
 
-variable "perf_test_email_template_id" {
-  type = string
-}
-
-variable "perf_test_email_with_attachment_template_id" {
-  type = string
-}
-
-variable "perf_test_email_with_link_template_id" {
+variable "perf_test_email_template_id_one_var" {
   type = string
 }
 
