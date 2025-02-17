@@ -178,5 +178,11 @@ for query in $QUERIES; do
   aws logs delete-query-definition --query-definition-id $query
 done
 
+R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'ResolverQueryLogConfigs[].Id' --output text)
+for query in $R53_QUERIES; do
+  echo "Deleting route53 query log $query"
+  aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
+done
+
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."
