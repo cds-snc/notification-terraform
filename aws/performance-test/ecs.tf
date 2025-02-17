@@ -44,8 +44,8 @@ data "template_file" "perf_test_container_definition" {
 
     PERF_TEST_AWS_S3_BUCKET             = var.perf_test_aws_s3_bucket
     PERF_TEST_CSV_DIRECTORY_PATH        = var.perf_test_csv_directory_path
-    PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR = var.PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR
-    PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR   = var.PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR
+    PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR = var.perf_test_email_template_id_one_var
+    PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR   = var.perf_test_sms_template_id_one_var
 
     PERF_TEST_PHONE_NUMBER_ARN = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_phone_number[0].arn
     PERF_TEST_EMAIL_ARN        = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn
