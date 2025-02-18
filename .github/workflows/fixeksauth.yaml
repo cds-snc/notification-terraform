@@ -1,0 +1,102 @@
+
+name: "Fix Dev Environment AWS Auth"
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 17:00 UTC = 22:00 EST
+    - cron: "0 17 * * 0"
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  ACCOUNT_ID: ${{ secrets.DEV_ACCOUNT_ID }}
+  AWS_REGION: ca-central-1
+  ENVIRONMENT: dev
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
+  WORKFLOW: true
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  
+  fix-aws-auth:
+    runs-on: ubuntu-latest            
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        
+      - name: setup-terraform
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role_session_name: NotifyTerraformApply           
+
+      - name: Setup helmfile
+        uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
+        with:
+          install-kubectl: yes
+          install-helm: yes       
+          helmfile-version: "v0.151.0"
+
+      - name: Install sponge
+        run: |
+          sudo apt update
+          sudo apt-get install -y moreutils
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+          
+      - name: Install 1Pass CLI
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+
+      - name: Retrieve VPN Config
+        run: |
+          sudo mkdir -p aws
+          cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+          cd ../env/${{env.ENVIRONMENT}}/eks
+          ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
+          CERT=$(terragrunt output --raw gha_vpn_certificate)
+          KEY=$(terragrunt output --raw gha_vpn_key)
+          aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT_ID --output text > /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo "<cert>
+          $CERT
+          </cert>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo "<key>
+          $KEY
+          </key>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
+
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@cd2ed8a90cc7b060dc4e001143e811b5f7ea0af5" # v3.1.0
+        with:
+          config_file: /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo_config: false       
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --name notification-canada-ca-dev-eks-cluster     
+          kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-dev-eks-cluster dev
+
+      - name: terragrunt apply k8s-fix
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws
+          cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars  
+          cd ../env/${{env.ENVIRONMENT}}/${{env.ENVIRONMENT}}_only_kubernetes_fix
+          export TF_VAR_role_name=$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSReservedSSO_AWSAdministratorAccess_*")) | .RoleName')
+          terragrunt apply --terragrunt-non-interactive -auto-approve
+
