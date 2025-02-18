@@ -51,7 +51,7 @@ data "template_file" "perf_test_container_definition" {
     PERF_TEST_EMAIL_ARN        = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn
     PERF_TEST_DOMAIN_ARN       = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_domain[0].arn
     PERF_TEST_API_KEY_ARN      = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_api_key[0].arn
-    DATABASE_READER_URI        = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_database_uri[0].arn
+    DATABASE_READER_URI_ARN    = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_database_uri[0].arn
   }
 }
 
