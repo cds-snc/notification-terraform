@@ -146,7 +146,6 @@ sqs_visibility_timeout_priority_high                               = 26
 sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
 sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
 sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
-sqs_db_tasks_queue_name                                            = "database-tasks"
 sqs_throttled_sms_queue_name                                       = "send-throttled-sms-tasks"
 sqs_bulk_queue_name                                                = "bulk-tasks"
 sqs_priority_queue_name                                            = "priority-tasks"

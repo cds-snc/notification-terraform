@@ -691,10 +691,6 @@ variable "sqs_throttled_sms_queue_name" {
   type = string
 }
 
-variable "sqs_db_tasks_queue_name" {
-  type = string
-}
-
 variable "sqs_priority_db_tasks_queue_name" {
   type = string
 }
