@@ -455,23 +455,24 @@ jobs:
           curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars        
-          - name: Retrieve VPN Config
-          run: |
-            sudo mkdir -p aws
-            cd aws
-            op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-            cd ../env/${{env.ENVIRONMENT}}/eks
-            ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
-            CERT=$(terragrunt output --raw gha_vpn_certificate)
-            KEY=$(terragrunt output --raw gha_vpn_key)
-            aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT_ID --output text > /var/tmp/${{env.ENVIRONMENT}}.ovpn
-            echo "<cert>
-            $CERT
-            </cert>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
-            echo "<key>
-            $KEY
-            </key>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars    
+              
+      - name: Retrieve VPN Config
+        run: |
+          sudo mkdir -p aws
+          cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+          cd ../env/${{env.ENVIRONMENT}}/eks
+          ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
+          CERT=$(terragrunt output --raw gha_vpn_certificate)
+          KEY=$(terragrunt output --raw gha_vpn_key)
+          aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT_ID --output text > /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo "<cert>
+          $CERT
+          </cert>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo "<key>
+          $KEY
+          </key>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
 
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
