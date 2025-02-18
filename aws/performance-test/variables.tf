@@ -19,3 +19,7 @@ variable "performance_test_ecr_repository_url" {
   type        = string
   description = "The ECR repo URL for performance test for the ecr dependency"
 }
+
+variable "database_read_only_proxy_endpoint" {
+  type = string
+}
