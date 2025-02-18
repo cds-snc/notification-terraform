@@ -3,6 +3,9 @@ name: "Fix Dev Environment AWS Auth"
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - devfix-auth
 
 defaults:
   run:
