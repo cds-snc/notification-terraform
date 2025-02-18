@@ -180,8 +180,10 @@ done
 
 R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'ResolverQueryLogConfigs[].Id' --output text)
 for query in $R53_QUERIES; do
-  echo "Deleting route53 query log $query"
-  aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
+    association=$(aws route53resolver list-resolver-query-log-config-associations --query "ResolverQueryLogConfigAssociations[? ResolverQueryLogConfigId=='$query'].Id" --output text)
+    resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
+    aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
 done
 
 echo "Done."
