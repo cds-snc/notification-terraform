@@ -99,6 +99,6 @@ jobs:
           cd ../env/${{env.ENVIRONMENT}}/${{env.ENVIRONMENT}}_only_kubernetes_fix
           export TF_VAR_role_name=$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSReservedSSO_AWSAdministratorAccess_*")) | .RoleName')
           terragrunt destroy --terragrunt-non-interactive -auto-approve
-          kubectl create configmap aws-auth --from-literal=key1=config1
+          kubectl create configmap aws-auth --from-literal=key1=config1 -n kube-system
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
