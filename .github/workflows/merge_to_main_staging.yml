@@ -295,7 +295,7 @@ jobs:
           cd env/${{env.ENVIRONMENT}}/eks
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
-  terragrunt-plan-aws-auth:
+  terragrunt-apply-aws-auth:
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -311,7 +311,7 @@ jobs:
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
-          role_session_name: NotifyTerraformPlan
+          role_session_name: NotifyTerraformApply
 
       - name: Install sponge
         run: |
