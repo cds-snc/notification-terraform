@@ -59,7 +59,28 @@ data "aws_iam_policy_document" "notify_admin_pr" {
       "ssm:GetParameters",
     ]
     resources = [
-      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES"
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES_ADMIN"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ses:ListIdentities",
+      "ses:GetIdentityVerificationAttributes"
+    ]
+    resources = ["*"]
+    sid       = ""
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-${var.env}-csv-upload/*"
     ]
   }
 }

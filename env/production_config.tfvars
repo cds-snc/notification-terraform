@@ -6,7 +6,7 @@ billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
-primary_worker_desired_size     = 5
+primary_worker_desired_size     = 8
 primary_worker_instance_types   = ["r5.large"]
 secondary_worker_instance_types = ["r5.large"]
 node_upgrade                    = false
@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.11.3-eksbuild.1"
 eks_addon_kube_proxy_version    = "v1.31.0-eksbuild.5"
 eks_addon_vpc_cni_version       = "v1.18.5-eksbuild.1"
 eks_addon_ebs_driver_version    = "v1.35.0-eksbuild.1"
-eks_node_ami_version            = "1.31.0-20241109"
-eks_karpenter_ami_id            = "ami-0a10a21aafe2fc2bc"
+eks_node_ami_version            = "1.31.4-20250203"
+eks_karpenter_ami_id            = "ami-055ae9cc5270ab08c"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -149,7 +149,6 @@ sqs_visibility_timeout_priority_high                               = 26
 sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
 sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
 sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
-sqs_db_tasks_queue_name                                            = "database-tasks"
 sqs_throttled_sms_queue_name                                       = "send-throttled-sms-tasks"
 sqs_bulk_queue_name                                                = "bulk-tasks"
 sqs_priority_queue_name                                            = "priority-tasks"
@@ -171,3 +170,4 @@ pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
 blazer_image_tag = "latest"
+blazer_rds_version = "15.5"

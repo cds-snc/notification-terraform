@@ -1,6 +1,6 @@
 resource "github_actions_secret" "manifests_account_id" {
   repository      = data.github_repository.notification_manifests.name
-  secret_name     = "${upper(var.env)}_ACCOUNT_ID"
+  secret_name     = "${upper(var.env)}_AWS_ACCOUNT_ID"
   plaintext_value = var.account_id
 }
 
@@ -51,4 +51,25 @@ resource "github_actions_secret" "manifests_new_relic_api_key" {
   repository      = data.github_repository.notification_manifests.name
   secret_name     = "${upper(var.env)}_NEW_RELIC_API_KEY"
   plaintext_value = var.new_relic_api_key
+}
+
+resource "github_actions_secret" "smoke_admin_client_secret" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_manifests.name
+  secret_name     = "SMOKE_ADMIN_CLIENT_SECRET"
+  plaintext_value = var.manifest_smoke_admin_client_secret
+}
+
+resource "github_actions_secret" "smoke_api_key" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_manifests.name
+  secret_name     = "SMOKE_API_KEY"
+  plaintext_value = var.manifest_smoke_api_key
+}
+
+resource "github_actions_secret" "pr_bot_github_token" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_manifests.name
+  secret_name     = "PR_BOT_GITHUB_TOKEN"
+  plaintext_value = var.manifest_pr_bot_github_token
 }

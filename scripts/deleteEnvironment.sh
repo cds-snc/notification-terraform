@@ -52,12 +52,18 @@ terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --terragrunt-non-interactive
 popd
 echo "Done."
 
-# Delete Cloud Based Sensor Bucket
+# Delete Cloud Based Sensor Bucket and New Relic resources
 echo "Deleting Cloud Based Sensor S3 Bucket..."
 pushd ../env/$ENVIRONMENT/common
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
+echo "Done." 
+echo "Deleting new relic resources..."
+terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_push[0]' --terragrunt-non-interactive -auto-approve
+terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_api_access_key.newrelic_aws_access_key[0]' --terragrunt-non-interactive -auto-approve
+terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0]' --terragrunt-non-interactive -auto-approve
 popd
 echo "Done."
+
 
 pip install boto3
 
@@ -96,13 +102,14 @@ aws kms delete-alias --alias-name alias/s3_scan_object_queue
 
 aws iam delete-service-linked-role --role-name AWSServiceRoleForEC2Spot
 
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics / heartbeat`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - pinpoint_to_sqs_sms_callbacks`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - sns_to_sqs_sms_callbacks`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics / system_status`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - ses_to_sqs_email_callbacks`]'.queryDefinitionId --output text)
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`Lambda Statistics - ses_receiving_emails`]'.queryDefinitionId --output text --region us-east-1) --region us-east-1
-aws logs delete-query-definition --query-definition-id $(aws logs describe-query-definitions --query 'queryDefinitions[?name==`API / Services going over daily rate limits`]'.queryDefinitionId --output text)
+aws logs delete-log-group --log-group-name '/aws/eks/notification-canada-ca-dev-eks-cluster/cluster'
+aws logs delete-log-group --log-group-name '/aws/rds/cluster/notification-canada-ca-dev-cluster/postgresql'
+
+QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
+for query in $QUERIES; do
+  echo "Deleting cloudwatch query $query"
+  aws logs delete-query-definition --query-definition-id $query
+done
 
 aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-provider/client-vpn
 
@@ -117,6 +124,67 @@ aws events delete-rule --name weeklyBudgetSpend
 aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
 aws events delete-rule --name google_cidr_testing
 
+aws sesv2 delete-email-identity --email-identity dev.notification.cdssandbox.xyz
+
+SYSTEM_STATUS_TARGET=$(aws events list-targets-by-rule --rule system_status_testing --query 'Targets[].Id' --output text)
+
+for target in $SYSTEM_STATUS_TARGET; do
+  echo "Deleting event target $target"
+  aws events remove-targets --rule "system_status_testing" --ids "$target"
+  echo "Done."
+done
+
+HEARTBEAT_TESTING_TARGET=$(aws events list-targets-by-rule --rule heartbeat_testing --query 'Targets[].Id' --output text)
+
+for target in $HEARTBEAT_TESTING_TARGET; do
+  echo "Deleting event target $target"
+  aws events remove-targets --rule "heartbeat_testing" --ids "$target"
+  echo "Done."
+done
+
+PERFTEST_TARGET=$(aws events list-targets-by-rule --rule perf_test_event_rule --query 'Targets[].Id' --output text)
+
+for target in $PERFTEST_TARGET; do
+  echo "Deleting event target $target"
+  aws events remove-targets --rule "perf_test_event_rule" --ids "$target"
+  echo "Done."
+done
+
+
+AWS_REGION=us-east-1  aws ses set-active-receipt-rule-set
+AWS_REGION=us-east-1 aws ses delete-receipt-rule-set --rule-set-name main
+
+IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
+
+for identity in $IDENTITIES; do
+  echo "Deleting ses email identity $identity"
+  aws sesv2 delete-email-identity --email-identity $identity
+  echo "Done."
+done
+
+# We have to switch to US-EAST-1 to delete the email identities
+export AWS_REGION=us-east-1
+US_IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
+
+for identity in $US_IDENTITIES; do
+  echo "Deleting ses email identity $identity"
+  aws sesv2 delete-email-identity --email-identity $identity
+  echo "Done."
+done
+
+QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
+for query in $QUERIES; do
+  echo "Deleting cloudwatch query $query"
+  aws logs delete-query-definition --query-definition-id $query
+done
+
+R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'ResolverQueryLogConfigs[].Id' --output text)
+for query in $R53_QUERIES; do
+    association=$(aws route53resolver list-resolver-query-log-config-associations --query "ResolverQueryLogConfigAssociations[? ResolverQueryLogConfigId=='$query'].Id" --output text)
+    resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
+    aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
+done
 
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."

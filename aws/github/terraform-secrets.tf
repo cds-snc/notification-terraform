@@ -1,13 +1,13 @@
 resource "github_actions_secret" "account_id" {
   repository      = data.github_repository.notification_terraform.name
-  secret_name     = "${upper(var.env)}_ACCOUNT_ID"
+  secret_name     = "${upper(var.env)}_AWS_ACCOUNT_ID"
   plaintext_value = var.account_id
 }
 
 resource "github_actions_secret" "notify_dev_slack_webhook" {
   count           = var.env == "production" ? 1 : 0
   repository      = data.github_repository.notification_terraform.name
-  secret_name     = "NOTIFY_${upper(var.env)}_SLACK_WEBHOOK"
+  secret_name     = "NOTIFY_DEV_SLACK_WEBHOOK"
   plaintext_value = var.notify_dev_slack_webhook
 }
 

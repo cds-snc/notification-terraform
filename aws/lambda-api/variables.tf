@@ -2,6 +2,10 @@ variable "csv_upload_bucket_arn" {
   type = string
 }
 
+variable "gc_organisations_bucket_arn" {
+  type = string
+}
+
 variable "vpc_private_subnets" {
   type = list(any)
 }
@@ -31,7 +35,8 @@ variable "sns_alert_critical_arn" {
 }
 
 locals {
-  api_lambda_log_group = "/aws/lambda/api-lambda"
+  api_lambda_log_group  = "/aws/lambda/api-lambda"
+  api_gateway_log_group = "api_gateway_log_group"
 }
 
 variable "ip_blocklist_arn" {

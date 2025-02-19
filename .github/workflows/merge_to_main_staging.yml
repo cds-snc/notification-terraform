@@ -18,7 +18,7 @@ defaults:
     shell: bash
 
 env:
-  ACCOUNT_ID: ${{ secrets.STAGING_ACCOUNT_ID }}
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
   ENVIRONMENT: staging
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       - uses: ./.github/actions/setup-terraform
         with:
@@ -65,7 +65,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
@@ -106,7 +106,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0 
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0 
 
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
@@ -149,7 +149,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -180,7 +180,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -211,7 +211,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -243,7 +243,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -274,7 +274,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
        
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -305,7 +305,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -336,7 +336,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -367,7 +367,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -398,7 +398,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -429,7 +429,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -460,7 +460,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -491,7 +491,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -522,7 +522,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -553,7 +553,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -584,7 +584,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -615,7 +615,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -646,7 +646,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -677,7 +677,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -708,7 +708,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -739,7 +739,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -770,7 +770,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -801,7 +801,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: setup-terraform
         uses: ./.github/actions/setup-terraform
@@ -832,7 +832,7 @@ jobs:
     needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-dns,terragrunt-apply-ses_validation_dns_entries,terragrunt-apply-cloudfront,terragrunt-apply-eks,terragrunt-apply-elasticache,terragrunt-apply-rds,terragrunt-apply-lambda-api,terragrunt-apply-heartbeat,terragrunt-apply-database-tools,terragrunt-apply-quicksight,terragrunt-apply-lambda-google-cidr,terragrunt-apply-ses_to_sqs_email_callbacks,terragrunt-apply-sns_to_sqs_sms_callbacks,terragrunt-apply-pinpoint_to_sqs_sms_callbacks,terragrunt-apply-system_status,terragrunt-apply-ses_receiving_emails,terragrunt-apply-system_status_static_site,terragrunt-apply-newrelic,terragrunt-apply-manifest_secrets]
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         
       - name: bump-version-and-push-tag
         uses: mathieudutour/github-tag-action@bcb832838e1612ff92089d914bccc0fd39458223 # v4.6

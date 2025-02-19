@@ -20,6 +20,12 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-prometheus-logs"
   retention_in_days = var.log_retention_period_days
 }
 
+resource "aws_cloudwatch_log_group" "blazer" {
+  count             = var.cloudwatch_enabled ? 1 : 0
+  name              = "blazer"
+  retention_in_days = 1827 # 5 years
+}
+
 
 ###
 # AWS EKS Cloudwatch log metric filters
@@ -92,7 +98,7 @@ resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
 resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "api-evicted-pods"
-  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"api-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-api-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -105,7 +111,7 @@ resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "celery-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-evicted-pods"
-  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"celery-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-celery-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -118,7 +124,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "admin-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "admin-evicted-pods"
-  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"admin-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-admin-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -131,7 +137,7 @@ resource "aws_cloudwatch_log_metric_filter" "admin-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "document-download-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "document-download-evicted-pods"
-  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"document-download-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-document-download-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -144,7 +150,7 @@ resource "aws_cloudwatch_log_metric_filter" "document-download-evicted-pods" {
 resource "aws_cloudwatch_log_metric_filter" "documentation-evicted-pods" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "documentation-evicted-pods"
-  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"documentation-*\") }"
+  pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-documentation-*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-prometheus-logs[0].name
 
   metric_transformation {
@@ -162,19 +168,6 @@ resource "aws_cloudwatch_log_metric_filter" "aggregating-queues-are-active" {
 
   metric_transformation {
     name      = "aggregating-queues-are-active"
-    namespace = "LogMetrics"
-    value     = "1"
-  }
-}
-
-resource "aws_cloudwatch_log_metric_filter" "github-arc-runner-alarm" {
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "GitHub ARC Runners Write Alarm"
-  pattern        = "{ $.kubernetes.pod_name = \"github-arc-ss-${var.env}-*-runner-*\"  && $.log = \"*ERROR*\" }"
-  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
-
-  metric_transformation {
-    name      = "aggregating-github-arc-runner-alarm"
     namespace = "LogMetrics"
     value     = "1"
   }
@@ -201,6 +194,19 @@ resource "aws_cloudwatch_log_metric_filter" "throttling-exceptions" {
 
   metric_transformation {
     name      = "throttling-exceptions"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "db-migration-failure" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "db-migration-failure"
+  pattern        = "database migration failed"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "db-migration-failure"
     namespace = "LogMetrics"
     value     = "1"
   }

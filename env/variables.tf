@@ -162,6 +162,10 @@ variable "rds_version" {
   type = string
 }
 
+variable "blazer_rds_version" {
+  type = string
+}
+
 variable "aws_xray_sdk_enabled" {
   type = bool
 }
@@ -489,11 +493,6 @@ variable "auth_tokens" {
   sensitive = true
 }
 
-variable "dangerous_salt" {
-  type      = string
-  sensitive = true
-}
-
 variable "ff_batch_insertion" {
   type = string
 }
@@ -504,15 +503,6 @@ variable "ff_cloudwatch_metrics_enabled" {
 
 variable "ff_redis_batch_saving" {
   type = string
-}
-
-variable "redis_url" {
-  type = string
-}
-
-variable "secret_key" {
-  type      = string
-  sensitive = true
 }
 
 variable "notify_sending_domain" {
@@ -705,10 +695,6 @@ variable "sqs_throttled_sms_queue_name" {
   type = string
 }
 
-variable "sqs_db_tasks_queue_name" {
-  type = string
-}
-
 variable "sqs_priority_db_tasks_queue_name" {
   type = string
 }
@@ -871,6 +857,16 @@ variable "manifest_new_relic_license_key" {
   sensitive = true
 }
 
+variable "manifest_new_relic_account_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "manifest_new_relic_api_key" {
+  type      = string
+  sensitive = true
+}
+
 variable "manifest_crm_github_personal_access_token" {
   type      = string
   sensitive = true
@@ -976,6 +972,24 @@ variable "manifest_cypress_auth_client_secret" {
   sensitive = true
 }
 
+variable "manifest_smoke_api_key" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
+variable "manifest_smoke_admin_client_secret" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
+variable "manifest_pr_bot_github_token" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
 variable "github_app_id" {
   type      = string
   sensitive = true
@@ -1016,4 +1030,40 @@ variable "aws_access_key_id" {
 variable "aws_secret_access_key" {
   type      = string
   sensitive = true
+}
+
+variable "admin_cypress_env_json" {
+  type      = string
+  sensitive = true
+  default   = "c3RhZ2luZ29ubHkK"
+}
+
+variable "admin_pr_review_env_security_group_ids" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
+variable "admin_pr_review_env_subnet_ids" {
+  type      = string
+  sensitive = true
+  default   = "stagingonly"
+}
+
+variable "admin_a11y_tracker_key" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
+}
+
+variable "ipv4_maxmind_license_key" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
+}
+
+variable "github_manifests_workflow_token" {
+  type      = string
+  sensitive = true
+  default   = "prodonly"
 }
