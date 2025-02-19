@@ -1,11 +1,12 @@
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "dev"
+  config_context = var.env
 }
 
 data "aws_caller_identity" "current" {}
 
 module "eks" {
+  count   = var.env != "production" ? 1 : 0
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
   version = "~> 20.0"
 
