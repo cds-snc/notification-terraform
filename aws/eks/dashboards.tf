@@ -551,11 +551,11 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | filter kubernetes.container_name like /^${local.celery_name}/\n| filter @message like /send_delivery_status_to_service request failed for notification_id/\n| parse log \"to url: https://* service: * exc: * \" as endpoint, service_id, error\n| stats count() as fails by service_id, endpoint, error\n| display fails, service_id, error, endpoint\n| order by fails desc\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /celery-sms-send/\n| fields strcontains(@message, 'sending to INTERNAL_TEST_NUMBER') as is_test\n| stats sum(is_test) as tests by bin(1m)\n",
                 "region": "${var.region}",
                 "stacked": false,
-                "title": "Failed Service Callbacks",
-                "view": "table"
+                "title": "Internal Test SMS per Minute",
+                "view": "timeSeries"
             }
         },
         {
@@ -570,6 +570,20 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "stacked": false,
                 "view": "table",
                 "title": "Abnormal Kubernetes Events"
+            }
+        },
+        {
+            "height": 5,
+            "width": 12,
+            "y": 22,
+            "x": 12,
+            "type": "log",
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | filter kubernetes.container_name like /^${local.celery_name}/\n| filter @message like /send_delivery_status_to_service request failed for notification_id/\n| parse log \"to url: https://* service: * exc: * \" as endpoint, service_id, error\n| stats count() as fails by service_id, endpoint, error\n| display fails, service_id, error, endpoint\n| order by fails desc\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Failed Service Callbacks",
+                "view": "table"
             }
         }
     ]
