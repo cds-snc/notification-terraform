@@ -1,9 +1,3 @@
-resource "aws_security_group" "perf_test" {
-  name        = "perf_test"
-  description = "Performance Test Security Group"
-  vpc_id      = var.vpc_id
-}
-
 resource "aws_security_group_rule" "perftest-egress-internet" {
   description       = "Egress to the internet from perftest"
   type              = "egress"
@@ -11,7 +5,7 @@ resource "aws_security_group_rule" "perftest-egress-internet" {
   to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.perf_test.id
+  security_group_id = var.perf_test_security_group_id
 }
 
 # Connect perf test to the vpc private endpoint security group
@@ -23,7 +17,7 @@ resource "aws_security_group_rule" "notification-worker-egress-private-endpoints
   to_port                  = 443
   protocol                 = "tcp"
   source_security_group_id = var.private-links-vpc-endpoints-securitygroup
-  security_group_id        = aws_security_group.perf_test.id
+  security_group_id        = var.perf_test_security_group_id
 }
 
 resource "aws_security_group_rule" "private-endpoints-ingress-perf-test" {
@@ -32,7 +26,7 @@ resource "aws_security_group_rule" "private-endpoints-ingress-perf-test" {
   from_port                = 443
   to_port                  = 443
   protocol                 = "tcp"
-  source_security_group_id = aws_security_group.perf_test.id
+  source_security_group_id = var.perf_test_security_group_id
   security_group_id        = var.private-links-vpc-endpoints-securitygroup
 }
 
@@ -42,6 +36,6 @@ resource "aws_security_group_rule" "perftest-egress-endpoints-gateway" {
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.perf_test.id
+  security_group_id = var.perf_test_security_group_id
   prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 }

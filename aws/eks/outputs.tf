@@ -90,6 +90,11 @@ output "quicksight_security_group_id" {
   value = aws_security_group.quicksight.id
 }
 
+# Performance test
+output "perf_test_security_group_id" {
+  value = aws_security_group.perf-test.id
+}
+
 # Sentinel
 output "sentinel_forwarder_cloudwatch_lambda_arn" {
   value = module.sentinel_forwarder.lambda_arn
