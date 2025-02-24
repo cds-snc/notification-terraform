@@ -141,6 +141,34 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-quicksight-ingres
   security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
 }
 
+# Performance test security group
+
+resource "aws_security_group" "perf-test" {
+  name        = "performance_test"
+  description = "Performance Test Security Group"
+  vpc_id      = var.vpc_id
+}
+
+resource "aws_security_group_rule" "perf-test-access-rds-eks" {
+  description              = "Connect performance test to RDS"
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = 5432
+  to_port                  = 5432
+  security_group_id        = aws_security_group.perf-test.id
+  source_security_group_id = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+resource "aws_security_group_rule" "notification-canada-ca-alb-perf-test-ingress" {
+  description              = "Access to performance test access through its security group"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.perf-test.id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
 # Google CIDR security groups
 
 resource "aws_ec2_managed_prefix_list" "google_cidrs" {
