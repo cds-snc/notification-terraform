@@ -353,7 +353,14 @@ jobs:
           install-kubectl: yes
           install-helm: yes       
           helmfile-version: "v0.151.0"
-          
+
+      - name: Configure credentials to Notify Private ECR using OIDC
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-manifests-apply
+          role-session-name: NotifyTerraformApply
+          aws-region: "ca-central-1"      
+
       - name: Connect to VPN
         uses: "kota65535/github-openvpn-connect-action@cd2ed8a90cc7b060dc4e001143e811b5f7ea0af5" # v3.1.0
         with:
