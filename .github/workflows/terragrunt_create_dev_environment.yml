@@ -387,7 +387,7 @@ jobs:
           install-helm: yes       
           helmfile-version: "v0.151.0"
 
-      - name: Configure credentials to Notify Private ECR using OIDC
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
           role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-manifests-apply
