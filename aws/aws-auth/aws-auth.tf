@@ -69,8 +69,3 @@ module "eks" {
     var.account_id
   ]
 }
-
-variable "role_name" {
-  type        = string
-  description = "The name of the role to create"
-}
