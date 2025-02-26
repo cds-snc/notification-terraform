@@ -58,9 +58,9 @@ resource "aws_cloudwatch_metric_alarm" "high-db-cpu-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "high-db-cpu-critical" {
+resource "aws_cloudwatch_metric_alarm" "very-high-db-cpu-warning" {
   count               = var.rds_instance_count
-  alarm_name          = "high-db-cpu-critical-instance-${count.index}"
+  alarm_name          = "very-high-db-cpu-warning-instance-${count.index}"
   alarm_description   = "CPU usage of the RDS instance > 95%"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_metric_alarm" "high-db-cpu-critical" {
   period              = 60
   statistic           = "Average"
   threshold           = 95
-  alarm_actions       = [var.sns_alert_critical_arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
