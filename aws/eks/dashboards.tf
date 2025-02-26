@@ -44,7 +44,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 16,
-            "y": 22,
+            "y": 27,
             "x": 8,
             "type": "log",
             "properties": {
@@ -103,11 +103,11 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             }
         },
         {
-            "type": "metric",
-            "x": 4,
-            "y": 8,
-            "width": 4,
             "height": 4,
+            "width": 4,
+            "y": 8,
+            "x": 4,
+            "type": "metric",
             "properties": {
                 "metrics": [
                     [ { "expression": "FILL(METRICS(), 0)", "label": "Pinpoint /", "id": "e1", "region": "${var.region}", "period": 60 } ],
@@ -296,7 +296,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 8,
-            "y": 22,
+            "y": 27,
             "x": 0,
             "type": "log",
             "properties": {
@@ -310,7 +310,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 8,
-            "y": 34,
+            "y": 39,
             "x": 0,
             "type": "log",
             "properties": {
@@ -324,7 +324,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 16,
-            "y": 34,
+            "y": 39,
             "x": 8,
             "type": "log",
             "properties": {
@@ -399,7 +399,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 16,
-            "y": 28,
+            "y": 33,
             "x": 8,
             "type": "log",
             "properties": {
@@ -533,7 +533,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
         {
             "height": 6,
             "width": 8,
-            "y": 28,
+            "y": 33,
             "x": 0,
             "type": "log",
             "properties": {
@@ -562,7 +562,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "type": "log",
             "height": 5,
             "width": 12,
-            "y": 21,
+            "y": 22,
             "x": 0,
             "properties": {
                 "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | fields @timestamp, @message, @logStream, @log,log_processed.firstTimestamp as timestamp, log_processed.involvedObject.name as pod, log_processed.involvedObject.namespace as namespace, log_processed.reason as reason, log_processed.type as level\n| filter kubernetes.container_name like /k8s-event-logger/\n| filter log_processed.involvedObject.kind like /Pod/\n| filter log_processed.type not like /Normal/\n| display timestamp, pod, namespace, reason, level\n| sort @timestamp desc\n| limit 100",
