@@ -447,6 +447,13 @@ jobs:
           config_file: /var/tmp/${{env.ENVIRONMENT}}.ovpn
           echo_config: false       
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-manifests-apply
+          role-session-name: NotifyTerraformPlan
+          aws-region: "ca-central-1"       
+
       - name: Configure kubeconfig
         run: |
           aws eks update-kubeconfig --name notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster     

@@ -59,6 +59,11 @@ module "eks" {
       groups   = ["system:masters"]
     },
     {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-plan"
+      username = "notification-terraform-plan"
+      groups   = ["system:masters"]
+    },
+    {
       rolearn  = "arn:aws:iam::${var.account_id}:role/ipv4-geolocate-webservice-apply"
       username = "ipv4-geolocate-webservice-apply"
       groups   = ["system:masters"]
