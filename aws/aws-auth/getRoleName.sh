@@ -5,3 +5,4 @@ ROLE_NAME=$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSRe
 jq --null-input \
   --arg rolename "$ROLE_NAME" \
   '{"rolename": $rolename}'
+  
