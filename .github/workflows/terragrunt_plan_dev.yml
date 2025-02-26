@@ -447,15 +447,17 @@ jobs:
           config_file: /var/tmp/${{env.ENVIRONMENT}}.ovpn
           echo_config: false       
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-manifests-apply
+          role-session-name: NotifyTerraformPlan
+          aws-region: "ca-central-1"       
+
       - name: Configure kubeconfig
         run: |
           aws eks update-kubeconfig --name notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster     
           kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster ${{env.ENVIRONMENT}}
-
-      - name: get role name
-        run: |
-          export TF_VAR_role_name=$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSReservedSSO_AWSAdministratorAccess_*")) | .RoleName')
-          echo "TF_VAR_role_name=$TF_VAR_role_name" >> $GITHUB_ENV
 
       - name: Terragrunt plan ${{env.COMPONENT}}
         uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6

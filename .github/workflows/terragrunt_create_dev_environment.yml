@@ -405,11 +405,6 @@ jobs:
           aws eks update-kubeconfig --name notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster     
           kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster ${{env.ENVIRONMENT}}
 
-      - name: get role name
-        run: |
-          export TF_VAR_role_name=$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName|match("AWSReservedSSO_AWSAdministratorAccess_*")) | .RoleName')
-          echo "TF_VAR_role_name=$TF_VAR_role_name" >> $GITHUB_ENV
-
       - name: terragrunt apply aws-auth
         run: |
           cd env/${{env.ENVIRONMENT}}/aws-auth
