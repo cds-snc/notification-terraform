@@ -5,6 +5,11 @@ provider "kubernetes" {
 
 data "aws_caller_identity" "current" {}
 
+data "external" "aws_role_name" {
+  # Get the role name from aws
+  program = ["./getRoleName.sh"]
+}
+
 module "eks" {
   count   = var.env != "production" ? 1 : 0
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
@@ -19,7 +24,7 @@ module "eks" {
       groups   = ["system:nodes", "system:bootstrappers"]
     },
     {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/${var.role_name}"
+      rolearn  = "arn:aws:iam::${var.account_id}:role/${data.external.aws_role_name.result.rolename}"
       username = "AWSAdministratorAccess:{{SessionName}}"
       groups   = ["system:masters"]
     },
@@ -46,6 +51,11 @@ module "eks" {
     {
       rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-apply"
       username = "notification-manifests-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-apply"
+      username = "notification-terraform-apply"
       groups   = ["system:masters"]
     },
     {
