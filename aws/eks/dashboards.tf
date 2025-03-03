@@ -585,6 +585,112 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "title": "Failed Service Callbacks",
                 "view": "table"
             }
+        },
+        {
+            "height": 6,
+            "width": 14,
+            "type": "log",
+            "x": 0,
+            "y": 48,
+            "properties": {
+                "query": "SOURCE '/aws/lambda/system_status' | fields @timestamp\n| filter @message like /'email'/\n| filter @message like 'Pushed status data'\n| parse @message \"'email': '*'\" as status\n| fields @timestamp,\n    (status='down') * 0 +\n    (status='degraded') * 1 +\n    (status='up') * 2 as numeric_status\n| stats \n    min(numeric_status) as email_status\n    # count(*) as total_checks,\n    # sum((status='down') * 1) as down_count\n    by bin(5m)\n# | display worst_status\n| sort @timestamp asc",
+                "region": "${var.region}",
+                "stacked": true,
+                "title": "Email health",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 2,
+            "width": 14,
+            "type": "text",
+            "x": 0,
+            "y": 46,
+            "properties": {
+                "markdown": "## Email\nThis line represents the email sending status: 2 - up, 1 - degraded, 0 - down."
+            }
+        },
+        {
+            "height": 6,
+            "width": 14,
+            "type": "log",
+            "x": 0,
+            "y": 56,
+            "properties": {
+                "query": "SOURCE '/aws/lambda/system_status' | fields @timestamp\n| filter @message like /'sms'/\n| filter @message like 'Pushed status data'\n| parse @message \"'sms': '*'\" as status\n| fields @timestamp,\n    (status='down') * 0 +\n    (status='degraded') * 1 +\n    (status='up') * 2 as numeric_status\n| stats \n    min(numeric_status) as sms_status\n    # count(*) as total_checks,\n    # sum((status='down') * 1) as down_count\n    by bin(5m)\n# | display worst_status\n| sort @timestamp asc",
+                "region": "${var.region}",
+                "stacked": true,
+                "title": "SMS down",
+                "view": "timeSeries"
+            }
+        },
+        {
+            "height": 2,
+            "width": 14,
+            "type": "text",
+            "x": 0,
+            "y": 54,
+            "properties": {
+                "markdown": "## SMS\nThis line represents the SMS sending status: 2 - up, 1 - degraded, 0 - down."
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "type": "log",
+            "x": 15,
+            "y": 48,
+            "properties": {
+                "query": "SOURCE '/aws/lambda/system_status' | fields @timestamp, @message, @logStream, @log\n# | filter @message like \"degraded\"\n| filter @message like \"'email': 'degraded'\" or @message like \"'email': 'down'\"\n| parse @message \"Pushed status data to s3: *\" as @all_statuses \n| parse @message \"'email': '*'\" as @email_status\n| sort @timestamp desc\n| display @timestamp, @email_status, @all_statuses\n| limit 200\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Log group: /aws/lambda/system_status",
+                "view": "table"
+            }
+        },
+        {
+            "height": 6,
+            "width": 9,
+            "type": "log",
+            "x": 15,
+            "y": 56,
+            "properties": {
+                "query": "SOURCE '/aws/lambda/system_status' | fields @timestamp, @message, @logStream, @log\n# | filter @message like \"degraded\"\n| filter @message like \"'sms': 'degraded'\" or @message like \"'sms': 'down'\"\n| parse @message \"Pushed status data to s3: *\" as @all_statuses \n| parse @message \"'sms': '*'\" as @sms_status\n| sort @timestamp desc\n| display @timestamp, @sms_status, @all_statuses\n| limit 200\n\n",
+                "region": "${var.region}",
+                "stacked": false,
+                "title": "Log group: /aws/lambda/system_status",
+                "view": "table"
+            }
+        },
+        {
+            "height": 2,
+            "width": 9,
+            "type": "text",
+            "x": 15,
+            "y": 46,
+            "properties": {
+                "markdown": "## Email down/degraded details\nInidivdual down or degraded logs."
+            }
+        },
+        {
+            "height": 2,
+            "width": 9,
+            "type": "text",
+            "x": 15,
+            "y": 54,
+            "properties": {
+                "markdown": "## SMS\nIndividual down or degraded logs"
+            }
+        },
+        {
+            "height": 1,
+            "width": 24,
+            "type": "text",
+            "x": 0,
+            "y": 45,
+            "properties": {
+                "markdown": "# System Status info"
+            }
         }
     ]
 }
