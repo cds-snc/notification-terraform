@@ -205,7 +205,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-cpu-warning" {
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-core-tasks-static-pods-high-cpu-warning"
-  alarm_description         = "Average CPU of Primary Celery pods >=50% during 10 minutes"
+  alarm_description         = "Average CPU of celery-core-tasks-static pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
@@ -226,7 +226,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-cpu-w
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-pods-high-cpu-warning" {
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-core-tasks-scalable-pods-high-cpu-warning"
-  alarm_description         = "Average CPU of Scalable Celery pods >=50% during 10 minutes"
+  alarm_description         = "Average CPU of celery-core-tasks-scalable pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
@@ -311,7 +311,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-memory-warning" {
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-core-tasks-static-pods-high-memory-warning"
-  alarm_description         = "Average memory of Primary Celery pods >=50% during 10 minutes"
+  alarm_description         = "Average memory of celery-core-tasks-static pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
   metric_name               = "pod_memory_utilization"
@@ -461,7 +461,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-replicas-unavai
   alarm_name          = "celery-core-tasks-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
-  alarm_description   = "Celery Primary Replicas Unavailable"
+  alarm_description   = "Celery Core Tasks Static Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
@@ -490,7 +490,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-replicas-unav
   alarm_name          = "celery-core-tasks-scalable-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
-  alarm_description   = "Celery Scalable Replicas Unavailable"
+  alarm_description   = "Celery Core Tasks Scalable Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
@@ -546,7 +546,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-dedicated-static-replicas-una
   alarm_name          = "celery-sms-dedicated-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
-  alarm_description   = "Celery SMS Replicas Unavailable"
+  alarm_description   = "Celery SMS Dedicated Static Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
@@ -574,7 +574,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-static-replicas-unavai
   alarm_name          = "celery-email-send-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
-  alarm_description   = "Celery Email Send Primary Replicas Unavailable"
+  alarm_description   = "Celery Email Send Static Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
@@ -631,7 +631,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-static-replicas-unavaila
   alarm_name          = "celery-sms-send-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
-  alarm_description   = "Celery SMS Send Primary Replicas Unavailable"
+  alarm_description   = "Celery SMS Send Static Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
