@@ -390,7 +390,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-manifests-apply
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role-session-name: NotifyTerraformApply
           aws-region: "ca-central-1"      
 
@@ -987,7 +987,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-eks, terragrunt-apply-rds]
+    needs: [terragrunt-apply-eks, terragrunt-apply-aws-auth, terragrunt-apply-rds]
     runs-on: ubuntu-latest            
 
     steps:
