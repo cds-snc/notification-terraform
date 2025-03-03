@@ -620,7 +620,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "query": "SOURCE '/aws/lambda/system_status' | fields @timestamp\n| filter @message like /'sms'/\n| filter @message like 'Pushed status data'\n| parse @message \"'sms': '*'\" as status\n| fields @timestamp,\n    (status='down') * 0 +\n    (status='degraded') * 1 +\n    (status='up') * 2 as numeric_status\n| stats \n    min(numeric_status) as sms_status\n    # count(*) as total_checks,\n    # sum((status='down') * 1) as down_count\n    by bin(5m)\n# | display worst_status\n| sort @timestamp asc",
                 "region": "${var.region}",
                 "stacked": true,
-                "title": "SMS down",
+                "title": "SMS Health",
                 "view": "timeSeries"
             }
         },
@@ -669,7 +669,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 15,
             "y": 46,
             "properties": {
-                "markdown": "## Email down/degraded details\nInidivdual down or degraded logs."
+                "markdown": "## Email down/degraded details\nIndividual down or degraded logs."
             }
         },
         {
@@ -679,7 +679,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "x": 15,
             "y": 54,
             "properties": {
-                "markdown": "## SMS\nIndividual down or degraded logs"
+                "markdown": "## SMS down/degraded details\nIndividual down or degraded logs"
             }
         },
         {
