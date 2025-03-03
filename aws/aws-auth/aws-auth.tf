@@ -11,7 +11,6 @@ data "external" "aws_role_name" {
 }
 
 module "eks" {
-  count   = var.env != "production" ? 1 : 0
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
   version = "~> 20.0"
 
