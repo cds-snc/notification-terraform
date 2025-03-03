@@ -33,7 +33,7 @@ resource "aws_cloudwatch_log_metric_filter" "system_status_email_down" {
   log_group_name = "/aws/lambda/${module.system_status.function_name}"
 
   metric_transformation {
-    name      = "500-errors-system_status-api"
+    name      = "system_status_email_down"
     namespace = "LogMetrics"
     value     = "1"
   }
@@ -46,7 +46,7 @@ resource "aws_cloudwatch_log_metric_filter" "system_status_email_degraded" {
   log_group_name = "/aws/lambda/${module.system_status.function_name}"
 
   metric_transformation {
-    name      = "500-errors-system_status-api"
+    name      = "system_status_email_degraded"
     namespace = "LogMetrics"
     value     = "1"
   }
@@ -59,7 +59,7 @@ resource "aws_cloudwatch_log_metric_filter" "system_status_sms_down" {
   log_group_name = "/aws/lambda/${module.system_status.function_name}"
 
   metric_transformation {
-    name      = "500-errors-system_status-api"
+    name      = "system_status_sms_down"
     namespace = "LogMetrics"
     value     = "1"
   }
@@ -72,7 +72,7 @@ resource "aws_cloudwatch_log_metric_filter" "system_status_sms_degraded" {
   log_group_name = "/aws/lambda/${module.system_status.function_name}"
 
   metric_transformation {
-    name      = "500-errors-system_status-api"
+    name      = "system_status_sms_degraded"
     namespace = "LogMetrics"
     value     = "1"
   }
