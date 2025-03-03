@@ -3,6 +3,12 @@ provider "kubernetes" {
   config_context = var.env
 }
 
+moved {
+  from = module.eks[0]
+  to   = module.eks
+}
+
+
 data "aws_caller_identity" "current" {}
 
 data "external" "aws_role_name" {
@@ -11,7 +17,6 @@ data "external" "aws_role_name" {
 }
 
 module "eks" {
-  count   = var.env != "production" ? 1 : 0
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
   version = "~> 20.0"
 
