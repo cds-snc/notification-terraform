@@ -595,7 +595,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-primary", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-primary" } ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-static", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-static" } ],
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-scalable", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-scalable" } ]
                 ],
                 "sparkline": true,
