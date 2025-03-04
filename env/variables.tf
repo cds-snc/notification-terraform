@@ -534,6 +534,11 @@ variable "perf_test_api_key" {
   sensitive = true
 }
 
+variable "perf_test_slack_webhook" {
+  type      = string
+  sensitive = true
+}
+
 variable "billing_tag_key" {
   type = string
 }

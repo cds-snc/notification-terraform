@@ -47,11 +47,12 @@ data "template_file" "perf_test_container_definition" {
     PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR = var.perf_test_email_template_id_one_var
     PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR   = var.perf_test_sms_template_id_one_var
 
-    PERF_TEST_PHONE_NUMBER_ARN = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_phone_number[0].arn
-    PERF_TEST_EMAIL_ARN        = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn
-    PERF_TEST_DOMAIN_ARN       = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_domain[0].arn
-    PERF_TEST_API_KEY_ARN      = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_api_key[0].arn
-    DATABASE_READER_URI_ARN    = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_database_uri[0].arn
+    PERF_TEST_PHONE_NUMBER_ARN  = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_phone_number[0].arn
+    PERF_TEST_EMAIL_ARN         = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn
+    PERF_TEST_DOMAIN_ARN        = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_domain[0].arn
+    PERF_TEST_API_KEY_ARN       = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_api_key[0].arn
+    PERF_TEST_SLACK_WEBHOOK_ARN = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_slack_webhook[0].arn
+    DATABASE_READER_URI_ARN     = var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_database_uri[0].arn
   }
 }
 

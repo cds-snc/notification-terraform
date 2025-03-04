@@ -58,6 +58,7 @@ data "aws_iam_policy_document" "perf_test_secretsmanager" {
       var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_email[0].arn,
       var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_domain[0].arn,
       var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_api_key[0].arn,
+      var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_slack_webhook[0].arn,
       var.env == "production" ? "" : aws_secretsmanager_secret_version.perf_test_database_uri[0].arn
     ]
   }
