@@ -278,13 +278,13 @@ jobs:
           terraform-init: |
             -upgrade
 
-terragrunt-plan-aws-auth:
+  terragrunt-plan-aws-auth:
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
+    needs: [terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
     env:
       COMPONENT: "aws-auth"
     steps:
@@ -336,7 +336,7 @@ terragrunt-plan-aws-auth:
           install-kubectl: yes
           install-helm: yes       
           helmfile-version: "v0.151.0"
-         
+          
       - name: Connect to VPN
         uses: "kota65535/github-openvpn-connect-action@cd2ed8a90cc7b060dc4e001143e811b5f7ea0af5" # v3.1.0
         with:
