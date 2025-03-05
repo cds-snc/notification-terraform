@@ -278,7 +278,7 @@ jobs:
           terraform-init: |
             -upgrade
 
-terragrunt-plan-aws-auth:
+  terragrunt-plan-aws-auth:
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
