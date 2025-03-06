@@ -25,3 +25,52 @@ resource "aws_cloudwatch_log_metric_filter" "system_status-500-errors-api" {
     value     = "1"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "system_status_email_down" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "system_status_email_down"
+  pattern        = "\\'email\\': \\'down\\'"
+  log_group_name = "/aws/lambda/${module.system_status.function_name}"
+
+  metric_transformation {
+    name      = "system_status_email_down"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+resource "aws_cloudwatch_log_metric_filter" "system_status_email_degraded" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "system_status_email_degraded"
+  pattern        = "\\'email\\': \\'degraded\\'"
+  log_group_name = "/aws/lambda/${module.system_status.function_name}"
+
+  metric_transformation {
+    name      = "system_status_email_degraded"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+resource "aws_cloudwatch_log_metric_filter" "system_status_sms_down" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "system_status_sms_down"
+  pattern        = "\\'sms\\': \\'down\\'"
+  log_group_name = "/aws/lambda/${module.system_status.function_name}"
+
+  metric_transformation {
+    name      = "system_status_sms_down"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+resource "aws_cloudwatch_log_metric_filter" "system_status_sms_degraded" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "system_status_sms_degraded"
+  pattern        = "\\'sms\\': \\'degraded\\'"
+  log_group_name = "/aws/lambda/${module.system_status.function_name}"
+
+  metric_transformation {
+    name      = "system_status_sms_degraded"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
