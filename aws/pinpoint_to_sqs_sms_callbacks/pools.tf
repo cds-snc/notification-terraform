@@ -35,5 +35,5 @@ resource "aws_secretsmanager_secret" "pinpoint_shortcode_pool_id" {
 
 resource "aws_secretsmanager_secret_version" "pinpoint_shortcode_pool_id" {
   secret_id     = aws_secretsmanager_secret.pinpoint_shortcode_pool_id.id
-  secret_string = data.external.get_short_code_pool_id.result.poolId
+  secret_string = data.external.get_short_code_pool_id.result.poolId != "" ? data.external.get_short_code_pool_id.result.poolId : data.external.get_default_pool_id.result.poolId
 }
