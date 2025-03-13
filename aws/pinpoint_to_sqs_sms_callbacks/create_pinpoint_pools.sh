@@ -30,9 +30,12 @@ logGroupArnFailures=$3
 
 # Create pools for the shortcode and default numbers
 
-poolArns=$(aws pinpoint-sms-voice-v2 describe-pools --output json | jq -r '.Pools.[].PoolArn')
+poolArns=$(aws pinpoint-sms-voice-v2 describe-pools --output json | jq -r '.Pools[].PoolArn')
 shortcodePoolExists=false
 defaultPoolExists=false
+
+enableShortCode=true
+
 for poolArn in $poolArns; do
     isShort=$(aws pinpoint-sms-voice-v2 list-tags-for-resource --resource-arn $poolArn | jq -r '.Tags[].Value' | grep "shortcode-pool" | wc -l)
     isDefault=$(aws pinpoint-sms-voice-v2 list-tags-for-resource --resource-arn $poolArn | jq -r '.Tags[].Value' | grep 'default-pool' | wc -l)
@@ -44,20 +47,28 @@ for poolArn in $poolArns; do
     fi
 done
 
-if [ $shortcodePoolExists == true ]; then
-    echo "Shortcode pool already exists"
-else
-    echo "Creating shortcode pool"
-    number1=$(aws pinpoint-sms-voice-v2 request-phone-number --iso-country-code CA --message-type TRANSACTIONAL --number-capabilities SMS --number-type LONG_CODE | jq -r ".PhoneNumberId")
-    poolId=$(aws pinpoint-sms-voice-v2 create-pool --origination-identity $number1 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=shortcode-pool | jq -r ".PoolId")
-    aws pinpoint-sms-voice-v2 update-pool --pool-id $poolId --shared-routes-enabled
+if [$enableShortCode == true]; then
+    if [ $shortcodePoolExists == true ]; then
+        echo "Shortcode pool already exists"
+    else
+        echo "Creating shortcode pool"
+        number1=$(aws pinpoint-sms-voice-v2 request-phone-number --iso-country-code CA --message-type TRANSACTIONAL --number-capabilities SMS --number-type LONG_CODE | jq -r ".PhoneNumberId")
+        sleep 30
+        poolId=$(aws pinpoint-sms-voice-v2 create-pool --origination-identity $number1 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=shortcode-pool | jq -r ".PoolId")
+        aws pinpoint-sms-voice-v2 update-pool --pool-id $poolId --shared-routes-enabled
+    fi
 fi
-if [ $defaultPoolExists == true ]; then
+
+if [$defaultPoolExists == true]; then
     echo "Default pool already exists"
 else
     echo "Creating default pool"
+    echo "Requesting number"
     number2=$(aws pinpoint-sms-voice-v2 request-phone-number --iso-country-code CA --message-type TRANSACTIONAL --number-capabilities SMS --number-type LONG_CODE  | jq -r ".PhoneNumberId")
-    poolId=$(aws aws pinpoint-sms-voice-v2 create-pool --origination-identity $number2 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=default-pool | jq -r ".PoolId")
+    sleep 30
+    echo "Creating pool"
+    poolId=$(aws pinpoint-sms-voice-v2 create-pool --origination-identity $number2 --iso-country-code CA --message-type TRANSACTIONAL --tags Key=Name,Value=default-pool | jq -r ".PoolId")
+    echo "Associating shared routes"
     aws pinpoint-sms-voice-v2 update-pool --pool-id $poolId --shared-routes-enabled
 fi
 
@@ -71,11 +82,14 @@ if [ $configurationSetExists ]; then
 else
     echo "Creating configuration set"
     aws pinpoint-sms-voice-v2 create-configuration-set --configuration-set-name pinpoint-configuration
+    echo "Creating event destinations"
+    echo "Creating happy path destnation"
     aws pinpoint-sms-voice-v2 create-event-destination \
         --event-destination-name PinpointLoggingAll \
         --configuration-set-name pinpoint-configuration \
         --matching-event-types ALL \
         --cloud-watch-logs-destination IamRoleArn=$iamRoleArn,LogGroupArn=$logGroupArnDeliveries
+    echo "Creating failure destination"
     aws pinpoint-sms-voice-v2 create-event-destination \
         --event-destination-name PinpointLoggingFailures \
         --configuration-set-name pinpoint-configuration \
