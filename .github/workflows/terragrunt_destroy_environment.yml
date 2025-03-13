@@ -62,7 +62,7 @@ jobs:
         uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           max_attempts: 5
-          retry_on: error
+          timeout_minutes: 90
           command: |
             cd scripts
             ./deleteEnvironment.sh dev ${{ secrets.DEV_ACCOUNT_ID}}        
