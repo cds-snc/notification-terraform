@@ -58,3 +58,21 @@ fields @timestamp, @message, @logStream, status
 | stats count(*) by status
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "api_gateway_count_requests_by_minute" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API Gateway Requests By Minute"
+
+  log_group_names = [
+    local.api_gateway_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message, @logStream, @log, status, httpMethod
+| sort @timestamp desc
+| filter ip like /8.8.8.8/
+| stats (count(*)) by httpmethod, bin(1m) as minute
+| order by minute asc
+| limit 100
+QUERY
+}
