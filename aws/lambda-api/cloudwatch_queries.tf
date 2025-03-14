@@ -55,6 +55,6 @@ resource "aws_cloudwatch_query_definition" "api_gateway_response_code_counts" {
 
   query_string = <<QUERY
 fields @timestamp, @message, @logStream, status
-| stats (count(*)) by status
+| stats count(*) by status
 QUERY
 }
