@@ -54,8 +54,7 @@ resource "aws_cloudwatch_query_definition" "api_gateway_response_code_counts" {
   ]
 
   query_string = <<QUERY
-fields @timestamp, @message, @logStream, @log
-| filter @message like /ea5e8773-c2eb-4523-97f9-25bc3018fbc1/
-| sort @timestamp desc
+fields @timestamp, @message, @logStream, status
+| stats count(*) by status
 QUERY
 }
