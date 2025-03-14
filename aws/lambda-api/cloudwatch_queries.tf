@@ -44,3 +44,18 @@ fields @timestamp, @message, @logStream, status
 | limit 1000
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "api_gateway_response_code_counts" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API Gateway Response Code Counts"
+
+  log_group_names = [
+    local.api_gateway_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message, @logStream, @log
+| filter @message like /ea5e8773-c2eb-4523-97f9-25bc3018fbc1/
+| sort @timestamp desc
+QUERY
+}
