@@ -2,7 +2,7 @@ resource "aws_iam_role" "platform_data_lake_export" {
   count              = var.env == "staging" ? 1 : 0
   name               = "NotifyExportToPlatformDataLake"
   description        = "Export RDS snapshots to the Platform Data Lake"
-  assume_role_policy = data.aws_iam_policy_document.platform_data_lake_assume[0].json
+  assume_role_policy = data.aws_iam_policy_document.platform_data_lake_export_assume[0].json
 }
 
 resource "aws_iam_policy" "platform_data_lake_export" {
