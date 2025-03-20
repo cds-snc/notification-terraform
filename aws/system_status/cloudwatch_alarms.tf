@@ -64,7 +64,7 @@ resource "aws_cloudwatch_metric_alarm" "system_status_email_degraded_warning" {
   namespace           = aws_cloudwatch_log_metric_filter.system_status_email_degraded[0].metric_transformation[0].namespace
   period              = 1800 # 30 minutes
   statistic           = "Sum"
-  threshold           = 3 # 3 out of 5 metric updates in 30 minutes
+  threshold           = 3 # 3 out of 6 metric updates in 30 minutes
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
@@ -98,7 +98,7 @@ resource "aws_cloudwatch_metric_alarm" "system_status_sms_degraded_warning" {
   namespace           = aws_cloudwatch_log_metric_filter.system_status_sms_degraded[0].metric_transformation[0].namespace
   period              = 1800 # 30 minutes
   statistic           = "Sum"
-  threshold           = 3 # 3 out of 5 metric updates in 30 minutes
+  threshold           = 3 # 3 out of 6 metric updates in 30 minutes
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
