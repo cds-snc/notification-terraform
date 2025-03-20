@@ -31,3 +31,18 @@ variable "sns_alert_warning_arn" {
 variable "sns_alert_critical_arn" {
   type = string
 }
+
+variable "platform_data_lake_kms_key_arn" {
+  type        = string
+  description = "Platform Data Lake KMS key ARN used for encrypting RDS snapshot exports"
+}
+
+variable "platform_data_lake_raw_s3_bucket_arn" {
+  type        = string
+  description = "Platform Data Lake Raw S3 bucket ARN where RDS snapshots are exported"
+}
+
+variable "platform_data_lake_rds_export_role_arn" {
+  type        = string
+  description = "The Platform Data Lake IAM role that triggers RDS snapshot exports to S3"
+}
