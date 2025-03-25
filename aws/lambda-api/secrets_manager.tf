@@ -85,6 +85,7 @@ POSTGRES_SQL=postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.d
 
 REDIS_URL=redis://${var.redis_primary_endpoint_address}
 REDIS_PUBLISH_URL=redis://${var.redis_primary_endpoint_address}
+REPORTS_BUCKET_NAME=notification-canada-ca-${var.env}-reports
 
 CRM_GITHUB_PERSONAL_ACCESS_TOKEN=${var.manifest_crm_github_personal_access_token}
 CRM_ORG_LIST_URL=https://raw.githubusercontent.com/cds-snc/gc-organisations-qa/main/data/all.json
@@ -205,6 +206,7 @@ POSTGRES_SQL=postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.d
 
 REDIS_URL=redis://${var.redis_primary_endpoint_address}
 REDIS_PUBLISH_URL=redis://${var.redis_primary_endpoint_address}
+REPORTS_BUCKET_NAME=notification-canada-ca-${var.env}-reports
 
 CRM_GITHUB_PERSONAL_ACCESS_TOKEN=${var.manifest_crm_github_personal_access_token}
 CRM_ORG_LIST_URL=https://raw.githubusercontent.com/cds-snc/gc-organisations-qa/main/data/all.json
