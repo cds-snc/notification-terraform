@@ -572,8 +572,8 @@ module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
   }
 }
 
-resource "aws_s3_bucket" "gc_organisations_bucket" {
-  bucket        = "notification-canada-ca-${var.env}-gc-organisations"
+resource "aws_s3_bucket" "reports_bucket" {
+  bucket        = "notification-canada-ca-${var.env}-reports"
   force_destroy = var.force_destroy_s3
 
   logging {
@@ -585,8 +585,30 @@ resource "aws_s3_bucket" "gc_organisations_bucket" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 
-  #tfsec:ignore:AWS002 - No logging enabled
-  #tfsec:ignore:AWS077 - Versioning is not enabled
+}
+
+resource "aws_s3_bucket_public_access_block" "reports_bucket" {
+  bucket = aws_s3_bucket.reports_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket" "reports_bucket" {
+  bucket        = "notification-canada-ca-${var.env}-reports"
+  force_destroy = var.force_destroy_s3
+
+  logging {
+    target_prefix = var.env
+    target_bucket = module.csv_bucket_logs.s3_bucket_id
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+
 }
 
 resource "aws_s3_bucket_public_access_block" "gc_organisations_bucket" {
