@@ -123,7 +123,7 @@ perf_test_email_template_id_one_var = "changeme"
 system_status_api_url                   = "https://api.notification.canada.ca"
 system_status_bucket_name               = "notification-canada-ca-production-system-status"
 system_status_admin_url                 = "https://notification.canada.ca"
-system_status_schedule_expression       = "rate(5 minute)"
+system_status_schedule_expression       = "rate(5 minutes)"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 30000
