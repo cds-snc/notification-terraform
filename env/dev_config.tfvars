@@ -83,7 +83,7 @@ aws_config_recorder_name          = "aws-controltower-BaselineConfigRecorder"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
-schedule_expression  = "rate(1 minute)"
+heartbeat_schedule_expression  = "rate(1 minute)"
 
 ## LAMBDA GOOGLE CIDR
 google_cidr_schedule_expression = "rate(1 day)"
@@ -118,9 +118,10 @@ perf_test_aws_s3_bucket      = "notify-performance-test-results-dev"
 perf_test_csv_directory_path = "/tmp/notify_performance_test"
 
 ## SYSTEM STATUS
-system_status_api_url     = "https://api.dev.notification.cdssandbox.xyz"
-system_status_bucket_name = "notification-canada-ca-dev-system-status"
-system_status_admin_url   = "https://dev.notification.cdssandbox.xyz"
+system_status_api_url               = "https://api.dev.notification.cdssandbox.xyz"
+system_status_bucket_name           = "notification-canada-ca-dev-system-status"
+system_status_admin_url             = "https://dev.notification.cdssandbox.xyz"
+system_status_schedule_expression   = "rate(5 minute)"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 100

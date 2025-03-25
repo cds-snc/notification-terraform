@@ -83,7 +83,7 @@ aws_config_recorder_name          = "aws-controltower-BaselineConfigRecorder"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
-schedule_expression  = "rate(1 minute)"
+heartbeat_schedule_expression  = "rate(1 minute)"
 
 ## LAMBDA GOOGLE CIDR
 google_cidr_schedule_expression = "rate(1 day)"
@@ -109,10 +109,10 @@ sqs_region              = "ca-central-1"
 gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssandbox.xyz"
 
 ## SYSTEM STATUS
-system_status_api_url     = "https://api.staging.notification.cdssandbox.xyz"
-system_status_bucket_name = "notification-canada-ca-staging-system-status"
-system_status_admin_url   = "https://staging.notification.cdssandbox.xyz"
-
+system_status_api_url               = "https://api.staging.notification.cdssandbox.xyz"
+system_status_bucket_name           = "notification-canada-ca-staging-system-status"
+system_status_admin_url             = "https://staging.notification.cdssandbox.xyz"
+system_status_schedule_expression   = "rate(5 minute)"
 ## PERF TEST
 aws_pinpoint_region          = "ca-central-1"
 perf_test_phone_number       = "16135550123" # INTERNAL_TEST_NUMBER - does not send to AWS

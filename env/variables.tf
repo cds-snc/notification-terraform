@@ -428,7 +428,11 @@ variable "heartbeat_sms_number" {
   type = string
 }
 
-variable "schedule_expression" {
+variable "heartbeat_schedule_expression" {
+  type = string
+}
+
+variable "system_status_schedule_expression" {
   type = string
 }
 
