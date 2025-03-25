@@ -112,7 +112,8 @@ gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssan
 system_status_api_url               = "https://api.staging.notification.cdssandbox.xyz"
 system_status_bucket_name           = "notification-canada-ca-staging-system-status"
 system_status_admin_url             = "https://staging.notification.cdssandbox.xyz"
-system_status_schedule_expression   = "rate(5 minute)"
+system_status_schedule_expression   = "rate(5 minutes)"
+
 ## PERF TEST
 aws_pinpoint_region          = "ca-central-1"
 perf_test_phone_number       = "16135550123" # INTERNAL_TEST_NUMBER - does not send to AWS
