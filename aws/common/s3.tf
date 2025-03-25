@@ -620,7 +620,7 @@ resource "aws_s3_bucket" "reports_bucket" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
   #checkov:skip=CKV_AWS_21:Versioning is not enabled for this bucket
-  #checkov:skip=CKV_AWS_291:Event notifications are not required for this bucket
+  #checkov:skip=CKV2_AWS_62:Event notifications are not required for this bucket
 }
 
 resource "aws_s3_bucket_public_access_block" "reports_bucket" {
