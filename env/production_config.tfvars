@@ -50,7 +50,7 @@ enable_delete_protection   = true
 api_enable_new_relic       = true
 cloudwatch_enabled         = true
 recovery                   = false
-aws_xray_sdk_enabled       = false
+aws_xray_sdk_enabled       = true
 
 ## DNS
 alt_domain                 = "notification.alpha.canada.ca"
