@@ -95,7 +95,7 @@ rds_database_name                      = "NotificationCanadaCastaging"
 rds_version                            = "15.5"
 platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:key/22f27c88-bb2b-49c3-b731-05123a974af4"
 platform_data_lake_raw_s3_bucket_arn   = "arn:aws:s3:::cds-data-lake-raw-production"
-platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-notify-export"
+platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-gc-notify-export"
 
 ## NOTIFY-API/CELERY               
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
