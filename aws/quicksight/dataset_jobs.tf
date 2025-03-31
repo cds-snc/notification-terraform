@@ -86,7 +86,6 @@ resource "aws_quicksight_data_set" "jobs" {
     actions   = local.dataset_owner_permissions
     principal = aws_quicksight_group.dataset_owner.arn
   }
-
 }
 
 resource "aws_quicksight_refresh_schedule" "jobs" {
