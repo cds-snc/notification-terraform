@@ -5,6 +5,12 @@ resource "aws_quicksight_data_set" "templates" {
   name        = "TemplatesV2"
   import_mode = "SPICE"
 
+  lifecycle {
+    ignore_changes = [
+      refresh_properties,
+    ]
+  }
+
   physical_table_map {
     physical_table_map_id = "templates"
     relational_table {
@@ -52,6 +58,7 @@ resource "aws_quicksight_data_set" "templates" {
     actions   = local.dataset_owner_permissions
     principal = aws_quicksight_group.dataset_owner.arn
   }
+
 }
 
 resource "aws_quicksight_refresh_schedule" "templates" {

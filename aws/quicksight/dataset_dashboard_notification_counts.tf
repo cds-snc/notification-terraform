@@ -5,6 +5,12 @@ resource "aws_quicksight_data_set" "dashboard-notification-counts" {
   name        = "Dashboard notification counts"
   import_mode = "SPICE"
 
+  lifecycle {
+    ignore_changes = [
+      refresh_properties,
+    ]
+  }
+
   physical_table_map {
     physical_table_map_id = "notification-counts"
     custom_sql {
@@ -111,6 +117,7 @@ WITH n AS (
     actions   = local.dataset_owner_permissions
     principal = aws_quicksight_group.dataset_owner.arn
   }
+
 }
 
 resource "aws_quicksight_refresh_schedule" "dashboard-notification-counts" {
