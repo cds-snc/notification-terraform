@@ -5,7 +5,7 @@ region               = "ca-central-1"
 billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
 
-## EKS     
+## EKS
 primary_worker_desired_size     = 8
 primary_worker_instance_types   = ["r5.large"]
 secondary_worker_instance_types = ["r5.large"]
@@ -57,7 +57,7 @@ alt_domain                 = "notification.alpha.canada.ca"
 domain                     = "notification.canada.ca"
 base_domain                = "notification.canada.ca"
 perf_test_domain           = "https://api.notification.canada.ca"
-ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "notification.elections.canada.ca"]
+ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "elections.ca"]
 
 ## LOGGING
 log_retention_period_days           = 0
@@ -96,7 +96,7 @@ platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:
 platform_data_lake_raw_s3_bucket_arn   = "arn:aws:s3:::cds-data-lake-raw-production"
 platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-notify-export"
 
-## NOTIFY-API/CELERY               
+## NOTIFY-API/CELERY
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
 ff_batch_insertion              = "true"
 ff_cloudwatch_metrics_enabled   = "true"
