@@ -46,12 +46,25 @@ data "aws_iam_policy_document" "platform_data_lake_export" {
     effect = "Allow"
     actions = [
       "rds:CopyDBSnapshot",
-      "rds:DescribeDBSnapshots",
-      "rds:DescribeDBSnapshotAttributes",
+      "rds:DescribeDBClusterSnapshots",
+      "rds:DescribeDBClusterSnapshotAttributes",
       "rds:ListTagsForResource",
+      "rds:StartExportTask"
     ]
     resources = [
-      "arn:aws:rds:${var.region}:${var.account_id}:snapshot:rds:notification-canada-ca-${var.env}-cluster-*"
+      "arn:aws:rds:${var.region}:${var.account_id}:cluster-snapshot:rds:notification-canada-ca-${var.env}-cluster-*",
+      "arn:aws:rds:${var.region}:${var.account_id}:cluster:notification-canada-ca-${var.env}-cluster"
+    ]
+  }
+
+  statement {
+    sid    = "IAMPassRole"
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = [
+      aws_iam_role.platform_data_lake_export[0].arn
     ]
   }
 
