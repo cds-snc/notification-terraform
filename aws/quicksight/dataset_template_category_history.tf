@@ -5,6 +5,12 @@ resource "aws_quicksight_data_set" "template-category-history" {
   name        = "Template category history"
   import_mode = "SPICE"
 
+  lifecycle {
+    ignore_changes = [
+      refresh_properties,
+    ]
+  }
+
   physical_table_map {
     physical_table_map_id = "tc-usage-history"
     custom_sql {

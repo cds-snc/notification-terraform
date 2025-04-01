@@ -5,6 +5,12 @@ resource "aws_quicksight_data_set" "templates" {
   name        = "TemplatesV2"
   import_mode = "SPICE"
 
+  lifecycle {
+    ignore_changes = [
+      refresh_properties,
+    ]
+  }
+
   physical_table_map {
     physical_table_map_id = "templates"
     relational_table {
