@@ -9,6 +9,8 @@ ACCOUNT_ID=$2
 
 USAGE="Usage: ./deleteEnv.sh <ENVIRONMENT> <ACCOUNT_ID>"
 
+START_TIME=$(date +%s.%N)
+
 if [ -z "$ENVIRONMENT" ]; then
     echo "Environment Name is required.."
     echo $USAGE
@@ -185,6 +187,15 @@ for query in $R53_QUERIES; do
     aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
     aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
 done
+
+END_TIME=$(date +%s.%N)
+
+RUN_TIME=$( echo "$END_TIME - $START_TIME" | bc )
+
+if [ $RUN_TIME > 3540.0 ]; then
+    echo "Timing out the job since it's taking longer than an hour to run"
+    exit 1
+fi
 
 echo "Done."
 echo "Account $ACCOUNT_ID has been cleaned up."
