@@ -1,7 +1,3 @@
-terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/database-tools?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//database-tools"}"
-}
-
 dependencies {
   paths = ["../common", "../eks", "../rds"]
 }
