@@ -357,7 +357,7 @@ resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri" {
   secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri.id
-  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.postgres_cluster_endpoint}/${var.app_db_database_name}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri" {
@@ -367,7 +367,7 @@ resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri" 
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_reader_uri" {
   secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_reader_uri.id
-  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.postgres_cluster_endpoint}/${var.app_db_database_name}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_postgres_host" {
@@ -387,7 +387,7 @@ resource "aws_secretsmanager_secret" "manifest_postgres_sql" {
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
   secret_id     = aws_secretsmanager_secret.manifest_postgres_sql.id
-  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.postgres_cluster_endpoint}/${var.app_db_database_name}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
