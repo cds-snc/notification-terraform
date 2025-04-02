@@ -1,3 +1,7 @@
+terraform {
+  source = "../../../aws//lambda-api"
+}
+
 dependencies {
   paths = ["../common", "../eks", "../ecr", "../rds", "../dns", "../elasticache"]
 }

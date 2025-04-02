@@ -1,3 +1,7 @@
+terraform {
+  source = "../../../aws//database-tools"
+}
+
 dependencies {
   paths = ["../common", "../eks", "../rds"]
 }
