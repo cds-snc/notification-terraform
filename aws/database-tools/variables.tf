@@ -28,3 +28,8 @@ variable "sns_alert_warning_arn" {
   description = "value of the sns alert warning arn"
   type        = string
 }
+
+variable "postgres_cluster_endpoint" {
+  description = "postgres cluster endpoint"
+  type        = string
+}
