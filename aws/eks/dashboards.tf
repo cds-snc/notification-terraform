@@ -699,8 +699,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "width": 24,
             "height": 6,
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-production-eks-cluster/host' | fields @timestamp as time, @message as message\n| filter @message like /Memory cgroup out of memory/\n| sort @timestamp desc\n| limit 1000",
-                "region": "ca-central-1",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/host' | fields @timestamp as time, @message as message\n| filter @message like /Memory cgroup out of memory/\n| sort @timestamp desc\n| limit 1000",
+                "region": "${var.region}",
                 "stacked": false,
                 "view": "table",
                 "title": "Out Of Memory Warnings"
