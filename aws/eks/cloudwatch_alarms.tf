@@ -1013,3 +1013,35 @@ resource "aws_cloudwatch_metric_alarm" "db-migration-failure-critical" {
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
 }
+
+
+resource "aws_cloudwatch_metric_alarm" "logs-1-oom-error-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-1-oom-error-1-minute-warning"
+  alarm_description   = "One oom error in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.oom-errors[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.oom-errors[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
+# both of these are set to warning atm
+resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-10-oom-error-5-minute-warning"
+  alarm_description   = "Ten oom errors in 5 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.oom-errors[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.oom-errors[0].metric_transformation[0].namespace
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 10
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
