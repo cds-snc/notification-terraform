@@ -74,7 +74,7 @@ resource "aws_cloudwatch_log_metric_filter" "socket-error" {
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
-    name      = "celery-critical"
+    name      = "socket-error"
     namespace = "LogMetrics"
     value     = "1"
   }
