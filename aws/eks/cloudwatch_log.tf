@@ -57,7 +57,7 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error"
-  pattern        = "\"ERROR/\" ?Worker ?MainProcess -\"Failed to write metrics\""
+  pattern        = "\"ERROR/\" ?Worker ?MainProcess -\"Failed to write metrics\" -\"Socket timeout durring send\" -\"Failed to connect to the socket\""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
