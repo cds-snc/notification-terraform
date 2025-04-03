@@ -2,6 +2,11 @@
 # AWS EKS Cloudwatch groups
 ###
 
+import {
+  to = aws_cloudwatch_log_group.notification-canada-ca-eks-host-logs[0]
+  id = "/aws/containerinsights/${var.eks_cluster_name}/host"
+}
+
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/eks/${var.eks_cluster_name}/cluster"
@@ -52,11 +57,24 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error"
-  pattern        = "%ERROR/.*Worker|ERROR/MainProcess%"
+  pattern        = "\"ERROR/\" ?Worker ?MainProcess -\"Failed to write metrics\""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
     name      = "celery-error"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "socket-error" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "socket-error"
+  pattern        = "%Failed to write metrics to the socket due to socket%"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "socket-error"
     namespace = "LogMetrics"
     value     = "1"
   }

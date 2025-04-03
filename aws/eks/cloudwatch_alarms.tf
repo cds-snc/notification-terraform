@@ -129,6 +129,39 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
   ok_actions          = [var.sns_alert_critical_arn]
 }
 
+
+resource "aws_cloudwatch_metric_alarm" "logs-1-socket-error-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-1-socket-error-1-minute-warning"
+  alarm_description   = "One socket error in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.socket-error[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.socket-error[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
+
+resource "aws_cloudwatch_metric_alarm" "logs-10-socket-error-1-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-10-socket-error-1-minute-warning"
+  alarm_description   = "Ten Socket errors in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.socket-error[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.socket-error[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 10
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
+}
+
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning"
