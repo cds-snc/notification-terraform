@@ -4,7 +4,7 @@
 
 import {
   to = aws_cloudwatch_log_group.notification-canada-ca-eks-host-logs[0]
-  id = "arn:aws:logs:ca-central-1:${var.subscription_id}:log-group:/aws/containerinsights/${var.eks_cluster_name}/host:*"
+  id = "arn:aws:logs:ca-central-1:${var.account_id}:log-group:/aws/containerinsights/${var.eks_cluster_name}/host:*"
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
