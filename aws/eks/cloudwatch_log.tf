@@ -52,11 +52,24 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error"
-  pattern        = "%ERROR/.*Worker|ERROR/MainProcess%"
+  pattern        = "%ERROR/.*Worker% OR %ERROR/MainProcess% -(%Failed to write metrics to the socket due to socket%)"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
     name      = "celery-error"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "socket-error" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "socket-error"
+  pattern        = "%Failed to write metrics to the socket due to socket%"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-critical"
     namespace = "LogMetrics"
     value     = "1"
   }
