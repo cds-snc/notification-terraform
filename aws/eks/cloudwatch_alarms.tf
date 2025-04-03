@@ -146,10 +146,10 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-socket-error-1-minute-warning" {
 }
 
 
-resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-warning" {
+resource "aws_cloudwatch_metric_alarm" "logs-10-socket-error-1-minute-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-10-celery-error-1-minute-warning"
-  alarm_description   = "Ten Celery errors in 1 minute"
+  alarm_name          = "logs-10-socket-error-1-minute-warning"
+  alarm_description   = "Ten Socket errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.socket-error[0].metric_transformation[0].name
