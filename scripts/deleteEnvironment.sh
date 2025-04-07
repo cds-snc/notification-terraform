@@ -192,7 +192,7 @@ END_TIME=$(date +%s.%N)
 
 RUN_TIME=$(printf "%.0f" $(echo "$END_TIME - $START_TIME" | bc))
 
-if [ $RUN_TIME ig 3540 ]; then
+if [ $RUN_TIME -gt 3540 ]; then
     echo "Timing out the job since it's taking longer than an hour to run"
     exit 1
 fi
