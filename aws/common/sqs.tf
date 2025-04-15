@@ -71,6 +71,7 @@ resource "aws_sqs_queue" "ses_receipt_callback_buffer" {
   message_retention_seconds  = 345600
   receive_wait_time_seconds  = 0
   visibility_timeout_seconds = var.sqs_visibility_timeout_default
+  sqs_managed_sse_enabled    = true
 
   tags = {
     Environment = var.env
