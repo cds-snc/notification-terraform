@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
       "sqs:DeleteMessage"
     ]
     effect    = "Allow"
-    resources = [aws_sqs_queue.ses_receipt_callback_buffer.arn]
+    resources = [var.ses_receipt_callback_buffer_arn]
   }
 }
 
