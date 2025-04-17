@@ -24,6 +24,7 @@ data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
     resources = [var.sqs_eks_notification_canada_cadelivery_receipts_arn]
   }
 
+  # Gives the lambda function permission to receive messages from the receipt buffer SQS queue
   statement {
     actions = [
       "sqs:GetQueueAttributes",
