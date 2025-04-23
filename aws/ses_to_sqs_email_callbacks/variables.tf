@@ -14,6 +14,10 @@ variable "notification_canada_ca_ses_callback_arn" {
   type = string
 }
 
+variable "ses_receipt_callback_buffer_arn" {
+  type = string
+}
+
 variable "ses_to_sqs_email_callbacks_ecr_repository_url" {
   type        = string
   description = "Inherited from ecr dependency"
