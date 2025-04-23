@@ -175,7 +175,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
   threshold           = "1"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
   treat_missing_data  = "notBreaching"
 
@@ -215,7 +215,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
     id          = "alarmCondition"
     label       = "Guarded Alarm Condition"
     return_data = true
-    expression  = "IF(successRate < 0.85 AND messagesPublished > 75, 0, 1)"
+    expression  = "IF(successRate < 0.75 AND messagesPublished > 75, 0, 1)"
   }
 }
 
