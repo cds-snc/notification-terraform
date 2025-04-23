@@ -140,7 +140,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
     id          = "alarmCondition"
     label       = "Guarded Alarm Condition"
     return_data = true
-    expression  = "IF(successRate < 0.85 AND messagesPublished > 75, 0, 1)"
+    expression  = "IF(successRate < 0.85 AND messagesPublished > 85, 0, 1)"
   }
 }
 
@@ -167,40 +167,56 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-critical" {
   provider = aws.us-west-2
+  count    = var.cloudwatch_enabled ? 1 : 0
 
-  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-critical"
   alarm_description   = "SMS success rate to Canadian numbers is below 75% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
-  metric_name         = "SMSSuccessRate"
-  namespace           = "AWS/SNS"
-  period              = 60 * 60 * 12
-  statistic           = "Average"
-  threshold           = 75 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
+  threshold           = "1"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
   treat_missing_data  = "notBreaching"
-  dimensions = {
-    SMSType = "Transactional"
-    Country = "CA"
-  }
-}
 
-resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sns-sms-blocked-as-spam-warning"
-  alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam[0].metric_transformation[0].namespace
-  period              = 60 * 60 * 12
-  statistic           = "Sum"
-  threshold           = 10
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  treat_missing_data  = "notBreaching"
+  metric_query {
+    id          = "successRate"
+    label       = "Success Rate"
+    return_data = false
+    metric {
+      namespace   = "AWS/SNS"
+      metric_name = "SMSSuccessRate"
+      period      = 60 * 60 * 12
+      stat        = "Average"
+      dimensions = {
+        SMSType = "Transactional"
+        Country = "CA"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "messagesPublished"
+    label       = "Messages Published"
+    return_data = false
+    metric {
+      namespace   = "AWS/SNS"
+      metric_name = "NumberOfMessagesPublished"
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      dimensions = {
+        SMSType = "Transactional"
+        Country = "CA"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "alarmCondition"
+    label       = "Guarded Alarm Condition"
+    return_data = true
+    expression  = "IF(successRate < 0.85 AND messagesPublished > 75, 0, 1)"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warning" {
