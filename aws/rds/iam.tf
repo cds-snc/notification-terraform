@@ -1,25 +1,20 @@
 resource "aws_iam_role" "platform_data_lake_export" {
-  count              = var.env == "staging" ? 1 : 0
   name               = "NotifyExportToPlatformDataLake"
   description        = "Export RDS snapshots to the Platform Data Lake"
-  assume_role_policy = data.aws_iam_policy_document.platform_data_lake_export_assume[0].json
+  assume_role_policy = data.aws_iam_policy_document.platform_data_lake_export_assume.json
 }
 
 resource "aws_iam_policy" "platform_data_lake_export" {
-  count  = var.env == "staging" ? 1 : 0
   name   = "NotifyExportToPlatformDataLake"
-  policy = data.aws_iam_policy_document.platform_data_lake_export[0].json
+  policy = data.aws_iam_policy_document.platform_data_lake_export.json
 }
 
 resource "aws_iam_role_policy_attachment" "platform_data_lake_export" {
-  count      = var.env == "staging" ? 1 : 0
-  role       = aws_iam_role.platform_data_lake_export[0].name
-  policy_arn = aws_iam_policy.platform_data_lake_export[0].arn
+  role       = aws_iam_role.platform_data_lake_export.name
+  policy_arn = aws_iam_policy.platform_data_lake_export.arn
 }
 
 data "aws_iam_policy_document" "platform_data_lake_export_assume" {
-  count = var.env == "staging" ? 1 : 0
-
   statement {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
@@ -39,8 +34,6 @@ data "aws_iam_policy_document" "platform_data_lake_export_assume" {
 }
 
 data "aws_iam_policy_document" "platform_data_lake_export" {
-  count = var.env == "staging" ? 1 : 0
-
   statement {
     sid    = "RDSExportSnapshots"
     effect = "Allow"
@@ -64,7 +57,7 @@ data "aws_iam_policy_document" "platform_data_lake_export" {
       "iam:PassRole"
     ]
     resources = [
-      aws_iam_role.platform_data_lake_export[0].arn
+      aws_iam_role.platform_data_lake_export.arn
     ]
   }
 
@@ -102,4 +95,19 @@ data "aws_iam_policy_document" "platform_data_lake_export" {
       var.platform_data_lake_kms_key_arn
     ]
   }
+}
+
+moved {
+  from = aws_iam_role.platform_data_lake_export[0]
+  to   = aws_iam_role.platform_data_lake_export
+}
+
+moved {
+  from = aws_iam_policy.platform_data_lake_export[0]
+  to   = aws_iam_policy.platform_data_lake_export
+}
+
+moved {
+  from = aws_iam_role_policy_attachment.platform_data_lake_export[0]
+  to   = aws_iam_role_policy_attachment.platform_data_lake_export
 }
