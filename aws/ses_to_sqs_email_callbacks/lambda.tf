@@ -37,8 +37,8 @@ data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
 }
 
 resource "aws_lambda_event_source_mapping" "sqs_batch_callbacks_trigger" {
-  event_source_arn                   = var.sqs_ses_callback_buffer_queue_arn
-  function_name                      = module.ses_to_sqs_email_callbacks.lambda_function_name
+  event_source_arn                   = var.ses_receipt_callback_buffer_arn
+  function_name                      = module.ses_to_sqs_email_callbacks.function_name
   enabled                            = true
   batch_size                         = 10
   maximum_batching_window_in_seconds = 5
