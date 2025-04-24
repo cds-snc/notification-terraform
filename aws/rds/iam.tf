@@ -98,26 +98,26 @@ data "aws_iam_policy_document" "platform_data_lake_export" {
 }
 
 moved {
-  from = "aws_iam_role.platform_data_lake_export[0]"
-  to   = "aws_iam_role.platform_data_lake_export"
+  from = aws_iam_role.platform_data_lake_export[0]
+  to   = aws_iam_role.platform_data_lake_export
 }
 
 moved {
-  from = "aws_iam_policy.platform_data_lake_export[0]"
-  to   = "aws_iam_policy.platform_data_lake_export"
+  from = aws_iam_policy.platform_data_lake_export[0]
+  to   = aws_iam_policy.platform_data_lake_export
 }
 
 moved {
-  from = "aws_iam_role_policy_attachment.platform_data_lake_export[0]"
-  to   = "aws_iam_role_policy_attachment.platform_data_lake_export"
+  from = aws_iam_role_policy_attachment.platform_data_lake_export[0]
+  to   = aws_iam_role_policy_attachment.platform_data_lake_export
 }
 
 moved {
-  from = "data.aws_iam_policy_document.platform_data_lake_export_assume[0]"
-  to   = "data.aws_iam_policy_document.platform_data_lake_export_assume"
+  from = data.aws_iam_policy_document.platform_data_lake_export_assume[0]
+  to   = data.aws_iam_policy_document.platform_data_lake_export_assume
 }
 
 moved {
-  from = "data.aws_iam_policy_document.platform_data_lake_export[0]"
-  to   = "data.aws_iam_policy_document.platform_data_lake_export"
+  from = data.aws_iam_policy_document.platform_data_lake_export[0]
+  to   = data.aws_iam_policy_document.platform_data_lake_export
 }
