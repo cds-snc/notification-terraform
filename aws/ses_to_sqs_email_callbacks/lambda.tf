@@ -41,5 +41,5 @@ resource "aws_lambda_event_source_mapping" "sqs_batch_callbacks_trigger" {
   function_name                      = module.ses_to_sqs_email_callbacks.function_name
   enabled                            = true
   batch_size                         = 10
-  maximum_batching_window_in_seconds = 5
+  maximum_batching_window_in_seconds = 1
 }
