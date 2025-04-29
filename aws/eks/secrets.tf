@@ -97,17 +97,6 @@ resource "aws_secretsmanager_secret_version" "document_download_api_target_group
   secret_id     = aws_secretsmanager_secret.document_download_api_target_group_arn.id
   secret_string = aws_alb_target_group.notification-canada-ca-document-api.arn
 }
-
-resource "aws_secretsmanager_secret" "eks_karpenter_ami_id" {
-  name                    = "EKS_KARPENTER_AMI_ID"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "eks_karpenter_ami_id" {
-  secret_id     = aws_secretsmanager_secret.eks_karpenter_ami_id.id
-  secret_string = var.eks_karpenter_ami_id
-}
-
 resource "aws_secretsmanager_secret" "gha_vpn_cert" {
   name                    = "GHA_VPN_CERT"
   recovery_window_in_days = 0
