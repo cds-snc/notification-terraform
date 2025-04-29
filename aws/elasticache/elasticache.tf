@@ -1,5 +1,5 @@
 ###
-# AWS Elasticache Valkey for Notification application
+# AWS Elasticache Redis/Valkey for Notification application
 ###
 
 resource "aws_elasticache_subnet_group" "notification-canada-ca-cache-subnet" {
@@ -8,7 +8,7 @@ resource "aws_elasticache_subnet_group" "notification-canada-ca-cache-subnet" {
 }
 
 ###
-# AWS Elasticache Valkey Cluster - 1 node, 2 replicas, cluster node enabled:false, multi AZ
+# AWS Elasticache Redis/Valkey Cluster - 1 node, 2 replicas, cluster node enabled:false, multi AZ
 ###
 
 resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz-group" {
@@ -18,17 +18,15 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   automatic_failover_enabled  = true
   preferred_cache_cluster_azs = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
   replication_group_id        = "notify-${var.env}-cluster-cache-az"
-  description                 = "Valkey multiaz cluster with replication group"
+  description                 = "Redis/Valkey multiaz cluster with replication group"
   node_type                   = var.elasticache_node_type
   num_cache_clusters          = var.elasticache_node_number_cache_clusters
   engine                      = var.env == "dev" ? "valkey" : "redis"
-  # AWS automatically supports the Valkey minor version management since version 6.
-  # https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/supported-engine-versions.html#Valkey-version-6.x
-  engine_version       = var.env == "dev" ? "7.2" : "5.x"
-  parameter_group_name = var.env == "dev" ? "default.valkey7" : "default.redis5.x"
-  port                 = 6379
-  maintenance_window   = "thu:04:00-thu:05:00"
-  multi_az_enabled     = true
+  engine_version              = var.env == "dev" ? "7.2" : "6.x"
+  parameter_group_name        = var.env == "dev" ? "default.valkey7" : "default.redis6.x"
+  port                        = 6379
+  maintenance_window          = "thu:04:00-thu:05:00"
+  multi_az_enabled            = true
 
   security_group_ids = local.cluster_security_group_ids
   subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
