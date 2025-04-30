@@ -38,3 +38,14 @@ resource "github_actions_secret" "aws_secret_access_key" {
   secret_name     = "${upper(var.env)}_AWS_SECRET_ACCESS_KEY"
   plaintext_value = var.aws_secret_access_key
 }
+
+variable "kms_arn" {
+  type        = string
+}
+
+resource "github_actions_secret" "aws_kms_key_id" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_terraform.name
+  secret_name     = "${upper(var.env)}_AWS_KMS_KEY_ID"
+  plaintext_value = var.kms_arn
+}

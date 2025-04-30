@@ -69,7 +69,7 @@ jobs:
           aws rds copy-db-cluster-snapshot \
             --source-db-cluster-snapshot-identifier ${{ env.LATEST_SNAPSHOT }} \
             --target-db-cluster-snapshot-identifier ${{ env.SNAPSHOT_NAME }} \
-            --kms-key-id ${{ secrets.KMS_KEY_ARN }}
+            --kms-key-id ${{ secrets.STAGING_AWS_KMS_KEY_ID }} \
             
           # Wait for copy to complete
           echo "Waiting for snapshot copy to complete..."
