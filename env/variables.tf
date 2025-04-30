@@ -267,6 +267,14 @@ variable "eks_addon_ebs_driver_version" {
   type = string
 }
 
+variable "eks_node_ami_version" {
+  type = string
+}
+
+variable "eks_karpenter_ami_id" {
+  type = string
+}
+
 variable "non_api_waf_rate_limit" {
   type = number
 }

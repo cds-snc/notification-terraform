@@ -51,10 +51,6 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
   }
 }
 
-data "aws_ssm_parameter" "eks_ami_release_version" {
-  name = "/aws/service/eks/optimized-ami/${aws_eks_cluster.notification-canada-ca-eks-cluster.version}/amazon-linux-2023/x86_64/standard/recommended/release_version"
-}
-
 ###
 # AWS EKS Nodegroup configuration
 ###
@@ -66,7 +62,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
   subnet_ids           = var.vpc_private_subnets_k8s
   force_update_version = var.force_upgrade
 
-  release_version = nonsensitive(data.aws_ssm_parameter.eks_ami_release_version.value)
+  release_version = var.eks_node_ami_version
   instance_types  = var.primary_worker_instance_types
 
   launch_template {
@@ -108,7 +104,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
   subnet_ids           = var.vpc_private_subnets_k8s
   force_update_version = var.force_upgrade
 
-  release_version = nonsensitive(data.aws_ssm_parameter.eks_ami_release_version.value)
+  release_version = var.eks_node_ami_version
   instance_types  = var.secondary_worker_instance_types
 
   scaling_config {
