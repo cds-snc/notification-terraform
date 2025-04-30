@@ -1056,3 +1056,13 @@ variable "github_manifests_workflow_token" {
   sensitive = true
   default   = "prodonly"
 }
+
+variable "manifest_docker_hub_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "manifest_docker_hub_pat" {
+  type      = string
+  sensitive = true
+}

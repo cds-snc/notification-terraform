@@ -6,6 +6,7 @@ provider "registry.terraform.io/hashicorp/aws" {
   constraints = "~> 5.66"
   hashes = [
     "h1:fr252BPFVqsCcVoLMN4PTVacXmrW3pbMlK1ibi/wHiU=",
+    "h1:uz55I4t3Pqy3p+82NZ35mkUA9mZ5yu4pS6beZMI8wpA=",
     "zh:1075825e7311a8d2d233fd453a173910e891b0320e8a7698af44d1f90b02621d",
     "zh:203c5d09a03fcaa946defb8459f01227f2fcda07df768f74777beb328d6751ae",
     "zh:21bc79ccb09bfdeb711a3a5226c6c4a457ac7c4bb781dbda6ade7be38461739f",
@@ -29,6 +30,7 @@ provider "registry.terraform.io/hashicorp/tls" {
   constraints = "~> 4.0"
   hashes = [
     "h1:/sSdjHoiykrPdyBP1JE03V/KDgLXnHZhHcSOYIdDH/A=",
+    "h1:n3M50qfWfRSpQV9Pwcvuse03pEizqrmYEryxKky4so4=",
     "zh:10de0d8af02f2e578101688fd334da3849f56ea91b0d9bd5b1f7a243417fdda8",
     "zh:37fc01f8b2bc9d5b055dc3e78bfd1beb7c42cfb776a4c81106e19c8911366297",
     "zh:4578ca03d1dd0b7f572d96bd03f744be24c726bfd282173d54b100fd221608bb",
@@ -49,6 +51,7 @@ provider "registry.terraform.io/integrations/github" {
   constraints = "~> 6.0"
   hashes = [
     "h1:B1q5+Ub1G3zJa9y474Fg40eo/N04/vOSeaf3dWaCG0I=",
+    "h1:YiGCvjr7R77HGTzw81legWicEHApVTli8O+ooDpLexE=",
     "zh:00f431c2a2510efcb1115442dda5e90815bcb16e1a3301679ade0139fa963d3b",
     "zh:12a862f4317b3cb65682c1b687650cd91eeee99e63774bdcfa8bcfc64bad097b",
     "zh:226d5e09ff27f94cb9336089181d26f85cb30219b863a579597f2e107f37de49",
@@ -71,6 +74,7 @@ provider "registry.terraform.io/newrelic/newrelic" {
   version     = "3.52.1"
   constraints = "~> 3.3"
   hashes = [
+    "h1:Y3+FVaasXEVQDkH9oOLFowhgenFyWEgtqC6gT+o6tqg=",
     "h1:Y6bcpmTzjIhfNsm2quEjHN+BcR/8cABqYNkav7PltVs=",
     "zh:07c0beb3979ed390db5e90a48b0b5971910c59282e6e2a66ea5815a54404bc66",
     "zh:1f9083fed84147da5c911380c1c2ebd5cb5f2f894b5e5cda8a3abd1777752cd6",
