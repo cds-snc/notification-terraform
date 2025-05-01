@@ -39,10 +39,6 @@ resource "github_actions_secret" "aws_secret_access_key" {
   plaintext_value = var.aws_secret_access_key
 }
 
-variable "shared_staging_kms_key_id" {
-  type = string
-}
-
 resource "github_actions_secret" "aws_kms_key_id" {
   count           = var.env == "staging" ? 1 : 0
   repository      = data.github_repository.notification_terraform.name
