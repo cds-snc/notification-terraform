@@ -8,6 +8,7 @@ module "sns_to_sqs_sms_callbacks" {
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
+  alias                      = "latest"
 
   policies = [
     data.aws_iam_policy_document.sns_to_sqs_sms_callbacks.json
