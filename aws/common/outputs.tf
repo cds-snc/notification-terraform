@@ -175,10 +175,6 @@ output "sqs_eks_notification_canada_cadelivery_receipts_arn" {
   value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
 }
 
-output "ses_receipt_callback_buffer_arn" {
-  value = aws_sqs_queue.ses_receipt_callback_buffer.arn
-}
-
 output "notification_base_url_regex_arn" {
   value       = aws_wafv2_regex_pattern_set.notification_base_url.arn
   description = "The ARN of the regex pattern set for the allowed base domains"
