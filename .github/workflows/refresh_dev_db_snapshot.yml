@@ -1,0 +1,84 @@
+name: Refresh Shared to Dev from Staging DB Snapshot
+
+on:
+  schedule:
+    # Run every Saturday at 01:00 UTC
+    - cron: '0 1 * * 6'
+  workflow_dispatch:
+
+jobs:
+  refresh-snapshot:
+    name: Copy and Share RDS Snapshot
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    env:
+      AWS_REGION: ca-central-1
+      SNAPSHOT_NAME: ${{ secrets.DEV_SHARED_RDS_SNAPSHOT_IDENTIFIER }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Configure credentials to Notify Private ECR using OIDC
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.STAGING_AWS_ACCOUNT_ID }}:role/notification-terraform-apply
+          role-session-name: NotifyApiGitHubActions
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Find latest automated snapshot
+        id: find-snapshot
+        run: |
+          CLUSTER_ID=$(aws rds describe-db-clusters --query "DBClusters[?contains(DBClusterIdentifier, 'notification-canada-ca')].DBClusterIdentifier" --output text)
+          echo "CLUSTER_ID=$CLUSTER_ID" >> $GITHUB_ENV
+          
+          LATEST_SNAPSHOT=$(aws rds describe-db-cluster-snapshots \
+            --db-cluster-identifier $CLUSTER_ID \
+            --snapshot-type automated \
+            --query "DBClusterSnapshots | sort_by(@, &SnapshotCreateTime) | [-1].DBClusterSnapshotIdentifier" \
+            --output text)
+          echo "LATEST_SNAPSHOT=$LATEST_SNAPSHOT" >> $GITHUB_ENV
+          
+          echo "Found latest snapshot: $LATEST_SNAPSHOT for cluster: $CLUSTER_ID"
+      
+      - name: Delete existing snapshot if exists
+        run: |
+          SNAPSHOT_EXISTS=$(aws rds describe-db-cluster-snapshots \
+            --db-cluster-snapshot-identifier ${{ env.SNAPSHOT_NAME }} \
+            --query "length(DBClusterSnapshots)" \
+            --output text 2>/dev/null || echo "0")
+          
+          if [ "$SNAPSHOT_EXISTS" != "0" ]; then
+            echo "Deleting existing snapshot '${{ env.SNAPSHOT_NAME }}'..."
+            aws rds delete-db-cluster-snapshot \
+              --db-cluster-snapshot-identifier ${{ env.SNAPSHOT_NAME }}
+              
+            # Wait for deletion to complete
+            echo "Waiting for snapshot deletion to complete..."
+            aws rds wait db-cluster-snapshot-deleted \
+              --db-cluster-snapshot-identifier ${{ env.SNAPSHOT_NAME }}
+          fi
+      
+      - name: Copy snapshot with new name
+        run: |
+          echo "Creating snapshot copy '${{ env.SNAPSHOT_NAME }}' from '${{ env.LATEST_SNAPSHOT }}'..."
+          aws rds copy-db-cluster-snapshot \
+            --source-db-cluster-snapshot-identifier ${{ env.LATEST_SNAPSHOT }} \
+            --target-db-cluster-snapshot-identifier ${{ env.SNAPSHOT_NAME }} \
+            --kms-key-id ${{ secrets.STAGING_AWS_KMS_KEY_ID }} \
+            
+          # Wait for copy to complete
+          echo "Waiting for snapshot copy to complete..."
+          aws rds wait db-cluster-snapshot-available \
+            --db-cluster-snapshot-identifier ${{ env.SNAPSHOT_NAME }}
+      
+      - name: Share snapshot with dev account
+        run: |
+          echo "Sharing snapshot with dev account..."
+          aws rds modify-db-cluster-snapshot-attribute \
+            --db-cluster-snapshot-identifier ${{ env.SNAPSHOT_NAME }} \
+            --attribute-name restore \
+            --values-to-add ${{ secrets.DEV_ACCOUNT_ID }}
+          
+          echo "Snapshot successfully shared with dev account"
