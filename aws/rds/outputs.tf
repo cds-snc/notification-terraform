@@ -17,3 +17,7 @@ output "postgres_cluster_endpoint" {
   value     = aws_rds_cluster.notification-canada-ca.endpoint
   sensitive = true
 }
+output "shared_staging_kms_key_id" {
+  value = aws_kms_key.rds_snapshot[0].arn
+  sensitive = true
+}

@@ -39,7 +39,7 @@ resource "github_actions_secret" "aws_secret_access_key" {
   plaintext_value = var.aws_secret_access_key
 }
 
-variable "kms_arn" {
+variable "shared_staging_kms_key_id" {
   type        = string
 }
 
@@ -47,5 +47,11 @@ resource "github_actions_secret" "aws_kms_key_id" {
   count           = var.env == "staging" ? 1 : 0
   repository      = data.github_repository.notification_terraform.name
   secret_name     = "${upper(var.env)}_AWS_KMS_KEY_ID"
-  plaintext_value = var.kms_arn
+  plaintext_value = var.shared_staging_kms_key_id
+}
+
+resource "github_actions_secret" "rds_snapshot_identifier" {
+  repository      = data.github_repository.notification_terraform.name
+  secret_name     = "${upper(var.env)}_RDS_SNAPSHOT_IDENTIFIER"
+  plaintext_value = var.rds_snapshot_identifier
 }
