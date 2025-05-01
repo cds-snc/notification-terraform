@@ -40,7 +40,7 @@ resource "github_actions_secret" "aws_secret_access_key" {
 }
 
 variable "shared_staging_kms_key_id" {
-  type        = string
+  type = string
 }
 
 resource "github_actions_secret" "aws_kms_key_id" {
