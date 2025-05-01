@@ -1,14 +1,10 @@
-name: Refresh Dev DB from Staging Snapshot
+name: Refresh Shared to Dev from Staging DB Snapshot
 
 on:
   schedule:
     # Run every Saturday at 01:00 UTC
     - cron: '0 1 * * 6'
   workflow_dispatch:
-    # Allow manual triggering
-  push:
-    branches:
-      - db-snapshots-cross-account
 
 jobs:
   refresh-snapshot:
@@ -28,7 +24,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@master
         with:
           role-to-assume: arn:aws:iam::${{ secrets.STAGING_AWS_ACCOUNT_ID }}:role/notification-terraform-apply
-          role-session-name: NotifyTerraformApply
+          role-session-name: NotifyApiGitHubActions
           aws-region: ${{ env.AWS_REGION }}
       
       - name: Find latest automated snapshot
