@@ -52,6 +52,6 @@ resource "github_actions_secret" "aws_kms_key_id" {
 
 resource "github_actions_secret" "rds_snapshot_identifier" {
   repository      = data.github_repository.notification_terraform.name
-  secret_name     = "${upper(var.env)}_RDS_SNAPSHOT_IDENTIFIER"
+  secret_name     = "${upper(var.env)}_SHARED_RDS_SNAPSHOT_IDENTIFIER"
   plaintext_value = var.rds_snapshot_identifier
 }
