@@ -13,7 +13,7 @@ dependency "rds" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    shared_staging_kms_key_id = "xxxxxxx"
+    shared_staging_kms_key_id = "mock-shared-test-snapshot"
   }
 }
 

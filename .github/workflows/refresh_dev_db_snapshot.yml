@@ -27,7 +27,7 @@ jobs:
       - name: Configure credentials to Notify Private ECR using OIDC
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::${{secrets.STAGING_ACCOUNT_ID}}:role/notification-terraform-apply
+          role-to-assume: arn:aws:iam::${{ secrets.STAGING_AWS_ACCOUNT_ID }}:role/notification-terraform-apply
           role-session-name: NotifyApiGitHubActions
           aws-region: ${{ env.AWS_REGION }}
       
