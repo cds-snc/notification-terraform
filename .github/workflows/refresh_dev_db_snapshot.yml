@@ -26,7 +26,7 @@ jobs:
 
       - uses: ./.github/actions/setup-terraform
         with:
-          role_to_assume: arn:aws:iam::${{ env.STAGING_AWS_ACCOUNT_ID }}:role/notification-terraform-apply
+          role_to_assume: arn:aws:iam::${{ secrets.STAGING_AWS_ACCOUNT_ID }}:role/notification-terraform-apply
           role_session_name: NotifyApiGitHubActions
           aws-region: ${{ env.AWS_REGION }}
       
