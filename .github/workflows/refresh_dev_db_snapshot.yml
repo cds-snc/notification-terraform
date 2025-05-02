@@ -11,6 +11,11 @@ env:
   SNAPSHOT_NAME: ${{ secrets.DEV_SHARED_RDS_SNAPSHOT_IDENTIFIER }}
   ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
 
+permissions:
+  id-token: write # This is required for requesting the OIDC JWT
+  contents: write # This is required for actions/checkout
+  pull-requests: write
+
 jobs:
   refresh-snapshot:
     name: Copy and Share RDS Snapshot
