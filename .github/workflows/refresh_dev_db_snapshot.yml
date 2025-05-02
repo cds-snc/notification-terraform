@@ -6,15 +6,21 @@ on:
     - cron: '0 1 * * 6'
   workflow_dispatch:
 
+env:
+  AWS_REGION: ca-central-1
+  SNAPSHOT_NAME: ${{ secrets.DEV_SHARED_RDS_SNAPSHOT_IDENTIFIER }}
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
+
+permissions:
+  id-token: write # This is required for requesting the OIDC JWT
+  contents: write # This is required for actions/checkout
+  pull-requests: write
+
 jobs:
   refresh-snapshot:
     name: Copy and Share RDS Snapshot
     runs-on: ubuntu-latest
     environment: staging
-    
-    env:
-      AWS_REGION: ca-central-1
-      SNAPSHOT_NAME: ${{ secrets.DEV_SHARED_RDS_SNAPSHOT_IDENTIFIER }}
     
     steps:
       - name: Checkout repository
@@ -24,11 +30,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      - uses: ./.github/actions/setup-terraform
+      - name: Configure credentials to Notify account using OIDC
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
         with:
-          role_to_assume: arn:aws:iam::${{ secrets.STAGING_AWS_ACCOUNT_ID }}:role/notification-terraform-apply
-          role_session_name: NotifyApiGitHubActions
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+          role-session-name: RefreshSharedToDev
+          aws-region: "ca-central-1"
       
       - name: Find latest automated snapshot
         id: find-snapshot
