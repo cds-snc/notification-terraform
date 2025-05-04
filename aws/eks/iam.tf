@@ -287,6 +287,7 @@ resource "aws_iam_role_policy" "karpenter_controller" {
           "iam:GetInstanceProfile",
           "iam:CreateInstanceProfile",
           "iam:TagInstanceProfile",
+          "iam:RemoveRoleFromInstanceProfile",
           "iam:AddRoleToInstanceProfile",
           "ec2:DescribeImages",
           "ec2:RunInstances",

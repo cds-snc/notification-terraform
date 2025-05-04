@@ -149,6 +149,13 @@ resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
   default_sms_type                      = "Transactional"
 }
 
+resource "aws_sns_topic_subscription" "sqs_callback_subscription" {
+  topic_arn            = aws_sns_topic.notification-canada-ca-ses-callback.arn
+  protocol             = "sqs"
+  endpoint             = aws_sqs_queue.ses_receipt_callback_buffer.arn
+  raw_message_delivery = true
+}
+
 resource "aws_sns_topic_subscription" "sns_alert_ok_us_west_2_to_lambda" {
   provider = aws.us-west-2
 

@@ -429,3 +429,24 @@ resource "aws_secretsmanager_secret_version" "manifest_cypress_auth_client_secre
   secret_id     = aws_secretsmanager_secret.manifest_cypress_auth_client_secret.id
   secret_string = var.manifest_cypress_auth_client_secret
 }
+
+resource "aws_secretsmanager_secret" "manifest_docker_hub_username" {
+  name                    = "MANIFEST_DOCKER_HUB_USERNAME"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_docker_hub_username" {
+  secret_id     = aws_secretsmanager_secret.manifest_docker_hub_username.id
+  secret_string = var.manifest_docker_hub_username
+}
+
+resource "aws_secretsmanager_secret" "manifest_docker_hub_pat" {
+  name                    = "MANIFEST_DOCKER_HUB_PAT"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat" {
+  secret_id     = aws_secretsmanager_secret.manifest_docker_hub_pat.id
+  secret_string = var.manifest_docker_hub_pat
+}
+
