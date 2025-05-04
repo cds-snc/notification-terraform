@@ -91,6 +91,9 @@ provider "aws" {
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
+  assume_role { 
+    role_arn = "arn:aws:iam::${local.secret_inputs.account_id}:role/notification-terraform-apply"
+  }
   assume_role {
     role_arn = "arn:aws:iam::${local.secret_inputs.dns_account_id}:role/notify_prod_dns_manager"
   }
