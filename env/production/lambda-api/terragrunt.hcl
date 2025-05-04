@@ -1,5 +1,5 @@
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/lambda-api?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//lambda-api"}"
+  source = "../../../aws//lambda-api"
 }
 
 dependencies {
