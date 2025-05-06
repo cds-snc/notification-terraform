@@ -129,7 +129,7 @@ resource "aws_iam_role_policy_attachment" "lambda_sqs" {
 
 ##
 # IAM role for a Kinesis Firehose to write AWS WAF ACL logs to the
-# Cloud Based Sensor S3 satellite bucket
+# Cloud Based Sensor S3 satellite bucket 
 ##
 resource "aws_iam_role" "firehose_waf_logs" {
   name               = "FirehoseWafLogs"
@@ -182,32 +182,6 @@ data "aws_iam_policy_document" "firehose_waf_logs" {
     resources = [
       "arn:aws:iam::*:role/aws-service-role/wafv2.amazonaws.com/AWSServiceRoleForWAFV2Logging"
     ]
-  }
-}
-
-resource "aws_sqs_queue_policy" "allow_sns_publish" {
-  queue_url = aws_sqs_queue.ses_receipt_callback_buffer.id
-  policy    = data.aws_iam_policy_document.sns_to_sqs.json
-}
-
-data "aws_iam_policy_document" "sns_to_sqs" {
-  statement {
-    sid    = "AllowSNSPublish"
-    effect = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    actions   = ["sqs:SendMessage"]
-    resources = [aws_sqs_queue.ses_receipt_callback_buffer.arn]
-
-    condition {
-      test     = "ArnLike"
-      variable = "aws:SourceArn"
-      values   = [aws_sns_topic.notification-canada-ca-ses-callback.arn]
-    }
   }
 }
 
