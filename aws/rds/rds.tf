@@ -196,7 +196,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   storage_encrypted   = true
   deletion_protection = var.enable_delete_protection
 
-  db_cluster_parameter_group_name = var.env != "production" ? aws_rds_cluster_parameter_group.postgres16.name : aws_rds_cluster_parameter_group.pgaudit.name
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.postgres16.name
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   vpc_security_group_ids = [
