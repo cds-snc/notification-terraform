@@ -4,7 +4,7 @@ module "ses_receiving_emails" {
     aws = aws.us-east-1
   }
 
-  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.4.3"
+  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v10.4.4"
   name                       = "ses_receiving_emails"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_receiving_emails_ecr_arn
@@ -13,6 +13,7 @@ module "ses_receiving_emails" {
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
+  alias_name                 = "latest"
 
   environment_variables = {
     NOTIFY_SENDING_DOMAIN   = var.notify_sending_domain
