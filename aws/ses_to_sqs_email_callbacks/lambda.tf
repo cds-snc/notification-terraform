@@ -1,5 +1,5 @@
 module "ses_to_sqs_email_callbacks" {
-  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.4.3"
+  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v10.4.4"
   name                       = "ses_to_sqs_email_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_to_sqs_email_callbacks_ecr_arn
