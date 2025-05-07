@@ -8,7 +8,7 @@ module "ses_to_sqs_email_callbacks" {
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
-  alias                      = "latest"
+  alias_name                 = "latest"
 
   policies = [
     data.aws_iam_policy_document.ses_to_sqs_email_callbacks.json

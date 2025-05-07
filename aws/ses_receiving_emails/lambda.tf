@@ -13,7 +13,7 @@ module "ses_receiving_emails" {
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
-  alias                      = "latest"
+  alias_name                 = "latest"
 
   environment_variables = {
     NOTIFY_SENDING_DOMAIN   = var.notify_sending_domain
