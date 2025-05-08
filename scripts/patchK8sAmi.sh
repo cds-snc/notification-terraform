@@ -10,8 +10,8 @@ NEW_IMAGE_VERSION=$2
 K8S_VERISON=$(echo $NEW_IMAGE_VERSION | cut -c1-4)
 echo "Detected K8s Version of: $K8S_VERISON"
 NODE_VERSION=$(echo $NEW_IMAGE_VERSION | rev | cut -c1-8 | rev)
-echo "Detected Node Version of: $NODE_VERSION"
-NEW_IMAGE_NAME="amazon-eks-node-$K8S_VERISON-v$NODE_VERSION"
+echo "Detected Node Version of: $NODE_VERSION"  
+NEW_IMAGE_NAME="amazon-eks-node-al2023-x86_64-standard-$K8S_VERISON-v$NODE_VERSION"
 echo "Looking up AMI ID for $NEW_IMAGE_NAME"
 NEW_AMI_ID=$(aws ec2 describe-images --filters "Name=name,Values=$NEW_IMAGE_NAME" --query 'Images[].ImageId' --output text)
 echo "New AMI ID is: $NEW_AMI_ID"
