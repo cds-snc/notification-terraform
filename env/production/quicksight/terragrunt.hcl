@@ -57,5 +57,5 @@ inputs = {
   quicksight_security_group_id                = dependency.eks.outputs.quicksight_security_group_id
   database_name                               = dependency.rds.outputs.database_name
   database_subnet_ids                         = dependency.rds.outputs.database_subnet_ids
-  rds_instance_id                             = dependency.rds.outputs.rds_instance_id
+  rds_reader_instance_id                      = dependency.rds.outputs.rds_reader_instance_ids[0]
 }
