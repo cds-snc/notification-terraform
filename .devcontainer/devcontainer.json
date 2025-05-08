@@ -21,11 +21,15 @@
       },
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
         "fill-labs.dependi",
         "hashicorp.terraform",
         "hashicorp.hcl",
+        "pflannery.vscode-versionlens",
         "redhat.vscode-yaml",
-        "sebastianbille.iam-legend"
+        "sebastianbille.iam-legend",
+        "usernamehw.errorlens"
       ]
     }
   },
