@@ -24,6 +24,7 @@
         "donjayamanne.githistory",
         "eamodio.gitlens",
         "fill-labs.dependi",
+        "fredwangwang.vscode-hcl-format",
         "hashicorp.terraform",
         "hashicorp.hcl",
         "pflannery.vscode-versionlens",
