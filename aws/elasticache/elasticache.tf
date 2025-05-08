@@ -21,9 +21,9 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   description                 = "Redis/Valkey multiaz cluster with replication group"
   node_type                   = var.elasticache_node_type
   num_cache_clusters          = var.elasticache_node_number_cache_clusters
-  engine                      = var.env == "dev" ? "valkey" : "redis"
-  engine_version              = var.env == "dev" ? "7.2" : "6.x"
-  parameter_group_name        = var.env == "dev" ? "default.valkey7" : "default.redis6.x"
+  engine                      = var.env != "production" ? "valkey" : "redis"
+  engine_version              = var.env != "production" ? "7.2" : "6.x"
+  parameter_group_name        = var.env != "production" ? "default.valkey7" : "default.redis6.x"
   port                        = 6379
   maintenance_window          = "thu:04:00-thu:05:00"
   multi_az_enabled            = true
