@@ -11,7 +11,7 @@ output "database_subnet_ids" {
   value = aws_db_subnet_group.notification-canada-ca.subnet_ids
 }
 output "rds_reader_instance_ids" {
-  value       = [for instance in aws_rds_cluster_instance.notification-canada-ca-instances : instance.identifier if !endswith(instance.identifier, "-0")]
+  value       = [for i, instance in aws_rds_cluster_instance.notification-canada-ca-instances : instance.identifier if i > 0]
   description = "List of reader instance IDs in the RDS cluster"
 }
 output "postgres_cluster_endpoint" {
