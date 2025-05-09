@@ -17,8 +17,9 @@ locals {
   ])
 }
 
-variable "rds_instance_id" {
-  type = string
+variable "rds_reader_instance_id" {
+  description = "The ID of the RDS reader instance to use for QuickSight"
+  type        = string
 }
 
 variable "database_name" {
