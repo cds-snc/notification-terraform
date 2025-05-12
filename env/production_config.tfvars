@@ -9,7 +9,7 @@ billing_tag_key      = "CostCenter"
 primary_worker_desired_size     = 8
 primary_worker_instance_types   = ["r5.large"]
 secondary_worker_instance_types = ["r5.large"]
-node_upgrade                    = true
+node_upgrade                    = false
 force_upgrade                   = false
 primary_worker_max_size         = 8
 primary_worker_min_size         = 3
@@ -57,7 +57,7 @@ alt_domain                 = "notification.alpha.canada.ca"
 domain                     = "notification.canada.ca"
 base_domain                = "notification.canada.ca"
 perf_test_domain           = "https://api.notification.canada.ca"
-ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "elections.ca"]
+ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "chrc-ccdp.gc.ca"]
 
 ## LOGGING
 log_retention_period_days           = 0
