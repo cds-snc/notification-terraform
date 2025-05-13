@@ -100,8 +100,7 @@ resource "aws_cloudwatch_query_definition" "pinpoint-sms-international-sending-s
   name  = "SMS (Pinpoint) / International sending status (with Sender IDs)"
 
   log_group_names = [
-    aws_cloudwatch_log_group.pinpoint_deliveries.name,
-    aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+    aws_cloudwatch_log_group.pinpoint_deliveries.name
   ]
 
   query_string = <<QUERY
