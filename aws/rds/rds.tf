@@ -35,6 +35,48 @@ resource "aws_rds_cluster_instance" "notification-canada-ca-instances" {
   }
 }
 
+resource "aws_rds_cluster_parameter_group" "postgres16" {
+  name        = "rds-cluster-pg-16"
+  family      = "aurora-postgresql16"
+  description = "RDS customized cluster parameter group"
+
+  parameter {
+    name  = "log_min_error_statement"
+    value = "debug5"
+  }
+
+  parameter {
+    name  = "log_connections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_disconnections"
+    value = "1"
+  }
+
+  parameter {
+    name  = "log_statement"
+    value = "ddl"
+  }
+
+  parameter {
+    name         = "rds.logical_replication"
+    value        = "1"
+    apply_method = "pending-reboot"
+  }
+
+  parameter {
+    name         = "rds.log_retention_period"
+    value        = "4320" # 3 days (in minutes)
+    apply_method = "pending-reboot"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 resource "aws_rds_cluster_parameter_group" "default" {
   name        = "rds-cluster-pg"
   family      = "aurora-postgresql15"
@@ -154,7 +196,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   storage_encrypted   = true
   deletion_protection = var.enable_delete_protection
 
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.pgaudit.name
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.postgres16.name
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   vpc_security_group_ids = [

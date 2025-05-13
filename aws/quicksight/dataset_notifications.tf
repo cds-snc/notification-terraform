@@ -5,6 +5,12 @@ resource "aws_quicksight_data_set" "notifications" {
   name        = "Notifications"
   import_mode = "SPICE"
 
+  lifecycle {
+    ignore_changes = [
+      refresh_properties,
+    ]
+  }
+
   physical_table_map {
     physical_table_map_id = "notifications"
     custom_sql {
@@ -26,7 +32,13 @@ resource "aws_quicksight_data_set" "notifications" {
               key_type as api_key_type,
               service_id,
               template_id,
-              reference as notification_reference
+              reference as notification_reference,
+              sms_total_message_price,
+              sms_total_carrier_fee,
+              sms_iso_country_code,
+              sms_carrier_name,
+              sms_message_encoding,
+              sms_origination_phone_number
             from notifications
           union
             select 
@@ -43,7 +55,13 @@ resource "aws_quicksight_data_set" "notifications" {
               key_type as api_key_type,
               service_id,
               template_id,
-              reference as notification_reference
+              reference as notification_reference,
+              sms_total_message_price,
+              sms_total_carrier_fee,
+              sms_iso_country_code,
+              sms_carrier_name,
+              sms_message_encoding,
+              sms_origination_phone_number
             from notification_history
         ),
         service_data as (
@@ -80,6 +98,7 @@ resource "aws_quicksight_data_set" "notifications" {
           notification_id, notification_billable_units, notification_created_at, notification_sent_at, notification_status,
           notification_queue_name, notification_type, notification_updated_at, 
           notification_reference, job_id, api_key_id, api_key_type,
+          sms_total_message_price, sms_total_carrier_fee, sms_iso_country_code, sms_carrier_name, sms_message_encoding, sms_origination_phone_number,
           s.*, t.*
         from notification_data n 
           join service_data s on n.service_id = s.service_id
@@ -216,6 +235,30 @@ resource "aws_quicksight_data_set" "notifications" {
       }
       columns {
         name = "tc_sms_sending_vehicle"
+        type = "STRING"
+      }
+      columns {
+        name = "sms_total_message_price"
+        type = "DECIMAL"
+      }
+      columns {
+        name = "sms_total_carrier_fee"
+        type = "DECIMAL"
+      }
+      columns {
+        name = "sms_iso_country_code"
+        type = "STRING"
+      }
+      columns {
+        name = "sms_carrier_name"
+        type = "STRING"
+      }
+      columns {
+        name = "sms_message_encoding"
+        type = "STRING"
+      }
+      columns {
+        name = "sms_origination_phone_number"
         type = "STRING"
       }
     }

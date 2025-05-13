@@ -17,7 +17,7 @@ resource "aws_quicksight_data_source" "rds" {
   parameters {
     rds {
       database    = var.database_name
-      instance_id = var.rds_instance_id
+      instance_id = var.rds_reader_instance_id
     }
   }
   type = "POSTGRESQL"
@@ -41,8 +41,8 @@ resource "aws_s3_object" "manifest_file" {
     bucket_ca = var.s3_bucket_sms_usage_sanitized_ca_central_id,
     bucket_us = var.s3_bucket_sms_usage_sanitized_us_west_id
   })
-  acl  = "private"
-  etag = filemd5("./s3-manifests/s3-manifest-sms-usage.tmpl")
+  acl         = "private"
+  source_hash = filemd5("./s3-manifests/s3-manifest-sms-usage.tmpl")
 }
 
 resource "aws_quicksight_data_source" "s3_sms_usage" {

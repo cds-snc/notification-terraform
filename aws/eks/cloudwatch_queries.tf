@@ -1,3 +1,12 @@
+locals {
+  celery_name            = "notify-celery"
+  admin_name             = "notify-admin"
+  api_name               = "notify-api"
+  document_download_name = "notify-document-download"
+  documentation_name     = "notify-documentation"
+
+}
+
 ################################ CELERY FOLDER ################################
 
 resource "aws_cloudwatch_query_definition" "celery-errors" {
@@ -10,7 +19,7 @@ resource "aws_cloudwatch_query_definition" "celery-errors" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /ERROR\/.*Worker/ or @message like /ERROR\/MainProcess/
 | sort @timestamp desc
 | limit 20
@@ -27,7 +36,7 @@ resource "aws_cloudwatch_query_definition" "celery-filter-by-job" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.labels.app like /^celery/
+| filter kubernetes.labels.app like /^${local.celery_name}/
 | filter @message like /0d58e195-d6ae-4fe3-aa73-064ff106972b/
 | sort @timestamp desc
 | limit 20
@@ -44,7 +53,7 @@ resource "aws_cloudwatch_query_definition" "celery-filter-by-notification-id" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /notification_id/
 | sort @timestamp desc
 | limit 20
@@ -93,7 +102,7 @@ resource "aws_cloudwatch_query_definition" "celery-queues" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.labels.app like /^celery/
+| filter kubernetes.labels.app like /^${local.celery_name}/
 | filter @message like /queue for delivery/
 | sort @timestamp desc
 | limit 20
@@ -110,7 +119,7 @@ resource "aws_cloudwatch_query_definition" "celery-starts" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.labels.app as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /Notify config/
 | sort @timestamp desc
 | stats count
@@ -127,7 +136,7 @@ resource "aws_cloudwatch_query_definition" "celery-worker-exited-normally" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /Warm shutdown/
 | sort @timestamp desc
 QUERY
@@ -143,7 +152,7 @@ resource "aws_cloudwatch_query_definition" "celery-worker-exited-prematurely" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /Task handler raised error: WorkerLostError\('Worker exited prematurely/
 | sort @timestamp desc
 QUERY
@@ -159,7 +168,7 @@ resource "aws_cloudwatch_query_definition" "celery-worker-exits-cold-vs-warm" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | parse "Warm shutdown" as @warm
 | parse "Worker exited prematurely" as @cold
 | filter ispresent(@warm) or ispresent(@cold)
@@ -177,7 +186,7 @@ resource "aws_cloudwatch_query_definition" "retry-attemps-by-duration" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /Retry in/
 | parse @message /Retry in (?<retry_duration>\d+s)/
 | stats count() by retry_duration
@@ -196,7 +205,7 @@ resource "aws_cloudwatch_query_definition" "admin-50X-errors" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /admin/
+| filter kubernetes.container_name like /${local.admin_name}/
 | filter @message like /HTTP\/\d+\.\d+\\" 50\d/
 | sort @timestamp desc
 | limit 20
@@ -213,10 +222,26 @@ resource "aws_cloudwatch_query_definition" "api-50X-errors" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /api/
+| filter kubernetes.container_name like /${local.api_name}/
 | filter @message like /HTTP\/\d+\.\d+\\" 50\d/
 | sort @timestamp desc
 | limit 20
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API / GUnicorn total running time"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+filter @message like /Total gunicorn running time/
+| parse @message /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
+| order by @timestamp asc
+| display @timestamp, @gunicorn_time
 QUERY
 }
 
@@ -230,7 +255,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery-email-send-*/
+| filter kubernetes.container_name like /^${local.celery_name}-email-send-*/
 | filter @message like "critical bounce rate threshold of 10"
 | sort @timestamp desc
 | limit 20
@@ -247,7 +272,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery-email-send-*/
+| filter kubernetes.container_name like /^${local.celery_name}-email-send-*/
 | filter @message like "warning bounce rate threshold of 5"
 | sort @timestamp desc
 | limit 20
@@ -264,7 +289,7 @@ resource "aws_cloudwatch_query_definition" "bounce-rate-warnings-and-criticals" 
 
   query_string = <<QUERY
 fields @timestamp, @service_id, @bounce_type
-| filter kubernetes.container_name like /^celery-email-send-*/
+| filter kubernetes.container_name like /^${local.celery_name}-email-send-*/
 | filter @message like /bounce rate threshold of/
 | parse @message "Service: * has met or exceeded a * bounce rate" as @service_id, @bounce_type
 | stats count(*) by @service_id, @bounce_type
@@ -282,7 +307,7 @@ resource "aws_cloudwatch_query_definition" "callback-errors-by-url" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /send_delivery_status_to_service request failed for notification_id/
 | parse log "to url: * service: * exc:" as @url, @service_id
 | stats count() as failed_callbacks by @url, @service_id
@@ -300,7 +325,7 @@ resource "aws_cloudwatch_query_definition" "callback-max-retry-failures-by-servi
 
   query_string = <<QUERY
 fields @timestamp, @service_id, @callback_url, @notification_id
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /send_delivery_status_to_service has retried the max num of times for callback url/
 | parse @message 'Retry: send_delivery_status_to_service has retried the max num of times for callback url * and notification_id: * service: *' as @callback_url, @notification_id, @service_id
 | sort @timestamp desc
@@ -319,26 +344,10 @@ resource "aws_cloudwatch_query_definition" "callback-failures" {
 
   query_string = <<QUERY
 fields @timestamp, @notification_id, @url, @error
-| filter kubernetes.container_name like /^celery/
+| filter kubernetes.container_name like /^${local.celery_name}/
 | filter @message like /send_delivery_status_to_service request failed for notification_id:/
 | parse @message 'send_delivery_status_to_service request failed for notification_id: * and url: * service: * exc: *' as @notification_id, @url, @service_id, @error
 | limit 10000
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "gh-arc-errors" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "CICD / GitHub ARC Errors"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-fields @timestamp, @message, @logStream, @log
-| filter @message like /ERR|Exception/
-| filter kubernetes.namespace_name = "github-arc-controller"
-| sort @timestamp desc
-| limit 100
-QUERY
-}

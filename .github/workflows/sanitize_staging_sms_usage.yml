@@ -17,7 +17,7 @@ jobs:
       run: python -m pip install --upgrade pip
 
     - name: Checkout
-      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
     - name: Install python packages
       run: pip install -r ./scripts/sanitize_sms_usage_logs/requirements.txt
@@ -37,5 +37,5 @@ jobs:
     - name: Notify Slack channel if this job failed
       if: ${{ failure() }}
       run: |
-        json="{'text':'<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !'}"
+        json='{"text":"<!here> Sanitize staging SMS usage data failed in <https://github.com/cds-snc/notification-terraform/|notification-terraform> !"}'
         curl -X POST -H 'Content-type: application/json' --data "$json"  ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}

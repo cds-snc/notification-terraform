@@ -5,8 +5,8 @@ region               = "ca-central-1"
 billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
 
-## EKS     
-primary_worker_desired_size     = 5
+## EKS
+primary_worker_desired_size     = 8
 primary_worker_instance_types   = ["r5.large"]
 secondary_worker_instance_types = ["r5.large"]
 node_upgrade                    = false
@@ -14,13 +14,13 @@ force_upgrade                   = false
 primary_worker_max_size         = 8
 primary_worker_min_size         = 3
 eks_cluster_name                = "notification-canada-ca-production-eks-cluster"
-eks_cluster_version             = "1.30"
-eks_addon_coredns_version       = "v1.11.1-eksbuild.9"
-eks_addon_kube_proxy_version    = "v1.30.0-eksbuild.3"
-eks_addon_vpc_cni_version       = "v1.18.1-eksbuild.3"
-eks_addon_ebs_driver_version    = "v1.31.0-eksbuild.1"
-eks_node_ami_version            = "1.30.4-20241011"
-eks_karpenter_ami_id            = "ami-0d8bd10d9dede6336"
+eks_cluster_version             = "1.32"
+eks_addon_coredns_version       = "v1.11.4-eksbuild.2"
+eks_addon_kube_proxy_version    = "v1.32.0-eksbuild.2"
+eks_addon_vpc_cni_version       = "v1.19.2-eksbuild.5"
+eks_addon_ebs_driver_version    = "v1.42.0-eksbuild.1"
+eks_node_ami_version            = "1.32.1-20250419"
+eks_karpenter_ami_id            = "ami-00f49f6ed3da57a90"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -50,14 +50,14 @@ enable_delete_protection   = true
 api_enable_new_relic       = true
 cloudwatch_enabled         = true
 recovery                   = false
-aws_xray_sdk_enabled       = false
+aws_xray_sdk_enabled       = true
 
 ## DNS
 alt_domain                 = "notification.alpha.canada.ca"
 domain                     = "notification.canada.ca"
 base_domain                = "notification.canada.ca"
 perf_test_domain           = "https://api.notification.canada.ca"
-ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca"]
+ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "chrc-ccdp.gc.ca"]
 
 ## LOGGING
 log_retention_period_days           = 0
@@ -69,7 +69,7 @@ vpc_cidr_block = "10.0.0.0/16"
 ## ELASTICACHE
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
-elasticache_node_type                  = "cache.t3.micro"
+elasticache_node_type                  = "cache.t3.medium"
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-ops"
@@ -79,22 +79,24 @@ slack_channel_general_topic  = "notification-ops"
 ## MONITORING
 athena_workgroup_name    = "primary"
 aws_config_recorder_name = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version   = "168"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
-schedule_expression  = "rate(1 minute)"
+heartbeat_schedule_expression  = "rate(1 minute)"
 
 ## LAMBDA GOOGLE CIDR
 google_cidr_schedule_expression = "rate(1 day)"
 
 ## RDS
-rds_instance_count = 3
-rds_instance_type  = "db.r6g.xlarge"
-rds_database_name  = "NotificationCanadaCaproduction"
-rds_version        = "15.5"
+rds_instance_count                     = 3
+rds_instance_type                      = "db.r6g.xlarge"
+rds_database_name                      = "NotificationCanadaCaproduction"
+rds_version                            = "16.6"
+platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:key/22f27c88-bb2b-49c3-b731-05123a974af4"
+platform_data_lake_raw_s3_bucket_arn   = "arn:aws:s3:::cds-data-lake-raw-production"
+platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-gc-notify-export"
 
-## NOTIFY-API/CELERY               
+## NOTIFY-API/CELERY
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
 ff_batch_insertion              = "true"
 ff_cloudwatch_metrics_enabled   = "true"
@@ -106,23 +108,22 @@ sqs_region              = "ca-central-1"
 gc_notify_service_email = "gc.notify.notification.gc@notification.canada.ca"
 
 ## PERF TEST (These are not in production)
-aws_pinpoint_region                         = "changeme"
-perf_test_phone_number                      = "changeme"
-perf_test_email                             = "changeme"
-perf_test_auth_header                       = "changeme"
-perf_schedule_expression                    = "changeme"
-perf_test_aws_s3_bucket                     = "changeme"
-perf_test_csv_directory_path                = "changeme"
-perf_test_sms_template_id                   = "changeme"
-perf_test_bulk_email_template_id            = "changeme"
-perf_test_email_template_id                 = "changeme"
-perf_test_email_with_attachment_template_id = "changeme"
-perf_test_email_with_link_template_id       = "changeme"
+aws_pinpoint_region                 = "changeme"
+perf_test_phone_number              = "changeme"
+perf_test_email                     = "changeme"
+perf_test_api_key                   = "changeme"
+perf_test_slack_webhook             = "changeme"
+perf_schedule_expression            = "changeme"
+perf_test_aws_s3_bucket             = "changeme"
+perf_test_csv_directory_path        = "changeme"
+perf_test_sms_template_id_one_var   = "changeme"
+perf_test_email_template_id_one_var = "changeme"
 
 ## SYSTEM STATUS
-system_status_api_url     = "https://api.notification.canada.ca"
-system_status_bucket_name = "notification-canada-ca-production-system-status"
-system_status_admin_url   = "https://notification.canada.ca"
+system_status_api_url                   = "https://api.notification.canada.ca"
+system_status_bucket_name               = "notification-canada-ca-production-system-status"
+system_status_admin_url                 = "https://notification.canada.ca"
+system_status_schedule_expression       = "rate(5 minutes)"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 30000
@@ -150,7 +151,6 @@ sqs_visibility_timeout_priority_high                               = 26
 sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
 sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
 sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
-sqs_db_tasks_queue_name                                            = "database-tasks"
 sqs_throttled_sms_queue_name                                       = "send-throttled-sms-tasks"
 sqs_bulk_queue_name                                                = "bulk-tasks"
 sqs_priority_queue_name                                            = "priority-tasks"
@@ -171,4 +171,5 @@ ses_receiving_emails_docker_tag          = "bootstrap"
 pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
-blazer_image_tag = "latest"
+blazer_image_tag   = "latest"
+blazer_rds_version = "15.5"

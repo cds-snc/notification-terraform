@@ -75,7 +75,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 
   # GCA routes
   regular_expression {
-    regex_string = "/other-services|/autres-services|/service-level-agreement|/accord-niveaux-de-service|/service-level-objectives|/objectifs-niveau-de-service|/pourquoi-notification-gc|/envoyer-.*-personnalise|/reg.*emo"
+    regex_string = "/other-servic.*|/autres-servic.*|/service-level-agreement|/accord-niveaux-de-service|/service-level-objectives|/objectifs-niveau-de-service|/pourquoi-notification-gc|/envoyer-.*-personnalise|/reg.*emo"
   }
 
   # GCA routes
@@ -83,6 +83,8 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
     regex_string = "/.*-contact-information|/.*-a-jour-les-coordonnees|/delivery-and-failure|/livraison-.*-et-echec|/system-status|/etat-du-systeme|/comprendre-.*-livraison|/sending-custom-content|/utiliser-.*-de-calcul"
   }
 
+  # This Regex pattern set is now full. There is a limit of 10 blocks/ 0-200 characters per block.
+  # To add more regex, use the re_admin2 block below.
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
@@ -96,9 +98,10 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # WAF Regex blocks are combined with OR logic.
   # Regex support is limited, please see:
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
+  # Additional regex for the Admin WAF should be added to this pattern set, not in re_admin, which is full.
 
   regular_expression {
-    regex_string = "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids"
+    regex_string = var.env == "production" ? "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids" : "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids|/_storybook.*"
   }
 
   tags = {

@@ -25,7 +25,7 @@ module "system_status" {
     system_status_admin_url        = var.system_status_admin_url
     system_status_api_url          = var.system_status_api_url
     system_status_bucket_name      = "notification-canada-ca-${var.env}-system-status"
-    sqlalchemy_database_reader_uri = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
+    sqlalchemy_database_reader_uri = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.rds_database_name}"
   }
 }
 
@@ -45,7 +45,7 @@ resource "aws_cloudwatch_event_rule" "system_status_testing" {
   count               = var.cloudwatch_enabled ? 1 : 0
   name                = "system_status_testing"
   description         = "system_status_testing event rule"
-  schedule_expression = var.schedule_expression
+  schedule_expression = var.system_status_schedule_expression
   depends_on          = [module.system_status]
 }
 

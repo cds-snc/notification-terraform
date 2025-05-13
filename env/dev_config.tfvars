@@ -6,7 +6,7 @@ billing_tag_value    = "notification-canada-ca-dev"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
-primary_worker_desired_size     = 4
+primary_worker_desired_size     = 5
 primary_worker_instance_types   = ["m5.large"]
 secondary_worker_instance_types = ["m5.large"]
 node_upgrade                    = false
@@ -14,13 +14,13 @@ force_upgrade                   = true
 primary_worker_max_size         = 7
 primary_worker_min_size         = 1
 eks_cluster_name                = "notification-canada-ca-dev-eks-cluster"
-eks_cluster_version             = "1.31"
-eks_addon_coredns_version       = "v1.11.3-eksbuild.1"
-eks_addon_kube_proxy_version    = "v1.31.0-eksbuild.5"
-eks_addon_vpc_cni_version       = "v1.18.5-eksbuild.1"
-eks_addon_ebs_driver_version    = "v1.35.0-eksbuild.1"
-eks_node_ami_version            = "1.31.0-20241011"
-eks_karpenter_ami_id            = "ami-05e0e03f6050a7bd2"
+eks_cluster_version             = "1.32"
+eks_addon_coredns_version       = "v1.11.4-eksbuild.2"
+eks_addon_kube_proxy_version    = "v1.32.0-eksbuild.2"
+eks_addon_vpc_cni_version       = "v1.19.2-eksbuild.5"
+eks_addon_ebs_driver_version    = "v1.42.0-eksbuild.1"
+eks_node_ami_version            = "1.32.1-20250419"
+eks_karpenter_ami_id            = "ami-00f49f6ed3da57a90"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -48,7 +48,7 @@ bootstrap                  = true
 enable_sentinel_forwarding = true
 enable_delete_protection   = false
 api_enable_new_relic       = false
-cloudwatch_enabled         = false
+cloudwatch_enabled         = true
 recovery                   = true
 aws_xray_sdk_enabled       = true
 
@@ -80,20 +80,23 @@ slack_channel_general_topic  = "notification-dev-ops"
 athena_workgroup_name             = "dev"
 cloudwatch_opsgenie_alarm_webhook = ""
 aws_config_recorder_name          = "aws-controltower-BaselineConfigRecorder"
-sentinel_layer_version            = "168"
 
 ## HEARTBEAT
 heartbeat_sms_number = "+16135550123"
-schedule_expression  = "rate(1 minute)"
+heartbeat_schedule_expression  = "rate(1 minute)"
 
 ## LAMBDA GOOGLE CIDR
 google_cidr_schedule_expression = "rate(1 day)"
 
 ## RDS
-rds_instance_count = 3
-rds_instance_type  = "db.t3.medium"
-rds_database_name  = "NotificationCanadaCastaging"
-rds_version        = "15.5"
+rds_instance_count                     = 3
+rds_instance_type                      = "db.t3.medium"
+rds_database_name                      = "NotificationCanadaCastaging"
+rds_version                            = "16.6"
+platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:key/22f27c88-bb2b-49c3-b731-05123a974af4"
+platform_data_lake_raw_s3_bucket_arn   = "arn:aws:s3:::cds-data-lake-raw-production"
+platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-gc-notify-export"
+
 
 ## NOTIFY-API/CELERY               
 RECREATE_MISSING_LAMBDA_PACKAGE = "false"
@@ -108,16 +111,17 @@ gc_notify_service_email = "gc.notify.notification.gc@staging.notification.cdssan
 
 ## PERF TEST
 aws_pinpoint_region          = "ca-central-1"
-perf_test_phone_number       = "16132532222"
+perf_test_phone_number       = "16135550123" # INTERNAL_TEST_NUMBER - does not send to AWS
 perf_test_email              = "success@simulator.amazonses.com"
 perf_schedule_expression     = "cron(0 0 * * ? *)"
 perf_test_aws_s3_bucket      = "notify-performance-test-results-dev"
 perf_test_csv_directory_path = "/tmp/notify_performance_test"
 
 ## SYSTEM STATUS
-system_status_api_url     = "https://api.dev.notification.cdssandbox.xyz"
-system_status_bucket_name = "notification-canada-ca-dev-system-status"
-system_status_admin_url   = "https://dev.notification.cdssandbox.xyz"
+system_status_api_url               = "https://api.dev.notification.cdssandbox.xyz"
+system_status_bucket_name           = "notification-canada-ca-dev-system-status"
+system_status_admin_url             = "https://dev.notification.cdssandbox.xyz"
+system_status_schedule_expression   = "rate(5 minutes)"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 100
@@ -145,7 +149,6 @@ sqs_visibility_timeout_priority_high                               = 26
 sqs_priority_db_tasks_queue_name                                   = "priority-database-tasks.fifo"
 sqs_normal_db_tasks_queue_name                                     = "normal-database-tasks"
 sqs_bulk_db_tasks_queue_name                                       = "bulk-database-tasks"
-sqs_db_tasks_queue_name                                            = "database-tasks"
 sqs_throttled_sms_queue_name                                       = "send-throttled-sms-tasks"
 sqs_bulk_queue_name                                                = "bulk-tasks"
 sqs_priority_queue_name                                            = "priority-tasks"
@@ -166,4 +169,5 @@ ses_receiving_emails_docker_tag          = "bootstrap"
 pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
-blazer_image_tag = "latest"
+blazer_image_tag   = "latest"
+blazer_rds_version = "15.10"

@@ -31,24 +31,12 @@
         "value": "${PERF_TEST_CSV_DIRECTORY_PATH}"
       },
       {
-        "name": "PERF_TEST_SMS_TEMPLATE_ID",
-        "value": "${PERF_TEST_SMS_TEMPLATE_ID}"
+        "name": "PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR",
+        "value": "${PERF_TEST_SMS_TEMPLATE_ID_ONE_VAR}"
       },
       {
-        "name": "PERF_TEST_BULK_EMAIL_TEMPLATE_ID",
-        "value": "${PERF_TEST_BULK_EMAIL_TEMPLATE_ID}"
-      },
-      {
-        "name": "PERF_TEST_EMAIL_TEMPLATE_ID",
-        "value": "${PERF_TEST_EMAIL_TEMPLATE_ID}"
-      },
-      {
-        "name": "PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID",
-        "value": "${PERF_TEST_EMAIL_WITH_ATTACHMENT_TEMPLATE_ID}"
-      },
-      {
-        "name": "PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID",
-        "value": "${PERF_TEST_EMAIL_WITH_LINK_TEMPLATE_ID}"
+        "name": "PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR",
+        "value": "${PERF_TEST_EMAIL_TEMPLATE_ID_ONE_VAR}"
       }
     ],
     "secrets": [
@@ -57,7 +45,7 @@
         "valueFrom": "${PERF_TEST_PHONE_NUMBER_ARN}"
       },
       {
-        "name": "PERF_TEST_EMAIL",
+        "name": "PERF_TEST_EMAIL_ADDRESS",
         "valueFrom": "${PERF_TEST_EMAIL_ARN}"
       },
       {
@@ -65,8 +53,16 @@
         "valueFrom": "${PERF_TEST_DOMAIN_ARN}"
       },
       {
-        "name": "PERF_TEST_AUTH_HEADER",
-        "valueFrom": "${PERF_TEST_AUTH_HEADER_ARN}"
+        "name": "PERF_TEST_API_KEY",
+        "valueFrom": "${PERF_TEST_API_KEY_ARN}"
+      },
+      {
+        "name": "PERF_TEST_SLACK_WEBHOOK",
+        "valueFrom": "${PERF_TEST_SLACK_WEBHOOK_ARN}"
+      },
+      {
+        "name": "DATABASE_READER_URI",
+        "valueFrom": "${DATABASE_READER_URI_ARN}"
       }
     ]
   }

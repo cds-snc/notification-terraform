@@ -2,9 +2,9 @@ name: "Terragrunt plan STAGING"
 
 env:
   ENVIRONMENT: staging
-  ACCOUNT_ID: ${{ secrets.STAGING_ACCOUNT_ID }}
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
-  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
   WORKFLOW: true
 
 on:
@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
+      config: ${{ steps.filter.outputs.config }}
       common: ${{ steps.filter.outputs.common }}
       ecr: ${{ steps.filter.outputs.ecr }}
       ecr-us-east: ${{ steps.filter.outputs.ecr-us-east }}
@@ -38,6 +39,7 @@ jobs:
       dns: ${{ steps.filter.outputs.dns }}
       ses_validation_dns_entries: ${{ steps.filter.outputs.ses_validation_dns_entries }}
       eks: ${{ steps.filter.outputs.eks }}
+      aws-auth: ${{ steps.filter.outputs.aws-auth }}
       rds: ${{ steps.filter.outputs.rds }}
       lambda-api: ${{ steps.filter.outputs.lambda-api }}
       heartbeat: ${{ steps.filter.outputs.heartbeat }}
@@ -48,12 +50,15 @@ jobs:
       system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}
       newrelic: ${{ steps.filter.outputs.newrelic }}
       manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
+      github: ${{ steps.filter.outputs.github }}
 
     steps:
       - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
         id: filter
         with:
           filters: |
+            config:
+              - 'env/*.tfvars'
             common:
               - '.github/workflows/terragrunt-plan-${{env.ENVIRONMENT}}.yml'
               - 'aws/common/**'
@@ -74,6 +79,9 @@ jobs:
             eks:
               - 'aws/eks/**'
               - 'env/${{env.ENVIRONMENT}}/eks/**'
+            aws-auth:
+              - 'aws/aws-auth/**'
+              - 'env/${{env.ENVIRONMENT}}/aws-auth/**'              
             elasticache:
               - 'aws/elasticache/**'
               - 'env/${{env.ENVIRONMENT}}/elasticache/**'
@@ -128,17 +136,21 @@ jobs:
             manifest_secrets:
               - 'aws/manifest_secrets/**'
               - 'env/${{env.ENVIRONMENT}}/manifest_secrets/**'
+            github:
+              - 'aws/github/**'
+              - 'env/${{env.ENVIRONMENT}}/github/**'
 
   terragrunt-plan-common:
     if: |
-      needs.terragrunt-filter.outputs.common == 'true'
+      needs.terragrunt-filter.outputs.common == 'true' || 
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "common"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -165,14 +177,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ecr == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
     runs-on: ubuntu-latest 
     env:
       COMPONENT: "ecr" 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -200,14 +213,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ecr-us-east == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
     runs-on: ubuntu-latest 
     env:
       COMPONENT: "ecr-us-east" 
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -236,14 +250,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "ses_receiving_emails"
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-ecr-us-east]
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -270,14 +285,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.dns == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "dns"
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -304,14 +320,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "ses_validation_dns_entries"
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns]
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -338,14 +355,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.cloudfront == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common]
     env:
       COMPONENT: "cloudfront"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -372,14 +390,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.eks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
     env:
       COMPONENT: "eks"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -401,19 +420,103 @@ jobs:
           terraform-init: |
             -upgrade
 
+  terragrunt-plan-aws-auth:
+    if: |
+      always() &&
+      needs.terragrunt-filter.outputs.aws-auth == 'true' &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
+    runs-on: ubuntu-latest  
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
+    env:
+      COMPONENT: "aws-auth"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+
+      - name: Install sponge
+        run: |
+          sudo apt update
+          sudo apt-get install -y moreutils
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars    
+              
+      - name: Retrieve VPN Config
+        run: |
+          sudo mkdir -p aws
+          cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+          cd ../env/${{env.ENVIRONMENT}}/eks
+          ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
+          CERT=$(terragrunt output --raw gha_vpn_certificate)
+          KEY=$(terragrunt output --raw gha_vpn_key)
+          aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT_ID --output text > /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo "<cert>
+          $CERT
+          </cert>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo "<key>
+          $KEY
+          </key>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
+
+      - name: Setup helmfile
+        uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
+        with:
+          install-kubectl: yes
+          install-helm: yes       
+          helmfile-version: "v0.151.0"
+         
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@cd2ed8a90cc7b060dc4e001143e811b5f7ea0af5" # v3.1.0
+        with:
+          config_file: /var/tmp/${{env.ENVIRONMENT}}.ovpn
+          echo_config: false             
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --name notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster     
+          kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster ${{env.ENVIRONMENT}}
+
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
   terragrunt-plan-elasticache:
     if: |
       always() &&
       needs.terragrunt-filter.outputs.elasticache == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
     env:
       COMPONENT: "elasticache"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -440,14 +543,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.rds == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
     env:
       COMPONENT: "rds"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -472,16 +576,17 @@ jobs:
   terragrunt-plan-lambda-api:
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.api == 'true' &&
+      needs.terragrunt-filter.outputs.lambda-api == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
     env:
       COMPONENT: "lambda-api"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -508,14 +613,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-admin-pr"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -542,14 +648,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.performance-test == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
-    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr, terragrunt-plan-rds]
     env:
       COMPONENT: "performance-test"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -577,14 +684,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.heartbeat == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "heartbeat"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -611,14 +719,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.database-tools == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "database-tools"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -645,14 +754,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.quicksight == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "quicksight"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -679,14 +789,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-google-cidr"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -713,14 +824,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "ses_to_sqs_email_callbacks"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -747,14 +859,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "sns_to_sqs_sms_callbacks"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -781,14 +894,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "pinpoint_to_sqs_sms_callbacks"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -815,14 +929,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.system_status == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
     env:
       COMPONENT: "system_status"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -849,14 +964,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.system_status_static_site == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-system_status]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "system_status_static_site"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -883,14 +999,15 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.newrelic == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-common]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "newrelic"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -917,14 +1034,50 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' &&
       !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "manifest_secrets"
     steps:
       - name: Checkout
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+      - uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-github:
+    if: |
+      always() &&
+      needs.terragrunt-filter.outputs.github == 'true' &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') ||
+      needs.terragrunt-filter.outputs.config == 'true'
+    needs: [terragrunt-filter,terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
+    runs-on: ubuntu-latest  
+    env:
+      COMPONENT: "github"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan

@@ -1,9 +1,14 @@
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "dev"
+  config_context = var.env
 }
 
 data "aws_caller_identity" "current" {}
+
+data "external" "aws_role_name" {
+  # Get the role name from aws
+  program = ["./getRoleName.sh"]
+}
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
@@ -18,7 +23,7 @@ module "eks" {
       groups   = ["system:nodes", "system:bootstrappers"]
     },
     {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/${var.role_name}"
+      rolearn  = "arn:aws:iam::${var.account_id}:role/${data.external.aws_role_name.result.rolename}"
       username = "AWSAdministratorAccess:{{SessionName}}"
       groups   = ["system:masters"]
     },
@@ -48,6 +53,16 @@ module "eks" {
       groups   = ["system:masters"]
     },
     {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-apply"
+      username = "notification-terraform-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-plan"
+      username = "notification-terraform-plan"
+      groups   = ["system:masters"]
+    },
+    {
       rolearn  = "arn:aws:iam::${var.account_id}:role/ipv4-geolocate-webservice-apply"
       username = "ipv4-geolocate-webservice-apply"
       groups   = ["system:masters"]
@@ -57,9 +72,4 @@ module "eks" {
   aws_auth_accounts = [
     var.account_id
   ]
-}
-
-variable "role_name" {
-  type        = string
-  description = "The name of the role to create"
 }

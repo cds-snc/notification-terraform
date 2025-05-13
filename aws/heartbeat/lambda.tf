@@ -36,7 +36,7 @@ resource "aws_cloudwatch_event_rule" "heartbeat_testing" {
   count               = var.cloudwatch_enabled ? 1 : 0
   name                = "heartbeat_testing"
   description         = "heartbeat_testing event rule"
-  schedule_expression = var.schedule_expression
+  schedule_expression = var.heartbeat_schedule_expression
   depends_on          = [module.heartbeat]
 }
 

@@ -5,6 +5,12 @@ resource "aws_quicksight_data_set" "sms_usage" {
   name        = "SmsUsage"
   import_mode = "SPICE"
 
+  lifecycle {
+    ignore_changes = [
+      refresh_properties,
+    ]
+  }
+
   physical_table_map {
     physical_table_map_id = "smsusage"
 

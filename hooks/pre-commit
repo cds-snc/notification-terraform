@@ -11,6 +11,7 @@ for D in $(find ./aws -mindepth 1 -maxdepth 1 -type d); do
             printf "${RED}Formatting Check for $D Failed"
             FAIL=true
         fi
+        echo ${GREEN}
     popd
 done
 if [ "$FAIL" = true ] ; then

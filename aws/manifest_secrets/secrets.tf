@@ -138,6 +138,26 @@ resource "aws_secretsmanager_secret_version" "manifest_new_relic_license_key_ver
   secret_string = var.manifest_new_relic_license_key
 }
 
+resource "aws_secretsmanager_secret" "manifest_new_relic_account_id" {
+  name                    = "MANIFEST_NEW_RELIC_ACCOUNT_ID"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_new_relic_account_id_version" {
+  secret_id     = aws_secretsmanager_secret.manifest_new_relic_account_id.id
+  secret_string = var.manifest_new_relic_account_id
+}
+
+resource "aws_secretsmanager_secret" "manifest_new_relic_api_key" {
+  name                    = "MANIFEST_NEW_RELIC_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_new_relic_api_key_version" {
+  secret_id     = aws_secretsmanager_secret.manifest_new_relic_api_key.id
+  secret_string = var.manifest_new_relic_api_key
+}
+
 resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token" {
   name                    = "MANIFEST_CRM_GITHUB_PERSONAL_ACCESS_TOKEN"
   recovery_window_in_days = 0
@@ -389,3 +409,44 @@ resource "aws_secretsmanager_secret_version" "manifest_redis_url" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_url.id
   secret_string = "redis://${var.redis_primary_endpoint_address}"
 }
+
+resource "aws_secretsmanager_secret" "manifest_cypress_user_pw_secret" {
+  name                    = "MANIFEST_CYPRESS_USER_PW_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cypress_user_pw_secret" {
+  secret_id     = aws_secretsmanager_secret.manifest_cypress_user_pw_secret.id
+  secret_string = var.manifest_cypress_user_pw_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_cypress_auth_client_secret" {
+  name                    = "MANIFEST_CYPRESS_AUTH_CLIENT_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cypress_auth_client_secret" {
+  secret_id     = aws_secretsmanager_secret.manifest_cypress_auth_client_secret.id
+  secret_string = var.manifest_cypress_auth_client_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_docker_hub_username" {
+  name                    = "MANIFEST_DOCKER_HUB_USERNAME"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_docker_hub_username" {
+  secret_id     = aws_secretsmanager_secret.manifest_docker_hub_username.id
+  secret_string = var.manifest_docker_hub_username
+}
+
+resource "aws_secretsmanager_secret" "manifest_docker_hub_pat" {
+  name                    = "MANIFEST_DOCKER_HUB_PAT"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat" {
+  secret_id     = aws_secretsmanager_secret.manifest_docker_hub_pat.id
+  secret_string = var.manifest_docker_hub_pat
+}
+
