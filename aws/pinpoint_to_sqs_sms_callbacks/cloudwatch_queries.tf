@@ -95,6 +95,33 @@ fields @timestamp, @message
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "pinpoint-sms-international-sending-status-sender-id" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "SMS (Pinpoint) / International sending status (with Sender IDs)"
+
+  log_group_names = [
+    aws_cloudwatch_log_group.pinpoint_deliveries.name
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message
+| parse @message /"isoCountryCode":"(?<Country>[^"]+)"/
+| parse @message /"eventType":"(?<EventType>[^"]+)"/
+| parse @message /"isFinal":(?<Is_Final>\w+)/
+| filter Is_Final = "true"
+| parse originationPhoneNumber /(?<longCode>\+\d{11})/
+| parse originationPhoneNumber /(?<senderId>^[^\+][a-zA-Z]+)/
+| parse originationPhoneNumber /(?<shortCode>237762)/
+| stats
+    count(longCode) as TotalLongCode,
+    count(shortCode) as TotalShortCode,
+    count(senderId) as TotalSenderId
+    by Country, EventType, senderId
+| sort Country asc, EventType asc
+
+QUERY
+}
+
 resource "aws_cloudwatch_query_definition" "pinpoint-sms-get-sms-logs-by-dest-phone-number" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Get SMS logs by destination phone number"
