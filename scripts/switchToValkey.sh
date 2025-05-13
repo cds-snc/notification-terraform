@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script will perform the necessasry steps to switch Notify from Redis to Valkey
+# This script will perform the necessary steps to switch Notify from Redis to Valkey
 # Usage ./switchToValkey.sh <environment>
 # Example ./switchToValkey.sh dev
 
