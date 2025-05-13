@@ -174,7 +174,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
-  threshold           = "1"
+  threshold           = 1
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
   treat_missing_data  = "notBreaching"
