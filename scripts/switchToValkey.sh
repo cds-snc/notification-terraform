@@ -18,7 +18,7 @@ if [ $? -ne 0 ]; then
   echo "Failed to apply changes in $ENVIRONMENT environment."
   exit 1
 fi
-echo "Successfully switched Notify from Redis to Valkey in $ENVIRONMENT environment."
+echo "Successfully created the Valkey cluster in $ENVIRONMENT environment."
 popd
 
 pushd ../$ENVIRONMENT/lambda-api
