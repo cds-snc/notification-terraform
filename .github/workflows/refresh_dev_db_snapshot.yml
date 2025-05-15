@@ -35,7 +35,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
           role-session-name: RefreshSharedToDev
-          aws-region: "ca-central-1"
+          aws-region: ${{ env.AWS_REGION }}
       
       - name: Find latest automated snapshot
         id: find-snapshot
