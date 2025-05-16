@@ -70,6 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
+elasticache_use_valkey                 = true
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-dev-ops"
