@@ -170,7 +170,7 @@ resource "null_resource" "build_ses_to_sqs_email_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/ && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile ."
+    command = "cd /var/tmp/notification-lambdas/sesemailcallbacks && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap -f /var/tmp/notification-lambdas/sesemailcallbacks/Dockerfile ."
   }
 
 }
