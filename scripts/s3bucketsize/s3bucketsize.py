@@ -60,7 +60,7 @@ def main():
         # Retrieve all objects in the bucket, checking for pagination
         while is_truncated:
             response = s3.list_objects_v2(**pagination_config)
-            for obj in response["Contents"]:
+            for obj in response.get("Contents", []):
                 total_size += obj["Size"]
                 item_count += 1
             
