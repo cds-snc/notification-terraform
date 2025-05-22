@@ -1,6 +1,11 @@
 locals {
-  secret_inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars")))
+  secret_inputs_raw = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars")))
   config_inputs = jsondecode(read_tfvars_file("../../${get_env("ENVIRONMENT")}_config.tfvars"))
+  
+  # Process all secret inputs to replace empty strings with single spaces " "
+  secret_inputs = { for k, v in local.secret_inputs_raw : k => 
+    (v == "" || v == null) ? " " : v 
+  }
 }
 
 inputs = merge(
