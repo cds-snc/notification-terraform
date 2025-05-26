@@ -19,7 +19,8 @@ toApply="common,ecr,ses_receiving_emails,dns,ses_validation_dns_entries,cloudfro
 
 ENVIRONMENT=$1
 
-IFS=', ' read -r -a folders <<< "$toApply"
+toApply=$(ls -d ../env/$ENVIRONMENT/*/)
+
 
 echo "This script will iterate through all terraform folders and auto upgrade and apply."
 echo -e "${YELLOW}The target environment is: ${BYELLOW} $ENVIRONMENT"
@@ -30,10 +31,16 @@ echo "Are you sure you want to proceed? Only "yes" will be accepted"
 read RESPONSE
 
 if [ "$RESPONSE" == "yes" ]; then
-   for folder in "${folders[@]}"
+   for folder in $toApply
    do
-      pushd ../env/$ENVIRONMENT/$folder
-      runCommand "terragrunt init --reconfigure"
+      pushd $folder
+      if [ "$folder" == "../env/$ENVIRONMENT/performance-test/" ]; then
+         echo "Skipping common folder"
+         popd
+         continue
+      fi
+      echo "Running terragrunt init --upgrade --reconfigure in $folder"
+      runCommand "terragrunt init --upgrade --reconfigure"
       popd
    done
     exit 0
