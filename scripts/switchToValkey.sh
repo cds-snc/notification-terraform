@@ -10,7 +10,7 @@ if [ -z "$ENVIRONMENT" ]; then
   exit 1
 fi
 
-pushd ../$ENVIRONMENT/elasticache
+pushd ../env/$ENVIRONMENT/elasticache
 echo "Creating Valkey cluster in $ENVIRONMENT environment..."
 
 terragrunt apply
@@ -21,7 +21,10 @@ fi
 echo "Successfully created the Valkey cluster in $ENVIRONMENT environment."
 popd
 
-pushd ../$ENVIRONMENT/lambda-api
+echo "Pause to start perfomance test"
+read -p "Press [Enter] to continue or [Ctrl+C] to cancel..."
+
+pushd ../env/$ENVIRONMENT/lambda-api
 echo "Updating Lambda function in $ENVIRONMENT environment..."
 terragrunt apply
 if [ $? -ne 0 ]; then
@@ -30,7 +33,7 @@ if [ $? -ne 0 ]; then
 fi
 popd
 echo "Successfully updated Lambda function in $ENVIRONMENT environment."
-pushd ../$ENVIRONMENT/manifest_secrets
+pushd ../env/$ENVIRONMENT/manifest_secrets
 echo "Updating manifest secrets in $ENVIRONMENT environment..."
 terragrunt apply
 if [ $? -ne 0 ]; then
