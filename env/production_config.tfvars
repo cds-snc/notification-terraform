@@ -7,9 +7,9 @@ billing_tag_key      = "CostCenter"
 
 ## EKS
 primary_worker_desired_size     = 8
-primary_worker_instance_types   = ["r5.large"]
-secondary_worker_instance_types = ["r5.large"]
-node_upgrade                    = true
+primary_worker_instance_types   = ["c7i.xlarge"]
+secondary_worker_instance_types = ["c7i.xlarge"]
+node_upgrade                    = false
 force_upgrade                   = false
 primary_worker_max_size         = 8
 primary_worker_min_size         = 3
@@ -57,7 +57,7 @@ alt_domain                 = "notification.alpha.canada.ca"
 domain                     = "notification.canada.ca"
 base_domain                = "notification.canada.ca"
 perf_test_domain           = "https://api.notification.canada.ca"
-ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "elections.ca"]
+ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "chrc-ccdp.gc.ca"]
 
 ## LOGGING
 log_retention_period_days           = 0
@@ -70,6 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.medium"
+elasticache_use_valkey                 = false
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-ops"
