@@ -160,7 +160,7 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
 # Route53 Resolver Query Logging Configuration
 resource "aws_route53_resolver_query_log_config" "main" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "${var.env}-route53-query-logging"
+  name  = "route53-query-logging"
 
   destination_arn = aws_cloudwatch_log_group.route53_resolver_query_log[0].arn
 
@@ -212,7 +212,7 @@ resource "aws_cloudwatch_log_metric_filter" "route53_servfail_notification" {
 # SNS Topic for DNS resolution alarms
 resource "aws_sns_topic" "dns_alarms" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "${var.env}-dns-resolution-alarms"
+  name  = "dns-resolution-alarms"
 
   tags = {
     Environment = var.env
@@ -224,7 +224,7 @@ resource "aws_sns_topic" "dns_alarms" {
 # CloudWatch Alarm for Route53 DNS resolution failures
 resource "aws_cloudwatch_metric_alarm" "route53_dns_failures" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "${var.env}-route53-dns-resolution-failures"
+  alarm_name          = "route53-dns-resolution-failures"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 2
   metric_name         = "Route53DNSResolutionFailureCount"
