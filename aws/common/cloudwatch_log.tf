@@ -156,3 +156,35 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
     default_value = "0"
   }
 }
+
+# CloudWatch Log Group to collect DNS resolution logs
+resource "aws_cloudwatch_log_group" "dns_logs" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name              = "/kubernetes/dns-resolution"
+  retention_in_days = 14
+  tags = {
+    Environment = var.env
+    CostCenter  = "notification-canada-ca-${var.env}"
+    Service     = "dns-monitoring"
+  }
+}
+
+# Metric Filter to detect unresolved DNS requests
+resource "aws_cloudwatch_log_metric_filter" "dns_resolution_failures" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name           = "DNSResolutionFailures"
+  pattern        = "\"NXDOMAIN\" OR \"SERVFAIL\""
+  log_group_name = aws_cloudwatch_log_group.dns_logs.name
+
+  metric_transformation {
+    name      = "DNSResolutionFailureCount"
+    namespace = "DNS/Resolution"
+    value     = "1"
+  }
+}
+
+# SNS Topic for alarms
+resource "aws_sns_topic" "dns_alarms" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name = "${var.env}-dns-resolution-alarms"
+}
