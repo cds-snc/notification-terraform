@@ -193,6 +193,18 @@ resource "aws_cloudwatch_log_metric_filter" "route53_dns_failures" {
   }
 }
 
+# SNS Topic for DNS resolution alarms
+resource "aws_sns_topic" "dns_alarms" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "${var.env}-dns-resolution-alarms"
+  
+  tags = {
+    Environment = var.env
+    CostCenter  = "notification-canada-ca-${var.env}"
+    Service     = "dns-monitoring"
+  }
+}
+
 # CloudWatch Alarm for Route53 DNS resolution failures
 resource "aws_cloudwatch_metric_alarm" "route53_dns_failures" {
   count               = var.cloudwatch_enabled ? 1 : 0
