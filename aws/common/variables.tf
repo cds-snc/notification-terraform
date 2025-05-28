@@ -9,7 +9,13 @@ variable "newrelic_account_region" {
 }
 
 variable "dns_failure_threshold" {
-  description = "Threshold for DNS resolution failures to trigger an alarm"
   type        = number
-  default     = 5 # Adjust based on your specific requirements
+  description = "The threshold for DNS resolution failures before triggering an alarm"
+  default     = 5 # Adjust this default value based on your requirements
+}
+
+variable "vpc_ids" {
+  type        = list(string)
+  description = "List of VPC IDs to enable Route53 resolver query logging"
+  default     = []
 }

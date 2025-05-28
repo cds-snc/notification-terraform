@@ -157,11 +157,13 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
   }
 }
 
-# CloudWatch Log Group to collect DNS resolution logs
-resource "aws_cloudwatch_log_group" "dns_logs" {
-  count             = var.cloudwatch_enabled ? 1 : 0
-  name              = "/kubernetes/dns-resolution"
-  retention_in_days = 14
+# Route53 Resolver Query Logging Configuration
+resource "aws_route53_resolver_query_log_config" "main" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "${var.env}-route53-query-logging"
+
+  destination_arn = aws_cloudwatch_log_group.route53_resolver_query_log[0].arn
+
   tags = {
     Environment = var.env
     CostCenter  = "notification-canada-ca-${var.env}"
@@ -169,22 +171,41 @@ resource "aws_cloudwatch_log_group" "dns_logs" {
   }
 }
 
-# Metric Filter to detect unresolved DNS requests
-resource "aws_cloudwatch_log_metric_filter" "dns_resolution_failures" {
+# Associate query logging with VPCs
+resource "aws_route53_resolver_query_log_config_association" "main" {
+  count = var.cloudwatch_enabled ? length(var.vpc_ids) : 0
+
+  resolver_query_log_config_id = aws_route53_resolver_query_log_config.main[0].id
+  resource_id                  = var.vpc_ids[count.index]
+}
+
+# Metric Filter for Route53 DNS resolution failures (NXDOMAIN, SERVFAIL responses)
+resource "aws_cloudwatch_log_metric_filter" "route53_dns_failures" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "DNSResolutionFailures"
-  pattern        = "\"NXDOMAIN\" OR \"SERVFAIL\""
-  log_group_name = aws_cloudwatch_log_group.dns_logs.name
+  name           = "Route53DNSResolutionFailures"
+  pattern        = "{ $.rcode = \"NXDOMAIN\" || $.rcode = \"SERVFAIL\" }"
+  log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
-    name      = "DNSResolutionFailureCount"
-    namespace = "DNS/Resolution"
+    name      = "Route53DNSResolutionFailureCount"
+    namespace = "Route53/Resolver"
     value     = "1"
   }
 }
 
-# SNS Topic for alarms
-resource "aws_sns_topic" "dns_alarms" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "${var.env}-dns-resolution-alarms"
+# CloudWatch Alarm for Route53 DNS resolution failures
+resource "aws_cloudwatch_metric_alarm" "route53_dns_failures" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "${var.env}-route53-dns-resolution-failures"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "Route53DNSResolutionFailureCount"
+  namespace           = "Route53/Resolver"
+  period              = 300 # 5 minutes
+  statistic           = "Sum"
+  threshold           = var.dns_failure_threshold
+  alarm_description   = "Alarm for Route53 DNS resolution failures exceeding threshold"
+  alarm_actions       = [aws_sns_topic.dns_alarms[0].arn]
+  ok_actions          = [aws_sns_topic.dns_alarms[0].arn]
+  treat_missing_data  = "notBreaching"
 }
