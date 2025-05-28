@@ -197,7 +197,7 @@ resource "aws_cloudwatch_log_metric_filter" "route53_dns_failures" {
 resource "aws_sns_topic" "dns_alarms" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "${var.env}-dns-resolution-alarms"
-  
+
   tags = {
     Environment = var.env
     CostCenter  = "notification-canada-ca-${var.env}"
