@@ -179,11 +179,27 @@ resource "aws_route53_resolver_query_log_config_association" "main" {
   resource_id                  = var.vpc_ids[count.index]
 }
 
-# Metric Filter for Route53 DNS resolution failures (NXDOMAIN, SERVFAIL responses)
-resource "aws_cloudwatch_log_metric_filter" "route53_dns_failures" {
+# Metric Filter for NXDOMAIN errors on notification.cdssandbox.ca domain
+resource "aws_cloudwatch_log_metric_filter" "route53_nxdomain_notification" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "Route53DNSResolutionFailures"
-  pattern        = "{ $.rcode = \"NXDOMAIN\" || $.rcode = \"SERVFAIL\" }"
+  name           = "Route53NXDOMAINNotificationDomain"
+  # Simplified pattern that should be compatible with CloudWatch
+  pattern        = "{ $.rcode = \"NXDOMAIN\" && $.query_name = \"*.notification.cdssandbox.ca\" }"
+  log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
+
+  metric_transformation {
+    name      = "Route53DNSResolutionFailureCount"
+    namespace = "Route53/Resolver"
+    value     = "1"
+  }
+}
+
+# Metric Filter for SERVFAIL errors on notification.cdssandbox.ca domain
+resource "aws_cloudwatch_log_metric_filter" "route53_servfail_notification" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "Route53SERVFAILNotificationDomain"
+  # Simplified pattern that should be compatible with CloudWatch
+  pattern        = "{ $.rcode = \"SERVFAIL\" && $.query_name = \"*.notification.cdssandbox.ca\" }"
   log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
