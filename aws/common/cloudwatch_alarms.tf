@@ -16,8 +16,8 @@ resource "aws_cloudwatch_metric_alarm" "route53_dns_failures" {
   statistic           = "Sum"
   threshold           = var.dns_failure_threshold
   alarm_description   = "Alarm for Route53 DNS resolution failures exceeding threshold"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok]
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   treat_missing_data  = "notBreaching"
 }
 
