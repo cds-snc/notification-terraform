@@ -4,7 +4,22 @@
 #
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
 
-
+# CloudWatch Alarm for Route53 DNS resolution failures
+resource "aws_cloudwatch_metric_alarm" "route53_dns_failures" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "route53-dns-resolution-failures"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "Route53DNSResolutionFailureCount"
+  namespace           = "Route53/Resolver"
+  period              = 300 # 5 minutes
+  statistic           = "Sum"
+  threshold           = var.dns_failure_threshold
+  alarm_description   = "Alarm for Route53 DNS resolution failures exceeding threshold"
+  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning]
+  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok]
+  treat_missing_data  = "notBreaching"
+}
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
