@@ -22,7 +22,8 @@ resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
 
 # CloudWatch Alarm for Route53 DNS resolution failures (Critical)
 resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-critical" {
-  count                     = var.cloudwatch_enabled ? 1 : 0
+  # count                     = var.cloudwatch_enabled ? 1 : 0
+  count                     = 0
   alarm_name                = "route53-dns-resolution-failures-critical"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = 5
