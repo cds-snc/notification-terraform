@@ -351,3 +351,20 @@ fields @timestamp, @notification_id, @url, @error
 QUERY
 }
 
+
+resource "aws_cloudwatch_query_definition" "api-send-greater-than-1s" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API / API send is greater than 1s"
+
+  log_group_name = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter @message like /Batch saving:/ and @message like \"/v2/notifications/email\"
+| parse @message \"time_taken: *ms\" as time_taken
+| filter time_taken > 1000
+| limit 1000
+QUERY
+}
