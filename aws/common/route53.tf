@@ -44,8 +44,8 @@ resource "aws_route53_resolver_query_log_config_association" "main" {
 resource "aws_cloudwatch_log_metric_filter" "route53_nxdomain_notification" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Route53NXDOMAINNotificationDomain"
-  # Modified to ensure subdomains are properly matched
-  pattern        = "{ $.rcode = \"NXDOMAIN\" && ($.query_name = \"*.${var.base_domain}\" || $.query_name LIKE \"*${var.base_domain}\") }"
+  # Simplified pattern that should be compatible with CloudWatch
+  pattern        = "{ $.rcode = \"NXDOMAIN\" && $.query_name = \"*.${var.base_domain}\" }"
   log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
@@ -55,12 +55,12 @@ resource "aws_cloudwatch_log_metric_filter" "route53_nxdomain_notification" {
   }
 }
 
-# Metric Filter for SERVFAIL errors 
+# Metric Filter for SERVFAIL errors on notification.cdssandbox.ca domain
 resource "aws_cloudwatch_log_metric_filter" "route53_servfail_notification" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Route53SERVFAILNotificationDomain"
-  # Modified to ensure subdomains are properly matched
-  pattern        = "{ $.rcode = \"SERVFAIL\" && ($.query_name = \"*.${var.base_domain}\" || $.query_name LIKE \"*${var.base_domain}\") }"
+  # Simplified pattern that should be compatible with CloudWatch
+  pattern        = "{ $.rcode = \"SERVFAIL\" && $.query_name = \"*.${var.base_domain}\" }"
   log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
