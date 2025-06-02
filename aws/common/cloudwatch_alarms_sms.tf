@@ -232,6 +232,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
   threshold           = 10
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   treat_missing_data  = "notBreaching"
+}
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warning" {
   provider = aws.us-west-2
