@@ -1055,7 +1055,7 @@ resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_ok_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
   metric_query {
     id          = "batch_saving_email_slow_execution"
     expression  = "INSIGHT_RULE_METRIC('batch_saving_email_slow_execution_rule')"
