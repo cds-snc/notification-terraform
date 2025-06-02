@@ -1056,7 +1056,7 @@ resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
   treat_missing_data  = "notBreaching"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  
+
   metric_query {
     id          = "batch_saving_email_slow_execution"
     expression  = "INSIGHT_RULE_METRIC('batch_saving_email_slow_execution_rule')"
@@ -1066,11 +1066,11 @@ resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
 }
 
 resource "aws_cloudwatch_insight_rule" "api_send_slow_execution_rule" {
-  name        = "api_send_slow_execution_rule"
-  state       = "ENABLED"
-  rule_body   = jsonencode({
-    Source = "aws/containerinsights/${var.cluster_name}/application"
+  name  = "api_send_slow_execution_rule"
+  state = "ENABLED"
+  rule_body = jsonencode({
+    Source        = "aws/containerinsights/${var.cluster_name}/application"
     LogGroupNames = [local.eks_application_log_group]
-    QueryString = aws_cloudwatch_query_definition.api-send-greater-than-1s[0].query_string
+    QueryString   = aws_cloudwatch_query_definition.api-send-greater-than-1s[0].query_string
   })
 }
