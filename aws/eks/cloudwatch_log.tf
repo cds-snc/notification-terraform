@@ -232,17 +232,3 @@ resource "aws_cloudwatch_log_metric_filter" "oom-errors" {
     value     = "1"
   }
 }
-
-resource "aws_cloudwatch_log_metric_filter" "api_send_slow_execution" {
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "api_send_slow_execution"
-  pattern        = "\"Batch saving:\" \"/v2/notifications/email\" \"time_taken:\" \"*ms\" \"time_taken: *\" > 1000"
-  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
-
-  metric_transformation {
-    name          = "ApiSendSlowExecution"
-    namespace     = "LogMetrics"
-    value         = "1"
-    default_value = "0"
-  }
-}
