@@ -1044,7 +1044,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
-  period              = 300
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
@@ -1057,6 +1056,7 @@ resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
+  period              = 300
   metric_query {
     id          = "batch_saving_email_slow_execution"
     expression  = "INSIGHT_RULE_METRIC('batch_saving_email_slow_execution_rule')"
