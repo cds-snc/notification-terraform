@@ -1044,6 +1044,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
+  period              = 300
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
