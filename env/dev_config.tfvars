@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.11.4-eksbuild.2"
 eks_addon_kube_proxy_version    = "v1.32.0-eksbuild.2"
 eks_addon_vpc_cni_version       = "v1.19.2-eksbuild.5"
 eks_addon_ebs_driver_version    = "v1.42.0-eksbuild.1"
-eks_node_ami_version            = "1.32.1-20250419"
-eks_karpenter_ami_id            = "ami-00f49f6ed3da57a90"
+eks_node_ami_version            = "1.32.3-20250519"
+eks_karpenter_ami_id            = "ami-0b5e7fb52a0e6150d"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -70,6 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
+elasticache_use_valkey                 = true
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-dev-ops"

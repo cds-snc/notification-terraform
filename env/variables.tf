@@ -1074,3 +1074,8 @@ variable "manifest_docker_hub_pat" {
   type      = string
   sensitive = true
 }
+
+variable "elasticache_use_valkey" {
+  type    = bool
+  default = false
+}

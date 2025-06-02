@@ -350,4 +350,3 @@ fields @timestamp, @notification_id, @url, @error
 | limit 10000
 QUERY
 }
-
