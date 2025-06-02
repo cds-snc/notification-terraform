@@ -356,7 +356,7 @@ resource "aws_cloudwatch_query_definition" "api-send-greater-than-1s" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "API / API send is greater than 1s"
 
-  log_group_name = [
+  log_group_names = [
     local.eks_application_log_group
   ]
 
