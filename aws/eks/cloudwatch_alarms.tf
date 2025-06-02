@@ -1046,20 +1046,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_log_metric_filter" "api_send_slow_execution" {
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "api_send_slow_execution"
-  pattern        = aws_cloudwatch_query_definition.api-send-greater-than-1s[0].query_string
-  log_group_name = local.eks_application_log_group
-
-  metric_transformation {
-    name          = "ApiSendSlowExecution"
-    namespace     = "NotifyCustomMetrics"
-    value         = "1"
-    default_value = "0"
-  }
-}
-
 resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-email-slow-execution-warning"
