@@ -1065,7 +1065,7 @@ resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
   }
 }
 
-resource "aws_cloudwatch_insight_rule" "api_send_slow_execution_rule" {
+resource "aws_cloudwatch_metric_insight_rule" "api_send_slow_execution_rule" {
   name  = "api_send_slow_execution_rule"
   state = "ENABLED"
   rule_body = jsonencode({
