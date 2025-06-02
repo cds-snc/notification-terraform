@@ -1046,24 +1046,34 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
+resource "aws_cloudwatch_log_metric_filter" "api_send_slow_execution" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "api_send_slow_execution"
+  pattern        = aws_cloudwatch_query_definition.api-send-greater-than-1s[0].query_string
+  log_group_name = local.eks_application_log_group
+
+  metric_transformation {
+    name          = "ApiSendSlowExecution"
+    namespace     = "NotifyCustomMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "api-email-slow-execution-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-email-slow-execution-warning"
   alarm_description   = "API send for email notifications taking longer than 1s"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.api_send_slow_execution[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.api_send_slow_execution[0].metric_transformation[0].namespace
+  period              = 300
+  statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
-
-  metric_query {
-    id          = "batch_saving_email_slow_execution"
-    expression  = "INSIGHT_RULE_METRIC('batch_saving_email_slow_execution_rule')"
-    label       = "Email batch saving operations taking >1000ms"
-    return_data = "true"
-    period      = 300
-  }
 }
 
 resource "aws_cloudwatch_query_definition" "api_send_slow_execution_rule" {
