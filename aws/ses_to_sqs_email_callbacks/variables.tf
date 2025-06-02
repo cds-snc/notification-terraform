@@ -16,6 +16,7 @@ variable "notification_canada_ca_ses_callback_arn" {
 
 variable "ses_receipt_callback_buffer_arn" {
   type = string
+  description = "ARN for the SQS queue receiving SES receipts from AWS"
 }
 
 variable "ses_to_sqs_email_callbacks_ecr_repository_url" {
