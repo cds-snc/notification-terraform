@@ -362,9 +362,10 @@ resource "aws_cloudwatch_query_definition" "api-send-greater-than-1s" {
 
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter @message like /Batch saving:/ and @message like \"/v2/notifications/email\"
-| parse @message \"time_taken: *ms\" as time_taken
-| filter time_taken > 1000
-| limit 1000
+| filter log like /Batch saving:/ and log like /\/v2\/notifications\/email/ and log like /time_taken:/
+| parse log "* time_taken: *ms *" as prefix_junk, time_taken_val, suffix_junk
+| filter isNumber(time_taken_val) and tonumber(time_taken_val) > 1000
+| sort @timestamp desc
+| limit 20 # Or your desired limit for display
 QUERY
 }
