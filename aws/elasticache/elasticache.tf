@@ -21,54 +21,9 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   description                 = "Redis/Valkey multiaz cluster with replication group"
   node_type                   = var.elasticache_node_type
   num_cache_clusters          = var.elasticache_node_number_cache_clusters
-  engine                      = "redis"
-  engine_version              = "6.x"
-  parameter_group_name        = "default.redis6.x"
-  port                        = 6379
-  maintenance_window          = "thu:04:00-thu:05:00"
-  multi_az_enabled            = true
-
-  security_group_ids = local.cluster_security_group_ids
-  subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
-
-  log_delivery_configuration {
-    destination      = aws_cloudwatch_log_group.notification-canada-ca-elasticache-slow-logs.name
-    destination_type = "cloudwatch-logs"
-    log_format       = "json"
-    log_type         = "slow-log"
-  }
-
-  log_delivery_configuration {
-    destination      = aws_cloudwatch_log_group.notification-canada-ca-elasticache-engine-logs.name
-    destination_type = "cloudwatch-logs"
-    log_format       = "json"
-    log_type         = "engine-log"
-  }
-
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
-
-  lifecycle {
-    ignore_changes = [num_cache_clusters]
-  }
-}
-
-
-resource "aws_elasticache_replication_group" "notification_valkey_cluster" {
-
-  count = var.elasticache_use_valkey == true ? 1 : 0
-
-  apply_immediately           = true
-  automatic_failover_enabled  = true
-  preferred_cache_cluster_azs = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
-  replication_group_id        = "notify-${var.env}-cluster-cache-valkey"
-  description                 = "Valkey multiaz cluster with replication group"
-  node_type                   = var.elasticache_node_type
-  num_cache_clusters          = var.elasticache_node_number_cache_clusters
-  engine                      = "valkey"
-  engine_version              = "7.2"
-  parameter_group_name        = "default.valkey7"
+  engine                      = var.elasticache_use_valkey ? "valkey" : "redis"
+  engine_version              = var.elasticache_use_valkey ? "8.0" : "6.x"
+  parameter_group_name        = var.elasticache_use_valkey ? "default.valkey8" : "default.redis6.x"
   port                        = 6379
   maintenance_window          = "thu:04:00-thu:05:00"
   multi_az_enabled            = true
