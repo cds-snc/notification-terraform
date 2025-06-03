@@ -5,6 +5,6 @@ output "redis_cluster_security_group_id" {
 
 output "redis_primary_endpoint_address" {
   description = "The address of the primary node for the cluster"
-  value       = var.elasticache_use_valkey == true ? aws_elasticache_replication_group.notification_valkey_cluster[0].primary_endpoint_address : aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.primary_endpoint_address
+  value       = aws_elasticache_replication_group.notification-cluster-cache-multiaz-group.primary_endpoint_address
   sensitive   = true
 }
