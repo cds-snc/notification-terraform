@@ -72,6 +72,7 @@ resource "aws_elasticache_replication_group" "notification_valkey_cluster" {
   port                        = 6379
   maintenance_window          = "thu:04:00-thu:05:00"
   multi_az_enabled            = true
+  snapshot_name               = "redis-migration"
 
   security_group_ids = local.cluster_security_group_ids
   subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name

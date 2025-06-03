@@ -7,8 +7,8 @@ billing_tag_key      = "CostCenter"
 
 ## EKS     
 primary_worker_desired_size     = 5
-primary_worker_instance_types   = ["m5.large"]
-secondary_worker_instance_types = ["m5.large"]
+primary_worker_instance_types   = ["c7i.xlarge"]
+secondary_worker_instance_types = ["c7i.xlarge"]
 node_upgrade                    = false
 force_upgrade                   = true
 primary_worker_max_size         = 7
@@ -70,7 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
-elasticache_use_valkey                 = true
+elasticache_use_valkey                 = false
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-dev-ops"
