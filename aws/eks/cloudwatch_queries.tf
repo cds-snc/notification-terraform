@@ -212,6 +212,26 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "admin-slow-dashboards" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Admin / Slow Dashboards"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /notify-admin/
+| filter @message like /MING: Total get_dashboard_partial/ and @message like 'dashboard.json'
+| parse @message "TIMING: Total get_dashboard_partials execution took *ms [Request details: time_taken: *ms full_path: '/services/*/dashboard.json?']" @response_time, @discard, @service_id
+| stats avg(@response_time) as avg_response_time, max(@response_time) as max_response_time by @service_id
+| sort max_response_time desc
+| limit 100
+
+QUERY
+}
+
 resource "aws_cloudwatch_query_definition" "api-50X-errors" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "API / 50X errors"
