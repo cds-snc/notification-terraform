@@ -2,11 +2,6 @@
 # API Gateway CloudWatch logging
 #
 
-import {
-  to = aws_cloudwatch_log_group.api_gateway_execution_log_group
-  id = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.api.id}/${aws_api_gateway_stage.api.stage_name}"
-}
-
 resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
   name              = "api_gateway_log_group"
   retention_in_days = var.log_retention_period_days
