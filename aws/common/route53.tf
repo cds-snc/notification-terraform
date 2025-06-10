@@ -40,32 +40,32 @@ resource "aws_route53_resolver_query_log_config_association" "main" {
   resource_id                  = var.vpc_ids[count.index]
 }
 
-# Metric Filter for NXDOMAIN errors on notification.cdssandbox.ca domain
+# Metric Filter for NXDOMAIN errors on notification.cdssandbox.ca domain - public DNS only
 resource "aws_cloudwatch_log_metric_filter" "route53_nxdomain_notification" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Route53NXDOMAINNotificationDomain"
-  # Simplified pattern that should be compatible with CloudWatch
-  pattern        = "{ $.rcode = \"NXDOMAIN\" && $.query_name = \"*${var.base_domain}*\" }"
+  # Pattern simplified to only exclude internal queries
+  pattern        = "{ $.rcode = \"NXDOMAIN\" && $.query_name = \"*${var.base_domain}*\" && $.query_name != \"*.internal*\" }"
   log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
-    name      = "Route53DNSResolutionFailureCount"
-    namespace = "Route53/Resolver"
+    name      = "Route53PublicDNSResolutionFailureCount"
+    namespace = "Route53/PublicResolver"
     value     = "1"
   }
 }
 
-# Metric Filter for SERVFAIL errors on notification.cdssandbox.ca domain
+# Metric Filter for SERVFAIL errors on notification.cdssandbox.ca domain - public DNS only
 resource "aws_cloudwatch_log_metric_filter" "route53_servfail_notification" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Route53SERVFAILNotificationDomain"
-  # Simplified pattern that should be compatible with CloudWatch
-  pattern        = "{ $.rcode = \"SERVFAIL\" && $.query_name = \"*${var.base_domain}*\" }"
+  # Pattern simplified to only exclude internal queries
+  pattern        = "{ $.rcode = \"SERVFAIL\" && $.query_name = \"*${var.base_domain}*\" && $.query_name != \"*.internal*\" }"
   log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
-    name      = "Route53DNSResolutionFailureCount"
-    namespace = "Route53/Resolver"
+    name      = "Route53PublicDNSResolutionFailureCount"
+    namespace = "Route53/PublicResolver"
     value     = "1"
   }
 }

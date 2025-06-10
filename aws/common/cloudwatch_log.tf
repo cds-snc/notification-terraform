@@ -46,12 +46,37 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
 
 resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
   count             = var.cloudwatch_enabled ? 1 : 0
-  name              = "route53/${var.region}/${var.account_id}/DNS/logs"
+  name              = "route53/us-east-1/${var.account_id}/DNS/logs"
   retention_in_days = var.log_retention_period_days
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+}
+
+# Resource policy to allow Route 53 to write to CloudWatch Logs
+resource "aws_cloudwatch_log_resource_policy" "route53_resolver_query_logging_policy" {
+  count           = var.cloudwatch_enabled ? 1 : 0
+  policy_name     = "route53-resolver-query-logging-policy"
+  policy_document = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "Route53LogsToCloudWatchLogs"
+        Effect = "Allow"
+        Principal = {
+          Service = [
+            "route53.amazonaws.com"
+          ]
+        }
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = aws_cloudwatch_log_group.route53_resolver_query_log[0].arn
+      }
+    ]
+  })
 }
 
 ###
