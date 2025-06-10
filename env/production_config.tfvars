@@ -70,7 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.medium"
-elasticache_use_valkey                 = false
+elasticache_use_valkey                 = true
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-ops"
