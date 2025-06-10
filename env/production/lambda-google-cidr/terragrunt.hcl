@@ -1,5 +1,5 @@
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/lambda-google-cidr?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//lambda-google-cidr"}"
+  source = "../../../aws//lambda-google-cidr"
 }
 
 dependencies {

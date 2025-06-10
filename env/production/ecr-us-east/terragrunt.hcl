@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ecr-us-east?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ecr-us-east"}"
+  source = "../../../aws//ecr-us-east"
 
   after_hook "cleanup-admin" {
     commands     = ["apply"]
