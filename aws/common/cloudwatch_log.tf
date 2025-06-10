@@ -45,6 +45,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
 }
 
 resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
+  provider          = aws.us-east-1 # Ensure this log group is created in us-east-1
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "route53/us-east-1/${var.account_id}/DNS/logs"
   retention_in_days = var.log_retention_period_days
@@ -56,6 +57,7 @@ resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
 
 # Resource policy to allow Route 53 to write to CloudWatch Logs
 resource "aws_cloudwatch_log_resource_policy" "route53_resolver_query_logging_policy" {
+  provider       = aws.us-east-1 # Ensure policy is created in us-east-1 for the log group
   count           = var.cloudwatch_enabled ? 1 : 0
   policy_name     = "route53-resolver-query-logging-policy"
   policy_document = jsonencode({
