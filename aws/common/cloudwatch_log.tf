@@ -57,9 +57,9 @@ resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
 
 # Resource policy to allow Route 53 to write to CloudWatch Logs
 resource "aws_cloudwatch_log_resource_policy" "route53_resolver_query_logging_policy" {
-  provider       = aws.us-east-1 # Ensure policy is created in us-east-1 for the log group
-  count           = var.cloudwatch_enabled ? 1 : 0
-  policy_name     = "route53-resolver-query-logging-policy"
+  provider    = aws.us-east-1 # Ensure policy is created in us-east-1 for the log group
+  count       = var.cloudwatch_enabled ? 1 : 0
+  policy_name = "route53-resolver-query-logging-policy"
   policy_document = jsonencode({
     Version = "2012-10-17"
     Statement = [
