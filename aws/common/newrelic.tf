@@ -232,7 +232,7 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_pull" {
 }
 
 resource "newrelic_cloud_aws_integrations" "newrelic_cloud_integration_pull" {
-  count             = var.env != "production" ? 1 : 0
+  count             = var.env != "production" && var.enable_new_relic ? 1 : 0
   account_id        = var.new_relic_account_id
   linked_account_id = newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0].id
 

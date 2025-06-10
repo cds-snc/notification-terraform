@@ -1,5 +1,5 @@
 module "ses_to_sqs_email_callbacks" {
-  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.4.3"
+  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v10.4.4"
   name                       = "ses_to_sqs_email_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_to_sqs_email_callbacks_ecr_arn
@@ -8,6 +8,7 @@ module "ses_to_sqs_email_callbacks" {
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
+  alias_name                 = "latest"
 
   policies = [
     data.aws_iam_policy_document.ses_to_sqs_email_callbacks.json
@@ -23,17 +24,23 @@ data "aws_iam_policy_document" "ses_to_sqs_email_callbacks" {
     effect    = "Allow"
     resources = [var.sqs_eks_notification_canada_cadelivery_receipts_arn]
   }
+
+  # Gives the lambda function permission to receive messages from the receipt buffer SQS queue
+  statement {
+    actions = [
+      "sqs:GetQueueAttributes",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage"
+    ]
+    effect    = "Allow"
+    resources = [var.ses_receipt_callback_buffer_arn]
+  }
 }
 
-resource "aws_lambda_permission" "allow_sns_ses_callbacks" {
-  action        = "lambda:InvokeFunction"
-  function_name = module.ses_to_sqs_email_callbacks.function_name
-  principal     = "sns.amazonaws.com"
-  source_arn    = var.notification_canada_ca_ses_callback_arn
-}
-
-resource "aws_sns_topic_subscription" "ses_sns_to_lambda" {
-  topic_arn = var.notification_canada_ca_ses_callback_arn
-  protocol  = "lambda"
-  endpoint  = module.ses_to_sqs_email_callbacks.function_arn
+resource "aws_lambda_event_source_mapping" "sqs_batch_callbacks_trigger" {
+  event_source_arn                   = var.ses_receipt_callback_buffer_arn
+  function_name                      = module.ses_to_sqs_email_callbacks.function_name
+  enabled                            = true
+  batch_size                         = 10
+  maximum_batching_window_in_seconds = 1
 }

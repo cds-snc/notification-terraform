@@ -7,25 +7,6 @@ _TODO: 1-3 sentence description of the changed you're proposing._
 * https://app.zenhub.com/workspaces/notify-planning-614b3ad91bc2030015ed22f5/issues/gh/cds-snc/notification-planning/1
 * https://app.zenhub.com/workspaces/notify-planning-core-6411dfb7c95fb80014e0cab0/issues/gh/cds-snc/notification-planning-core/1
 
-## Before merging this PR
-
-Read code suggestions left by the
-[cds-ai-codereviewer](https://github.com/cds-snc/cds-ai-codereviewer/) bot. Address
-valid suggestions and shortly write down reasons to not address others. To help
-with the classification of the comments, please use these reactions on each of the
-comments made by the AI review:
-
-| Classification      | Reaction | Emoticon |
-|---------------------|----------|----------|
-| Useful              | +1       | 👍        |
-| Noisy               | eyes     | 👀        |
-| Hallucination       | confused | 😕        |
-| Wrong but teachable | rocket   | 🚀        |
-| Wrong and incorrect | -1       | 👎        |
-
-The classifications will be extracted and summarized into an analysis of how helpful
-or not the AI code review really is.
-
 ## Test instructions | Instructions pour tester la modification
 
 _TODO: Fill in test instructions for the reviewer._

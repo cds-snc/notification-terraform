@@ -19,6 +19,7 @@ dependency "common" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
+    ses_receipt_callback_buffer_arn         = ""
     sns_alert_warning_arn          = ""
     sns_alert_critical_arn         = ""
     sns_alert_ok_arn               = ""
@@ -31,6 +32,7 @@ include {
 
 inputs = {
   notification_canada_ca_ses_callback_arn = dependency.common.outputs.notification_canada_ca_ses_callback_arn
+  ses_receipt_callback_buffer_arn         = dependency.common.outputs.ses_receipt_callback_buffer_arn
   sns_alert_warning_arn                   = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                  = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_ok_arn                        = dependency.common.outputs.sns_alert_ok_arn

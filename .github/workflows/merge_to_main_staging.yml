@@ -523,6 +523,7 @@ jobs:
       - name: terragrunt apply performance-test
         run: |
           cd env/${{env.ENVIRONMENT}}/performance-test
+          terragrunt init --upgrade --reconfigure
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-heartbeat:

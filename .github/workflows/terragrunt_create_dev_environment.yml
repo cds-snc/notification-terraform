@@ -980,7 +980,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-eks, terragrunt-apply-aws-auth, terragrunt-apply-rds]
+    needs: [terragrunt-apply-eks, terragrunt-apply-aws-auth, terragrunt-apply-rds, terragrunt-apply-manifest_secrets]
     runs-on: ubuntu-latest            
 
     steps:

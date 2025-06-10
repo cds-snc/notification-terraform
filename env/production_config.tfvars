@@ -7,20 +7,20 @@ billing_tag_key      = "CostCenter"
 
 ## EKS
 primary_worker_desired_size     = 8
-primary_worker_instance_types   = ["r5.large"]
-secondary_worker_instance_types = ["r5.large"]
+primary_worker_instance_types   = ["c7i.xlarge"]
+secondary_worker_instance_types = ["c7i.xlarge"]
 node_upgrade                    = false
 force_upgrade                   = false
 primary_worker_max_size         = 8
 primary_worker_min_size         = 3
 eks_cluster_name                = "notification-canada-ca-production-eks-cluster"
-eks_cluster_version             = "1.31"
-eks_addon_coredns_version       = "v1.11.3-eksbuild.1"
-eks_addon_kube_proxy_version    = "v1.31.0-eksbuild.5"
-eks_addon_vpc_cni_version       = "v1.18.5-eksbuild.1"
-eks_addon_ebs_driver_version    = "v1.35.0-eksbuild.1"
-eks_node_ami_version            = "1.31.5-20250317"
-eks_karpenter_ami_id            = "ami-0cea78b92c459ffdf"
+eks_cluster_version             = "1.32"
+eks_addon_coredns_version       = "v1.11.4-eksbuild.2"
+eks_addon_kube_proxy_version    = "v1.32.0-eksbuild.2"
+eks_addon_vpc_cni_version       = "v1.19.2-eksbuild.5"
+eks_addon_ebs_driver_version    = "v1.42.0-eksbuild.1"
+eks_node_ami_version            = "1.32.3-20250519"
+eks_karpenter_ami_id            = "ami-0b5e7fb52a0e6150d"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -57,7 +57,7 @@ alt_domain                 = "notification.alpha.canada.ca"
 domain                     = "notification.canada.ca"
 base_domain                = "notification.canada.ca"
 perf_test_domain           = "https://api.notification.canada.ca"
-ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "elections.ca"]
+ses_custom_sending_domains = ["notification.gov.bc.ca", "notify.novascotia.ca", "chrc-ccdp.gc.ca"]
 
 ## LOGGING
 log_retention_period_days           = 0
@@ -70,6 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.medium"
+elasticache_use_valkey                 = false
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-ops"
@@ -91,7 +92,7 @@ google_cidr_schedule_expression = "rate(1 day)"
 rds_instance_count                     = 3
 rds_instance_type                      = "db.r6g.xlarge"
 rds_database_name                      = "NotificationCanadaCaproduction"
-rds_version                            = "15.5"
+rds_version                            = "16.6"
 platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:key/22f27c88-bb2b-49c3-b731-05123a974af4"
 platform_data_lake_raw_s3_bucket_arn   = "arn:aws:s3:::cds-data-lake-raw-production"
 platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-gc-notify-export"

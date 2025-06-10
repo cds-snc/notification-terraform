@@ -54,10 +54,19 @@ def main():
         # Calculate the total size of the bucket
         total_size = 0
         item_count = 0
-        for obj in s3.list_objects_v2(Bucket=bucket_name)["Contents"]:
-            # print(f"Object: {obj['Key']}, Size: {obj['Size']} bytes")
-            total_size += obj["Size"]
-            item_count += 1
+        is_truncated = True
+        pagination_config = {"Bucket": bucket_name}
+        
+        # Retrieve all objects in the bucket, checking for pagination
+        while is_truncated:
+            response = s3.list_objects_v2(**pagination_config)
+            for obj in response.get("Contents", []):
+                total_size += obj["Size"]
+                item_count += 1
+            
+            is_truncated = response.get("IsTruncated", False)
+            if is_truncated:
+                pagination_config["ContinuationToken"] = response.get("NextContinuationToken")
 
         print(f"Bucket: {bucket_name}, Size: {total_size} bytes, Items: {item_count}")
         # Append data for each bucket

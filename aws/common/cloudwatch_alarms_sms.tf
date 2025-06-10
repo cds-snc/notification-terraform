@@ -93,23 +93,54 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-warning" {
   provider = aws.us-west-2
+  count    = var.cloudwatch_enabled ? 1 : 0
 
-  count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-warning"
   alarm_description   = "SMS success rate to Canadian numbers is below 85% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
-  metric_name         = "SMSSuccessRate"
-  namespace           = "AWS/SNS"
-  period              = 60 * 60 * 12
-  statistic           = "Average"
-  threshold           = 85 / 100
+  threshold           = "1"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
   treat_missing_data  = "notBreaching"
-  dimensions = {
-    SMSType = "Transactional"
-    Country = "CA"
+
+  metric_query {
+    id          = "successRate"
+    label       = "Success Rate"
+    return_data = false
+    metric {
+      namespace   = "AWS/SNS"
+      metric_name = "SMSSuccessRate"
+      period      = 60 * 60 * 12
+      stat        = "Average"
+      dimensions = {
+        SMSType = "Transactional"
+        Country = "CA"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "messagesPublished"
+    label       = "Messages Published"
+    return_data = false
+    metric {
+      namespace   = "AWS/SNS"
+      metric_name = "NumberOfMessagesPublished"
+      period      = 60 * 60 * 12
+      stat        = "Sum"
+      dimensions = {
+        SMSType = "Transactional"
+        Country = "CA"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "alarmCondition"
+    label       = "Guarded Alarm Condition"
+    return_data = true
+    expression  = "IF(successRate < 0.85 AND messagesPublished > 75, 0, 1)"
   }
 }
 

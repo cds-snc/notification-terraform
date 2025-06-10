@@ -20,6 +20,12 @@ resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-prometheus-logs"
   retention_in_days = var.log_retention_period_days
 }
 
+resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-host-logs" {
+  count             = var.cloudwatch_enabled ? 1 : 0
+  name              = "/aws/containerinsights/${var.eks_cluster_name}/host"
+  retention_in_days = var.log_retention_period_days
+}
+
 resource "aws_cloudwatch_log_group" "blazer" {
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "blazer"
@@ -207,6 +213,21 @@ resource "aws_cloudwatch_log_metric_filter" "db-migration-failure" {
 
   metric_transformation {
     name      = "db-migration-failure"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+
+# AWS EKS host log metric filters
+resource "aws_cloudwatch_log_metric_filter" "oom-errors" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "oom-errors"
+  pattern        = "%Memory cgroup out of memory%"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-host-logs[0].name
+
+  metric_transformation {
+    name      = "oom-errors"
     namespace = "LogMetrics"
     value     = "1"
   }

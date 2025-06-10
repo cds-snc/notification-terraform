@@ -7,20 +7,20 @@ billing_tag_key      = "CostCenter"
 
 ## EKS     
 primary_worker_desired_size     = 5
-primary_worker_instance_types   = ["m5.large"]
-secondary_worker_instance_types = ["m5.large"]
+primary_worker_instance_types   = ["c7i.xlarge"]
+secondary_worker_instance_types = ["c7i.xlarge"]
 node_upgrade                    = false
 force_upgrade                   = true
 primary_worker_max_size         = 7
 primary_worker_min_size         = 1
 eks_cluster_name                = "notification-canada-ca-dev-eks-cluster"
-eks_cluster_version             = "1.31"
-eks_addon_coredns_version       = "v1.11.3-eksbuild.1"
-eks_addon_kube_proxy_version    = "v1.31.0-eksbuild.5"
-eks_addon_vpc_cni_version       = "v1.18.5-eksbuild.1"
-eks_addon_ebs_driver_version    = "v1.35.0-eksbuild.1"
-eks_node_ami_version            = "1.31.5-20250317"
-eks_karpenter_ami_id            = "ami-0cea78b92c459ffdf"
+eks_cluster_version             = "1.33"
+eks_addon_coredns_version       = "v1.12.1-eksbuild.2"
+eks_addon_kube_proxy_version    = "v1.33.0-eksbuild.2"
+eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
+eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
+eks_node_ami_version            = "1.33.0-20250519"
+eks_karpenter_ami_id            = "ami-079a9873764c370a7"
 non_api_waf_rate_limit          = 500
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -70,6 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.micro"
+elasticache_use_valkey                 = true
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-dev-ops"
@@ -92,7 +93,7 @@ google_cidr_schedule_expression = "rate(1 day)"
 rds_instance_count                     = 3
 rds_instance_type                      = "db.t3.medium"
 rds_database_name                      = "NotificationCanadaCastaging"
-rds_version                            = "15.5"
+rds_version                            = "16.6"
 platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:key/22f27c88-bb2b-49c3-b731-05123a974af4"
 platform_data_lake_raw_s3_bucket_arn   = "arn:aws:s3:::cds-data-lake-raw-production"
 platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-gc-notify-export"

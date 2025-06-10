@@ -33,6 +33,7 @@ dependency "rds" {
     kms_arn                          = ""
     s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
     vpc_id                           = ""
+    rds_reader_instance_ids          = ["notification-canada-ca-staging-instance-1", "notification-canada-ca-staging-instance-2"]
   }
 }
 
@@ -57,5 +58,5 @@ inputs = {
   quicksight_security_group_id                = dependency.eks.outputs.quicksight_security_group_id
   database_name                               = dependency.rds.outputs.database_name
   database_subnet_ids                         = dependency.rds.outputs.database_subnet_ids
-  rds_instance_id                             = dependency.rds.outputs.rds_instance_id
+  rds_reader_instance_id                      = dependency.rds.outputs.rds_reader_instance_ids[0]
 }
