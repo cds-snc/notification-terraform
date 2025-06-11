@@ -17,12 +17,6 @@ resource "aws_route53_resolver_query_log_config" "dns_query_log_config" {
   ]
 }
 
-resource "aws_route53_resolver_query_log_config_association" "dns_query_log_config_association" {
-  count                        = var.cloudwatch_enabled ? 1 : 0
-  resolver_query_log_config_id = aws_route53_resolver_query_log_config.dns_query_log_config[0].id
-  resource_id                  = aws_vpc.notification-canada-ca.id
-}
-
 # Route53 Resolver Query Logging Configuration
 resource "aws_route53_resolver_query_log_config" "main" {
   provider = aws.us-east-1
