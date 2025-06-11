@@ -6,7 +6,6 @@
 
 # CloudWatch Alarm for Route53 DNS resolution failures (Warning)
 resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
-  provider            = aws.us-east-1
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "route53-dns-resolution-failures-warning"
   comparison_operator = "GreaterThanThreshold"
@@ -23,7 +22,6 @@ resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
 
 # CloudWatch Alarm for Route53 DNS resolution failures (Critical)
 resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-critical" {
-  provider                  = aws.us-east-1
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "route53-dns-resolution-failures-critical"
   comparison_operator       = "GreaterThanThreshold"
