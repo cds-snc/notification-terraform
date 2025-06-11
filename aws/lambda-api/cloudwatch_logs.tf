@@ -2,6 +2,14 @@
 # API Gateway CloudWatch logging
 #
 
+removed {
+  from = aws_cloudwatch_log_group.api_gateway_execution_log_group
+
+  lifecycle {
+    destroy = false
+  }
+}
+
 resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
   name              = "api_gateway_log_group"
   retention_in_days = var.log_retention_period_days
