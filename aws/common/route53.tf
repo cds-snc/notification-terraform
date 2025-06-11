@@ -10,6 +10,10 @@ resource "aws_route53_resolver_query_log_config" "dns_query_log_config" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+
+  depends_on = [
+    aws_cloudwatch_log_resource_policy.route53_resolver_query_logging_policy
+  ]
 }
 
 resource "aws_route53_resolver_query_log_config_association" "dns_query_log_config_association" {
@@ -30,6 +34,10 @@ resource "aws_route53_resolver_query_log_config" "main" {
     CostCenter  = "notification-canada-ca-${var.env}"
     Service     = "dns-monitoring"
   }
+
+  depends_on = [
+    aws_cloudwatch_log_resource_policy.route53_resolver_query_logging_policy
+  ]
 }
 
 # Associate query logging with VPCs
