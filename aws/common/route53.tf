@@ -46,7 +46,7 @@ resource "aws_cloudwatch_log_metric_filter" "route53_nxdomain_notification" {
   count    = var.cloudwatch_enabled ? 1 : 0
   name     = "Route53NXDOMAINNotificationDomain"
   # Pattern simplified to only exclude internal queries
-  pattern  = "?${var.base_domain} NXDOMAIN"
+  pattern        = "?${var.base_domain} NXDOMAIN"
   log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
@@ -62,7 +62,7 @@ resource "aws_cloudwatch_log_metric_filter" "route53_servfail_notification" {
   count    = var.cloudwatch_enabled ? 1 : 0
   name     = "Route53SERVFAILNotificationDomain"
   # Pattern simplified to only exclude internal queries
-  pattern  = "?${var.base_domain} SERVFAIL"
+  pattern        = "?${var.base_domain} SERVFAIL"
   log_group_name = aws_cloudwatch_log_group.route53_resolver_query_log[0].name
 
   metric_transformation {
