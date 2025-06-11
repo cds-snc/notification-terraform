@@ -3,6 +3,7 @@
 ###
 
 resource "aws_route53_resolver_query_log_config" "dns_query_log_config" {
+  provider        = aws.us-east-1
   count           = var.cloudwatch_enabled ? 1 : 0
   name            = "${var.region}_${var.account_id}_dns_query_log_config"
   destination_arn = aws_cloudwatch_log_group.route53_resolver_query_log[0].arn
@@ -24,8 +25,9 @@ resource "aws_route53_resolver_query_log_config_association" "dns_query_log_conf
 
 # Route53 Resolver Query Logging Configuration
 resource "aws_route53_resolver_query_log_config" "main" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "route53-query-logging"
+  provider = aws.us-east-1
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "route53-query-logging"
 
   destination_arn = aws_cloudwatch_log_group.route53_resolver_query_log[0].arn
 
