@@ -17,7 +17,9 @@ resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
   statistic           = "Sum"
   threshold           = 5
   alarm_description   = "Alarm for Route53 DNS resolution failures exceeding threshold"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn]
   treat_missing_data  = "notBreaching"
 }
 
@@ -34,9 +36,9 @@ resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-critical" {
   statistic                 = "Sum"
   threshold                 = 20
   alarm_description         = "Alarm for Route53 DNS resolution failures exceeding threshold"
-  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
+  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn]
   treat_missing_data        = "notBreaching"
 }
 
