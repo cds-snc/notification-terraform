@@ -83,7 +83,7 @@ resource "aws_cloudwatch_query_definition" "get-trace-by-notification-id" {
 
   log_group_names = [
     local.api_lambda_log_group,
-    aws_cloudwatch_log_group.api_gateway_execution_log_group.name
+    "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.api.id}/${aws_api_gateway_stage.api.stage_name}"
   ]
 
   query_string = <<QUERY
