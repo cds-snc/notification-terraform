@@ -11,8 +11,8 @@ resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
   alarm_name                = "route53-dns-resolution-failures-warning"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = 3
-  metric_name               = "Route53DNSResolutionFailureCount"
-  namespace                 = "Route53/Resolver"
+  metric_name               = "Route53PublicDNSResolutionFailureCount"
+  namespace                 = "Route53/PublicResolver"
   period                    = 300 # 5 minutes
   statistic                 = "Sum"
   threshold                 = 5
@@ -30,8 +30,8 @@ resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-critical" {
   alarm_name                = "route53-dns-resolution-failures-critical"
   comparison_operator       = "GreaterThanThreshold"
   evaluation_periods        = 5
-  metric_name               = "Route53DNSResolutionFailureCount"
-  namespace                 = "Route53/Resolver"
+  metric_name               = "Route53PublicDNSResolutionFailureCount"
+  namespace                 = "Route53/PublicResolver"
   period                    = 300 # 5 minutes
   statistic                 = "Sum"
   threshold                 = 20
