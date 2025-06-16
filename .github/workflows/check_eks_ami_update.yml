@@ -75,6 +75,7 @@ jobs:
         committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
         signoff: false
+        base: main
         branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
         delete-branch: true
         title: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
