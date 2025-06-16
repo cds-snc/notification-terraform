@@ -68,6 +68,10 @@ jobs:
       uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ steps.generate-token.outputs.token }}
+        commit-message: Dev and Staging AMI patch
+        title: Dev and Staging AMI patch
+        body: Test
+        branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
 
     - name: Post to slack
       if: steps.latest.outputs.ami != steps.current.outputs.ami
