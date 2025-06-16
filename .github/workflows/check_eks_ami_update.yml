@@ -28,7 +28,7 @@ jobs:
           --name ${{ env.EKS_CLUSTER_NAME }} \
           --query 'cluster.version' --output text)"
         LATEST_AMI="$(aws ssm get-parameter \
-          --name /aws/service/eks/optimized-ami/$CLUSTER_VERSION/amazon-linux-2/recommended/release_version \
+          --name /aws/service/eks/optimized-ami/$CLUSTER_VERSION/amazon-linux-2023/x86_64/standard/recommended/release_version \
           --query 'Parameter.Value' --output text)"
         echo "ami=${LATEST_AMI}" >> "$GITHUB_OUTPUT"
 
@@ -43,9 +43,18 @@ jobs:
         echo "ami=${CURRENT_AMI}" >> "$GITHUB_OUTPUT"
 
 
-    - name: Post to slack
+    - name: Patch Dev and Staging AMI
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
-        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available: <https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html|${{ steps.latest.outputs.ami }}>"}}]}'
-        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 
+        # Modify dev and staging AMI patch
+        git checkout -b dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
+        ./scripts/patchK8sAmi.sh dev,staging ${{ steps.latest.outputs.ami }}
+        git add .
+        git commit -m "Update Kubernetes worker AMI to ${{ steps.latest.outputs.ami }}"
+        git push --set-upstream origin dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
+
+    - name: pull-request
+      uses: diillson/auto-pull-request@v1.0.1
+      with:
+        destination_branch: "main"
