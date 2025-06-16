@@ -67,6 +67,7 @@ jobs:
         message: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
 
     - name: dev-staging-pull-request
+      id: dev_staging_pr
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       uses: diillson/auto-pull-request@v1.0.1
       with:
@@ -142,6 +143,7 @@ jobs:
         message: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
 
     - name: prod-pull-request
+      id: prod_pr
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       uses: diillson/auto-pull-request@v1.0.1
       with:
@@ -198,6 +200,6 @@ jobs:
 
     - name: Post to slack
       if: steps.latest.outputs.ami != steps.current.outputs.ami
-      #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
-        echo ${{steps.dev-staging-pull-request.outputs.pr_url}}
+        echo ${{ steps.dev_staging_pr.outputs.pr_url }}
+        echo ${{ steps.prod_pr.outputs.pr_url }}
