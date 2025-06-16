@@ -142,7 +142,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: prod-eks-ami-${{ steps.latest.outputs.ami }}
-        message: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
+        message: "Update production EKS AMI to ${{ steps.latest.outputs.ami }}"
 
     - name: prod-pull-request
       id: production_pr
