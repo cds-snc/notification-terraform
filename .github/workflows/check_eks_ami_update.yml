@@ -108,8 +108,8 @@ jobs:
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         # Modify prod AMI patch
+        git fetch
         git checkout main
-        git pull origin main
         pushd scripts
         ./patchK8sAmi.sh production ${{ steps.latest.outputs.ami }}
         popd
@@ -123,7 +123,7 @@ jobs:
         token: ${{ steps.generate-token.outputs.token }}
         commit-message: Production EKS AMI patch
         title: Production EKS AMI patch
-        branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}-${{ github.run_id }}
+        branch: production-eks-ami-${{ steps.latest.outputs.ami }}-${{ github.run_id }}
         body: |
           # Summary | Résumé
           Update the production EKS AMI version to ${{ steps.latest.outputs.ami }}
