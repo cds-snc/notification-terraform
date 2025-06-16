@@ -25,8 +25,8 @@ for ENV in $ENVIRONMENTS; do
   
   pushd ../env
 
-  sed -E -i '' "s/[0-9].[0-9]{2}.[0-9]*-[0-9]{8}/$NEW_IMAGE_VERSION/" "$ENV"_config.tfvars
-  sed -E -i '' "s/ami-[A-Fa-f0-9]+/$NEW_AMI_ID/" "$ENV"_config.tfvars
+  sed -E -i '' 's/[0-9].[0-9]{2}.[0-9]*-[0-9]{8}/'$NEW_IMAGE_VERSION'/' "$ENV"_config.tfvars
+  sed -E -i '' 's/ami-[A-Fa-f0-9]+/'$NEW_AMI_ID'/' "$ENV"_config.tfvars
 
   popd 
 done
