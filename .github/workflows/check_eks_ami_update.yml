@@ -50,6 +50,7 @@ jobs:
         # Modify dev and staging AMI patch
         git checkout -b dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
         ./scripts/patchK8sAmi.sh dev,staging ${{ steps.latest.outputs.ami }}
+        pwd
         git add .
         git commit -m "Update Kubernetes worker AMI to ${{ steps.latest.outputs.ami }}"
         git push --set-upstream origin dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
