@@ -21,6 +21,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
+    - name: Checkout
+      uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+
     - name: Get latest AMI image release version
       id: latest
       run: |
@@ -28,7 +31,7 @@ jobs:
           --name ${{ env.EKS_CLUSTER_NAME }} \
           --query 'cluster.version' --output text)"
         LATEST_AMI="$(aws ssm get-parameter \
-          --name /aws/service/eks/optimized-ami/$CLUSTER_VERSION/amazon-linux-2/recommended/release_version \
+          --name /aws/service/eks/optimized-ami/$CLUSTER_VERSION/amazon-linux-2023/x86_64/standard/recommended/release_version \
           --query 'Parameter.Value' --output text)"
         echo "ami=${LATEST_AMI}" >> "$GITHUB_OUTPUT"
 
@@ -43,9 +46,163 @@ jobs:
         echo "ami=${CURRENT_AMI}" >> "$GITHUB_OUTPUT"
 
 
+    - name: Patch Dev and Staging AMI
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      #checkov:skip=CKV_GHA_3:This is an expected use of curl
+      run: |
+        # Modify dev and staging AMI patch
+        git checkout -b dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
+        pushd scripts
+        ./patchK8sAmi.sh dev,staging ${{ steps.latest.outputs.ami }}
+        popd
+        git add ./env/dev_config.tfvars
+        git add ./env/staging_config.tfvars
+
+    - name: Commit & Push changes
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      uses: actions-js/push@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
+        message: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
+
+    - name: dev-staging-pull-request
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      id: dev_staging_pr
+      uses: diillson/auto-pull-request@v1.0.1
+      with:
+        destination_branch: "main"
+        source_branch: "dev-staging-eks-ami-${{ steps.latest.outputs.ami }}"
+        pr_title: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
+        pr_body: |
+          # Summary | Résumé
+          Update the dev and staging EKS AMI version to ${{ steps.latest.outputs.ami }}
+
+          ## Related Issues | Cartes liées
+
+          * https://app.zenhub.com/workspaces/notify-planning-core-6411dfb7c95fb80014e0cab0/issues/gh/cds-snc/notification-planning-core/495
+
+          ## Before merging this PR
+
+          Read code suggestions left by the
+          [cds-ai-codereviewer](https://github.com/cds-snc/cds-ai-codereviewer/) bot. Address
+          valid suggestions and shortly write down reasons to not address others. To help
+          with the classification of the comments, please use these reactions on each of the
+          comments made by the AI review:
+
+          | Classification      | Reaction | Emoticon |
+          |---------------------|----------|----------|
+          | Useful              | +1       | 👍        |
+          | Noisy               | eyes     | 👀        |
+          | Hallucination       | confused | 😕        |
+          | Wrong but teachable | rocket   | 🚀        |
+          | Wrong and incorrect | -1       | 👎        |
+
+          The classifications will be extracted and summarized into an analysis of how helpful
+          or not the AI code review really is.
+
+          ## Test instructions | Instructions pour tester la modification
+
+          - [ ] Check that Terraform completes successfully.
+          - [ ] Verify that all nodes are ready in staging 
+          - [ ] Verify that Notify pods are all running in staging
+          - [ ] Run a smoke test against staging
+          - [ ] Verify the performance test results in staging the next day before merging the Prod PR.
+
+          ## Release Instructions | Instructions pour le déploiement
+
+          None.
+
+          ## Reviewer checklist | Liste de vérification du réviseur
+
+          * [ ] This PR does not break existing functionality.
+          * [ ] This PR does not violate GCNotify's privacy policies.
+          * [ ] This PR does not raise new security concerns. Refer to our GC Notify Risk Register document on our Google drive.
+          * [ ] This PR does not significantly alter performance.
+          * [ ] Additional required documentation resulting of these changes is covered (such as the README, setup instructions, a related ADR or the technical documentation).
+
+          > ⚠ If boxes cannot be checked off before merging the PR, they should be moved to the "Release Instructions" section with appropriate steps required to verify before release. For example, changes to celery code may require tests on staging to verify that performance has not been affected.
+
+    - name: Patch Prod AMI
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      #checkov:skip=CKV_GHA_3:This is an expected use of curl
+      run: |
+        # Modify prod AMI patch
+        git checkout main
+        git pull origin main
+        git checkout -b prod-eks-ami-${{ steps.latest.outputs.ami }}
+        pushd scripts
+        ./patchK8sAmi.sh production ${{ steps.latest.outputs.ami }}
+        popd
+        git add ./env/production_config.tfvars
+
+    - name: Commit & Push changes
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      uses: actions-js/push@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: prod-eks-ami-${{ steps.latest.outputs.ami }}
+        message: "Update production EKS AMI to ${{ steps.latest.outputs.ami }}"
+
+    - name: prod-pull-request
+      id: production_pr
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      uses: diillson/auto-pull-request@v1.0.1
+      with:
+        destination_branch: "main"
+        source_branch: "prod-eks-ami-${{ steps.latest.outputs.ami }}"
+        pr_title: "Update production EKS AMI to ${{ steps.latest.outputs.ami }}"
+        pr_body: |
+          # Summary | Résumé
+          Update the production EKS AMI version to ${{ steps.latest.outputs.ami }}
+
+          ## Related Issues | Cartes liées
+
+          * https://app.zenhub.com/workspaces/notify-planning-core-6411dfb7c95fb80014e0cab0/issues/gh/cds-snc/notification-planning-core/495
+
+          ## Before merging this PR
+
+          Read code suggestions left by the
+          [cds-ai-codereviewer](https://github.com/cds-snc/cds-ai-codereviewer/) bot. Address
+          valid suggestions and shortly write down reasons to not address others. To help
+          with the classification of the comments, please use these reactions on each of the
+          comments made by the AI review:
+
+          | Classification      | Reaction | Emoticon |
+          |---------------------|----------|----------|
+          | Useful              | +1       | 👍        |
+          | Noisy               | eyes     | 👀        |
+          | Hallucination       | confused | 😕        |
+          | Wrong but teachable | rocket   | 🚀        |
+          | Wrong and incorrect | -1       | 👎        |
+
+          The classifications will be extracted and summarized into an analysis of how helpful
+          or not the AI code review really is.
+
+          ## Test instructions | Instructions pour tester la modification
+
+          - [ ] Verify that the dev and staging PR is merged first and working
+          - [ ] Verify that all nodes are ready in production
+          - [ ] Verify that Notify pods are all running in production
+          - [ ] Run a smoke test against production
+
+          ## Release Instructions | Instructions pour le déploiement
+
+          None.
+
+          ## Reviewer checklist | Liste de vérification du réviseur
+
+          * [ ] This PR does not break existing functionality.
+          * [ ] This PR does not violate GCNotify's privacy policies.
+          * [ ] This PR does not raise new security concerns. Refer to our GC Notify Risk Register document on our Google drive.
+          * [ ] This PR does not significantly alter performance.
+          * [ ] Additional required documentation resulting of these changes is covered (such as the README, setup instructions, a related ADR or the technical documentation).
+
+          > ⚠ If boxes cannot be checked off before merging the PR, they should be moved to the "Release Instructions" section with appropriate steps required to verify before release. For example, changes to celery code may require tests on staging to verify that performance has not been affected.
+
     - name: Post to slack
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
-        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available: <https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html|${{ steps.latest.outputs.ami }}>"}}]}'
+        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available. Please review and merge the PRs: \n <${{steps.dev_staging_pr.outputs.pr_url}}|Staging PR> \n <${{steps.production_pr.outputs.pr_url}}|Production PR>"}}]}'
         curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 
