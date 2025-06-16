@@ -61,6 +61,8 @@ jobs:
       uses: actions-js/push@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
+        message: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
 
 
     - name: pull-request
