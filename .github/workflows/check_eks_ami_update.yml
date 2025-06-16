@@ -200,5 +200,5 @@ jobs:
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
-        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: New EKS AMI available. Please review and Merge the PRs. \n [Staging PR](${{steps.dev-staging-pull-request.outputs.pr_url}}) \n [Production PR](${{steps.prod-pull-request.outputs.pr_url}})>"}}]}'
+        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: New EKS AMI available. Please review and Merge the PRs. \n [Staging PR]('${{steps.dev-staging-pull-request.outputs.pr_url}}') \n [Production PR]('${{steps.prod-pull-request.outputs.pr_url}}')>"}}]}'
         curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 
