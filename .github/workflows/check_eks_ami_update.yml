@@ -55,7 +55,8 @@ jobs:
         pushd scripts
         ./patchK8sAmi.sh dev,staging ${{ steps.latest.outputs.ami }}
         popd
-        git add .
+        git add ./env/dev_config.tfvars
+        git add ./env/staging_config.tfvars
 
     - name: Commit & Push changes
       if: steps.latest.outputs.ami != steps.current.outputs.ami
@@ -130,7 +131,7 @@ jobs:
         pushd scripts
         ./patchK8sAmi.sh production ${{ steps.latest.outputs.ami }}
         popd
-        git add .
+        git add ./env/production_config.tfvars
 
     - name: Commit & Push changes
       if: steps.latest.outputs.ami != steps.current.outputs.ami
