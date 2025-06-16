@@ -21,6 +21,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
+    - name: Generate PR Bot Token
+      uses: actions/create-github-app-token@v1
+      id: generate-token
+      with:
+        app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
+        private-key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}    
+
     - name: Checkout
       uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
@@ -51,55 +58,28 @@ jobs:
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         # Modify dev and staging AMI patch
-        git checkout -b dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
         pushd scripts
         ./patchK8sAmi.sh dev,staging ${{ steps.latest.outputs.ami }}
         popd
         git add ./env/dev_config.tfvars
         git add ./env/staging_config.tfvars
 
-    - name: Commit & Push changes
-      if: steps.latest.outputs.ami != steps.current.outputs.ami
-      uses: actions-js/push@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
-        message: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
-
-    - name: dev-staging-pull-request
-      if: steps.latest.outputs.ami != steps.current.outputs.ami
+    - name: Create Dev and Staging Pull Request
       id: dev_staging_pr
-      uses: diillson/auto-pull-request@v1.0.1
+      uses: peter-evans/create-pull-request@v7
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
       with:
-        destination_branch: "main"
-        source_branch: "dev-staging-eks-ami-${{ steps.latest.outputs.ami }}"
-        pr_title: "Update dev and staging EKS AMI to ${{ steps.latest.outputs.ami }}"
-        pr_body: |
+        token: ${{ steps.generate-token.outputs.token }}
+        commit-message: Dev and Staging EKS AMI patch
+        title: Dev and Staging EKS AMI patch
+        branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}-${{ github.run_id }}
+        body: |
           # Summary | Résumé
           Update the dev and staging EKS AMI version to ${{ steps.latest.outputs.ami }}
 
           ## Related Issues | Cartes liées
 
           * https://app.zenhub.com/workspaces/notify-planning-core-6411dfb7c95fb80014e0cab0/issues/gh/cds-snc/notification-planning-core/495
-
-          ## Before merging this PR
-
-          Read code suggestions left by the
-          [cds-ai-codereviewer](https://github.com/cds-snc/cds-ai-codereviewer/) bot. Address
-          valid suggestions and shortly write down reasons to not address others. To help
-          with the classification of the comments, please use these reactions on each of the
-          comments made by the AI review:
-
-          | Classification      | Reaction | Emoticon |
-          |---------------------|----------|----------|
-          | Useful              | +1       | 👍        |
-          | Noisy               | eyes     | 👀        |
-          | Hallucination       | confused | 😕        |
-          | Wrong but teachable | rocket   | 🚀        |
-          | Wrong and incorrect | -1       | 👎        |
-
-          The classifications will be extracted and summarized into an analysis of how helpful
-          or not the AI code review really is.
 
           ## Test instructions | Instructions pour tester la modification
 
@@ -130,54 +110,27 @@ jobs:
         # Modify prod AMI patch
         git checkout main
         git pull origin main
-        git checkout -b prod-eks-ami-${{ steps.latest.outputs.ami }}
         pushd scripts
         ./patchK8sAmi.sh production ${{ steps.latest.outputs.ami }}
         popd
         git add ./env/production_config.tfvars
 
-    - name: Commit & Push changes
-      if: steps.latest.outputs.ami != steps.current.outputs.ami
-      uses: actions-js/push@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: prod-eks-ami-${{ steps.latest.outputs.ami }}
-        message: "Update production EKS AMI to ${{ steps.latest.outputs.ami }}"
-
-    - name: prod-pull-request
+    - name: Create Pull Request
       id: production_pr
       if: steps.latest.outputs.ami != steps.current.outputs.ami
-      uses: diillson/auto-pull-request@v1.0.1
+      uses: peter-evans/create-pull-request@v7
       with:
-        destination_branch: "main"
-        source_branch: "prod-eks-ami-${{ steps.latest.outputs.ami }}"
-        pr_title: "Update production EKS AMI to ${{ steps.latest.outputs.ami }}"
-        pr_body: |
+        token: ${{ steps.generate-token.outputs.token }}
+        commit-message: Production EKS AMI patch
+        title: Production EKS AMI patch
+        branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}-${{ github.run_id }}
+        body: |
           # Summary | Résumé
           Update the production EKS AMI version to ${{ steps.latest.outputs.ami }}
 
           ## Related Issues | Cartes liées
 
           * https://app.zenhub.com/workspaces/notify-planning-core-6411dfb7c95fb80014e0cab0/issues/gh/cds-snc/notification-planning-core/495
-
-          ## Before merging this PR
-
-          Read code suggestions left by the
-          [cds-ai-codereviewer](https://github.com/cds-snc/cds-ai-codereviewer/) bot. Address
-          valid suggestions and shortly write down reasons to not address others. To help
-          with the classification of the comments, please use these reactions on each of the
-          comments made by the AI review:
-
-          | Classification      | Reaction | Emoticon |
-          |---------------------|----------|----------|
-          | Useful              | +1       | 👍        |
-          | Noisy               | eyes     | 👀        |
-          | Hallucination       | confused | 😕        |
-          | Wrong but teachable | rocket   | 🚀        |
-          | Wrong and incorrect | -1       | 👎        |
-
-          The classifications will be extracted and summarized into an analysis of how helpful
-          or not the AI code review really is.
 
           ## Test instructions | Instructions pour tester la modification
 
@@ -204,5 +157,5 @@ jobs:
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
-        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available. Please review and merge the PRs: \n <${{steps.dev_staging_pr.outputs.pr_url}}|Staging PR> \n <${{steps.production_pr.outputs.pr_url}}|Production PR>"}}]}'
+        json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available. Please review and merge the PRs: \n <${{steps.dev_staging_pr.outputs.pull-request-url}}|Staging PR> \n <${{steps.production_pr.outputs.pull-request-url}}|Production PR>"}}]}'
         curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 
