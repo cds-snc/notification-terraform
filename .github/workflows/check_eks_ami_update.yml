@@ -57,7 +57,6 @@ jobs:
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         # Modify dev and staging AMI patch
-        git checkout -b dev-staging-eks-ami-${{ steps.latest.outputs.ami }}
         pushd scripts
         ./patchK8sAmi.sh dev,staging ${{ steps.latest.outputs.ami }}
         popd
