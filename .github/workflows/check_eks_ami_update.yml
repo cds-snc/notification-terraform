@@ -123,14 +123,13 @@ jobs:
 
           > ⚠ If boxes cannot be checked off before merging the PR, they should be moved to the "Release Instructions" section with appropriate steps required to verify before release. For example, changes to celery code may require tests on staging to verify that performance has not been affected.
 
-    - name: Checkout
-      uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-
     - name: Patch Prod AMI
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         # Modify prod AMI patch
+        git checkout main
+        git pull origin main
         git checkout -b prod-eks-ami-${{ steps.latest.outputs.ami }}
         pushd scripts
         ./patchK8sAmi.sh production ${{ steps.latest.outputs.ami }}
