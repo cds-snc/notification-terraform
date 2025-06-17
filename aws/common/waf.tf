@@ -104,6 +104,10 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
     regex_string = var.env == "production" ? "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids" : "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids|/_storybook.*|/_preview_.*"
   }
 
+  regular_expression {
+    regex_string = "/by-for-gc|/par-et-pour-gc"
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
