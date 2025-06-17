@@ -101,7 +101,11 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   # Additional regex for the Admin WAF should be added to this pattern set, not in re_admin, which is full.
 
   regular_expression {
-    regex_string = var.env == "production" ? "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids|/by-for-gc|/par-et-pour-gc" : "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids|/_storybook.*|/_preview_.*|/by-for-gc|/par-et-pour-gc"
+    regex_string = var.env == "production" ? "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids" : "/sitemap|/plandesite|/agree-terms|/getting-started|/decouvrir-notification-gc|/template-category.*|/template-categories.*|/mettre-en-forme-les-courriels|/find-ids|/_storybook.*|/_preview_.*"
+  }
+
+  regular_expression {
+    regex_string = "/by-for-gc|/par-et-pour-gc"
   }
 
   tags = {
