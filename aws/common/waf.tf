@@ -105,7 +105,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
   }
 
   regular_expression {
-    regex_string = "/by-for-gc|/par-et-pour-gc"
+    regex_string = "/by-and-for-gc|/par-et-pour-gc"
   }
 
   tags = {
