@@ -53,3 +53,52 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
     ignore_changes = [num_cache_clusters]
   }
 }
+
+###
+# AWS Elasticache Redis/Valkey Cluster - 1 node, 2 replicas, cluster node enabled:false, multi AZ
+###
+
+resource "aws_elasticache_replication_group" "elasticache_queue_cache" {
+
+  count = var.env == "dev" ? 1 : 0
+
+  apply_immediately           = true
+  automatic_failover_enabled  = true
+  preferred_cache_cluster_azs = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
+  replication_group_id        = "notify-${var.env}-queue-cache"
+  description                 = "Redis/Valkey multiaz cluster with replication group for Celery queues"
+  node_type                   = var.elasticache_node_type
+  num_cache_clusters          = var.elasticache_node_number_cache_clusters
+  engine                      = "valkey"
+  engine_version              = "8.0"
+  parameter_group_name        = "default.valkey8"
+  port                        = 6379
+  maintenance_window          = "thu:04:00-thu:05:00"
+  multi_az_enabled            = true
+
+  security_group_ids = local.cluster_security_group_ids
+  subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
+
+  log_delivery_configuration {
+    destination      = aws_cloudwatch_log_group.elasticache_queue_cache_slow_logs[0].name
+    destination_type = "cloudwatch-logs"
+    log_format       = "json"
+    log_type         = "slow-log"
+  }
+
+  log_delivery_configuration {
+    destination      = aws_cloudwatch_log_group.elasticache_queue_cache_engine_logs[0].name
+    destination_type = "cloudwatch-logs"
+    log_format       = "json"
+    log_type         = "engine-log"
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+
+  lifecycle {
+    ignore_changes = [num_cache_clusters]
+  }
+}
+
