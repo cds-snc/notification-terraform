@@ -28,22 +28,6 @@ resource "aws_route53_record" "notification-www-root" {
 }
 
 
-resource "aws_route53_record" "notificatio-root-WC" {
-
-  provider        = aws.dns
-  name            = "*.${var.domain}"
-  zone_id         = var.route53_zone_id
-  type            = "A"
-  allow_overwrite = true
-
-  alias {
-    name                   = aws_alb.notification-canada-ca.dns_name
-    zone_id                = aws_alb.notification-canada-ca.zone_id
-    evaluate_target_health = false
-  }
-
-}
-
 resource "aws_route53_record" "doc-notification-canada-ca-cname" {
   provider        = aws.dns
   zone_id         = var.route53_zone_id
