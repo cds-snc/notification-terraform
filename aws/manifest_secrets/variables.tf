@@ -15,5 +15,6 @@ variable "redis_primary_endpoint_address" {
 }
 
 variable "elasticache_queue_cache_primary_endpoint_address" {
-  type = string
+  default = "changeme"
+  type    = string
 }
