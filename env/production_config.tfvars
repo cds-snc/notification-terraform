@@ -21,7 +21,7 @@ eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
 eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
 eks_node_ami_version            = "1.33.0-20250519"
 eks_karpenter_ami_id            = "ami-079a9873764c370a7"
-non_api_waf_rate_limit          = 500
+non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
 celery_queue_prefix             = "eks-notification-canada-ca"
@@ -70,7 +70,7 @@ vpc_cidr_block = "10.0.0.0/16"
 elasticache_node_count                 = 1
 elasticache_node_number_cache_clusters = 3
 elasticache_node_type                  = "cache.t3.medium"
-elasticache_use_valkey                 = false
+elasticache_use_valkey                 = true
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-ops"

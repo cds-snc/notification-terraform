@@ -178,7 +178,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   namespace           = "AWS/SNS"
   period              = 60 * 60 * 12
   statistic           = "Average"
-  threshold           = 75 / 100
+  threshold           = 50 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
   treat_missing_data  = "notBreaching"
