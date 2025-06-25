@@ -184,6 +184,13 @@ resource "aws_eks_addon" "coredns" {
     corefile = <<-EOF
       .:53 {
           errors
+          log . {
+              class denial
+              class error
+              class success {
+                  name regex .*\.notification-canada-ca\.svc\.cluster\.local\.
+              }
+          }
           health {
               lameduck 5s
             }
@@ -193,7 +200,9 @@ resource "aws_eks_addon" "coredns" {
             fallthrough in-addr.arpa ip6.arpa
           }
           prometheus :9153
-          forward . /etc/resolv.conf
+          forward . /etc/resolv.conf {
+              except cluster.local
+          }
           cache 60
           loop
           reload
