@@ -39,6 +39,7 @@ jobs:
       dns: ${{ steps.filter.outputs.dns }}
       ses_validation_dns_entries: ${{ steps.filter.outputs.ses_validation_dns_entries }}
       eks: ${{ steps.filter.outputs.eks }}
+      elasticache: $${{ steps.filter.outputs.elasticache }}
       aws-auth: ${{ steps.filter.outputs.aws-auth }}
       rds: ${{ steps.filter.outputs.rds }}
       lambda-api: ${{ steps.filter.outputs.lambda-api }}
