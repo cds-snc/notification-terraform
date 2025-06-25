@@ -13,8 +13,3 @@ variable "postgres_cluster_endpoint" {
 variable "redis_primary_endpoint_address" {
   type = string
 }
-
-variable "elasticache_queue_cache_primary_endpoint_address" {
-  default = "changeme"
-  type    = string
-}
