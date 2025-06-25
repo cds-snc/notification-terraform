@@ -18,7 +18,7 @@ dependency "rds" {
 
 dependency "elasticache" {
   config_path = "../elasticache"
-  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     redis_primary_endpoint_address = "thisisamockstring_redis_primary_endpoint_address"
