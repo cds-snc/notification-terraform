@@ -397,7 +397,7 @@ resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url" {
   secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url.id
-  secret_string = var.env != "production" ? "redis://${var.elasticache_queue_cache_primary_endpoint_address}" : "redis://${var.redis_primary_endpoint_address}"
+  secret_string = var.env == "dev" ? "redis://${var.elasticache_queue_cache_primary_endpoint_address}" : "redis://${var.redis_primary_endpoint_address}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_url" {

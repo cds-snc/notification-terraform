@@ -60,7 +60,7 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
 
 resource "aws_elasticache_replication_group" "elasticache_queue_cache" {
 
-  count = var.env != "production" ? 1 : 0
+  count = var.env == "dev" ? 1 : 0
 
   apply_immediately           = true
   automatic_failover_enabled  = true
