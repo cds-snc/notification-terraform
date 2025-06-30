@@ -170,13 +170,13 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
 
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-critical"
-  alarm_description   = "SMS success rate to Canadian numbers is below 75% over 2 consecutive periods of 12 hours"
+  alarm_description   = "SMS success rate to Canadian numbers is below 50% over 4 consecutive periods of 6 hrs"
   comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "2"
-  datapoints_to_alarm = "2"
+  evaluation_periods  = "4"
+  datapoints_to_alarm = "4"
   metric_name         = "SMSSuccessRate"
   namespace           = "AWS/SNS"
-  period              = 60 * 60 * 12
+  period              = 60 * 60 * 6
   statistic           = "Average"
   threshold           = 50 / 100
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
