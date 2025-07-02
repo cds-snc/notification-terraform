@@ -79,6 +79,7 @@ dependency "elasticache" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan"]
   mock_outputs = {
     redis_primary_endpoint_address = "thisisamockstring_redis_primary_endpoint_address"
+    elasticache_queue_cache_primary_endpoint_address = "thisisamockstring_elasticache_queue_cache_primary_endpoint_address"
   }
 }
 include {
@@ -106,4 +107,6 @@ inputs = {
   route53_zone_id                        = dependency.dns.outputs.route53_zone_id
   postgres_cluster_endpoint              = dependency.rds.outputs.postgres_cluster_endpoint
   redis_primary_endpoint_address         = dependency.elasticache.outputs.redis_primary_endpoint_address
+  elasticache_queue_cache_primary_endpoint_address = dependency.elasticache.outputs.elasticache_queue_cache_primary_endpoint_address
+  
 }
