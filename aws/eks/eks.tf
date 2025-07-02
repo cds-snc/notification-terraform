@@ -184,20 +184,16 @@ resource "aws_eks_addon" "coredns" {
     corefile = <<-EOF
       .:53 {
           errors
-          log . {
+          log . notification {
               class denial
-              class error
-              class success {
-                  name regex .*\.notification-canada-ca\.svc\.cluster\.local\.
-              }
           }
           health {
               lameduck 5s
-            }
+          }
           ready
           kubernetes cluster.local in-addr.arpa ip6.arpa {
-            pods insecure
-            fallthrough in-addr.arpa ip6.arpa
+              pods insecure
+              fallthrough in-addr.arpa ip6.arpa
           }
           prometheus :9153
           forward . /etc/resolv.conf {
@@ -238,3 +234,4 @@ resource "aws_eks_addon" "ebs_driver" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 }
+
