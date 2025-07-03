@@ -15,8 +15,10 @@ resource "aws_cloudwatch_metric_alarm" "coredns-nxdomain-notification-warning" {
   period              = 300 # 5 minutes
   statistic           = "Sum"
   threshold           = 30
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  alarm_actions       = []
+  ok_actions          = [] 
+  # alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  # ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   treat_missing_data  = "notBreaching"
 }
 
