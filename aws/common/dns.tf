@@ -6,7 +6,7 @@ resource "aws_cloudwatch_log_metric_filter" "coredns-nxdomain-notification-filte
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "CoreDNSNXDOMAINNotificationFilter"
   log_group_name = "/aws/containerinsights/${var.eks_cluster_name}/application"
-  pattern        = "{ $.log = \"*notification*\" && $.log = \"*NXDOMAIN*\" }"
+  pattern        = "{ $.log =~ /(?i).*notification.*/ && $.log =~ /(?i).*NXDOMAIN.*/ }"
 
   metric_transformation {
     name      = "CoreDNSNXDOMAINNotificationCount"
