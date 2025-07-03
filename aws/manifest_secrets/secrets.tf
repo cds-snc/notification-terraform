@@ -390,14 +390,14 @@ resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
 }
 
-resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
-  name                    = "MANIFEST_REDIS_PUBLISH_URL"
+resource "aws_secretsmanager_secret" "manifest_cache_ops_url" {
+  name                    = "MANIFEST_CACHE_OPS_URL"
   recovery_window_in_days = 0
 }
 
-resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url" {
-  secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url.id
-  secret_string = var.env == "dev" ? "redis://${var.elasticache_queue_cache_primary_endpoint_address}" : "redis://${var.redis_primary_endpoint_address}"
+resource "aws_secretsmanager_secret_version" "manifest_cache_ops_url" {
+  secret_id     = aws_secretsmanager_secret.manifest_cache_ops_url.id
+  secret_string = var.env != "production" ? "redis://${var.elasticache_queue_cache_primary_endpoint_address}" : "redis://${var.redis_primary_endpoint_address}"
 }
 
 resource "aws_secretsmanager_secret" "manifest_redis_url" {
