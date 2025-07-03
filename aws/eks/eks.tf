@@ -26,6 +26,13 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
     # https://github.com/cds-snc/notification-terraform/issues/205
   }
 
+  encryption_config {
+    resources = ["secrets"]
+    provider {
+      key_arn = aws_kms_key.eks.arn
+    }
+  }
+
   # tfsec:ignore:AWS066 EKS should have the encryption of secrets enabled
   # Will be tackled in the future https://github.com/cds-snc/notification-terraform/issues/202
 
@@ -235,3 +242,8 @@ resource "aws_eks_addon" "ebs_driver" {
   resolve_conflicts_on_update = "OVERWRITE"
 }
 
+resource "aws_kms_key" "eks" {
+  description             = "KMS key for EKS secret encryption"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
