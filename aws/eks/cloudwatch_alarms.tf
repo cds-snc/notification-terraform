@@ -4,6 +4,25 @@
 #
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
+
+resource "aws_cloudwatch_metric_alarm" "coredns-nxdomain-notification-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "coredns-nxdomain-notification-warning"
+  alarm_description   = "More than 30 NXDOMAIN responses containing 'notification' in CoreDNS logs in 5 minutes"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "CoreDNSNXDOMAINNotificationCount"
+  namespace           = "NotificationCanadaCa/DNS"
+  period              = 300 # 5 minutes
+  statistic           = "Sum"
+  threshold           = 30
+  alarm_actions       = []
+  ok_actions          = []
+  # alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  # ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  treat_missing_data = "notBreaching"
+}
+
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-1-500-error-1-minute-warning"
