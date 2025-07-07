@@ -972,13 +972,11 @@ variable "manifest_cypress_auth_client_secret" {
 variable "manifest_smoke_api_key" {
   type      = string
   sensitive = true
-  default   = "stagingonly"
 }
 
 variable "manifest_smoke_admin_client_secret" {
   type      = string
   sensitive = true
-  default   = "stagingonly"
 }
 
 variable "manifest_pr_bot_github_token" {
