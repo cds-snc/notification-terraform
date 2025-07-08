@@ -971,11 +971,13 @@ variable "manifest_cypress_auth_client_secret" {
 
 variable "manifest_smoke_api_key" {
   type      = string
+  default   = "changeme"
   sensitive = true
 }
 
 variable "manifest_smoke_admin_client_secret" {
   type      = string
+  default   = "changeme"
   sensitive = true
 }
 
