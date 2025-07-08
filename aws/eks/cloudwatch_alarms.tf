@@ -17,7 +17,7 @@ resource "aws_cloudwatch_metric_alarm" "coredns-nxdomain-notification-warning" {
   statistic                 = "Sum"
   threshold                 = 30
   alarm_actions             = [var.sns_alert_warning_arn]
-  insufficient_data_actions = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
   treat_missing_data        = "notBreaching"
 }
 
