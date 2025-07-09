@@ -2,11 +2,14 @@
 # API Gateway CloudWatch logging
 #
 
-removed {
-  from = aws_cloudwatch_log_group.api_gateway_execution_log_group
+# This has to be done using a null resource because this log group is automatically created by the API Gateway and is not managed by Terraform.
+resource "null_resource" "api_gateway_cloudwatch_logging" {
+  count = var.cloudwatch_enabled ? 1 : 0
 
-  lifecycle {
-    destroy = false
+  provisioner "local-exec" {
+    command = <<EOT
+      aws logs put-retention-policy --log-group-name "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.api.id}/${aws_api_gateway_stage.api.stage_name}" --retention-in-days ${var.sensitive_log_retention_period_days}
+    EOT
   }
 }
 

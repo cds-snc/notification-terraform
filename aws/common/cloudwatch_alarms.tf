@@ -4,6 +4,7 @@
 #
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
 
+
 # CloudWatch Alarm for Route53 DNS resolution failures (Warning)
 resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
   provider                  = aws.us-east-1
@@ -16,25 +17,6 @@ resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
   period                    = 300 # 5 minutes
   statistic                 = "Sum"
   threshold                 = 5
-  alarm_description         = "Alarm for Route53 DNS resolution failures exceeding threshold"
-  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
-  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
-  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn]
-  treat_missing_data        = "notBreaching"
-}
-
-# CloudWatch Alarm for Route53 DNS resolution failures (Critical)
-resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-critical" {
-  provider                  = aws.us-east-1
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "route53-dns-resolution-failures-critical"
-  comparison_operator       = "GreaterThanThreshold"
-  evaluation_periods        = 5
-  metric_name               = "Route53PublicDNSResolutionFailureCount"
-  namespace                 = "Route53/PublicResolver"
-  period                    = 300 # 5 minutes
-  statistic                 = "Sum"
-  threshold                 = 20
   alarm_description         = "Alarm for Route53 DNS resolution failures exceeding threshold"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn]
