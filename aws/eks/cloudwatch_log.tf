@@ -241,7 +241,7 @@ resource "aws_cloudwatch_log_metric_filter" "coredns-nxdomain-notification-filte
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "CoreDNSNXDOMAINNotificationFilter"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
-  pattern        = "{ $.log = \"*notification*\" && $.log = \"*NXDOMAIN*\" }"
+  pattern        = "{ $.log = \"*${var.base_domain}. *\" && $.log = \"*NXDOMAIN*\" }"
 
   metric_transformation {
     name      = "CoreDNSNXDOMAINNotificationCount"
