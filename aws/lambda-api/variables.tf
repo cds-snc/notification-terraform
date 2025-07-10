@@ -88,3 +88,8 @@ variable "redis_primary_endpoint_address" {
   type        = string
   description = "Primary endpoint address of the redis cluster"
 }
+
+variable "elasticache_queue_cache_primary_endpoint_address" {
+  default = "changeme"
+  type    = string
+}
