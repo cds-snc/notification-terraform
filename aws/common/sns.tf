@@ -70,12 +70,58 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-general" {
-  name              = "alert-general"
-  kms_master_key_id = aws_kms_key.sns-alert-general.arn
-
+  name = "alert-general"
+  kms_master_key_id = aws_kms_key.notification-canada-ca.arn
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AWSBudgetsSNSPublishingPermissions",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "budgets.amazonaws.com"
+      },
+      "Action": "SNS:Publish",
+      "Resource": "arn:aws:sns:ca-central-1:${var.account_id}:alert-general",
+      "Condition": {
+        "StringEquals": {
+          "aws:SourceAccount": "${var.account_id}"
+        },
+        "ArnLike": {
+          "aws:SourceArn": "arn:aws:budgets::${var.account_id}:*"
+        }
+      }
+    },
+    {
+      "Sid": "__default_statement_ID",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "SNS:GetTopicAttributes",
+        "SNS:SetTopicAttributes",
+        "SNS:AddPermission",
+        "SNS:RemovePermission",
+        "SNS:DeleteTopic",
+        "SNS:Subscribe",
+        "SNS:ListSubscriptionsByTopic",
+        "SNS:Publish"
+      ],
+      "Resource": "arn:aws:sns:ca-central-1:${var.account_id}:alert-general",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceOwner": "${var.account_id}"
+        }
+      }
+    }
+  ]
+}
+POLICY
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs" {
