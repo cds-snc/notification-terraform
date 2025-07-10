@@ -70,7 +70,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-general" {
-  name = "alert-general"
+  name              = "alert-general"
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
