@@ -163,7 +163,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -199,7 +199,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -235,7 +235,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -271,7 +271,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -306,7 +306,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -341,7 +341,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -376,7 +376,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -411,7 +411,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -494,7 +494,7 @@ jobs:
           kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster ${{env.ENVIRONMENT}}
 
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -529,7 +529,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -564,7 +564,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -599,7 +599,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -634,7 +634,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -669,7 +669,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -705,7 +705,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -740,7 +740,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -775,7 +775,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -810,7 +810,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -845,7 +845,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -880,7 +880,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -915,7 +915,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -950,7 +950,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -985,7 +985,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -1020,7 +1020,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -1055,7 +1055,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -1090,7 +1090,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@e710cb1446e5dfe69a0182603fb06b5282d7eb07 # v3.4.3
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"

@@ -51,6 +51,7 @@ api_enable_new_relic       = true
 cloudwatch_enabled         = true
 recovery                   = false
 aws_xray_sdk_enabled       = true
+debug_thing                = true
 
 ## DNS
 alt_domain                 = "staging.alpha.notification.cdssandbox.xyz"
