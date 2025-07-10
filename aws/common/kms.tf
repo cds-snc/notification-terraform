@@ -53,6 +53,18 @@ resource "aws_kms_key" "notification-canada-ca" {
       "kms:Decrypt"
     ],
     "Resource": "*"
+  },
+  {
+    "Sid": "Allow_SQS_for_CMK",
+    "Effect": "Allow",
+    "Principal": {
+      "Service": "sqs.amazonaws.com"
+    },
+    "Action": [
+      "kms:GenerateDataKey*",
+      "kms:Decrypt"
+    ],
+    "Resource": "*"
   }
 
   ]
@@ -98,6 +110,18 @@ resource "aws_kms_key" "notification-canada-ca-us-west-2" {
             "kms:GenerateDataKey"
          ],
          "Resource":"*"
+      },
+      {
+         "Sid":"Allow_SQS_for_CMK",
+         "Effect":"Allow",
+         "Principal":{
+            "Service":"sqs.amazonaws.com"
+         },
+         "Action":[
+            "kms:GenerateDataKey*",
+            "kms:Decrypt"
+         ],
+         "Resource":"*"
       }
    ]
 }
@@ -141,6 +165,18 @@ resource "aws_kms_key" "notification-canada-ca-us-east-1" {
          "Action":[
             "kms:Decrypt",
             "kms:GenerateDataKey"
+         ],
+         "Resource":"*"
+      },
+      {
+         "Sid":"Allow_SQS_for_CMK",
+         "Effect":"Allow",
+         "Principal":{
+            "Service":"sqs.amazonaws.com"
+         },
+         "Action":[
+            "kms:GenerateDataKey*",
+            "kms:Decrypt"
          ],
          "Resource":"*"
       }
