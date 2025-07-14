@@ -90,9 +90,6 @@ resource "aws_sns_topic" "notification-canada-ca-alert-general" {
       "Condition": {
         "StringEquals": {
           "aws:SourceAccount": "${var.account_id}"
-        },
-        "ArnLike": {
-          "aws:SourceArn": "arn:aws:budgets::${var.account_id}:*"
         }
       }
     },
