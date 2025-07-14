@@ -11,6 +11,6 @@ output "redis_primary_endpoint_address" {
 
 output "elasticache_queue_cache_primary_endpoint_address" {
   description = "The address of the primary node for the cluster"
-  value       = aws_elasticache_replication_group.elasticache_queue_cache[0].primary_endpoint_address
+  value       = aws_elasticache_replication_group.elasticache_queue_cache.primary_endpoint_address
   sensitive   = true
 }
