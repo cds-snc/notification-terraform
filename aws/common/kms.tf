@@ -118,38 +118,6 @@ resource "aws_kms_key" "notification-canada-ca-us-west-2" {
             "kms:GenerateDataKey"
          ],
          "Resource":"*"
-      },
-      {
-         "Sid":"Allow_SQS_for_CMK",
-         "Effect":"Allow",
-         "Principal":{
-            "Service":"sqs.amazonaws.com"
-         },
-         "Action":[
-            "kms:GenerateDataKey*",
-            "kms:Decrypt"
-         ],
-         "Resource":"*"
-      },
-      {
-         "Sid":"Allow_Budgets_for_CMK",
-         "Effect":"Allow",
-         "Principal":{
-            "Service":"budgets.amazonaws.com"
-         },
-         "Action":[
-            "kms:GenerateDataKey*",
-            "kms:Decrypt"
-         ],
-         "Resource":"*",
-         "Condition":{
-            "StringEquals":{
-               "aws:SourceAccount":"${data.aws_caller_identity.current.account_id}"
-            },
-            "ArnLike":{
-               "aws:SourceArn":"arn:aws:budgets::${data.aws_caller_identity.current.account_id}:*"
-            }
-         }
       }
    ]
 }
@@ -195,38 +163,6 @@ resource "aws_kms_key" "notification-canada-ca-us-east-1" {
             "kms:GenerateDataKey"
          ],
          "Resource":"*"
-      },
-      {
-         "Sid":"Allow_SQS_for_CMK",
-         "Effect":"Allow",
-         "Principal":{
-            "Service":"sqs.amazonaws.com"
-         },
-         "Action":[
-            "kms:GenerateDataKey*",
-            "kms:Decrypt"
-         ],
-         "Resource":"*"
-      },
-      {
-         "Sid":"Allow_Budgets_for_CMK",
-         "Effect":"Allow",
-         "Principal":{
-            "Service":"budgets.amazonaws.com"
-         },
-         "Action":[
-            "kms:GenerateDataKey*",
-            "kms:Decrypt"
-         ],
-         "Resource":"*",
-         "Condition":{
-            "StringEquals":{
-               "aws:SourceAccount":"${data.aws_caller_identity.current.account_id}"
-            },
-            "ArnLike":{
-               "aws:SourceArn":"arn:aws:budgets::${data.aws_caller_identity.current.account_id}:*"
-            }
-         }
       }
    ]
 }
