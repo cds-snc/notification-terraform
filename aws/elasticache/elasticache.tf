@@ -19,8 +19,8 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
   preferred_cache_cluster_azs = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
   replication_group_id        = "notify-${var.env}-cluster-cache-az"
   description                 = "Redis/Valkey multiaz cluster with replication group"
-  node_type                   = var.elasticache_node_type
-  num_cache_clusters          = var.elasticache_node_number_cache_clusters
+  node_type                   = var.elasticache_admin_cache_node_type
+  num_cache_clusters          = var.elasticache_admin_cache_node_count
   engine                      = var.elasticache_use_valkey ? "valkey" : "redis"
   engine_version              = var.elasticache_use_valkey ? "8.0" : "6.x"
   parameter_group_name        = var.elasticache_use_valkey ? "default.valkey8" : "default.redis6.x"
@@ -67,8 +67,8 @@ resource "aws_elasticache_replication_group" "elasticache_queue_cache" {
   preferred_cache_cluster_azs = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
   replication_group_id        = "notify-${var.env}-queue-cache"
   description                 = "Redis/Valkey multiaz cluster with replication group for Celery queues"
-  node_type                   = var.elasticache_node_type
-  num_cache_clusters          = var.elasticache_node_number_cache_clusters
+  node_type                   = var.elasticache_cache_ops_node_type
+  num_cache_clusters          = var.elasticache_cache_ops_node_count
   engine                      = "valkey"
   engine_version              = "8.0"
   parameter_group_name        = "default.valkey8"
