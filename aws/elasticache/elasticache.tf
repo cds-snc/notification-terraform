@@ -60,8 +60,6 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
 
 resource "aws_elasticache_replication_group" "elasticache_queue_cache" {
 
-  count = var.env != "production" ? 1 : 0
-
   apply_immediately           = true
   automatic_failover_enabled  = true
   preferred_cache_cluster_azs = ["ca-central-1b", "ca-central-1d", "ca-central-1a"]
@@ -80,14 +78,14 @@ resource "aws_elasticache_replication_group" "elasticache_queue_cache" {
   subnet_group_name  = aws_elasticache_subnet_group.notification-canada-ca-cache-subnet.name
 
   log_delivery_configuration {
-    destination      = aws_cloudwatch_log_group.elasticache_queue_cache_slow_logs[0].name
+    destination      = aws_cloudwatch_log_group.elasticache_queue_cache_slow_logs.name
     destination_type = "cloudwatch-logs"
     log_format       = "json"
     log_type         = "slow-log"
   }
 
   log_delivery_configuration {
-    destination      = aws_cloudwatch_log_group.elasticache_queue_cache_engine_logs[0].name
+    destination      = aws_cloudwatch_log_group.elasticache_queue_cache_engine_logs.name
     destination_type = "cloudwatch-logs"
     log_format       = "json"
     log_type         = "engine-log"
