@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "encrypted_kms_policy" {
     condition {
       test     = "ArnLike"
       variable = "aws:SourceArn"
-      values   = ["arn:aws:budgets::${data.aws_caller_identity.current.account_id}:*"]
+      values   = ["arn:aws:budgets:${var.region}:${data.aws_caller_identity.current.account_id}:*"]
     }
   }
 }
