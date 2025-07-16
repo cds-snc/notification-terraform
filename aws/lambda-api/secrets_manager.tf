@@ -84,7 +84,7 @@ POSTGRES_HOST=${var.postgres_cluster_endpoint}
 POSTGRES_SQL=postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}
 
 REDIS_URL=redis://${var.redis_primary_endpoint_address}
-CACHE_OPS_URL=redis://${var.env != "production" ? var.elasticache_queue_cache_primary_endpoint_address : var.redis_primary_endpoint_address}
+CACHE_OPS_URL=redis://${var.elasticache_queue_cache_primary_endpoint_address}
 REPORTS_BUCKET_NAME=notification-canada-ca-${var.env}-reports
 
 CRM_GITHUB_PERSONAL_ACCESS_TOKEN=${var.manifest_crm_github_personal_access_token}
