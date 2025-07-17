@@ -8,6 +8,7 @@ resource "aws_sqs_queue" "priority_db_tasks_queue" {
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
+    Environment = "${var.env}"
   }
 }
 
