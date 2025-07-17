@@ -179,13 +179,3 @@ resource "aws_kms_key" "notification-canada-ca-us-east-1" {
     CostCenter = "notification-canada-ca-${var.env}"
   }
 }
-      }
-   ]
-}
-EOF
-
-  tags = {
-    Name       = "notification-canada-ca"
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
-}
