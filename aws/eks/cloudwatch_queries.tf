@@ -265,9 +265,9 @@ filter @message like /Total gunicorn running time/
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "api-inexistent-domain-resolution-errors" {
+resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Inexistent domain resolution errors"
+  name  = "API / Non-existent domain resolution errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -279,9 +279,9 @@ limit 10000
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "api-inexistent-domain-resolution-errors-stats" {
+resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Inexistent domain resolution errors"
+  name  = "API / Non-existent domain resolution errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -297,9 +297,9 @@ fields @timestamp, @message, @logStream, @log
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "api-inexistent-domain-resolution-errors-stats-by-5-minutes" {
+resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats-by-5-minutes" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Inexistent domain resolution errors"
+  name  = "API / Non-existent domain resolution errors"
 
   log_group_names = [
     local.eks_application_log_group
