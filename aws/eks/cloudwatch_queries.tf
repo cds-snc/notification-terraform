@@ -265,6 +265,57 @@ filter @message like /Total gunicorn running time/
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API / Non-existent domain resolution errors"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+filter @message like /NXDOMAIN/
+limit 10000
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API / Non-existent domain resolution errors"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message, @logStream, @log
+| filter @message like /NXDOMAIN/
+| parse @message /IN (?<@domain>.*?). udp/
+| stats count(*) as Total by @domain
+| sort Total desc, @domain 
+| limit 1000
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats-by-5-minutes" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API / Non-existent domain resolution errors"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message, @logStream, @log
+| filter @message like /NXDOMAIN/
+| parse @message /IN (?<@domain>.*?). udp/
+| stats count(*) as Total by @domain, bin(5m) as Timerange
+| sort Total desc, @domain asc, Timerange asc
+| display @domain, Total, Timerange
+| limit 1000
+QUERY
+}
+
 resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Bounces / Critical bounces"
