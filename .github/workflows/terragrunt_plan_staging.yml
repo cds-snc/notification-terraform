@@ -39,6 +39,7 @@ jobs:
       dns: ${{ steps.filter.outputs.dns }}
       ses_validation_dns_entries: ${{ steps.filter.outputs.ses_validation_dns_entries }}
       eks: ${{ steps.filter.outputs.eks }}
+      elasticache: ${{ steps.filter.outputs.elasticache }}
       aws-auth: ${{ steps.filter.outputs.aws-auth }}
       rds: ${{ steps.filter.outputs.rds }}
       lambda-api: ${{ steps.filter.outputs.lambda-api }}
@@ -511,7 +512,7 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
-    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
+    needs: [terragrunt-filter]
     env:
       COMPONENT: "elasticache"
     steps:

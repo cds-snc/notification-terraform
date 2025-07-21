@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.12.1-eksbuild.2"
 eks_addon_kube_proxy_version    = "v1.33.0-eksbuild.2"
 eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
 eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
-eks_node_ami_version            = "1.33.0-20250610"
-eks_karpenter_ami_id            = "ami-062ed9cf9ccb593cf"
+eks_node_ami_version            = "1.33.0-20250715"
+eks_karpenter_ami_id            = "ami-00bb6a08e1bd4a6a1"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -63,9 +63,12 @@ ses_custom_sending_domains = ["custom-sending-domain.staging.notification.cdssan
 vpc_cidr_block = "10.0.0.0/16"
 
 ## ELASTICACHE
-elasticache_node_count                 = 1
-elasticache_node_number_cache_clusters = 3
-elasticache_node_type                  = "cache.t3.medium"
+elasticache_cache_ops_node_count = 3
+elasticache_cache_ops_node_type  = "cache.t3.medium"
+
+elasticache_admin_cache_node_count = 3
+elasticache_admin_cache_node_type = "cache.t3.medium"
+
 elasticache_use_valkey                 = true
 
 ## LOGGING

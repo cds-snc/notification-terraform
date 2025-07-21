@@ -296,15 +296,19 @@ variable "notify_k8s_namespace" {
   description = "Kubernetes namespace where GC Notify is installed"
 }
 
-variable "elasticache_node_count" {
+variable "elasticache_cache_ops_node_type" {
+  type = string
+}
+
+variable "elasticache_cache_ops_node_count" {
   type = number
 }
 
-variable "elasticache_node_number_cache_clusters" {
+variable "elasticache_admin_cache_node_count" {
   type = number
 }
 
-variable "elasticache_node_type" {
+variable "elasticache_admin_cache_node_type" {
   type = string
 }
 
@@ -971,14 +975,14 @@ variable "manifest_cypress_auth_client_secret" {
 
 variable "manifest_smoke_api_key" {
   type      = string
+  default   = "changeme"
   sensitive = true
-  default   = "stagingonly"
 }
 
 variable "manifest_smoke_admin_client_secret" {
   type      = string
+  default   = "changeme"
   sensitive = true
-  default   = "stagingonly"
 }
 
 variable "manifest_pr_bot_github_token" {

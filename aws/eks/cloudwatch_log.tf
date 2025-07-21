@@ -232,3 +232,21 @@ resource "aws_cloudwatch_log_metric_filter" "oom-errors" {
     value     = "1"
   }
 }
+
+###
+# CORE DNS resources for Notification application
+###
+
+resource "aws_cloudwatch_log_metric_filter" "coredns-nxdomain-notification-filter" {
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "CoreDNSNXDOMAINNotificationFilter"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+  pattern        = "{ $.log = \"*${var.base_domain}. *\" && $.log = \"*NXDOMAIN*\" }"
+
+  metric_transformation {
+    name      = "CoreDNSNXDOMAINNotificationCount"
+    namespace = "NotificationCanadaCa/DNS"
+    value     = "1"
+  }
+}
+

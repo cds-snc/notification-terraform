@@ -4,6 +4,7 @@
 #
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
 
+
 # CloudWatch Alarm for Route53 DNS resolution failures (Warning)
 resource "aws_cloudwatch_metric_alarm" "route53-dns-failures-warning" {
   provider                  = aws.us-east-1
