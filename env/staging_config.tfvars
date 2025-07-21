@@ -63,9 +63,12 @@ ses_custom_sending_domains = ["custom-sending-domain.staging.notification.cdssan
 vpc_cidr_block = "10.0.0.0/16"
 
 ## ELASTICACHE
-elasticache_node_count                 = 1
-elasticache_node_number_cache_clusters = 3
-elasticache_node_type                  = "cache.t3.medium"
+elasticache_cache_ops_node_count = 3
+elasticache_cache_ops_node_type  = "cache.t3.medium"
+
+elasticache_admin_cache_node_count = 3
+elasticache_admin_cache_node_type = "cache.t3.medium"
+
 elasticache_use_valkey                 = true
 
 ## LOGGING

@@ -67,9 +67,12 @@ sensitive_log_retention_period_days = 14
 vpc_cidr_block = "10.0.0.0/16"
 
 ## ELASTICACHE
-elasticache_node_count                 = 1
-elasticache_node_number_cache_clusters = 3
-elasticache_node_type                  = "cache.t3.micro"
+elasticache_cache_ops_node_count = 3
+elasticache_cache_ops_node_type  = "cache.t3.micro"
+
+elasticache_admin_cache_node_count = 3
+elasticache_admin_cache_node_type = "cache.t3.micro"
+
 elasticache_use_valkey                 = true
 
 ## SLACK INTEGRATION

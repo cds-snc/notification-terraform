@@ -296,15 +296,19 @@ variable "notify_k8s_namespace" {
   description = "Kubernetes namespace where GC Notify is installed"
 }
 
-variable "elasticache_node_count" {
+variable "elasticache_cache_ops_node_type" {
+  type = string
+}
+
+variable "elasticache_cache_ops_node_count" {
   type = number
 }
 
-variable "elasticache_node_number_cache_clusters" {
+variable "elasticache_admin_cache_node_count" {
   type = number
 }
 
-variable "elasticache_node_type" {
+variable "elasticache_admin_cache_node_type" {
   type = string
 }
 
