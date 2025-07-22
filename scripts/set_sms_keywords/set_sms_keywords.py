@@ -159,7 +159,16 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--pools", help="Change keywords of pools", action="store_true", default=False)
     parser.add_argument("--phone_numbers", help="Change keywords of phone numbers not in a pool", action="store_true", default=False)
+    parser.add_argument("--validate-only", help="Validate keyword messages without submitting to AWS", action="store_true", default=False)
     args = parser.parse_args()
+
+    if args.validate_only:
+        print("🔍 Validating keyword messages...")
+        print("=" * 50)
+        for keyword in keywords_to_set:
+            check_sms_length_warning(keyword["Keyword"], keyword["KeywordMessage"])
+        print("✅ Validation complete. No changes made to AWS.")
+        return
 
     if args.pools:
         for pool in client.describe_pools()['Pools']:
