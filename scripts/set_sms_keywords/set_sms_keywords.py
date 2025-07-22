@@ -1,11 +1,54 @@
 import boto3
 import argparse
-from typing import Any, Dict
+from typing import Any
 from dotenv import load_dotenv
 
 """
 Set the keywords for phone numbers and pools.
 """
+
+
+def check_sms_length_warning(keyword: str, message: str) -> None:
+    """
+    Check if the SMS message would be split into multiple parts and warn if so.
+    
+    SMS limits:
+    - Single SMS: 160 characters (GSM 7-bit) or 70 characters (Unicode)
+    - Multi-part SMS: 153 characters per part (GSM) or 67 characters per part (Unicode)
+    
+    Args:
+        keyword: The keyword being set
+        message: The message content to check
+    """
+    # Check if message contains non-GSM characters (requires Unicode encoding)
+    gsm_basic = set("@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà")
+    gsm_extended = set("^{}\\[~]|€")
+    
+    is_unicode = any(char not in gsm_basic and char not in gsm_extended for char in message)
+    
+    if is_unicode:
+        # Unicode encoding: 70 chars single, 67 chars per part for multi-part
+        single_limit = 70
+        multipart_limit = 67
+        encoding = "Unicode"
+        message_length = len(message)
+    else:
+        # GSM 7-bit encoding: 160 chars single, 153 chars per part for multi-part
+        # Extended GSM characters count as 2 characters
+        char_count = sum(2 if char in gsm_extended else 1 for char in message)
+        single_limit = 160
+        multipart_limit = 153
+        encoding = "GSM 7-bit"
+        message_length = char_count
+    
+    if message_length > single_limit:
+        parts_needed = (message_length - 1) // multipart_limit + 1
+        if parts_needed >= 2:
+            print(f"⚠️  WARNING: Keyword '{keyword}' message is {message_length} characters ({encoding}) and will be split into {parts_needed} SMS parts")
+            print(f"   Message: {message[:50]}{'...' if len(message) > 50 else ''}")
+            if parts_needed == 2:
+                print(f"   Consider shortening the message to stay within {single_limit} characters for a single SMS")
+            print()
 
 
 keywords_to_set = [
@@ -87,7 +130,7 @@ keywords_to_set = [
 ]
 
 
-def set_keywords(client: Any, origination_identity: str, keywords_to_set: Dict[str, str]) -> None:
+def set_keywords(client: Any, origination_identity: str, keyword_list: list) -> None:
     """
     Set the keywords for the origination identity.
     
@@ -95,16 +138,18 @@ def set_keywords(client: Any, origination_identity: str, keywords_to_set: Dict[s
         The AWS Pinpoint client.
     origination_identity: str
         The origination identity (phone number or pool) to set the keywords for.
-    keywords_to_set: Dict[str, str]
+    keyword_list: list
         The keywords to set.
     """
 
     current_keywords = client.describe_keywords(OriginationIdentity=origination_identity)['Keywords']
     for keyword in current_keywords:
-        if keyword['Keyword'] not in [k['Keyword'] for k in keywords_to_set]:
+        if keyword['Keyword'] not in [k['Keyword'] for k in keyword_list]:
             client.delete_keyword(OriginationIdentity=origination_identity, Keyword=keyword['Keyword'])
 
-    for keyword in keywords_to_set:
+    for keyword in keyword_list:
+        # Check for SMS length warning before setting the keyword
+        check_sms_length_warning(keyword["Keyword"], keyword["KeywordMessage"])
         client.put_keyword(OriginationIdentity=origination_identity, Keyword=keyword["Keyword"], KeywordMessage=keyword["KeywordMessage"], KeywordAction=keyword["KeywordAction"])
 
 
