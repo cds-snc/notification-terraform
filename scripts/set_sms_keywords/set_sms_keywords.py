@@ -20,6 +20,11 @@ keywords_to_set = [
         "KeywordAction": "OPT_IN",
     },
     {
+        "Keyword": "FIN",
+        "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
+        "KeywordAction": "OPT_OUT",
+    },
+    {
         "Keyword": "ARRÊT",
         "KeywordMessage": "Le gouvernement du Canada ne vous textera plus via Notification GC. Textez ABONNER pour reprendre (frais standards de messages/données).",
         "KeywordAction": "OPT_OUT",
@@ -51,22 +56,22 @@ keywords_to_set = [
     },
     {
         "Keyword": "ABONNER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez FIN (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "ABONER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez FIN (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "ABONNNER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRÊT (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez FIN (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "AIDE",
-        "KeywordMessage": "Notification GC: Visitez https://notification.canada.ca/contact Frais de msg/données std applicables. La fréquence des messages peut varier. Textez ARRÊT pour annuler.",
+        "KeywordMessage": "Notification GC: Visitez https://notification.canada.ca/contact Frais de msg/données std applicables. La fréquence des messages peut varier. Textez FIN pour annuler.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
     },
     {
@@ -76,7 +81,7 @@ keywords_to_set = [
     },
     {
         "Keyword": "INFO",
-        "KeywordMessage": "GC Notify: More info at https://notification.canada.ca Data rates apply. Notification GC: Plus d’informations à https://notification.canada.ca Frais de msg/données std applicables.",
+        "KeywordMessage": "GC Notify: More info at https://notification.canada.ca Data rates apply. Notification GC: Plus d'informations à https://notification.canada.ca Frais de msg/données std applicables.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
     }
 ]
