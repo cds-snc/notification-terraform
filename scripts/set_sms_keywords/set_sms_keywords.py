@@ -172,11 +172,16 @@ def set_keywords(client: Any, origination_identity: str, keyword_list: list) -> 
 
 def main():
     load_dotenv()
-    client = boto3.client("pinpoint-sms-voice-v2", region_name="ca-central-1")
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--region",
+        choices=["us-west-2", "ca-central-1"],
+        required=True,
+        help="AWS region to update (us-west-2 or ca-central-1)",
+    )
     parser.add_argument("--pools", help="Change keywords of pools", action="store_true")
     parser.add_argument(
-        "--phone_numbers",
+        "--phone-numbers",
         help="Change keywords of phone numbers not in a pool",
         action="store_true",
     )
@@ -186,6 +191,8 @@ def main():
         action="store_true",
     )
     args = parser.parse_args()
+
+    client = boto3.client("pinpoint-sms-voice-v2", region_name=args.region)
 
     if args.validate_only:
         print("🔍 Validating keyword messages...")
