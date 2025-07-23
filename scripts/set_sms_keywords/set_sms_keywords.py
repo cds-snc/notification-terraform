@@ -114,7 +114,7 @@ keywords_to_set = [
     },
     {
         "Keyword": "AIDE",
-        "KeywordMessage": "Notification GC: Visitez https://notification.canada.ca/contact Frais de msg/données std applicables. La fréquence des messages peut varier. Textez FIN pour annuler.",
+        "KeywordMessage": "Notification GC https://www.canada.ca/en/contact.html Frais de msg/données std applicables. La fréquence des messages peut varier. Textez FIN pour annuler.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
     },
     {
@@ -124,7 +124,7 @@ keywords_to_set = [
     },
     {
         "Keyword": "INFO",
-        "KeywordMessage": "GC Notify: More info at https://notification.canada.ca Data rates apply. Notification GC: Plus d'informations à https://notification.canada.ca Frais de msg/données std applicables.",
+        "KeywordMessage": "GC Notify/Notification GC: More info/Plus d'info: https://notification.canada.ca  Msg&Data Rates May Apply. Tarifs de Msg&Données peuvent s'appliquer.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
     }
 ]
