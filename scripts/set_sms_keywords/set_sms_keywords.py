@@ -157,9 +157,9 @@ def main():
     load_dotenv()
     client = boto3.client('pinpoint-sms-voice-v2', region_name='ca-central-1')
     parser=argparse.ArgumentParser()
-    parser.add_argument("--pools", help="Change keywords of pools", action="store_true", default=False)
-    parser.add_argument("--phone_numbers", help="Change keywords of phone numbers not in a pool", action="store_true", default=False)
-    parser.add_argument("--validate-only", help="Validate keyword messages without submitting to AWS", action="store_true", default=False)
+    parser.add_argument("--pools", help="Change keywords of pools", action="store_true")
+    parser.add_argument("--phone_numbers", help="Change keywords of phone numbers not in a pool", action="store_true")
+    parser.add_argument("--validate-only", help="Validate keyword messages without submitting to AWS", action="store_true")
     args = parser.parse_args()
 
     if args.validate_only:
