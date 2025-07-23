@@ -67,30 +67,6 @@ data "aws_iam_policy_document" "encrypted_kms_policy" {
     ]
     resources = ["*"]
   }
-
-  statement {
-    sid    = "Allow_Budgets_for_CMK"
-    effect = "Allow"
-    principals {
-      type        = "Service"
-      identifiers = ["budgets.amazonaws.com"]
-    }
-    actions = [
-      "kms:GenerateDataKey*",
-      "kms:Decrypt"
-    ]
-    resources = ["*"]
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values   = ["${data.aws_caller_identity.current.account_id}"]
-    }
-    condition {
-      test     = "ArnLike"
-      variable = "aws:SourceArn"
-      values   = ["arn:aws:budgets:${var.region}:${data.aws_caller_identity.current.account_id}:*"]
-    }
-  }
   statement {
     sid    = "AllowBudgetsServiceToUseKey"
     effect = "Allow"
