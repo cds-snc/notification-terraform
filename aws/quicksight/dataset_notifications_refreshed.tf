@@ -145,3 +145,18 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
     principal = aws_quicksight_group.dataset_owner.arn
   }
 }
+
+resource "aws_quicksight_refresh_schedule" "notifications-refreshed" {
+  data_set_id = "notifications-refreshed"
+  schedule_id = "schedule-notifications"
+  depends_on  = [aws_quicksight_data_set.notifications]
+
+  schedule {
+    refresh_type = "INCREMENTAL_REFRESH"
+
+    schedule_frequency {
+      interval        = "DAILY"
+      time_of_the_day = "07:50"
+    }
+  }
+}
