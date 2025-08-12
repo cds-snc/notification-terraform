@@ -5,7 +5,7 @@ resource "newrelic_nrql_alert_condition" "admin_error_percentage" {
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Admin] Error percentage"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -39,7 +39,7 @@ resource "newrelic_nrql_alert_condition" "admin_response_time" {
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Admin] Response time"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -73,7 +73,7 @@ resource "newrelic_nrql_alert_condition" "k8s_api_error_percentage" {
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[k8s API] Error percentage"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -107,7 +107,7 @@ resource "newrelic_nrql_alert_condition" "k8s_api_response_time" {
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[k8s API] Response time"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -141,7 +141,7 @@ resource "newrelic_nrql_alert_condition" "k8s_api_transaction_database_time" {
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "baseline"
   name                         = "[k8s API] Transaction database time"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -184,7 +184,7 @@ resource "newrelic_nrql_alert_condition" "external_services_callbacks_over_5_sec
   You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
   EOT
 
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 3600
 
   nrql {
@@ -217,7 +217,7 @@ resource "newrelic_nrql_alert_condition" "internal_services_awsnotify_over_5_sec
   You can identify the offending service(s) report by this alarm or via the ${var.env} errors dashboard: https://one.newrelic.com/dashboards/detail/${data.newrelic_entity.notification-api-lambda[0].guid}?account=${var.new_relic_account_id}
   EOT
 
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 86400
 
   nrql {
@@ -277,7 +277,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_api_user_e
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Lambda API] Error percentage (API User Errors)"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 86400
 
   nrql {
@@ -347,7 +347,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_fuzzy_atta
   Unusual fuzzy attack is detected. 
   EOT
 
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 86400
 
   nrql {
@@ -377,7 +377,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_error_percentage_unexpected
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "static"
   name                         = "[Lambda API] Error percentage (Unexpected Errors)"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 86400
 
   nrql {
@@ -413,7 +413,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_api_us
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "baseline"
   name                         = "[Lambda API] Errors count anomaly (API User Errors)"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 86400
 
   nrql {
@@ -447,7 +447,7 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_unexpe
   policy_id                    = newrelic_alert_policy.terraform_notify_policy[0].id
   type                         = "baseline"
   name                         = "[Lambda API] Errors count anomaly (Unexpected Errors)"
-  enabled                      = true
+  enabled                      = var.env == "production" ? true : false
   violation_time_limit_seconds = 86400
 
   nrql {
