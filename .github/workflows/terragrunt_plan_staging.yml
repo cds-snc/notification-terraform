@@ -491,6 +491,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
           cd ../env/${{env.ENVIRONMENT}}/eks
+          terragrunt init -upgrade
           ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
           CERT=$(terragrunt output --raw gha_vpn_certificate)
           KEY=$(terragrunt output --raw gha_vpn_key)
