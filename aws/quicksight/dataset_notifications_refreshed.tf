@@ -104,34 +104,66 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
   }
 
   physical_table_map {
-    physical_table_map_id = "organisation"
+    physical_table_map_id = "services"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
-      name            = "organisation"
+      name            = "services"
 
       input_columns {
         name = "id"
         type = "STRING"
       }
       input_columns {
+        name = "active"
+        type = "INTEGER"
+      }
+      input_columns {
+        name = "restricted"
+        type = "INTEGER"
+      }
+      input_columns {
+        name = "research_mode"
+        type = "INTEGER"
+      }
+      input_columns {
+        name = "count_as_live"
+        type = "INTEGER"
+      }
+      input_columns {
+        name = "go_live_at"
+        type = "DATETIME"
+      }
+      input_columns {
         name = "name"
         type = "STRING"
+      }
+      input_columns {
+        name = "message_limit"
+        type = "INTEGER"
+      }
+      input_columns {
+        name = "rate_limit"
+        type = "INTEGER"
+      }
+      input_columns {
+        name = "sms_daily_limit"
+        type = "INTEGER"
       }
     }
   }
 
   logical_table_map {
-    logical_table_map_id = "notifications-with-org"
-    alias                = "Notifications with Organisation"
+    logical_table_map_id = "notifications-with-services"
+    alias                = "Notifications with Services"
 
     source {
       join_instruction {
-        left_operand  = "notifications" # matches your physical_table_map_id
-        right_operand = "organisation"  # matches your physical_table_map_id
+        left_operand  = "notifications"
+        right_operand = "services"
 
         type = "INNER" # can also be LEFT, RIGHT, OUTER, etc.
 
-        on_clause = "notifications.organisation_id = organisation.id"
+        on_clause = "notifications.service_id = services.id"
       }
     }
   }
