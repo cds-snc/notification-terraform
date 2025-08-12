@@ -3,10 +3,9 @@
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
 resource "aws_quicksight_data_set" "notifications_refreshed" {
-  data_set_id       = "notifications-refreshed"
-  name              = "Notifications Refreshing"
-  import_mode       = "SPICE"
-  notification_arns = ["arn:aws:sns:ca-central-1:${var.account_id}:aws-controltower-SecurityNotifications"]
+  data_set_id = "notifications-refreshed"
+  name        = "Notifications Refreshing"
+  import_mode = "SPICE"
 
   lifecycle {
     ignore_changes = [
