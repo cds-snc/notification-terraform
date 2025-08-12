@@ -30,6 +30,7 @@ jobs:
     outputs:
       config: ${{ steps.filter.outputs.config }}
       common: ${{ steps.filter.outputs.common }}
+      cloudfront: ${{ steps.filter.outputs.cloudfront }}
       ecr: ${{ steps.filter.outputs.ecr }}
       ecr-us-east: ${{ steps.filter.outputs.ecr-us-east }}
       ses_receiving_emails: ${{ steps.filter.outputs.ses_receiving_emails }}
@@ -41,6 +42,7 @@ jobs:
       eks: ${{ steps.filter.outputs.eks }}
       elasticache: ${{ steps.filter.outputs.elasticache }}
       aws-auth: ${{ steps.filter.outputs.aws-auth }}
+      lambda-admin-pr: ${{ steps.filter.outputs.lambda-admin-pr }}
       rds: ${{ steps.filter.outputs.rds }}
       lambda-api: ${{ steps.filter.outputs.lambda-api }}
       heartbeat: ${{ steps.filter.outputs.heartbeat }}
