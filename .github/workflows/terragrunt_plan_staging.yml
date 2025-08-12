@@ -28,30 +28,33 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      config: ${{ steps.filter.outputs.config }}
+      aws-auth: ${{ steps.filter.outputs.aws-auth }}
+      cloudfront: ${{ steps.filter.outputs.cloudfront }}
       common: ${{ steps.filter.outputs.common }}
+      config: ${{ steps.filter.outputs.config }}
+      database-tools: ${{ steps.filter.outputs.database-tools }}
+      dns: ${{ steps.filter.outputs.dns }}
       ecr: ${{ steps.filter.outputs.ecr }}
       ecr-us-east: ${{ steps.filter.outputs.ecr-us-east }}
+      elasticache: ${{ steps.filter.outputs.elasticache }}
+      eks: ${{ steps.filter.outputs.eks }}
+      github: ${{ steps.filter.outputs.github }}
+      heartbeat: ${{ steps.filter.outputs.heartbeat }}
+      lambda-admin-pr: ${{ steps.filter.outputs.lambda-admin-pr }}
+      lambda-api: ${{ steps.filter.outputs.lambda-api }}
+      lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
+      manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
+      newrelic: ${{ steps.filter.outputs.newrelic }}
+      performance-test: ${{ steps.filter.outputs.performance-test }}
+      pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}
+      quicksight: ${{ steps.filter.outputs.quicksight }}
+      rds: ${{ steps.filter.outputs.rds }}
       ses_receiving_emails: ${{ steps.filter.outputs.ses_receiving_emails }}
       ses_to_sqs_email_callbacks: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks }}
-      sns_to_sqs_sms_callbacks: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks }}
-      pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}
-      dns: ${{ steps.filter.outputs.dns }}
       ses_validation_dns_entries: ${{ steps.filter.outputs.ses_validation_dns_entries }}
-      eks: ${{ steps.filter.outputs.eks }}
-      elasticache: ${{ steps.filter.outputs.elasticache }}
-      aws-auth: ${{ steps.filter.outputs.aws-auth }}
-      rds: ${{ steps.filter.outputs.rds }}
-      lambda-api: ${{ steps.filter.outputs.lambda-api }}
-      heartbeat: ${{ steps.filter.outputs.heartbeat }}
-      database-tools: ${{ steps.filter.outputs.database-tools }}
-      quicksight: ${{ steps.filter.outputs.quicksight }}
-      lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
+      sns_to_sqs_sms_callbacks: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks }}
       system_status: ${{ steps.filter.outputs.system_status }}
       system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}
-      newrelic: ${{ steps.filter.outputs.newrelic }}
-      manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
-      github: ${{ steps.filter.outputs.github }}
 
     steps:
       - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
@@ -68,78 +71,103 @@ jobs:
             dns:
               - 'aws/dns/**'
               - 'env/${{env.ENVIRONMENT}}/dns/**'
+              - 'env/terragrunt.hcl'
             ses_validation_dns_entries:
               - 'aws/ses_validation_dns_entries/**'
               - 'env/${{env.ENVIRONMENT}}/ses_validation_dns_entries/**'
+              - 'env/terragrunt.hcl'
             ecr:
               - 'aws/ecr/**'
               - 'env/${{env.ENVIRONMENT}}/ecr/**'
+              - 'env/terragrunt.hcl'
             ecr-us-east:
               - 'aws/ecr-us-east/**'
               - 'env/${{env.ENVIRONMENT}}/ecr-us-east/**'
+              - 'env/terragrunt.hcl'
             eks:
               - 'aws/eks/**'
               - 'env/${{env.ENVIRONMENT}}/eks/**'
+              - 'env/terragrunt.hcl'
             aws-auth:
               - 'aws/aws-auth/**'
-              - 'env/${{env.ENVIRONMENT}}/aws-auth/**'              
+              - 'env/${{env.ENVIRONMENT}}/aws-auth/**'
+              - 'env/terragrunt.hcl'
             elasticache:
               - 'aws/elasticache/**'
               - 'env/${{env.ENVIRONMENT}}/elasticache/**'
+              - 'env/terragrunt.hcl'
             rds:
               - 'aws/rds/**'
               - 'env/${{env.ENVIRONMENT}}/rds/**'
+              - 'env/terragrunt.hcl'
             cloudfront:
               - 'aws/cloudfront/**'
               - 'env/${{env.ENVIRONMENT}}/cloudfront/**'
+              - 'env/terragrunt.hcl'
             lambda-api:
               - 'aws/lambda-api/**'
               - 'env/${{env.ENVIRONMENT}}/lambda-api/**'
+              - 'env/terragrunt.hcl'
             lambda-admin-pr:
               - 'aws/lambda-admin-pr/**'
-              - 'env/${{env.ENVIRONMENT}}/lambda-admin-pr/**'              
+              - 'env/${{env.ENVIRONMENT}}/lambda-admin-pr/**'
+              - 'env/terragrunt.hcl'
             performance-test:
               - 'aws/performance-test/**'
               - 'env/${{env.ENVIRONMENT}}/performance-test/**'
+              - 'env/terragrunt.hcl'
             heartbeat:
               - 'aws/heartbeat/**'
               - 'env/${{env.ENVIRONMENT}}/heartbeat/**'
+              - 'env/terragrunt.hcl'
             database-tools:
               - 'aws/database-tools/**'
               - 'env/${{env.ENVIRONMENT}}/database-tools/**'
+              - 'env/terragrunt.hcl'
             system_status:
               - 'aws/system_status/**'
               - 'env/${{env.ENVIRONMENT}}/system_status/**'
+              - 'env/terragrunt.hcl'
             system_status_static_site:
               - 'aws/system_status_static_site/**'
               - 'env/${{env.ENVIRONMENT}}/system_status_static_site/**'
+              - 'env/terragrunt.hcl'
             quicksight:
               - 'aws/quicksight/**'
               - 'env/${{env.ENVIRONMENT}}/quicksight/**'
+              - 'env/terragrunt.hcl'
             lambda-google-cidr:
               - 'aws/lambda-google-cidr/**'
               - 'env/${{env.ENVIRONMENT}}/lambda-google-cidr/**'
+              - 'env/terragrunt.hcl'
             ses_receiving_emails:
               - 'aws/ses_receiving_emails/**'
               - 'env/${{env.ENVIRONMENT}}/ses_receiving_emails/**'
+              - 'env/terragrunt.hcl'
             ses_to_sqs_email_callbacks:
               - 'aws/ses_to_sqs_email_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks/**'
+              - 'env/terragrunt.hcl'
             sns_to_sqs_sms_callbacks:
               - 'aws/sns_to_sqs_sms_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks/**'
+              - 'env/terragrunt.hcl'
             pinpoint_to_sqs_sms_callbacks:
               - 'aws/pinpoint_to_sqs_sms_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks/**'
+              - 'env/terragrunt.hcl'
             newrelic:
               - 'aws/newrelic/**'
               - 'env/${{env.ENVIRONMENT}}/newrelic/**'
+              - 'env/terragrunt.hcl'
             manifest_secrets:
               - 'aws/manifest_secrets/**'
               - 'env/${{env.ENVIRONMENT}}/manifest_secrets/**'
+              - 'env/terragrunt.hcl'
             github:
               - 'aws/github/**'
               - 'env/${{env.ENVIRONMENT}}/github/**'
+              - 'env/terragrunt.hcl'
 
   terragrunt-plan-common:
     if: |
@@ -464,6 +492,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
           cd ../env/${{env.ENVIRONMENT}}/eks
+          terragrunt init -upgrade
           ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
           CERT=$(terragrunt output --raw gha_vpn_certificate)
           KEY=$(terragrunt output --raw gha_vpn_key)

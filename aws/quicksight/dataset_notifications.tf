@@ -68,6 +68,8 @@ resource "aws_quicksight_data_set" "notifications" {
           select
             s.id as service_id,
             s.active as service_active,
+            s.restricted as service_restricted,
+            s.research_mode as service_research_mode,
             count_as_live as service_count_as_live,
             s.go_live_at as service_go_live_at,
             s.name as service_name,
@@ -159,6 +161,14 @@ resource "aws_quicksight_data_set" "notifications" {
       }
       columns {
         name = "service_active"
+        type = "BOOLEAN"
+      }
+      columns {
+        name = "service_restricted"
+        type = "BOOLEAN"
+      }
+      columns {
+        name = "service_research_mode"
         type = "BOOLEAN"
       }
       columns {
