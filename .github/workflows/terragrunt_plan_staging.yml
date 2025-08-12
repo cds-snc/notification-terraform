@@ -68,78 +68,103 @@ jobs:
             dns:
               - 'aws/dns/**'
               - 'env/${{env.ENVIRONMENT}}/dns/**'
+              - 'env/terragrunt.hcl'
             ses_validation_dns_entries:
               - 'aws/ses_validation_dns_entries/**'
               - 'env/${{env.ENVIRONMENT}}/ses_validation_dns_entries/**'
+              - 'env/terragrunt.hcl'
             ecr:
               - 'aws/ecr/**'
               - 'env/${{env.ENVIRONMENT}}/ecr/**'
+              - 'env/terragrunt.hcl'
             ecr-us-east:
               - 'aws/ecr-us-east/**'
               - 'env/${{env.ENVIRONMENT}}/ecr-us-east/**'
+              - 'env/terragrunt.hcl'
             eks:
               - 'aws/eks/**'
               - 'env/${{env.ENVIRONMENT}}/eks/**'
+              - 'env/terragrunt.hcl'
             aws-auth:
               - 'aws/aws-auth/**'
-              - 'env/${{env.ENVIRONMENT}}/aws-auth/**'              
+              - 'env/${{env.ENVIRONMENT}}/aws-auth/**'
+              - 'env/terragrunt.hcl'
             elasticache:
               - 'aws/elasticache/**'
               - 'env/${{env.ENVIRONMENT}}/elasticache/**'
+              - 'env/terragrunt.hcl'
             rds:
               - 'aws/rds/**'
               - 'env/${{env.ENVIRONMENT}}/rds/**'
+              - 'env/terragrunt.hcl'
             cloudfront:
               - 'aws/cloudfront/**'
               - 'env/${{env.ENVIRONMENT}}/cloudfront/**'
+              - 'env/terragrunt.hcl'
             lambda-api:
               - 'aws/lambda-api/**'
               - 'env/${{env.ENVIRONMENT}}/lambda-api/**'
+              - 'env/terragrunt.hcl'
             lambda-admin-pr:
               - 'aws/lambda-admin-pr/**'
-              - 'env/${{env.ENVIRONMENT}}/lambda-admin-pr/**'              
+              - 'env/${{env.ENVIRONMENT}}/lambda-admin-pr/**'
+              - 'env/terragrunt.hcl'
             performance-test:
               - 'aws/performance-test/**'
               - 'env/${{env.ENVIRONMENT}}/performance-test/**'
+              - 'env/terragrunt.hcl'
             heartbeat:
               - 'aws/heartbeat/**'
               - 'env/${{env.ENVIRONMENT}}/heartbeat/**'
+              - 'env/terragrunt.hcl'
             database-tools:
               - 'aws/database-tools/**'
               - 'env/${{env.ENVIRONMENT}}/database-tools/**'
+              - 'env/terragrunt.hcl'
             system_status:
               - 'aws/system_status/**'
               - 'env/${{env.ENVIRONMENT}}/system_status/**'
+              - 'env/terragrunt.hcl'
             system_status_static_site:
               - 'aws/system_status_static_site/**'
               - 'env/${{env.ENVIRONMENT}}/system_status_static_site/**'
+              - 'env/terragrunt.hcl'
             quicksight:
               - 'aws/quicksight/**'
               - 'env/${{env.ENVIRONMENT}}/quicksight/**'
+              - 'env/terragrunt.hcl'
             lambda-google-cidr:
               - 'aws/lambda-google-cidr/**'
               - 'env/${{env.ENVIRONMENT}}/lambda-google-cidr/**'
+              - 'env/terragrunt.hcl'
             ses_receiving_emails:
               - 'aws/ses_receiving_emails/**'
               - 'env/${{env.ENVIRONMENT}}/ses_receiving_emails/**'
+              - 'env/terragrunt.hcl'
             ses_to_sqs_email_callbacks:
               - 'aws/ses_to_sqs_email_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks/**'
+              - 'env/terragrunt.hcl'
             sns_to_sqs_sms_callbacks:
               - 'aws/sns_to_sqs_sms_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks/**'
+              - 'env/terragrunt.hcl'
             pinpoint_to_sqs_sms_callbacks:
               - 'aws/pinpoint_to_sqs_sms_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks/**'
+              - 'env/terragrunt.hcl'
             newrelic:
               - 'aws/newrelic/**'
               - 'env/${{env.ENVIRONMENT}}/newrelic/**'
+              - 'env/terragrunt.hcl'
             manifest_secrets:
               - 'aws/manifest_secrets/**'
               - 'env/${{env.ENVIRONMENT}}/manifest_secrets/**'
+              - 'env/terragrunt.hcl'
             github:
               - 'aws/github/**'
               - 'env/${{env.ENVIRONMENT}}/github/**'
+              - 'env/terragrunt.hcl'
 
   terragrunt-plan-common:
     if: |
