@@ -26,6 +26,7 @@ resource "aws_sqs_queue" "notify_internal_tasks_queue" {
   name = "${var.celery_queue_prefix}notify-internal-tasks"
   # This queue was created outside of terraform and has this value set to false in staging and production.
   sqs_managed_sse_enabled = false
+  max_message_size        = var.sqs_max_message_size
   # This queue was created outside of terraform and has this value set to default in staging and production.
   visibility_timeout_seconds = var.sqs_visibility_timeout_default
 }
@@ -53,7 +54,7 @@ resource "aws_sqs_queue" "eks_notification_canada_ca_email_high_queue" {
 resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
   name             = "eks-notification-canada-cadelivery-receipts"
   delay_seconds    = 0
-  max_message_size = 262144
+  max_message_size = var.sqs_max_message_size
   #4 Days
   message_retention_seconds  = 345600
   receive_wait_time_seconds  = 0
@@ -67,7 +68,7 @@ resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
 resource "aws_sqs_queue" "ses_receipt_callback_buffer" {
   name                       = "ses-receipt-callback-buffer"
   delay_seconds              = 0
-  max_message_size           = 262144
+  max_message_size           = var.sqs_max_message_size
   message_retention_seconds  = 345600
   receive_wait_time_seconds  = 0
   visibility_timeout_seconds = var.sqs_visibility_timeout_default
