@@ -760,7 +760,7 @@ jobs:
 
       - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
         run: |
-          cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callback
+          cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
           terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
