@@ -77,11 +77,11 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
       }
       input_columns {
         name = "sms_total_message_price"
-        type = "DECIMAL-FLOAT"
+        type = "DECIMAL"
       }
       input_columns {
         name = "sms_total_carrier_fee"
-        type = "DECIMAL-FLOAT"
+        type = "DECIMAL"
       }
       input_columns {
         name = "sms_iso_country_code"
