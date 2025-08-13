@@ -153,19 +153,37 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
 
   logical_table_map {
     logical_table_map_id = "logical-notifications"
-    alias                = "Notifications"
+    alias                = "notifications"
 
     source {
       physical_table_id = "notifications"
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "id"
+        new_column_name = "notification_id"
+      }
     }
   }
 
   logical_table_map {
     logical_table_map_id = "logical-services"
-    alias                = "Services"
+    alias                = "services"
 
     source {
       physical_table_id = "services"
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "id"
+        new_column_name = "service_id"
+      }
+    }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "name"
+        new_column_name = "service_name"
+      }
     }
   }
 
@@ -180,7 +198,7 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
 
         type = "INNER" # can also be LEFT, RIGHT, OUTER, etc.
 
-        on_clause = "notifications.service_id = services.id"
+        on_clause = "notifications.service_id = services.service_id"
       }
     }
   }
