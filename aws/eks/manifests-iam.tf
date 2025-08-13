@@ -358,3 +358,57 @@ resource "aws_iam_role_policy_attachment" "celery_worker" {
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.celery.name
 }
+
+#
+# Database
+#
+#
+# NOTIFY-Database
+#
+
+data "aws_iam_policy_document" "assume_role_policy_database" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:notification-canada-ca:notify-database"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "database" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_database.json
+  name               = "secrets-csi-role-database"
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "secrets_csi_database" {
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.database.name
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "parameters_csi_database" {
+  policy_arn = aws_iam_policy.parameters_csi.arn
+  role       = aws_iam_role.database.name
+}
+
+resource "aws_iam_role_policy_attachment" "database_worker" {
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.database.name
+}
