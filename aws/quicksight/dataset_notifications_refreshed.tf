@@ -164,6 +164,12 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
         new_column_name = "notification_id"
       }
     }
+    data_transforms {
+      rename_column_operation {
+        column_name     = "service_id"
+        new_column_name = "service_id_fk"
+      }
+    }
   }
 
   logical_table_map {
@@ -198,7 +204,7 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
 
         type = "INNER" # can also be LEFT, RIGHT, OUTER, etc.
 
-        on_clause = "notifications.service_id = services.service_id"
+        on_clause = "notifications.service_id_fk = services.service_id"
       }
     }
   }
