@@ -54,6 +54,7 @@ jobs:
       - name: terragrunt apply COMMON
         run: |
           cd env/${{env.ENVIRONMENT}}/common
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr:
@@ -95,6 +96,7 @@ jobs:
       - name: terragrunt apply ECR
         run: |
           cd env/${{env.ENVIRONMENT}}/ecr
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr-us-east:
@@ -136,6 +138,7 @@ jobs:
       - name: terragrunt apply ECR
         run: |
           cd env/${{env.ENVIRONMENT}}/ecr-us-east
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
 
@@ -168,6 +171,7 @@ jobs:
       - name: terragrunt apply ses_receiving_emails
         run: |
           cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-dns:
@@ -199,6 +203,7 @@ jobs:
       - name: terragrunt apply dns
         run: |
           cd env/${{env.ENVIRONMENT}}/dns
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_validation_dns_entries:
@@ -230,6 +235,7 @@ jobs:
       - name: terragrunt apply ses_validation_dns_entries
         run: |
           cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
 
@@ -262,6 +268,7 @@ jobs:
       - name: terragrunt apply cloudfront
         run: |
           cd env/${{env.ENVIRONMENT}}/cloudfront
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-eks:
@@ -293,6 +300,7 @@ jobs:
       - name: terragrunt apply eks
         run: |
           cd env/${{env.ENVIRONMENT}}/eks
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-aws-auth:
@@ -336,6 +344,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
           cd ../env/${{env.ENVIRONMENT}}/eks
+          terragrunt init -upgrade
           ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
           CERT=$(terragrunt output --raw gha_vpn_certificate)
           KEY=$(terragrunt output --raw gha_vpn_key)
@@ -368,6 +377,7 @@ jobs:
       - name: terragrunt apply aws-auth
         run: |
           cd env/${{env.ENVIRONMENT}}/aws-auth
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-elasticache:
@@ -399,6 +409,7 @@ jobs:
       - name: terragrunt apply elasticache
         run: |
           cd env/${{env.ENVIRONMENT}}/elasticache
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-rds:
@@ -430,6 +441,7 @@ jobs:
       - name: terragrunt apply rds
         run: |
           cd env/${{env.ENVIRONMENT}}/rds
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-api:
@@ -461,6 +473,7 @@ jobs:
       - name: terragrunt apply lambda-api
         run: |
           cd env/${{env.ENVIRONMENT}}/lambda-api
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-admin-pr:
@@ -492,6 +505,7 @@ jobs:
       - name: terragrunt apply lambda-admin-pr
         run: |
           cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-performance-test:
@@ -555,6 +569,7 @@ jobs:
       - name: terragrunt apply heartbeat
         run: |
           cd env/${{env.ENVIRONMENT}}/heartbeat
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-database-tools:
@@ -586,6 +601,7 @@ jobs:
       - name: terragrunt apply database-tools
         run: |
           cd env/${{env.ENVIRONMENT}}/database-tools
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-quicksight:
@@ -617,6 +633,7 @@ jobs:
       - name: terragrunt apply quicksight
         run: |
           cd env/${{env.ENVIRONMENT}}/quicksight
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-lambda-google-cidr:
@@ -648,6 +665,7 @@ jobs:
       - name: terragrunt apply lambda-google-cidr
         run: |
           cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ses_to_sqs_email_callbacks:
@@ -679,6 +697,7 @@ jobs:
       - name: terragrunt apply ses_to_sqs_email_callbacks
         run: |
           cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-sns_to_sqs_sms_callbacks:
@@ -710,6 +729,7 @@ jobs:
       - name: terragrunt apply sns_to_sqs_sms_callbacks
         run: |
           cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-pinpoint_to_sqs_sms_callbacks:
@@ -741,6 +761,7 @@ jobs:
       - name: terragrunt apply pinpoint_to_sqs_sms_callbacks
         run: |
           cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status:
@@ -772,6 +793,7 @@ jobs:
       - name: terragrunt apply system_status
         run: |
           cd env/${{env.ENVIRONMENT}}/system_status
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-system_status_static_site:
@@ -803,6 +825,7 @@ jobs:
       - name: terragrunt apply system_status_static_site
         run: |
           cd env/${{env.ENVIRONMENT}}/system_status_static_site
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-newrelic:
@@ -834,6 +857,7 @@ jobs:
       - name: terragrunt apply newrelic
         run: |
           cd env/${{env.ENVIRONMENT}}/newrelic
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-manifest_secrets:
@@ -865,6 +889,7 @@ jobs:
       - name: terragrunt apply manifest_secrets
         run: |
           cd env/${{env.ENVIRONMENT}}/manifest_secrets
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve      
  
   terragrunt-apply-github:
@@ -896,6 +921,7 @@ jobs:
       - name: terragrunt apply github
         run: |
           cd env/${{env.ENVIRONMENT}}/github
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve      
 
   bump-version-and-push-tag:

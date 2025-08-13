@@ -45,8 +45,6 @@ resource "aws_eip" "notification-canada-ca-natgw" {
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
 
-  vpc = true
-
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
@@ -56,8 +54,6 @@ resource "aws_eip" "notification-canada-ca-natgw" {
 resource "aws_eip" "notification-canada-ca-natgw-k8s" {
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
-
-  vpc = true
 
   tags = {
     Name       = "notification-canada-ca"

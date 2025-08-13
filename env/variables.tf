@@ -1083,3 +1083,8 @@ variable "elasticache_use_valkey" {
   type    = bool
   default = false
 }
+
+variable "sqs_max_message_size" {
+  type    = number
+  default = 1048576 # 1 MB
+}

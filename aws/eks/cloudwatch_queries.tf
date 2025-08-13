@@ -281,7 +281,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Non-existent domain resolution errors"
+  name  = "API / Non-existent domain resolution error stats"
 
   log_group_names = [
     local.eks_application_log_group
@@ -299,7 +299,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats-by-5-minutes" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Non-existent domain resolution errors"
+  name  = "API / Non-existent domain resolution errors by 5 minutes"
 
   log_group_names = [
     local.eks_application_log_group
