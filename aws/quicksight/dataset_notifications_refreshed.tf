@@ -152,13 +152,31 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
   }
 
   logical_table_map {
+    logical_table_map_id = "logical-notifications"
+    alias                = "Notifications"
+
+    source {
+      physical_table_id = "notifications"
+    }
+  }
+
+  logical_table_map {
+    logical_table_map_id = "logical-services"
+    alias                = "Services"
+
+    source {
+      physical_table_id = "services"
+    }
+  }
+
+  logical_table_map {
     logical_table_map_id = "notifications-with-services"
     alias                = "Notifications with Services"
 
     source {
       join_instruction {
-        left_operand  = "notifications"
-        right_operand = "services"
+        left_operand  = "logical-notifications"
+        right_operand = "logical-services"
 
         type = "INNER" # can also be LEFT, RIGHT, OUTER, etc.
 
