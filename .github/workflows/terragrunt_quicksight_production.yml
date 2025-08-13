@@ -53,4 +53,5 @@ jobs:
       - name: terragrunt apply quicksight
         run: |
           cd env/${{env.ENVIRONMENT}}/quicksight
+          terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve
