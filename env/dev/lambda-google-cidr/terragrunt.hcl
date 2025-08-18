@@ -8,10 +8,23 @@ dependencies {
 
 dependency "common" {
   config_path = "../common"
+
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    sns_alert_warning_arn = ""
+  }
 }
 
 dependency "ecr" {
   config_path = "../ecr"
+
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    google_cidr_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/google-cidr"
+    google_cidr_ecr_arn           = "arn:aws:ecr:ca-central-1:123456789012:repository/google-cidr"
+  }
 }
 
 dependency "eks" {
