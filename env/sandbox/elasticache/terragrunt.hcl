@@ -11,7 +11,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs_allowed_terraform_commands = ["validate", "init"]
   mock_outputs = {
     vpc_id = ""
     vpc_private_subnets = [
@@ -27,7 +27,7 @@ dependency "eks" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
+  mock_outputs_allowed_terraform_commands = ["validate", "init"]
   mock_outputs = {
     eks-cluster-securitygroup = "sg-0e2c3ef6c5c75b74c"
   }
