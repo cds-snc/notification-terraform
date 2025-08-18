@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../ecr"]
+  paths = ["../common", "../ecr-us-east"]
 }
 
 dependency "common" {

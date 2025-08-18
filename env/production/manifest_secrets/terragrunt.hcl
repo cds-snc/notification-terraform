@@ -8,7 +8,7 @@ dependencies {
 
 dependency "rds" {
   config_path = "../rds"
-  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
+  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
   mock_outputs = {
     database_read_only_proxy_endpoint = "thisisamockstring_database_read_only_proxy_endpoint"
     database_read_write_proxy_endpoint = "thisisamockstring_database_read_write_proxy_endpoint"
