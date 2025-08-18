@@ -18,3 +18,5 @@ All times are UTC.
 0740 - users
 
 0745 - sms_usage_notifications
+
+0750 - notifications-refreshed
