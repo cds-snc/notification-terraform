@@ -18,7 +18,7 @@ runCommand()
 
 ENVIRONMENT=$1
 
-folders=$(ls -d ../env/$ENVIRONMENT/*/)
+#folders=$(ls -d ../env/$ENVIRONMENT/*/)
 
 
 echo "This script will iterate through all terraform folders and auto upgrade and apply."
@@ -29,15 +29,13 @@ echo -e "${COLOR_OFF}"
 echo "Are you sure you want to proceed? Only "yes" will be accepted"
 read RESPONSE
 
+folders="common,ecr,ses_receiving_emails,dns,ses_validation_dns_entries,cloudfront,eks,elasticache,rds,lambda-api,lambda-admin-pr,performance-test,heartbeat,database-tools,lambda-google-cidr,ses_to_sqs_email_callbacks,sns_to_sqs_sms_callbacks"
+IFS=', ' read -r -a folders <<< "$folders"
+
 if [ "$RESPONSE" == "yes" ]; then
-   for folder in $folders
+   for folder in "${folders[@]}"
    do
-      pushd $folder
-      if [ "$folder" == "../env/$ENVIRONMENT/performance-test/" ]; then
-         echo "Skipping common folder"
-         popd
-         continue
-      fi
+      pushd ../env/$ENVIRONMENT/$folder
       echo "Running terragrunt init --upgrade --reconfigure in $folder"
       runCommand "terragrunt init --upgrade --reconfigure"
       popd
