@@ -3,6 +3,7 @@
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
 resource "aws_quicksight_data_set" "notifications_refreshed" {
+  count       = 0
   data_set_id = "notifications-refreshed"
   name        = "Notifications Refreshing"
   import_mode = "SPICE"
@@ -220,6 +221,7 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
 }
 
 resource "aws_quicksight_refresh_schedule" "notifications-refreshed" {
+  count       = 0
   data_set_id = "notifications-refreshed"
   schedule_id = "schedule-notifications"
   depends_on  = [aws_quicksight_data_set.notifications]
