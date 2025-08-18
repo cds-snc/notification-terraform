@@ -29,7 +29,7 @@ echo -e "${COLOR_OFF}"
 echo "Are you sure you want to proceed? Only "yes" will be accepted"
 read RESPONSE
 
-folders="common,ecr,ecr-us-east,pinpoint_to_sqs_sms_callbacks,ses_receiving_emails,dns,ses_validation_dns_entries,cloudfront,eks,aws-auth,elasticache,rds,lambda-api,lambda-admin-pr,heartbeat,database-tools,lambda-google-cidr,ses_to_sqs_email_callbacks,sns_to_sqs_sms_callbacks,system_status,system_status_static_site,github,manifest_secrets,newrelic,quicksight,"
+folders="common,ecr,ecr-us-east,pinpoint_to_sqs_sms_callbacks,ses_receiving_emails,dns,ses_validation_dns_entries,cloudfront,eks,aws-auth,elasticache,rds,lambda-api,lambda-admin-pr,heartbeat,database-tools,lambda-google-cidr,ses_to_sqs_email_callbacks,sns_to_sqs_sms_callbacks,system_status,system_status_static_site,github,manifest_secrets,newrelic,quicksight"
 
 IFS=', ' read -r -a folders <<< "$folders"
 
