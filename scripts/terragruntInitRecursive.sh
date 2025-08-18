@@ -29,7 +29,7 @@ echo -e "${COLOR_OFF}"
 echo "Are you sure you want to proceed? Only "yes" will be accepted"
 read RESPONSE
 
-folders="common,ecr,ses_receiving_emails,dns,ses_validation_dns_entries,cloudfront,eks,elasticache,rds,lambda-api,lambda-admin-pr,heartbeat,database-tools,lambda-google-cidr,ses_to_sqs_email_callbacks,sns_to_sqs_sms_callbacks"
+folders="common,ecr,ecr-us-east,ses_receiving_emails,dns,ses_validation_dns_entries,cloudfront,eks,elasticache,rds,lambda-api,lambda-admin-pr,heartbeat,database-tools,lambda-google-cidr,ses_to_sqs_email_callbacks,sns_to_sqs_sms_callbacks"
 IFS=', ' read -r -a folders <<< "$folders"
 
 if [ "$RESPONSE" == "yes" ]; then
