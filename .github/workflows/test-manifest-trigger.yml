@@ -1,0 +1,35 @@
+name: "Test Manifest Pond Trigger"
+
+on:
+  push:
+    branches:
+      - pond-test-workflow
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  trigger-manifests-helmfile-staging-apply:
+    if: |
+        always() &&
+        !contains(needs.*.result, 'failure') &&
+        !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger manifests helmfile staging apply
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.MANIFESTS_WORKFLOW_TOKEN }}
+          script: |
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: 'cds-snc',
+              repo: 'notification-manifests',
+              workflow_id: 'helmfile_staging_apply.yaml',
+              ref: 'main'
+            });
+            console.log('Triggered helmfile staging apply workflow:', result.status);
