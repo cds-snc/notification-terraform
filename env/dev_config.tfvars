@@ -39,7 +39,7 @@ new_relic_distribution_tracing_enabled = "true"
 notification_queue_prefix              = "eks-notification-canada-ca"
 
 # ENVIRONMENT
-enable_new_relic           = true
+enable_new_relic           = false
 create_cbs_bucket          = true
 force_destroy_s3           = true
 force_delete_ecr           = true
