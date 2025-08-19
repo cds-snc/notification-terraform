@@ -961,4 +961,4 @@ jobs:
               workflow_id: 'helmfile_staging_apply.yaml',
               ref: 'main'
             });
-            console.log('Triggered helmfile staging apply workflow:', result.status);          
+            console.log('Triggered helmfile staging apply workflow:', result.status);
