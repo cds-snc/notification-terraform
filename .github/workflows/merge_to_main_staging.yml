@@ -953,7 +953,7 @@ jobs:
       - name: Trigger manifests helmfile staging apply
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.MANIFESTS_WORKFLOW_TOKEN }}
           script: |
             const result = await github.rest.actions.createWorkflowDispatch({
               owner: 'cds-snc',
