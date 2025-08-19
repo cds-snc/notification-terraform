@@ -51,3 +51,10 @@ resource "github_actions_secret" "rds_snapshot_identifier" {
   secret_name     = "${upper(var.env)}_SHARED_RDS_SNAPSHOT_IDENTIFIER"
   plaintext_value = var.rds_snapshot_identifier
 }
+
+resource "github_actions_secret" "terraform_github_manifests_workflow_token" {
+  count           = var.env == "staging" ? 1 : 0
+  repository      = data.github_repository.notification_terraform.name
+  secret_name     = "MANIFESTS_WORKFLOW_TOKEN"
+  plaintext_value = var.github_manifests_workflow_token
+}
