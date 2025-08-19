@@ -948,7 +948,7 @@ jobs:
         !contains(needs.*.result, 'failure') &&
         !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
-    needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-dns,terragrunt-apply-ses_validation_dns_entries,terragrunt-apply-cloudfront,terragrunt-apply-eks,terragrunt-apply-elasticache,terragrunt-apply-rds,terragrunt-apply-lambda-api,terragrunt-apply-heartbeat,terragrunt-apply-database-tools,terragrunt-apply-quicksight,terragrunt-apply-lambda-google-cidr,terragrunt-apply-ses_to_sqs_email_callbacks,terragrunt-apply-sns_to_sqs_sms_callbacks,terragrunt-apply-pinpoint_to_sqs_sms_callbacks,terragrunt-apply-system_status,terragrunt-apply-ses_receiving_emails,terragrunt-apply-system_status_static_site,terragrunt-apply-newrelic,terragrunt-apply-manifest_secrets,terragrunt-apply-github]
+    needs: [terragrunt-apply-manifest_secrets]
     steps:
       - name: Trigger manifests helmfile staging apply
         uses: actions/github-script@v7
