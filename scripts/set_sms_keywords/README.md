@@ -15,29 +15,42 @@ This script manages SMS keywords for AWS Pinpoint phone numbers and pools, speci
 - AWS credentials configured (via environment variables, AWS CLI, or `.env` file)
 - Required Python packages: `boto3`, `python-dotenv`
 
-Install dependencies:
-
-```bash
-pip install boto3 python-dotenv
-```
-
 ## Virtual Environment Setup
 
-A virtual environment is included in this directory. To activate it:
+It's recommended to use a virtual environment to isolate the project dependencies. Follow these steps to create and use a virtual environment:
 
-**On macOS/Linux:**
+### Create the virtual environment
+
+Navigate to the script directory and create a virtual environment:
+
+```bash
+cd scripts/set_sms_keywords
+python3 -m venv venv
+```
+
+### Activate the virtual environment
 
 ```bash
 source venv/bin/activate
 ```
 
-To deactivate the virtual environment when you're done:
+### Install dependencies
+
+With the virtual environment activated, install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Deactivate the virtual environment
+
+When you're done working with the script, deactivate the virtual environment:
 
 ```bash
 deactivate
 ```
 
-**Note:** Make sure to activate the virtual environment before running the script to ensure you're using the correct Python packages.
+**Note:** Always activate the virtual environment before running the script to ensure you're using the correct Python packages.
 
 ## Usage
 
