@@ -1,5 +1,3 @@
-#PRODUCTION EKS VERSIONS: K8s Node Upgrade 1.30.4-20240917
-
 terraform {
   source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/eks?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//eks"}"
 }

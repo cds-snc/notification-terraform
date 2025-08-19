@@ -19,9 +19,14 @@ dependency "common" {
 
 dependency "ecr" {
   config_path = "../ecr"
+  
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    heartbeat_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/heartbeat"
+    heartbeat_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/heartbeat"
+  }
 }
-
-
 
 include {
   path = find_in_parent_folders()
