@@ -21,6 +21,24 @@ Install dependencies:
 pip install boto3 python-dotenv
 ```
 
+## Virtual Environment Setup
+
+A virtual environment is included in this directory. To activate it:
+
+**On macOS/Linux:**
+
+```bash
+source venv/bin/activate
+```
+
+To deactivate the virtual environment when you're done:
+
+```bash
+deactivate
+```
+
+**Note:** Make sure to activate the virtual environment before running the script to ensure you're using the correct Python packages.
+
 ## Usage
 
 Navigate to the script directory:

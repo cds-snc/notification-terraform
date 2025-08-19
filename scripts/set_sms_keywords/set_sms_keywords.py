@@ -107,22 +107,22 @@ keywords_to_set = [
     },
     {
         "Keyword": "ABONNER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez FIN (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRET (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "ABONER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez FIN (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRET (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "ABONNNER",
-        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez FIN (frais standards de messages/données).",
+        "KeywordMessage": "Inscription réussie aux messages texte de Notification GC. Pour vous désabonner, textez ARRET (frais standards de messages/données).",
         "KeywordAction": "OPT_IN",
     },
     {
         "Keyword": "AIDE",
-        "KeywordMessage": "Notification GC https://www.canada.ca/en/contact.html Frais de msg/données std applicables. La fréquence des messages peut varier. Textez FIN pour annuler.",
+        "KeywordMessage": "Notification GC https://www.canada.ca/en/contact.html Frais de msg/données std applicables. La fréquence des messages peut varier. Textez ARRET pour annuler.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
     },
     {
