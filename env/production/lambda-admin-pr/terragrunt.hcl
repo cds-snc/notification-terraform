@@ -30,6 +30,12 @@ dependency "elasticache" {
 
 dependency "ecr" {
   config_path = "../ecr"
+
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    notify_admin_ecr_arn = "arn:aws:ecr:ca-central-1:123456789012:repository/notify-admin"
+  }
 }
 
 include {

@@ -33,7 +33,7 @@ dependency "rds" {
     kms_arn                          = ""
     s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
     vpc_id                           = ""
-    rds_reader_instance_ids          = ["notification-canada-ca-staging-instance-1", "notification-canada-ca-staging-instance-2"]
+    rds_reader_instance_ids          = ["notification-canada-ca-production-instance-0", "notification-canada-ca-production-instance-1", "notification-canada-ca-production-instance-2"]
   }
 }
 
