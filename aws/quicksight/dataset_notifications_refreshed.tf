@@ -3,7 +3,7 @@
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
 resource "aws_quicksight_data_set" "notifications_refreshed" {
-  count       = 0
+  count       = 1
   data_set_id = "notifications-refreshed"
   name        = "Notifications Refreshing"
   import_mode = "SPICE"
@@ -15,7 +15,7 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
   }
 
   physical_table_map {
-    physical_table_map_id = "notifications"
+    physical_table_map_id = "physical-notifications-table"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "notifications"
@@ -104,7 +104,7 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
   }
 
   physical_table_map {
-    physical_table_map_id = "services"
+    physical_table_map_id = "physical-services-table"
     relational_table {
       data_source_arn = aws_quicksight_data_source.rds.arn
       name            = "services"
@@ -153,11 +153,11 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
   }
 
   logical_table_map {
-    logical_table_map_id = "logical-notifications"
-    alias                = "notifications"
+    logical_table_map_id = "logical-table-notifications"
+    alias                = "notifications-table-alias"
 
     source {
-      physical_table_id = "notifications"
+      physical_table_id = "physical-notifications-table"
     }
     data_transforms {
       rename_column_operation {
@@ -174,11 +174,11 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
   }
 
   logical_table_map {
-    logical_table_map_id = "logical-services"
-    alias                = "services"
+    logical_table_map_id = "logical-table-services"
+    alias                = "services-table-alias"
 
     source {
-      physical_table_id = "services"
+      physical_table_id = "physical-services-table"
     }
     data_transforms {
       rename_column_operation {
@@ -196,16 +196,28 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
 
   logical_table_map {
     logical_table_map_id = "notifications-with-services"
-    alias                = "Notifications with Services"
+    alias                = "notifications-services"
 
     source {
       join_instruction {
-        left_operand  = "logical-notifications"
-        right_operand = "logical-services"
+        left_operand  = "logical-table-notifications"
+        right_operand = "logical-table-services"
 
         type = "INNER" # can also be LEFT, RIGHT, OUTER, etc.
 
-        on_clause = "notifications.service_id_fk = services.service_id"
+        on_clause = "service_id_fk = service_id"
+      }
+    }
+  }
+
+  refresh_properties {
+    refresh_configuration {
+      incremental_refresh {
+        lookback_window {
+          column_name = "created_at"
+          size        = "1"
+          size_unit   = "DAY"
+        }
       }
     }
   }
@@ -221,10 +233,10 @@ resource "aws_quicksight_data_set" "notifications_refreshed" {
 }
 
 resource "aws_quicksight_refresh_schedule" "notifications-refreshed" {
-  count       = 0
+  count       = 1
   data_set_id = "notifications-refreshed"
   schedule_id = "schedule-notifications"
-  depends_on  = [aws_quicksight_data_set.notifications]
+  depends_on  = [aws_quicksight_data_set.notifications_refreshed]
 
   schedule {
     refresh_type = "INCREMENTAL_REFRESH"
