@@ -301,7 +301,8 @@ resource "aws_iam_role_policy_attachment" "newrelic_configuration_recorder" {
 
 
 resource "aws_config_configuration_recorder_status" "newrelic_recorder_status" {
-  count      = var.enable_new_relic && var.env != "production" ? 1 : 0
+  # We have an explicit deny on deleting this, so keeping it set to true
+  count      = var.env != "production" ? 1 : 0
   name       = var.aws_config_recorder_name
   is_enabled = true
 }
