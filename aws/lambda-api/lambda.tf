@@ -11,7 +11,7 @@ resource "aws_lambda_function" "api" {
   image_uri    = "${var.api_lambda_ecr_repository_url}:${local.image_tag}"
 
   timeout                        = 60
-  reserved_concurrent_executions = 850
+  reserved_concurrent_executions = 1250
   memory_size                    = 1024
 
   tracing_config {
