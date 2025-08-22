@@ -55,6 +55,27 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-salesforce
   insufficient_data_actions = [var.sns_alert_warning_arn]
 }
 
+resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "lambda-api-throttle-warning"
+  alarm_description         = "API Lambda function is being throttled"
+  comparison_operator       = "GreaterThanThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Throttles"
+  namespace                 = "AWS/Lambda"
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 1
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+
+  dimensions = {
+    FunctionName = aws_lambda_function.api.function_name
+  }
+}
+
 module "lambda_no_log_detection" {
   count                 = var.cloudwatch_enabled ? 1 : 0
   source                = "github.com/cds-snc/terraform-modules/empty_log_group_alarm"
