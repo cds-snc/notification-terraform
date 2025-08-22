@@ -65,7 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-warning" {
   namespace                 = "AWS/Lambda"
   period                    = "60"
   statistic                 = "Sum"
-  threshold                 = 1
+  threshold                 = 0
   treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
@@ -130,4 +130,26 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-critical" {
   threshold           = 5
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-warning" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "api-gateway-5xx-error-warning"
+  alarm_description         = "API Gateway is returning 5XX errors"
+  comparison_operator       = "GreaterThanThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "5XXError"
+  namespace                 = "AWS/ApiGateway"
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 0
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_warning_arn]
+  ok_actions                = [var.sns_alert_warning_arn]
+  insufficient_data_actions = [var.sns_alert_warning_arn]
+
+  dimensions = {
+    ApiName = aws_api_gateway_rest_api.api.name
+    Stage   = aws_api_gateway_stage.api.stage_name
+  }
 }
