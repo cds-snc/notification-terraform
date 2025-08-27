@@ -34,12 +34,15 @@ low_demand_min_concurrency             = 1
 low_demand_max_concurrency             = 5
 high_demand_min_concurrency            = 1
 high_demand_max_concurrency            = 10
-new_relic_app_name                     = "notification-lambda-api-staging"
-new_relic_distribution_tracing_enabled = "true"
 notification_queue_prefix              = "eks-notification-canada-ca"
 
-# ENVIRONMENT
+# NEW RELIC
 enable_new_relic           = false
+api_enable_new_relic       = false
+new_relic_app_name                     = "notification-lambda-api-staging"
+new_relic_distribution_tracing_enabled = "true"
+
+# ENVIRONMENT
 create_cbs_bucket          = false
 force_destroy_s3           = false
 force_delete_ecr           = false
@@ -47,7 +50,6 @@ force_destroy_athena       = false
 bootstrap                  = false
 enable_sentinel_forwarding = true
 enable_delete_protection   = true
-api_enable_new_relic       = false
 cloudwatch_enabled         = true
 recovery                   = false
 aws_xray_sdk_enabled       = true
