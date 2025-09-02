@@ -144,7 +144,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api_gateway_errors_by_ip_address" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API Gateway error by IP address"
+  name  = "API Gateway / API Gateway error by IP address"
 
   log_group_names = [
     local.api_gateway_log_group
@@ -161,7 +161,7 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api_gateway_average_latency" {
   count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Average Latency from API Gateway"
+  name  = "API Gateway / Average Latency from API Gateway"
 
   log_group_names = [
     local.api_gateway_log_group
