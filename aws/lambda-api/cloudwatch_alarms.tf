@@ -76,6 +76,27 @@ resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-warning" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "lambda-api-throttle-critical"
+  alarm_description         = "API Lambda function is being throttled"
+  comparison_operator       = "GreaterThanThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Throttles"
+  namespace                 = "AWS/Lambda"
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 10
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_critical_arn]
+  ok_actions                = [var.sns_alert_critical_arn]
+  insufficient_data_actions = [var.sns_alert_critical_arn]
+
+  dimensions = {
+    FunctionName = aws_lambda_function.api.function_name
+  }
+}
+
 module "lambda_no_log_detection" {
   count                 = var.cloudwatch_enabled ? 1 : 0
   source                = "github.com/cds-snc/terraform-modules/empty_log_group_alarm"
@@ -147,6 +168,28 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-warning" {
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
+
+  dimensions = {
+    ApiName = aws_api_gateway_rest_api.api.name
+    Stage   = aws_api_gateway_stage.api.stage_name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-critical" {
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "api-gateway-5xx-error-critical"
+  alarm_description         = "API Gateway is returning 5XX errors"
+  comparison_operator       = "GreaterThanThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "5XXError"
+  namespace                 = "AWS/ApiGateway"
+  period                    = "60"
+  statistic                 = "Sum"
+  threshold                 = 10
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [var.sns_alert_critical_arn]
+  ok_actions                = [var.sns_alert_critical_arn]
+  insufficient_data_actions = [var.sns_alert_critical_arn]
 
   dimensions = {
     ApiName = aws_api_gateway_rest_api.api.name

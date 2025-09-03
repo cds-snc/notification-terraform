@@ -1904,6 +1904,30 @@ resource "aws_cloudwatch_dashboard" "slos" {
                 "end": "P0D",
                 "title": "Time to process email delivery receipts, per 15 minutes"
             }
+        },
+        {
+            "height": 6,
+            "width": 12,
+            "y": 0,
+            "x": 0,
+            "type": "metric",
+            "properties": {
+                "metrics": [
+                    [ "AWS/Lambda", "ConcurrentExecutions", "FunctionName", "${var.region}-api-lambda", { "stat": "Maximum", "yAxis": "left" } ],
+                    [ ".", "Duration", ".", ".", { "stat": "Average", "yAxis": "right" } ],
+                    [ ".", "Throttles", ".", ".", { "stat": "Sum", "yAxis": "left" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "title": "API-Lambda concurrent executions, duration and throttles",
+                "period": 300,
+                "legend": { "position": "bottom" },
+                "yAxis": {
+                    "left": { "label": "Count", "min": 0 },
+                    "right": { "label": "Duration (ms)", "min": 0 }
+                }
+            }
         }
     ]
 }

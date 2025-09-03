@@ -141,3 +141,77 @@ fields @timestamp, @message, @logStream
 | limit 20
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "api_gateway_errors_by_ip_address" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API Gateway / API Gateway error by IP address"
+
+  log_group_names = [
+    local.api_gateway_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message, @logStream, status
+| filter status = "500"
+| stats count() as total by ip
+| order by total desc
+| limit 1000
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_gateway_average_latency" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API Gateway / Average Latency from API Gateway"
+
+  log_group_names = [
+    local.api_gateway_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message
+| parse @message '"resourcePath":"*"' as resourcePath
+| parse @message '"responseLatency":"*"' as responseLatency
+| stats 
+    count() as requests,
+    avg(responseLatency) as avgLatency,
+    pct(responseLatency, 95) as p95Latency,
+    max(responseLatency) as maxLatency
+    by resourcePath,
+       if(responseLatency < 400, "under 400ms",
+          if(responseLatency < 1000, "400ms - 1s", "over 1s")
+       ) as latencyBucket
+| sort avgLatency desc
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_lambda_concurrent_running_per_min" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API / Concurrent API-Lambdas running per min"
+
+  log_group_names = [
+    local.api_lambda_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, @message
+| parse @message /START RequestId: (?<requestId>[\w-]+)/
+| stats count() as concurrent by bin(1m)
+| sort concurrent desc
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_lambda_gunicorn_total_running_time" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "API / Gunicorn total running time"
+
+  log_group_names = [
+    local.api_lambda_log_group
+  ]
+
+  query_string = <<QUERY
+filter @message like /Total gunicorn running time/
+| parse @message /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
+| order by @timestamp asc
+| display @timestamp, @gunicorn_time
+QUERY
+}
