@@ -6,7 +6,7 @@ provider "kubernetes" {
 data "aws_caller_identity" "current" {}
 
 data "external" "aws_role_name" {
-  # Get the role name from aws
+  # Get the role name from AWS using a script
   program = ["./getRoleName.sh"]
 }
 
