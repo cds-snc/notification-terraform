@@ -332,11 +332,8 @@ jobs:
           </key>" >> /var/tmp/${{env.ENVIRONMENT}}.ovpn
 
       - name: Setup helmfile
-        uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
-        with:
-          install-kubectl: yes
-          install-helm: yes       
-          helmfile-version: "v0.151.0"
+        uses: ./.github/actions/setup-helmfile-wrapper
+
           
       - name: Connect to VPN
         uses: "kota65535/github-openvpn-connect-action@cd2ed8a90cc7b060dc4e001143e811b5f7ea0af5" # v3.1.0
