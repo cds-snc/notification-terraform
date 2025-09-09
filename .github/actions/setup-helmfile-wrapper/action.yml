@@ -1,0 +1,46 @@
+name: Setup Helm/Helmfile (Pinned)
+description: Centralized Helmfile + Helm + helm-diff plugin setup with pinned, overrideable versions.
+
+inputs:
+  install-kubectl:
+    description: Install kubectl (yes/no)
+    required: false
+    default: "yes"
+  install-helm:
+    description: Install helm (yes/no)
+    required: false
+    default: "yes"
+  helmfile-version:
+    description: Helmfile version to install
+    required: false
+    default: "v0.161.0"
+  helm-version:
+    description: Helm version to install
+    required: false
+    default: "v3.15.2"
+  helm-diff-plugin-version:
+    description: helm-diff plugin version
+    required: false
+    default: "v3.9.8"
+  kubectl-version:
+    description: AWS EKS kubectl version (must align with cluster minor)
+    required: false
+    default: "1.29.0"
+  kubectl-release-date:
+    description: AWS EKS kubectl release date matching version
+    required: false
+    default: "2024-01-04"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup helmfile toolchain
+      uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
+      with:
+        install-kubectl: ${{ inputs.install-kubectl }}
+        install-helm: ${{ inputs.install-helm }}
+        helmfile-version: ${{ inputs.helmfile-version }}
+        helm-version: ${{ inputs.helm-version }}
+        helm-diff-plugin-version: ${{ inputs.helm-diff-plugin-version }}
+        kubectl-version: ${{ inputs.kubectl-version }}
+        kubectl-release-date: ${{ inputs.kubectl-release-date }}
