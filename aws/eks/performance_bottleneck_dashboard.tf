@@ -1091,7 +1091,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 6,
-            "y": 114,
+            "y": 121,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1109,7 +1109,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 12,
-            "y": 114,
+            "y": 121,
             "width": 6,
             "height": 6,
             "properties": {
