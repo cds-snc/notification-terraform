@@ -203,6 +203,8 @@ resource "aws_wafv2_web_acl" "api_lambda" {
             }
           }
         }
+        # Make an exception for IPs that might come from different countries but used by Github action runners
+        # For more info see docs/githubActionsWafException.md
         statement {
           not_statement {
             statement {
