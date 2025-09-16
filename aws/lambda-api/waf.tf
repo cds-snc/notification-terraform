@@ -193,10 +193,25 @@ resource "aws_wafv2_web_acl" "api_lambda" {
       block {}
     }
     statement {
-      not_statement {
+      and_statement {
         statement {
-          geo_match_statement {
-            country_codes = ["CA", "US"]
+          not_statement {
+            statement {
+              geo_match_statement {
+                country_codes = ["CA", "US"]
+              }
+            }
+          }
+        }
+        # Make an exception for IPs that might come from different countries but used by Github action runners
+        # For more info see docs/githubActionsWafException.md
+        statement {
+          not_statement {
+            statement {
+              ip_set_reference_statement {
+                arn = aws_wafv2_ip_set.github_actions.arn
+              }
+            }
           }
         }
       }
