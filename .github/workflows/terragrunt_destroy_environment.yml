@@ -2,9 +2,8 @@ name: "Delete Dev Environment"
 
 on:
   workflow_dispatch:
-  #schedule:
-    # 17:00 UTC = 22:00 EST
-    #- cron: "0 22 * * 5,6"
+  schedule:
+    - cron: "0 22 * * 5,6"
 
 defaults:
   run:
