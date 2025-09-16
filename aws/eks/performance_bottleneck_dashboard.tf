@@ -511,7 +511,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "legend": {
                     "position": "bottom"
                 },
-                "title": "EKS Cluser Node Count",
+                "title": "EKS Cluster Node Count",
                 "yAxis": {
                     "left": {
                         "showUnits": false,
