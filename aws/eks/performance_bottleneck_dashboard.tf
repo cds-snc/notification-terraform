@@ -1,3 +1,8 @@
+locals {
+  api_target_group   = join("/", slice(split("/", aws_alb_target_group.notification-canada-ca-api.arn), 1, 3))
+  admin_target_group = join("/", slice(split("/", aws_alb_target_group.notification-canada-ca-admin.arn), 1, 3))
+}
+
 resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Performance-Bottlenecks"
@@ -506,7 +511,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "legend": {
                     "position": "bottom"
                 },
-                "title": "EKS Cluster Node Count",
+                "title": "EKS Cluser Node Count",
                 "yAxis": {
                     "left": {
                         "showUnits": false,
@@ -1262,7 +1267,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
             "properties": {
                 "metrics": [
                     [ { "expression": "AVG(METRICS())", "label": "Average Response Time", "id": "e1" } ],
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "AvailabilityZone", "ca-central-1d", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "m1", "visible": false } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/${local.admin_target_group}", "AvailabilityZone", "ca-central-1d", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
                     [ "...", "ca-central-1a", ".", ".", { "id": "m2", "visible": false } ],
                     [ "...", "ca-central-1b", ".", ".", { "id": "m3", "visible": false } ]
                 ],
@@ -1289,7 +1294,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
             "properties": {
                 "metrics": [
                     [ { "expression": "AVG(METRICS())", "label": "Average Response Time", "id": "e1" } ],
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "AvailabilityZone", "ca-central-1d", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "m1", "visible": false } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/${local.api_target_group}", "AvailabilityZone", "ca-central-1d", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
                     [ "...", "ca-central-1b", ".", ".", { "id": "m2", "visible": false } ],
                     [ "...", "ca-central-1a", ".", ".", { "id": "m3", "visible": false } ]
                 ],
