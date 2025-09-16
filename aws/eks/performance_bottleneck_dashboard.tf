@@ -907,8 +907,8 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         },
         {
             "type": "metric",
-            "x": 12,
-            "y": 94,
+            "x": 0,
+            "y": 100,
             "width": 6,
             "height": 6,
             "properties": {
@@ -928,8 +928,8 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         },
         {
             "type": "metric",
-            "x": 18,
-            "y": 94,
+            "x": 6,
+            "y": 100,
             "width": 6,
             "height": 6,
             "properties": {
@@ -950,7 +950,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "text",
             "x": 0,
-            "y": 100,
+            "y": 106,
             "width": 24,
             "height": 1,
             "properties": {
@@ -960,7 +960,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "text",
             "x": 0,
-            "y": 101,
+            "y": 107,
             "width": 24,
             "height": 1,
             "properties": {
@@ -970,7 +970,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 12,
-            "y": 102,
+            "y": 108,
             "width": 6,
             "height": 6,
             "properties": {
@@ -988,7 +988,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 0,
-            "y": 102,
+            "y": 108,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1007,7 +1007,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 6,
-            "y": 102,
+            "y": 108,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1025,7 +1025,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 18,
-            "y": 102,
+            "y": 108,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1045,7 +1045,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 0,
-            "y": 108,
+            "y": 114,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1063,7 +1063,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "text",
             "x": 0,
-            "y": 114,
+            "y": 120,
             "width": 24,
             "height": 1,
             "properties": {
@@ -1073,7 +1073,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 0,
-            "y": 115,
+            "y": 121,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1091,7 +1091,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 6,
-            "y": 115,
+            "y": 114,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1109,7 +1109,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 12,
-            "y": 115,
+            "y": 114,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1127,7 +1127,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 18,
-            "y": 115,
+            "y": 121,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1145,7 +1145,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "metric",
             "x": 0,
-            "y": 121,
+            "y": 127,
             "width": 6,
             "height": 6,
             "properties": {
@@ -1235,6 +1235,76 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
             "height": 1,
             "properties": {
                 "markdown": "# Send Rates"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 81,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "metrics": [
+                    [ "AWS/ApiGateway", "Latency", "ApiName", "api-lambda" ]
+                ],
+                "region": "ca-central-1",
+                "title": "API Gateway Latency"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 18,
+            "y": 68,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "AVG(METRICS())", "label": "Average Response Time", "id": "e1" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "AvailabilityZone", "ca-central-1d", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "m1", "visible": false } ],
+                    [ "...", "ca-central-1a", ".", ".", { "id": "m2", "visible": false } ],
+                    [ "...", "ca-central-1b", ".", ".", { "id": "m3", "visible": false } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ca-central-1",
+                "stat": "Average",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "label": "Seconds",
+                        "showUnits": false
+                    }
+                },
+                "title": "Admin Average Response Time"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 18,
+            "y": 81,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "AVG(METRICS())", "label": "Average Response Time", "id": "e1" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "AvailabilityZone", "ca-central-1d", "LoadBalancer", "app/notification-${var.env}-alb/a88ef289ed9dd41e", { "id": "m1", "visible": false } ],
+                    [ "...", "ca-central-1b", ".", ".", { "id": "m2", "visible": false } ],
+                    [ "...", "ca-central-1a", ".", ".", { "id": "m3", "visible": false } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ca-central-1",
+                "stat": "Average",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "label": "Seconds",
+                        "showUnits": false
+                    }
+                },
+                "title": "Average Response Time"
             }
         }
     ]
