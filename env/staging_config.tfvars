@@ -1,4 +1,4 @@
-## GENERAL
+## GENERAL 
 env                  = "staging"
 account_budget_limit = 5000
 region               = "ca-central-1"
