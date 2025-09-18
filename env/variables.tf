@@ -388,12 +388,6 @@ variable "new_relic_api_key" {
   sensitive = true
 }
 
-variable "new_relic_user_email" {
-  type        = string
-  description = "Email address of the New Relic user whose USER API key Terraform should create (required when staging uses key_type USER)."
-  sensitive   = false
-}
-
 variable "new_relic_slack_webhook_url" {
   type      = string
   sensitive = true
