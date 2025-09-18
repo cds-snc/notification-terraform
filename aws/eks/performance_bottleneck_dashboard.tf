@@ -1169,7 +1169,7 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
             "type": "metric",
             "x": 0,
             "y": 1,
-            "width": 12,
+            "width": 6,
             "height": 6,
             "properties": {
                 "metrics": [
@@ -1310,6 +1310,20 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                     }
                 },
                 "title": "Average Response Time"
+            }
+        },
+        {
+            "type": "log",
+            "x": 6,
+            "y": 1,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "query": "SOURCE '/aws/containerinsights/notification-canada-ca-${var.env}-eks-cluster/application' | fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream\n| filter kubernetes.container_name like /celery-sms-send/\n| fields strcontains(@message, 'sending to INTERNAL_TEST_NUMBER') as is_test\n| stats sum(is_test) as tests by bin(1m)\n",
+                "region": "ca-central-1",
+                "stacked": false,
+                "title": "Internal Test SMS per Minute",
+                "view": "timeSeries"
             }
         }
     ]
