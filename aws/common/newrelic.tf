@@ -92,6 +92,7 @@ resource "newrelic_api_access_key" "newrelic_aws_access_key" {
   account_id  = var.new_relic_account_id
   key_type    = var.env == "staging" ? "USER" : "INGEST"
   ingest_type = var.env == "staging" ? null : "LICENSE"
+  user_id     = var.env == "staging" ? var.new_relic_user_id : null
   name        = var.env == "staging" ? "notify_tf_provider" : "notify_tf_provider_${var.env}"
   notes       = "Used by Notify Terraform Code to create New Relic Resources"
 }
