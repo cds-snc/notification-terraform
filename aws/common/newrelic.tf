@@ -4,6 +4,12 @@ provider "newrelic" {
   region     = "US"
 }
 
+# Lookup the New Relic user for staging environment USER key creation
+data "newrelic_user" "staging_tf_user" {
+  count = var.enable_new_relic && var.env == "staging" ? 1 : 0
+  email = var.new_relic_user_email
+}
+
 data "aws_iam_policy_document" "newrelic_assume_policy" {
   count = var.enable_new_relic ? 1 : 0
 
@@ -93,6 +99,7 @@ resource "newrelic_api_access_key" "newrelic_aws_access_key" {
   key_type    = var.env == "staging" ? "USER" : "INGEST"
   ingest_type = var.env == "staging" ? null : "LICENSE"
   name        = var.env == "staging" ? "notify_tf_provider" : "notify_tf_provider_${var.env}"
+  user_id     = var.env == "staging" ? data.newrelic_user.staging_tf_user[0].id : null
   notes       = "Used by Notify Terraform Code to create New Relic Resources"
 }
 
