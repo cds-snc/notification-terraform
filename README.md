@@ -7,7 +7,7 @@
 
 ### Why are we using Terragrunt?
 
-The promise of Terragrunt is to make it easier to maintain Terraform code by providing a wrapper around modules, adhering to "Don't repeat yourself" (DRY) configuration as well as better remote state management. For a complete explanation of features, take a look at the [excellent documentation](https://terragrunt.gruntwork.io/docs/#features).
+The promise of Terragrunt is to make it easier to  maintain Terraform code by providing a wrapper around modules, adhering to "Don't repeat yourself" (DRY) configuration as well as better remote state management. For a complete explanation of features, take a look at the [excellent documentation](https://terragrunt.gruntwork.io/docs/#features).
 
 ### How is this repository structured?
 
