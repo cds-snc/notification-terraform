@@ -461,3 +461,25 @@ resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat" {
   secret_string = var.manifest_docker_hub_pat
 }
 
+resource "aws_secretsmanager_secret" "manifest_signoz_smtp_username" {
+  name                    = "MANIFEST_SIGNOZ_SMTP_USERNAME"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_username" {
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_username.id
+  secret_string = var.manifest_signoz_smtp_username
+}
+
+resource "aws_secretsmanager_secret" "manifest_signoz_smtp_password" {
+  name                    = "MANIFEST_SIGNOZ_SMTP_PASSWORD"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_password.id
+  secret_string = var.manifest_signoz_smtp_password
+}
+
+
+

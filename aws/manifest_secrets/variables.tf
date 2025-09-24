@@ -18,3 +18,13 @@ variable "elasticache_queue_cache_primary_endpoint_address" {
   default = "changeme"
   type    = string
 }
+
+variable "manifest_signoz_smtp_username" {
+  default   = "changeme"
+  sensitive = true
+}
+
+variable "manifest_signoz_smtp_password" {
+  default   = "changeme"
+  sensitive = true
+}
