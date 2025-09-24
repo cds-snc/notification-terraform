@@ -5,6 +5,31 @@ In a new environment, these images would not exist in the ECR yet and thus the b
 This code pulls the source code of the other repositories, builds the images, and pushes to ECR if the bootstrap variable is set to true.
 */
 
+# Lambda Log Extension Build and Push
+resource "null_resource" "build_lambda_log_extension_docker_image" {
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = "cd extension && docker build -t ${aws_ecr_repository.lambda_log_extension[0].repository_url}:latest ."
+  }
+
+}
+
+resource "null_resource" "push_lambda_log_extension_docker_image" {
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = "docker push ${aws_ecr_repository.lambda_log_extension[0].repository_url}:latest"
+  }
+
+}
+
 #Notify Admin Build and Push
 
 resource "null_resource" "admin_repo_clone" {

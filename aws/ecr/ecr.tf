@@ -1,3 +1,15 @@
+resource "aws_ecr_repository" "lambda_log_extension" {
+  count                = var.env == "production" ? 0 : 1
+  name                 = "log-extension-image"
+  image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+
 resource "aws_ecr_repository" "heartbeat" {
   # The :latest tag is used in Staging
 
