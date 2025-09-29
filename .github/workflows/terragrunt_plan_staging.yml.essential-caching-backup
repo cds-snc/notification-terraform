@@ -180,36 +180,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -237,36 +215,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
@@ -295,36 +251,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
@@ -354,36 +288,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -411,36 +323,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -468,36 +358,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -525,36 +393,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -582,36 +428,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -639,24 +463,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
         
       - uses: ./.github/actions/setup-terraform
         with:
@@ -675,12 +481,8 @@ jobs:
 
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars    
               
@@ -742,36 +544,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -799,36 +579,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -856,36 +614,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -913,36 +649,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -970,36 +684,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1028,36 +720,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1085,36 +755,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1142,36 +790,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1199,36 +825,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1256,36 +860,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1313,36 +895,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1370,36 +930,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1427,36 +965,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1484,36 +1000,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1541,36 +1035,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1598,36 +1070,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1655,36 +1105,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
