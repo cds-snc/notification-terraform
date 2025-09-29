@@ -34,7 +34,7 @@ low_demand_min_concurrency             = 1
 low_demand_max_concurrency             = 5
 high_demand_min_concurrency            = 3
 high_demand_max_concurrency            = 10
-new_relic_app_name                     = "notification-api-production"
+new_relic_app_name                     = "notification-lambda-api-production"
 new_relic_distribution_tracing_enabled = "true"
 notification_queue_prefix              = "eks-notification-canada-ca"
 
