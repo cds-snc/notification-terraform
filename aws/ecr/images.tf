@@ -7,6 +7,7 @@ This code pulls the source code of the other repositories, builds the images, an
 
 # Lambda Log Extension Build and Push
 resource "null_resource" "build_lambda_log_extension_docker_image" {
+  count = var.env == "dev" ? 1 : 0
 
   triggers = {
     always_run = "${timestamp()}"
@@ -19,10 +20,14 @@ resource "null_resource" "build_lambda_log_extension_docker_image" {
 }
 
 resource "null_resource" "push_lambda_log_extension_docker_image" {
-
+  count = var.env == "dev" ? 1 : 0
   triggers = {
     always_run = "${timestamp()}"
   }
+
+  depends_on = [
+    null_resource.build_lambda_log_extension_docker_image
+  ]
 
   provisioner "local-exec" {
     command = "docker push ${aws_ecr_repository.lambda_log_extension[0].repository_url}:latest"

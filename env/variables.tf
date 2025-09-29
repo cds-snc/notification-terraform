@@ -1088,3 +1088,8 @@ variable "sqs_max_message_size" {
   type    = number
   default = 1048576 # 1 MB
 }
+
+variable "new_relic_user_id" {
+  type      = string
+  sensitive = true
+}

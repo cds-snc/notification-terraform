@@ -418,6 +418,7 @@ resource "aws_iam_role_policy_attachment" "database_worker" {
 #
 
 data "aws_iam_policy_document" "assume_role_policy_signoz" {
+  count = var.env == "dev" ? 1 : 0
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -443,24 +444,28 @@ data "aws_iam_policy_document" "assume_role_policy_signoz" {
 
 # Role
 resource "aws_iam_role" "signoz" {
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz.json
+  count              = var.env == "dev" ? 1 : 0
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz[0].json
   name               = "signoz-eks-role"
 }
 
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_signoz" {
+  count      = var.env == "dev" ? 1 : 0
   policy_arn = aws_iam_policy.secrets_csi.arn
-  role       = aws_iam_role.signoz.name
+  role       = aws_iam_role.signoz[0].name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_signoz" {
+  count      = var.env == "dev" ? 1 : 0
   policy_arn = aws_iam_policy.parameters_csi.arn
-  role       = aws_iam_role.signoz.name
+  role       = aws_iam_role.signoz[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "signoz_worker" {
+  count      = var.env == "dev" ? 1 : 0
   policy_arn = aws_iam_policy.notification-worker-policy.arn
-  role       = aws_iam_role.signoz.name
+  role       = aws_iam_role.signoz[0].name
 }

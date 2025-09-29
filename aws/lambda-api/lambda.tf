@@ -8,7 +8,7 @@ resource "aws_lambda_function" "api" {
   publish       = true
 
   package_type = "Image"
-  image_uri    = "${var.api_lambda_ecr_repository_url}:signoz-test-3"
+  image_uri    = "${var.api_lambda_ecr_repository_url}:${local.image_tag}"
 
   timeout                        = 60
   reserved_concurrent_executions = 850
@@ -49,11 +49,8 @@ resource "aws_lambda_function" "api" {
 
     }
   }
-
   lifecycle {
-    ignore_changes = [
-      description, # Will be updated outside TF to force cold start existing lambdas. Primarily when common envs are updated
-    ]
+    ignore_changes = [image_uri, description]
   }
 }
 
