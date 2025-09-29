@@ -147,7 +147,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
-  alarm_description   = "SMS success rate to Canadian numbers is below 25% with at least 100 messages over 2 consecutive periods of 12 hours"
+  alarm_description   = "SMS success rate to Canadian numbers is below 25% with at least 25 messages over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
   datapoints_to_alarm = "2"
@@ -192,7 +192,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
     id          = "alarmCondition"
     label       = "Guarded Alarm Condition"
     return_data = true
-    expression  = "IF(successRate < 0.25 AND messagesPublished > 100, 0, 1)"
+    expression  = "IF(successRate < 0.25 AND messagesPublished > 25, 0, 1)"
   }
 }
 
