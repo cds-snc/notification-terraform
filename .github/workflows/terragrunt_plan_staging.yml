@@ -179,8 +179,6 @@ jobs:
       COMPONENT: "common"
       TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
       TF_IN_AUTOMATION: true
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -255,8 +253,6 @@ jobs:
     runs-on: ubuntu-latest 
     env:
       COMPONENT: "ecr"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
       TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
       TF_IN_AUTOMATION: true
     steps:
@@ -2052,113 +2048,6 @@ jobs:
           terraform-init: |
             -upgrade
 
-  # Matrix job for SES/SNS messaging components (can run in parallel)
-  terragrunt-plan-messaging-matrix:
-    if: |
-      needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
-      needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
-    needs: [terragrunt-filter, terragrunt-plan-common]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        component: 
-          - ses_receiving_emails
-          - ses_to_sqs_email_callbacks  
-          - sns_to_sqs_sms_callbacks
-          - pinpoint_to_sqs_sms_callbacks
-        include:
-          - component: ses_receiving_emails
-            condition: ${{ needs.terragrunt-filter.outputs.ses_receiving_emails }}
-          - component: ses_to_sqs_email_callbacks
-            condition: ${{ needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks }}
-          - component: sns_to_sqs_sms_callbacks
-            condition: ${{ needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks }}
-          - component: pinpoint_to_sqs_sms_callbacks
-            condition: ${{ needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks }}
-    env:
-      COMPONENT: ${{ matrix.component }}
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-    steps:
-      - name: Check if component should run
-        id: should_run
-        run: |
-          if [[ "${{ matrix.condition }}" == "true" || "${{ needs.terragrunt-filter.outputs.config }}" == "true" ]]; then
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          else
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Checkout
-        if: steps.should_run.outputs.should_run == 'true'
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      
-      - name: Cache Terraform tools
-        if: steps.should_run.outputs.should_run == 'true'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        if: steps.should_run.outputs.should_run == 'true'
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      
-      - name: Cache Terragrunt
-        if: steps.should_run.outputs.should_run == 'true'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ matrix.component }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ matrix.component }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ matrix.component }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Setup Terraform
-        if: steps.should_run.outputs.should_run == 'true'
-        uses: ./.github/actions/setup-terraform
-        with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
-          role_session_name: NotifyTerraformPlan
-      
-      - name: Install 1Pass CLI and Download TFVars
-        if: steps.should_run.outputs.should_run == 'true'
-        run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          else
-            echo "✅ 1Password CLI already installed (cached)"
-          fi
-          sudo mkdir -p aws && cd aws
-          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-      
-      - name: Terragrunt plan ${{ matrix.component }}
-        if: steps.should_run.outputs.should_run == 'true'
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"
-          terraform-init: |
-            -upgrade
   # Matrix job for SES/SNS messaging components (can run in parallel)
   terragrunt-plan-messaging-matrix:
     if: |
