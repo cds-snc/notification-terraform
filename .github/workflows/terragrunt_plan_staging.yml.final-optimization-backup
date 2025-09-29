@@ -177,9 +177,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores-4-cores
     env:
       COMPONENT: "common"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -201,26 +198,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
       
       - uses: ./.github/actions/setup-terraform
         with:
@@ -259,9 +236,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores
     env:
       COMPONENT: "ecr" 
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -283,26 +257,6 @@ jobs:
           restore-keys: |
             1password-cli-${{ runner.os }}
             
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
       - name: Cache Terraform tools
         uses: actions/cache@v4
         with:
@@ -320,26 +274,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
       
       - uses: ./.github/actions/setup-terraform
         with:
@@ -379,9 +313,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores
     env:
       COMPONENT: "ecr-us-east" 
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -403,26 +334,6 @@ jobs:
           restore-keys: |
             1password-cli-${{ runner.os }}
             
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
       - name: Cache Terraform tools
         uses: actions/cache@v4
         with:
@@ -440,26 +351,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
       
       - uses: ./.github/actions/setup-terraform
         with:
@@ -499,9 +390,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "ses_receiving_emails"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     needs: [terragrunt-filter, terragrunt-plan-common]
     steps:
       - name: Checkout
@@ -523,26 +411,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -576,9 +444,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "dns"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
     steps:
       - name: Checkout
@@ -600,26 +465,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -653,9 +498,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "ses_validation_dns_entries"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns]
     steps:
       - name: Checkout
@@ -677,26 +519,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -731,9 +553,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common]
     env:
       COMPONENT: "cloudfront"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -754,26 +573,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -808,9 +607,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
     env:
       COMPONENT: "eks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -831,26 +627,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -885,9 +661,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
     env:
       COMPONENT: "aws-auth"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -909,26 +682,6 @@ jobs:
           restore-keys: |
             1password-cli-${{ runner.os }}
               
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1008,9 +761,6 @@ jobs:
     needs: [terragrunt-filter]
     env:
       COMPONENT: "elasticache"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1031,26 +781,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1085,9 +815,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
     env:
       COMPONENT: "rds"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1108,26 +835,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1162,9 +869,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
     env:
       COMPONENT: "lambda-api"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1185,26 +889,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1239,9 +923,6 @@ jobs:
     needs: [terragrunt-filter, terragrunt-plan-common, terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-admin-pr"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1262,26 +943,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1316,9 +977,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr, terragrunt-plan-rds]
     env:
       COMPONENT: "performance-test"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1339,26 +997,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1394,9 +1032,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "heartbeat"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1417,26 +1052,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1471,9 +1086,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "database-tools"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1494,26 +1106,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1548,9 +1140,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "quicksight"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1571,26 +1160,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1625,9 +1194,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-google-cidr"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1648,26 +1214,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1702,9 +1248,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "ses_to_sqs_email_callbacks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1725,26 +1268,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1779,9 +1302,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "sns_to_sqs_sms_callbacks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1802,26 +1322,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1856,9 +1356,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "pinpoint_to_sqs_sms_callbacks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1879,26 +1376,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -1933,9 +1410,6 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
     env:
       COMPONENT: "system_status"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -1956,26 +1430,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -2010,9 +1464,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "system_status_static_site"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -2033,26 +1484,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -2087,9 +1518,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "newrelic"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -2110,26 +1538,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -2164,9 +1572,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "manifest_secrets"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -2187,26 +1592,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -2241,9 +1626,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "github"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -2264,26 +1646,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
             - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan

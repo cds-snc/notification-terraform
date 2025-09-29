@@ -1,0 +1,91 @@
+name: "setup-terraform-cached"
+description: "Setup Terraform tools with comprehensive caching for maximum performance"
+
+inputs:
+  role_to_assume:
+    description: The role to assume when configuring AWS credentials
+    required: true
+    type: string
+  role_session_name:
+    description: The name of the session when configuring AWS credentials
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Terraform tools
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.local/bin
+          ~/.terraform.d
+          ~/terraform-tools
+        key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
+        restore-keys: |
+          terraform-tools-${{ runner.os }}-
+    
+    - name: Cache 1Password CLI
+      uses: actions/cache@v4
+      with:
+        path: /usr/local/bin/op
+        key: 1password-cli-${{ runner.os }}
+        restore-keys: |
+          1password-cli-${{ runner.os }}
+    
+    - name: Cache Terragrunt cache directories
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.terragrunt-cache
+          .terragrunt-cache
+        key: terragrunt-cache-${{ runner.os }}-${{ github.sha }}
+        restore-keys: |
+          terragrunt-cache-${{ runner.os }}-
+    
+    - name: Set environment variables
+      uses: ./.github/actions/setvars
+      with:
+        envVarFile: ./.env
+
+    - name: Setup Terraform tools
+      uses: cds-snc/terraform-tools-setup@v1
+      env:
+        CONFTEST_VERSION: 0.30.0 
+        TERRAFORM_VERSION: 1.11.4
+        TERRAGRUNT_VERSION: 0.77.22
+        TF_SUMMARIZE_VERSION: 0.2.3
+
+    - name: Setup Infrastructure Version
+      run: |
+        INFRASTRUCTURE_VERSION=`cat ./.github/workflows/infrastructure_version.txt`
+        echo "INFRASTRUCTURE_VERSION=$INFRASTRUCTURE_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Configure credentials to Notify account using OIDC
+      uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+      with:
+        role-to-assume: ${{ inputs.role_to_assume }}
+        role-session-name: ${{ inputs.role_session_name }}
+        aws-region: ca-central-1
+
+    - name: Install 1Password CLI (if not cached)
+      run: |
+        if ! command -v op &> /dev/null; then
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+        else
+          echo "✅ 1Password CLI already installed (cached)"
+        fi
+      shell: bash
+
+    - name: Download TFVars with caching
+      run: |
+        sudo mkdir -p aws
+        cd aws
+        if [ ! -f "${{github.workspace}}/aws/staging.tfvars" ]; then
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_staging"/notesPlain > staging.tfvars
+        else
+          echo "✅ TFVars already present"
+        fi
+      shell: bash

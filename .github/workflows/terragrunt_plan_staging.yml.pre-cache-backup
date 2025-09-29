@@ -177,9 +177,6 @@ jobs:
     runs-on: ubuntu-latest-4-cores-4-cores
     env:
       COMPONENT: "common"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
@@ -202,26 +199,6 @@ jobs:
           restore-keys: |
             1password-cli-${{ runner.os }}
       
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -230,10 +207,8 @@ jobs:
       - name: Install 1Pass CLI and Download TFVars
         run: |
           if ! command -v op &> /dev/null; then
-            if ! command -v op &> /dev/null; then
             curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
             sudo dpkg -i 1pass.deb
-          fi
           fi
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
@@ -259,49 +234,9 @@ jobs:
     runs-on: ubuntu-latest-4-cores
     env:
       COMPONENT: "ecr" 
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-            
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
       
       - name: Cache Terraform tools
         uses: actions/cache@v4
@@ -320,26 +255,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
       
       - uses: ./.github/actions/setup-terraform
         with:
@@ -349,10 +264,8 @@ jobs:
       - name: Install 1Pass CLI and Download TFVars
         run: |
           if ! command -v op &> /dev/null; then
-            if ! command -v op &> /dev/null; then
             curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
             sudo dpkg -i 1pass.deb
-          fi
           fi
           sudo mkdir -p aws
           cd aws
@@ -379,49 +292,9 @@ jobs:
     runs-on: ubuntu-latest-4-cores
     env:
       COMPONENT: "ecr-us-east" 
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-            
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
       
       - name: Cache Terraform tools
         uses: actions/cache@v4
@@ -440,26 +313,6 @@ jobs:
           key: 1password-cli-${{ runner.os }}
           restore-keys: |
             1password-cli-${{ runner.os }}
-      
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
       
       - uses: ./.github/actions/setup-terraform
         with:
@@ -469,10 +322,8 @@ jobs:
       - name: Install 1Pass CLI and Download TFVars
         run: |
           if ! command -v op &> /dev/null; then
-            if ! command -v op &> /dev/null; then
             curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
             sudo dpkg -i 1pass.deb
-          fi
           fi
           sudo mkdir -p aws
           cd aws
@@ -499,60 +350,18 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "ses_receiving_emails"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
-    needs: [terragrunt-filter, terragrunt-plan-common]
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-ecr-us-east]
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -576,60 +385,18 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "dns"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -653,60 +420,18 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "ses_validation_dns_entries"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns]
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -731,59 +456,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common]
     env:
       COMPONENT: "cloudfront"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -808,59 +491,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
     env:
       COMPONENT: "eks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -885,50 +526,10 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
     env:
       COMPONENT: "aws-auth"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-              
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
+        
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -946,10 +547,8 @@ jobs:
 
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars    
               
@@ -1008,59 +607,17 @@ jobs:
     needs: [terragrunt-filter]
     env:
       COMPONENT: "elasticache"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1085,59 +642,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
     env:
       COMPONENT: "rds"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1162,59 +677,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
     env:
       COMPONENT: "lambda-api"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1236,62 +709,20 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest-4-cores  
-    needs: [terragrunt-filter, terragrunt-plan-common, terragrunt-plan-ecr]
+    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-admin-pr"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1316,59 +747,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr, terragrunt-plan-rds]
     env:
       COMPONENT: "performance-test"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1394,59 +783,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "heartbeat"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1471,59 +818,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "database-tools"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1548,59 +853,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "quicksight"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1625,59 +888,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-google-cidr"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1702,59 +923,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "ses_to_sqs_email_callbacks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1779,59 +958,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "sns_to_sqs_sms_callbacks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1856,59 +993,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "pinpoint_to_sqs_sms_callbacks"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -1933,59 +1028,17 @@ jobs:
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
     env:
       COMPONENT: "system_status"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -2010,59 +1063,17 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "system_status_static_site"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -2087,59 +1098,17 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "newrelic"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -2164,59 +1133,17 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "manifest_secrets"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
@@ -2241,59 +1168,17 @@ jobs:
     runs-on: ubuntu-latest-4-cores  
     env:
       COMPONENT: "github"
-      TF_PLUGIN_CACHE_DIR: ~/.terraform.d/plugin-cache
-      TF_IN_AUTOMATION: true
-      TF_INPUT: false
     steps:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-      - name: Cache Terraform tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/bin
-            ~/.terraform.d
-          key: terraform-tools-${{ runner.os }}-${{ hashFiles('.github/actions/setup-terraform/action.yml') }}
-          restore-keys: |
-            terraform-tools-${{ runner.os }}-
-      
-      - name: Cache 1Password CLI
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/op
-          key: 1password-cli-${{ runner.os }}
-          restore-keys: |
-            1password-cli-${{ runner.os }}
-      - name: Cache Terragrunt
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/**') }}
-          restore-keys: |
-            terragrunt-${{ runner.os }}-${{ env.COMPONENT }}-
-            terragrunt-${{ runner.os }}-
-      
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terraform.d/plugin-cache
-          key: terraform-providers-${{ runner.os }}-${{ hashFiles('env/${{ env.ENVIRONMENT }}/${{ env.COMPONENT }}/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ runner.os }}-
-      
-            - uses: ./.github/actions/setup-terraform
+      - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       - name: Install 1Pass CLI and Download TFVars
         run: |
-          if ! command -v op &> /dev/null; then
-            curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-            sudo dpkg -i 1pass.deb
-          fi
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
