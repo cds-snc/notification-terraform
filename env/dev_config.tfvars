@@ -37,8 +37,9 @@ high_demand_max_concurrency            = 10
 notification_queue_prefix              = "eks-notification-canada-ca"
 
 # New Relic Lambda API configuration
-lambda_new_relic_app_name                              = "notification-lambda-api-dev"
-lambda_new_relic_distribution_tracing_enabled          = "true"
+lambda_api_enable_new_relic                     = false
+lambda_new_relic_app_name                       = "notification-lambda-api-dev"
+lambda_new_relic_distribution_tracing_enabled   = "true"
 lambda_new_relic_handler                        = "application.handler"
 lambda_new_relic_extension_enabled              = "true"
 lambda_new_relic_extension_logs_enabled         = "true"
@@ -56,7 +57,6 @@ force_destroy_athena       = true
 bootstrap                  = true
 enable_sentinel_forwarding = true
 enable_delete_protection   = false
-api_enable_new_relic       = false
 cloudwatch_enabled         = true
 recovery                   = true
 aws_xray_sdk_enabled       = true

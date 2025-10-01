@@ -1,7 +1,7 @@
 locals {
   # Conditional New Relic environment variables
   # Only include these if api_enable_new_relic is true
-  newrelic_env_vars = var.enable_new_relic ? {
+  newrelic_env_vars = var.lambda_api_enable_new_relic ? {
     # New Relic account configuration
     NEW_RELIC_ACCOUNT_ID  = var.new_relic_account_id
     NEW_RELIC_APP_NAME    = var.lambda_new_relic_app_name
