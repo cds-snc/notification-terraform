@@ -101,28 +101,9 @@ variable "lambda_new_relic_app_name" {
   type = string
 }
 
-variable "lambda_new_relic_distribution_tracing_enabled" {
-  type = string
-}
-
 variable "lambda_new_relic_handler" {
   type        = string
   description = "The actual Lambda handler function that New Relic wrapper should invoke"
-}
-
-variable "lambda_new_relic_extension_enabled" {
-  type        = string
-  description = "Enable the New Relic Lambda extension for telemetry shipping"
-}
-
-variable "lambda_new_relic_extension_logs_enabled" {
-  type        = string
-  description = "Enable sending Lambda execution logs through the New Relic extension"
-}
-
-variable "lambda_new_relic_extension_send_function_logs" {
-  type        = string
-  description = "Allow the New Relic extension to forward function stdout/stderr logs"
 }
 
 variable "lambda_new_relic_config_file" {
