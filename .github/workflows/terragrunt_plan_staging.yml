@@ -32,6 +32,11 @@ jobs:
       matrix-tier1: ${{ steps.set-matrix.outputs.matrix-tier1 }}
       matrix-tier2: ${{ steps.set-matrix.outputs.matrix-tier2 }}
       matrix-tier3: ${{ steps.set-matrix.outputs.matrix-tier3 }}
+      matrix-tier4: ${{ steps.set-matrix.outputs.matrix-tier4 }}
+      matrix-tier5: ${{ steps.set-matrix.outputs.matrix-tier5 }}
+      matrix-tier6: ${{ steps.set-matrix.outputs.matrix-tier6 }}
+      matrix-tier7: ${{ steps.set-matrix.outputs.matrix-tier7 }}
+      matrix-tier8: ${{ steps.set-matrix.outputs.matrix-tier8 }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,15 +58,25 @@ jobs:
           # Get the list of changed files
           CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
           
-          # Define dependency tiers
-          TIER1_MODULES=("common" "vpc" "dns" "kms" "iam" "s3")
-          TIER2_MODULES=("rds" "elasticache" "ecr" "ses_validation_dns_entries" "newrelic")
-          TIER3_MODULES=("eks" "lambda-api" "lambda-admin-pr" "cloudfront" "quicksight" "github" "heartbeat" "database-tools" "system_status" "performance-test")
+          # Define dependency tiers with more granular control
+          TIER1_MODULES=("common" "ecr" "elasticache" "ecr-us-east")  
+          TIER2_MODULES=("cloudfront" "newrelic" "heartbeat" "ses_receiving_emails" "ses_to_sqs_email_callbacks" "sns_to_sqs_sms_callbacks" "pinpoint_to_sqs_sms_callbacks" "lambda-admin-pr" "ses_receiving_emails") 
+          TIER3_MODULES=("dns") 
+          TIER4_MODULES=("eks" "ses_validation_dns_entries")
+          TIER5_MODULES=("rds" "lambda-google-cidr" "aws-auth")
+          TIER6_MODULES=("system_status" "lambda-api" "performance-test" "database-tools")
+          TIER7_MODULES=("system_status_static_site")
+          TIER8_MODULES=("system_status" "github")
           
           # Initialize arrays for each tier
           STAGING_DIRS_T1=()
           STAGING_DIRS_T2=()
           STAGING_DIRS_T3=()
+          STAGING_DIRS_T4=()
+          STAGING_DIRS_T5=()
+          STAGING_DIRS_T6=()
+          STAGING_DIRS_T7=()
+          STAGING_DIRS_T8=()
           
           # If this is a manual trigger (workflow_dispatch), plan all staging modules
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
@@ -80,6 +95,31 @@ jobs:
             for module in "${TIER3_MODULES[@]}"; do
               if [ -d "env/staging/$module" ]; then
                 STAGING_DIRS_T3+=("env/staging/$module")
+              fi
+            done
+            for module in "${TIER4_MODULES[@]}"; do
+              if [ -d "env/staging/$module" ]; then
+                STAGING_DIRS_T4+=("env/staging/$module")
+              fi
+            done
+            for module in "${TIER5_MODULES[@]}"; do
+              if [ -d "env/staging/$module" ]; then
+                STAGING_DIRS_T5+=("env/staging/$module")
+              fi
+            done
+            for module in "${TIER6_MODULES[@]}"; do
+              if [ -d "env/staging/$module" ]; then
+                STAGING_DIRS_T6+=("env/staging/$module")
+              fi
+            done
+            for module in "${TIER7_MODULES[@]}"; do
+              if [ -d "env/staging/$module" ]; then
+                STAGING_DIRS_T7+=("env/staging/$module")
+              fi
+            done
+            for module in "${TIER8_MODULES[@]}"; do
+              if [ -d "env/staging/$module" ]; then
+                STAGING_DIRS_T8+=("env/staging/$module")
               fi
             done
           elif [ "${{ steps.changed-files.outputs.any_changed }}" == "true" ]; then
@@ -103,6 +143,31 @@ jobs:
                   STAGING_DIRS_T3+=("env/staging/$module")
                 fi
               done
+              for module in "${TIER4_MODULES[@]}"; do
+                if [ -d "env/staging/$module" ]; then
+                  STAGING_DIRS_T4+=("env/staging/$module")
+                fi
+              done
+              for module in "${TIER5_MODULES[@]}"; do
+                if [ -d "env/staging/$module" ]; then
+                  STAGING_DIRS_T5+=("env/staging/$module")
+                fi
+              done
+              for module in "${TIER6_MODULES[@]}"; do
+                if [ -d "env/staging/$module" ]; then
+                  STAGING_DIRS_T6+=("env/staging/$module")
+                fi
+              done
+              for module in "${TIER7_MODULES[@]}"; do
+                if [ -d "env/staging/$module" ]; then
+                  STAGING_DIRS_T7+=("env/staging/$module")
+                fi
+              done
+              for module in "${TIER8_MODULES[@]}"; do
+                if [ -d "env/staging/$module" ]; then
+                  STAGING_DIRS_T8+=("env/staging/$module")
+                fi
+              done
             else
               # Extract unique module directories from changed files and categorize by tier
               for file in $CHANGED_FILES; do
@@ -117,6 +182,16 @@ jobs:
                       STAGING_DIRS_T2+=("$staging_dir")
                     elif [[ " ${TIER3_MODULES[@]} " =~ " $module " ]]; then
                       STAGING_DIRS_T3+=("$staging_dir")
+                    elif [[ " ${TIER4_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T4+=("$staging_dir")
+                    elif [[ " ${TIER5_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T5+=("$staging_dir")
+                    elif [[ " ${TIER6_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T6+=("$staging_dir")
+                    elif [[ " ${TIER7_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T7+=("$staging_dir")
+                    elif [[ " ${TIER8_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T8+=("$staging_dir")
                     fi
                   fi
                 elif [[ $file == env/staging/* ]]; then
@@ -130,6 +205,16 @@ jobs:
                       STAGING_DIRS_T2+=("$staging_dir")
                     elif [[ " ${TIER3_MODULES[@]} " =~ " $module " ]]; then
                       STAGING_DIRS_T3+=("$staging_dir")
+                    elif [[ " ${TIER4_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T4+=("$staging_dir")
+                    elif [[ " ${TIER5_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T5+=("$staging_dir")
+                    elif [[ " ${TIER6_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T6+=("$staging_dir")
+                    elif [[ " ${TIER7_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T7+=("$staging_dir")
+                    elif [[ " ${TIER8_MODULES[@]} " =~ " $module " ]]; then
+                      STAGING_DIRS_T8+=("$staging_dir")
                     fi
                   fi
                 fi
@@ -140,6 +225,11 @@ jobs:
             echo "matrix-tier1=[]" >> $GITHUB_OUTPUT
             echo "matrix-tier2=[]" >> $GITHUB_OUTPUT
             echo "matrix-tier3=[]" >> $GITHUB_OUTPUT
+            echo "matrix-tier4=[]" >> $GITHUB_OUTPUT
+            echo "matrix-tier5=[]" >> $GITHUB_OUTPUT
+            echo "matrix-tier6=[]" >> $GITHUB_OUTPUT
+            echo "matrix-tier7=[]" >> $GITHUB_OUTPUT
+            echo "matrix-tier8=[]" >> $GITHUB_OUTPUT
             exit 0
           fi
           
@@ -147,6 +237,11 @@ jobs:
           UNIQUE_DIRS_T1=($(printf "%s\n" "${STAGING_DIRS_T1[@]}" | sort -u))
           UNIQUE_DIRS_T2=($(printf "%s\n" "${STAGING_DIRS_T2[@]}" | sort -u))
           UNIQUE_DIRS_T3=($(printf "%s\n" "${STAGING_DIRS_T3[@]}" | sort -u))
+          UNIQUE_DIRS_T4=($(printf "%s\n" "${STAGING_DIRS_T4[@]}" | sort -u))
+          UNIQUE_DIRS_T5=($(printf "%s\n" "${STAGING_DIRS_T5[@]}" | sort -u))
+          UNIQUE_DIRS_T6=($(printf "%s\n" "${STAGING_DIRS_T6[@]}" | sort -u))
+          UNIQUE_DIRS_T7=($(printf "%s\n" "${STAGING_DIRS_T7[@]}" | sort -u))
+          UNIQUE_DIRS_T8=($(printf "%s\n" "${STAGING_DIRS_T8[@]}" | sort -u))
           
           # Convert to JSON matrices
           if [ ${#UNIQUE_DIRS_T1[@]} -eq 0 ]; then
@@ -163,6 +258,63 @@ jobs:
           else
             printf -v MATRIX_JSON_T2 '"%s",' "${UNIQUE_DIRS_T2[@]}"
             MATRIX_JSON_T2="[${MATRIX_JSON_T2%,}]"
+            echo "matrix-tier2=$MATRIX_JSON_T2" >> $GITHUB_OUTPUT
+            echo "Tier 2 planning: ${UNIQUE_DIRS_T2[@]}"
+          fi
+          
+          if [ ${#UNIQUE_DIRS_T3[@]} -eq 0 ]; then
+            echo "matrix-tier3=[]" >> $GITHUB_OUTPUT
+          else
+            printf -v MATRIX_JSON_T3 '"%s",' "${UNIQUE_DIRS_T3[@]}"
+            MATRIX_JSON_T3="[${MATRIX_JSON_T3%,}]"
+            echo "matrix-tier3=$MATRIX_JSON_T3" >> $GITHUB_OUTPUT
+            echo "Tier 3 planning: ${UNIQUE_DIRS_T3[@]}"
+          fi
+          
+          if [ ${#UNIQUE_DIRS_T4[@]} -eq 0 ]; then
+            echo "matrix-tier4=[]" >> $GITHUB_OUTPUT
+          else
+            printf -v MATRIX_JSON_T4 '"%s",' "${UNIQUE_DIRS_T4[@]}"
+            MATRIX_JSON_T4="[${MATRIX_JSON_T4%,}]"
+            echo "matrix-tier4=$MATRIX_JSON_T4" >> $GITHUB_OUTPUT
+            echo "Tier 4 planning: ${UNIQUE_DIRS_T4[@]}"
+          fi
+          
+          if [ ${#UNIQUE_DIRS_T5[@]} -eq 0 ]; then
+            echo "matrix-tier5=[]" >> $GITHUB_OUTPUT
+          else
+            printf -v MATRIX_JSON_T5 '"%s",' "${UNIQUE_DIRS_T5[@]}"
+            MATRIX_JSON_T5="[${MATRIX_JSON_T5%,}]"
+            echo "matrix-tier5=$MATRIX_JSON_T5" >> $GITHUB_OUTPUT
+            echo "Tier 5 planning: ${UNIQUE_DIRS_T5[@]}"
+          fi
+          
+          if [ ${#UNIQUE_DIRS_T6[@]} -eq 0 ]; then
+            echo "matrix-tier6=[]" >> $GITHUB_OUTPUT
+          else
+            printf -v MATRIX_JSON_T6 '"%s",' "${UNIQUE_DIRS_T6[@]}"
+            MATRIX_JSON_T6="[${MATRIX_JSON_T6%,}]"
+            echo "matrix-tier6=$MATRIX_JSON_T6" >> $GITHUB_OUTPUT
+            echo "Tier 6 planning: ${UNIQUE_DIRS_T6[@]}"
+          fi
+          
+          if [ ${#UNIQUE_DIRS_T7[@]} -eq 0 ]; then
+            echo "matrix-tier7=[]" >> $GITHUB_OUTPUT
+          else
+            printf -v MATRIX_JSON_T7 '"%s",' "${UNIQUE_DIRS_T7[@]}"
+            MATRIX_JSON_T7="[${MATRIX_JSON_T7%,}]"
+            echo "matrix-tier7=$MATRIX_JSON_T7" >> $GITHUB_OUTPUT
+            echo "Tier 7 planning: ${UNIQUE_DIRS_T7[@]}"
+          fi
+          
+          if [ ${#UNIQUE_DIRS_T8[@]} -eq 0 ]; then
+            echo "matrix-tier8=[]" >> $GITHUB_OUTPUT
+          else
+            printf -v MATRIX_JSON_T8 '"%s",' "${UNIQUE_DIRS_T8[@]}"
+            MATRIX_JSON_T8="[${MATRIX_JSON_T8%,}]"
+            echo "matrix-tier8=$MATRIX_JSON_T8" >> $GITHUB_OUTPUT
+            echo "Tier 8 planning: ${UNIQUE_DIRS_T8[@]}"
+          fi
             echo "matrix-tier2=$MATRIX_JSON_T2" >> $GITHUB_OUTPUT
             echo "Tier 2 planning: ${UNIQUE_DIRS_T2[@]}"
           fi
@@ -398,9 +550,379 @@ jobs:
             ${{ env.WORKING_DIR }}/.terragrunt-cache
           retention-days: 7
 
-  plan-summary:
+  # Tier 4: Container registry and databases
+  terragrunt-plan-tier4:
     needs: [detect-changes, terragrunt-plan-tier1, terragrunt-plan-tier2, terragrunt-plan-tier3]
-    if: always() && (needs.detect-changes.outputs.matrix-tier1 != '[]' || needs.detect-changes.outputs.matrix-tier2 != '[]' || needs.detect-changes.outputs.matrix-tier3 != '[]')
+    if: always() && needs.detect-changes.outputs.matrix-tier4 != '[]' && (needs.terragrunt-plan-tier3.result == 'success' || needs.terragrunt-plan-tier3.result == 'skipped')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: ${{ fromJson(needs.detect-changes.outputs.matrix-tier4) }}
+    
+    env:
+      WORKING_DIR: ${{ matrix.directory }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role-session-name: NotifyTerraformPlan
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+          wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${{ env.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Cache Terragrunt modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: ${{ runner.os }}-terragrunt-${{ hashFiles('**/terragrunt.hcl') }}
+          restore-keys: |
+            ${{ runner.os }}-terragrunt-
+
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
+
+      - name: Terragrunt Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt init --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt plan --terragrunt-non-interactive -out=tfplan
+
+      - name: Upload plan artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: terragrunt-plan-tier4-${{ matrix.directory }}-${{ github.run_number }}
+          path: |
+            ${{ env.WORKING_DIR }}/tfplan
+            ${{ env.WORKING_DIR }}/.terragrunt-cache
+          retention-days: 7
+
+  # Tier 5: Messaging and monitoring
+  terragrunt-plan-tier5:
+    needs: [detect-changes, terragrunt-plan-tier1, terragrunt-plan-tier2, terragrunt-plan-tier3, terragrunt-plan-tier4]
+    if: always() && needs.detect-changes.outputs.matrix-tier5 != '[]' && (needs.terragrunt-plan-tier4.result == 'success' || needs.terragrunt-plan-tier4.result == 'skipped')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: ${{ fromJson(needs.detect-changes.outputs.matrix-tier5) }}
+    
+    env:
+      WORKING_DIR: ${{ matrix.directory }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role-session-name: NotifyTerraformPlan
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+          wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${{ env.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Cache Terragrunt modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: ${{ runner.os }}-terragrunt-${{ hashFiles('**/terragrunt.hcl') }}
+          restore-keys: |
+            ${{ runner.os }}-terragrunt-
+
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
+
+      - name: Terragrunt Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt init --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt plan --terragrunt-non-interactive -out=tfplan
+
+      - name: Upload plan artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: terragrunt-plan-tier5-${{ matrix.directory }}-${{ github.run_number }}
+          path: |
+            ${{ env.WORKING_DIR }}/tfplan
+            ${{ env.WORKING_DIR }}/.terragrunt-cache
+          retention-days: 7
+
+  # Tier 6: Container orchestration and analytics
+  terragrunt-plan-tier6:
+    needs: [detect-changes, terragrunt-plan-tier1, terragrunt-plan-tier2, terragrunt-plan-tier3, terragrunt-plan-tier4, terragrunt-plan-tier5]
+    if: always() && needs.detect-changes.outputs.matrix-tier6 != '[]' && (needs.terragrunt-plan-tier5.result == 'success' || needs.terragrunt-plan-tier5.result == 'skipped')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: ${{ fromJson(needs.detect-changes.outputs.matrix-tier6) }}
+    
+    env:
+      WORKING_DIR: ${{ matrix.directory }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role-session-name: NotifyTerraformPlan
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+          wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${{ env.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Cache Terragrunt modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: ${{ runner.os }}-terragrunt-${{ hashFiles('**/terragrunt.hcl') }}
+          restore-keys: |
+            ${{ runner.os }}-terragrunt-
+
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
+
+      - name: Terragrunt Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt init --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt plan --terragrunt-non-interactive -out=tfplan
+
+      - name: Upload plan artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: terragrunt-plan-tier6-${{ matrix.directory }}-${{ github.run_number }}
+          path: |
+            ${{ env.WORKING_DIR }}/tfplan
+            ${{ env.WORKING_DIR }}/.terragrunt-cache
+          retention-days: 7
+
+  # Tier 7: Application services
+  terragrunt-plan-tier7:
+    needs: [detect-changes, terragrunt-plan-tier1, terragrunt-plan-tier2, terragrunt-plan-tier3, terragrunt-plan-tier4, terragrunt-plan-tier5, terragrunt-plan-tier6]
+    if: always() && needs.detect-changes.outputs.matrix-tier7 != '[]' && (needs.terragrunt-plan-tier6.result == 'success' || needs.terragrunt-plan-tier6.result == 'skipped')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: ${{ fromJson(needs.detect-changes.outputs.matrix-tier7) }}
+    
+    env:
+      WORKING_DIR: ${{ matrix.directory }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role-session-name: NotifyTerraformPlan
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+          wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${{ env.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Cache Terragrunt modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: ${{ runner.os }}-terragrunt-${{ hashFiles('**/terragrunt.hcl') }}
+          restore-keys: |
+            ${{ runner.os }}-terragrunt-
+
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
+
+      - name: Terragrunt Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt init --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt plan --terragrunt-non-interactive -out=tfplan
+
+      - name: Upload plan artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: terragrunt-plan-tier7-${{ matrix.directory }}-${{ github.run_number }}
+          path: |
+            ${{ env.WORKING_DIR }}/tfplan
+            ${{ env.WORKING_DIR }}/.terragrunt-cache
+          retention-days: 7
+
+  # Tier 8: Frontend and tooling
+  terragrunt-plan-tier8:
+    needs: [detect-changes, terragrunt-plan-tier1, terragrunt-plan-tier2, terragrunt-plan-tier3, terragrunt-plan-tier4, terragrunt-plan-tier5, terragrunt-plan-tier6, terragrunt-plan-tier7]
+    if: always() && needs.detect-changes.outputs.matrix-tier8 != '[]' && (needs.terragrunt-plan-tier7.result == 'success' || needs.terragrunt-plan-tier7.result == 'skipped')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: ${{ fromJson(needs.detect-changes.outputs.matrix-tier8) }}
+    
+    env:
+      WORKING_DIR: ${{ matrix.directory }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role-session-name: NotifyTerraformPlan
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+          wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${{ env.TERRAGRUNT_VERSION }}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Cache Terragrunt modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: ${{ runner.os }}-terragrunt-${{ hashFiles('**/terragrunt.hcl') }}
+          restore-keys: |
+            ${{ runner.os }}-terragrunt-
+
+      - name: Install 1Pass CLI and Download TFVars
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars         
+
+      - name: Terragrunt Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt init --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          terragrunt plan --terragrunt-non-interactive -out=tfplan
+
+      - name: Upload plan artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: terragrunt-plan-tier8-${{ matrix.directory }}-${{ github.run_number }}
+          path: |
+            ${{ env.WORKING_DIR }}/tfplan
+            ${{ env.WORKING_DIR }}/.terragrunt-cache
+          retention-days: 7
+
+  plan-summary:
+    needs: [detect-changes, terragrunt-plan-tier1, terragrunt-plan-tier2, terragrunt-plan-tier3, terragrunt-plan-tier4, terragrunt-plan-tier5, terragrunt-plan-tier6, terragrunt-plan-tier7, terragrunt-plan-tier8]
+    if: always() && (needs.detect-changes.outputs.matrix-tier1 != '[]' || needs.detect-changes.outputs.matrix-tier2 != '[]' || needs.detect-changes.outputs.matrix-tier3 != '[]' || needs.detect-changes.outputs.matrix-tier4 != '[]' || needs.detect-changes.outputs.matrix-tier5 != '[]' || needs.detect-changes.outputs.matrix-tier6 != '[]' || needs.detect-changes.outputs.matrix-tier7 != '[]' || needs.detect-changes.outputs.matrix-tier8 != '[]')
     runs-on: ubuntu-latest
     steps:
       - name: Plan Summary
@@ -425,4 +947,34 @@ jobs:
           if [ "${{ needs.detect-changes.outputs.matrix-tier3 }}" != "[]" ]; then
             MATRIX_T3='${{ needs.detect-changes.outputs.matrix-tier3 }}'
             echo "$MATRIX_T3" | jq -r '.[] | "| 3 | \(.) | ✅ Planned |"' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Tier 4 summary
+          if [ "${{ needs.detect-changes.outputs.matrix-tier4 }}" != "[]" ]; then
+            MATRIX_T4='${{ needs.detect-changes.outputs.matrix-tier4 }}'
+            echo "$MATRIX_T4" | jq -r '.[] | "| 4 | \(.) | ✅ Planned |"' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Tier 5 summary
+          if [ "${{ needs.detect-changes.outputs.matrix-tier5 }}" != "[]" ]; then
+            MATRIX_T5='${{ needs.detect-changes.outputs.matrix-tier5 }}'
+            echo "$MATRIX_T5" | jq -r '.[] | "| 5 | \(.) | ✅ Planned |"' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Tier 6 summary
+          if [ "${{ needs.detect-changes.outputs.matrix-tier6 }}" != "[]" ]; then
+            MATRIX_T6='${{ needs.detect-changes.outputs.matrix-tier6 }}'
+            echo "$MATRIX_T6" | jq -r '.[] | "| 6 | \(.) | ✅ Planned |"' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Tier 7 summary
+          if [ "${{ needs.detect-changes.outputs.matrix-tier7 }}" != "[]" ]; then
+            MATRIX_T7='${{ needs.detect-changes.outputs.matrix-tier7 }}'
+            echo "$MATRIX_T7" | jq -r '.[] | "| 7 | \(.) | ✅ Planned |"' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Tier 8 summary
+          if [ "${{ needs.detect-changes.outputs.matrix-tier8 }}" != "[]" ]; then
+            MATRIX_T8='${{ needs.detect-changes.outputs.matrix-tier8 }}'
+            echo "$MATRIX_T8" | jq -r '.[] | "| 8 | \(.) | ✅ Planned |"' >> $GITHUB_STEP_SUMMARY
           fi
