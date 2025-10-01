@@ -315,18 +315,6 @@ jobs:
             echo "matrix-tier8=$MATRIX_JSON_T8" >> $GITHUB_OUTPUT
             echo "Tier 8 planning: ${UNIQUE_DIRS_T8[@]}"
           fi
-            echo "matrix-tier2=$MATRIX_JSON_T2" >> $GITHUB_OUTPUT
-            echo "Tier 2 planning: ${UNIQUE_DIRS_T2[@]}"
-          fi
-          
-          if [ ${#UNIQUE_DIRS_T3[@]} -eq 0 ]; then
-            echo "matrix-tier3=[]" >> $GITHUB_OUTPUT
-          else
-            printf -v MATRIX_JSON_T3 '"%s",' "${UNIQUE_DIRS_T3[@]}"
-            MATRIX_JSON_T3="[${MATRIX_JSON_T3%,}]"
-            echo "matrix-tier3=$MATRIX_JSON_T3" >> $GITHUB_OUTPUT
-            echo "Tier 3 planning: ${UNIQUE_DIRS_T3[@]}"
-          fi
 
   # Tier 1: Foundation modules (no dependencies)
   terragrunt-plan-tier1:
