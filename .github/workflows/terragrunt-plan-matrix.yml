@@ -1,4 +1,4 @@
-name: "Terragrunt plan STAGING"
+name: Terragrunt Plan Matrix
 
 on:
   pull_request:
