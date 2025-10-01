@@ -48,17 +48,17 @@ locals {
 
     # Handler configuration - tells New Relic wrapper what your real handler is
     # For containerized Lambdas, this should match your actual handler function
-    NEW_RELIC_LAMBDA_HANDLER = var.new_relic_lambda_handler
+    NEW_RELIC_LAMBDA_HANDLER = var.lambda_new_relic_handler
 
     # New Relic extension configuration
-    NEW_RELIC_LAMBDA_EXTENSION_ENABLED     = var.new_relic_lambda_extension_enabled
-    NEW_RELIC_EXTENSION_LOGS_ENABLED       = var.new_relic_extension_logs_enabled
-    NEW_RELIC_EXTENSION_SEND_FUNCTION_LOGS = var.new_relic_extension_send_function_logs
+    NEW_RELIC_LAMBDA_EXTENSION_ENABLED     = var.lambda_new_relic_extension_enabled
+    NEW_RELIC_EXTENSION_LOGS_ENABLED       = var.lambda_new_relic_extension_logs_enabled
+    NEW_RELIC_EXTENSION_SEND_FUNCTION_LOGS = var.lambda_new_relic_extension_send_function_logs
 
     # Distributed tracing configuration
     NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
 
     # Optional: Config file path if you have one in your container
-    NEW_RELIC_CONFIG_FILE = var.new_relic_config_file
+    NEW_RELIC_CONFIG_FILE = var.lambda_new_relic_config_file
   } : {}
 }
