@@ -95,7 +95,7 @@ jobs:
           terragrunt --version
 
       - name: Cache Terragrunt modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.terragrunt-cache
@@ -122,7 +122,7 @@ jobs:
           terragrunt plan --terragrunt-non-interactive -out=tfplan
 
       - name: Upload plan artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: terragrunt-plan-${{ matrix.directory }}-${{ github.run_number }}
