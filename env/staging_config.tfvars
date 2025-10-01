@@ -34,9 +34,14 @@ low_demand_min_concurrency             = 1
 low_demand_max_concurrency             = 5
 high_demand_min_concurrency            = 1
 high_demand_max_concurrency            = 10
-new_relic_app_name                     = "notification-lambda-api-staging"
-new_relic_distribution_tracing_enabled = "true"
 notification_queue_prefix              = "eks-notification-canada-ca"
+
+# New Relic Lambda API configuration
+lambda_api_enable_new_relic                     = true
+lambda_new_relic_app_name                       = "notification-lambda-api-staging"
+lambda_new_relic_handler                        = "application.handler"
+lambda_new_relic_config_file                    = "/app/newrelic.ini"
+
 
 # ENVIRONMENT
 enable_new_relic           = true
