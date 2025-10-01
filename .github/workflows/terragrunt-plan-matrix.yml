@@ -1,18 +1,29 @@
-name: Terragrunt Plan Matrix
-
-on:
-  pull_request:
-    branches: [ main ]
-    paths:
-      - 'env/**'
-      - 'aws/**'
-      - '.github/workflows/terragrunt-plan-matrix.yml'
-  workflow_dispatch:
+name: "Terragrunt plan STAGING"
 
 env:
+  ENVIRONMENT: staging
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
   TF_VERSION: 1.5.7
   TERRAGRUNT_VERSION: 0.50.17
+  WORKFLOW: true
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".env"
+      - "aws/**"
+      - "env/$ENVIRONMENT/**"
+      - "env/terragrunt.hcl"
+      - "env/*.tfvars"
+      - ".github/workflows/terragrunt_plan_$ENVIRONMENT.yml"
+
+permissions:
+  id-token: write # This is required for requesting the OIDC JWT
+  contents: write # This is required for actions/checkout
+  pull-requests: write
 
 jobs:
   detect-changes:
@@ -36,13 +47,8 @@ jobs:
       - name: Set matrix based on changes
         id: set-matrix
         run: |
-          # Define all possible directories to check
-          ALL_DIRS='[
-            "env/dev",
-            "env/staging", 
-            "env/production",
-            "env/sandbox"
-          ]'
+          # Define all possible directories to check (single line JSON)
+          ALL_DIRS='["env/dev","env/staging","env/production","env/sandbox"]'
           
           # If specific files changed, we could filter the matrix here
           # For now, run all environments when changes are detected
@@ -71,8 +77,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/github-actions-role
+          role-session-name: GitHubActions-TerragruntPlan
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
