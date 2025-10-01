@@ -174,7 +174,7 @@ jobs:
       needs.terragrunt-filter.outputs.common == 'true' || 
       needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-20.04-16core
     env:
       COMPONENT: "common"
     steps:
