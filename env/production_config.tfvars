@@ -32,13 +32,13 @@ api_image_tag                          = "release"
 redis_enabled                          = "1"
 low_demand_min_concurrency             = 1
 low_demand_max_concurrency             = 5
-high_demand_min_concurrency            = 1
+high_demand_min_concurrency            = 3
 high_demand_max_concurrency            = 10
 notification_queue_prefix              = "eks-notification-canada-ca"
 
 # New Relic Lambda API configuration
-new_relic_app_name                              = "notification-lambda-api-production"
-new_relic_distribution_tracing_enabled          = "true"
+lambda_new_relic_app_name                              = "notification-lambda-api-production"
+lambda_new_relic_distribution_tracing_enabled          = "true"
 lambda_new_relic_handler                        = "application.handler"
 lambda_new_relic_extension_enabled              = "true"
 lambda_new_relic_extension_logs_enabled         = "true"

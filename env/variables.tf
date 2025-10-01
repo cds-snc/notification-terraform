@@ -97,11 +97,11 @@ variable "high_demand_max_concurrency" {
   type = number
 }
 
-variable "new_relic_app_name" {
+variable "lambda_new_relic_app_name" {
   type = string
 }
 
-variable "new_relic_distribution_tracing_enabled" {
+variable "lambda_new_relic_distribution_tracing_enabled" {
   type = string
 }
 
