@@ -49,7 +49,6 @@ resource "aws_lambda_function" "api" {
 
     }
   }
-
   lifecycle {
     ignore_changes = [
       image_uri,
