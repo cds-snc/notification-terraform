@@ -45,6 +45,22 @@ jobs:
             env/staging_config.tfvars
             aws/**
 
+      - name: Debug all changed files
+        run: |
+          echo "All changed files (any): ${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "All modified files: ${{ steps.changed-files.outputs.all_modified_files }}"
+          echo "Added files: ${{ steps.changed-files.outputs.added_files }}"
+          echo "Modified files: ${{ steps.changed-files.outputs.modified_files }}"
+          echo "Deleted files: ${{ steps.changed-files.outputs.deleted_files }}"
+
+      - name: Get ALL changed files (no filter)
+        id: all-changed-files
+        uses: tj-actions/changed-files@v39
+
+      - name: Debug unfiltered changes
+        run: |
+          echo "All files changed in PR: ${{ steps.all-changed-files.outputs.all_changed_files }}"
+
       - name: Set matrix based on changes
         id: set-matrix
         run: |
@@ -54,10 +70,23 @@ jobs:
           # Initialize empty array for staging directories
           STAGING_DIRS=()
           
+          echo "Trigger event: ${{ github.event_name }}"
           echo "Any changed: ${{ steps.changed-files.outputs.any_changed }}"
           echo "Changed files: $CHANGED_FILES"
           
-          if [ "${{ steps.changed-files.outputs.any_changed }}" == "true" ]; then
+          # If this is a manual trigger (workflow_dispatch), plan all staging modules
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "Manual trigger detected - planning all staging modules"
+            # Find all directories in env/staging/
+            for dir in env/staging/*/; do
+              if [ -d "$dir" ]; then
+                # Remove trailing slash and add to array
+                module_dir=$(echo $dir | sed 's:/*$::')
+                echo "Found staging module: $module_dir"
+                STAGING_DIRS+=("$module_dir")
+              fi
+            done
+          elif [ "${{ steps.changed-files.outputs.any_changed }}" == "true" ]; then
             echo "Processing changed files..."
             
             # Check if staging_config.tfvars changed - if so, plan ALL staging modules
@@ -100,29 +129,30 @@ jobs:
                 fi
               done
             fi
-            
-            echo "All staging dirs found: ${STAGING_DIRS[@]}"
-            
-            # Remove duplicates and convert to JSON array
-            UNIQUE_DIRS=($(printf "%s\n" "${STAGING_DIRS[@]}" | sort -u))
-            
-            echo "Unique dirs: ${UNIQUE_DIRS[@]}"
-            echo "Number of unique dirs: ${#UNIQUE_DIRS[@]}"
-            
-            if [ ${#UNIQUE_DIRS[@]} -eq 0 ]; then
-              echo "No valid directories found, setting empty matrix"
-              echo "matrix=[]" >> $GITHUB_OUTPUT
-            else
-              # Convert bash array to JSON
-              printf -v MATRIX_JSON '"%s",' "${UNIQUE_DIRS[@]}"
-              MATRIX_JSON="[${MATRIX_JSON%,}]"
-              echo "Final matrix: $MATRIX_JSON"
-              echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
-              echo "Planning for directories: ${UNIQUE_DIRS[@]}"
-            fi
           else
-            echo "No files changed, setting empty matrix"
+            echo "No files changed and not a manual trigger, setting empty matrix"
             echo "matrix=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "All staging dirs found: ${STAGING_DIRS[@]}"
+          
+          # Remove duplicates and convert to JSON array
+          UNIQUE_DIRS=($(printf "%s\n" "${STAGING_DIRS[@]}" | sort -u))
+          
+          echo "Unique dirs: ${UNIQUE_DIRS[@]}"
+          echo "Number of unique dirs: ${#UNIQUE_DIRS[@]}"
+          
+          if [ ${#UNIQUE_DIRS[@]} -eq 0 ]; then
+            echo "No valid directories found, setting empty matrix"
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+          else
+            # Convert bash array to JSON
+            printf -v MATRIX_JSON '"%s",' "${UNIQUE_DIRS[@]}"
+            MATRIX_JSON="[${MATRIX_JSON%,}]"
+            echo "Final matrix: $MATRIX_JSON"
+            echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+            echo "Planning for directories: ${UNIQUE_DIRS[@]}"
           fi
 
   terragrunt-plan:
