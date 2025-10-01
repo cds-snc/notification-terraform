@@ -41,19 +41,67 @@ jobs:
         uses: tj-actions/changed-files@v39
         with:
           files: |
-            env/**
+            env/staging/**
+            env/staging_config.tfvars
             aws/**
 
       - name: Set matrix based on changes
         id: set-matrix
         run: |
-          # Define all possible directories to check (single line JSON)
-          ALL_DIRS='["env/dev","env/staging","env/production","env/sandbox"]'
+          # Get the list of changed files
+          CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
           
-          # If specific files changed, we could filter the matrix here
-          # For now, run all environments when changes are detected
+          # Initialize empty array for staging directories
+          STAGING_DIRS=()
+          
           if [ "${{ steps.changed-files.outputs.any_changed }}" == "true" ]; then
-            echo "matrix=$ALL_DIRS" >> $GITHUB_OUTPUT
+            echo "Changed files: $CHANGED_FILES"
+            
+            # Check if staging_config.tfvars changed - if so, plan ALL staging modules
+            if echo "$CHANGED_FILES" | grep -q "env/staging_config.tfvars"; then
+              echo "staging_config.tfvars changed - planning all staging modules"
+              # Find all directories in env/staging/
+              for dir in env/staging/*/; do
+                if [ -d "$dir" ]; then
+                  # Remove trailing slash and add to array
+                  module_dir=$(echo $dir | sed 's:/*$::')
+                  STAGING_DIRS+=("$module_dir")
+                fi
+              done
+            else
+              # Extract unique module directories from changed files
+              for file in $CHANGED_FILES; do
+                if [[ $file == aws/* ]]; then
+                  # Extract module name from aws/ path (e.g., aws/eks/file.tf -> eks)
+                  module=$(echo $file | cut -d'/' -f2)
+                  staging_dir="env/staging/$module"
+                  # Check if this staging directory actually exists
+                  if [ -d "$staging_dir" ]; then
+                    STAGING_DIRS+=("$staging_dir")
+                  fi
+                elif [[ $file == env/staging/* ]]; then
+                  # Extract module name from env/staging/ path (e.g., env/staging/eks/file.tf -> eks)
+                  module=$(echo $file | cut -d'/' -f3)
+                  if [ ! -z "$module" ]; then
+                    staging_dir="env/staging/$module"
+                    STAGING_DIRS+=("$staging_dir")
+                  fi
+                fi
+              done
+            fi
+            
+            # Remove duplicates and convert to JSON array
+            UNIQUE_DIRS=($(printf "%s\n" "${STAGING_DIRS[@]}" | sort -u))
+            
+            if [ ${#UNIQUE_DIRS[@]} -eq 0 ]; then
+              echo "matrix=[]" >> $GITHUB_OUTPUT
+            else
+              # Convert bash array to JSON
+              printf -v MATRIX_JSON '"%s",' "${UNIQUE_DIRS[@]}"
+              MATRIX_JSON="[${MATRIX_JSON%,}]"
+              echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+              echo "Planning for directories: ${UNIQUE_DIRS[@]}"
+            fi
           else
             echo "matrix=[]" >> $GITHUB_OUTPUT
           fi
