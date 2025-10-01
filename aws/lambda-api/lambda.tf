@@ -42,7 +42,6 @@ resource "aws_lambda_function" "api" {
       local.newrelic_env_vars
     )
   }
-
   lifecycle {
     ignore_changes = [
       image_uri,
