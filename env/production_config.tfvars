@@ -39,11 +39,7 @@ notification_queue_prefix              = "eks-notification-canada-ca"
 # New Relic Lambda API configuration
 lambda_api_enable_new_relic                     = false
 lambda_new_relic_app_name                       = "notification-lambda-api-production"
-lambda_new_relic_distribution_tracing_enabled   = "true"
 lambda_new_relic_handler                        = "application.handler"
-lambda_new_relic_extension_enabled              = "true"
-lambda_new_relic_extension_logs_enabled         = "true"
-lambda_new_relic_extension_send_function_logs   = "true"
 lambda_new_relic_config_file                    = "/app/newrelic.ini"
 
 # ENVIRONMENT
