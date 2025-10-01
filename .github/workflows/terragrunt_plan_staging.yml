@@ -25,7 +25,8 @@ permissions:
 
 jobs:
   terragrunt-filter:
-    runs-on: [Notify_Large_Github_Runner]
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]
 
     outputs:
       aws-auth: ${{ steps.filter.outputs.aws-auth }}
@@ -174,7 +175,8 @@ jobs:
       needs.terragrunt-filter.outputs.common == 'true' || 
       needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]
     env:
       COMPONENT: "common"
     steps:
@@ -209,7 +211,8 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
-    runs-on: [Notify_Large_Github_Runner] 
+    runs-on: 
+      labels: [Notify_Large_Github_Runner] 
     env:
       COMPONENT: "ecr" 
     steps:
@@ -245,7 +248,8 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: terragrunt-filter
-    runs-on: [Notify_Large_Github_Runner] 
+    runs-on: 
+      labels: [Notify_Large_Github_Runner] 
     env:
       COMPONENT: "ecr-us-east" 
     steps:
@@ -281,7 +285,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     env:
       COMPONENT: "ses_receiving_emails"
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-ecr-us-east]
@@ -316,7 +321,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     env:
       COMPONENT: "dns"
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
@@ -351,7 +357,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     env:
       COMPONENT: "ses_validation_dns_entries"
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns]
@@ -386,7 +393,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common]
     env:
       COMPONENT: "cloudfront"
@@ -421,7 +429,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
     env:
       COMPONENT: "eks"
@@ -456,7 +465,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
     env:
       COMPONENT: "aws-auth"
@@ -537,7 +547,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter]
     env:
       COMPONENT: "elasticache"
@@ -572,7 +583,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks]
     env:
       COMPONENT: "rds"
@@ -607,7 +619,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr,terragrunt-plan-rds]
     env:
       COMPONENT: "lambda-api"
@@ -642,7 +655,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-admin-pr"
@@ -677,7 +691,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr, terragrunt-plan-rds]
     env:
       COMPONENT: "performance-test"
@@ -713,7 +728,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "heartbeat"
@@ -748,7 +764,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "database-tools"
@@ -783,7 +800,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "quicksight"
@@ -818,7 +836,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-google-cidr"
@@ -853,7 +872,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "ses_to_sqs_email_callbacks"
@@ -888,7 +908,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "sns_to_sqs_sms_callbacks"
@@ -923,7 +944,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "pinpoint_to_sqs_sms_callbacks"
@@ -958,7 +980,8 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
     env:
       COMPONENT: "system_status"
@@ -994,7 +1017,8 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-system_status]
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     env:
       COMPONENT: "system_status_static_site"
     steps:
@@ -1029,7 +1053,8 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-common]
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     env:
       COMPONENT: "newrelic"
     steps:
@@ -1064,7 +1089,8 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     env:
       COMPONENT: "manifest_secrets"
     steps:
@@ -1099,7 +1125,8 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: [terragrunt-filter,terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-api, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site, terragrunt-plan-newrelic]
-    runs-on: [Notify_Large_Github_Runner]  
+    runs-on: 
+      labels: [Notify_Large_Github_Runner]  
     env:
       COMPONENT: "github"
     steps:
