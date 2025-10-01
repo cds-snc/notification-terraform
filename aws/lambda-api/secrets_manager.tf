@@ -9,6 +9,17 @@ resource "aws_secretsmanager_secret_version" "new-relic-license-key" {
   secret_string = var.new_relic_license_key
 }
 
+resource "aws_secretsmanager_secret" "lambda-new-relic-license-key" {
+  name                    = "NEW_RELIC_LICENSE_KEY"
+  description             = "The New Relic license key, for sending telemetry"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "lambda-new-relic-license-key" {
+  secret_id     = aws_secretsmanager_secret.lambda-new-relic-license-key.id
+  secret_string = var.manifest_new_relic_license_key
+}
+
 resource "aws_ssm_parameter" "environment_variables" {
   count       = var.bootstrap ? 1 : 0
   name        = "ENVIRONMENT_VARIABLES"
