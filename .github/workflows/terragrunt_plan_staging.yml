@@ -6,7 +6,7 @@ env:
   AWS_REGION: ca-central-1
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
   TF_VERSION: 1.5.7
-  TERRAGRUNT_VERSION: 0.50.17
+  TERRAGRUNT_VERSION: 0.77.22
   WORKFLOW: true
 
 on:
@@ -45,22 +45,6 @@ jobs:
             env/staging_config.tfvars
             aws/**
 
-      - name: Debug all changed files
-        run: |
-          echo "All changed files (any): ${{ steps.changed-files.outputs.all_changed_files }}"
-          echo "All modified files: ${{ steps.changed-files.outputs.all_modified_files }}"
-          echo "Added files: ${{ steps.changed-files.outputs.added_files }}"
-          echo "Modified files: ${{ steps.changed-files.outputs.modified_files }}"
-          echo "Deleted files: ${{ steps.changed-files.outputs.deleted_files }}"
-
-      - name: Get ALL changed files (no filter)
-        id: all-changed-files
-        uses: tj-actions/changed-files@v39
-
-      - name: Debug unfiltered changes
-        run: |
-          echo "All files changed in PR: ${{ steps.all-changed-files.outputs.all_changed_files }}"
-
       - name: Set matrix based on changes
         id: set-matrix
         run: |
@@ -70,10 +54,6 @@ jobs:
           # Initialize empty array for staging directories
           STAGING_DIRS=()
           
-          echo "Trigger event: ${{ github.event_name }}"
-          echo "Any changed: ${{ steps.changed-files.outputs.any_changed }}"
-          echo "Changed files: $CHANGED_FILES"
-          
           # If this is a manual trigger (workflow_dispatch), plan all staging modules
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             echo "Manual trigger detected - planning all staging modules"
@@ -82,12 +62,11 @@ jobs:
               if [ -d "$dir" ]; then
                 # Remove trailing slash and add to array
                 module_dir=$(echo $dir | sed 's:/*$::')
-                echo "Found staging module: $module_dir"
                 STAGING_DIRS+=("$module_dir")
               fi
             done
           elif [ "${{ steps.changed-files.outputs.any_changed }}" == "true" ]; then
-            echo "Processing changed files..."
+            echo "Changed files: $CHANGED_FILES"
             
             # Check if staging_config.tfvars changed - if so, plan ALL staging modules
             if echo "$CHANGED_FILES" | grep -q "env/staging_config.tfvars"; then
@@ -97,60 +76,46 @@ jobs:
                 if [ -d "$dir" ]; then
                   # Remove trailing slash and add to array
                   module_dir=$(echo $dir | sed 's:/*$::')
-                  echo "Found staging module: $module_dir"
                   STAGING_DIRS+=("$module_dir")
                 fi
               done
             else
-              echo "Checking individual file changes..."
               # Extract unique module directories from changed files
               for file in $CHANGED_FILES; do
-                echo "Processing file: $file"
                 if [[ $file == aws/* ]]; then
                   # Extract module name from aws/ path (e.g., aws/eks/file.tf -> eks)
                   module=$(echo $file | cut -d'/' -f2)
                   staging_dir="env/staging/$module"
-                  echo "Checking if $staging_dir exists..."
                   # Check if this staging directory actually exists
                   if [ -d "$staging_dir" ]; then
-                    echo "Adding $staging_dir to plan list"
                     STAGING_DIRS+=("$staging_dir")
-                  else
-                    echo "Directory $staging_dir does not exist"
                   fi
                 elif [[ $file == env/staging/* ]]; then
                   # Extract module name from env/staging/ path (e.g., env/staging/eks/file.tf -> eks)
                   module=$(echo $file | cut -d'/' -f3)
                   if [ ! -z "$module" ]; then
                     staging_dir="env/staging/$module"
-                    echo "Adding staging module: $staging_dir"
                     STAGING_DIRS+=("$staging_dir")
                   fi
                 fi
               done
             fi
           else
-            echo "No files changed and not a manual trigger, setting empty matrix"
+            echo "No relevant files changed"
             echo "matrix=[]" >> $GITHUB_OUTPUT
             exit 0
           fi
           
-          echo "All staging dirs found: ${STAGING_DIRS[@]}"
-          
           # Remove duplicates and convert to JSON array
           UNIQUE_DIRS=($(printf "%s\n" "${STAGING_DIRS[@]}" | sort -u))
           
-          echo "Unique dirs: ${UNIQUE_DIRS[@]}"
-          echo "Number of unique dirs: ${#UNIQUE_DIRS[@]}"
-          
           if [ ${#UNIQUE_DIRS[@]} -eq 0 ]; then
-            echo "No valid directories found, setting empty matrix"
+            echo "No valid staging directories found"
             echo "matrix=[]" >> $GITHUB_OUTPUT
           else
             # Convert bash array to JSON
             printf -v MATRIX_JSON '"%s",' "${UNIQUE_DIRS[@]}"
             MATRIX_JSON="[${MATRIX_JSON%,}]"
-            echo "Final matrix: $MATRIX_JSON"
             echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
             echo "Planning for directories: ${UNIQUE_DIRS[@]}"
           fi
