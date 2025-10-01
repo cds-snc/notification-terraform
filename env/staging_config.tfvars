@@ -45,7 +45,6 @@ lambda_new_relic_extension_logs_enabled         = "true"
 lambda_new_relic_extension_send_function_logs   = "true"
 lambda_new_relic_config_file                    = "/app/newrelic.ini"
 
-notification_queue_prefix              = "eks-notification-canada-ca"
 
 # ENVIRONMENT
 enable_new_relic           = true
