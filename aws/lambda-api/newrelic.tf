@@ -57,8 +57,5 @@ locals {
 
     # Distributed tracing configuration
     NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
-
-    # Optional: Config file path if you have one in your container
-    NEW_RELIC_CONFIG_FILE = var.lambda_new_relic_config_file
   } : {}
 }
