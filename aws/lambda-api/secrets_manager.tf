@@ -10,7 +10,7 @@ resource "aws_secretsmanager_secret_version" "new-relic-license-key" {
 }
 
 resource "aws_secretsmanager_secret" "lambda-new-relic-license-key" {
-  name                    = "LAMBDANEW_RELIC_LICENSE_KEY"
+  name                    = "LAMBDA_NEW_RELIC_LICENSE_KEY"
   description             = "The New Relic license key, for sending telemetry"
   recovery_window_in_days = 0
 }
