@@ -667,7 +667,7 @@ jobs:
             -upgrade                       
 
 
-  terragrunt-plan-step-8:
+  terragrunt-plan-step-7:
     if: |
       needs.terragrunt-filter.outputs.github == 'true'
 
