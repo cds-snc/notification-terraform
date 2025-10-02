@@ -107,6 +107,20 @@ jobs:
               planOutput = 'Error: Could not read plan output';
             }
             
+            // Strip ANSI color codes and clean up the output
+            function stripAnsiCodes(text) {
+              // Remove ANSI escape sequences
+              return text.replace(/\x1b\[[0-9;]*m/g, '')
+                        .replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '')
+                        // Remove other common escape sequences
+                        .replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+                        // Clean up extra whitespace
+                        .replace(/\r\n/g, '\n')
+                        .replace(/\r/g, '\n');
+            }
+            
+            planOutput = stripAnsiCodes(planOutput);
+            
             // Create summary comment first
             const summaryOutput = `#### 🏗️ Terragrunt Plan Summary for ${{env.ENVIRONMENT}}
             
@@ -123,76 +137,90 @@ jobs:
               body: summaryOutput
             });
             
-            // Split the output into sections based on module boundaries
-            // Look for patterns that indicate module starts/ends
+            // Parse by looking for module-specific output sections
             const lines = planOutput.split('\n');
             const modules = new Map();
-            let currentOutput = [];
-            let isInTerraformOutput = false;
+            let currentModule = '';
+            let currentModuleLines = [];
             
             for (let i = 0; i < lines.length; i++) {
               const line = lines[i];
               
-              // Skip terragrunt warnings at the beginning
+              // Skip terragrunt warnings
               if (line.includes('WARN') && line.includes('terragrunt')) {
                 continue;
               }
               
-              // Look for terraform plan output indicators
-              if (line.includes('Terraform used the selected providers') || 
-                  line.includes('Terraform will perform the following actions') ||
-                  line.includes('No changes. Your infrastructure matches') ||
-                  line.includes('Plan:') ||
-                  line.includes('Error:') ||
-                  line.includes('─────────────────────────────────────') ||
-                  line.match(/^\s*[#\+\-~]\s/)) {
-                isInTerraformOutput = true;
+              // Look for module indicators in the log output
+              // Pattern: "[module-name] terraform: ..." or "STDOUT [module-name]"
+              let moduleMatch = null;
+              
+              if (line.includes('[') && line.includes(']')) {
+                // Extract module name from [module-name] pattern
+                const bracketMatch = line.match(/\[([^\]]+)\]/);
+                if (bracketMatch) {
+                  const moduleName = bracketMatch[1];
+                  // Skip non-module brackets like timestamps
+                  if (!moduleName.includes(':') && !moduleName.includes('.') && moduleName !== 'STDOUT') {
+                    moduleMatch = moduleName;
+                  }
+                }
               }
               
-              if (isInTerraformOutput) {
-                currentOutput.push(line);
+              if (moduleMatch) {
+                // Save previous module if exists
+                if (currentModule && currentModuleLines.length > 0) {
+                  modules.set(currentModule, currentModuleLines.join('\n'));
+                }
+                
+                currentModule = moduleMatch;
+                currentModuleLines = [line];
+                console.log(`Found module: ${currentModule}`);
+              } else if (currentModule) {
+                currentModuleLines.push(line);
               }
             }
             
-            // If we found terraform output, let's try to split it intelligently
-            if (currentOutput.length > 0) {
-              const terraformOutput = currentOutput.join('\n');
+            // Save the last module
+            if (currentModule && currentModuleLines.length > 0) {
+              modules.set(currentModule, currentModuleLines.join('\n'));
+            }
+            
+            console.log(`Found ${modules.size} modules: ${Array.from(modules.keys()).join(', ')}`);
+            
+            // If no modules found, try to split by terraform plan sections
+            if (modules.size === 0) {
+              console.log('No modules found with bracket parsing, trying plan section approach...');
               
-              // Try to split by plan sections
-              // Look for "Plan: X to add, Y to change, Z to destroy" or similar patterns
-              const planSections = terraformOutput.split(/(?=Terraform used the selected providers|Plan: \d+|No changes\. Your infrastructure|Error: )/);
+              // Look for terraform plan output sections
+              const planSections = planOutput.split(/(?=Terraform used the selected providers|Terraform will perform the following actions|Plan: \d+|No changes\. Your infrastructure)/);
               
-              let moduleIndex = 1;
+              let sectionIndex = 1;
               for (const section of planSections) {
-                if (section.trim().length > 100) { // Only include substantial sections
-                  // Try to extract module info from the section
-                  let moduleName = `module-${moduleIndex}`;
+                if (section.trim().length > 200) { // Only include substantial sections
+                  // Try to find module hints in the section
+                  let moduleName = `section-${sectionIndex}`;
                   
-                  // Look for provider or resource hints to identify the module
-                  const resourceMatch = section.match(/resource "([^"]+)"/);
-                  const providerMatch = section.match(/provider\[([^\]]+)\]/);
-                  
-                  if (resourceMatch) {
-                    const resourceType = resourceMatch[1].split('_')[0];
-                    moduleName = resourceType;
-                  } else if (providerMatch) {
-                    moduleName = `provider-section-${moduleIndex}`;
+                  // Look for resource patterns to identify module
+                  const resourceMatches = section.match(/resource "([^"]+)"/g);
+                  if (resourceMatches && resourceMatches.length > 0) {
+                    const resourceTypes = [...new Set(resourceMatches.map(r => r.match(/resource "([^"]+)"/)[1].split('_')[0]))];
+                    moduleName = resourceTypes.slice(0, 2).join('-');
                   }
                   
                   modules.set(moduleName, section);
-                  moduleIndex++;
+                  sectionIndex++;
                 }
               }
             }
             
-            // If still no modules found, create one big section
+            // If still no modules, create combined output
             if (modules.size === 0) {
               console.log('Creating single combined output section');
-              // Remove warnings and empty lines
               const cleanOutput = planOutput
                 .split('\n')
-                .filter(line => !line.includes('WARN') || !line.includes('terragrunt'))
                 .filter(line => line.trim().length > 0)
+                .filter(line => !line.includes('WARN'))
                 .join('\n');
                 
               if (cleanOutput.length > 0) {
@@ -200,33 +228,40 @@ jobs:
               }
             }
             
-            console.log(`Found ${modules.size} sections: ${Array.from(modules.keys()).join(', ')}`);
+            console.log(`Final modules: ${Array.from(modules.keys()).join(', ')}`);
             
             // Post module comments
             let moduleCount = 0;
             const maxCommentSize = 60000;
             
-            for (const [sectionName, output] of modules) {
-              let sectionOutput = output;
-              if (sectionOutput.length > maxCommentSize) {
-                sectionOutput = sectionOutput.substring(0, maxCommentSize - 500) + '\n\n... (output truncated due to size)';
+            for (const [moduleName, output] of modules) {
+              let moduleOutput = output.trim();
+              
+              // Further clean up the output
+              moduleOutput = moduleOutput
+                .split('\n')
+                .filter(line => line.trim().length > 0)
+                .join('\n');
+              
+              if (moduleOutput.length > maxCommentSize) {
+                moduleOutput = moduleOutput.substring(0, maxCommentSize - 500) + '\n\n... (output truncated due to size)';
               }
               
-              const sectionComment = `#### 📦 Plan Section: \`${sectionName}\`
+              const moduleComment = `#### 📦 Module: \`${moduleName}\`
               
-              \`\`\`terraform
-              ${sectionOutput.trim()}
+              \`\`\`
+              ${moduleOutput}
               \`\`\``;
               
               await github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: sectionComment
+                body: moduleComment
               });
               
               moduleCount++;
               await new Promise(resolve => setTimeout(resolve, 100));
             }
             
-            console.log(`Created ${moduleCount} section comments`);
+            console.log(`Created ${moduleCount} module comments`);
