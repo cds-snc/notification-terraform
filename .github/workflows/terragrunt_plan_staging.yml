@@ -80,28 +80,42 @@ jobs:
         run: |
           echo "Generating JSON plan outputs..."
           
-          # Find all tfplan files and convert them to JSON
+          # Find all tfplan files in .terragrunt-cache directories
           find . -name "tfplan" -type f | while read -r plan_file; do
-            module_dir=$(dirname "$plan_file")
-            module_name=$(basename "$module_dir")
+            echo "Found plan file: $plan_file"
             
-            echo "Processing module: $module_name in $module_dir"
+            # Extract module name from the path
+            # Path format: ./module-name/.terragrunt-cache/.../tfplan
+            module_name=$(echo "$plan_file" | cut -d'/' -f2)
+            echo "Extracted module name: $module_name"
             
-            cd "$module_dir"
+            # Get the directory containing the tfplan file
+            plan_dir=$(dirname "$plan_file")
+            echo "Plan directory: $plan_dir"
+            
+            # Change to the directory containing the plan file
+            cd "$plan_dir"
+            
             if terragrunt show -json tfplan > "${module_name}_plan.json" 2>/dev/null; then
               echo "✓ Generated JSON for module: $module_name"
-              # Check if the plan has changes
-              if [ -s "${module_name}_plan.json" ]; then
-                echo "  JSON file size: $(wc -c < "${module_name}_plan.json") bytes"
+              # Move the JSON file to the top level for easier access
+              mv "${module_name}_plan.json" "../../${module_name}_plan.json"
+              echo "  JSON file moved to: ../../${module_name}_plan.json"
+              if [ -s "../../${module_name}_plan.json" ]; then
+                echo "  JSON file size: $(wc -c < "../../${module_name}_plan.json") bytes"
               fi
             else
               echo "✗ Failed to generate JSON for module: $module_name"
+              echo "  Error details:"
+              terragrunt show -json tfplan 2>&1 || true
             fi
+            
+            # Return to the base directory
             cd - > /dev/null
           done
           
           # Create a list of all JSON files for the comment step
-          find . -name "*_plan.json" -type f > json_plans_list.txt
+          find . -maxdepth 1 -name "*_plan.json" -type f > json_plans_list.txt
           echo "Found $(wc -l < json_plans_list.txt) JSON plan files:"
           cat json_plans_list.txt
 
@@ -112,7 +126,7 @@ jobs:
           name: plan-output-staging
           path: |
             env/${{ env.ENVIRONMENT }}/plan_output.txt
-            env/${{ env.ENVIRONMENT }}/**/*_plan.json
+            env/${{ env.ENVIRONMENT }}/*_plan.json
             env/${{ env.ENVIRONMENT }}/json_plans_list.txt
           retention-days: 1
 
