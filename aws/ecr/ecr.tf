@@ -1,3 +1,15 @@
+resource "aws_ecr_repository" "lambda_log_extension" {
+  count                = var.env == "dev" ? 1 : 0
+  name                 = "log-extension-image"
+  image_tag_mutability = "MUTABLE" #tfsec:ignore:AWS078
+  force_delete         = var.force_delete_ecr
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+
 resource "aws_ecr_repository" "heartbeat" {
   # The :latest tag is used in Staging
 
@@ -21,6 +33,19 @@ resource "aws_ecr_repository" "notify_admin" {
   }
 }
 
+resource "aws_ecr_repository" "api" {
+  # The :latest tag is used in Staging
+  #tfsec:ignore:AWS078
+
+  name                 = "notify/api"
+  image_tag_mutability = "IMMUTABLE"
+  force_delete         = var.force_delete_ecr
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
 resource "aws_ecr_repository" "api-lambda" {
   # The :latest tag is used in Staging
   #tfsec:ignore:AWS078
@@ -33,6 +58,20 @@ resource "aws_ecr_repository" "api-lambda" {
     scan_on_push = true
   }
 }
+
+resource "aws_ecr_repository" "document-download" {
+  # The :latest tag is used in Staging
+  #tfsec:ignore:AWS078
+
+  name                 = "notify/document-download"
+  image_tag_mutability = "IMMUTABLE"
+  force_delete         = var.force_delete_ecr
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
 
 resource "aws_ecr_repository" "google-cidr" {
   # The :latest tag is used in Staging

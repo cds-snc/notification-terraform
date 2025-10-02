@@ -25,31 +25,23 @@ resource "aws_lambda_function" "api" {
     subnet_ids = var.vpc_private_subnets
   }
   environment {
-    variables = {
-      ADMIN_BASE_URL                 = "https://${var.base_domain}"
-      API_HOST_NAME                  = "https://api.${var.base_domain}"
-      DOCUMENT_DOWNLOAD_API_HOST     = "https://api.document.${var.base_domain}"
-      SQLALCHEMY_DATABASE_URI        = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
-      SQLALCHEMY_DATABASE_READER_URI = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
-      NOTIFICATION_QUEUE_PREFIX      = var.notification_queue_prefix
-      NOTIFY_EMAIL_DOMAIN            = var.domain
-      NOTIFY_ENVIRONMENT             = var.env
-      REDIS_ENABLED                  = var.redis_enabled
-      FF_CLOUDWATCH_METRICS_ENABLED  = var.ff_cloudwatch_metrics_enabled
-
-      NEW_RELIC_CONFIG_FILE                 = "/app/newrelic.ini"
-      NEW_RELIC_ENVIRONMENT                 = var.env
-      NEW_RELIC_LAMBDA_HANDLER              = "application.handler"
-      NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
-      NEW_RELIC_APP_NAME                    = var.new_relic_app_name
-      NEW_RELIC_DISTRIBUTED_TRACING_ENABLED = var.new_relic_distribution_tracing_enabled
-      NEW_RELIC_EXTENSION_LOGS_ENABLED      = true
-      NEW_RELIC_LAMBDA_EXTENSION_ENABLED    = true
-      AWS_XRAY_SDK_ENABLED                  = var.aws_xray_sdk_enabled
-
-    }
+    variables = merge(
+      {
+        ADMIN_BASE_URL                 = "https://${var.base_domain}"
+        API_HOST_NAME                  = "https://api.${var.base_domain}"
+        DOCUMENT_DOWNLOAD_API_HOST     = "https://api.document.${var.base_domain}"
+        SQLALCHEMY_DATABASE_URI        = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
+        SQLALCHEMY_DATABASE_READER_URI = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
+        NOTIFICATION_QUEUE_PREFIX      = var.notification_queue_prefix
+        NOTIFY_EMAIL_DOMAIN            = var.domain
+        NOTIFY_ENVIRONMENT             = var.env
+        REDIS_ENABLED                  = var.redis_enabled
+        FF_CLOUDWATCH_METRICS_ENABLED  = var.ff_cloudwatch_metrics_enabled
+        AWS_XRAY_SDK_ENABLED           = var.aws_xray_sdk_enabled
+      },
+      local.newrelic_env_vars
+    )
   }
-
   lifecycle {
     ignore_changes = [
       image_uri,
