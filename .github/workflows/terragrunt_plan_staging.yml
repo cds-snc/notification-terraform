@@ -53,37 +53,67 @@ jobs:
           set +e  # Don't exit on error so we can capture output
           
           # Run terragrunt plan on all modules except quicksight and aws-auth
+          # Save binary plan files for JSON conversion
           terragrunt run-all plan \
             --terragrunt-exclude-dir quicksight \
             --terragrunt-exclude-dir aws-auth \
             --terragrunt-non-interactive \
             --terragrunt-parallelism 20 \
-            --out plan.txt \
-
+            -out=tfplan 2>&1 | tee plan_output.txt
           
           PLAN_EXIT_CODE=${PIPESTATUS[0]}
           
-          # Debug: Check if file exists and show size
-          echo "Plan output file size: $(wc -c < plan_output.txt) bytes"
-          echo "Plan output file lines: $(wc -l < plan_output.txt) lines"
+          # Debug: Check if text output file exists and show size
+          if [ -f "plan_output.txt" ]; then
+            echo "Plan text output file size: $(wc -c < plan_output.txt) bytes"
+            echo "Plan text output file lines: $(wc -l < plan_output.txt) lines"
+          fi
           
           # Set exit code as output for the comment step
           echo "exitcode=$PLAN_EXIT_CODE" >> $GITHUB_OUTPUT
           
           exit $PLAN_EXIT_CODE
           
-      - name: Show plan
-        id: show-plan
+      - name: Generate JSON Plan Files
+        id: json-plans
         working-directory: env/${{env.ENVIRONMENT}}
         run: |
-          terraform show -no-color -json | tee plan_output.json
+          echo "Generating JSON plan outputs..."
+          
+          # Find all tfplan files and convert them to JSON
+          find . -name "tfplan" -type f | while read -r plan_file; do
+            module_dir=$(dirname "$plan_file")
+            module_name=$(basename "$module_dir")
+            
+            echo "Processing module: $module_name in $module_dir"
+            
+            cd "$module_dir"
+            if terragrunt show -json tfplan > "${module_name}_plan.json" 2>/dev/null; then
+              echo "✓ Generated JSON for module: $module_name"
+              # Check if the plan has changes
+              if [ -s "${module_name}_plan.json" ]; then
+                echo "  JSON file size: $(wc -c < "${module_name}_plan.json") bytes"
+              fi
+            else
+              echo "✗ Failed to generate JSON for module: $module_name"
+            fi
+            cd - > /dev/null
+          done
+          
+          # Create a list of all JSON files for the comment step
+          find . -name "*_plan.json" -type f > json_plans_list.txt
+          echo "Found $(wc -l < json_plans_list.txt) JSON plan files:"
+          cat json_plans_list.txt
 
-      - name: Upload plan output
+      - name: Upload plan outputs
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: plan-output
-          path: env/${{env.ENVIRONMENT}}/plan_output.json
+          name: plan-output-staging
+          path: |
+            env/${{ env.ENVIRONMENT }}/plan_output.txt
+            env/${{ env.ENVIRONMENT }}/**/*_plan.json
+            env/${{ env.ENVIRONMENT }}/json_plans_list.txt
           retention-days: 1
 
   comment-pr:
@@ -91,7 +121,179 @@ jobs:
     if: always() && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - name: Download plan output
-        run: |
-          cat env/${{env.ENVIRONMENT}}/plan_output.json
+      - name: Download plan outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: plan-output-staging
+          path: ./plan-outputs
+
+      - name: Create PR comments from JSON plans
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read the exit code from the plan step
+            const exitCode = '${{ needs.terragrunt-run-all-plan.outputs.exitcode }}';
+            
+            // Function to analyze a JSON plan and extract changes
+            function analyzePlan(jsonPlan) {
+              try {
+                const plan = JSON.parse(jsonPlan);
+                
+                if (!plan.resource_changes) {
+                  return { hasChanges: false, summary: 'No resource changes found.' };
+                }
+                
+                const changes = {
+                  create: [],
+                  update: [],
+                  delete: [],
+                  replace: []
+                };
+                
+                let totalChanges = 0;
+                
+                plan.resource_changes.forEach(change => {
+                  const resourceName = `${change.type}.${change.name}`;
+                  
+                  if (change.change && change.change.actions) {
+                    const actions = change.change.actions;
+                    
+                    if (actions.includes('create')) {
+                      changes.create.push(resourceName);
+                      totalChanges++;
+                    } else if (actions.includes('delete') && actions.includes('create')) {
+                      changes.replace.push(resourceName);
+                      totalChanges++;
+                    } else if (actions.includes('update')) {
+                      changes.update.push(resourceName);
+                      totalChanges++;
+                    } else if (actions.includes('delete')) {
+                      changes.delete.push(resourceName);
+                      totalChanges++;
+                    }
+                  }
+                });
+                
+                if (totalChanges === 0) {
+                  return { hasChanges: false, summary: 'No changes detected.' };
+                }
+                
+                // Build summary
+                let summary = `**Plan Summary:** ${totalChanges} change(s)\n\n`;
+                
+                if (changes.create.length > 0) {
+                  summary += `**${changes.create.length} to create:**\n`;
+                  changes.create.forEach(resource => {
+                    summary += `- 🟢 ${resource}\n`;
+                  });
+                  summary += '\n';
+                }
+                
+                if (changes.update.length > 0) {
+                  summary += `**${changes.update.length} to update:**\n`;
+                  changes.update.forEach(resource => {
+                    summary += `- 🟡 ${resource}\n`;
+                  });
+                  summary += '\n';
+                }
+                
+                if (changes.replace.length > 0) {
+                  summary += `**${changes.replace.length} to replace:**\n`;
+                  changes.replace.forEach(resource => {
+                    summary += `- 🔄 ${resource}\n`;
+                  });
+                  summary += '\n';
+                }
+                
+                if (changes.delete.length > 0) {
+                  summary += `**${changes.delete.length} to delete:**\n`;
+                  changes.delete.forEach(resource => {
+                    summary += `- 🔴 ${resource}\n`;
+                  });
+                  summary += '\n';
+                }
+                
+                return { hasChanges: true, summary, changes };
+                
+              } catch (error) {
+                console.error('Error parsing JSON plan:', error);
+                return { hasChanges: false, summary: `Error parsing plan: ${error.message}` };
+              }
+            }
+            
+            // Create summary comment first
+            const summaryOutput = `#### 🏗️ Terragrunt Plan Summary for staging
+            
+            *Plan exit code: ${exitCode}*
+            *Action: \`${{ github.event_name }}\`*
+            
+            📋 Individual module plans are posted as separate comments below.`;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summaryOutput
+            });
+            
+            // Read the list of JSON plan files
+            const jsonPlansListPath = './plan-outputs/json_plans_list.txt';
+            
+            if (!fs.existsSync(jsonPlansListPath)) {
+              console.log('No JSON plans list found');
+              return;
+            }
+            
+            const jsonPlanFiles = fs.readFileSync(jsonPlansListPath, 'utf8')
+              .split('\n')
+              .filter(line => line.trim().length > 0)
+              .map(line => line.trim());
+            
+            console.log(`Found ${jsonPlanFiles.length} JSON plan files`);
+            
+            let commentsCreated = 0;
+            let modulesWithChanges = 0;
+            
+            // Process each JSON plan file
+            for (const relativePath of jsonPlanFiles) {
+              const fullPath = `./plan-outputs/${relativePath}`;
+              
+              if (fs.existsSync(fullPath)) {
+                const moduleMatch = path.basename(relativePath).match(/(.+)_plan\.json$/);
+                if (!moduleMatch) continue;
+                
+                const moduleName = moduleMatch[1];
+                console.log(`Processing module: ${moduleName}`);
+                
+                try {
+                  const jsonContent = fs.readFileSync(fullPath, 'utf8');
+                  const analysis = analyzePlan(jsonContent);
+                  
+                  if (analysis.hasChanges) {
+                    modulesWithChanges++;
+                    
+                    const moduleComment = `#### 📦 Module: \`${moduleName}\`\n\n${analysis.summary}\n\n*<details><summary>View JSON Plan</summary>*\n\n\`\`\`json\n${JSON.stringify(JSON.parse(jsonContent), null, 2).substring(0, 10000)}\n\`\`\`\n\n*</details>*`;
+                    
+                    await github.rest.issues.createComment({
+                      issue_number: context.issue.number,
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      body: moduleComment
+                    });
+                    
+                    commentsCreated++;
+                    console.log(`Created comment for module: ${moduleName}`);
+                  } else {
+                    console.log(`Skipping module ${moduleName} - no changes detected`);
+                  }
+                } catch (error) {
+                  console.error(`Error processing module ${moduleName}:`, error);
+                }
+              }
+            }
+            
+            console.log(`Created ${commentsCreated} module comments for ${modulesWithChanges} modules with changes`);
 
