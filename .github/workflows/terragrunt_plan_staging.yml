@@ -142,8 +142,18 @@ jobs:
               try {
                 const plan = JSON.parse(jsonPlan);
                 
-                if (!plan.resource_changes) {
-                  return { hasChanges: false, summary: 'No resource changes found.' };
+                console.log('=== JSON Plan Analysis Debug ===');
+                console.log('Plan keys:', Object.keys(plan));
+                console.log('Has resource_changes:', !!plan.resource_changes);
+                
+                if (plan.resource_changes) {
+                  console.log('Resource changes count:', plan.resource_changes.length);
+                  console.log('First few resource changes:', JSON.stringify(plan.resource_changes.slice(0, 3), null, 2));
+                }
+                
+                if (!plan.resource_changes || plan.resource_changes.length === 0) {
+                  console.log('No resource_changes found in plan');
+                  return { hasChanges: false, summary: 'No resource changes found in plan.' };
                 }
                 
                 const changes = {
@@ -155,7 +165,13 @@ jobs:
                 
                 let totalChanges = 0;
                 
-                plan.resource_changes.forEach(change => {
+                plan.resource_changes.forEach((change, index) => {
+                  console.log(`Processing resource change ${index}:`, {
+                    type: change.type,
+                    name: change.name,
+                    actions: change.change?.actions
+                  });
+                  
                   const resourceName = `${change.type}.${change.name}`;
                   
                   if (change.change && change.change.actions) {
@@ -174,11 +190,16 @@ jobs:
                       changes.delete.push(resourceName);
                       totalChanges++;
                     }
+                  } else {
+                    console.log(`Resource change ${index} has no change.actions:`, JSON.stringify(change, null, 2));
                   }
                 });
                 
+                console.log('Total changes detected:', totalChanges);
+                console.log('Changes breakdown:', changes);
+                
                 if (totalChanges === 0) {
-                  return { hasChanges: false, summary: 'No changes detected.' };
+                  return { hasChanges: false, summary: 'No actionable changes detected.' };
                 }
                 
                 // Build summary
@@ -220,6 +241,7 @@ jobs:
                 
               } catch (error) {
                 console.error('Error parsing JSON plan:', error);
+                console.error('JSON content preview:', jsonPlan.substring(0, 500));
                 return { hasChanges: false, summary: `Error parsing plan: ${error.message}` };
               }
             }
@@ -257,20 +279,46 @@ jobs:
             let commentsCreated = 0;
             let modulesWithChanges = 0;
             
+            // Debug: Create a comment with the first JSON file for inspection
+            if (jsonPlanFiles.length > 0) {
+              const firstJsonFile = `./plan-outputs/${jsonPlanFiles[0]}`;
+              if (fs.existsSync(firstJsonFile)) {
+                const firstJsonContent = fs.readFileSync(firstJsonFile, 'utf8');
+                const debugComment = `#### 🔍 Debug: Sample JSON Plan Structure\n\n**File:** \`${jsonPlanFiles[0]}\`\n**Size:** ${firstJsonContent.length} characters\n\n**JSON Preview:**\n\`\`\`json\n${firstJsonContent.substring(0, 2000)}\n\`\`\`\n\n**Keys available:** ${Object.keys(JSON.parse(firstJsonContent)).join(', ')}`;
+                
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: debugComment
+                });
+              }
+            }
+            
             // Process each JSON plan file
             for (const relativePath of jsonPlanFiles) {
               const fullPath = `./plan-outputs/${relativePath}`;
               
+              console.log(`Checking file: ${fullPath}`);
+              console.log(`File exists: ${fs.existsSync(fullPath)}`);
+              
               if (fs.existsSync(fullPath)) {
                 const moduleMatch = path.basename(relativePath).match(/(.+)_plan\.json$/);
-                if (!moduleMatch) continue;
+                if (!moduleMatch) {
+                  console.log(`Skipping file - doesn't match pattern: ${relativePath}`);
+                  continue;
+                }
                 
                 const moduleName = moduleMatch[1];
-                console.log(`Processing module: ${moduleName}`);
+                console.log(`Processing module: ${moduleName} from file: ${relativePath}`);
                 
                 try {
                   const jsonContent = fs.readFileSync(fullPath, 'utf8');
+                  console.log(`JSON content length: ${jsonContent.length} characters`);
+                  console.log(`JSON content preview: ${jsonContent.substring(0, 200)}...`);
+                  
                   const analysis = analyzePlan(jsonContent);
+                  console.log(`Analysis result for ${moduleName}:`, analysis);
                   
                   if (analysis.hasChanges) {
                     modulesWithChanges++;
@@ -285,13 +333,15 @@ jobs:
                     });
                     
                     commentsCreated++;
-                    console.log(`Created comment for module: ${moduleName}`);
+                    console.log(`✓ Created comment for module: ${moduleName}`);
                   } else {
-                    console.log(`Skipping module ${moduleName} - no changes detected`);
+                    console.log(`✗ Skipping module ${moduleName} - no changes detected: ${analysis.summary}`);
                   }
                 } catch (error) {
                   console.error(`Error processing module ${moduleName}:`, error);
                 }
+              } else {
+                console.log(`File not found: ${fullPath}`);
               }
             }
             
