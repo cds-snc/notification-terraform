@@ -121,24 +121,43 @@ jobs:
             
             // Check if module has actual changes
             function hasChanges(moduleOutput) {
-              const output = moduleOutput.toLowerCase();
-              const hasKeywords = output.includes('plan:') || 
-                     output.includes('to add') || 
-                     output.includes('to change') || 
-                     output.includes('to destroy') ||
-                     output.includes('will be created') ||
-                     output.includes('will be updated') ||
-                     output.includes('will be destroyed') ||
-                     output.includes('must be replaced');
+              console.log(`=== hasChanges Debug ===`);
+              console.log(`Output length: ${moduleOutput.length}`);
+              console.log(`Full output preview: "${moduleOutput.substring(0, 500)}"`);
               
-              const hasDiffMarkers = /^\s*[+\-~#]/.test(moduleOutput);
-              const hasNoChanges = output.includes('no changes') && output.includes('infrastructure matches');
+              // Look for Plan: summary lines that indicate actual changes
+              const planMatch = moduleOutput.match(/Plan:\s*(\d+)\s*to\s*add,\s*(\d+)\s*to\s*change,\s*(\d+)\s*to\s*destroy/i);
+              if (planMatch) {
+                const [, add, change, destroy] = planMatch;
+                const totalChanges = parseInt(add) + parseInt(change) + parseInt(destroy);
+                console.log(`Found Plan summary: ${add} add, ${change} change, ${destroy} destroy = ${totalChanges} total`);
+                return totalChanges > 0;
+              }
               
-              // Debug logging
-              console.log(`Module output preview: "${moduleOutput.substring(0, 200)}..."`);
-              console.log(`Has keywords: ${hasKeywords}, Has diff markers: ${hasDiffMarkers}, Has no changes: ${hasNoChanges}`);
+              // Check for resource change indicators
+              const hasResourceChanges = /will be (created|updated|destroyed|replaced)/i.test(moduleOutput);
+              console.log(`Has resource changes: ${hasResourceChanges}`);
               
-              return (hasKeywords || hasDiffMarkers) && !hasNoChanges;
+              // Check for diff markers (+ - ~)
+              const hasDiffMarkers = /^[\s]*[\+\-\~]/m.test(moduleOutput);
+              console.log(`Has diff markers: ${hasDiffMarkers}`);
+              
+              // Check if it explicitly says no changes - be specific about these patterns
+              const noChangesPatterns = [
+                /no changes are needed/i,
+                /No changes\./i,
+                /found no differences/i,
+                /and no Terraform configuration changes/i,
+                /infrastructure matches the configuration/i
+              ];
+              
+              const hasNoChanges = noChangesPatterns.some(pattern => pattern.test(moduleOutput));
+              console.log(`Has no changes: ${hasNoChanges}`);
+              
+              const result = (hasResourceChanges || hasDiffMarkers) && !hasNoChanges;
+              console.log(`Final hasChanges result: ${result}`);
+              
+              return result;
             }
             
             // Clean up individual lines
@@ -150,11 +169,11 @@ jobs:
                 .replace(/STDOUT\s+/, '')
                 // Remove module brackets from individual lines (we'll handle module grouping separately)
                 .replace(/\[[^\]]+\]\s+/, '')
-                // Remove "terraform:" prefixes
+                // Remove "terraform:" prefixes but keep the rest
                 .replace(/terraform:\s+/, '')
-                // Clean up extra spaces
-                .replace(/\s+/g, ' ')
-                .trim();
+                // Don't clean up extra spaces too aggressively - terraform output formatting matters
+                .replace(/^\s+/, '') // Remove leading whitespace
+                .replace(/\s+$/, ''); // Remove trailing whitespace
             }
             
             planOutput = stripAnsiCodes(planOutput);
@@ -208,8 +227,19 @@ jobs:
               if (moduleMatch) {
                 // Save previous module if exists and has content
                 if (currentModule && currentModuleLines.length > 0) {
-                  // Combine all lines for this module
-                  const moduleContent = currentModuleLines.map(cleanLine).filter(line => line.length > 0).join('\n');
+                  // Join lines with minimal cleaning to preserve terraform output structure
+                  const moduleContent = currentModuleLines
+                    .map(line => {
+                      // Only do minimal cleaning - remove timestamps, STDOUT, module brackets, but keep content
+                      return line
+                        .replace(/^\d{2}:\d{2}:\d{2}\.\d{3}\s+/, '')
+                        .replace(/STDOUT\s+\[[^\]]+\]\s+/, '')
+                        .replace(/\[[^\]]+\]\s+terraform:\s*/, '')
+                        .trim();
+                    })
+                    .filter(line => line.length > 0)
+                    .join('\n');
+                    
                   if (moduleContent.trim().length > 0) {
                     modules.set(currentModule, moduleContent);
                   }
@@ -226,7 +256,17 @@ jobs:
             
             // Save the last module
             if (currentModule && currentModuleLines.length > 0) {
-              const moduleContent = currentModuleLines.map(cleanLine).filter(line => line.length > 0).join('\n');
+              const moduleContent = currentModuleLines
+                .map(line => {
+                  return line
+                    .replace(/^\d{2}:\d{2}:\d{2}\.\d{3}\s+/, '')
+                    .replace(/STDOUT\s+\[[^\]]+\]\s+/, '')
+                    .replace(/\[[^\]]+\]\s+terraform:\s*/, '')
+                    .trim();
+                })
+                .filter(line => line.length > 0)
+                .join('\n');
+                
               if (moduleContent.trim().length > 0) {
                 modules.set(currentModule, moduleContent);
               }
