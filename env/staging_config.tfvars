@@ -28,7 +28,7 @@ celery_queue_prefix             = "eks-notification-canada-ca"
 notify_k8s_namespace            = "notification-canada-ca"
 
 # lambda-api
-api_image_tag                          = "latest"
+api_image_tag                          = "asfasf"
 redis_enabled                          = "1"
 low_demand_min_concurrency             = 1
 low_demand_max_concurrency             = 5
