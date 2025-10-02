@@ -301,7 +301,7 @@ jobs:
 
   terragrunt-plan-step-3:
     if: |
-      needs.terragrunt-filter.outputs.cloudfront == 'dns' 
+      needs.terragrunt-filter.outputs.dns == 'true'
     needs: 
       - terragrunt-filter
       - terragrunt-plan-step-2
