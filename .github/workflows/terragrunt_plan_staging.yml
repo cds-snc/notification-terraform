@@ -122,15 +122,23 @@ jobs:
             // Check if module has actual changes
             function hasChanges(moduleOutput) {
               const output = moduleOutput.toLowerCase();
-              return output.includes('plan:') || 
+              const hasKeywords = output.includes('plan:') || 
                      output.includes('to add') || 
                      output.includes('to change') || 
                      output.includes('to destroy') ||
                      output.includes('will be created') ||
                      output.includes('will be updated') ||
                      output.includes('will be destroyed') ||
-                     output.includes('must be replaced') ||
-                     /^\s*[+\-~#]/.test(moduleOutput); // terraform diff markers
+                     output.includes('must be replaced');
+              
+              const hasDiffMarkers = /^\s*[+\-~#]/.test(moduleOutput);
+              const hasNoChanges = output.includes('no changes') && output.includes('infrastructure matches');
+              
+              // Debug logging
+              console.log(`Module output preview: "${moduleOutput.substring(0, 200)}..."`);
+              console.log(`Has keywords: ${hasKeywords}, Has diff markers: ${hasDiffMarkers}, Has no changes: ${hasNoChanges}`);
+              
+              return (hasKeywords || hasDiffMarkers) && !hasNoChanges;
             }
             
             // Clean up individual lines
@@ -276,11 +284,22 @@ jobs:
             for (const [moduleName, output] of modules) {
               let moduleOutput = output.trim();
               
+              console.log(`\n=== Processing module: ${moduleName} ===`);
+              console.log(`Module output length: ${moduleOutput.length} characters`);
+              
               // Check if this module has actual changes
-              if (!hasChanges(moduleOutput)) {
+              const hasModuleChanges = hasChanges(moduleOutput);
+              
+              if (!hasModuleChanges) {
                 console.log(`Skipping module ${moduleName} - no changes detected`);
                 skippedCount++;
-                continue;
+                
+                // For debugging, let's still create a comment for the first few modules to see what's in them
+                if (skippedCount <= 3) {
+                  console.log(`DEBUG: Creating comment anyway for debugging (module ${skippedCount})`);
+                } else {
+                  continue;
+                }
               }
               
               // Further clean up the output
@@ -293,7 +312,8 @@ jobs:
                 moduleOutput = moduleOutput.substring(0, maxCommentSize - 500) + '\n\n... (output truncated due to size)';
               }
               
-              const moduleComment = `#### 📦 Module: \`${moduleName}\` (Changes Detected)
+              const changeStatus = hasModuleChanges ? "(Changes Detected)" : "(DEBUG - No Changes)";
+              const moduleComment = `#### 📦 Module: \`${moduleName}\` ${changeStatus}
               
               \`\`\`terraform
               ${moduleOutput}
