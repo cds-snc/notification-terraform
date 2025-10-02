@@ -1,0 +1,498 @@
+name: "Terragrunt plan STAGING (Optimized)"
+
+env:
+  ENVIRONMENT: staging
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
+  AWS_REGION: ca-central-1
+  OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
+  WORKFLOW: true
+  TF_PLUGIN_CACHE_DIR: /tmp/.terraform.d/plugin-cache
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".env"
+      - "aws/**"
+      - "env/$ENVIRONMENT/**"
+      - "env/terragrunt.hcl"
+      - "env/*.tfvars"
+      - ".github/workflows/terragrunt_plan_$ENVIRONMENT.yml"
+
+permissions:
+  id-token: write # This is required for requesting the OIDC JWT
+  contents: write # This is required for actions/checkout
+  pull-requests: write
+
+jobs:
+  terragrunt-filter:
+    runs-on: ubuntu-latest
+
+    outputs:
+      aws-auth: ${{ steps.filter.outputs.aws-auth }}
+      cloudfront: ${{ steps.filter.outputs.cloudfront }}
+      common: ${{ steps.filter.outputs.common }}
+      config: ${{ steps.filter.outputs.config }}
+      database-tools: ${{ steps.filter.outputs.database-tools }}
+      dns: ${{ steps.filter.outputs.dns }}
+      ecr: ${{ steps.filter.outputs.ecr }}
+      ecr-us-east: ${{ steps.filter.outputs.ecr-us-east }}
+      elasticache: ${{ steps.filter.outputs.elasticache }}
+      eks: ${{ steps.filter.outputs.eks }}
+      github: ${{ steps.filter.outputs.github }}
+      heartbeat: ${{ steps.filter.outputs.heartbeat }}
+      lambda-admin-pr: ${{ steps.filter.outputs.lambda-admin-pr }}
+      lambda-api: ${{ steps.filter.outputs.lambda-api }}
+      lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
+      manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
+      newrelic: ${{ steps.filter.outputs.newrelic }}
+      performance-test: ${{ steps.filter.outputs.performance-test }}
+      pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}
+      quicksight: ${{ steps.filter.outputs.quicksight }}
+      rds: ${{ steps.filter.outputs.rds }}
+      ses_receiving_emails: ${{ steps.filter.outputs.ses_receiving_emails }}
+      ses_to_sqs_email_callbacks: ${{ steps.filter.outputs.ses_to_sqs_email_callbacks }}
+      ses_validation_dns_entries: ${{ steps.filter.outputs.ses_validation_dns_entries }}
+      sns_to_sqs_sms_callbacks: ${{ steps.filter.outputs.sns_to_sqs_sms_callbacks }}
+      system_status: ${{ steps.filter.outputs.system_status }}
+      system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}
+
+    steps:
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        id: filter
+        with:
+          filters: |
+            config:
+              - 'env/*.tfvars'
+            common:
+              - '.github/workflows/terragrunt-plan-${{env.ENVIRONMENT}}.yml'
+              - 'aws/common/**'
+              - 'env/${{env.ENVIRONMENT}}/common/**'
+              - 'env/terragrunt.hcl'
+            dns:
+              - 'aws/dns/**'
+              - 'env/${{env.ENVIRONMENT}}/dns/**'
+              - 'env/terragrunt.hcl'
+            ses_validation_dns_entries:
+              - 'aws/ses_validation_dns_entries/**'
+              - 'env/${{env.ENVIRONMENT}}/ses_validation_dns_entries/**'
+              - 'env/terragrunt.hcl'
+            ecr:
+              - 'aws/ecr/**'
+              - 'env/${{env.ENVIRONMENT}}/ecr/**'
+              - 'env/terragrunt.hcl'
+            ecr-us-east:
+              - 'aws/ecr-us-east/**'
+              - 'env/${{env.ENVIRONMENT}}/ecr-us-east/**'
+              - 'env/terragrunt.hcl'
+            eks:
+              - 'aws/eks/**'
+              - 'env/${{env.ENVIRONMENT}}/eks/**'
+              - 'env/terragrunt.hcl'
+            aws-auth:
+              - 'aws/aws-auth/**'
+              - 'env/${{env.ENVIRONMENT}}/aws-auth/**'
+              - 'env/terragrunt.hcl'
+            elasticache:
+              - 'aws/elasticache/**'
+              - 'env/${{env.ENVIRONMENT}}/elasticache/**'
+              - 'env/terragrunt.hcl'
+            rds:
+              - 'aws/rds/**'
+              - 'env/${{env.ENVIRONMENT}}/rds/**'
+              - 'env/terragrunt.hcl'
+            cloudfront:
+              - 'aws/cloudfront/**'
+              - 'env/${{env.ENVIRONMENT}}/cloudfront/**'
+              - 'env/terragrunt.hcl'
+            lambda-api:
+              - 'aws/lambda-api/**'
+              - 'env/${{env.ENVIRONMENT}}/lambda-api/**'
+              - 'env/terragrunt.hcl'
+            lambda-admin-pr:
+              - 'aws/lambda-admin-pr/**'
+              - 'env/${{env.ENVIRONMENT}}/lambda-admin-pr/**'
+              - 'env/terragrunt.hcl'
+            performance-test:
+              - 'aws/performance-test/**'
+              - 'env/${{env.ENVIRONMENT}}/performance-test/**'
+              - 'env/terragrunt.hcl'
+            heartbeat:
+              - 'aws/heartbeat/**'
+              - 'env/${{env.ENVIRONMENT}}/heartbeat/**'
+              - 'env/terragrunt.hcl'
+            database-tools:
+              - 'aws/database-tools/**'
+              - 'env/${{env.ENVIRONMENT}}/database-tools/**'
+              - 'env/terragrunt.hcl'
+            system_status:
+              - 'aws/system_status/**'
+              - 'env/${{env.ENVIRONMENT}}/system_status/**'
+              - 'env/terragrunt.hcl'
+            system_status_static_site:
+              - 'aws/system_status_static_site/**'
+              - 'env/${{env.ENVIRONMENT}}/system_status_static_site/**'
+              - 'env/terragrunt.hcl'
+            quicksight:
+              - 'aws/quicksight/**'
+              - 'env/${{env.ENVIRONMENT}}/quicksight/**'
+              - 'env/terragrunt.hcl'
+            lambda-google-cidr:
+              - 'aws/lambda-google-cidr/**'
+              - 'env/${{env.ENVIRONMENT}}/lambda-google-cidr/**'
+              - 'env/terragrunt.hcl'
+            ses_receiving_emails:
+              - 'aws/ses_receiving_emails/**'
+              - 'env/${{env.ENVIRONMENT}}/ses_receiving_emails/**'
+              - 'env/terragrunt.hcl'
+            ses_to_sqs_email_callbacks:
+              - 'aws/ses_to_sqs_email_callbacks/**'
+              - 'env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks/**'
+              - 'env/terragrunt.hcl'
+            sns_to_sqs_sms_callbacks:
+              - 'aws/sns_to_sqs_sms_callbacks/**'
+              - 'env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks/**'
+              - 'env/terragrunt.hcl'
+            pinpoint_to_sqs_sms_callbacks:
+              - 'aws/pinpoint_to_sqs_sms_callbacks/**'
+              - 'env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks/**'
+              - 'env/terragrunt.hcl'
+            newrelic:
+              - 'aws/newrelic/**'
+              - 'env/${{env.ENVIRONMENT}}/newrelic/**'
+              - 'env/terragrunt.hcl'
+            manifest_secrets:
+              - 'aws/manifest_secrets/**'
+              - 'env/${{env.ENVIRONMENT}}/manifest_secrets/**'
+              - 'env/terragrunt.hcl'
+            github:
+              - 'aws/github/**'
+              - 'env/${{env.ENVIRONMENT}}/github/**'
+              - 'env/terragrunt.hcl'
+
+  terragrunt-plan-step-1:
+    if: |
+      needs.terragrunt-filter.outputs.common == 'true' || 
+      needs.terragrunt-filter.outputs.ecr == 'true' ||
+      needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
+      needs.terragrunt-filter.outputs.newrelic == 'true' ||
+      needs.terragrunt-filter.outputs.config == 'true'
+    needs: terragrunt-filter
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [common, ecr, ecr-us-east, newrelic]
+        include:
+          - component: common
+            condition: ${{ needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ecr
+            condition: ${{ needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ecr-us-east
+            condition: ${{ needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: newrelic
+            condition: ${{ needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+    env:
+      COMPONENT: ${{ matrix.component }}
+    steps:
+      - name: Skip if no changes
+        if: ${{ !matrix.condition }}
+        run: |
+          echo "No changes detected for ${{ matrix.component }}, skipping..."
+          exit 0
+      
+      - name: Checkout
+        if: ${{ matrix.condition }}
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+
+      # Cache Terraform providers to avoid repeated downloads
+      - name: Cache Terraform providers
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          restore-keys: |
+            terraform-providers-
+
+      # Cache Terragrunt dependencies
+      - name: Cache Terragrunt cache
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
+          restore-keys: |
+            terragrunt-cache-${{ github.sha }}-
+            terragrunt-cache-
+      
+      - name: Setup Terraform
+        if: ${{ matrix.condition }}
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      
+      - name: Download TFVars
+        if: ${{ matrix.condition }}
+        run: |
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+      
+      - name: Terragrunt plan ${{ matrix.component }}
+        if: ${{ matrix.condition }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"      
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-step-2:
+    if: |
+      needs.terragrunt-filter.outputs.cloudfront == 'true' || 
+      needs.terragrunt-filter.outputs.heartbeat == 'true' ||
+      needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
+      needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
+      needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true'||
+      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true'
+
+    needs: 
+      - terragrunt-filter
+      - terragrunt-plan-step-1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [cloudfront, heartbeat, pinpoint_to_sqs_sms_callbacks, ses_receiving_emails, ses_to_sqs_email_callbacks, sns_to_sqs_sms_callbacks]
+        include:
+          - component: cloudfront
+            condition: ${{ needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: heartbeat
+            condition: ${{ needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: pinpoint_to_sqs_sms_callbacks
+            condition: ${{ needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ses_receiving_emails
+            condition: ${{ needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ses_to_sqs_email_callbacks
+            condition: ${{ needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: sns_to_sqs_sms_callbacks
+            condition: ${{ needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+    env:
+      COMPONENT: ${{ matrix.component }}
+    steps:
+      - name: Skip if no changes
+        if: ${{ !matrix.condition }}
+        run: |
+          echo "No changes detected for ${{ matrix.component }}, skipping..."
+          exit 0
+      
+      - name: Checkout
+        if: ${{ matrix.condition }}
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+
+      # Cache Terraform providers
+      - name: Cache Terraform providers
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          restore-keys: |
+            terraform-providers-
+
+      # Cache Terragrunt dependencies  
+      - name: Cache Terragrunt cache
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
+          restore-keys: |
+            terragrunt-cache-${{ github.sha }}-
+            terragrunt-cache-
+      
+      - name: Setup Terraform
+        if: ${{ matrix.condition }}
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      
+      - name: Download TFVars
+        if: ${{ matrix.condition }}
+        run: |
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+      
+      - name: Terragrunt plan ${{ matrix.component }}
+        if: ${{ matrix.condition }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"      
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-step-3:
+    if: |
+      needs.terragrunt-filter.outputs.dns == 'true'
+    needs: 
+      - terragrunt-filter
+      - terragrunt-plan-step-2
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [dns]
+        include:
+          - component: dns
+            condition: ${{ needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+    env:
+      COMPONENT: ${{ matrix.component }}
+    steps:
+      - name: Skip if no changes
+        if: ${{ !matrix.condition }}
+        run: |
+          echo "No changes detected for ${{ matrix.component }}, skipping..."
+          exit 0
+      
+      - name: Checkout
+        if: ${{ matrix.condition }}
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+
+      # Cache Terraform providers
+      - name: Cache Terraform providers
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          restore-keys: |
+            terraform-providers-
+
+      # Cache Terragrunt dependencies and state
+      - name: Cache Terragrunt cache
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
+          restore-keys: |
+            terragrunt-cache-${{ github.sha }}-
+            terragrunt-cache-
+      
+      - name: Setup Terraform
+        if: ${{ matrix.condition }}
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      
+      - name: Download TFVars
+        if: ${{ matrix.condition }}
+        run: |
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+      
+      - name: Terragrunt plan ${{ matrix.component }}
+        if: ${{ matrix.condition }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"      
+          terraform-init: |
+            -upgrade
+
+  terragrunt-plan-step-4:
+    if: |
+      needs.terragrunt-filter.outputs.eks == 'true' || 
+      needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
+      needs.terragrunt-filter.outputs.system_status_static_site == 'true'
+
+    needs: 
+      - terragrunt-filter
+      - terragrunt-plan-step-3
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [eks, ses_validation_dns_entries, system_status_static_site]
+        include:
+          - component: eks
+            condition: ${{ needs.terragrunt-filter.outputs.eks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ses_validation_dns_entries
+            condition: ${{ needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: system_status_static_site
+            condition: ${{ needs.terragrunt-filter.outputs.system_status_static_site == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+    env:
+      COMPONENT: ${{ matrix.component }}
+    steps:
+      - name: Skip if no changes
+        if: ${{ !matrix.condition }}
+        run: |
+          echo "No changes detected for ${{ matrix.component }}, skipping..."
+          exit 0
+      
+      - name: Checkout
+        if: ${{ matrix.condition }}
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+
+      # Cache Terraform providers
+      - name: Cache Terraform providers
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          restore-keys: |
+            terraform-providers-
+
+      # Cache Terragrunt dependencies
+      - name: Cache Terragrunt cache  
+        if: ${{ matrix.condition }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
+          restore-keys: |
+            terragrunt-cache-${{ github.sha }}-
+            terragrunt-cache-
+      
+      - name: Setup Terraform
+        if: ${{ matrix.condition }}
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      
+      - name: Download TFVars
+        if: ${{ matrix.condition }}
+        run: |
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+      
+      - name: Terragrunt plan ${{ matrix.component }}
+        if: ${{ matrix.condition }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"      
+          terraform-init: |
+            -upgrade           

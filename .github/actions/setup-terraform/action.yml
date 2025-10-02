@@ -51,4 +51,10 @@ runs:
       with:
         role-to-assume: ${{ inputs.role_to_assume }}
         role-session-name: ${{ inputs.role_session_name }}
-        aws-region: "ca-central-1"
+        aws-region: ca-central-1
+
+    - name: Install 1Password CLI
+      run: |
+        curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+        sudo dpkg -i 1pass.deb
+      shell: bash
