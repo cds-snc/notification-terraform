@@ -58,9 +58,9 @@ jobs:
             --terragrunt-exclude-dir quicksight \
             --terragrunt-exclude-dir aws-auth \
             --terragrunt-non-interactive \
-            --terragrunt-parallelism 20 > plan_output.txt 2>&1
+            --terragrunt-parallelism 20 2>&1 | tee plan_output.txt
           
-          PLAN_EXIT_CODE=$?
+          PLAN_EXIT_CODE=${PIPESTATUS[0]}
           
           # Output the results
           cat plan_output.txt
