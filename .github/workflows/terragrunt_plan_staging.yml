@@ -123,106 +123,110 @@ jobs:
               body: summaryOutput
             });
             
-            // Debug: Show first 1000 characters to understand the format
-            console.log('First 1000 characters of output:');
-            console.log(planOutput.substring(0, 1000));
-            
-            // More flexible parsing - look for various terragrunt patterns
+            // Split the output into sections based on module boundaries
+            // Look for patterns that indicate module starts/ends
             const lines = planOutput.split('\n');
             const modules = new Map();
-            let currentModule = '';
-            let currentModuleOutput = [];
+            let currentOutput = [];
+            let isInTerraformOutput = false;
             
             for (let i = 0; i < lines.length; i++) {
               const line = lines[i];
               
-              // Look for terragrunt module indicators
-              let moduleMatch = null;
-              
-              // Pattern 1: "=> Executing terraform plan in /path/to/env/staging/module"
-              if (line.includes('Executing') && line.includes('env/staging/')) {
-                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
-              }
-              // Pattern 2: "=> Running terraform plan in /path/to/env/staging/module"
-              else if (line.includes('Running') && line.includes('env/staging/')) {
-                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
-              }
-              // Pattern 3: Just the module path in working directory context
-              else if (line.includes('env/staging/') && (line.includes('terraform') || line.includes('plan'))) {
-                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
-              }
-              // Pattern 4: Directory path pattern
-              else if (line.match(/^.*env\/staging\/([^\/\s]+).*$/)) {
-                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
+              // Skip terragrunt warnings at the beginning
+              if (line.includes('WARN') && line.includes('terragrunt')) {
+                continue;
               }
               
-              if (moduleMatch) {
-                // Save previous module if exists
-                if (currentModule && currentModuleOutput.length > 0) {
-                  modules.set(currentModule, currentModuleOutput.join('\n'));
-                }
-                
-                currentModule = moduleMatch[1];
-                currentModuleOutput = [line];
-                console.log(`Found module: ${currentModule}`);
-              } else if (currentModule) {
-                currentModuleOutput.push(line);
+              // Look for terraform plan output indicators
+              if (line.includes('Terraform used the selected providers') || 
+                  line.includes('Terraform will perform the following actions') ||
+                  line.includes('No changes. Your infrastructure matches') ||
+                  line.includes('Plan:') ||
+                  line.includes('Error:') ||
+                  line.includes('─────────────────────────────────────') ||
+                  line.match(/^\s*[#\+\-~]\s/)) {
+                isInTerraformOutput = true;
+              }
+              
+              if (isInTerraformOutput) {
+                currentOutput.push(line);
               }
             }
             
-            // Save the last module
-            if (currentModule && currentModuleOutput.length > 0) {
-              modules.set(currentModule, currentModuleOutput.join('\n'));
-            }
-            
-            console.log(`Found ${modules.size} modules: ${Array.from(modules.keys()).join(', ')}`);
-            
-            // If no modules found with pattern matching, try splitting by chunks
-            if (modules.size === 0) {
-              console.log('No modules found with pattern matching, trying chunk approach...');
+            // If we found terraform output, let's try to split it intelligently
+            if (currentOutput.length > 0) {
+              const terraformOutput = currentOutput.join('\n');
               
-              // Split by empty lines and look for chunks with env/staging
-              const chunks = planOutput.split(/\n\s*\n/);
-              let chunkIndex = 0;
+              // Try to split by plan sections
+              // Look for "Plan: X to add, Y to change, Z to destroy" or similar patterns
+              const planSections = terraformOutput.split(/(?=Terraform used the selected providers|Plan: \d+|No changes\. Your infrastructure|Error: )/);
               
-              for (const chunk of chunks) {
-                if (chunk.includes('env/staging/')) {
-                  const moduleMatch = chunk.match(/env\/staging\/([^\/\s]+)/);
-                  if (moduleMatch) {
-                    const moduleName = moduleMatch[1];
-                    modules.set(`${moduleName}-${chunkIndex}`, chunk);
-                    console.log(`Found chunk module: ${moduleName}-${chunkIndex}`);
+              let moduleIndex = 1;
+              for (const section of planSections) {
+                if (section.trim().length > 100) { // Only include substantial sections
+                  // Try to extract module info from the section
+                  let moduleName = `module-${moduleIndex}`;
+                  
+                  // Look for provider or resource hints to identify the module
+                  const resourceMatch = section.match(/resource "([^"]+)"/);
+                  const providerMatch = section.match(/provider\[([^\]]+)\]/);
+                  
+                  if (resourceMatch) {
+                    const resourceType = resourceMatch[1].split('_')[0];
+                    moduleName = resourceType;
+                  } else if (providerMatch) {
+                    moduleName = `provider-section-${moduleIndex}`;
                   }
+                  
+                  modules.set(moduleName, section);
+                  moduleIndex++;
                 }
-                chunkIndex++;
               }
             }
+            
+            // If still no modules found, create one big section
+            if (modules.size === 0) {
+              console.log('Creating single combined output section');
+              // Remove warnings and empty lines
+              const cleanOutput = planOutput
+                .split('\n')
+                .filter(line => !line.includes('WARN') || !line.includes('terragrunt'))
+                .filter(line => line.trim().length > 0)
+                .join('\n');
+                
+              if (cleanOutput.length > 0) {
+                modules.set('combined-plan', cleanOutput);
+              }
+            }
+            
+            console.log(`Found ${modules.size} sections: ${Array.from(modules.keys()).join(', ')}`);
             
             // Post module comments
             let moduleCount = 0;
             const maxCommentSize = 60000;
             
-            for (const [moduleName, output] of modules) {
-              let moduleOutput = output;
-              if (moduleOutput.length > maxCommentSize) {
-                moduleOutput = moduleOutput.substring(0, maxCommentSize - 500) + '\n\n... (output truncated due to size)';
+            for (const [sectionName, output] of modules) {
+              let sectionOutput = output;
+              if (sectionOutput.length > maxCommentSize) {
+                sectionOutput = sectionOutput.substring(0, maxCommentSize - 500) + '\n\n... (output truncated due to size)';
               }
               
-              const moduleComment = `#### 📦 Module: \`${moduleName}\`
+              const sectionComment = `#### 📦 Plan Section: \`${sectionName}\`
               
-              \`\`\`
-              ${moduleOutput.trim()}
+              \`\`\`terraform
+              ${sectionOutput.trim()}
               \`\`\``;
               
               await github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: moduleComment
+                body: sectionComment
               });
               
               moduleCount++;
               await new Promise(resolve => setTimeout(resolve, 100));
             }
             
-            console.log(`Created ${moduleCount} module comments`);
+            console.log(`Created ${moduleCount} section comments`);
