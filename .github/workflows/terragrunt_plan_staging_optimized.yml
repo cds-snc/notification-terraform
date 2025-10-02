@@ -329,18 +329,24 @@ jobs:
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-      
-      - name: Terragrunt plan ${{ matrix.component }}
+
+      - name: Terragrunt Plan
         if: ${{ matrix.condition }}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"      
-          terraform-init: |
-            -upgrade
+        run: |
+          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt plan --terragrunt-non-interactive --no-color 
+      
+#      - name: Terragrunt plan ${{ matrix.component }}
+#        if: ${{ matrix.condition }}
+#        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+#        with:
+#          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+#          comment-delete: "true"
+#          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+#          github-token: "${{ secrets.GITHUB_TOKEN }}"
+#          terragrunt: "true"      
+#          terraform-init: |
+#            -upgrade
 
   terragrunt-plan-step-3:
     if: |
@@ -403,18 +409,24 @@ jobs:
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-      
-      - name: Terragrunt plan ${{ matrix.component }}
+ 
+      - name: Terragrunt Plan
         if: ${{ matrix.condition }}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"      
-          terraform-init: |
-            -upgrade
+        run: |
+          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt plan --terragrunt-non-interactive --no-color           
+          
+ #     - name: Terragrunt plan ${{ matrix.component }}
+ #       if: ${{ matrix.condition }}
+ #       uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+ #       with:
+ #         directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+ #         comment-delete: "true"
+ #         comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+ #         github-token: "${{ secrets.GITHUB_TOKEN }}"
+ #         terragrunt: "true"      
+ #         terraform-init: |
+ #           -upgrade
 
   terragrunt-plan-step-4:
     if: |
@@ -484,18 +496,24 @@ jobs:
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-      
-      - name: Terragrunt plan ${{ matrix.component }}
+
+      - name: Terragrunt Plan
         if: ${{ matrix.condition }}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"      
-          terraform-init: |
-            -upgrade           
+        run: |
+          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt plan --terragrunt-non-interactive --no-color 
+          
+#      - name: Terragrunt plan ${{ matrix.component }}
+#        if: ${{ matrix.condition }}
+#        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+#        with:
+#          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+#          comment-delete: "true"
+#          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+#          github-token: "${{ secrets.GITHUB_TOKEN }}"
+#          terragrunt: "true"      
+#          terraform-init: |
+#            -upgrade           
 
   terragrunt-plan-step-5:
     if: |
@@ -565,18 +583,23 @@ jobs:
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-      
-      - name: Terragrunt plan ${{ matrix.component }}
+
+      - name: Terragrunt Plan
         if: ${{ matrix.condition }}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"      
-          terraform-init: |
-            -upgrade           
+        run: |
+          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt plan --terragrunt-non-interactive --no-color       
+#      - name: Terragrunt plan ${{ matrix.component }}
+#        if: ${{ matrix.condition }}
+#        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+#        with:
+#          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+#          comment-delete: "true"
+#          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+#          github-token: "${{ secrets.GITHUB_TOKEN }}"
+#          terragrunt: "true"      
+#          terraform-init: |
+#            -upgrade           
 
   terragrunt-plan-step-6:
     if: |
@@ -654,17 +677,22 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
       
-      - name: Terragrunt plan ${{ matrix.component }}
+      - name: Terragrunt Plan
         if: ${{ matrix.condition }}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"      
-          terraform-init: |
-            -upgrade                       
+        run: |
+          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt plan --terragrunt-non-interactive --no-color       
+#      - name: Terragrunt plan ${{ matrix.component }}
+#        if: ${{ matrix.condition }}
+#        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+#        with:
+#          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+#          comment-delete: "true"
+#          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+#          github-token: "${{ secrets.GITHUB_TOKEN }}"
+#          terragrunt: "true"      
+#          terraform-init: |
+#            -upgrade                       
 
 
   terragrunt-plan-step-7:
@@ -729,15 +757,20 @@ jobs:
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-      
-      - name: Terragrunt plan ${{ matrix.component }}
+
+      - name: Terragrunt Plan
         if: ${{ matrix.condition }}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
-        with:
-          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
-          comment-delete: "true"
-          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          terragrunt: "true"      
-          terraform-init: |
-            -upgrade                       
+        run: |
+          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt plan --terragrunt-non-interactive --no-color 
+#      - name: Terragrunt plan ${{ matrix.component }}
+#        if: ${{ matrix.condition }}
+#        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+#        with:
+#          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+#          comment-delete: "true"
+#          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+#          github-token: "${{ secrets.GITHUB_TOKEN }}"
+#          terragrunt: "true"      
+#          terraform-init: |
+#            -upgrade                       
