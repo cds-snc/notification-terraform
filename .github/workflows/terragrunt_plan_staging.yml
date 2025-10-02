@@ -62,17 +62,22 @@ jobs:
           
           PLAN_EXIT_CODE=${PIPESTATUS[0]}
           
-          # Output the results
-          cat plan_output.txt
+          # Debug: Check if file exists and show size
+          echo "Plan output file size: $(wc -c < plan_output.txt) bytes"
+          echo "Plan output file lines: $(wc -l < plan_output.txt) lines"
           
           # Set outputs for the comment step
           echo "exitcode=$PLAN_EXIT_CODE" >> $GITHUB_OUTPUT
           
           # Store the plan output (truncate if too long for GitHub)
-          PLAN_OUTPUT=$(cat plan_output.txt | tail -c 50000)  # Last 50KB
-          echo "stdout<<EOF" >> $GITHUB_OUTPUT
-          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          if [ -s plan_output.txt ]; then
+            PLAN_OUTPUT=$(cat plan_output.txt | tail -c 50000)  # Last 50KB
+            echo "stdout<<EOF" >> $GITHUB_OUTPUT
+            echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "stdout=No plan output captured" >> $GITHUB_OUTPUT
+          fi
           
           exit $PLAN_EXIT_CODE
 
