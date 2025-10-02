@@ -119,6 +119,36 @@ jobs:
                         .replace(/\r/g, '\n');
             }
             
+            // Check if module has actual changes
+            function hasChanges(moduleOutput) {
+              const output = moduleOutput.toLowerCase();
+              return output.includes('plan:') || 
+                     output.includes('to add') || 
+                     output.includes('to change') || 
+                     output.includes('to destroy') ||
+                     output.includes('will be created') ||
+                     output.includes('will be updated') ||
+                     output.includes('will be destroyed') ||
+                     output.includes('must be replaced') ||
+                     /^\s*[+\-~#]/.test(moduleOutput); // terraform diff markers
+            }
+            
+            // Clean up individual lines
+            function cleanLine(line) {
+              return line
+                // Remove timestamps like "14:48:07.039"
+                .replace(/^\d{2}:\d{2}:\d{2}\.\d{3}\s+/, '')
+                // Remove "STDOUT" markers
+                .replace(/STDOUT\s+/, '')
+                // Remove module brackets from individual lines (we'll handle module grouping separately)
+                .replace(/\[[^\]]+\]\s+/, '')
+                // Remove "terraform:" prefixes
+                .replace(/terraform:\s+/, '')
+                // Clean up extra spaces
+                .replace(/\s+/g, ' ')
+                .trim();
+            }
+            
             planOutput = stripAnsiCodes(planOutput);
             
             // Create summary comment first
@@ -168,22 +198,30 @@ jobs:
               }
               
               if (moduleMatch) {
-                // Save previous module if exists
+                // Save previous module if exists and has content
                 if (currentModule && currentModuleLines.length > 0) {
-                  modules.set(currentModule, currentModuleLines.join('\n'));
+                  // Combine all lines for this module
+                  const moduleContent = currentModuleLines.map(cleanLine).filter(line => line.length > 0).join('\n');
+                  if (moduleContent.trim().length > 0) {
+                    modules.set(currentModule, moduleContent);
+                  }
                 }
                 
                 currentModule = moduleMatch;
                 currentModuleLines = [line];
                 console.log(`Found module: ${currentModule}`);
               } else if (currentModule) {
+                // Add all lines for the current module
                 currentModuleLines.push(line);
               }
             }
             
             // Save the last module
             if (currentModule && currentModuleLines.length > 0) {
-              modules.set(currentModule, currentModuleLines.join('\n'));
+              const moduleContent = currentModuleLines.map(cleanLine).filter(line => line.length > 0).join('\n');
+              if (moduleContent.trim().length > 0) {
+                modules.set(currentModule, moduleContent);
+              }
             }
             
             console.log(`Found ${modules.size} modules: ${Array.from(modules.keys()).join(', ')}`);
@@ -230,12 +268,20 @@ jobs:
             
             console.log(`Final modules: ${Array.from(modules.keys()).join(', ')}`);
             
-            // Post module comments
+            // Post module comments (only for modules with changes)
             let moduleCount = 0;
+            let skippedCount = 0;
             const maxCommentSize = 60000;
             
             for (const [moduleName, output] of modules) {
               let moduleOutput = output.trim();
+              
+              // Check if this module has actual changes
+              if (!hasChanges(moduleOutput)) {
+                console.log(`Skipping module ${moduleName} - no changes detected`);
+                skippedCount++;
+                continue;
+              }
               
               // Further clean up the output
               moduleOutput = moduleOutput
@@ -247,9 +293,9 @@ jobs:
                 moduleOutput = moduleOutput.substring(0, maxCommentSize - 500) + '\n\n... (output truncated due to size)';
               }
               
-              const moduleComment = `#### 📦 Module: \`${moduleName}\`
+              const moduleComment = `#### 📦 Module: \`${moduleName}\` (Changes Detected)
               
-              \`\`\`
+              \`\`\`terraform
               ${moduleOutput}
               \`\`\``;
               
@@ -264,4 +310,4 @@ jobs:
               await new Promise(resolve => setTimeout(resolve, 100));
             }
             
-            console.log(`Created ${moduleCount} module comments`);
+            console.log(`Created ${moduleCount} module comments, skipped ${skippedCount} modules with no changes`);
