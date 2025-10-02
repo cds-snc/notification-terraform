@@ -123,49 +123,89 @@ jobs:
               body: summaryOutput
             });
             
-            // Parse output by module - look for terragrunt module execution patterns
+            // Debug: Show first 1000 characters to understand the format
+            console.log('First 1000 characters of output:');
+            console.log(planOutput.substring(0, 1000));
+            
+            // More flexible parsing - look for various terragrunt patterns
             const lines = planOutput.split('\n');
+            const modules = new Map();
             let currentModule = '';
-            let moduleOutput = '';
-            let moduleCount = 0;
-            const maxCommentSize = 60000;
+            let currentModuleOutput = [];
             
             for (let i = 0; i < lines.length; i++) {
               const line = lines[i];
               
-              // Look for terragrunt module start patterns
-              if (line.includes('env/staging/') && (line.includes('Executing') || line.includes('Running'))) {
-                // If we have a previous module, post it
-                if (currentModule && moduleOutput.trim()) {
-                  await postModuleComment(currentModule, moduleOutput, maxCommentSize);
-                  moduleCount++;
-                  await new Promise(resolve => setTimeout(resolve, 100));
+              // Look for terragrunt module indicators
+              let moduleMatch = null;
+              
+              // Pattern 1: "=> Executing terraform plan in /path/to/env/staging/module"
+              if (line.includes('Executing') && line.includes('env/staging/')) {
+                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
+              }
+              // Pattern 2: "=> Running terraform plan in /path/to/env/staging/module"
+              else if (line.includes('Running') && line.includes('env/staging/')) {
+                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
+              }
+              // Pattern 3: Just the module path in working directory context
+              else if (line.includes('env/staging/') && (line.includes('terraform') || line.includes('plan'))) {
+                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
+              }
+              // Pattern 4: Directory path pattern
+              else if (line.match(/^.*env\/staging\/([^\/\s]+).*$/)) {
+                moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
+              }
+              
+              if (moduleMatch) {
+                // Save previous module if exists
+                if (currentModule && currentModuleOutput.length > 0) {
+                  modules.set(currentModule, currentModuleOutput.join('\n'));
                 }
                 
-                // Extract module name
-                const moduleMatch = line.match(/env\/staging\/([^\/\s]+)/);
-                if (moduleMatch) {
-                  currentModule = moduleMatch[1];
-                  moduleOutput = line + '\n';
-                }
+                currentModule = moduleMatch[1];
+                currentModuleOutput = [line];
+                console.log(`Found module: ${currentModule}`);
               } else if (currentModule) {
-                moduleOutput += line + '\n';
+                currentModuleOutput.push(line);
               }
             }
             
-            // Post the last module if exists
-            if (currentModule && moduleOutput.trim()) {
-              await postModuleComment(currentModule, moduleOutput, maxCommentSize);
-              moduleCount++;
+            // Save the last module
+            if (currentModule && currentModuleOutput.length > 0) {
+              modules.set(currentModule, currentModuleOutput.join('\n'));
             }
             
-            console.log(`Created ${moduleCount} module comments`);
+            console.log(`Found ${modules.size} modules: ${Array.from(modules.keys()).join(', ')}`);
             
-            // Helper function to post module comments
-            async function postModuleComment(moduleName, output, maxSize) {
+            // If no modules found with pattern matching, try splitting by chunks
+            if (modules.size === 0) {
+              console.log('No modules found with pattern matching, trying chunk approach...');
+              
+              // Split by empty lines and look for chunks with env/staging
+              const chunks = planOutput.split(/\n\s*\n/);
+              let chunkIndex = 0;
+              
+              for (const chunk of chunks) {
+                if (chunk.includes('env/staging/')) {
+                  const moduleMatch = chunk.match(/env\/staging\/([^\/\s]+)/);
+                  if (moduleMatch) {
+                    const moduleName = moduleMatch[1];
+                    modules.set(`${moduleName}-${chunkIndex}`, chunk);
+                    console.log(`Found chunk module: ${moduleName}-${chunkIndex}`);
+                  }
+                }
+                chunkIndex++;
+              }
+            }
+            
+            // Post module comments
+            let moduleCount = 0;
+            const maxCommentSize = 60000;
+            
+            for (const [moduleName, output] of modules) {
               let moduleOutput = output;
-              if (moduleOutput.length > maxSize) {
-                moduleOutput = moduleOutput.substring(0, maxSize - 500) + '\n\n... (output truncated due to size)';
+              if (moduleOutput.length > maxCommentSize) {
+                moduleOutput = moduleOutput.substring(0, maxCommentSize - 500) + '\n\n... (output truncated due to size)';
               }
               
               const moduleComment = `#### 📦 Module: \`${moduleName}\`
@@ -180,4 +220,9 @@ jobs:
                 repo: context.repo.repo,
                 body: moduleComment
               });
+              
+              moduleCount++;
+              await new Promise(resolve => setTimeout(resolve, 100));
             }
+            
+            console.log(`Created ${moduleCount} module comments`);
