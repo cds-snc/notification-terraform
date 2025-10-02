@@ -239,7 +239,9 @@ jobs:
       needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true'||
       needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true'
 
-    needs: terragrunt-plan-step-1
+    needs: 
+      - terragrunt-filter
+      - terragrunt-plan-step-1
     runs-on: ubuntu-latest
     strategy:
       matrix:
