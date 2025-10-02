@@ -351,3 +351,63 @@ jobs:
           terragrunt: "true"      
           terraform-init: |
             -upgrade
+
+  terragrunt-plan-step-4:
+    if: |
+      needs.terragrunt-filter.outputs.eks == 'true' || 
+      needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
+      needs.terragrunt-filter.outputs.system_status_static_site == 'true'
+
+    needs: 
+      - terragrunt-filter
+      - terragrunt-plan-step-3
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [eks, ses_validation_dns_entries, system_status_static_site]
+        include:
+          - component: eks
+            condition: ${{ needs.terragrunt-filter.outputs.eks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ses_validation_dns_entries
+            condition: ${{ needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: system_status_static_site
+            condition: ${{ needs.terragrunt-filter.outputs.system_status_static_site == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+    env:
+      COMPONENT: ${{ matrix.component }}
+    steps:
+      - name: Skip if no changes
+        if: ${{ !matrix.condition }}
+        run: |
+          echo "No changes detected for ${{ matrix.component }}, skipping..."
+          exit 0
+      
+      - name: Checkout
+        if: ${{ matrix.condition }}
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+      
+      - name: Setup Terraform
+        if: ${{ matrix.condition }}
+        uses: ./.github/actions/setup-terraform
+        with:
+          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+          role_session_name: NotifyTerraformPlan
+      
+      - name: Install 1Pass CLI and Download TFVars
+        if: ${{ matrix.condition }}
+        run: |
+          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
+          sudo dpkg -i 1pass.deb
+          sudo mkdir -p aws && cd aws
+          op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
+      
+      - name: Terragrunt plan ${{ matrix.component }}
+        if: ${{ matrix.condition }}
+        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{ matrix.component }}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{ matrix.component }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"      
+          terraform-init: |
+            -upgrade            
