@@ -2,6 +2,7 @@ locals {
   # New Relic environment variables
   newrelic_env_vars = {
     # New Relic account configuration
+    #Important: We set these for the lambda to be in APM mode, not serverless mode
     NEW_RELIC_ACCOUNT_ID                  = var.new_relic_account_id
     NEW_RELIC_APP_NAME                    = var.lambda_new_relic_app_name
     NEW_RELIC_ENVIRONMENT                 = var.env
