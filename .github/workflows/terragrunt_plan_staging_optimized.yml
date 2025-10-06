@@ -246,7 +246,9 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > results.txt  
-          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh results.txt -o output.txt
+          
+          cat output.txt
+          
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
           cat output.txt >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
