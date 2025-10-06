@@ -246,8 +246,8 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > results.txt  
-          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh results.txt -o /var/tmp/output.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
 
