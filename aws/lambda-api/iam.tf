@@ -89,7 +89,8 @@ data "aws_iam_policy_document" "api_policies" {
       "secretsmanager:GetSecretValue",
     ]
     resources = [
-      aws_secretsmanager_secret_version.new-relic-license-key.arn
+      aws_secretsmanager_secret_version.new-relic-license-key.arn,
+      aws_secretsmanager_secret_version.lambda-new-relic-license-key.arn
     ]
   }
 
