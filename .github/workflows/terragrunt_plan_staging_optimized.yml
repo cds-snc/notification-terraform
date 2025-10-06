@@ -346,10 +346,26 @@ jobs:
 
       - name: Terragrunt Plan
         if: ${{ matrix.condition }}
+        id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > results.txt
-          #./extract_terraform_plan.sh results.txt output.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
+
+          cat /var/tmp/output.txt
+
+          echo 'plan<<EOF' >> $GITHUB_OUTPUT
+          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with plan output
+        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        with:
+          message-id: ${{ matrix.component }}_plan
+          message: |
+            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            ```shell
+            ${{join(steps.tf-plan.outputs.plan, '\n')}}
       
 
   terragrunt-plan-step-3:
@@ -417,9 +433,26 @@ jobs:
  
       - name: Terragrunt Plan
         if: ${{ matrix.condition }}
+        id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg"
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
+
+          cat /var/tmp/output.txt
+
+          echo 'plan<<EOF' >> $GITHUB_OUTPUT
+          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with plan output
+        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        with:
+          message-id: ${{ matrix.component }}_plan
+          message: |
+            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            ```shell
+            ${{join(steps.tf-plan.outputs.plan, '\n')}}
           
   terragrunt-plan-step-4:
     if: |
@@ -493,9 +526,26 @@ jobs:
 
       - name: Terragrunt Plan
         if: ${{ matrix.condition }}
+        id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg"
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
+
+          cat /var/tmp/output.txt
+
+          echo 'plan<<EOF' >> $GITHUB_OUTPUT
+          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with plan output
+        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        with:
+          message-id: ${{ matrix.component }}_plan
+          message: |
+            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            ```shell
+            ${{join(steps.tf-plan.outputs.plan, '\n')}}
           
   terragrunt-plan-step-5:
     if: |
@@ -569,9 +619,26 @@ jobs:
 
       - name: Terragrunt Plan
         if: ${{ matrix.condition }}
+        id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg"
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
+
+          cat /var/tmp/output.txt
+
+          echo 'plan<<EOF' >> $GITHUB_OUTPUT
+          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with plan output
+        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        with:
+          message-id: ${{ matrix.component }}_plan
+          message: |
+            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            ```shell
+            ${{join(steps.tf-plan.outputs.plan, '\n')}}
 
   terragrunt-plan-step-6:
     if: |
@@ -652,9 +719,26 @@ jobs:
       
       - name: Terragrunt Plan
         if: ${{ matrix.condition }}
+        id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg"
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
+
+          cat /var/tmp/output.txt
+
+          echo 'plan<<EOF' >> $GITHUB_OUTPUT
+          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with plan output
+        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        with:
+          message-id: ${{ matrix.component }}_plan
+          message: |
+            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            ```shell
+            ${{join(steps.tf-plan.outputs.plan, '\n')}}
 
 
   terragrunt-plan-step-7:
@@ -723,7 +807,24 @@ jobs:
 
       - name: Terragrunt Plan
         if: ${{ matrix.condition }}
+        id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg"
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
+
+          cat /var/tmp/output.txt
+
+          echo 'plan<<EOF' >> $GITHUB_OUTPUT
+          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Comment on PR with plan output
+        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        with:
+          message-id: ${{ matrix.component }}_plan
+          message: |
+            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            ```shell
+            ${{join(steps.tf-plan.outputs.plan, '\n')}}
        
