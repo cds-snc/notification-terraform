@@ -1,0 +1,642 @@
+module.budget_notifier.data.archive_file.spend_notifier: Reading...
+module.budget_notifier.data.archive_file.spend_notifier: Read complete after 0s [id=4408b60c2b887ac5aaec16e312a597e8ee7c1de2]
+aws_cloudwatch_log_group.route53_resolver_query_log[0]: Refreshing state... [id=route53/us-east-1/800095993820/DNS/logs]
+data.aws_availability_zones.available: Reading...
+module.notify_slack_general.data.aws_caller_identity.current: Reading...
+aws_iam_policy.lambda_sqs_send: Refreshing state... [id=arn:aws:iam::800095993820:policy/lambda_sqs_send]
+aws_iam_service_linked_role.spotInstances: Refreshing state... [id=arn:aws:iam::800095993820:role/aws-service-role/spot.amazonaws.com/AWSServiceRoleForEC2Spot]
+aws_secretsmanager_secret.aws_account_id: Refreshing state... [id=arn:aws:secretsmanager:ca-central-1:800095993820:secret:AWS_ACCOUNT_ID-RZOrZ8]
+aws_sqs_queue.eks_notification_canada_ca_email_high_queue: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/eks-notification-canada-casend-email-high]
+aws_iam_role.sns-delivery-role: Refreshing state... [id=sns-delivery-role]
+aws_s3_bucket.alb_log_bucket: Refreshing state... [id=notification-canada-ca-dev-alb-logs]
+module.notify_slack_general.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+aws_sqs_queue.priority_db_tasks_queue: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/eks-notification-canada-ca-priority-database-tasks.fifo]
+module.budget_notifier.data.aws_iam_policy.lambda_insights: Reading...
+module.sns_sms_usage_report_bucket.aws_s3_bucket.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-logs]
+aws_cloudwatch_event_rule.aws_health[0]: Refreshing state... [id=aws_health]
+aws_config_configuration_recorder_status.newrelic_recorder_status[0]: Refreshing state... [id=aws-controltower-BaselineConfigRecorder]
+aws_sqs_queue.bulk_db_tasks_queue: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/eks-notification-canada-ca-bulk-database-tasks]
+data.aws_availability_zones.available: Read complete after 0s [id=ca-central-1]
+aws_sqs_queue.normal_db_tasks_queue: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/eks-notification-canada-ca-normal-database-tasks]
+aws_sqs_queue.eks_notification_canada_ca_sms_high_queue: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/eks-notification-canada-casend-sms-high]
+aws_wafv2_regex_pattern_set.re_api: Refreshing state... [id=569cddeb-2ef7-443f-b233-3737a3c59a25]
+module.sns_sms_usage_report_sanitized_bucket.aws_s3_bucket.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-logs-san]
+aws_wafv2_regex_pattern_set.re_documentation: Refreshing state... [id=e78171e0-424c-4718-ad20-ffd7fa9c7518]
+module.notify_slack_general.aws_cloudwatch_log_group.lambda[0]: Refreshing state... [id=/aws/lambda/notify-slack-general]
+module.s3_scan_objects.data.aws_iam_policy_document.scan_files_assume_role[0]: Reading...
+module.s3_scan_objects.data.aws_iam_policy_document.scan_files_assume_role[0]: Read complete after 0s [id=1028506448]
+aws_cloudwatch_dashboard.email-bounce_rate[0]: Refreshing state... [id=Email_Bounce_Rate]
+data.aws_iam_policy_document.firehose_waf_logs: Reading...
+data.aws_iam_policy_document.firehose_waf_logs: Read complete after 0s [id=454346111]
+aws_vpc.notification-canada-ca: Refreshing state... [id=vpc-0f09df25b3b63b50b]
+aws_sqs_queue.eks_notification_canada_cadelivery_receipts: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/eks-notification-canada-cadelivery-receipts]
+aws_iam_role.iam_lambda_to_sqs: Refreshing state... [id=iam_lambda_to_sqs]
+module.s3_scan_objects.data.aws_caller_identity.current: Reading...
+module.s3_scan_objects.data.aws_caller_identity.current: Read complete after 1s [id=800095993820]
+aws_iam_policy.lambda_logging: Refreshing state... [id=arn:aws:iam::800095993820:policy/lambda_logging]
+aws_wafv2_regex_pattern_set.re_document_download: Refreshing state... [id=a2aceaa8-48ec-46d4-b8ce-cfea5b5c2d25]
+module.notify_slack_general.data.aws_partition.current: Reading...
+module.notify_slack_general.data.aws_partition.current: Read complete after 0s [id=aws]
+module.budget_notifier.aws_cloudwatch_event_rule.weekly_budget_spend[0]: Refreshing state... [id=weeklyBudgetSpend]
+aws_wafv2_ip_set.ip_blocklist: Refreshing state... [id=43aad990-e4e2-427a-ae27-4b8067a200fb]
+data.aws_caller_identity.current: Reading...
+aws_cloudwatch_dashboard.queues[0]: Refreshing state... [id=Queues]
+data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+aws_sqs_queue.notify_internal_tasks_queue: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/eks-notification-canada-canotify-internal-tasks]
+aws_cloudwatch_dashboard.redis_batch_saving[0]: Refreshing state... [id=Redis-batch-saving]
+aws_securityhub_standards_subscription.cis: Refreshing state... [id=arn:aws:securityhub:ca-central-1:800095993820:subscription/cis-aws-foundations-benchmark/v/1.2.0]
+aws_wafv2_regex_pattern_set.notification_base_url: Refreshing state... [id=b30c79b2-bae9-477b-b8e7-688b406c21df]
+module.budget_notifier.aws_cloudwatch_event_rule.daily_budget_spend[0]: Refreshing state... [id=dailyBudgetSpend]
+module.document_download_logs.aws_s3_bucket.this: Refreshing state... [id=notification-canada-ca-dev-document-download-logs]
+aws_cloudwatch_log_group.sns_deliveries[0]: Refreshing state... [id=sns/ca-central-1/800095993820/DirectPublishToPhoneNumber]
+aws_sqs_queue.ses_receipt_callback_buffer: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/ses-receipt-callback-buffer]
+module.cbs_logs_bucket[0].aws_s3_bucket.this: Refreshing state... [id=cbs-satellite-notification-dev]
+module.budget_notifier.data.aws_region.current: Reading...
+aws_wafv2_regex_pattern_set.re_admin2: Refreshing state... [id=070bd9ee-a1cf-42d5-b6c1-bee010f2e6e4]
+module.budget_notifier.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.notify_slack_general.data.aws_region.current: Reading...
+module.notify_slack_general.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+aws_cloudwatch_log_group.sns_deliveries_failures[0]: Refreshing state... [id=sns/ca-central-1/800095993820/DirectPublishToPhoneNumber/Failure]
+aws_wafv2_regex_pattern_set.re_admin: Refreshing state... [id=c56bf199-5894-471f-8716-7a234f54da37]
+module.budget_notifier.data.aws_iam_policy_document.spend_notifier_role: Reading...
+module.budget_notifier.data.aws_iam_policy_document.spend_notifier_role: Read complete after 0s [id=2690255455]
+aws_cloudwatch_dashboard.sensitive[0]: Refreshing state... [id=Platform-admin-access-of-sensitive-services]
+module.cbs_logs_bucket[0].data.aws_elb_service_account.this[0]: Reading...
+module.cbs_logs_bucket[0].data.aws_elb_service_account.this[0]: Read complete after 0s [id=985666609251]
+module.athena_logs_bucket.aws_s3_bucket.this: Refreshing state... [id=notification-canada-ca-dev-athena-logs]
+data.aws_iam_policy_document.firehose_assume: Reading...
+data.aws_iam_policy_document.firehose_assume: Read complete after 0s [id=414810265]
+aws_s3_bucket.asset_bucket: Refreshing state... [id=notification-canada-ca-dev-asset-upload]
+module.csv_bucket_logs.aws_s3_bucket.this: Refreshing state... [id=notification-canada-ca-dev-csv-upload-logs]
+module.s3_scan_objects.data.aws_iam_policy_document.scan_files[0]: Reading...
+module.s3_scan_objects.data.aws_iam_policy_document.scan_files[0]: Read complete after 0s [id=156750748]
+module.budget_notifier.data.aws_caller_identity.current: Reading...
+aws_cloudwatch_log_metric_filter.route53_nxdomain_notification[0]: Refreshing state... [id=Route53NXDOMAINNotificationDomain]
+module.budget_notifier.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+aws_cloudwatch_log_resource_policy.route53_resolver_query_logging_policy[0]: Refreshing state... [id=route53-resolver-query-logging-policy]
+aws_cloudwatch_log_metric_filter.route53_servfail_notification[0]: Refreshing state... [id=Route53SERVFAILNotificationDomain]
+aws_pinpoint_app.notification-canada-ca: Refreshing state... [id=979a335a903c439a9e87d7dd3aee787f]
+module.sns_sms_usage_report_bucket_us_west_2.aws_s3_bucket.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-west-2-logs]
+aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0]: Refreshing state... [id=sns/us-west-2/800095993820/DirectPublishToPhoneNumber/Failure]
+module.sns_sms_usage_report_sanitized_bucket_us_west_2.aws_s3_bucket.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-west-2-logs-san]
+aws_cloudwatch_log_group.sns_deliveries_us_west_2[0]: Refreshing state... [id=sns/us-west-2/800095993820/DirectPublishToPhoneNumber]
+aws_secretsmanager_secret_version.aws_account_id: Refreshing state... [id=arn:aws:secretsmanager:ca-central-1:800095993820:secret:AWS_ACCOUNT_ID-RZOrZ8|terraform-20250929120447630500000002]
+aws_iam_role_policy.sns-delivery-role-policy: Refreshing state... [id=sns-delivery-role:sns-delivery-role-policy]
+module.s3_scan_objects.aws_iam_role.scan_files[0]: Refreshing state... [id=ScanFilesGetObjects]
+aws_s3_bucket_public_access_block.alb_log_bucket: Refreshing state... [id=notification-canada-ca-dev-alb-logs]
+aws_s3_bucket_policy.alb_log_bucket_allow_elb_account: Refreshing state... [id=notification-canada-ca-dev-alb-logs]
+aws_iam_policy.firehose_waf_logs: Refreshing state... [id=arn:aws:iam::800095993820:policy/FirehoseWafLogsPolicy]
+module.sns_sms_usage_report_bucket.aws_s3_bucket_public_access_block.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-logs]
+module.sns_sms_usage_report_sanitized_bucket.aws_s3_bucket_public_access_block.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-logs-san]
+data.aws_iam_policy_document.encrypted_kms_policy: Reading...
+data.aws_iam_policy_document.encrypted_kms_policy: Read complete after 0s [id=4177788912]
+aws_kms_key.notification-canada-ca-us-east-1: Refreshing state... [id=746b16f0-c628-4dd9-a7e6-c42f134c6e79]
+aws_kms_key.notification-canada-ca-us-west-2: Refreshing state... [id=0fb89c9d-de48-4776-bf0d-f969d827bf25]
+aws_iam_role_policy_attachment.lambda_sqs: Refreshing state... [id=iam_lambda_to_sqs/arn:aws:iam::800095993820:policy/lambda_sqs_send]
+aws_iam_role_policy_attachment.lambda_logs: Refreshing state... [id=iam_lambda_to_sqs/arn:aws:iam::800095993820:policy/lambda_logging]
+module.budget_notifier.aws_iam_role.spend_notifier: Refreshing state... [id=spend_notifier_lambda]
+aws_cloudwatch_query_definition.sms-sns-get-failures[0]: Refreshing state... [id=3845e12f-5f25-44fa-9db8-561f62e1113f]
+aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam[0]: Refreshing state... [id=sns-sms-blocked-as-spam]
+aws_cloudwatch_query_definition.sms-sns-blocked-as-spam[0]: Refreshing state... [id=7022ea5c-9b4e-4de6-a2a5-ee740bc845ec]
+aws_cloudwatch_query_definition.sms-sns-unreachable-phone-numbers[0]: Refreshing state... [id=82de2663-4a39-4741-9d3a-66a78ad0453d]
+aws_cloudwatch_query_definition.sms-sns-success-vs-unreachable[0]: Refreshing state... [id=99594ef5-395c-4f5b-ae55-26eae1bee216]
+aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded[0]: Refreshing state... [id=sns-sms-rate-exceeded]
+aws_cloudwatch_query_definition.sms-sns-carrier-dwell-times[0]: Refreshing state... [id=b2b04aa5-59b1-48ff-860f-4ac7ceb04b14]
+aws_cloudwatch_query_definition.sms-sns-get-sms-logs-by-phone-number[0]: Refreshing state... [id=b6f7eb48-862b-4c91-9bdd-00f9e29f2eb5]
+aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable[0]: Refreshing state... [id=sns-sms-phone-carrier-unavailable]
+aws_cloudwatch_query_definition.sms-sns-international-sending-status[0]: Refreshing state... [id=15dce0af-eb0c-4ec7-88da-417239851d37]
+aws_iam_role.firehose_waf_logs: Refreshing state... [id=FirehoseWafLogs]
+module.s3_scan_objects.aws_iam_policy.scan_files[0]: Refreshing state... [id=arn:aws:iam::800095993820:policy/ScanFilesGetObjects]
+module.budget_notifier.data.aws_iam_policy_document.spend_notifier: Reading...
+module.budget_notifier.data.aws_iam_policy_document.spend_notifier: Read complete after 0s [id=2683219108]
+aws_route53_resolver_query_log_config.main[0]: Refreshing state... [id=rqlc-c71392af5fa94267]
+aws_security_group.vpc_endpoints: Refreshing state... [id=sg-0f276bd920e80b3a5]
+aws_internet_gateway.notification-canada-ca: Refreshing state... [id=igw-0c135c89bc3b1752d]
+aws_default_security_group.default: Refreshing state... [id=sg-0a7e0aa983c8b84dc]
+aws_subnet.notification-canada-ca-private-k8s[0]: Refreshing state... [id=subnet-0be826e6ed587182b]
+aws_subnet.notification-canada-ca-private-k8s[2]: Refreshing state... [id=subnet-07c4c4060b2e15e1c]
+aws_subnet.notification-canada-ca-private-k8s[1]: Refreshing state... [id=subnet-017f33bc1245f6f9e]
+aws_default_network_acl.notification-canada-ca: Refreshing state... [id=acl-06ad36aea1491ffb2]
+aws_subnet.notification-canada-ca-private[0]: Refreshing state... [id=subnet-0b0d301f7ceae19a7]
+aws_subnet.notification-canada-ca-private[2]: Refreshing state... [id=subnet-077ede62ab32e9cef]
+aws_subnet.notification-canada-ca-private[1]: Refreshing state... [id=subnet-027f22dbf91382aa7]
+aws_subnet.notification-canada-ca-public[2]: Refreshing state... [id=subnet-0ec601ee81372c5ba]
+aws_subnet.notification-canada-ca-public[0]: Refreshing state... [id=subnet-0f7a25c613e9949d3]
+module.budget_notifier.data.aws_iam_policy.lambda_insights: Read complete after 2s [id=arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy]
+aws_subnet.notification-canada-ca-public[1]: Refreshing state... [id=subnet-0366a0f2a4fdb0516]
+module.cbs_logs_bucket[0].aws_s3_bucket_ownership_controls.this: Refreshing state... [id=cbs-satellite-notification-dev]
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.deny_insecure_transport: Reading...
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.deny_insecure_transport: Read complete after 0s [id=361992395]
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.elb_log_delivery[0]: Reading...
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.elb_log_delivery[0]: Read complete after 0s [id=1862441261]
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.lb_log_delivery[0]: Reading...
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.lb_log_delivery[0]: Read complete after 0s [id=2855007482]
+module.document_download_logs.aws_s3_bucket_ownership_controls.this: Refreshing state... [id=notification-canada-ca-dev-document-download-logs]
+module.document_download_logs.data.aws_iam_policy_document.deny_insecure_transport: Reading...
+module.document_download_logs.data.aws_iam_policy_document.deny_insecure_transport: Read complete after 0s [id=3670796369]
+module.athena_logs_bucket.data.aws_iam_policy_document.deny_insecure_transport: Reading...
+module.athena_logs_bucket.data.aws_iam_policy_document.deny_insecure_transport: Read complete after 0s [id=1198995795]
+module.athena_logs_bucket.aws_s3_bucket_ownership_controls.this: Refreshing state... [id=notification-canada-ca-dev-athena-logs]
+aws_s3_bucket_public_access_block.asset_bucket: Refreshing state... [id=notification-canada-ca-dev-asset-upload]
+aws_s3_object.assets["static/examples/example-variable-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-variable-fr.svg]
+aws_s3_object.assets["static/integrate.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/integrate.svg]
+aws_s3_object.assets["static/personalise-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/personalise-en.svg]
+aws_s3_object.assets["static/custom-branding-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/custom-branding-fr.svg]
+aws_s3_object.assets["static/features/features-templates-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-templates-fr.svg]
+aws_s3_object.assets["static/why-notify/privacy.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/privacy.svg]
+aws_s3_object.assets["static/text-messages-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/text-messages-fr.svg]
+aws_s3_object.assets["static/features/features-dashboard-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-dashboard-en.svg]
+aws_s3_object.assets["static/letter-en-v2.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/letter-en-v2.svg]
+aws_s3_object.assets["static/send-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/send-en.svg]
+aws_s3_object.assets["static/gov-canada-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/gov-canada-en.svg]
+aws_s3_object.assets["static/send-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/send-fr.svg]
+aws_s3_object.assets["static/why-notify/bolt.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/bolt.svg]
+aws_s3_object.assets["static/features/features-branding-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-branding-en.svg]
+aws_s3_object.assets["static/features/features-scheduler-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-scheduler-en.svg]
+aws_s3_object.assets["static/pricing-en-v2.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/pricing-en-v2.svg]
+aws_s3_object.assets["static/why-notify/lock.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/lock.svg]
+aws_s3_object.assets["static/letter-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/letter-fr.svg]
+aws_s3_object.assets["static/text-messages-no-variables-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/text-messages-no-variables-fr.svg]
+aws_s3_object.assets["static/why-notify/experiment.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/experiment.svg]
+aws_s3_object.assets["static/why-notify/cloud.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/cloud.svg]
+aws_s3_object.assets["static/recipients-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/recipients-en.svg]
+aws_s3_object.assets["static/custom-branding-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/custom-branding-en.svg]
+aws_s3_object.assets["static/pricing-fr-v2.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/pricing-fr-v2.svg]
+aws_s3_object.assets["static/features/features-templates-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-templates-en.svg]
+aws_s3_object.assets["static/assign-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/assign-fr.svg]
+aws_s3_object.assets["static/features/features-personalize-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-personalize-en.svg]
+aws_s3_object.assets["static/integrate-1.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/integrate-1.svg]
+aws_s3_object.assets["static/examples/example-filter-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-filter-fr.svg]
+aws_s3_object.assets["static/gov-canada-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/gov-canada-fr.svg]
+aws_s3_object.assets["static/pricing-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/pricing-en.svg]
+aws_s3_object.assets["static/built4you.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/built4you.svg]
+aws_s3_object.assets["static/features/features-team-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-team-fr.svg]
+aws_s3_object.assets["static/features/features-api-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-api-fr.svg]
+aws_s3_object.assets["static/schedule-email-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/schedule-email-fr.svg]
+aws_s3_object.assets["static/personalise-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/personalise-fr.svg]
+aws_s3_object.assets["static/examples/example-variable-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-variable-en.svg]
+aws_s3_object.assets["static/dashboard-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/dashboard-en.svg]
+aws_s3_object.assets["static/features/features-dashboard-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-dashboard-fr.svg]
+aws_s3_object.assets["static/schedule-email-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/schedule-email-en.svg]
+aws_s3_object.assets["static/features/features-team-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-team-en.svg]
+aws_s3_object.assets["static/examples/example-row-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-row-en.svg]
+aws_s3_object.assets["static/mac-phone.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/mac-phone.svg]
+aws_s3_object.assets["static/text-messages-no-variables-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/text-messages-no-variables-en.svg]
+aws_s3_object.assets["static/built4you-v2.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/built4you-v2.svg]
+aws_s3_object.assets["static/pricing-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/pricing-fr.svg]
+aws_s3_object.assets["static/text-messages-fr-v2.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/text-messages-fr-v2.svg]
+aws_s3_object.assets["static/features/features-branding-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-branding-fr.svg]
+aws_s3_object.assets["static/dashboard-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/dashboard-fr.svg]
+aws_s3_object.assets["static/why-notify/check.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/check.svg]
+aws_s3_object.assets["static/assign-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/assign-en.svg]
+aws_s3_object.assets["static/examples/example-headers-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-headers-en.svg]
+aws_s3_object.assets["static/cloud-flow.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/cloud-flow.svg]
+aws_s3_object.assets["static/why-notify/wand-magic-sparkles.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/wand-magic-sparkles.svg]
+aws_s3_object.assets["static/text-messages-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/text-messages-en.svg]
+aws_s3_object.assets["static/why-notify/sms.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/sms.svg]
+aws_s3_object.assets["static/recipients-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/recipients-fr.svg]
+aws_s3_object.assets["static/examples/example-row-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-row-fr.svg]
+aws_s3_object.assets["static/message-status-image-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/message-status-image-fr.svg]
+aws_s3_object.assets["static/goc--footer-logo.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/goc--footer-logo.svg]
+aws_s3_object.assets["static/features/features-scheduler-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-scheduler-fr.svg]
+aws_s3_object.assets["static/letter-fr-v2.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/letter-fr-v2.svg]
+aws_s3_object.assets["static/features/features-recipients-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-recipients-fr.svg]
+aws_s3_object.assets["static/features/features-api-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-api-en.svg]
+aws_s3_object.assets["static/examples/example-filter-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-filter-en.svg]
+aws_s3_object.assets["static/why-notify/secure.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/secure.svg]
+aws_s3_object.assets["static/letter-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/letter-en.svg]
+aws_s3_object.assets["static/examples/example-headers-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/examples/example-headers-fr.svg]
+aws_s3_object.assets["static/features/features-recipients-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-recipients-en.svg]
+aws_s3_object.assets["static/why-notify/vial.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/vial.svg]
+aws_s3_object.assets["static/why-notify/user-secret.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/why-notify/user-secret.svg]
+aws_s3_object.assets["static/message-status-image-en.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/message-status-image-en.svg]
+aws_s3_object.assets["static/text-messages-en-v2.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/text-messages-en-v2.svg]
+aws_s3_object.assets["static/features/features-personalize-fr.svg"]: Refreshing state... [id=notification-canada-ca-dev-asset-upload/static/features/features-personalize-fr.svg]
+module.csv_bucket_logs.aws_s3_bucket_ownership_controls.this: Refreshing state... [id=notification-canada-ca-dev-csv-upload-logs]
+module.csv_bucket_logs.data.aws_iam_policy_document.deny_insecure_transport: Reading...
+module.csv_bucket_logs.data.aws_iam_policy_document.deny_insecure_transport: Read complete after 0s [id=711653075]
+module.notify_slack_general.module.lambda.data.aws_partition.current: Reading...
+module.notify_slack_general.module.lambda.data.aws_caller_identity.current: Reading...
+module.notify_slack_general.data.aws_iam_policy_document.lambda[0]: Reading...
+module.notify_slack_general.module.lambda.data.aws_partition.current: Read complete after 0s [id=aws]
+module.notify_slack_general.data.aws_iam_policy_document.lambda[0]: Read complete after 0s [id=2674325621]
+module.notify_slack_general.module.lambda.data.aws_region.current: Reading...
+module.notify_slack_general.module.lambda.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.s3_scan_objects.data.aws_iam_policy_document.s3_scan_object_queue: Reading...
+aws_sns_sms_preferences.update-sms-prefs: Refreshing state... [id=aws_sns_sms_id]
+module.s3_scan_objects.data.aws_iam_policy_document.s3_scan_object_queue: Read complete after 0s [id=2345387913]
+aws_s3_bucket_policy.sns_sms_usage_report_bucket_policy: Refreshing state... [id=notification-canada-ca-dev-sms-usage-logs]
+aws_kms_key.notification-canada-ca: Refreshing state... [id=93e21e05-d05a-4cb4-8a5a-555af0b6d75b]
+aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2[0]: Refreshing state... [id=sns-sms-blocked-as-spam-us-west-2]
+module.notify_slack_general.module.lambda.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2[0]: Refreshing state... [id=sns-sms-rate-exceeded-us-west-2]
+aws_cloudwatch_log_metric_filter.sns-sms-phone-carrier-unavailable-us-west-2[0]: Refreshing state... [id=sns-sms-phone-carrier-unavailable-us-west-2]
+aws_pinpoint_sms_channel.sms: Refreshing state... [id=979a335a903c439a9e87d7dd3aee787f]
+module.budget_notifier.aws_lambda_function.spend_notifier: Refreshing state... [id=spend_notifier]
+module.budget_notifier.aws_iam_policy.spend_notifier: Refreshing state... [id=arn:aws:iam::800095993820:policy/spend_notifier]
+aws_sns_topic.notification-canada-ca-alert-critical-us-east-1: Refreshing state... [id=arn:aws:sns:us-east-1:800095993820:alert-critical-us-east-1]
+aws_sns_topic.notification-canada-ca-alert-warning-us-east-1: Refreshing state... [id=arn:aws:sns:us-east-1:800095993820:alert-warning-us-east-1]
+aws_sns_topic.notification-canada-ca-alert-ok-us-east-1: Refreshing state... [id=arn:aws:sns:us-east-1:800095993820:alert-ok-us-east-1]
+aws_route_table.notification-canada-ca-public_subnet: Refreshing state... [id=rtb-09391d3449fd87394]
+aws_eip.notification-canada-ca-natgw-k8s[0]: Refreshing state... [id=eipalloc-0e16123072d37a1af]
+aws_eip.notification-canada-ca-natgw-k8s[1]: Refreshing state... [id=eipalloc-00ae4ce3f76f79318]
+aws_eip.notification-canada-ca-natgw-k8s[2]: Refreshing state... [id=eipalloc-0cfec082067034d4f]
+aws_eip.notification-canada-ca-natgw[1]: Refreshing state... [id=eipalloc-089fa0dcddaa0461d]
+aws_eip.notification-canada-ca-natgw[0]: Refreshing state... [id=eipalloc-05405a5086cde6ab5]
+aws_eip.notification-canada-ca-natgw[2]: Refreshing state... [id=eipalloc-0d49e86a538556f11]
+module.s3_scan_objects.aws_iam_role_policy_attachment.scan_files[0]: Refreshing state... [id=ScanFilesGetObjects/arn:aws:iam::800095993820:policy/ScanFilesGetObjects]
+aws_iam_role_policy_attachment.firehose_waf_logs: Refreshing state... [id=FirehoseWafLogs/arn:aws:iam::800095993820:policy/FirehoseWafLogsPolicy]
+aws_sns_topic.notification-canada-ca-alert-critical-us-west-2: Refreshing state... [id=arn:aws:sns:us-west-2:800095993820:alert-critical-us-west-2]
+aws_sns_topic.notification-canada-ca-alert-warning-us-west-2: Refreshing state... [id=arn:aws:sns:us-west-2:800095993820:alert-warning-us-west-2]
+aws_sns_topic.notification-canada-ca-alert-ok-us-west-2: Refreshing state... [id=arn:aws:sns:us-west-2:800095993820:alert-ok-us-west-2]
+module.budget_notifier.aws_iam_role_policy_attachment.lambda_insights: Refreshing state... [id=spend_notifier_lambda/arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy]
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.combined: Reading...
+module.cbs_logs_bucket[0].data.aws_iam_policy_document.combined: Read complete after 0s [id=3550782194]
+aws_s3_bucket.document_bucket: Refreshing state... [id=notification-canada-ca-dev-document-download]
+aws_s3_bucket.scan_files_document_bucket: Refreshing state... [id=notification-canada-ca-dev-document-download-scan-files]
+module.document_download_logs.data.aws_iam_policy_document.combined: Reading...
+module.document_download_logs.data.aws_iam_policy_document.combined: Read complete after 0s [id=3670796369]
+aws_s3_bucket.athena_bucket: Refreshing state... [id=notification-canada-ca-dev-athena]
+module.athena_logs_bucket.data.aws_iam_policy_document.combined: Reading...
+module.athena_logs_bucket.data.aws_iam_policy_document.combined: Read complete after 0s [id=1198995795]
+aws_vpc_endpoint.interface["ssmmessages"]: Refreshing state... [id=vpce-0aa6b3317b9ab31e7]
+aws_vpc_endpoint.interface["monitoring"]: Refreshing state... [id=vpce-043b310c596c7565b]
+aws_vpc_endpoint.interface["rds"]: Refreshing state... [id=vpce-042816a5e9be6ddfe]
+aws_vpc_endpoint.interface["ec2messages"]: Refreshing state... [id=vpce-04d94c3cf44b3af8b]
+aws_vpc_endpoint.interface["ecr.api"]: Refreshing state... [id=vpce-008b0b16c9b40e80f]
+aws_vpc_endpoint.interface["ecr.dkr"]: Refreshing state... [id=vpce-0d07950b2a9d34c01]
+aws_vpc_endpoint.interface["logs"]: Refreshing state... [id=vpce-01f98ddc935973a99]
+aws_vpc_endpoint.interface["ssm"]: Refreshing state... [id=vpce-0a7994985637036e2]
+aws_s3_bucket.gc_organisations_bucket: Refreshing state... [id=notification-canada-ca-dev-gc-organisations]
+aws_s3_bucket.reports_bucket: Refreshing state... [id=notification-canada-ca-dev-reports]
+aws_s3_bucket.csv_bucket: Refreshing state... [id=notification-canada-ca-dev-csv-upload]
+module.csv_bucket_logs.data.aws_iam_policy_document.combined: Reading...
+module.csv_bucket_logs.data.aws_iam_policy_document.combined: Read complete after 0s [id=711653075]
+module.notify_slack_general.module.lambda.data.external.archive_prepare[0]: Reading...
+module.s3_scan_objects.aws_kms_key.s3_scan_object_queue: Refreshing state... [id=1b84424b-43dc-41ef-aa46-621e3ad5dea2]
+module.s3_scan_objects.data.aws_iam_policy_document.limit_tagging[0]: Reading...
+module.s3_scan_objects.data.aws_iam_policy_document.limit_tagging[0]: Read complete after 0s [id=1783763720]
+module.s3_scan_objects.data.aws_iam_policy_document.scan_files_download[0]: Reading...
+module.s3_scan_objects.data.aws_iam_policy_document.scan_files_download[0]: Read complete after 0s [id=1856358821]
+aws_sns_topic.notification-canada-ca-alert-critical: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-critical]
+aws_sns_topic.notification-canada-ca-alert-ok: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-ok]
+aws_sns_topic.notification-canada-ca-alert-warning: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-warning]
+aws_sns_topic.notification-canada-ca-ses-callback: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:ses-callback]
+aws_sns_topic.notification-canada-ca-alert-general: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-general]
+module.notify_slack_general.module.lambda.data.external.archive_prepare[0]: Read complete after 0s [id=-]
+module.sns_sms_usage_report_sanitized_bucket_us_west_2.aws_s3_bucket_public_access_block.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-west-2-logs-san]
+module.sns_sms_usage_report_bucket_us_west_2.aws_s3_bucket_public_access_block.this: Refreshing state... [id=notification-canada-ca-dev-sms-usage-west-2-logs]
+aws_route_table_association.notification-canada-ca[0]: Refreshing state... [id=rtbassoc-0c2898f9550b89d06]
+aws_route_table_association.notification-canada-ca[1]: Refreshing state... [id=rtbassoc-040542f7e59f6e6a8]
+aws_route_table_association.notification-canada-ca[2]: Refreshing state... [id=rtbassoc-0867c2a7f7ef0d349]
+module.budget_notifier.aws_iam_role_policy_attachment.spend_notifier: Refreshing state... [id=spend_notifier_lambda/arn:aws:iam::800095993820:policy/spend_notifier]
+module.budget_notifier.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/spend_notifier]
+module.budget_notifier.aws_cloudwatch_event_target.daily_budget_spend[0]: Refreshing state... [id=dailyBudgetSpend-terraform-2025092912054929490000000d]
+module.budget_notifier.aws_lambda_permission.allow_daily_budget[0]: Refreshing state... [id=AllowDailyBudget]
+module.budget_notifier.aws_lambda_permission.allow_weekly_budget[0]: Refreshing state... [id=AllowWeeklyBudget]
+module.budget_notifier.aws_cloudwatch_event_target.weekly_budget_spend[0]: Refreshing state... [id=weeklyBudgetSpend-terraform-2025092912054912900000000c]
+aws_cloudwatch_metric_alarm.route53-dns-failures-warning[0]: Refreshing state... [id=route53-dns-resolution-failures-warning]
+module.cbs_logs_bucket[0].aws_s3_bucket_policy.this: Refreshing state... [id=cbs-satellite-notification-dev]
+aws_nat_gateway.notification-canada-ca-k8s[2]: Refreshing state... [id=nat-07d220e1cdb557803]
+aws_nat_gateway.notification-canada-ca-k8s[0]: Refreshing state... [id=nat-0d201b784a0d4cbd0]
+aws_nat_gateway.notification-canada-ca-k8s[1]: Refreshing state... [id=nat-0143362d9792476be]
+module.document_download_logs.aws_s3_bucket_policy.this: Refreshing state... [id=notification-canada-ca-dev-document-download-logs]
+module.athena_logs_bucket.aws_s3_bucket_policy.this: Refreshing state... [id=notification-canada-ca-dev-athena-logs]
+aws_nat_gateway.notification-canada-ca[0]: Refreshing state... [id=nat-0d5f160ec5023026f]
+aws_nat_gateway.notification-canada-ca[1]: Refreshing state... [id=nat-0dd75222598e66839]
+aws_nat_gateway.notification-canada-ca[2]: Refreshing state... [id=nat-00bcc22f44f455200]
+aws_s3_bucket_public_access_block.document_bucket: Refreshing state... [id=notification-canada-ca-dev-document-download]
+aws_athena_workgroup.build_tables: Refreshing state... [id=Build_log_tables]
+aws_athena_workgroup.support: Refreshing state... [id=Support]
+aws_athena_database.notification_athena: Refreshing state... [id=notification_athena]
+aws_athena_workgroup.primary: Refreshing state... [id=dev]
+aws_s3_bucket_public_access_block.athena_bucket: Refreshing state... [id=notification-canada-ca-dev-athena]
+aws_athena_workgroup.ad_hoc: Refreshing state... [id=Adhoc_queries]
+aws_s3_bucket_public_access_block.scan_files_document_bucket: Refreshing state... [id=notification-canada-ca-dev-document-download-scan-files]
+aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-us-west-2-warning[0]: Refreshing state... [id=sns-sms-success-rate-canadian-numbers-us-west-2-warning]
+aws_cloudwatch_metric_alarm.sns-sms-blocked-as-spam-us-west-2-warning[0]: Refreshing state... [id=sns-sms-blocked-as-spam-us-west-2-warning]
+aws_cloudwatch_metric_alarm.sns-sms-rate-exceeded-us-west-2-warning[0]: Refreshing state... [id=sns-sms-rate-exceeded-us-west-2-warning]
+aws_cloudwatch_metric_alarm.sns-sms-phone-carrier-unavailable-us-west-2-warning[0]: Refreshing state... [id=sns-sms-phone-carrier-unavailable-us-west-2-warning]
+aws_cloudwatch_metric_alarm.sns-spending-us-west-2-warning[0]: Refreshing state... [id=sns-spending-us-west-2-warning]
+aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-us-west-2-critical[0]: Refreshing state... [id=sns-sms-success-rate-canadian-numbers-us-west-2-critical]
+aws_cloudwatch_metric_alarm.sns-spending-us-west-2-critical[0]: Refreshing state... [id=sns-spending-us-west-2-critical]
+module.csv_bucket_logs.aws_s3_bucket_policy.this: Refreshing state... [id=notification-canada-ca-dev-csv-upload-logs]
+module.notify_slack_general.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Reading...
+module.s3_scan_objects.data.aws_iam_policy_document.upload_bucket[0]: Reading...
+module.s3_scan_objects.data.aws_iam_policy_document.upload_bucket[0]: Read complete after 0s [id=2535892848]
+module.s3_scan_objects.aws_sqs_queue.s3_scan_object: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/s3-scan-object]
+module.notify_slack_general.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Read complete after 0s [id=/aws/lambda/notify-slack-general]
+module.s3_scan_objects.aws_kms_alias.s3_scan_object_queue: Refreshing state... [id=alias/s3_scan_object_queue]
+aws_cloudwatch_metric_alarm.sns-sms-rate-exceeded-warning[0]: Refreshing state... [id=sns-sms-rate-exceeded-warning]
+aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-warning[0]: Refreshing state... [id=sqs-send-sms-medium-queue-delay-warning]
+aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-warning[0]: Refreshing state... [id=no-emails-sent-1-minute-warning]
+aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-warning[0]: Refreshing state... [id=sqs-send-email-low-queue-delay-warning]
+aws_cloudwatch_metric_alarm.sqs-priority-db-tasks-stuck-in-queue-warning[0]: Refreshing state... [id=sqs-priority-db-tasks-stuck-in-queue-warning]
+aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-warning[0]: Refreshing state... [id=sqs-send-sms-low-queue-delay-warning]
+aws_cloudwatch_metric_alarm.bulk-inflights-not-being-processed-warning[0]: Refreshing state... [id=bulk-inflights-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-warning[0]: Refreshing state... [id=sqs-send-email-high-queue-delay-warning]
+aws_cloudwatch_metric_alarm.sqs-bulk-db-tasks-stuck-in-queue-warning[0]: Refreshing state... [id=sqs-bulk-db-tasks-stuck-in-queue-warning]
+aws_cloudwatch_metric_alarm.bulk-bulk-not-being-processed-warning[0]: Refreshing state... [id=bulk-bulk-buffer-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.sqs-bulk-queue-delay-warning[0]: Refreshing state... [id=sqs-bulk-queue-delay-warning]
+aws_cloudwatch_metric_alarm.sqs-priority-queue-delay-warning[0]: Refreshing state... [id=sqs-priority-queue-delay-warning]
+aws_cloudwatch_metric_alarm.scan-files-document-download-bucket-size-warning[0]: Refreshing state... [id=scan-files-document-download-bucket-size-warning]
+aws_cloudwatch_metric_alarm.sns-spending-warning[0]: Refreshing state... [id=sns-spending-warning]
+aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-warning[0]: Refreshing state... [id=sqs-send-sms-high-queue-delay-warning]
+aws_cloudwatch_metric_alarm.priority-inflights-not-being-processed-warning[0]: Refreshing state... [id=priority-inflights-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.sns-sms-blocked-as-spam-warning[0]: Refreshing state... [id=sns-sms-blocked-as-spam-warning]
+aws_cloudwatch_metric_alarm.sns-sms-phone-carrier-unavailable-warning[0]: Refreshing state... [id=sns-sms-phone-carrier-unavailable-warning]
+aws_cloudwatch_metric_alarm.expired-inflight-warning[0]: Refreshing state... [id=expired-inflight-warning]
+aws_cloudwatch_metric_alarm.live-service-over-daily-rate-limit-warning[0]: Refreshing state... [id=live-service-over-daily-rate-limit-warning]
+aws_cloudwatch_metric_alarm.document-download-bucket-size-warning[0]: Refreshing state... [id=document-download-bucket-size-warning]
+aws_cloudwatch_metric_alarm.ses-complaint-rate-warning[0]: Refreshing state... [id=ses-complaint-rate-warning]
+aws_cloudwatch_metric_alarm.sqs-throttled-sms-stuck-in-queue-warning[0]: Refreshing state... [id=sqs-throttled-sms-stuck-in-queue-warning]
+aws_cloudwatch_metric_alarm.sqs-normal-db-tasks-stuck-in-queue-warning[0]: Refreshing state... [id=sqs-normal-db-tasks-stuck-in-queue-warning]
+aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-warning[0]: Refreshing state... [id=sns-sms-success-rate-canadian-numbers-warning]
+aws_cloudwatch_metric_alarm.healtheck-page-slow-response-warning[0]: Refreshing state... [id=healtheck-page-slow-response-warning]
+aws_cloudwatch_metric_alarm.ses-bounce-rate-warning[0]: Refreshing state... [id=ses-bounce-rate-warning]
+aws_cloudwatch_metric_alarm.normal-bulk-not-being-processed-warning[0]: Refreshing state... [id=normal-bulk-buffer-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.priority-bulk-not-being-processed-warning[0]: Refreshing state... [id=priority-bulk-buffer-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-warning[0]: Refreshing state... [id=sqs-send-email-medium-queue-delay-warning]
+aws_cloudwatch_metric_alarm.normal-inflights-not-being-processed-warning[0]: Refreshing state... [id=normal-inflights-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.sqs-priority-db-tasks-stuck-in-queue-critical[0]: Refreshing state... [id=sqs-priority-db-tasks-stuck-in-queue-critical]
+aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-critical[0]: Refreshing state... [id=sqs-send-email-low-queue-delay-critical]
+aws_cloudwatch_metric_alarm.sns-spending-critical[0]: Refreshing state... [id=sns-spending-critical]
+aws_cloudwatch_metric_alarm.inflights-not-being-processed-warning[0]: Refreshing state... [id=inflights-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.sqs-priority-queue-delay-critical[0]: Refreshing state... [id=sqs-priority-queue-delay-critical]
+aws_cloudwatch_metric_alarm.sqs-send-email-high-queue-delay-critical[0]: Refreshing state... [id=sqs-send-email-high-queue-delay-critical]
+aws_cloudwatch_metric_alarm.priority_inflights-not-being-processed-critical[0]: Refreshing state... [id=priority-inflights-not-being-processed-critical]
+aws_cloudwatch_metric_alarm.sqs-send-sms-medium-queue-delay-critical[0]: Refreshing state... [id=sqs-send-sms-medium-queue-delay-critical]
+aws_cloudwatch_metric_alarm.ses-bounce-rate-critical[0]: Refreshing state... [id=ses-bounce-rate-critical]
+aws_cloudwatch_metric_alarm.sqs-send-sms-low-queue-delay-critical[0]: Refreshing state... [id=sqs-send-sms-low-queue-delay-critical]
+aws_cloudwatch_metric_alarm.bulk-not-being-processed-critical[0]: Refreshing state... [id=bulk-buffer-not-being-processed-critical]
+aws_cloudwatch_metric_alarm.sqs-bulk-queue-delay-critical[0]: Refreshing state... [id=sqs-bulk-queue-delay-critical]
+aws_cloudwatch_metric_alarm.sqs-bulk-db-tasks-stuck-in-queue-critical[0]: Refreshing state... [id=sqs-bulk-db-tasks-stuck-in-queue-critical]
+aws_cloudwatch_metric_alarm.sign-in-3-500-error-15-minutes-critical[0]: Refreshing state... [id=sign-in-3-500-error-15-minutes-critical]
+aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-critical[0]: Refreshing state... [id=sqs-send-email-medium-queue-delay-critical]
+aws_cloudwatch_metric_alarm.normal-inflights-not-being-processed-critical[0]: Refreshing state... [id=normal-inflights-not-being-processed-critical]
+aws_cloudwatch_metric_alarm.sqs-send-throttled-sms-tasks-receive-rate-warning[0]: Refreshing state... [id=sqs-send-throttled-sms-tasks-receive-rate-warning]
+aws_cloudwatch_metric_alarm.expired-inflight-critical[0]: Refreshing state... [id=expired-inflight-critical]
+aws_cloudwatch_metric_alarm.no-emails-sent-5-minutes-critical[0]: Refreshing state... [id=no-emails-sent-5-minutes-critical]
+aws_cloudwatch_metric_alarm.sqs-throttled-sms-stuck-in-queue-critical[0]: Refreshing state... [id=sqs-throttled-sms-stuck-in-queue-critical]
+aws_cloudwatch_metric_alarm.healtheck-page-slow-response-critical[0]: Refreshing state... [id=healtheck-page-slow-response-critical]
+aws_cloudwatch_metric_alarm.inflights-not-being-processed-critical[0]: Refreshing state... [id=inflights-not-being-processed-critical]
+aws_cloudwatch_metric_alarm.normal-bulk-not-being-processed-critical[0]: Refreshing state... [id=normal_bulk-buffer-not-being-processed-critical]
+aws_cloudwatch_metric_alarm.sqs-send-throttled-sms-tasks-receive-rate-critical[0]: Refreshing state... [id=sqs-send-throttled-sms-tasks-receive-rate-critical]
+aws_cloudwatch_metric_alarm.bulk-bulk-not-being-processed-critical[0]: Refreshing state... [id=bulk_bulk-buffer-not-being-processed-critical]
+aws_cloudwatch_metric_alarm.priority-bulk-not-being-processed-critical[0]: Refreshing state... [id=priority_bulk-buffer-not-being-processed-critical]
+aws_cloudwatch_metric_alarm.bulk-not-being-processed-warning[0]: Refreshing state... [id=bulk-buffer-not-being-processed-warning]
+aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical[0]: Refreshing state... [id=sns-sms-success-rate-canadian-numbers-critical]
+aws_cloudwatch_metric_alarm.sqs-normal-db-tasks-stuck-in-queue-critical[0]: Refreshing state... [id=sqs-normal-db-tasks-stuck-in-queue-critical]
+aws_cloudwatch_metric_alarm.sqs-send-sms-high-queue-delay-critical[0]: Refreshing state... [id=sqs-send-sms-high-queue-delay-critical]
+aws_cloudwatch_metric_alarm.contact-3-500-error-15-minutes-critical[0]: Refreshing state... [id=contact-3-500-error-15-minutes-critical]
+aws_cloudwatch_metric_alarm.ses-complaint-rate-critical[0]: Refreshing state... [id=ses-complaint-rate-critical]
+aws_cloudwatch_metric_alarm.bulk-inflights-not-being-processed-critical[0]: Refreshing state... [id=bulk-inflights-not-being-processed-critical]
+module.notify_slack_general.module.lambda.local_file.archive_plan[0]: Refreshing state... [id=a51e4aed93794b2c8129960a625ac350c648e4a9]
+aws_sns_topic_subscription.sqs_callback_subscription: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:ses-callback:10f00f83-e824-4b70-bf37-def0c08f2306]
+data.aws_iam_policy_document.sns_to_sqs: Reading...
+data.aws_iam_policy_document.sns_to_sqs: Read complete after 0s [id=3114808439]
+aws_s3_bucket_policy.sns_sms_usage_report_bucket_us_west_2_policy: Refreshing state... [id=notification-canada-ca-dev-sms-usage-west-2-logs]
+aws_sns_sms_preferences.update-sms-prefs-us-west-2: Refreshing state... [id=aws_sns_sms_id]
+aws_budgets_budget.cloudwatch_data_scanned: Refreshing state... [id=800095993820:cloudwatch-data-scanned-budget]
+aws_cloudwatch_event_target.aws_health_sns_warning[0]: Refreshing state... [id=aws_health-aws_health_sns_warning]
+aws_budgets_budget.notify_global: Refreshing state... [id=800095993820:notify-global-budget]
+aws_s3_bucket_public_access_block.gc_organisations_bucket: Refreshing state... [id=notification-canada-ca-dev-gc-organisations]
+aws_s3_bucket_public_access_block.reports_bucket: Refreshing state... [id=notification-canada-ca-dev-reports]
+module.cbs_logs_bucket[0].aws_s3_bucket_public_access_block.this: Refreshing state... [id=cbs-satellite-notification-dev]
+module.cbs_logs_bucket[0].aws_s3_bucket_versioning.this: Refreshing state... [id=cbs-satellite-notification-dev]
+aws_s3_bucket_public_access_block.csv_bucket: Refreshing state... [id=notification-canada-ca-dev-csv-upload]
+module.athena_logs_bucket.aws_s3_bucket_public_access_block.this: Refreshing state... [id=notification-canada-ca-dev-athena-logs]
+module.athena_logs_bucket.aws_s3_bucket_versioning.this: Refreshing state... [id=notification-canada-ca-dev-athena-logs]
+module.document_download_logs.aws_s3_bucket_versioning.this: Refreshing state... [id=notification-canada-ca-dev-document-download-logs]
+module.document_download_logs.aws_s3_bucket_public_access_block.this: Refreshing state... [id=notification-canada-ca-dev-document-download-logs]
+aws_route_table.notification-canada-ca-private_subnet_k8s[1]: Refreshing state... [id=rtb-078d5d6adc28c2c79]
+aws_route_table.notification-canada-ca-private_subnet_k8s[0]: Refreshing state... [id=rtb-0d698bd988f4e1e4d]
+aws_route_table.notification-canada-ca-private_subnet_k8s[2]: Refreshing state... [id=rtb-0952fa29d5facc38d]
+aws_route_table.notification-canada-ca-private_subnet[2]: Refreshing state... [id=rtb-00dade1e8c2fe8b6f]
+aws_route_table.notification-canada-ca-private_subnet[0]: Refreshing state... [id=rtb-03d07a3ea0c019b33]
+aws_route_table.notification-canada-ca-private_subnet[1]: Refreshing state... [id=rtb-0f8fa9ab28491fbf1]
+module.csv_bucket_logs.aws_s3_bucket_public_access_block.this: Refreshing state... [id=notification-canada-ca-dev-csv-upload-logs]
+module.csv_bucket_logs.aws_s3_bucket_versioning.this: Refreshing state... [id=notification-canada-ca-dev-csv-upload-logs]
+module.notify_slack_general.module.lambda.data.aws_iam_policy_document.assume_role[0]: Reading...
+module.notify_slack_general.module.lambda.data.aws_iam_policy_document.assume_role[0]: Read complete after 0s [id=2690255455]
+aws_athena_named_query.investigate_ip: Refreshing state... [id=b90f2e03-bbaa-42de-b736-be04ddd42494]
+aws_athena_named_query.direct_ip_queries: Refreshing state... [id=1e5dc473-f2f2-4e26-bb29-2d7690915e84]
+aws_athena_named_query.create_table_waf_logs_api_lambda: Refreshing state... [id=014d4f53-8ae4-4861-9abd-3e9e2ceacb8b]
+aws_athena_named_query.find_blocked_ips: Refreshing state... [id=44f73769-61ad-43c8-9d9a-e5fc1ea0839b]
+aws_athena_named_query.requests_by_date_country: Refreshing state... [id=4062b603-8da8-47da-b151-89b7c367fe7b]
+aws_athena_named_query.http_five_hundreds: Refreshing state... [id=9484dc7d-869c-4830-8488-5af11ed63731]
+aws_athena_named_query.fuzzing_attack: Refreshing state... [id=082c1612-daed-4626-9f58-e4e4f07ac116]
+aws_athena_named_query.http_four_hundreds: Refreshing state... [id=a90dc5ad-e604-4ea3-9424-7f9cdb885772]
+aws_athena_named_query.monitor_blocked_requests: Refreshing state... [id=1ca2e9ad-0d62-4b30-98e8-222b32190d9e]
+aws_athena_named_query.alb_ip_address_by_url: Refreshing state... [id=a7e91d74-b2df-4992-a5a9-f4ae56f15d37]
+aws_athena_named_query.create_table_all_waf_logs: Refreshing state... [id=025c8d38-50c3-404f-b47d-a61172b0d567]
+aws_athena_named_query.create_cloudfront_logs: Refreshing state... [id=37168ace-7ec5-4d45-bbe1-a31cd47a24e0]
+aws_athena_named_query.create_table_alb_logs: Refreshing state... [id=9d7c26d6-c3a7-47b6-8426-9245ecf954fb]
+aws_athena_named_query.create_table_waf_logs: Refreshing state... [id=456572eb-cdbd-40aa-b8d8-01b5c3a75b80]
+module.s3_scan_objects.aws_s3_bucket_policy.upload_bucket[0]: Refreshing state... [id=notification-canada-ca-dev-document-download-scan-files]
+module.notify_slack_critical.data.aws_region.current: Reading...
+module.notify_slack_critical.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.notify_slack_critical.data.aws_partition.current: Reading...
+module.notify_slack_critical.data.aws_partition.current: Read complete after 0s [id=aws]
+module.notify_slack_critical.data.aws_caller_identity.current: Reading...
+module.notify_slack_warning.data.aws_partition.current: Reading...
+module.notify_slack_warning.data.aws_partition.current: Read complete after 0s [id=aws]
+module.notify_slack_warning.data.aws_region.current: Reading...
+module.notify_slack_warning.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.notify_slack_warning.data.aws_caller_identity.current: Reading...
+module.notify_slack_critical.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+module.s3_scan_objects.aws_s3_bucket_notification.s3_scan_object: Refreshing state... [id=notification-canada-ca-dev-document-download-scan-files]
+module.notify_slack_warning.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+module.s3_scan_objects.data.aws_iam_policy_document.s3_scan_object: Reading...
+module.s3_scan_objects.data.aws_iam_policy_document.s3_scan_object: Read complete after 0s [id=4200428648]
+module.notify_slack_ok.data.aws_partition.current: Reading...
+module.notify_slack_ok.data.aws_partition.current: Read complete after 0s [id=aws]
+module.notify_slack_ok.data.aws_caller_identity.current: Reading...
+module.notify_slack_ok.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+module.notify_slack_ok.data.aws_region.current: Reading...
+module.notify_slack_ok.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.notify_slack_general.module.lambda.null_resource.archive[0]: Refreshing state... [id=4615577542454513547]
+aws_sqs_queue_policy.allow_sns_publish: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/ses-receipt-callback-buffer]
+aws_cloudwatch_dashboard.emails[0]: Refreshing state... [id=Emails]
+module.cbs_logs_bucket[0].aws_s3_bucket_acl.this: Refreshing state... [id=cbs-satellite-notification-dev,log-delivery-write]
+module.athena_logs_bucket.aws_s3_bucket_acl.this: Refreshing state... [id=notification-canada-ca-dev-athena-logs,log-delivery-write]
+aws_route_table_association.notification-canada-ca-private-k8s[2]: Refreshing state... [id=rtbassoc-0edfa6a2131aa9d05]
+module.document_download_logs.aws_s3_bucket_acl.this: Refreshing state... [id=notification-canada-ca-dev-document-download-logs,log-delivery-write]
+aws_route_table_association.notification-canada-ca-private-k8s[1]: Refreshing state... [id=rtbassoc-06268c53392026d18]
+aws_route_table_association.notification-canada-ca-private-k8s[0]: Refreshing state... [id=rtbassoc-08362fc09a90cc14c]
+aws_route_table_association.notification-canada-ca-private[0]: Refreshing state... [id=rtbassoc-02b2a33fe121ba15d]
+aws_route_table_association.notification-canada-ca-private[1]: Refreshing state... [id=rtbassoc-077755295b1723004]
+aws_route_table_association.notification-canada-ca-private[2]: Refreshing state... [id=rtbassoc-0f1d4e50b09632a30]
+aws_vpc_endpoint.gateway["s3"]: Refreshing state... [id=vpce-02684cd5e53978ad5]
+module.csv_bucket_logs.aws_s3_bucket_acl.this: Refreshing state... [id=notification-canada-ca-dev-csv-upload-logs,log-delivery-write]
+module.notify_slack_general.module.lambda.aws_iam_role.lambda[0]: Refreshing state... [id=lambda-notify-slack-general]
+module.notify_slack_critical.aws_cloudwatch_log_group.lambda[0]: Refreshing state... [id=/aws/lambda/notify-slack-critical]
+module.notify_slack_warning.aws_cloudwatch_log_group.lambda[0]: Refreshing state... [id=/aws/lambda/notify-slack-warning]
+module.s3_scan_objects.aws_sqs_queue_policy.s3_scan_object: Refreshing state... [id=https://sqs.ca-central-1.amazonaws.com/800095993820/s3-scan-object]
+module.notify_slack_ok.aws_cloudwatch_log_group.lambda[0]: Refreshing state... [id=/aws/lambda/notify-slack-ok]
+module.notify_slack_general.module.lambda.aws_iam_policy.additional_json[0]: Refreshing state... [id=arn:aws:iam::800095993820:policy/lambda-notify-slack-general]
+aws_flow_log.cloud-based-sensor: Refreshing state... [id=fl-08b2b4f0282d29644]
+module.notify_slack_critical.module.lambda.data.aws_region.current: Reading...
+module.notify_slack_critical.module.lambda.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.notify_slack_critical.module.lambda.data.aws_caller_identity.current: Reading...
+module.notify_slack_critical.module.lambda.data.aws_partition.current: Reading...
+module.notify_slack_critical.module.lambda.data.aws_partition.current: Read complete after 0s [id=aws]
+module.notify_slack_critical.data.aws_iam_policy_document.lambda[0]: Reading...
+module.notify_slack_critical.data.aws_iam_policy_document.lambda[0]: Read complete after 0s [id=1948688390]
+module.notify_slack_warning.module.lambda.data.aws_caller_identity.current: Reading...
+module.notify_slack_critical.module.lambda.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+module.notify_slack_warning.module.lambda.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+module.notify_slack_warning.module.lambda.data.aws_partition.current: Reading...
+module.notify_slack_warning.data.aws_iam_policy_document.lambda[0]: Reading...
+module.notify_slack_warning.module.lambda.data.aws_partition.current: Read complete after 0s [id=aws]
+module.notify_slack_warning.data.aws_iam_policy_document.lambda[0]: Read complete after 0s [id=4064447603]
+module.notify_slack_warning.module.lambda.data.aws_region.current: Reading...
+module.notify_slack_warning.module.lambda.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.notify_slack_critical.module.lambda.data.external.archive_prepare[0]: Reading...
+module.notify_slack_warning.module.lambda.data.external.archive_prepare[0]: Reading...
+module.notify_slack_ok.data.aws_iam_policy_document.lambda[0]: Reading...
+module.notify_slack_ok.data.aws_iam_policy_document.lambda[0]: Read complete after 0s [id=3789026234]
+module.notify_slack_ok.module.lambda.data.aws_region.current: Reading...
+module.notify_slack_ok.module.lambda.data.aws_region.current: Read complete after 0s [id=ca-central-1]
+module.notify_slack_ok.module.lambda.data.aws_caller_identity.current: Reading...
+module.notify_slack_ok.module.lambda.data.aws_caller_identity.current: Read complete after 0s [id=800095993820]
+module.notify_slack_ok.module.lambda.data.aws_partition.current: Reading...
+module.notify_slack_ok.module.lambda.data.aws_partition.current: Read complete after 0s [id=aws]
+module.notify_slack_critical.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Reading...
+module.notify_slack_critical.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Read complete after 0s [id=/aws/lambda/notify-slack-critical]
+module.notify_slack_warning.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Reading...
+module.notify_slack_warning.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Read complete after 0s [id=/aws/lambda/notify-slack-warning]
+module.notify_slack_general.module.lambda.aws_iam_role_policy_attachment.additional_json[0]: Refreshing state... [id=lambda-notify-slack-general/arn:aws:iam::800095993820:policy/lambda-notify-slack-general]
+module.notify_slack_warning.module.lambda.data.external.archive_prepare[0]: Read complete after 0s [id=-]
+module.notify_slack_ok.module.lambda.data.external.archive_prepare[0]: Reading...
+module.notify_slack_critical.module.lambda.data.external.archive_prepare[0]: Read complete after 0s [id=-]
+module.notify_slack_critical.module.lambda.data.aws_iam_policy_document.assume_role[0]: Reading...
+module.notify_slack_critical.module.lambda.data.aws_iam_policy_document.assume_role[0]: Read complete after 0s [id=2690255455]
+module.notify_slack_warning.module.lambda.data.aws_iam_policy_document.assume_role[0]: Reading...
+module.notify_slack_warning.module.lambda.data.aws_iam_policy_document.assume_role[0]: Read complete after 0s [id=2690255455]
+module.notify_slack_warning.module.lambda.local_file.archive_plan[0]: Refreshing state... [id=39dab5563d6b1edf3bddbd83b59895dc2a210391]
+module.notify_slack_ok.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Reading...
+module.notify_slack_critical.module.lambda.local_file.archive_plan[0]: Refreshing state... [id=4862501a94ef789386532aa63b5ae3e3b2d4ea04]
+module.notify_slack_critical.module.lambda.aws_iam_role.lambda[0]: Refreshing state... [id=lambda-notify-slack-critical]
+module.notify_slack_ok.module.lambda.data.aws_cloudwatch_log_group.lambda[0]: Read complete after 0s [id=/aws/lambda/notify-slack-ok]
+module.notify_slack_warning.module.lambda.aws_iam_role.lambda[0]: Refreshing state... [id=lambda-notify-slack-warning]
+module.notify_slack_warning.module.lambda.null_resource.archive[0]: Refreshing state... [id=5103686762700802885]
+module.notify_slack_ok.module.lambda.data.aws_iam_policy_document.assume_role[0]: Reading...
+module.notify_slack_ok.module.lambda.data.aws_iam_policy_document.assume_role[0]: Read complete after 0s [id=2690255455]
+module.notify_slack_general.module.lambda.aws_lambda_function.this[0]: Refreshing state... [id=notify-slack-general]
+module.notify_slack_ok.module.lambda.data.external.archive_prepare[0]: Read complete after 0s [id=-]
+module.notify_slack_critical.module.lambda.aws_iam_policy.additional_json[0]: Refreshing state... [id=arn:aws:iam::800095993820:policy/lambda-notify-slack-critical]
+module.notify_slack_critical.module.lambda.null_resource.archive[0]: Refreshing state... [id=57172068359551527]
+module.notify_slack_warning.module.lambda.aws_iam_policy.additional_json[0]: Refreshing state... [id=arn:aws:iam::800095993820:policy/lambda-notify-slack-warning]
+module.notify_slack_ok.module.lambda.aws_iam_role.lambda[0]: Refreshing state... [id=lambda-notify-slack-ok]
+module.notify_slack_ok.module.lambda.local_file.archive_plan[0]: Refreshing state... [id=eab78a504d7c04c5270abcb289ccba3db9e11b45]
+module.notify_slack_ok.module.lambda.aws_iam_policy.additional_json[0]: Refreshing state... [id=arn:aws:iam::800095993820:policy/lambda-notify-slack-ok]
+module.notify_slack_critical.module.lambda.aws_iam_role_policy_attachment.additional_json[0]: Refreshing state... [id=lambda-notify-slack-critical/arn:aws:iam::800095993820:policy/lambda-notify-slack-critical]
+module.notify_slack_ok.module.lambda.null_resource.archive[0]: Refreshing state... [id=1836270575397885444]
+module.notify_slack_warning.module.lambda.aws_iam_role_policy_attachment.additional_json[0]: Refreshing state... [id=lambda-notify-slack-warning/arn:aws:iam::800095993820:policy/lambda-notify-slack-warning]
+module.notify_slack_general.module.lambda.aws_lambda_permission.unqualified_alias_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+module.notify_slack_general.module.lambda.aws_lambda_permission.current_version_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+module.notify_slack_general.aws_sns_topic_subscription.sns_notify_slack[0]: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-general:daddfc14-44a9-4fbf-b6f2-e00acb734e98]
+module.notify_slack_critical.module.lambda.aws_lambda_function.this[0]: Refreshing state... [id=notify-slack-critical]
+module.notify_slack_warning.module.lambda.aws_lambda_function.this[0]: Refreshing state... [id=notify-slack-warning]
+module.notify_slack_ok.module.lambda.aws_iam_role_policy_attachment.additional_json[0]: Refreshing state... [id=lambda-notify-slack-ok/arn:aws:iam::800095993820:policy/lambda-notify-slack-ok]
+module.notify_slack_ok.module.lambda.aws_lambda_function.this[0]: Refreshing state... [id=notify-slack-ok]
+module.notify_slack_critical.module.lambda.aws_lambda_permission.current_version_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+module.notify_slack_critical.module.lambda.aws_lambda_permission.unqualified_alias_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+module.notify_slack_critical.aws_sns_topic_subscription.sns_notify_slack[0]: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-critical:e993876e-e7c4-4217-af50-576c9717d76a]
+module.notify_slack_warning.module.lambda.aws_lambda_permission.current_version_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+module.notify_slack_warning.module.lambda.aws_lambda_permission.unqualified_alias_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+aws_sns_topic_subscription.sns_alert_critical_us_east_1_to_lambda: Refreshing state... [id=arn:aws:sns:us-east-1:800095993820:alert-critical-us-east-1:b5eb4a41-8f3d-44e7-98cd-196a48db6771]
+aws_sns_topic_subscription.sns_alert_critical_us_west_2_to_lambda: Refreshing state... [id=arn:aws:sns:us-west-2:800095993820:alert-critical-us-west-2:15be8547-332a-4448-893d-4db2fee3d046]
+aws_lambda_permission.sns_critical_us_west_2_to_slack_lambda: Refreshing state... [id=terraform-20250929120631465400000016]
+aws_lambda_permission.sns_critical_us_east_1_to_slack_lambda: Refreshing state... [id=terraform-20250929120631276900000015]
+module.notify_slack_warning.aws_sns_topic_subscription.sns_notify_slack[0]: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-warning:0b4563fb-b955-4c16-95a7-a6f9fab9bff9]
+module.notify_slack_ok.module.lambda.aws_lambda_permission.unqualified_alias_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+module.notify_slack_ok.module.lambda.aws_lambda_permission.current_version_triggers["AllowExecutionFromSNS"]: Refreshing state... [id=AllowExecutionFromSNS]
+aws_lambda_permission.sns_warning_us_east_1_to_slack_lambda: Refreshing state... [id=terraform-20250929120635244300000017]
+aws_sns_topic_subscription.sns_alert_warning_us_west_2_to_lambda: Refreshing state... [id=arn:aws:sns:us-west-2:800095993820:alert-warning-us-west-2:c48f3c30-70ef-4ecc-b94c-ce3477a37db0]
+aws_sns_topic_subscription.sns_alert_warning_us_east_1_to_lambda: Refreshing state... [id=arn:aws:sns:us-east-1:800095993820:alert-warning-us-east-1:098ffe44-c22e-4bcf-8eab-629a271505d2]
+aws_lambda_permission.sns_warning_us_west_2_to_slack_lambda: Refreshing state... [id=terraform-20250929120635488300000018]
+module.notify_slack_ok.aws_sns_topic_subscription.sns_notify_slack[0]: Refreshing state... [id=arn:aws:sns:ca-central-1:800095993820:alert-ok:65c4e61a-93f8-4df8-9536-1c2891f9c4e5]
+aws_sns_topic_subscription.sns_alert_ok_us_east_1_to_lambda: Refreshing state... [id=arn:aws:sns:us-east-1:800095993820:alert-ok-us-east-1:f5a19056-ec40-4949-af74-567b2c57e85e]
+aws_lambda_permission.sns_ok_us_east_1_to_slack_lambda: Refreshing state... [id=terraform-20250929120641730000000019]
+aws_sns_topic_subscription.sns_alert_ok_us_west_2_to_lambda: Refreshing state... [id=arn:aws:sns:us-west-2:800095993820:alert-ok-us-west-2:5a10f002-b012-488e-a5ab-fefd31c3f489]
+aws_cloudwatch_dashboard.sms[0]: Refreshing state... [id=SMS]
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+Terraform will perform the following actions:
+  # aws_cloudwatch_metric_alarm.sns-sms-success-rate-canadian-numbers-critical[0] will be updated in-place
+  ~ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
+      ~ alarm_description                     = "SMS success rate to Canadian numbers is below 25% over 2 consecutive periods of 12 hours" -> "SMS success rate to Canadian numbers is below 25% with at least 25 messages over 2 consecutive periods of 12 hours"
+      ~ dimensions                            = {
+          - "Country" = "CA" -> null
+          - "SMSType" = "Transactional" -> null
+        }
+        id                                    = "sns-sms-success-rate-canadian-numbers-critical"
+      - metric_name                           = "SMSSuccessRate" -> null
+      - namespace                             = "AWS/SNS" -> null
+      - period                                = 43200 -> null
+      - statistic                             = "Average" -> null
+        tags                                  = {}
+      ~ threshold                             = 0.25 -> 1
+        # (16 unchanged attributes hidden)
+      + metric_query {
+          + id          = "messagesPublished"
+          + label       = "Messages Published"
+          + return_data = false
+            # (2 unchanged attributes hidden)
+          + metric {
+              + dimensions  = {
+                  + "Country" = "CA"
+                  + "SMSType" = "Transactional"
+                }
+              + metric_name = "NumberOfMessagesPublished"
+              + namespace   = "AWS/SNS"
+              + period      = 43200
+              + stat        = "Sum"
+                # (1 unchanged attribute hidden)
+            }
+        }
+      + metric_query {
+          + id          = "successRate"
+          + label       = "Success Rate"
+          + return_data = false
+            # (2 unchanged attributes hidden)
+          + metric {
+              + dimensions  = {
+                  + "Country" = "CA"
+                  + "SMSType" = "Transactional"
+                }
+              + metric_name = "SMSSuccessRate"
+              + namespace   = "AWS/SNS"
+              + period      = 43200
+              + stat        = "Average"
+                # (1 unchanged attribute hidden)
+            }
+        }
+      + metric_query {
+          + expression  = "IF(successRate < 0.25 AND messagesPublished > 25, 0, 1)"
+          + id          = "alarmCondition"
+          + label       = "Guarded Alarm Condition"
+          + return_data = true
+            # (1 unchanged attribute hidden)
+        }
+    }
+Plan: 0 to add, 1 to change, 0 to destroy.
+Warning: Argument is deprecated
+  with aws_s3_bucket.csv_bucket,
+  on s3.tf line 5, in resource "aws_s3_bucket" "csv_bucket":
+   5: resource "aws_s3_bucket" "csv_bucket" {
+lifecycle_rule is deprecated. Use the aws_s3_bucket_lifecycle_configuration
+resource instead.
+(and 63 more similar warnings elsewhere)
+Warning: Deprecated attribute
+  on .terraform/modules/notify_slack_critical.lambda/outputs.tf line 9, in output "lambda_function_arn_static":
+   9:   value       = local.create && var.create_function && !var.create_layer ? "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.function_name}" : ""
+The attribute "name" is deprecated. Refer to the provider documentation for
+details.
+(and 17 more similar warnings elsewhere)
+─────────────────────────────────────────────────────────────────────────────
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
