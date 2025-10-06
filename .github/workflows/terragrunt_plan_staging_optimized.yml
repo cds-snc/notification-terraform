@@ -239,13 +239,18 @@ jobs:
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
-      
-      - name: Terragrunt Plan
+
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@91d1f3210525d6e6e7a279e2a430c4c7e7a9f437 # v3.5
         if: ${{ matrix.condition }}
-        run: |
-          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color 
-      
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+          skip-fmt: "true"               
 
   terragrunt-plan-step-2:
     if: |
@@ -325,11 +330,17 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
-      - name: Terragrunt Plan
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@91d1f3210525d6e6e7a279e2a430c4c7e7a9f437 # v3.5
         if: ${{ matrix.condition }}
-        run: |
-          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color 
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+          skip-fmt: "true"               
       
 
   terragrunt-plan-step-3:
@@ -394,12 +405,18 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
  
-      - name: Terragrunt Plan
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@91d1f3210525d6e6e7a279e2a430c4c7e7a9f437 # v3.5
         if: ${{ matrix.condition }}
-        run: |
-          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color           
-          
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+          skip-fmt: "true"
+
   terragrunt-plan-step-4:
     if: |
       needs.terragrunt-filter.outputs.eks == 'true' || 
@@ -469,11 +486,17 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
-      - name: Terragrunt Plan
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@91d1f3210525d6e6e7a279e2a430c4c7e7a9f437 # v3.5
         if: ${{ matrix.condition }}
-        run: |
-          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color 
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+          skip-fmt: "true"               
           
   terragrunt-plan-step-5:
     if: |
@@ -544,11 +567,17 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
-      - name: Terragrunt Plan
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@91d1f3210525d6e6e7a279e2a430c4c7e7a9f437 # v3.5
         if: ${{ matrix.condition }}
-        run: |
-          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color       
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+          skip-fmt: "true"
 
   terragrunt-plan-step-6:
     if: |
@@ -626,11 +655,17 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
       
-      - name: Terragrunt Plan
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@91d1f3210525d6e6e7a279e2a430c4c7e7a9f437 # v3.5
         if: ${{ matrix.condition }}
-        run: |
-          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color                   
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+          skip-fmt: "true"                            
 
 
   terragrunt-plan-step-7:
@@ -696,9 +731,14 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
-      - name: Terragrunt Plan
+      - name: Terragrunt plan ${{env.COMPONENT}}
+        uses: cds-snc/terraform-plan@91d1f3210525d6e6e7a279e2a430c4c7e7a9f437 # v3.5
         if: ${{ matrix.condition }}
-        run: |
-          cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt plan --terragrunt-non-interactive --no-color 
-       
+        with:
+          directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
+          comment-delete: "true"
+          comment-title: "${{env.ENVIRONMENT}}: ${{env.COMPONENT}}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          terragrunt: "true"
+          skip-conftest: "true"
+          skip-fmt: "true"               
