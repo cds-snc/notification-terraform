@@ -212,6 +212,26 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "admin-svc-audit-removed-users" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Admin / Service audit - removed users"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /notify-admin/
+| filter @message like /is removing user/
+| parse @message "User * is removing user: * from service: *" as @admin_user, @removed_user, @service
+| sort @timestamp desc
+| display @timestamp, @admin_user, @removed_user, @service, log
+| limit 20
+
+QUERY
+}
+
 resource "aws_cloudwatch_query_definition" "admin-slow-dashboards" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Admin / Slow Dashboards"
