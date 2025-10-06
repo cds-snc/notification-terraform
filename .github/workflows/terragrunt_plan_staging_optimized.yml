@@ -180,6 +180,7 @@ jobs:
     needs: terragrunt-filter
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component: [common, ecr, ecr-us-east, newrelic]
         include:
@@ -278,6 +279,7 @@ jobs:
       - terragrunt-plan-step-1
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component: [cloudfront, heartbeat, pinpoint_to_sqs_sms_callbacks, ses_receiving_emails, ses_to_sqs_email_callbacks, sns_to_sqs_sms_callbacks]
         include:
@@ -358,6 +360,7 @@ jobs:
       - terragrunt-plan-step-2
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component: [dns]
         include:
@@ -429,6 +432,7 @@ jobs:
       - terragrunt-plan-step-3
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component: [eks, ses_validation_dns_entries, system_status_static_site]
         include:
@@ -504,6 +508,7 @@ jobs:
       - terragrunt-plan-step-4
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component: [elasticache, lambda-google-cidr, rds]
         include:
@@ -581,6 +586,7 @@ jobs:
       - terragrunt-plan-step-5
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component: [database-tools, lambda-admin-pr, lambda-api, manifest_secrets, system_status]
         include:
@@ -660,6 +666,7 @@ jobs:
       - terragrunt-plan-step-6
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         component: [github]
         include:
