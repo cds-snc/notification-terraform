@@ -256,6 +256,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -359,6 +360,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -446,6 +448,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -539,6 +542,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -632,6 +636,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -732,6 +737,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -820,6 +826,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
