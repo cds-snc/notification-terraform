@@ -171,6 +171,7 @@ jobs:
               - 'env/terragrunt.hcl'
 
   terragrunt-plan-step-1:
+    name: "${{ matrix.component }}"
     if: |
       needs.terragrunt-filter.outputs.common == 'true' || 
       needs.terragrunt-filter.outputs.ecr == 'true' ||
