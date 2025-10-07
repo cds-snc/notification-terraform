@@ -1099,3 +1099,9 @@ variable "new_relic_user_id" {
   type      = string
   sensitive = true
 }
+
+variable "system_status_static_site_cloudfront_distribution" {
+  type      = string
+  sensitive = true
+  default   = "E1234567890ABC"
+}
