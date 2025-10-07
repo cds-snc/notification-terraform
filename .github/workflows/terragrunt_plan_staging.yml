@@ -562,7 +562,7 @@ jobs:
       needs.terragrunt-filter.outputs.config == 'true'
     needs: 
       - terragrunt-filter
-      - terragrunt-plan-step-4
+#      - terragrunt-plan-step-4
     runs-on: ubuntu-latest
     env:
       COMPONENT: aws-auth
@@ -597,7 +597,17 @@ jobs:
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
-      
+
+      - name: Install sponge
+        run: |
+          sudo apt update
+          sudo apt-get install -y moreutils
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+          
       - name: Retrieve VPN Config
         run: |
           sudo mkdir -p aws
