@@ -16,7 +16,7 @@ on:
       - "env/$ENVIRONMENT/**"
       - "env/terragrunt.hcl"
       - "env/*.tfvars"
-      - ".github/workflows/terragrunt_plan_$ENVIRONMENT.yml"
+      - ".github/workflows/terragrunt_plan_staging.yml"
 
 permissions:
   id-token: write # This is required for requesting the OIDC JWT
