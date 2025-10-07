@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/infrastructure_version.txt"
+      - "env/$ENVIRONMENT/**"
 
 permissions:
   id-token: write
@@ -17,6 +18,7 @@ env:
   AWS_REGION: ca-central-1
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_PRODUCTION }}
   WORKFLOW: true
+  TF_PLUGIN_CACHE_DIR: /tmp/.terraform.d/plugin-cache
 
 jobs:
   terragrunt-plan-common:
