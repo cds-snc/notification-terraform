@@ -5,7 +5,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/infrastructure_version.txt"
-      - "env/$ENVIRONMENT/**"
+      - "env/staging/**"
 
 permissions:
   id-token: write
