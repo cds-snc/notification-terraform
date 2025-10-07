@@ -41,10 +41,23 @@ dependency "common" {
   }
 }
 
+dependency "system_status_static_site" {
+  config_path = "../system_status_static_site"
+
+  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
+  # module hasn't been applied yet.
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
+  mock_outputs_merge_with_state           = true
+  mock_outputs = {
+    system_status_static_site_cloudfront_distribution = "E1234567890ABC"
+  }
+}
+
 inputs = {
   admin_pr_review_env_security_group_ids                              = dependency.lambda-admin-pr.outputs.admin_pr_security_group_id
   admin_pr_review_env_subnet_ids                                      = dependency.common.outputs.vpc_private_subnets
   shared_staging_kms_key_id                                           = dependency.rds.outputs.shared_staging_kms_key_id                                                            
+  system_status_static_site_cloudfront_distribution                               = dependency.system_status_static_site.outputs.system_status_static_site_cloudfront_distribution
 }
 
 include {
