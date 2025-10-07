@@ -25,3 +25,7 @@ data "github_repository" "notification_document_download" {
 data "github_repository" "ipv4_geolocate" {
   name = "ipv4-geolocate-webservice"
 }
+
+data "github_repository" "notification_system_status_frontend" {
+  name = "notification-system-status-frontend"
+}
