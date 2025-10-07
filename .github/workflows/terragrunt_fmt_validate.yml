@@ -46,7 +46,7 @@ jobs:
         id: tf-format
         run: |
           cd env/${{env.ENVIRONMENT}}
-          terragrunt run-all format --check
+          terragrunt run-all fmt --check
 
       - name: Terragrunt Validate
         id: tf-validate
