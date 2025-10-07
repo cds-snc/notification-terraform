@@ -1,5 +1,5 @@
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/common?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//common"}"
+  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/common?ref=${get_env("INFRASTRUCTURE_VERSION") == "2.22.7" ? "streamline-wf" : "v${get_env("INFRASTRUCTURE_VERSION")}"}" : "../../../aws//common"}"
 
   before_hook "get-admin" {
     commands     = ["apply", "plan"]

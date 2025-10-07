@@ -46,8 +46,10 @@ jobs:
           uses: actions/cache@v4
           with:
             path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-            key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+            key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
             restore-keys: |
+              terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
               terraform-providers-
 
         # Cache Terragrunt dependencies
@@ -125,9 +127,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
-            terraform-providers-
+            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-
 
       # Cache Terragrunt dependencies  
       - name: Cache Terragrunt cache
@@ -198,9 +201,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
-            terraform-providers-
+            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-
 
       # Cache Terragrunt dependencies and state
       - name: Cache Terragrunt cache
@@ -272,9 +276,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
-            terraform-providers-
+            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -340,9 +345,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
-            terraform-providers-
+            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -452,9 +458,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
-            terraform-providers-
+            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -531,9 +538,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
-            terraform-providers-
+            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -604,9 +612,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
-            terraform-providers-
+            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
+              terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
