@@ -587,7 +587,7 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ env.COMPONENT }}
           restore-keys: |
             terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
