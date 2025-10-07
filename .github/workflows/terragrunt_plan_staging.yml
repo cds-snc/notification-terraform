@@ -668,8 +668,8 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       needs.terragrunt-filter.outputs.elasticache == 'true' || 
-      needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
-      needs.terragrunt-filter.outputs.system_status_static_site == 'true'
+      needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' ||
+      needs.terragrunt-filter.outputs.rds == 'true'
 
     needs: 
       - terragrunt-filter
