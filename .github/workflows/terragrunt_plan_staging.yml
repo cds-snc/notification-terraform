@@ -370,6 +370,7 @@ jobs:
             # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
+            ```
       
 
   terragrunt-plan-step-3:
