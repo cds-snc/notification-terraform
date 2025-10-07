@@ -274,7 +274,7 @@ jobs:
       needs.terragrunt-filter.outputs.heartbeat == 'true' ||
       needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
       needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
-      needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true'||
+      needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' ||
       needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true'
 
     needs: 
