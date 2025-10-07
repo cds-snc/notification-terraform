@@ -659,7 +659,7 @@ jobs:
         with:
           message-id: aws_auth_plan
           message: |
-            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            # ${{env.ENVIRONMENT}}/${{ env.COMPONENT }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
           
