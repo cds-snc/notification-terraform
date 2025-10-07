@@ -562,7 +562,7 @@ jobs:
       needs.terragrunt-filter.outputs.config == 'true'
     needs: 
       - terragrunt-filter
-#      - terragrunt-plan-step-4
+      - terragrunt-plan-step-4
     runs-on: ubuntu-latest
     env:
       COMPONENT: aws-auth
@@ -765,7 +765,8 @@ jobs:
       needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' ||
       needs.terragrunt-filter.outputs.lambda-api == 'true' ||
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
-      needs.terragrunt-filter.outputs.system_status == 'true'
+      needs.terragrunt-filter.outputs.system_status == 'true' ||
+      needs.terragrunt-filter.outputs.performance-test == 'true'
 
     needs: 
       - terragrunt-filter
@@ -774,7 +775,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [database-tools, lambda-admin-pr, lambda-api, manifest_secrets, system_status]
+        component: [database-tools, lambda-admin-pr, lambda-api, manifest_secrets, system_status, performance-test]
         include:
           - component: database-tools
             condition: ${{ needs.terragrunt-filter.outputs.database-tools == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
@@ -786,6 +787,8 @@ jobs:
             condition: ${{ needs.terragrunt-filter.outputs.manifest_secrets == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
           - component: system_status
             condition: ${{ needs.terragrunt-filter.outputs.system_status == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: performance-test
+            condition: ${{ needs.terragrunt-filter.outputs.performance-test == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
 
     env:
       COMPONENT: ${{ matrix.component }}
