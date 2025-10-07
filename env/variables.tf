@@ -770,10 +770,6 @@ variable "system_status_docker_tag" {
   type = string
 }
 
-variable "system_status_static_site_cloudfront_distribution" {
-  type = string
-} 
-
 variable "heartbeat_docker_tag" {
   type = string
 }
