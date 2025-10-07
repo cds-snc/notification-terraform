@@ -57,7 +57,7 @@ inputs = {
   admin_pr_review_env_security_group_ids                              = dependency.lambda-admin-pr.outputs.admin_pr_security_group_id
   admin_pr_review_env_subnet_ids                                      = dependency.common.outputs.vpc_private_subnets
   shared_staging_kms_key_id                                           = dependency.rds.outputs.shared_staging_kms_key_id                                                            
-  system_status_static_site_cloudfront_distribution                               = dependency.system_status_static_site.outputs.system_status_static_site_cloudfront_distribution
+  system_status_static_site_cloudfront_distribution = dependency.system_status_static_site.outputs.system_status_static_site_cloudfront_distribution
 }
 
 include {
