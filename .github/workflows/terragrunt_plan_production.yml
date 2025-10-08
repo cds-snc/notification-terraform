@@ -517,14 +517,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [database-tools, lambda-admin-pr, lambda-api, manifest_secrets, system_status, performance-test]
+        component: [database-tools, lambda-api, manifest_secrets, system_status]
         include:
           - component: database-tools
-          - component: lambda-admin-pr
           - component: lambda-api
           - component: manifest_secrets
           - component: system_status
-          - component: performance-test
 
     env:
       COMPONENT: ${{ matrix.component }}
