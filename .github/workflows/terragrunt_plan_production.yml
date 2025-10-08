@@ -48,7 +48,6 @@ jobs:
             key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
             restore-keys: |
               terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
               terraform-providers-
 
         # Cache Terragrunt dependencies
@@ -129,7 +128,7 @@ jobs:
           key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
             terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
+            terraform-providers-
 
       # Cache Terragrunt dependencies  
       - name: Cache Terragrunt cache
@@ -204,7 +203,7 @@ jobs:
           key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
             terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
+            terraform-providers-
 
       # Cache Terragrunt dependencies and state
       - name: Cache Terragrunt cache
@@ -280,7 +279,7 @@ jobs:
           key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
             terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
+            terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -306,7 +305,6 @@ jobs:
           op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt Plan
-
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -350,7 +348,7 @@ jobs:
           key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
             terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
+            terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -464,7 +462,7 @@ jobs:
           key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
             terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
+            terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -543,7 +541,7 @@ jobs:
           key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
             terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
+            terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
@@ -617,7 +615,7 @@ jobs:
           key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
           restore-keys: |
             terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
+            terraform-providers-
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
