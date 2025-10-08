@@ -29,3 +29,7 @@ data "github_repository" "ipv4_geolocate" {
 data "github_repository" "notification_system_status_frontend" {
   name = "notification-system-status-frontend"
 }
+
+data "github_repository" "notification_performance_test_results" {
+  name = "notification-performance-test-results"
+}
