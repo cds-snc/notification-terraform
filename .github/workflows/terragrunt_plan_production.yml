@@ -96,7 +96,7 @@ jobs:
             message: |
               # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
               ```shell
-              ${{join(steps.tf-plan.outputs.plan, '\n')}}<|diff_marker|>
+              ${{join(steps.tf-plan.outputs.plan, '\n')}}
               ```
 
   terragrunt-plan-step-2:
@@ -177,6 +177,7 @@ jobs:
             # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
+            ```
       
 
   terragrunt-plan-step-3:
@@ -251,6 +252,7 @@ jobs:
             # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
+            ```
           
   terragrunt-plan-step-4:
     name: "${{ matrix.component }}"
@@ -327,6 +329,7 @@ jobs:
             # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
+            ```
 
   terragrunt-aws-auth:
     name: "aws-auth"
@@ -357,7 +360,7 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ env.COMPONENT }}
           restore-keys: |
             terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
@@ -429,10 +432,11 @@ jobs:
         with:
           message-id: aws_auth_plan
           message: |
-            # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
+            # ${{env.ENVIRONMENT}}/${{ env.COMPONENT }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
-          
+            ```
+
   terragrunt-plan-step-5:
     name: "${{ matrix.component }}"
     needs: 
@@ -508,6 +512,7 @@ jobs:
             # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
+            ```
 
   terragrunt-plan-step-6:
     name: "${{ matrix.component }}"
@@ -586,7 +591,7 @@ jobs:
             # ${{env.ENVIRONMENT}}/${{ matrix.component }} Terragrunt Plan:
             ```shell
             ${{join(steps.tf-plan.outputs.plan, '\n')}}
-
+            ```
 
   terragrunt-plan-step-7:
     name: "${{ matrix.component }}"
