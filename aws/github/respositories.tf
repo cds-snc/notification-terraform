@@ -31,5 +31,6 @@ data "github_repository" "notification_system_status_frontend" {
 }
 
 data "github_repository" "notification_performance_test_results" {
-  name = "notification-performance-test-results"
+  name  = "notification-performance-test-results"
+  pages = false
 }
