@@ -1,3 +1,5 @@
+# NOTE: We hard code the repository here because it's private and fails to resolve properly when used as a datasource.
+
 resource "github_actions_secret" "perf_test_aws_access_key_id" {
   count           = var.env == "staging" ? 1 : 0
   repository      = "notification-performance-test-results"
