@@ -173,6 +173,7 @@ jobs:
   terragrunt-plan-step-1:
     name: "${{ matrix.component }}"
     if: |
+      always() &&
       needs.terragrunt-filter.outputs.common == 'true' || 
       needs.terragrunt-filter.outputs.ecr == 'true' ||
       needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
@@ -184,22 +185,31 @@ jobs:
       fail-fast: false
       matrix:
         component: [common, ecr, ecr-us-east, newrelic]
+        include:
+          - component: common
+            condition: ${{ needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ecr
+            condition: ${{ needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ecr-us-east
+            condition: ${{ needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: newrelic
+            condition: ${{ needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Skip if no changes
-        if: ${{ !((matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true'))) }}
+        if: ${{ !matrix.condition }}
         run: |
           echo "No changes detected for ${{ matrix.component }}, skipping..."
           exit 0
       
       - name: Checkout
-        if: ${{ (matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       # Cache Terraform providers to avoid repeated downloads
       - name: Cache Terraform providers
-        if: ${{ (matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -209,7 +219,7 @@ jobs:
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache
-        if: ${{ (matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: |
@@ -221,20 +231,20 @@ jobs:
             terragrunt-cache-
       
       - name: Setup Terraform
-        if: ${{ (matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
       - name: Download TFVars
-        if: ${{ (matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
       
       - name: Terragrunt Plan
-        if: ${{ (matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -248,7 +258,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ ((matrix.component == 'common' && (needs.terragrunt-filter.outputs.common == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr' && (needs.terragrunt-filter.outputs.ecr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ecr-us-east' && (needs.terragrunt-filter.outputs.ecr-us-east == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'newrelic' && (needs.terragrunt-filter.outputs.newrelic == 'true' || needs.terragrunt-filter.outputs.config == 'true'))) && steps.tf-plan.outputs.plan != '' }}
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -261,13 +271,13 @@ jobs:
   terragrunt-plan-step-2:
     name: "${{ matrix.component }}"
     if: |
-      (needs.terragrunt-filter.outputs.cloudfront == 'true' || 
+      always() &&
+      needs.terragrunt-filter.outputs.cloudfront == 'true' || 
       needs.terragrunt-filter.outputs.heartbeat == 'true' ||
       needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
       needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
       needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true') &&
-      (needs.terragrunt-plan-step-1.result == 'success' || needs.terragrunt-plan-step-1.result == 'skipped')
+      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true'
 
     needs: 
       - terragrunt-filter
@@ -277,22 +287,35 @@ jobs:
       fail-fast: false
       matrix:
         component: [cloudfront, heartbeat, pinpoint_to_sqs_sms_callbacks, ses_receiving_emails, ses_to_sqs_email_callbacks, sns_to_sqs_sms_callbacks]
+        include:
+          - component: cloudfront
+            condition: ${{ needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: heartbeat
+            condition: ${{ needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: pinpoint_to_sqs_sms_callbacks
+            condition: ${{ needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ses_receiving_emails
+            condition: ${{ needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ses_to_sqs_email_callbacks
+            condition: ${{ needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: sns_to_sqs_sms_callbacks
+            condition: ${{ needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Skip if no changes
-        if: ${{ !((matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true'))) }}
+        if: ${{ !matrix.condition }}
         run: |
           echo "No changes detected for ${{ matrix.component }}, skipping..."
           exit 0
       
       - name: Checkout
-        if: ${{ (matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       # Cache Terraform providers
       - name: Cache Terraform providers
-        if: ${{ (matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -302,7 +325,7 @@ jobs:
 
       # Cache Terragrunt dependencies  
       - name: Cache Terragrunt cache
-        if: ${{ (matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: |
@@ -314,20 +337,20 @@ jobs:
             terragrunt-cache-
       
       - name: Setup Terraform
-        if: ${{ (matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
       - name: Download TFVars
-        if: ${{ (matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt Plan
-        if: ${{ (matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -341,7 +364,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ ((matrix.component == 'cloudfront' && (needs.terragrunt-filter.outputs.cloudfront == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'heartbeat' && (needs.terragrunt-filter.outputs.heartbeat == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'pinpoint_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_receiving_emails' && (needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'ses_to_sqs_email_callbacks' && (needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'sns_to_sqs_sms_callbacks' && (needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' || needs.terragrunt-filter.outputs.config == 'true'))) && steps.tf-plan.outputs.plan != '' }}
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -355,8 +378,8 @@ jobs:
   terragrunt-plan-step-3:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.dns == 'true' &&
-      (needs.terragrunt-plan-step-2.result == 'success' || needs.terragrunt-plan-step-2.result == 'skipped')
+      always() &&
+      needs.terragrunt-filter.outputs.dns == 'true'
     needs: 
       - terragrunt-filter
       - terragrunt-plan-step-2
@@ -364,24 +387,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-
         component: [dns]
+        include:
+          - component: dns
+            condition: ${{ needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Skip if no changes
-        if: ${{ !(matrix.component == 'dns' && (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ !matrix.condition }}
         run: |
           echo "No changes detected for ${{ matrix.component }}, skipping..."
           exit 0
       
       - name: Checkout
-        if: ${{ matrix.component == 'dns' && (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true') }}
+        if: ${{ matrix.condition }}
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       # Cache Terraform providers
       - name: Cache Terraform providers
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -391,7 +416,7 @@ jobs:
 
       # Cache Terragrunt dependencies and state
       - name: Cache Terragrunt cache
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: |
@@ -403,20 +428,20 @@ jobs:
             terragrunt-cache-
       
       - name: Setup Terraform
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
       - name: Download TFVars
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
  
       - name: Terragrunt Plan
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -430,7 +455,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ true }}
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -442,10 +467,10 @@ jobs:
   terragrunt-plan-step-4:
     name: "${{ matrix.component }}"
     if: |
-      (needs.terragrunt-filter.outputs.eks == 'true' || 
+      always() &&
+      needs.terragrunt-filter.outputs.eks == 'true' || 
       needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
-      needs.terragrunt-filter.outputs.system_status_static_site == 'true') &&
-      (needs.terragrunt-plan-step-3.result == 'success' || needs.terragrunt-plan-step-3.result == 'skipped')
+      needs.terragrunt-filter.outputs.system_status_static_site == 'true'
 
     needs: 
       - terragrunt-filter
@@ -454,24 +479,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-
         component: [eks, ses_validation_dns_entries, system_status_static_site]
+        include:
+          - component: eks
+            condition: ${{ needs.terragrunt-filter.outputs.eks == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: ses_validation_dns_entries
+            condition: ${{ needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: system_status_static_site
+            condition: ${{ needs.terragrunt-filter.outputs.system_status_static_site == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Skip if no changes
-        if: ${{ !(matrix.component == 'dns' && (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ !matrix.condition }}
         run: |
           echo "No changes detected for ${{ matrix.component }}, skipping..."
           exit 0
       
       - name: Checkout
-        if: ${{ matrix.component == 'dns' && (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true') }}
+        if: ${{ matrix.condition }}
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       # Cache Terraform providers
       - name: Cache Terraform providers
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -481,7 +512,7 @@ jobs:
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: |
@@ -493,20 +524,20 @@ jobs:
             terragrunt-cache-
       
       - name: Setup Terraform
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
       - name: Download TFVars
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt Plan
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -520,7 +551,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ true }}
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -640,10 +671,10 @@ jobs:
   terragrunt-plan-step-5:
     name: "${{ matrix.component }}"
     if: |
-      (needs.terragrunt-filter.outputs.elasticache == 'true' || 
+      always() &&
+      needs.terragrunt-filter.outputs.elasticache == 'true' || 
       needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' ||
-      needs.terragrunt-filter.outputs.rds == 'true') &&
-      (needs.terragrunt-plan-step-4.result == 'success' || needs.terragrunt-plan-step-4.result == 'skipped')
+      needs.terragrunt-filter.outputs.rds == 'true'
 
     needs: 
       - terragrunt-filter
@@ -652,24 +683,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-
         component: [elasticache, lambda-google-cidr, rds]
+        include:
+          - component: elasticache
+            condition: ${{ needs.terragrunt-filter.outputs.elasticache == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: lambda-google-cidr
+            condition: ${{ needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: rds
+            condition: ${{ needs.terragrunt-filter.outputs.rds == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Skip if no changes
-        if: ${{ !(matrix.component == 'dns' && (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ !matrix.condition }}
         run: |
           echo "No changes detected for ${{ matrix.component }}, skipping..."
           exit 0
       
       - name: Checkout
-        if: ${{ matrix.component == 'dns' && (needs.terragrunt-filter.outputs.dns == 'true' || needs.terragrunt-filter.outputs.config == 'true') }}
+        if: ${{ matrix.condition }}
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       # Cache Terraform providers
       - name: Cache Terraform providers
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -679,7 +716,7 @@ jobs:
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: |
@@ -691,20 +728,20 @@ jobs:
             terragrunt-cache-
       
       - name: Setup Terraform
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
       - name: Download TFVars
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt Plan
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -718,7 +755,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ true }}
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -730,13 +767,13 @@ jobs:
   terragrunt-plan-step-6:
     name: "${{ matrix.component }}"
     if: |
-      (needs.terragrunt-filter.outputs.database-tools == 'true' || 
+      always() &&
+      needs.terragrunt-filter.outputs.database-tools == 'true' || 
       needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' ||
       needs.terragrunt-filter.outputs.lambda-api == 'true' ||
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
       needs.terragrunt-filter.outputs.system_status == 'true' ||
-      needs.terragrunt-filter.outputs.performance-test == 'true') &&
-      (needs.terragrunt-plan-step-5.result == 'success' || needs.terragrunt-plan-step-5.result == 'skipped')
+      needs.terragrunt-filter.outputs.performance-test == 'true'
 
     needs: 
       - terragrunt-filter
@@ -746,23 +783,36 @@ jobs:
       fail-fast: false
       matrix:
         component: [database-tools, lambda-admin-pr, lambda-api, manifest_secrets, system_status, performance-test]
+        include:
+          - component: database-tools
+            condition: ${{ needs.terragrunt-filter.outputs.database-tools == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: lambda-admin-pr
+            condition: ${{ needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: lambda-api
+            condition: ${{ needs.terragrunt-filter.outputs.lambda-api == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: manifest_secrets
+            condition: ${{ needs.terragrunt-filter.outputs.manifest_secrets == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: system_status
+            condition: ${{ needs.terragrunt-filter.outputs.system_status == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+          - component: performance-test
+            condition: ${{ needs.terragrunt-filter.outputs.performance-test == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
 
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Skip if no changes
-        if: ${{ !((matrix.component == 'database-tools' && (needs.terragrunt-filter.outputs.database-tools == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'lambda-admin-pr' && (needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'lambda-api' && (needs.terragrunt-filter.outputs.lambda-api == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'manifest_secrets' && (needs.terragrunt-filter.outputs.manifest_secrets == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'system_status' && (needs.terragrunt-filter.outputs.system_status == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'performance-test' && (needs.terragrunt-filter.outputs.performance-test == 'true' || needs.terragrunt-filter.outputs.config == 'true'))) }}
+        if: ${{ !matrix.condition }}
         run: |
           echo "No changes detected for ${{ matrix.component }}, skipping..."
           exit 0
       
       - name: Checkout
-        if: ${{ (matrix.component == 'database-tools' && (needs.terragrunt-filter.outputs.database-tools == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'lambda-admin-pr' && (needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'lambda-api' && (needs.terragrunt-filter.outputs.lambda-api == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'manifest_secrets' && (needs.terragrunt-filter.outputs.manifest_secrets == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'system_status' && (needs.terragrunt-filter.outputs.system_status == 'true' || needs.terragrunt-filter.outputs.config == 'true')) || (matrix.component == 'performance-test' && (needs.terragrunt-filter.outputs.performance-test == 'true' || needs.terragrunt-filter.outputs.config == 'true')) }}
+        if: ${{ matrix.condition }}
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       # Cache Terraform providers
       - name: Cache Terraform providers
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -772,7 +822,7 @@ jobs:
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: |
@@ -784,20 +834,20 @@ jobs:
             terragrunt-cache-
       
       - name: Setup Terraform
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
       - name: Download TFVars
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
       
       - name: Terragrunt Plan
-        if: ${{ true }}
+        if: ${{ matrix.condition }}
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -811,7 +861,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ true }}
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
@@ -824,8 +874,8 @@ jobs:
   terragrunt-plan-step-7:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.github == 'true' &&
-      (needs.terragrunt-plan-step-6.result == 'success' || needs.terragrunt-plan-step-6.result == 'skipped')
+      always() &&
+      needs.terragrunt-filter.outputs.github == 'true'
 
     needs: 
       - terragrunt-filter
@@ -845,12 +895,12 @@ jobs:
           exit 0
       
       - name: Checkout
-        if: ${{ needs.terragrunt-filter.outputs.github == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+        if: ${{ matrix.condition }}
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       # Cache Terraform providers
       - name: Cache Terraform providers
-        if: ${{ needs.terragrunt-filter.outputs.github == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: ${{ env.TF_PLUGIN_CACHE_DIR }}
@@ -860,7 +910,7 @@ jobs:
 
       # Cache Terragrunt dependencies
       - name: Cache Terragrunt cache  
-        if: ${{ needs.terragrunt-filter.outputs.github == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+        if: ${{ matrix.condition }}
         uses: actions/cache@v4
         with:
           path: |
@@ -872,20 +922,20 @@ jobs:
             terragrunt-cache-
       
       - name: Setup Terraform
-        if: ${{ needs.terragrunt-filter.outputs.github == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+        if: ${{ matrix.condition }}
         uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
       - name: Download TFVars
-        if: ${{ needs.terragrunt-filter.outputs.github == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+        if: ${{ matrix.condition }}
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
 
       - name: Terragrunt Plan
-        if: ${{ needs.terragrunt-filter.outputs.github == 'true' || needs.terragrunt-filter.outputs.config == 'true' }}
+        if: ${{ matrix.condition }}
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
@@ -899,7 +949,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ (needs.terragrunt-filter.outputs.github == 'true' || needs.terragrunt-filter.outputs.config == 'true') && steps.tf-plan.outputs.plan != '' }}
+        if: ${{ matrix.condition && steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
         with:
           message-id: ${{ matrix.component }}_plan
