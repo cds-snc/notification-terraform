@@ -261,12 +261,13 @@ jobs:
   terragrunt-plan-step-2:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.cloudfront == 'true' || 
+      (needs.terragrunt-filter.outputs.cloudfront == 'true' || 
       needs.terragrunt-filter.outputs.heartbeat == 'true' ||
       needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
       needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
       needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true'
+      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true') &&
+      (needs.terragrunt-plan-step-1.result == 'success' || needs.terragrunt-plan-step-1.result == 'skipped')
 
     needs: 
       - terragrunt-filter
@@ -354,7 +355,8 @@ jobs:
   terragrunt-plan-step-3:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.dns == 'true'
+      needs.terragrunt-filter.outputs.dns == 'true' &&
+      (needs.terragrunt-plan-step-2.result == 'success' || needs.terragrunt-plan-step-2.result == 'skipped')
     needs: 
       - terragrunt-filter
       - terragrunt-plan-step-2
@@ -440,9 +442,10 @@ jobs:
   terragrunt-plan-step-4:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.eks == 'true' || 
+      (needs.terragrunt-filter.outputs.eks == 'true' || 
       needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
-      needs.terragrunt-filter.outputs.system_status_static_site == 'true'
+      needs.terragrunt-filter.outputs.system_status_static_site == 'true') &&
+      (needs.terragrunt-plan-step-3.result == 'success' || needs.terragrunt-plan-step-3.result == 'skipped')
 
     needs: 
       - terragrunt-filter
@@ -637,9 +640,10 @@ jobs:
   terragrunt-plan-step-5:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.elasticache == 'true' || 
+      (needs.terragrunt-filter.outputs.elasticache == 'true' || 
       needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' ||
-      needs.terragrunt-filter.outputs.rds == 'true'
+      needs.terragrunt-filter.outputs.rds == 'true') &&
+      (needs.terragrunt-plan-step-4.result == 'success' || needs.terragrunt-plan-step-4.result == 'skipped')
 
     needs: 
       - terragrunt-filter
@@ -726,12 +730,13 @@ jobs:
   terragrunt-plan-step-6:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.database-tools == 'true' || 
+      (needs.terragrunt-filter.outputs.database-tools == 'true' || 
       needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' ||
       needs.terragrunt-filter.outputs.lambda-api == 'true' ||
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
       needs.terragrunt-filter.outputs.system_status == 'true' ||
-      needs.terragrunt-filter.outputs.performance-test == 'true'
+      needs.terragrunt-filter.outputs.performance-test == 'true') &&
+      (needs.terragrunt-plan-step-5.result == 'success' || needs.terragrunt-plan-step-5.result == 'skipped')
 
     needs: 
       - terragrunt-filter
@@ -819,7 +824,8 @@ jobs:
   terragrunt-plan-step-7:
     name: "${{ matrix.component }}"
     if: |
-      needs.terragrunt-filter.outputs.github == 'true'
+      needs.terragrunt-filter.outputs.github == 'true' &&
+      (needs.terragrunt-plan-step-6.result == 'success' || needs.terragrunt-plan-step-6.result == 'skipped')
 
     needs: 
       - terragrunt-filter
