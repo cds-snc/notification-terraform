@@ -103,22 +103,21 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             }
         },
         {
-            "height": 4,
-            "width": 4,
-            "y": 8,
-            "x": 4,
             "type": "metric",
+            "x": 4,
+            "y": 8,
+            "width": 4,
+            "height": 4,
             "properties": {
                 "metrics": [
-                    [ { "expression": "FILL(METRICS(), 0)", "label": "Pinpoint /", "id": "e1", "region": "${var.region}", "period": 60 } ],
-                    [ "LogMetrics", "pinpoint-sms-successes", { "region": "${var.region}", "label": "min", "id": "m1", "visible": false } ]
+                    [ "AWS/SMSVoice", "NumberOfTextMessagePartsSent", { "region": "ca-central-1" } ]
                 ],
-                "view": "singleValue",
-                "stacked": true,
-                "region": "${var.region}",
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ca-central-1",
                 "stat": "Sum",
                 "period": 60,
-                "title": "Pinpoint Send Rate Per Minute",
+                "title": "Pinpoint Fragments Send Rate Per Minute",
                 "sparkline": true
             }
         },
