@@ -1214,10 +1214,10 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         },
         {
             "type": "metric",
-            "x": 4,
-            "y": 8,
-            "width": 4,
-            "height": 4,
+            "x": 18,
+            "y": 1,
+            "width": 6,
+            "height": 6,
             "properties": {
                 "metrics": [
                     [ "AWS/SMSVoice", "NumberOfTextMessagePartsSent", { "region": "ca-central-1" } ]
