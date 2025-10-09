@@ -399,7 +399,6 @@ jobs:
       - name: Comment on PR with plan output
         if: ${{ steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
-        if: ${{ steps.tf-plan.outputs.plan != '' }}
         with:
           message-id: ${{ matrix.component }}_plan
           message: |
