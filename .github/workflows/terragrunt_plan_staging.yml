@@ -179,6 +179,7 @@ jobs:
       needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
       needs.terragrunt-filter.outputs.newrelic == 'true' ||
       needs.terragrunt-filter.outputs.config == 'true'
+
     needs: terragrunt-filter
     runs-on: ubuntu-latest
     strategy:
@@ -238,6 +239,7 @@ jobs:
 
       - name: Comment on PR with plan output
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        if: ${{ steps.tf-plan.outputs.plan != '' }}
         with:
           message-id: ${{ matrix.component }}_plan
           message: |
@@ -255,7 +257,8 @@ jobs:
       needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
       needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
       needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true'
+      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' ||
+      needs.terragrunt-filter.outputs.config == 'true'
 
     needs: 
       - terragrunt-filter
@@ -318,6 +321,7 @@ jobs:
 
       - name: Comment on PR with plan output
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        if: ${{ steps.tf-plan.outputs.plan != '' }}
         with:
           message-id: ${{ matrix.component }}_plan
           message: |
@@ -331,7 +335,8 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.dns == 'true'
+      needs.terragrunt-filter.outputs.dns == 'true' ||
+      needs.terragrunt-filter.outputs.config == 'true'
     needs: 
       - terragrunt-filter
       - terragrunt-plan-step-2
@@ -407,7 +412,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.eks == 'true' || 
       needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
-      needs.terragrunt-filter.outputs.system_status_static_site == 'true'
+      needs.terragrunt-filter.outputs.system_status_static_site == 'true' ||
+      needs.terragrunt-filter.outputs.config == 'true'
 
     needs: 
       - terragrunt-filter
@@ -482,6 +488,7 @@ jobs:
     name: "aws-auth"
     if: |
       needs.terragrunt-filter.outputs.aws-auth == 'true' || 
+      needs.terragrunt-filter.outputs.config == 'true' ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: 
       - terragrunt-filter
@@ -592,7 +599,8 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.elasticache == 'true' || 
       needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' ||
-      needs.terragrunt-filter.outputs.rds == 'true'
+      needs.terragrunt-filter.outputs.rds == 'true' ||
+      needs.terragrunt-filter.outputs.config == 'true'
 
     needs: 
       - terragrunt-filter
@@ -672,7 +680,8 @@ jobs:
       needs.terragrunt-filter.outputs.lambda-api == 'true' ||
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
       needs.terragrunt-filter.outputs.system_status == 'true' ||
-      needs.terragrunt-filter.outputs.performance-test == 'true'
+      needs.terragrunt-filter.outputs.performance-test == 'true' ||
+      needs.terragrunt-filter.outputs.config == 'true'
 
     needs: 
       - terragrunt-filter
@@ -749,7 +758,8 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.github == 'true'
+      needs.terragrunt-filter.outputs.github == 'true' ||
+      needs.terragrunt-filter.outputs.config == 'true'
 
     needs: 
       - terragrunt-filter
@@ -811,8 +821,8 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
-        if: ${{ steps.tf-plan.outputs.plan != '' }}
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+        if: ${{ steps.tf-plan.outputs.plan != '' }}
         with:
           message-id: ${{ matrix.component }}_plan
           message: |
