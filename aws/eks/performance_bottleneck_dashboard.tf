@@ -1220,15 +1220,14 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "FILL(METRICS(), 0)", "label": "Pinpoint /", "id": "e1", "region": "ca-central-1", "period": 60 } ],
-                    [ "LogMetrics", "pinpoint-sms-successes", { "region": "ca-central-1", "label": "min", "id": "m1", "visible": false } ]
+                    [ "AWS/SMSVoice", "NumberOfTextMessagePartsSent", { "region": "ca-central-1" } ]
                 ],
                 "view": "timeSeries",
                 "stacked": false,
                 "region": "ca-central-1",
                 "stat": "Sum",
                 "period": 60,
-                "title": "Pinpoint Send Rate Per Minute",
+                "title": "Pinpoint Fragments Send Rate Per Minute",
                 "sparkline": true
             }
         },
