@@ -1105,3 +1105,8 @@ variable "system_status_static_site_cloudfront_distribution" {
   sensitive = true
   default   = "E1234567890ABC"
 }
+
+variable "rds_local_storage_gb" {
+  type    = number
+  default = 512
+}

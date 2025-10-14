@@ -189,7 +189,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   preferred_backup_window      = "07:00-09:00"
   preferred_maintenance_window = "wed:04:00-wed:04:30"
   db_subnet_group_name         = aws_db_subnet_group.notification-canada-ca.name
-  allocated_storage            = 512
+  allocated_storage            = var.rds_local_storage_gb
 
   snapshot_identifier = var.recovery == true ? var.rds_snapshot_identifier : null
 
