@@ -99,7 +99,7 @@ google_cidr_schedule_expression = "rate(1 day)"
 
 ## RDS
 rds_instance_count                     = 3
-rds_instance_type                      = "db.r6g.2xlarge"
+rds_instance_type                      = "db.r6g.xlarge"
 rds_database_name                      = "NotificationCanadaCastaging"
 rds_version                            = "16.6"
 platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:key/22f27c88-bb2b-49c3-b731-05123a974af4"
