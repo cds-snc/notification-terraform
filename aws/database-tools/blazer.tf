@@ -1,5 +1,5 @@
 locals {
-  image_tag = var.env == "production" ? var.blazer_image_tag : "latest"
+  image_tag = var.blazer_image_tag
 }
 
 resource "aws_ecs_cluster" "blazer" {
