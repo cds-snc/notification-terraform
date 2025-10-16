@@ -763,7 +763,8 @@ variable "system_status_admin_url" {
 }
 
 variable "blazer_image_tag" {
-  type = string
+  type    = string
+  default = "latest"
 }
 
 variable "system_status_docker_tag" {
