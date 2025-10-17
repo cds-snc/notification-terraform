@@ -38,6 +38,41 @@ resource "aws_s3_bucket_public_access_block" "velero_backups" {
   restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_notification" "velero_backups" {
+  count  = var.env == "dev" ? 1 : 0
+  bucket = aws_s3_bucket.velero_backups[0].id
+
+  eventbridge = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
+  count  = var.env == "dev" ? 1 : 0
+  bucket = aws_s3_bucket.velero_backups[0].id
+
+  rule {
+    id     = "expire-old-backups"
+    status = "Enabled"
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+
+    transition {
+      days          = 90
+      storage_class = "GLACIER"
+    }
+
+    expiration {
+      days = 365
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 90
+    }
+  }
+}
+
 # IAM policy for Velero
 resource "aws_iam_policy" "velero" {
   count       = var.env == "dev" ? 1 : 0
