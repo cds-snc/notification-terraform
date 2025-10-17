@@ -5,6 +5,8 @@ region               = "ca-central-1"
 billing_tag_value    = "notification-canada-ca-staging"
 billing_tag_key      = "CostCenter"
 
+#remove later
+
 ## EKS     
 primary_worker_desired_size     = 5
 primary_worker_instance_types   = ["c7i.xlarge"]
