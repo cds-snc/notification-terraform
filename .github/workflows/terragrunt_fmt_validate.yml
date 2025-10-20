@@ -57,6 +57,7 @@ jobs:
         run: |
           mkdir -p $HOME/.terraform.d/plugin-cache
           echo "plugin_cache_dir = \"$HOME/.terraform.d/plugin-cache\"" > $HOME/.terraformrc
+          echo "TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache" >> $GITHUB_ENV
       
       - name: Terragrunt Format
         id: tf-format
@@ -64,8 +65,11 @@ jobs:
           cd env/${{env.ENVIRONMENT}}
           terragrunt run-all fmt --check
 
-      - name: Terragrunt Validate
+      - name: Terragrunt Init and Validate
         id: tf-validate
         run: |
           cd env/${{env.ENVIRONMENT}}
-          terragrunt run-all validate
+          # Initialize all modules first to download providers and set up the .terragrunt-cache
+          terragrunt run-all init --terragrunt-non-interactive
+          # Now validate can work properly
+          terragrunt run-all validate --terragrunt-non-interactive
