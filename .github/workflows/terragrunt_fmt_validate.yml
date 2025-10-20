@@ -56,7 +56,7 @@ jobs:
       - name: Setup Terraform Plugin Cache
         run: |
           mkdir -p $HOME/.terraform.d/plugin-cache
-          echo 'plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"' > $HOME/.terraformrc
+          echo "plugin_cache_dir = \"$HOME/.terraform.d/plugin-cache\"" > $HOME/.terraformrc
       
       - name: Terragrunt Format
         id: tf-format
