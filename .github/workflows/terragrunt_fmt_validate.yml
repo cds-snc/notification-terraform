@@ -6,6 +6,7 @@ env:
   AWS_REGION: ca-central-1
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
   WORKFLOW: true
+  TF_PLUGIN_CACHE_DIR: /tmp/.terraform.d/plugin-cache
 
 on:
   workflow_dispatch:
@@ -48,16 +49,34 @@ jobs:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
           role_session_name: NotifyTerraformPlan
       
+      - name: Cache Terraform providers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.terraform.d/plugin-cache
+          key: terraform-providers-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
+          restore-keys: |
+            terraform-providers-
+
+      - name: Cache Terragrunt cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terragrunt-cache
+            .terragrunt-cache
+          key: terragrunt-cache-${{ github.sha }}
+          restore-keys: |
+            terragrunt-cache-
+      
       - name: Download TFVars
         run: |
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
       
-      - name: Setup Terraform Plugin Cache
+      - name: Terragrunt Init
+        id: tf-init
         run: |
-          mkdir -p $HOME/.terraform.d/plugin-cache
-          echo "plugin_cache_dir = \"$HOME/.terraform.d/plugin-cache\"" > $HOME/.terraformrc
-          echo "TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache" >> $GITHUB_ENV
+          cd env/${{env.ENVIRONMENT}}
+          terragrunt run-all init --terragrunt-non-interactive
       
       - name: Terragrunt Format
         id: tf-format
@@ -65,11 +84,8 @@ jobs:
           cd env/${{env.ENVIRONMENT}}
           terragrunt run-all fmt --check
 
-      - name: Terragrunt Init and Validate
+      - name: Terragrunt Validate
         id: tf-validate
         run: |
           cd env/${{env.ENVIRONMENT}}
-          # Initialize all modules first to download providers and set up the .terragrunt-cache
-          terragrunt run-all init --terragrunt-non-interactive
-          # Now validate can work properly
           terragrunt run-all validate --terragrunt-non-interactive
