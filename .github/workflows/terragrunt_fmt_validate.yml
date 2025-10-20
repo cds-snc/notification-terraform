@@ -78,11 +78,18 @@ jobs:
           cd env/${{env.ENVIRONMENT}}
           terragrunt run-all init --terragrunt-non-interactive
       
-      - name: Terragrunt Format
+      - name: Terraform Format Check (Terraform files only)
         id: tf-format
         run: |
           cd env/${{env.ENVIRONMENT}}
-          terragrunt run-all fmt --check
+          # Use find to format only .tf files, not .hcl files
+          find . -name "*.tf" -not -path "*/.terragrunt-cache/*" -exec terraform fmt -check -diff {} +
+      
+      - name: Terragrunt Format Check (Terragrunt HCL files)
+        id: tg-format
+        run: |
+          cd env/${{env.ENVIRONMENT}}
+          terragrunt hclfmt --check
 
       - name: Terragrunt Validate
         id: tf-validate
