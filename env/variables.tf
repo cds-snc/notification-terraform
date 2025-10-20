@@ -147,10 +147,6 @@ variable "enable_delete_protection" {
   type = bool
 }
 
-variable "api_enable_new_relic" {
-  type = bool
-}
-
 variable "cloudwatch_enabled" {
   type = bool
 }
@@ -1105,4 +1101,9 @@ variable "system_status_static_site_cloudfront_distribution" {
   type      = string
   sensitive = true
   default   = "E1234567890ABC"
+}
+
+variable "api_enable_new_relic" {
+  type    = bool
+  default = false
 }
