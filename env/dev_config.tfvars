@@ -37,16 +37,13 @@ high_demand_max_concurrency            = 10
 notification_queue_prefix              = "eks-notification-canada-ca"
 
 # New Relic Lambda API configuration
-lambda_api_enable_new_relic                     = false
 lambda_new_relic_app_name                       = "notification-lambda-api-dev"
-lambda_new_relic_handler                        = "application.handler"
 lambda_new_relic_config_file                    = "/app/newrelic.ini"
 
 
 
 # ENVIRONMENT
-api_enable_new_relic       = false
-enable_new_relic           = false
+enable_new_relic           = true
 create_cbs_bucket          = true
 force_destroy_s3           = true
 force_delete_ecr           = true
