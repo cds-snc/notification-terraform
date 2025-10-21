@@ -38,7 +38,6 @@ notification_queue_prefix              = "eks-notification-canada-ca"
 
 # New Relic Lambda API configuration
 lambda_new_relic_app_name                       = "notification-lambda-api-staging"
-lambda_new_relic_handler                        = "application.handler"
 lambda_new_relic_config_file                    = "/app/newrelic.ini"
 
 
