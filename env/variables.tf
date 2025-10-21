@@ -101,6 +101,11 @@ variable "lambda_new_relic_app_name" {
   type = string
 }
 
+variable "lambda_new_relic_handler" {
+  type        = string
+  description = "The actual Lambda handler function that New Relic wrapper should invoke"
+}
+
 variable "lambda_new_relic_config_file" {
   type        = string
   description = "Path to the New Relic configuration file in the Lambda container"
