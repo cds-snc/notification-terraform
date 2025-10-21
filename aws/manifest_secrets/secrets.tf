@@ -485,5 +485,14 @@ resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
   secret_string = var.manifest_signoz_smtp_password
 }
 
+# THIS ISN'T A SECRET, BUT THIS GETS THE VALUE INTO SECRETS MANAGER 
+# SO THAT IT CAN BE ACCESSED BY HELM IN MANIFESTS REPO
+resource "aws_secretsmanager_secret" "manifest_enable_new_relic" {
+  name                    = "MANIFEST_ENABLE_NEW_RELIC"
+  recovery_window_in_days = 0
+}
 
-
+resource "aws_secretsmanager_secret_version" "manifest_enable_new_relic_version" {
+  secret_id     = aws_secretsmanager_secret.manifest_enable_new_relic.id
+  secret_string = var.enable_new_relic
+}
