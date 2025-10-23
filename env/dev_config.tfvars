@@ -42,7 +42,7 @@ lambda_new_relic_config_file                    = "/app/newrelic.ini"
 lambda_new_relic_handler                        = "application.handler"
 
 # ENVIRONMENT
-enable_new_relic           = true
+enable_new_relic           = false
 create_cbs_bucket          = true
 force_destroy_s3           = true
 force_delete_ecr           = true
