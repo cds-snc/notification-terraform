@@ -12,7 +12,7 @@ module "guardduty_malware_s3" {
   source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=v10.8.3"
 
   s3_bucket_name = "notification-canada-ca-${var.env}-document-download-scan-files"
-  tagging_status = "DISABLED" # Set to `ENABLED` when ready to switch over from Scan Files
+  tagging_status = "ENABLED"
 
   alarms_enabled                           = true
   alarm_completed_scan_count_threshold     = 20000
