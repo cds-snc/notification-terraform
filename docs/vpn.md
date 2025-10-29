@@ -29,7 +29,6 @@ Each environment has its own VPN, and thus you must set up 3 VPN profiles. Repea
 
 ## Tools Currently Available
 
-* Blazer (use the start-blazer.sh script in the attic to connect)
 * Kubernetes
 * Database and redis (not recommended; no audits)
 
@@ -52,20 +51,6 @@ without connecting to the appropriate VPN.
 - You MUST connect to the corresponding environment VPN to reach that DNS (ex staging for *.staging.notification.internal)
 - Since the DNS is not standard, you MUST enter the https:// in the URL (at least the first time you navigate to it), or else you will be sent to search results. Bookmarking sites is recommended for ease of use.
 - The SSL Certificate for these internal addresses is a self-signed certificate. You will have to accept and continue when you are warned about insecure connections. 
-
-### Links
-
-#### Dev
-
-- https://blazer.dev.notification.internal.com
-
-#### Staging
-
-- https://blazer.staging.notification.internal.com
-
-#### Production
-
-- Coming soon
 
 ## Tools coming soon
 
