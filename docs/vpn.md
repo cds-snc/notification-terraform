@@ -2,7 +2,7 @@
 
 ## Overview
 
-GC Notify is moving towards using a VPN to access internal tools and perform administrative tasks. This increases security, and ease of use for connecting to our various utilities. 
+GC Notify uses an AWS VPN to access internal tools and perform administrative tasks. This increases security, and ease of use for connecting to our various utilities. 
 
 ## Setup
 
@@ -29,7 +29,9 @@ Each environment has its own VPN, and thus you must set up 3 VPN profiles. Repea
 
 ## Tools Currently Available
 
-Currently Blazer and Hasura are the only tools available under the VPN, but more will follow. Additionally you can directly connect to redis and postgres but this is obviously not recommended in production.
+* Blazer (use the start-blazer.sh script in the attic to connect)
+* Kubernetes
+* Database and redis (not recommended; no audits)
 
 Connecting to redis and postgres directly would be using their respective CLI from your local machine
 
@@ -54,19 +56,18 @@ without connecting to the appropriate VPN.
 ### Links
 
 #### Dev
-- https://hasura.dev.notification.internal.com
+
 - https://blazer.dev.notification.internal.com
 
 #### Staging
-- https://hasura.staging.notification.internal.com
+
 - https://blazer.staging.notification.internal.com
 
-
 #### Production
+
 - Coming soon
 
 ## Tools coming soon
 
 - Graylog (Logs in Dev)
-- Kubernetes endpoint
-- Any other handy tools you would like to see??
+- Any other handy tools you would like to see?? Message @notifycore in Slack.
