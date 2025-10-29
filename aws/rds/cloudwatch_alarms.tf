@@ -118,14 +118,14 @@ resource "aws_cloudwatch_metric_alarm" "low-db-memory-critical" {
 resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-warning" {
   count               = var.rds_instance_count
   alarm_name          = "db-free-local-storage-warning-instance-${count.index}"
-  alarm_description   = "Free local storage of instance is less than 10GB"
+  alarm_description   = "Free local storage of instance is less than 20GB"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "FreeLocalStorage"
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 10 * 1024 * 1024 * 1024
+  threshold           = 20 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_warning_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
@@ -136,14 +136,14 @@ resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-warning" {
 resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-critical" {
   count               = var.rds_instance_count
   alarm_name          = "db-free-local-storage-critical-instance-${count.index}"
-  alarm_description   = "Free local storage of instance is less than 1GB"
+  alarm_description   = "Free local storage of instance is less than 10GB"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "FreeLocalStorage"
   namespace           = "AWS/RDS"
   period              = 60
   statistic           = "Average"
-  threshold           = 1 * 1024 * 1024 * 1024
+  threshold           = 10 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_critical_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
