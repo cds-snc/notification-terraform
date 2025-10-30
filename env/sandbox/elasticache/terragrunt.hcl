@@ -18,7 +18,10 @@ dependency "common" {
       "subnet-001e585d12cce4d1e",
       "subnet-08de34a9e1a7458dc",
       "subnet-0af8b8402f1d605ff",
-    ]
+    ],
+    sns_alert_warning_arn  = ""
+    sns_alert_critical_arn = ""
+    kms_arn                = ""
   }
 }
 
