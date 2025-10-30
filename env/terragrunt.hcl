@@ -26,19 +26,19 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.9"
+      version = "6.15.0"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~> 4.0"
+      version = "4.1.0"
     }
     newrelic = {
       source  = "newrelic/newrelic"
-      version = "~> 3.3"
+      version = "3.70.5"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 6.0"
+      version = "6.6.0"
     }
   }
 }

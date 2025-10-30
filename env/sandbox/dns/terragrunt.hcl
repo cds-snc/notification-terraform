@@ -14,6 +14,7 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["validate", "init"]
   mock_outputs = {
     notification_canada_ca_ses_callback_arn = ""
+    vpc_id                                  = ""
   }
 }
 
