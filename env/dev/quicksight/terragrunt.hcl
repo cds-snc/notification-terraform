@@ -13,6 +13,7 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
+    sns_alert_warning_arn                       = ""
     kms_arn                                     = ""
     s3_bucket_sms_usage_sanitized_ca_central_id = "sns_sms_usage_report_bucket"
     s3_bucket_sms_usage_sanitized_us_west_id    = "sns_sms_usage_report_bucket_2"
@@ -34,6 +35,8 @@ dependency "rds" {
     s3_bucket_sms_usage_sanitized_id = "sns_sms_usage_report_bucket"
     vpc_id                           = ""
     rds_reader_instance_ids          = ["notification-canada-ca-production-instance-0", "notification-canada-ca-production-instance-1", "notification-canada-ca-production-instance-2"]
+    database_name                    = ""
+    database_subnet_ids              = [""]
   }
 }
 

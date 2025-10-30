@@ -14,6 +14,8 @@ dependency "common" {
   mock_outputs_allowed_terraform_commands = ["validate", "init"]
   mock_outputs = {
     asset_bucket_regional_domain_name = ""
+    s3_bucket_asset_bucket_id         = ""
+    s3_bucket_asset_bucket_arn        = ""
   }
 }
 

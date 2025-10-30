@@ -42,6 +42,7 @@ dependency "common" {
       "10.0.64.0/19",
       "10.0.96.0/19",
     ]    
+    vpc_id                                    = "vpc-0bb1c1f2e3EXAMPLE"
     sns_alert_warning_arn                     = ""
     sns_alert_critical_arn                    = ""
     sns_alert_general_arn                     = ""
