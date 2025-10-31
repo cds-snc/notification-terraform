@@ -208,10 +208,9 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-            env/${{env.ENVIRONMENT}}/**/.terragrunt-cache
-          key: terragrunt-cache-step1-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
           restore-keys: |
-            terragrunt-cache-step1-${{ github.sha }}-
+            terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
       
       - name: Setup Terraform
@@ -229,7 +228,6 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -292,11 +290,9 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-            env/${{env.ENVIRONMENT}}/**/.terragrunt-cache
-          key: terragrunt-cache-step2-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
           restore-keys: |
-            terragrunt-cache-step2-${{ github.sha }}-
-            terragrunt-cache-step1-${{ github.sha }}-
+            terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
       
       - name: Setup Terraform
@@ -314,7 +310,6 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -372,12 +367,9 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-            env/${{env.ENVIRONMENT}}/**/.terragrunt-cache
-          key: terragrunt-cache-step3-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
           restore-keys: |
-            terragrunt-cache-step3-${{ github.sha }}-
-            terragrunt-cache-step2-${{ github.sha }}-
-            terragrunt-cache-step1-${{ github.sha }}-
+            terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
       
       - name: Setup Terraform
@@ -395,7 +387,6 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -454,13 +445,9 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-            env/${{env.ENVIRONMENT}}/**/.terragrunt-cache
-          key: terragrunt-cache-step4-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
           restore-keys: |
-            terragrunt-cache-step4-${{ github.sha }}-
-            terragrunt-cache-step3-${{ github.sha }}-
-            terragrunt-cache-step2-${{ github.sha }}-
-            terragrunt-cache-step1-${{ github.sha }}-
+            terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
       
       - name: Setup Terraform
@@ -478,7 +465,6 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -646,14 +632,9 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-            env/${{env.ENVIRONMENT}}/**/.terragrunt-cache
-          key: terragrunt-cache-step5-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
           restore-keys: |
-            terragrunt-cache-step5-${{ github.sha }}-
-            terragrunt-cache-step4-${{ github.sha }}-
-            terragrunt-cache-step3-${{ github.sha }}-
-            terragrunt-cache-step2-${{ github.sha }}-
-            terragrunt-cache-step1-${{ github.sha }}-
+            terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
       
       - name: Setup Terraform
@@ -671,7 +652,6 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -734,15 +714,9 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-            env/${{env.ENVIRONMENT}}/**/.terragrunt-cache
-          key: terragrunt-cache-step6-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
           restore-keys: |
-            terragrunt-cache-step6-${{ github.sha }}-
-            terragrunt-cache-step5-${{ github.sha }}-
-            terragrunt-cache-step4-${{ github.sha }}-
-            terragrunt-cache-step3-${{ github.sha }}-
-            terragrunt-cache-step2-${{ github.sha }}-
-            terragrunt-cache-step1-${{ github.sha }}-
+            terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
       
       - name: Setup Terraform
@@ -760,7 +734,6 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -818,16 +791,9 @@ jobs:
           path: |
             ~/.terragrunt-cache
             .terragrunt-cache
-            env/${{env.ENVIRONMENT}}/**/.terragrunt-cache
-          key: terragrunt-cache-step7-${{ github.sha }}-${{ matrix.component }}
+          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
           restore-keys: |
-            terragrunt-cache-step7-${{ github.sha }}-
-            terragrunt-cache-step6-${{ github.sha }}-
-            terragrunt-cache-step5-${{ github.sha }}-
-            terragrunt-cache-step4-${{ github.sha }}-
-            terragrunt-cache-step3-${{ github.sha }}-
-            terragrunt-cache-step2-${{ github.sha }}-
-            terragrunt-cache-step1-${{ github.sha }}-
+            terragrunt-cache-${{ github.sha }}-
             terragrunt-cache-
       
       - name: Setup Terraform
@@ -845,7 +811,6 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
