@@ -54,46 +54,7 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
       attribute = "labels.policyIds"
       operator  = "EXACTLY_MATCHES"
       values = [
-        newrelic_alert_policy.terraform_notify_policy[0].id
-      ]
-    }
-    predicate {
-      attribute = "priority"
-      operator  = "EQUAL"
-      values = [
-        "CRITICAL",
-      ]
-    }
-  }
-}
-
-resource "newrelic_workflow" "terraform_notify_workflow_by_condition" {
-  count = var.enable_new_relic ? 1 : 0
-
-  name                  = "Notify Workflow - ${var.env} by Condition"
-  account_id            = var.new_relic_account_id
-  enabled               = true
-  enrichments_enabled   = true
-  muting_rules_handling = "DONT_NOTIFY_FULLY_MUTED_ISSUES"
-
-
-  destination {
-    channel_id = newrelic_notification_channel.terraform_notify_channel[0].id
-    notification_triggers = [
-      "ACKNOWLEDGED",
-      "ACTIVATED",
-      "CLOSED"
-    ]
-  }
-
-  issues_filter {
-    name = "workflow-filter"
-    type = "FILTER"
-
-    predicate {
-      attribute = "labels.policyIds"
-      operator  = "EXACTLY_MATCHES"
-      values = [
+        newrelic_alert_policy.terraform_notify_policy[0].id,
         newrelic_alert_policy.terraform_notify_policy_by_condition[0].id
       ]
     }
