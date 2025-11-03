@@ -514,7 +514,7 @@ resource "newrelic_nrql_alert_condition" "admin_monthy_data_usage" {
   policy_id                    = newrelic_alert_policy.terraform_notify_policy_by_condition[0].id
   type                         = "static"
   name                         = "[Admin] Monthy Data Usage"
-  enabled                      = true
+  enabled                      = false
   violation_time_limit_seconds = 259200
 
   nrql {
