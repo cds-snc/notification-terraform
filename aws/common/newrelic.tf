@@ -87,16 +87,6 @@ resource "newrelic_cloud_aws_link_account" "newrelic_cloud_integration_push" {
   depends_on             = [aws_iam_role_policy_attachment.newrelic_aws_policy_attach]
 }
 
-resource "newrelic_api_access_key" "newrelic_aws_access_key" {
-  count       = var.enable_new_relic && var.env != "production" ? 1 : 0
-  account_id  = var.new_relic_account_id
-  key_type    = var.env == "staging" ? "USER" : "INGEST"
-  ingest_type = var.env == "staging" ? null : "LICENSE"
-  user_id     = var.env == "staging" ? var.new_relic_user_id : null
-  name        = var.env == "staging" ? "notify_tf_provider" : "notify_tf_provider_${var.env}"
-  notes       = "Used by Notify Terraform Code to create New Relic Resources"
-}
-
 resource "aws_iam_role" "firehose_newrelic_role" {
   count = var.enable_new_relic && var.env != "production" ? 1 : 0
   name  = "firehose_newrelic_role_${var.env}"
@@ -153,7 +143,7 @@ resource "aws_kinesis_firehose_delivery_stream" "newrelic_firehose_stream" {
   http_endpoint_configuration {
     url                = var.newrelic_account_region == "US" ? "https://aws-api.newrelic.com/cloudwatch-metrics/v1" : "https://aws-api.eu01.nr-data.net/cloudwatch-metrics/v1"
     name               = "New Relic ${var.env}"
-    access_key         = newrelic_api_access_key.newrelic_aws_access_key[0].key
+    access_key         = var.new_relic_api_key
     buffering_size     = 1
     buffering_interval = 60
     role_arn           = aws_iam_role.firehose_newrelic_role[0].arn
