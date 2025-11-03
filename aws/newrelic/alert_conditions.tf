@@ -473,3 +473,69 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_unexpe
   aggregation_delay  = 300
   baseline_direction = "upper_and_lower"
 }
+
+resource "newrelic_nrql_alert_condition" "admin_monthly_ccu" {
+  count = var.enable_new_relic ? 1 : 0
+
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy_by_condition[0].id
+  type                         = "static"
+  name                         = "[Admin] Monthly CCU"
+  enabled                      = false
+  violation_time_limit_seconds = 259200
+
+  nrql {
+    query = "FROM NrMTDConsumption select latest(consumption)  where metric = 'CoreCCU'"
+  }
+
+  critical {
+    operator              = "above_or_equals"
+    threshold             = 100
+    threshold_duration    = 60
+    threshold_occurrences = "at_least_once"
+  }
+
+  warning {
+    operator              = "above_or_equals"
+    threshold             = 70
+    threshold_duration    = 60
+    threshold_occurrences = "at_least_once"
+  }
+  fill_option        = "none"
+  aggregation_window = 60
+  aggregation_method = "event_timer"
+  aggregation_timer  = 60
+}
+
+resource "newrelic_nrql_alert_condition" "admin_monthy_data_usage" {
+  count = var.enable_new_relic ? 1 : 0
+
+  account_id                   = var.new_relic_account_id
+  policy_id                    = newrelic_alert_policy.terraform_notify_policy_by_condition[0].id
+  type                         = "static"
+  name                         = "[Admin] Monthy Data Usage"
+  enabled                      = true
+  violation_time_limit_seconds = 259200
+
+  nrql {
+    query = "FROM NrMTDConsumption SELECT latest(GigabytesIngested) WHERE productLine = 'DataPlatform'"
+  }
+
+  critical {
+    operator              = "above_or_equals"
+    threshold             = 4000
+    threshold_duration    = 60
+    threshold_occurrences = "at_least_once"
+  }
+
+  warning {
+    operator              = "above_or_equals"
+    threshold             = 2800
+    threshold_duration    = 60
+    threshold_occurrences = "at_least_once"
+  }
+  fill_option        = "none"
+  aggregation_window = 60
+  aggregation_method = "event_timer"
+  aggregation_timer  = 60
+}
