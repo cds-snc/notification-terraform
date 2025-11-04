@@ -17,7 +17,6 @@ env:
   AWS_REGION: ca-central-1
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_PRODUCTION }}
   WORKFLOW: true
-  TF_PLUGIN_CACHE_DIR: /tmp/.terraform.d/plugin-cache
 
 jobs:
 
@@ -39,28 +38,6 @@ jobs:
       
         - name: Checkout
           uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-
-        # Cache Terraform providers to avoid repeated downloads
-        - name: Cache Terraform providers
-          uses: actions/cache@v4
-          with:
-            path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-            key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-            restore-keys: |
-              terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-              terraform-providers-
-
-        # Cache Terragrunt dependencies
-        - name: Cache Terragrunt cache
-          uses: actions/cache@v4
-          with:
-            path: |
-              ~/.terragrunt-cache
-              .terragrunt-cache
-            key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
-            restore-keys: |
-              terragrunt-cache-${{ github.sha }}-
-              terragrunt-cache-
         
         - name: Setup Terraform
           uses: ./.github/actions/setup-terraform
@@ -77,6 +54,7 @@ jobs:
           id: tf-plan
           run: |
             cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+            terragrunt init --upgrade
             terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
             ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -120,28 +98,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      # Cache Terraform providers
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-            terraform-providers-
-
-      # Cache Terragrunt dependencies  
-      - name: Cache Terragrunt cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
-          restore-keys: |
-            terragrunt-cache-${{ github.sha }}-
-            terragrunt-cache-
-      
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
         with:
@@ -157,6 +113,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -195,28 +152,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      # Cache Terraform providers
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-            terraform-providers-
-
-      # Cache Terragrunt dependencies and state
-      - name: Cache Terragrunt cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
-          restore-keys: |
-            terragrunt-cache-${{ github.sha }}-
-            terragrunt-cache-
-      
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
         with:
@@ -232,6 +167,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -271,28 +207,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      # Cache Terraform providers
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-            terraform-providers-
-
-      # Cache Terragrunt dependencies
-      - name: Cache Terragrunt cache  
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
-          restore-keys: |
-            terragrunt-cache-${{ github.sha }}-
-            terragrunt-cache-
-      
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
         with:
@@ -308,6 +222,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -340,28 +255,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      # Cache Terraform providers
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-            terraform-providers-
-
-      # Cache Terragrunt dependencies
-      - name: Cache Terragrunt cache  
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ env.COMPONENT }}
-          restore-keys: |
-            terragrunt-cache-${{ github.sha }}-
-            terragrunt-cache-
-      
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
         with:
@@ -384,7 +277,7 @@ jobs:
           cd aws
           op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
           cd ../env/${{env.ENVIRONMENT}}/eks
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
           CERT=$(terragrunt output --raw gha_vpn_certificate)
           KEY=$(terragrunt output --raw gha_vpn_key)
@@ -414,6 +307,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ env.COMPONENT }}
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -454,28 +348,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      # Cache Terraform providers
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-            terraform-providers-
-
-      # Cache Terragrunt dependencies
-      - name: Cache Terragrunt cache  
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
-          restore-keys: |
-            terragrunt-cache-${{ github.sha }}-
-            terragrunt-cache-
-      
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
         with:
@@ -491,6 +363,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -533,28 +406,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      # Cache Terraform providers
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-            terraform-providers-
-
-      # Cache Terragrunt dependencies
-      - name: Cache Terragrunt cache  
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
-          restore-keys: |
-            terragrunt-cache-${{ github.sha }}-
-            terragrunt-cache-
-      
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
         with:
@@ -570,6 +421,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -607,28 +459,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
-      # Cache Terraform providers
-      - name: Cache Terraform providers
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
-          key: terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-${{ hashFiles('env/terragrunt.hcl', 'aws/**/.terraform.lock.hcl') }}
-          restore-keys: |
-            terraform-providers-${{ hashFiles('.github/workflows/infrastructure_version.txt') }}-
-            terraform-providers-
-
-      # Cache Terragrunt dependencies
-      - name: Cache Terragrunt cache  
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.terragrunt-cache
-            .terragrunt-cache
-          key: terragrunt-cache-${{ github.sha }}-${{ matrix.component }}
-          restore-keys: |
-            terragrunt-cache-${{ github.sha }}-
-            terragrunt-cache-
-      
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
         with:
@@ -644,6 +474,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
