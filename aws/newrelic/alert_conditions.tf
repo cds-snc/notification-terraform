@@ -475,13 +475,13 @@ resource "newrelic_nrql_alert_condition" "lambda_api_errors_count_anomaly_unexpe
 }
 
 resource "newrelic_nrql_alert_condition" "admin_monthly_ccu" {
-  count = var.enable_new_relic ? 1 : 0
+  count = var.enable_new_relic && var.env == "production" ? 1 : 0
 
   account_id                   = var.new_relic_account_id
   policy_id                    = newrelic_alert_policy.terraform_notify_policy_by_condition[0].id
   type                         = "static"
   name                         = "[Admin] Monthly CCU"
-  enabled                      = false
+  enabled                      = var.env == "production"
   violation_time_limit_seconds = 259200
 
   nrql {
@@ -508,13 +508,13 @@ resource "newrelic_nrql_alert_condition" "admin_monthly_ccu" {
 }
 
 resource "newrelic_nrql_alert_condition" "admin_monthy_data_usage" {
-  count = var.enable_new_relic ? 1 : 0
+  count = var.enable_new_relic && var.env == "production" ? 1 : 0
 
   account_id                   = var.new_relic_account_id
   policy_id                    = newrelic_alert_policy.terraform_notify_policy_by_condition[0].id
   type                         = "static"
   name                         = "[Admin] Monthy Data Usage"
-  enabled                      = false
+  enabled                      = var.env == "production"
   violation_time_limit_seconds = 259200
 
   nrql {
