@@ -8,6 +8,8 @@ env:
   AWS_DEFAULT_REGION: ca-central-1
   EKS_CLUSTER_NAME: notification-canada-ca-staging-eks-cluster
   EKS_CLUSTER_NODE_GROUP_NAME: notification-canada-ca-staging-eks-primary-node-group-k8s
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
+
 
 permissions:
   id-token: write # This is required for requesting the OIDC JWT
