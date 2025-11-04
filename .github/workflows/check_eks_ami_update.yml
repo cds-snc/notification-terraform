@@ -18,6 +18,14 @@ jobs:
   check-eks-ami-update:
     runs-on: ubuntu-latest
     steps:
+
+    - name: Configure credentials to Notify account using OIDC
+      uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+      with:
+        role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
+        role-session-name: NotifyTerraformPlan
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
     - name: Generate PR Bot Token
       uses: actions/create-github-app-token@v1
       id: generate-token
