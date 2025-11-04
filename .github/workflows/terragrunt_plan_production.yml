@@ -54,7 +54,7 @@ jobs:
           id: tf-plan
           run: |
             cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-            terragrunt init -upgrade
+            terragrunt init --upgrade
             terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
             ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -113,7 +113,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -167,7 +167,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -222,7 +222,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -277,7 +277,7 @@ jobs:
           cd aws
           op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars
           cd ../env/${{env.ENVIRONMENT}}/eks
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           ENDPOINT_ID=$(terragrunt output --raw gha_vpn_id)
           CERT=$(terragrunt output --raw gha_vpn_certificate)
           KEY=$(terragrunt output --raw gha_vpn_key)
@@ -307,7 +307,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ env.COMPONENT }}
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -363,7 +363,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -421,7 +421,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
@@ -474,7 +474,7 @@ jobs:
         id: tf-plan
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
-          terragrunt init -upgrade
+          terragrunt init --upgrade
           terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
