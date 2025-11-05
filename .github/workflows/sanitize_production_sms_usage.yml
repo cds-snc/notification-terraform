@@ -7,6 +7,13 @@ on:
 env:
   INPUT_BUCKET_1: notification-canada-ca-production-sms-usage-logs
   INPUT_BUCKET_2: notification-canada-ca-production-sms-usage-west-2-logs
+  ACCOUNT_ID: ${{ secrets.PRODUCTION_AWS_ACCOUNT_ID }}
+  AWS_DEFAULT_REGION: ca-central-1
+
+permissions:
+  id-token: write # This is required for requesting the OIDC JWT
+  contents: write # This is required for actions/checkout
+  pull-requests: write
 
 jobs:
   sanitize-sms-usage:
@@ -22,12 +29,12 @@ jobs:
     - name: Install python packages
       run: pip install -r ./scripts/sanitize_sms_usage_logs/requirements.txt
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+    - name: Configure credentials to Notify using OIDC
+      uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
       with:
-        aws-access-key-id: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
-        aws-region: ca-central-1
+        role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+        role-session-name: NotifyTerraformPlan
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
     - name: run script
       run: |
