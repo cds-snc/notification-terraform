@@ -54,7 +54,8 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
       attribute = "labels.policyIds"
       operator  = "EXACTLY_MATCHES"
       values = [
-        newrelic_alert_policy.terraform_notify_policy[0].id
+        newrelic_alert_policy.terraform_notify_policy[0].id,
+        newrelic_alert_policy.terraform_notify_policy_by_condition[0].id
       ]
     }
     predicate {
@@ -66,4 +67,3 @@ resource "newrelic_workflow" "terraform_notify_workflow" {
     }
   }
 }
-
