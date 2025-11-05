@@ -19,8 +19,8 @@ eks_addon_coredns_version       = "v1.12.1-eksbuild.2"
 eks_addon_kube_proxy_version    = "v1.34.0-eksbuild.2"
 eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
 eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
-eks_node_ami_version            = "1.34.1-20251016"
-eks_karpenter_ami_id            = "ami-0f426de246f9ea558"
+eks_node_ami_version            = "1.34.1-20251029"
+eks_karpenter_ami_id            = "ami-0fa0aa4d92832ebd6"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -42,7 +42,7 @@ lambda_new_relic_config_file                    = "/app/newrelic.ini"
 lambda_new_relic_handler                        = "application.handler"
 
 # ENVIRONMENT
-enable_new_relic           = true
+enable_new_relic           = false
 create_cbs_bucket          = false
 force_destroy_s3           = false
 force_delete_ecr           = false
