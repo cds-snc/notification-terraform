@@ -919,7 +919,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/github
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m     
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   bump-version-and-push-tag:
     if: |
