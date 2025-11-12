@@ -77,3 +77,10 @@ resource "github_actions_secret" "admin_github_manifests_workflow_token" {
   plaintext_value  = var.github_manifests_workflow_token
   destroy_on_drift = false
 }
+
+resource "github_actions_secret" "admin_account_id" {
+  repository       = data.github_repository.notification_admin.name
+  secret_name      = "${upper(var.env)}_AWS_ACCOUNT_ID"
+  plaintext_value  = var.account_id
+  destroy_on_drift = false
+}
