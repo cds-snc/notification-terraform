@@ -5,20 +5,27 @@ on:
     - cron: "0 13 * * 1" # 1pm Monday UTC
 
 env:
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
   AWS_DEFAULT_REGION: ca-central-1
   EKS_CLUSTER_NAME: notification-canada-ca-staging-eks-cluster
   EKS_CLUSTER_NODE_GROUP_NAME: notification-canada-ca-staging-eks-primary-node-group-k8s
+
+
+permissions:
+  id-token: write # This is required for requesting the OIDC JWT
+  contents: write # This is required for actions/checkout
+  pull-requests: write
 
 jobs:
   check-eks-ami-update:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+    - name: Configure credentials to Notify using OIDC
+      uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
       with:
-        aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+        role-session-name: NotifyTerraformPlan
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
     - name: Generate PR Bot Token
