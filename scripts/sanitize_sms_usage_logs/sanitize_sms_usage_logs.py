@@ -17,7 +17,7 @@ def main():
     parser.add_argument("--push", help="push output to s3 (default: save locally instead)", action="store_true", default=False)
     args = parser.parse_args()
         
-    session = boto3.Session(aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"))
+    session = boto3.Session()
     s3 = session.resource('s3')
     
     if args.in_bucket is None:
