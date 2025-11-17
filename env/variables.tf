@@ -806,6 +806,16 @@ variable "manifest_document_download_api_key" {
   sensitive = true
 }
 
+variable "manifest_airtable_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "manifest_airtable_newsletter_base_id" {
+  type      = string
+  sensitive = true
+}
+
 variable "manifest_aws_route53_zone" {
   type      = string
   sensitive = true
