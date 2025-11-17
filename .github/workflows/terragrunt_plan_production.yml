@@ -55,7 +55,7 @@ jobs:
           run: |
             cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
             terragrunt init --upgrade
-            terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+            terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
             ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
             cat /var/tmp/output.txt
@@ -114,7 +114,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
           terragrunt init --upgrade
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
@@ -168,7 +168,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
           terragrunt init --upgrade
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
@@ -223,7 +223,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
           terragrunt init --upgrade
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
@@ -308,7 +308,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ env.COMPONENT }}
           terragrunt init --upgrade
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
@@ -364,7 +364,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
           terragrunt init --upgrade
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
@@ -422,7 +422,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
           terragrunt init --upgrade
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
@@ -475,7 +475,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/${{ matrix.component }}
           terragrunt init --upgrade
-          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" > /var/tmp/results.txt
+          terragrunt plan --terragrunt-non-interactive --no-color --log-custom-format "%msg" -lock-timeout=10m > /var/tmp/results.txt
           ${{ github.workspace }}/.github/scripts/extract_terraform_plan_enhanced.sh /var/tmp/results.txt -o /var/tmp/output.txt
 
           cat /var/tmp/output.txt
