@@ -35,7 +35,7 @@ resource "aws_secretsmanager_secret" "manifest_airtable_newsletter_base_id" {
 
 resource "aws_secretsmanager_secret_version" "manifest_airtable_newsletter_base_id_version" {
   secret_id     = aws_secretsmanager_secret.manifest_airtable_newsletter_base_id.id
-  secret_string = var.mmanifest_airtable_newsletter_base_id
+  secret_string = var.manifest_airtable_newsletter_base_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
