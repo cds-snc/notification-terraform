@@ -28,16 +28,6 @@ resource "aws_secretsmanager_secret_version" "manifest_airtable_api_key_version"
   secret_string = var.manifest_airtable_api_key
 }
 
-resource "aws_secretsmanager_secret" "manifest_airtable_newsletter_base_id" {
-  name                    = "MANIFEST_AIRTABLE_NEWSLETTER_BASE_ID"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_airtable_newsletter_base_id_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_airtable_newsletter_base_id.id
-  secret_string = var.manifest_airtable_newsletter_base_id
-}
-
 resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
   name                    = "MANIFEST_DOCUMENT_DOWNLOAD_API_KEY"
   recovery_window_in_days = 0
