@@ -1112,3 +1112,9 @@ variable "api_enable_new_relic" {
   type    = bool
   default = false
 }
+
+variable "api_gateway_timeout" {
+  description = "Timeout for API Gateway integrations in milliseconds"
+  type        = number
+  default     = 29000
+}

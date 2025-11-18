@@ -66,6 +66,7 @@ resource "aws_api_gateway_integration" "integration" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_alias.api_latest.invoke_arn
+  timeout_milliseconds    = var.api_gateway_timeout
 
   request_parameters = {
     "integration.request.path.proxy" = "method.request.path.proxy"
