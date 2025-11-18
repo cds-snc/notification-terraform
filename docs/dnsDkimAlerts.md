@@ -3,10 +3,17 @@
 ## Overview
 This document describes the process to follow when receiving a Slack warning alert about missing or invalid DKIM/DNS records for SES domain identities.
 
+## Monitoring Mechanism
+The system monitors for SES-related issues through:
+- **AWS Health Events**: Captures AWS notifications about SES reputation and domain identity issues
+- **CloudWatch Alarms**: Monitors SES bounce rates, complaint rates, and sending metrics (already in place)
+- **Manual Verification**: Periodic checks by the operations team (recommended)
+
 ## Alert Types
 The system monitors for the following DNS/DKIM issues:
-- **DomainVerificationFailure**: The domain's verification DNS records are missing or invalid
-- **DkimVerificationFailure**: The domain's DKIM DNS records are missing or invalid
+- **Domain Identity Issues**: Problems with domain verification records
+- **DKIM Verification Issues**: Missing or invalid DKIM DNS records
+- **Reputation Issues**: SES reputation problems that may indicate DNS/email configuration issues
 
 ## When You Receive an Alert
 

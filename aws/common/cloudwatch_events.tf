@@ -45,25 +45,33 @@ resource "aws_cloudwatch_event_target" "aws_health_sns_warning" {
 
 ###
 # SES Domain Identity Issues (DKIM/DNS Record Failures)
+# Captures AWS Health events specifically for SES reputation and identity issues.
+# This rule monitors for AWS notifications about SES problems that may indicate
+# DNS/DKIM record issues, such as when client domains remove or modify required records.
+# Related documentation: docs/dnsDkimAlerts.md
 ###
 
-resource "aws_cloudwatch_event_rule" "ses_domain_identity_issues" {
+resource "aws_cloudwatch_event_rule" "ses_reputation_identity_issues" {
   count       = var.cloudwatch_enabled ? 1 : 0
-  name        = "ses-domain-identity-issues"
-  description = "Alert when SES detects missing or invalid DKIM/DNS records for domain identities"
+  name        = "ses-reputation-identity-issues"
+  description = "Alert on SES reputation and domain identity issues including DNS/DKIM failures"
 
   event_pattern = jsonencode({
-    source      = ["aws.ses"]
-    detail-type = ["SES Domain Identity Notification"]
+    source      = ["aws.health"]
+    detail-type = ["AWS Health Event"]
     detail = {
-      notificationType = ["DomainVerificationFailure", "DkimVerificationFailure"]
+      service = ["SES"]
+      eventTypeCategory = [
+        "issue",
+        "accountNotification"
+      ]
     }
   })
 }
 
-resource "aws_cloudwatch_event_target" "ses_domain_identity_issues_warning" {
+resource "aws_cloudwatch_event_target" "ses_reputation_identity_issues_warning" {
   count     = var.cloudwatch_enabled ? 1 : 0
-  rule      = aws_cloudwatch_event_rule.ses_domain_identity_issues[0].name
-  target_id = "ses_domain_identity_issues_warning"
+  rule      = aws_cloudwatch_event_rule.ses_reputation_identity_issues[0].name
+  target_id = "ses_reputation_identity_issues_warning"
   arn       = aws_sns_topic.notification-canada-ca-alert-warning.arn
 }
