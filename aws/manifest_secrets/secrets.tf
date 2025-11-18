@@ -18,6 +18,16 @@ resource "aws_secretsmanager_secret_version" "manifest_auth_tokens_version" {
   secret_string = var.manifest_auth_tokens
 }
 
+resource "aws_secretsmanager_secret" "manifest_airtable_api_key" {
+  name                    = "MANIFEST_AIRTABLE_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_airtable_api_key_version" {
+  secret_id     = aws_secretsmanager_secret.manifest_airtable_api_key.id
+  secret_string = var.manifest_airtable_api_key
+}
+
 resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
   name                    = "MANIFEST_DOCUMENT_DOWNLOAD_API_KEY"
   recovery_window_in_days = 0
