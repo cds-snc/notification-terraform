@@ -55,7 +55,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/common
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-ecr:
     if: |
@@ -97,7 +97,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/ecr
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-ecr-us-east:
     if: |
@@ -139,7 +139,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/ecr-us-east
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
 
   terragrunt-apply-ses_receiving_emails:
@@ -172,7 +172,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/ses_receiving_emails
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-dns:
     if: |
@@ -204,7 +204,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/dns
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-ses_validation_dns_entries:
     if: |
@@ -236,7 +236,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/ses_validation_dns_entries
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
 
   terragrunt-apply-cloudfront:
@@ -269,7 +269,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/cloudfront
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-eks:
     if: |
@@ -301,7 +301,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/eks
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-aws-auth:
     if: |
@@ -375,7 +375,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/aws-auth
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-elasticache:
     if: |
@@ -407,7 +407,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/elasticache
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-rds:
     if: |
@@ -439,7 +439,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/rds
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-lambda-api:
     if: |
@@ -471,7 +471,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/lambda-api
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-lambda-admin-pr:
     if: |
@@ -503,7 +503,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/lambda-admin-pr
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-performance-test:
     if: |
@@ -535,7 +535,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/performance-test
           terragrunt init --upgrade --reconfigure
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-heartbeat:
     if: |
@@ -567,7 +567,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/heartbeat
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-database-tools:
     if: |
@@ -599,7 +599,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/database-tools
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-quicksight:
     if: |
@@ -631,7 +631,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/quicksight
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-lambda-google-cidr:
     if: |
@@ -663,7 +663,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/lambda-google-cidr
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-ses_to_sqs_email_callbacks:
     if: |
@@ -695,7 +695,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/ses_to_sqs_email_callbacks
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-sns_to_sqs_sms_callbacks:
     if: |
@@ -727,7 +727,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/sns_to_sqs_sms_callbacks
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-pinpoint_to_sqs_sms_callbacks:
     if: |
@@ -759,7 +759,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-system_status:
     if: |
@@ -791,7 +791,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/system_status
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-system_status_static_site:
     if: |
@@ -823,7 +823,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/system_status_static_site
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-newrelic:
     if: |
@@ -855,7 +855,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/newrelic
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   terragrunt-apply-manifest_secrets:
     if: |
@@ -887,7 +887,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/manifest_secrets
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve      
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
  
   terragrunt-apply-github:
     if: |
@@ -919,7 +919,7 @@ jobs:
         run: |
           cd env/${{env.ENVIRONMENT}}/github
           terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve      
+          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
   bump-version-and-push-tag:
     if: |

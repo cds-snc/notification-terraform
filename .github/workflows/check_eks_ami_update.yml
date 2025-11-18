@@ -5,6 +5,7 @@ on:
     - cron: "0 13 * * 1" # 1pm Monday UTC
 
 env:
+  ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
   AWS_DEFAULT_REGION: ca-central-1
   EKS_CLUSTER_NAME: notification-canada-ca-staging-eks-cluster
   EKS_CLUSTER_NODE_GROUP_NAME: notification-canada-ca-staging-eks-primary-node-group-k8s
@@ -21,10 +22,10 @@ jobs:
     steps:
 
     - name: Configure credentials to Notify using OIDC
-      uses: aws-actions/configure-aws-credentials@master
+      uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
       with:
-        role-to-assume: arn:aws:iam::${{secrets.STAGING_AWS_ACCOUNT_ID}}:role/notification-terraform-plan
-        role-session-name: NotifyApiGitHubActions
+        role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
+        role-session-name: NotifyTerraformPlan
         aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
     - name: Generate PR Bot Token

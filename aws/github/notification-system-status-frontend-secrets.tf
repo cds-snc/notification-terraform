@@ -37,3 +37,10 @@ resource "github_actions_secret" "slack_notify_dev_webhook" {
   plaintext_value  = var.notify_dev_slack_webhook
   destroy_on_drift = false
 }
+
+resource "github_actions_secret" "system_status_account_id" {
+  repository       = data.github_repository.notification_system_status_frontend.name
+  secret_name      = "${upper(var.env)}_AWS_ACCOUNT_ID"
+  plaintext_value  = var.account_id
+  destroy_on_drift = false
+}
