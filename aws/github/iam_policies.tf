@@ -54,16 +54,6 @@ data "aws_iam_policy_document" "notification_admin_test_admin_deploy" {
   statement {
     effect = "Allow"
     actions = [
-      "logs:DescribeLogGroups"
-    ]
-    resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
       "logs:CreateLogGroup",
       # "logs:CreateLogStream",
       # "logs:DeleteLogGroup",
@@ -145,46 +135,46 @@ data "aws_iam_policy_document" "notification_oidc_plan_policy" {
       "logs:ListTagsForResource"
     ]
     resources = [
-      "*"
+      "arn:aws:logs:${var.region}:${var.account_id}:log-group:*"
     ]
   }
 
-  statement {
-    sid    = "ReadAutoscalingTagsForResources"
-    effect = "Allow"
-    actions = [
-      "application-autoscaling:ListTagsForResource"
-    ]
-    resources = [
-      "*"
-    ]
-  }
+  # statement {
+  #   sid    = "ReadAutoscalingTagsForResources"
+  #   effect = "Allow"
+  #   actions = [
+  #     "application-autoscaling:ListTagsForResource"
+  #   ]
+  #   resources = [
+  #     "*"
+  #   ]
+  # }
 
-  statement {
-    sid    = "AllowReadingQuickSightResources"
-    effect = "Allow"
-    actions = [
-      "quicksight:List*",
-      "quicksight:Get*",
-      "quicksight:Describe*"
-    ]
-    resources = [
-      "*"
-    ]
-  }
+  # statement {
+  #   sid    = "AllowReadingQuickSightResources"
+  #   effect = "Allow"
+  #   actions = [
+  #     "quicksight:List*",
+  #     "quicksight:Get*",
+  #     "quicksight:Describe*"
+  #   ]
+  #   resources = [
+  #     "*"
+  #   ]
+  # }
 
-  statement {
-    sid    = "AllowReadingGlueResources"
-    effect = "Allow"
-    actions = [
-      "glue:List*",
-      "glue:Get*",
-      "glue:Describe*"
-    ]
-    resources = [
-      "*"
-    ]
-  }
+  # statement {
+  #   sid    = "AllowReadingGlueResources"
+  #   effect = "Allow"
+  #   actions = [
+  #     "glue:List*",
+  #     "glue:Get*",
+  #     "glue:Describe*"
+  #   ]
+  #   resources = [
+  #     "*"
+  #   ]
+  # }
 
   statement {
     sid    = "AllowAssumeRole"
