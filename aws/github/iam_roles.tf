@@ -31,14 +31,18 @@ module "github_workflow_roles" {
 # Attach polices to the OIDC roles to grant them permissions
 #
 resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy" {
+  count = var.env == "staging" ? 1 : 0
+
   role       = local.notification_admin_test_admin_deploy
-  policy_arn = aws_iam_policy.notification_admin_test_admin_deploy.arn
+  policy_arn = aws_iam_policy.notification_admin_test_admin_deploy[0].arn
   depends_on = [
     module.github_workflow_roles
   ]
 }
 
 resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy_read_only" {
+  count = var.env == "staging" ? 1 : 0
+
   role       = local.notification_admin_test_admin_deploy
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
@@ -47,6 +51,8 @@ resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy_
 }
 
 resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy_oidc_plan_policy" {
+  count = var.env == "staging" ? 1 : 0
+
   role       = local.notification_admin_test_admin_deploy
   policy_arn = aws_iam_policy.notification_oidc_plan_policy.arn
   depends_on = [

@@ -2,6 +2,8 @@
 # Create and Manage PR review environment resources
 #
 resource "aws_iam_policy" "notification_admin_test_admin_deploy" {
+  count = var.env == "staging" ? 1 : 0
+
   name   = local.notification_admin_test_admin_deploy
   path   = "/"
   policy = data.aws_iam_policy_document.notification_admin_test_admin_deploy.json
