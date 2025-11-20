@@ -136,19 +136,42 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
   alarm_description   = "Ten Celery errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].namespace
-  period              = 60
-  statistic           = "Sum"
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
+
+  metric_query {
+    id          = "e1"
+    expression  = var.env == "dev" ? "m1 - m2" : "m1"
+    label       = "Celery Errors (excluding not found)"
+    return_data = true
+  }
+
+  metric_query {
+    id = "m1"
+    metric {
+      metric_name = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].namespace
+      period      = 60
+      stat        = "Sum"
+    }
+  }
+
+  metric_query {
+    id = "m2"
+    metric {
+      metric_name = var.env == "staging" ? aws_cloudwatch_log_metric_filter.celery-not-found-error[0].metric_transformation[0].name : aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].name
+      namespace   = aws_cloudwatch_log_metric_filter.celery-error[0].metric_transformation[0].namespace
+      period      = 60
+      stat        = "Sum"
+    }
+  }
 }
 
 # We are adding this alarm in to staging since we are seeing some issues with cypress tests causing not found errors in staging
 resource "aws_cloudwatch_metric_alarm" "logs-30-celery-not-found-error-1-minute-critical" {
-  count               = var.cloudwatch_enabled ? 1 : 0
+  count               = var.cloudwatch_enabled && var.env == "staging" ? 1 : 0
   alarm_name          = "logs-30-celery-not-found-error-1-minute-critical"
   alarm_description   = "Thirty Celery not found errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
