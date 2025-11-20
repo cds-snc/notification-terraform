@@ -143,7 +143,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
 
   metric_query {
     id          = "e1"
-    expression  = var.env == "dev" ? "m1 - m2" : "m1"
+    expression  = var.env == "staging" ? "m1 - m2" : "m1"
     label       = "Celery Errors (excluding not found)"
     return_data = true
   }
