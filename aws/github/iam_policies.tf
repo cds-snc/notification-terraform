@@ -1,6 +1,8 @@
 #
-# Create and Manage PR review environment resources
+# Create and Manage github workflow policies
 #
+
+# resource policies for GitHub OIDC roles
 resource "aws_iam_policy" "notification_admin_test_admin_deploy" {
   count = var.env == "staging" ? 1 : 0
 
@@ -70,127 +72,53 @@ data "aws_iam_policy_document" "notification_admin_test_admin_deploy" {
   }
 }
 
-data "aws_organizations_organization" "org" {}
-
-resource "aws_iam_policy" "notification_oidc_plan_policy" {
-  name   = local.notification_oidc_plan_policy
+resource "aws_iam_policy" "notification_manifests_helmfile_diff" {
+  name   = local.notification_manifests_helmfile_diff
   path   = "/"
-  policy = data.aws_iam_policy_document.notification_oidc_plan_policy.json
+  policy = data.aws_iam_policy_document.notification_manifests_helmfile_diff.json
 }
 
-data "aws_iam_policy_document" "notification_oidc_plan_policy" {
+data "aws_iam_policy_document" "notification_manifests_helmfile_diff" {
   statement {
-    sid    = "AllowAllDynamoDBActionsOnAllTerragruntTables"
     effect = "Allow"
     actions = [
-      "dynamodb:*"
+      "eks:DescribeCluster"
     ]
     resources = [
-      "arn:aws:dynamodb:${var.region}:${var.account_id}:table/tfstate-lock",
-      "arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"
+      "arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-*"
     ]
   }
 
   statement {
-    sid    = "AllowAllS3ActionsOnAllTerragruntBuckets"
     effect = "Allow"
     actions = [
-      "s3:*"
+      "ec2:ExportClientVpnClientConfiguration"
     ]
     resources = [
-      "arn:aws:s3:::*-tfstate/*",
-      "arn:aws:s3:::*-tfstate",
-      "arn:aws:s3:::*-tf/*",
-      "arn:aws:s3:::*-tf"
+      "arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"
     ]
   }
+}
 
+resource "aws_iam_policy" "notification_manifests_staging_smoke_test" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_manifests_staging_smoke_test
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_manifests_staging_smoke_test.json
+}
+
+data "aws_iam_policy_document" "notification_manifests_staging_smoke_test" {
   statement {
-    sid    = "AllowReadingSecrets"
     effect = "Allow"
     actions = [
-      "secretsmanager:ListSecretVersionIds",
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:DescribeSecret"
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:PutObject",
+      "s3:PutObjectAcl"
     ]
     resources = [
-      "arn:aws:secretsmanager:*:${var.account_id}:secret:*"
+      "arn:aws:s3:::notification-canada-ca-*"
     ]
-  }
-
-  statement {
-    sid    = "ListSecrets"
-    effect = "Allow"
-    actions = [
-      "secretsmanager:ListSecrets"
-    ]
-    resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    sid    = "ReadCWTagsForResources"
-    effect = "Allow"
-    actions = [
-      "logs:ListTagsForResource"
-    ]
-    resources = [
-      "arn:aws:logs:${var.region}:${var.account_id}:log-group:*"
-    ]
-  }
-
-  # statement {
-  #   sid    = "ReadAutoscalingTagsForResources"
-  #   effect = "Allow"
-  #   actions = [
-  #     "application-autoscaling:ListTagsForResource"
-  #   ]
-  #   resources = [
-  #     "*"
-  #   ]
-  # }
-
-  # statement {
-  #   sid    = "AllowReadingQuickSightResources"
-  #   effect = "Allow"
-  #   actions = [
-  #     "quicksight:List*",
-  #     "quicksight:Get*",
-  #     "quicksight:Describe*"
-  #   ]
-  #   resources = [
-  #     "*"
-  #   ]
-  # }
-
-  # statement {
-  #   sid    = "AllowReadingGlueResources"
-  #   effect = "Allow"
-  #   actions = [
-  #     "glue:List*",
-  #     "glue:Get*",
-  #     "glue:Describe*"
-  #   ]
-  #   resources = [
-  #     "*"
-  #   ]
-  # }
-
-  statement {
-    sid    = "AllowAssumeRole"
-    effect = "Allow"
-    actions = [
-      "sts:AssumeRole"
-    ]
-    resources = [
-      "*"
-    ]
-    condition {
-      test     = "StringEquals"
-      variable = "aws:PrincipalOrgID"
-      values   = [data.aws_organizations_organization.org.id]
-    }
   }
 }
