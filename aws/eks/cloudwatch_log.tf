@@ -52,11 +52,25 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error"
-  pattern        = "%ERROR/.*Worker|ERROR/MainProcess%"
+  pattern        = var.env == "staging" ? "%ERROR/.*Worker|ERROR/MainProcess% - %notifications not found for SES references%" : "%ERROR/.*Worker|ERROR/MainProcess%"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
     name      = "celery-error"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+# We are adding this alarm in to staging since we are seeing some issues with cypress tests causing not found errors in staging
+resource "aws_cloudwatch_log_metric_filter" "celery-not-found-error" {
+  count          = var.cloudwatch_enabled && var.env == "staging" ? 1 : 0
+  name           = "celery-not-found-error"
+  pattern        = "%notifications not found for SES references%"
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-not-found-error"
     namespace = "LogMetrics"
     value     = "1"
   }
