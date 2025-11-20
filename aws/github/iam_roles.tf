@@ -15,9 +15,7 @@ data "aws_iam_policy" "readonly" {
 # The roles can be assumed by the GitHub workflows according to the `claim`
 # attribute of each role.
 # 
-module "github_workflow_roles_admin" {
-  count = var.env == "staging" ? 1 : 0
-
+module "github_workflow_roles" {
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   roles = [
@@ -38,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy"
   role       = local.notification_admin_test_admin_deploy
   policy_arn = aws_iam_policy.notification_admin_test_admin_deploy[0].arn
   depends_on = [
-    module.github_workflow_roles_admin
+    module.github_workflow_roles
   ]
 }
 
@@ -48,7 +46,7 @@ resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy_
   role       = local.notification_admin_test_admin_deploy
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
-    module.github_workflow_roles_admin
+    module.github_workflow_roles
   ]
 }
 
@@ -58,6 +56,6 @@ resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy_
   role       = local.notification_admin_test_admin_deploy
   policy_arn = aws_iam_policy.notification_oidc_plan_policy.arn
   depends_on = [
-    module.github_workflow_roles_admin
+    module.github_workflow_roles
   ]
 }
