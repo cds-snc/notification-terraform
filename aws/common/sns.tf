@@ -25,6 +25,25 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning" {
   }
 }
 
+resource "aws_sns_topic_policy" "notification-canada-ca-alert-warning-eventbridge" {
+  arn = aws_sns_topic.notification-canada-ca-alert-warning.arn
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowEventBridgeToPublish"
+        Effect = "Allow"
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+        Action   = "SNS:Publish"
+        Resource = aws_sns_topic.notification-canada-ca-alert-warning.arn
+      }
+    ]
+  })
+}
+
 resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-west-2" {
   provider = aws.us-west-2
 
