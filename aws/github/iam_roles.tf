@@ -29,7 +29,7 @@ module "github_workflow_roles_admin" {
     {
       name      = local.notification_admin_test_admin_deploy
       repo_name = "notification-admin"
-      claim     = "ref:refs/heads/*"
+      claim     = "pull_request"
     }
   ]
 }

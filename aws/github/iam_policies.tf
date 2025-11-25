@@ -11,17 +11,33 @@ resource "aws_iam_policy" "notification_admin_test_admin_deploy" {
   policy = data.aws_iam_policy_document.notification_admin_test_admin_deploy.json
 }
 
+data "aws_iam_role" "notify-admin-pr" {
+  name = "notify-admin-pr" # the name of your existing IAM role
+}
+
 data "aws_iam_policy_document" "notification_admin_test_admin_deploy" {
   statement {
     effect = "Allow"
     actions = [
       "ecr:BatchDeleteImage",
       "ecr:DescribeImages",
-      "ecr:ListImages"
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage"
     ]
     resources = [
       "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/admin"
     ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = [data.aws_iam_role.notify-admin-pr.arn]
   }
 
   statement {
@@ -37,13 +53,13 @@ data "aws_iam_policy_document" "notification_admin_test_admin_deploy" {
     actions = [
       "lambda:AddPermission",
       "lambda:CreateFunction",
-      # "lambda:CreateFunctionUrlConfig",
+      "lambda:CreateFunctionUrlConfig",
       # "lambda:DeleteFunction",
       # "lambda:DeleteFunctionUrlConfig",
       # "lambda:DeleteFunctionConcurrency",
       "lambda:GetFunction",
       "lambda:GetFunctionConfiguration",
-      # "lambda:GetFunctionUrlConfig",
+      "lambda:GetFunctionUrlConfig",
       # "lambda:ListFunctionUrlConfigs",
       "lambda:PutFunctionConcurrency",
       "lambda:UpdateFunctionCode",
