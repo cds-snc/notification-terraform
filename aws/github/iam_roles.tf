@@ -41,7 +41,7 @@ module "github_workflow_roles_manifests" {
     {
       name      = local.notification_manifests_helmfile_diff
       repo_name = "notification-manifests"
-      claim     = "ref:refs/heads/*"
+      claim     = "*"
     },
     {
       name      = local.notification_manifests_staging_smoke_test
