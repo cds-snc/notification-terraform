@@ -67,6 +67,11 @@ module "eks" {
       username = "ipv4-geolocate-webservice-apply"
       groups   = ["system:masters"]
     },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-diff"
+      username = "notification-manifests-helmfile-diff"
+      groups   = ["system:masters"]
+    },
   ]
 
   aws_auth_accounts = [
