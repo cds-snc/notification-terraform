@@ -170,17 +170,17 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-1-minute-critical" 
 }
 
 # We are adding this alarm in to staging since we are seeing some issues with cypress tests causing not found errors in staging
-resource "aws_cloudwatch_metric_alarm" "logs-30-celery-not-found-error-1-minute-critical" {
+resource "aws_cloudwatch_metric_alarm" "logs-celery-not-found-error-1-minute-critical" {
   count               = var.cloudwatch_enabled && var.env == "staging" ? 1 : 0
-  alarm_name          = "logs-30-celery-not-found-error-1-minute-critical"
-  alarm_description   = "Thirty Celery not found errors in 1 minute"
+  alarm_name          = "logs-celery-not-found-error-1-minute-critical"
+  alarm_description   = "Fifty Celery not found errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-not-found-error[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-not-found-error[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 30
+  threshold           = 50
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
