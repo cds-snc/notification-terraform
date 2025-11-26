@@ -1,5 +1,5 @@
 locals {
-  notification_admin_test_admin_deploy      = "notification-admin-test-admin-deploy"
+  notification_admin_test_admin_workflows   = "notification-admin-test-admin-workflows"
   notification_manifests_helmfile_diff      = "notification-manifests-helmfile-diff"
   notification_manifests_staging_smoke_test = "notification-manifests-staging-smoke-test"
 }
@@ -27,7 +27,7 @@ module "github_workflow_roles_admin" {
   billing_tag_value = var.billing_tag_value
   roles = [
     {
-      name      = local.notification_admin_test_admin_deploy
+      name      = local.notification_admin_test_admin_workflows
       repo_name = "notification-admin"
       claim     = "pull_request"
     }
@@ -54,30 +54,30 @@ module "github_workflow_roles_manifests" {
 #
 # Attach polices to the OIDC roles to grant them permissions
 #
-resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy" {
+resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_workflows" {
   count = var.env == "staging" ? 1 : 0
 
-  role       = local.notification_admin_test_admin_deploy
-  policy_arn = aws_iam_policy.notification_admin_test_admin_deploy[0].arn
+  role       = local.notification_admin_test_admin_workflows
+  policy_arn = aws_iam_policy.notification_admin_test_admin_workflows[0].arn
   depends_on = [
     module.github_workflow_roles_admin
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy_read_only" {
+resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_workflows_read_only" {
   count = var.env == "staging" ? 1 : 0
 
-  role       = local.notification_admin_test_admin_deploy
+  role       = local.notification_admin_test_admin_workflows
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
     module.github_workflow_roles_admin
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_deploy_oidc_plan_policy" {
+resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_workflows_oidc_plan_policy" {
   count = var.env == "staging" ? 1 : 0
 
-  role       = local.notification_admin_test_admin_deploy
+  role       = local.notification_admin_test_admin_workflows
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_admin
