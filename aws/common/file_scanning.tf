@@ -1,5 +1,5 @@
 module "s3_scan_objects" {
-  source = "github.com/cds-snc/terraform-modules//S3_scan_object?ref=v10.9.0"
+  source = "github.com/cds-snc/terraform-modules//S3_scan_object?ref=v10.9.1"
 
   s3_upload_bucket_names  = ["notification-canada-ca-${var.env}-document-download-scan-files"]
   s3_scan_object_role_arn = "arn:aws:iam::${var.scan_files_account_id}:role/s3-scan-object"
@@ -9,7 +9,7 @@ module "s3_scan_objects" {
 }
 
 module "guardduty_malware_s3" {
-  source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=v10.9.0"
+  source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=v10.9.1"
 
   s3_bucket_name = "notification-canada-ca-${var.env}-document-download-scan-files"
   tagging_status = "ENABLED"
