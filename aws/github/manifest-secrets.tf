@@ -14,7 +14,6 @@ resource "github_actions_secret" "manifests_openai_api_key" {
 }
 
 resource "github_actions_secret" "manifests_op_service_account_token" {
-  count            = var.env == "production" || var.env == "staging" || var.env == "dev" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "OP_SERVICE_ACCOUNT_TOKEN_${upper(var.env)}"
   plaintext_value  = var.op_service_account_token
@@ -22,7 +21,6 @@ resource "github_actions_secret" "manifests_op_service_account_token" {
 }
 
 resource "github_actions_secret" "manifests_aws_access_key_id" {
-  count            = var.env == "production" || var.env == "staging" || var.env == "dev" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "${upper(var.env)}_AWS_ACCESS_KEY_ID"
   plaintext_value  = var.aws_access_key_id
@@ -30,7 +28,6 @@ resource "github_actions_secret" "manifests_aws_access_key_id" {
 }
 
 resource "github_actions_secret" "manifests_aws_secret_access_key" {
-  count            = var.env == "production" || var.env == "staging" || var.env == "dev" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "${upper(var.env)}_AWS_SECRET_ACCESS_KEY"
   plaintext_value  = var.aws_secret_access_key
@@ -46,7 +43,6 @@ resource "github_actions_secret" "manifests_notify_dev_slack_webhook" {
 }
 
 resource "github_actions_secret" "manifests_cache_clear_client_secret" {
-  count            = var.env == "production" || var.env == "staging" || var.env == "dev" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "${upper(var.env)}_CACHE_CLEAR_CLIENT_SECRET"
   plaintext_value  = var.manifest_cache_clear_client_secret
