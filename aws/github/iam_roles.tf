@@ -29,7 +29,7 @@ module "github_workflow_roles_admin" {
     {
       name      = local.notification_admin_test_admin_deploy
       repo_name = "notification-admin"
-      claim     = "ref:refs/heads/*"
+      claim     = "pull_request"
     }
   ]
 }
@@ -41,7 +41,7 @@ module "github_workflow_roles_manifests" {
     {
       name      = local.notification_manifests_helmfile_diff
       repo_name = "notification-manifests"
-      claim     = "ref:refs/heads/*"
+      claim     = "*"
     },
     {
       name      = local.notification_manifests_staging_smoke_test
