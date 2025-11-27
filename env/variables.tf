@@ -147,6 +147,10 @@ variable "enable_delete_protection" {
   type = bool
 }
 
+variable "enable_guardduty_malware_s3" {
+  type = bool
+}
+
 variable "cloudwatch_enabled" {
   type = bool
 }

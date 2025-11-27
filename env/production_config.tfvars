@@ -42,17 +42,18 @@ lambda_new_relic_config_file                    = "/app/newrelic.ini"
 lambda_new_relic_handler                        = "application.handler"
 
 # ENVIRONMENT
-enable_new_relic           = true
-create_cbs_bucket          = false
-force_destroy_s3           = false
-force_delete_ecr           = false
-force_destroy_athena       = false
-bootstrap                  = false
-enable_sentinel_forwarding = true
-enable_delete_protection   = true
-cloudwatch_enabled         = true
-recovery                   = false
-aws_xray_sdk_enabled       = true
+enable_new_relic            = true
+create_cbs_bucket           = false
+force_destroy_s3            = false
+force_delete_ecr            = false
+force_destroy_athena        = false
+bootstrap                   = false
+enable_sentinel_forwarding  = true
+enable_delete_protection    = true
+enable_guardduty_malware_s3 = false
+cloudwatch_enabled          = true
+recovery                    = false
+aws_xray_sdk_enabled        = true
 
 ## DNS
 alt_domain                 = "notification.alpha.canada.ca"
