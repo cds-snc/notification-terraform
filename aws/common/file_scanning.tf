@@ -9,7 +9,7 @@ module "s3_scan_objects" {
 }
 
 module "guardduty_malware_s3" {
-  count = var.env == "staging" ? 1 : 0
+  count = var.enable_guardduty_malware_s3 ? 1 : 0
 
   source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=v10.9.1"
 
