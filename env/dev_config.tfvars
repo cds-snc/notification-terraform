@@ -42,17 +42,18 @@ lambda_new_relic_config_file                    = "/app/newrelic.ini"
 lambda_new_relic_handler                        = "application.handler"
 
 # ENVIRONMENT
-enable_new_relic           = false
-create_cbs_bucket          = true
-force_destroy_s3           = true
-force_delete_ecr           = true
-force_destroy_athena       = true
-bootstrap                  = true
-enable_sentinel_forwarding = true
-enable_delete_protection   = false
-cloudwatch_enabled         = true
-recovery                   = true
-aws_xray_sdk_enabled       = true
+enable_new_relic            = false
+create_cbs_bucket           = true
+force_destroy_s3            = true
+force_delete_ecr            = true
+force_destroy_athena        = true
+bootstrap                   = true
+enable_sentinel_forwarding  = true
+enable_delete_protection    = false
+enable_guardduty_malware_s3 = false
+cloudwatch_enabled          = true
+recovery                    = true
+aws_xray_sdk_enabled        = true
 
 ## DNS
 alt_domain                 = "alpha.dev.notification.cdssandbox.xyz"

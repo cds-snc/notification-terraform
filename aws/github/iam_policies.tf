@@ -3,19 +3,19 @@
 #
 
 # resource policies for GitHub OIDC roles
-resource "aws_iam_policy" "notification_admin_test_admin_deploy" {
+resource "aws_iam_policy" "notification_admin_test_admin_workflows" {
   count = var.env == "staging" ? 1 : 0
 
-  name   = local.notification_admin_test_admin_deploy
+  name   = local.notification_admin_test_admin_workflows
   path   = "/"
-  policy = data.aws_iam_policy_document.notification_admin_test_admin_deploy.json
+  policy = data.aws_iam_policy_document.notification_admin_test_admin_workflows.json
 }
 
 data "aws_iam_role" "notify-admin-pr" {
   name = "notify-admin-pr" # the name of your existing IAM role
 }
 
-data "aws_iam_policy_document" "notification_admin_test_admin_deploy" {
+data "aws_iam_policy_document" "notification_admin_test_admin_workflows" {
   statement {
     effect = "Allow"
     actions = [
@@ -54,17 +54,17 @@ data "aws_iam_policy_document" "notification_admin_test_admin_deploy" {
       "lambda:AddPermission",
       "lambda:CreateFunction",
       "lambda:CreateFunctionUrlConfig",
-      # "lambda:DeleteFunction",
-      # "lambda:DeleteFunctionUrlConfig",
-      # "lambda:DeleteFunctionConcurrency",
+      "lambda:DeleteFunction",
+      "lambda:DeleteFunctionUrlConfig",
+      "lambda:DeleteFunctionConcurrency",
       "lambda:GetFunction",
       "lambda:GetFunctionConfiguration",
       "lambda:GetFunctionUrlConfig",
-      # "lambda:ListFunctionUrlConfigs",
+      "lambda:ListFunctionUrlConfigs",
       "lambda:PutFunctionConcurrency",
       "lambda:UpdateFunctionCode",
       "lambda:UpdateFunctionConfiguration",
-      # "lambda:UpdateFunctionUrlConfig"
+      "lambda:UpdateFunctionUrlConfig"
     ]
     resources = [
       "arn:aws:lambda:${var.region}:${var.account_id}:function:notify-admin-pr-*"
@@ -75,11 +75,11 @@ data "aws_iam_policy_document" "notification_admin_test_admin_deploy" {
     effect = "Allow"
     actions = [
       "logs:CreateLogGroup",
-      # "logs:CreateLogStream",
-      # "logs:DeleteLogGroup",
-      # "logs:DeleteLogStream",
-      # "logs:DeleteRetentionPolicy",
-      # "logs:DescribeLogStreams",
+      "logs:CreateLogStream",
+      "logs:DeleteLogGroup",
+      "logs:DeleteLogStream",
+      "logs:DeleteRetentionPolicy",
+      "logs:DescribeLogStreams",
       "logs:PutRetentionPolicy"
     ]
     resources = [
