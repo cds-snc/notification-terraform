@@ -8,14 +8,17 @@ resource "aws_iam_policy" "notification_admin_test_admin_workflows" {
 
   name   = local.notification_admin_test_admin_workflows
   path   = "/"
-  policy = data.aws_iam_policy_document.notification_admin_test_admin_workflows.json
+  policy = data.aws_iam_policy_document.notification_admin_test_admin_workflows[0].json
 }
 
 data "aws_iam_role" "notify-admin-pr" {
-  name = "notify-admin-pr" # the name of your existing IAM role
+  count = var.env == "staging" ? 1 : 0
+  name  = "notify-admin-pr" # the name of your existing IAM role
 }
 
 data "aws_iam_policy_document" "notification_admin_test_admin_workflows" {
+  count = var.env == "staging" ? 1 : 0
+
   statement {
     effect = "Allow"
     actions = [
@@ -37,7 +40,7 @@ data "aws_iam_policy_document" "notification_admin_test_admin_workflows" {
     actions = [
       "iam:PassRole"
     ]
-    resources = [data.aws_iam_role.notify-admin-pr.arn]
+    resources = [data.aws_iam_role.notify-admin-pr[0].arn]
   }
 
   statement {
