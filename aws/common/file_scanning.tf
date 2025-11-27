@@ -9,6 +9,8 @@ module "s3_scan_objects" {
 }
 
 module "guardduty_malware_s3" {
+  count = var.env == "staging" ? 1 : 0
+
   source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=v10.9.1"
 
   s3_bucket_name = "notification-canada-ca-${var.env}-document-download-scan-files"
@@ -21,4 +23,36 @@ module "guardduty_malware_s3" {
   alarm_sns_topic_ok_arn                   = aws_sns_topic.notification-canada-ca-alert-ok.arn
 
   billing_tag_value = var.billing_tag_value
+}
+
+// Support introduction of feature flag for module
+// This is required as the scanning service S3 object tags overwrite each other's existing tags
+moved {
+  from = module.guardduty_malware_s3.aws_cloudwatch_metric_alarm.malware_completed_scan_bytes
+  to   = module.guardduty_malware_s3[0].aws_cloudwatch_metric_alarm.malware_completed_scan_bytes
+}
+
+moved {
+  from = module.guardduty_malware_s3.aws_cloudwatch_metric_alarm.malware_completed_scan_count
+  to   = module.guardduty_malware_s3[0].aws_cloudwatch_metric_alarm.malware_completed_scan_count
+}
+
+moved {
+  from = module.guardduty_malware_s3.aws_guardduty_malware_protection_plan.this
+  to   = module.guardduty_malware_s3[0].aws_guardduty_malware_protection_plan.this
+}
+
+moved {
+  from = module.guardduty_malware_s3.aws_iam_policy.this
+  to   = module.guardduty_malware_s3[0].aws_iam_policy.this
+}
+
+moved {
+  from = module.guardduty_malware_s3.aws_iam_role.this
+  to   = module.guardduty_malware_s3[0].aws_iam_role.this
+}
+
+moved {
+  from = module.guardduty_malware_s3.aws_iam_role_policy_attachment.this
+  to   = module.guardduty_malware_s3[0].aws_iam_role_policy_attachment.this
 }
