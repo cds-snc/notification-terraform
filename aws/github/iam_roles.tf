@@ -1,5 +1,6 @@
 locals {
   notification_admin_test_admin_workflows   = "notification-admin-test-admin-workflows"
+  notification_admin_cypress_e2e_tests      = "notification-admin-cypress-e2e-tests"
   notification_manifests_helmfile_diff      = "notification-manifests-helmfile-diff"
   notification_manifests_staging_smoke_test = "notification-manifests-staging-smoke-test"
 }
@@ -30,6 +31,11 @@ module "github_workflow_roles_admin" {
       name      = local.notification_admin_test_admin_workflows
       repo_name = "notification-admin"
       claim     = "pull_request"
+    },
+    {
+      name      = local.notification_admin_cypress_e2e_tests
+      repo_name = "notification-admin"
+      claim     = "*"
     }
   ]
 }
@@ -78,6 +84,36 @@ resource "aws_iam_role_policy_attachment" "notification_admin_test_admin_workflo
   count = var.env == "staging" ? 1 : 0
 
   role       = local.notification_admin_test_admin_workflows
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [
+    module.github_workflow_roles_admin
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_admin_cypress_e2e_tests" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_admin_cypress_e2e_tests
+  policy_arn = aws_iam_policy.notification_admin_cypress_e2e_tests[0].arn
+  depends_on = [
+    module.github_workflow_roles_admin
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_admin_cypress_e2e_tests_read_only" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_admin_cypress_e2e_tests
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [
+    module.github_workflow_roles_admin
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_admin_cypress_e2e_tests_oidc_plan_policy" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_admin_cypress_e2e_tests
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_admin

@@ -91,6 +91,28 @@ data "aws_iam_policy_document" "notification_admin_test_admin_workflows" {
   }
 }
 
+resource "aws_iam_policy" "notification_admin_cypress_e2e_tests" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_admin_cypress_e2e_tests
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_admin_cypress_e2e_tests[0].json
+}
+
+data "aws_iam_policy_document" "notification_admin_cypress_e2e_tests" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sqs:*",
+    ]
+    resources = [
+      "arn:aws:sqs:${var.region}:${var.account_id}:*"
+    ]
+  }
+}
+
 resource "aws_iam_policy" "notification_manifests_helmfile_diff" {
   name   = local.notification_manifests_helmfile_diff
   path   = "/"
