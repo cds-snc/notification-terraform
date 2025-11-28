@@ -1,0 +1,120 @@
+# GC Notify Gitleaks Configuration
+title = "GC Notify secret detection rules"
+
+[extend]
+# Extend the default gitleaks config
+useDefault = true
+
+# Custom rules for GC Notify specific secrets
+[[rules]]
+id = "notify-api-key"
+description = "GC Notify API Key"
+regex = '''(?i)(gcntfy|notify)[-_]?api[-_]?key['"]?\s*[:=]\s*['"]?([a-z0-9_-]{36,})'''
+secretGroup = 2
+keywords = [
+  "gcntfy",
+  "notify",
+  "api_key",
+  "api-key",
+]
+tags = ["gc-notify", "api-key"]
+
+[[rules]]
+id = "notify-service-api-key"
+description = "GC Notify Service API Key (starts with specific prefix)"
+regex = '''[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}'''
+keywords = [
+  "service",
+  "api",
+  "key",
+]
+tags = ["gc-notify", "service-api-key"]
+
+[[rules]]
+id = "notify-callback-bearer-token"
+description = "GC Notify Callback Bearer Token"
+regex = '''(?i)(callback|bearer)[-_]?token['"]?\s*[:=]\s*['"]?([A-Za-z0-9+/]{40,}={0,2})'''
+secretGroup = 2
+keywords = [
+  "callback",
+  "bearer",
+  "token",
+]
+tags = ["gc-notify", "bearer-token"]
+
+[[rules]]
+id = "notify-internal-secret"
+description = "GC Notify Internal Secret"
+regex = '''(?i)(notify|internal|secret)[-_]?secret['"]?\s*[:=]\s*['"]?([A-Za-z0-9_-]{32,})'''
+secretGroup = 2
+keywords = [
+  "notify",
+  "internal",
+  "secret",
+]
+tags = ["gc-notify", "internal-secret"]
+
+[[rules]]
+id = "notify-admin-client-secret"
+description = "GC Notify Admin Client Secret"
+regex = '''(?i)admin[-_]?client[-_]?secret['"]?\s*[:=]\s*['"]?([A-Za-z0-9_-]{32,})'''
+secretGroup = 1
+keywords = [
+  "admin",
+  "client",
+  "secret",
+]
+tags = ["gc-notify", "admin-secret"]
+
+[[rules]]
+id = "notify-dangerous-salt"
+description = "GC Notify Dangerous Salt"
+regex = '''(?i)dangerous[-_]?salt['"]?\s*[:=]\s*['"]?([A-Za-z0-9+/=]{16,})'''
+secretGroup = 1
+keywords = [
+  "dangerous",
+  "salt",
+]
+tags = ["gc-notify", "dangerous-salt"]
+
+[[rules]]
+id = "notify-db-connection-string"
+description = "GC Notify Database Connection String"
+regex = '''postgres(ql)?://[^:]+:[^@]+@[^/]+/[^\s'"]+'''
+keywords = [
+  "postgres",
+  "postgresql",
+  "database",
+]
+tags = ["gc-notify", "database"]
+
+[[rules]]
+id = "notify-redis-url"
+description = "GC Notify Redis URL with credentials"
+regex = '''rediss?://[^:]+:[^@]+@[^/\s'"]+'''
+keywords = [
+  "redis",
+  "rediss",
+]
+tags = ["gc-notify", "redis"]
+
+# Global allowlist for test/example values
+[[allowlists]]
+description = "Ignore test and example secrets"
+regexTarget = "match"
+regexes = [
+  '''(?i)(test|example|sample|dummy|fake|mock)''',
+  '''(?i)(your|my)[-_](api[-_])?key''',
+  '''(?i)xxxxxx''',
+  '''(?i)replace[-_]?me''',
+]
+
+[[allowlists]]
+description = "Ignore documentation and common false positives"
+paths = [
+  '''README\.md$''',
+  '''\.md$''',
+  '''\.txt$''',
+  '''example''',
+  '''sample''',
+]
