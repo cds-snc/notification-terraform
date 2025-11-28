@@ -3,8 +3,8 @@ name: "Create Dev Environment"
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 17 * * 0"
+  #schedule:
+  #  - cron: "0 17 * * 0"
 
 defaults:
   run:
