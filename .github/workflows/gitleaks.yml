@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@e9e6e54e2b1b1b6e7e0e92ce40938e425c205b5a # v2.3.2
+        uses: gitleaks/gitleaks-action@cb7149a9604c34bb638a6a02a259832716ef8f7c # v2.3.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
