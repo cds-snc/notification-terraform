@@ -1,6 +1,6 @@
 # S3 bucket for Velero backups
 resource "aws_s3_bucket" "velero_backups" {
-  count  = var.env == "dev" ? 1 : 0
+  count  = var.env != "production" ? 1 : 0
   bucket = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-backups"
 
   tags = {
@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "velero_backups" {
 }
 
 resource "aws_s3_bucket_versioning" "velero_backups" {
-  count  = var.env == "dev" ? 1 : 0
+  count  = var.env != "production" ? 1 : 0
   bucket = aws_s3_bucket.velero_backups[0].id
 
   versioning_configuration {
@@ -18,7 +18,7 @@ resource "aws_s3_bucket_versioning" "velero_backups" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "velero_backups" {
-  count  = var.env == "dev" ? 1 : 0
+  count  = var.env != "production" ? 1 : 0
   bucket = aws_s3_bucket.velero_backups[0].id
 
   rule {
@@ -29,7 +29,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "velero_backups" {
 }
 
 resource "aws_s3_bucket_public_access_block" "velero_backups" {
-  count  = var.env == "dev" ? 1 : 0
+  count  = var.env != "production" ? 1 : 0
   bucket = aws_s3_bucket.velero_backups[0].id
 
   block_public_acls       = true
@@ -39,14 +39,14 @@ resource "aws_s3_bucket_public_access_block" "velero_backups" {
 }
 
 resource "aws_s3_bucket_notification" "velero_backups" {
-  count  = var.env == "dev" ? 1 : 0
+  count  = var.env != "production" ? 1 : 0
   bucket = aws_s3_bucket.velero_backups[0].id
 
   eventbridge = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
-  count  = var.env == "dev" ? 1 : 0
+  count  = var.env != "production" ? 1 : 0
   bucket = aws_s3_bucket.velero_backups[0].id
 
   rule {
