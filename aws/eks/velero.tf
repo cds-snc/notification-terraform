@@ -75,7 +75,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
 
 # IAM policy for Velero
 resource "aws_iam_policy" "velero" {
-  count       = var.env == "dev" ? 1 : 0
+  count       = var.env != "production" ? 1 : 0
   name        = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-policy"
   description = "Policy for Velero backup and restore operations"
 
@@ -122,7 +122,7 @@ resource "aws_iam_policy" "velero" {
 
 # IAM role for Velero service account
 resource "aws_iam_role" "velero" {
-  count = var.env == "dev" ? 1 : 0
+  count = var.env != "production" ? 1 : 0
   name  = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-role"
 
   assume_role_policy = jsonencode({
@@ -151,7 +151,7 @@ resource "aws_iam_role" "velero" {
 
 # Attach policy to role
 resource "aws_iam_role_policy_attachment" "velero" {
-  count      = var.env == "dev" ? 1 : 0
+  count      = var.env != "production" ? 1 : 0
   role       = aws_iam_role.velero[0].name
   policy_arn = aws_iam_policy.velero[0].arn
 }
@@ -159,15 +159,15 @@ resource "aws_iam_role_policy_attachment" "velero" {
 # Outputs
 output "velero_s3_bucket_name" {
   description = "Name of the S3 bucket for Velero backups"
-  value       = var.env == "dev" ? aws_s3_bucket.velero_backups[0].id : null
+  value       = var.env != "production" ? aws_s3_bucket.velero_backups[0].id : null
 }
 
 output "velero_iam_role_arn" {
   description = "ARN of the IAM role for Velero"
-  value       = var.env == "dev" ? aws_iam_role.velero[0].arn : null
+  value       = var.env != "production" ? aws_iam_role.velero[0].arn : null
 }
 
 output "velero_s3_bucket_arn" {
   description = "ARN of the S3 bucket for Velero backups"
-  value       = var.env == "dev" ? aws_s3_bucket.velero_backups[0].arn : null
+  value       = var.env != "production" ? aws_s3_bucket.velero_backups[0].arn : null
 }
