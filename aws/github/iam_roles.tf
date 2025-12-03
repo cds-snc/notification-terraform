@@ -3,7 +3,9 @@ locals {
   notification_admin_cypress_e2e_tests          = "notification-admin-cypress-e2e-tests"
   notification_manifests_helmfile_diff          = "notification-manifests-helmfile-diff"
   notification_manifests_staging_smoke_test     = "notification-manifests-staging-smoke-test"
-  notification_api_dev_build_push               = "notification-api-dev-build-push"
+  notification_api_dev_build_push               = "notification-api-dev-branch-build-push-dev"
+  notification_api_dev_build_push_staging       = "notification-api-dev-branch-build-push-staging"
+  notification_api_dev_build_push_production    = "notification-api-dev-branch-build-push-production"
   notification_admin_dev_build_push             = "notification-admin-dev-build-push"
   notification_document_download_dev_build_push = "notification-document-download-dev-build-push"
 }
@@ -68,6 +70,34 @@ module "github_workflow_roles_notification_api" {
   roles = [
     {
       name      = local.notification_api_dev_build_push
+      repo_name = "notification-api"
+      claim     = "ref:refs/heads/dev"
+    }
+  ]
+}
+
+module "github_workflow_roles_notification_api_staging" {
+  count             = var.env == "staging" ? 1 : 0
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+
+  roles = [
+    {
+      name      = local.notification_api_dev_build_push_staging
+      repo_name = "notification-api"
+      claim     = "ref:refs/heads/dev"
+    }
+  ]
+}
+
+module "github_workflow_roles_notification_api_production" {
+  count             = var.env == "production" ? 1 : 0
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+
+  roles = [
+    {
+      name      = local.notification_api_dev_build_push_production
       repo_name = "notification-api"
       claim     = "ref:refs/heads/dev"
     }
@@ -243,6 +273,60 @@ resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_oidc_
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_notification_api
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_staging" {
+  count      = var.env == "staging" ? 1 : 0
+  role       = local.notification_api_dev_build_push_staging
+  policy_arn = aws_iam_policy.notification_api_dev_build_push[0].arn
+  depends_on = [
+    module.github_workflow_roles_notification_api_staging
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_staging_read_only" {
+  count      = var.env == "staging" ? 1 : 0
+  role       = local.notification_api_dev_build_push_staging
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [
+    module.github_workflow_roles_notification_api_staging
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_staging_oidc_plan_policy" {
+  count      = var.env == "staging" ? 1 : 0
+  role       = local.notification_api_dev_build_push_staging
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [
+    module.github_workflow_roles_notification_api_staging
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_production" {
+  count      = var.env == "production" ? 1 : 0
+  role       = local.notification_api_dev_build_push_production
+  policy_arn = aws_iam_policy.notification_api_dev_build_push[0].arn
+  depends_on = [
+    module.github_workflow_roles_notification_api_production
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_production_read_only" {
+  count      = var.env == "production" ? 1 : 0
+  role       = local.notification_api_dev_build_push_production
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [
+    module.github_workflow_roles_notification_api_production
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_production_oidc_plan_policy" {
+  count      = var.env == "production" ? 1 : 0
+  role       = local.notification_api_dev_build_push_production
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [
+    module.github_workflow_roles_notification_api_production
   ]
 }
 
