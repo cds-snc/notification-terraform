@@ -61,7 +61,7 @@ module "github_workflow_roles_manifests" {
 }
 
 module "github_workflow_roles_notification_api" {
-  count            = var.env == "dev" ? 1 : 0
+  count             = var.env == "dev" ? 1 : 0
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
@@ -75,7 +75,7 @@ module "github_workflow_roles_notification_api" {
 }
 
 module "github_workflow_roles_notification_admin" {
-  count            = var.env == "dev" ? 1 : 0
+  count             = var.env == "dev" ? 1 : 0
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
@@ -89,7 +89,7 @@ module "github_workflow_roles_notification_admin" {
 }
 
 module "github_workflow_roles_notification_document_download" {
-  count            = var.env == "dev" ? 1 : 0
+  count             = var.env == "dev" ? 1 : 0
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
