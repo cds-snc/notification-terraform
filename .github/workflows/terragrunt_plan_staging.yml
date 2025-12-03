@@ -352,7 +352,8 @@ jobs:
       needs.terragrunt-filter.outputs.eks == 'true' || 
       needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
       needs.terragrunt-filter.outputs.system_status_static_site == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
+      needs.terragrunt-filter.outputs.config == 'true' ||
+      needs.terragrunt-filter.outputs.quicksight == 'true'
 
     needs: 
       - terragrunt-filter
@@ -361,7 +362,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [eks, ses_validation_dns_entries, system_status_static_site]
+        component: [eks, ses_validation_dns_entries, system_status_static_site, quicksight]
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
