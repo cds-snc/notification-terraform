@@ -165,6 +165,7 @@ data "aws_iam_policy_document" "notification_manifests_staging_smoke_test" {
 }
 
 resource "aws_iam_policy" "notification_api_dev_build_push" {
+  count  = var.env == "dev" ? 1 : 0
   name   = local.notification_api_dev_build_push
   path   = "/"
   policy = data.aws_iam_policy_document.notification_api_dev_build_push.json
@@ -197,6 +198,7 @@ data "aws_iam_policy_document" "notification_api_dev_build_push" {
 }
 
 resource "aws_iam_policy" "notification_admin_dev_build_push" {
+  count  = var.env == "dev" ? 1 : 0
   name   = local.notification_admin_dev_build_push
   path   = "/"
   policy = data.aws_iam_policy_document.notification_admin_dev_build_push.json
@@ -229,6 +231,7 @@ data "aws_iam_policy_document" "notification_admin_dev_build_push" {
 }
 
 resource "aws_iam_policy" "notification_document_download_dev_build_push" {
+  count  = var.env == "dev" ? 1 : 0
   name   = local.notification_document_download_dev_build_push
   path   = "/"
   policy = data.aws_iam_policy_document.notification_document_download_dev_build_push.json

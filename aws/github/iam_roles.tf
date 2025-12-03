@@ -61,6 +61,7 @@ module "github_workflow_roles_manifests" {
 }
 
 module "github_workflow_roles_notification_api" {
+  count            = var.env == "dev" ? 1 : 0
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
@@ -74,6 +75,7 @@ module "github_workflow_roles_notification_api" {
 }
 
 module "github_workflow_roles_notification_admin" {
+  count            = var.env == "dev" ? 1 : 0
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
@@ -87,6 +89,7 @@ module "github_workflow_roles_notification_admin" {
 }
 
 module "github_workflow_roles_notification_document_download" {
+  count            = var.env == "dev" ? 1 : 0
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
@@ -217,14 +220,16 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_staging_smoke_
 }
 
 resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_api_dev_build_push
-  policy_arn = aws_iam_policy.notification_api_dev_build_push.arn
+  policy_arn = aws_iam_policy.notification_api_dev_build_push[0].arn
   depends_on = [
     module.github_workflow_roles_notification_api
   ]
 }
 
 resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_read_only" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_api_dev_build_push
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
@@ -233,6 +238,7 @@ resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_read_
 }
 
 resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_oidc_plan_policy" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_api_dev_build_push
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
@@ -241,14 +247,16 @@ resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_oidc_
 }
 
 resource "aws_iam_role_policy_attachment" "notification_admin_dev_build_push" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_admin_dev_build_push
-  policy_arn = aws_iam_policy.notification_admin_dev_build_push.arn
+  policy_arn = aws_iam_policy.notification_admin_dev_build_push[0].arn
   depends_on = [
     module.github_workflow_roles_notification_admin
   ]
 }
 
 resource "aws_iam_role_policy_attachment" "notification_admin_dev_build_push_read_only" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_admin_dev_build_push
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
@@ -257,6 +265,7 @@ resource "aws_iam_role_policy_attachment" "notification_admin_dev_build_push_rea
 }
 
 resource "aws_iam_role_policy_attachment" "notification_admin_dev_build_push_oidc_plan_policy" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_admin_dev_build_push
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
@@ -265,14 +274,16 @@ resource "aws_iam_role_policy_attachment" "notification_admin_dev_build_push_oid
 }
 
 resource "aws_iam_role_policy_attachment" "notification_document_download_dev_build_push" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_document_download_dev_build_push
-  policy_arn = aws_iam_policy.notification_document_download_dev_build_push.arn
+  policy_arn = aws_iam_policy.notification_document_download_dev_build_push[0].arn
   depends_on = [
     module.github_workflow_roles_notification_document_download
   ]
 }
 
 resource "aws_iam_role_policy_attachment" "notification_document_download_dev_build_push_read_only" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_document_download_dev_build_push
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
@@ -281,6 +292,7 @@ resource "aws_iam_role_policy_attachment" "notification_document_download_dev_bu
 }
 
 resource "aws_iam_role_policy_attachment" "notification_document_download_dev_build_push_oidc_plan_policy" {
+  count      = var.env == "dev" ? 1 : 0
   role       = local.notification_document_download_dev_build_push
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
