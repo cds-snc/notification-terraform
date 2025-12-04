@@ -164,6 +164,37 @@ data "aws_iam_policy_document" "notification_manifests_staging_smoke_test" {
   }
 }
 
+resource "aws_iam_policy" "notification_manifests_k8s_lambda_apply" {
+  name   = local.notification_manifests_k8s_lambda_apply
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_manifests_k8s_lambda_apply.json
+}
+
+data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "eks:DescribeCluster"
+    ]
+    resources = [
+      "arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:UpdateFunctionCode",
+      "lambda:UpdateFunctionConfiguration",
+      "lambda:GetFunction",
+      "lambda:GetFunctionConfiguration"
+    ]
+    resources = [
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:*"
+    ]
+  }
+}
+
 resource "aws_iam_policy" "notification_api_build_push" {
   name   = local.notification_api_build_push
   path   = "/"
