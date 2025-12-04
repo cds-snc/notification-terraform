@@ -1,12 +1,12 @@
 locals {
-  notification_admin_test_admin_workflows          = "notification-admin-test-admin-workflows"
-  notification_admin_cypress_e2e_tests             = "notification-admin-cypress-e2e-tests"
-  notification_manifests_helmfile_diff             = "notification-manifests-helmfile-diff"
-  notification_manifests_staging_smoke_test        = "notification-manifests-staging-smoke-test"
-  notification_manifests_k8s_lambda_apply          = "notification-manifests-k8s-lambda-apply"
-  notification_api_build_push                      = "notification-api-build-push"
-  notification_admin_build_push                    = "notification-admin-build-push"
-  notification_document_download_build_push        = "notification-document-download-build-push"
+  notification_admin_test_admin_workflows   = "notification-admin-test-admin-workflows"
+  notification_admin_cypress_e2e_tests      = "notification-admin-cypress-e2e-tests"
+  notification_manifests_helmfile_diff      = "notification-manifests-helmfile-diff"
+  notification_manifests_staging_smoke_test = "notification-manifests-staging-smoke-test"
+  notification_manifests_k8s_lambda_apply   = "notification-manifests-k8s-lambda-apply"
+  notification_api_build_push               = "notification-api-build-push"
+  notification_admin_build_push             = "notification-admin-build-push"
+  notification_document_download_build_push = "notification-document-download-build-push"
 }
 
 # 
