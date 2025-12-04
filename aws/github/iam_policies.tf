@@ -163,3 +163,100 @@ data "aws_iam_policy_document" "notification_manifests_staging_smoke_test" {
     ]
   }
 }
+
+resource "aws_iam_policy" "notification_api_build_push" {
+  name   = local.notification_api_build_push
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_api_build_push.json
+}
+
+data "aws_iam_policy_document" "notification_api_build_push" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchDeleteImage",
+      "ecr:DescribeImages",
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage"
+    ]
+    resources = [
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api",
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api-lambda"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_admin_build_push" {
+  name   = local.notification_admin_build_push
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_admin_build_push.json
+}
+
+data "aws_iam_policy_document" "notification_admin_build_push" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchDeleteImage",
+      "ecr:DescribeImages",
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage"
+    ]
+    resources = [
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/admin"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_document_download_build_push" {
+  name   = local.notification_document_download_build_push
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_document_download_build_push.json
+}
+
+data "aws_iam_policy_document" "notification_document_download_build_push" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchDeleteImage",
+      "ecr:DescribeImages",
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage"
+    ]
+    resources = [
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/document-download"
+    ]
+  }
+}

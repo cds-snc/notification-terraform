@@ -1122,3 +1122,7 @@ variable "api_gateway_timeout" {
   type        = number
   default     = 29000
 }
+
+variable "datalake_bucket_name" {
+  type = string
+}
