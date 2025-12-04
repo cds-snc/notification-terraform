@@ -5,6 +5,54 @@
 # to prevent deletion of backups (ransomware protection).
 #
 
+# KMS key policy for backup vault
+data "aws_iam_policy_document" "backup_vault_kms" {
+  count = var.env == "dev" ? 1 : 0
+
+  # Allow account root full access
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.account_id}:root"]
+    }
+
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+
+  # Allow AWS Backup service to use the key
+  statement {
+    sid    = "Allow AWS Backup to use the key"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["backup.amazonaws.com"]
+    }
+
+    actions = [
+      "kms:CreateGrant",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey",
+      "kms:GenerateDataKeyWithoutPlaintext",
+      "kms:ReEncrypt*"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["backup.${var.region}.amazonaws.com"]
+    }
+  }
+}
+
 # KMS key for encrypting backups
 resource "aws_kms_key" "backup_vault" {
   count = var.env == "dev" ? 1 : 0
@@ -12,6 +60,7 @@ resource "aws_kms_key" "backup_vault" {
   description             = "KMS key for RDS backup vault encryption - ${var.env}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
+  policy                  = data.aws_iam_policy_document.backup_vault_kms[0].json
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -158,10 +207,12 @@ resource "aws_sns_topic_policy" "backup_notifications" {
   count = var.env == "dev" ? 1 : 0
 
   arn    = aws_sns_topic.backup_notifications[0].arn
-  policy = data.aws_iam_policy_document.backup_notifications.json
+  policy = data.aws_iam_policy_document.backup_notifications[0].json
 }
 
 data "aws_iam_policy_document" "backup_notifications" {
+  count = var.env == "dev" ? 1 : 0
+
   statement {
     effect = "Allow"
 
