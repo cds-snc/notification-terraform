@@ -191,7 +191,8 @@ data "aws_iam_policy_document" "notification_api_build_push" {
       "ecr:PutImage"
     ]
     resources = [
-      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api"
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api",
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api-lambda"
     ]
   }
 }
