@@ -3,6 +3,7 @@ locals {
   notification_admin_cypress_e2e_tests      = "notification-admin-cypress-e2e-tests"
   notification_manifests_helmfile_diff      = "notification-manifests-helmfile-diff"
   notification_manifests_staging_smoke_test = "notification-manifests-staging-smoke-test"
+  notification_manifests_k8s_lambda_apply   = "notification-manifests-k8s-lambda-apply"
   notification_api_build_push               = "notification-api-build-push"
   notification_admin_build_push             = "notification-admin-build-push"
   notification_document_download_build_push = "notification-document-download-build-push"
@@ -56,6 +57,11 @@ module "github_workflow_roles_manifests" {
       name      = local.notification_manifests_staging_smoke_test
       repo_name = "notification-manifests"
       claim     = "ref:refs/heads/*"
+    },
+    {
+      name      = "${local.notification_manifests_k8s_lambda_apply}-main-branch"
+      repo_name = "notification-manifests"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
@@ -225,6 +231,30 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_staging_smoke_
   count = var.env == "staging" ? 1 : 0
 
   role       = local.notification_manifests_staging_smoke_test
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [
+    module.github_workflow_roles_manifests
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_k8s_lambda_apply_main_branch" {
+  role       = "${local.notification_manifests_k8s_lambda_apply}-main-branch"
+  policy_arn = aws_iam_policy.notification_manifests_k8s_lambda_apply.arn
+  depends_on = [
+    module.github_workflow_roles_manifests
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_k8s_lambda_apply_main_branch_read_only" {
+  role       = "${local.notification_manifests_k8s_lambda_apply}-main-branch"
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [
+    module.github_workflow_roles_manifests
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_k8s_lambda_apply_main_branch_oidc_plan_policy" {
+  role       = "${local.notification_manifests_k8s_lambda_apply}-main-branch"
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_manifests
