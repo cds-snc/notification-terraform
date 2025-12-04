@@ -231,72 +231,144 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_staging_smoke_
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_api_build_push" {
-  role       = local.notification_api_build_push
+resource "aws_iam_role_policy_attachment" "notification_api_build_push_dev_branch" {
+  role       = "${local.notification_api_build_push}-dev-branch"
   policy_arn = aws_iam_policy.notification_api_build_push.arn
   depends_on = [
     module.github_workflow_roles_notification_api
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_read_only" {
-  role       = local.notification_api_build_push
+resource "aws_iam_role_policy_attachment" "notification_api_build_push_dev_branch_read_only" {
+  role       = "${local.notification_api_build_push}-dev-branch"
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
     module.github_workflow_roles_notification_api
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_api_dev_build_push_oidc_plan_policy" {
-  role       = local.notification_api_build_push
+resource "aws_iam_role_policy_attachment" "notification_api_build_push_dev_branch_oidc_plan_policy" {
+  role       = "${local.notification_api_build_push}-dev-branch"
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_notification_api
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_admin_build_push" {
-  role       = local.notification_admin_build_push
+resource "aws_iam_role_policy_attachment" "notification_api_build_push_main_branch" {
+  role       = "${local.notification_api_build_push}-main-branch"
+  policy_arn = aws_iam_policy.notification_api_build_push.arn
+  depends_on = [
+    module.github_workflow_roles_notification_api
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_build_push_main_branch_read_only" {
+  role       = "${local.notification_api_build_push}-main-branch"
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [
+    module.github_workflow_roles_notification_api
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_build_push_main_branch_oidc_plan_policy" {
+  role       = "${local.notification_api_build_push}-main-branch"
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [
+    module.github_workflow_roles_notification_api
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_admin_build_push_dev_branch" {
+  role       = "${local.notification_admin_build_push}-dev-branch"
   policy_arn = aws_iam_policy.notification_admin_build_push.arn
   depends_on = [
     module.github_workflow_roles_notification_admin
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_admin_dev_build_push_read_only" {
-  role       = local.notification_admin_build_push
+resource "aws_iam_role_policy_attachment" "notification_admin_build_push_dev_branch_read_only" {
+  role       = "${local.notification_admin_build_push}-dev-branch"
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
     module.github_workflow_roles_notification_admin
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_admin_dev_build_push_oidc_plan_policy" {
-  role       = local.notification_admin_build_push
+resource "aws_iam_role_policy_attachment" "notification_admin_build_push_dev_branch_oidc_plan_policy" {
+  role       = "${local.notification_admin_build_push}-dev-branch"
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_notification_admin
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_document_download_build_push" {
-  role       = local.notification_document_download_build_push
+resource "aws_iam_role_policy_attachment" "notification_admin_build_push_main_branch" {
+  role       = "${local.notification_admin_build_push}-main-branch"
+  policy_arn = aws_iam_policy.notification_admin_build_push.arn
+  depends_on = [
+    module.github_workflow_roles_notification_admin
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_admin_build_push_main_branch_read_only" {
+  role       = "${local.notification_admin_build_push}-main-branch"
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [
+    module.github_workflow_roles_notification_admin
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_admin_build_push_main_branch_oidc_plan_policy" {
+  role       = "${local.notification_admin_build_push}-main-branch"
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [
+    module.github_workflow_roles_notification_admin
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_document_download_build_push_dev_branch" {
+  role       = "${local.notification_document_download_build_push}-dev-branch"
   policy_arn = aws_iam_policy.notification_document_download_build_push.arn
   depends_on = [
     module.github_workflow_roles_notification_document_download
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_document_download_dev_build_push_read_only" {
-  role       = local.notification_document_download_build_push
+resource "aws_iam_role_policy_attachment" "notification_document_download_build_push_dev_branch_read_only" {
+  role       = "${local.notification_document_download_build_push}-dev-branch"
   policy_arn = data.aws_iam_policy.readonly.arn
   depends_on = [
     module.github_workflow_roles_notification_document_download
   ]
 }
 
-resource "aws_iam_role_policy_attachment" "notification_document_download_dev_build_push_oidc_plan_policy" {
-  role       = local.notification_document_download_build_push
+resource "aws_iam_role_policy_attachment" "notification_document_download_build_push_dev_branch_oidc_plan_policy" {
+  role       = "${local.notification_document_download_build_push}-dev-branch"
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [
+    module.github_workflow_roles_notification_document_download
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_document_download_build_push_main_branch" {
+  role       = "${local.notification_document_download_build_push}-main-branch"
+  policy_arn = aws_iam_policy.notification_document_download_build_push.arn
+  depends_on = [
+    module.github_workflow_roles_notification_document_download
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_document_download_build_push_main_branch_read_only" {
+  role       = "${local.notification_document_download_build_push}-main-branch"
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [
+    module.github_workflow_roles_notification_document_download
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_document_download_build_push_main_branch_oidc_plan_policy" {
+  role       = "${local.notification_document_download_build_push}-main-branch"
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_notification_document_download
