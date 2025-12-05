@@ -77,11 +77,6 @@ module "eks" {
       username = "notification-manifests-k8s-lambda-apply-main-branch"
       groups   = ["system:masters"]
     },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-k8s-lambda-apply-workflow-debug-branch"
-      username = "notification-manifests-k8s-lambda-apply-workflow-debug-branch"
-      groups   = ["system:masters"]
-    },
   ]
 
   aws_auth_accounts = [
