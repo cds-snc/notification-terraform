@@ -109,12 +109,12 @@ module "github_workflow_roles_notification_document_download" {
   roles = [
     {
       name      = "${local.notification_document_download_build_push}-dev-branch"
-      repo_name = "notification-document-download"
+      repo_name = "notification-document-download-api"
       claim     = "ref:refs/heads/dev"
     },
     {
       name      = "${local.notification_document_download_build_push}-main-branch"
-      repo_name = "notification-document-download"
+      repo_name = "notification-document-download-api"
       claim     = "ref:refs/heads/main"
     }
   ]
