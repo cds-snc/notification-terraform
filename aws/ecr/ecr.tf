@@ -72,6 +72,19 @@ resource "aws_ecr_repository" "document-download" {
   }
 }
 
+resource "aws_ecr_repository" "documentation" {
+  # The :latest tag is used in Staging
+  #tfsec:ignore:AWS078
+
+  name                 = "notify/documentation"
+  image_tag_mutability = "IMMUTABLE"
+  force_delete         = var.force_delete_ecr
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
 
 resource "aws_ecr_repository" "google-cidr" {
   # The :latest tag is used in Staging
