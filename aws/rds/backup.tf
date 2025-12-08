@@ -7,8 +7,6 @@
 
 # KMS key policy for backup vault
 data "aws_iam_policy_document" "backup_vault_kms" {
-  count = var.env == "dev" ? 1 : 0
-
   # Allow account root full access
   statement {
     sid    = "Enable IAM User Permissions"
@@ -55,12 +53,10 @@ data "aws_iam_policy_document" "backup_vault_kms" {
 
 # KMS key for encrypting backups
 resource "aws_kms_key" "backup_vault" {
-  count = var.env == "dev" ? 1 : 0
-
   description             = "KMS key for RDS backup vault encryption - ${var.env}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  policy                  = data.aws_iam_policy_document.backup_vault_kms[0].json
+  policy                  = data.aws_iam_policy_document.backup_vault_kms.json
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -69,18 +65,14 @@ resource "aws_kms_key" "backup_vault" {
 }
 
 resource "aws_kms_alias" "backup_vault" {
-  count = var.env == "dev" ? 1 : 0
-
   name          = "alias/backup-vault-${var.env}"
-  target_key_id = aws_kms_key.backup_vault[0].key_id
+  target_key_id = aws_kms_key.backup_vault.key_id
 }
 
 # Backup vault with encryption
 resource "aws_backup_vault" "rds" {
-  count = var.env == "dev" ? 1 : 0
-
   name        = "notification-canada-ca-${var.env}-rds-vault"
-  kms_key_arn = aws_kms_key.backup_vault[0].arn
+  kms_key_arn = aws_kms_key.backup_vault.arn
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -90,10 +82,11 @@ resource "aws_backup_vault" "rds" {
 
 # Vault lock configuration for immutability
 # This prevents deletion of backups for the specified retention period
+# Only enabled in production for ransomware protection
 resource "aws_backup_vault_lock_configuration" "rds" {
-  count = var.env == "dev" ? 1 : 0
+  count = var.env == "production" ? 1 : 0
 
-  backup_vault_name   = aws_backup_vault.rds[0].name
+  backup_vault_name   = aws_backup_vault.rds.name
   min_retention_days  = 7
   max_retention_days  = 8
   changeable_for_days = 365
@@ -101,8 +94,6 @@ resource "aws_backup_vault_lock_configuration" "rds" {
 
 # IAM role for AWS Backup
 resource "aws_iam_role" "backup" {
-  count = var.env == "dev" ? 1 : 0
-
   name               = "AWSBackupRole-${var.env}"
   assume_role_policy = data.aws_iam_policy_document.backup_assume_role.json
 
@@ -126,28 +117,22 @@ data "aws_iam_policy_document" "backup_assume_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "backup" {
-  count = var.env == "dev" ? 1 : 0
-
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
-  role       = aws_iam_role.backup[0].name
+  role       = aws_iam_role.backup.name
 }
 
 resource "aws_iam_role_policy_attachment" "backup_restore" {
-  count = var.env == "dev" ? 1 : 0
-
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
-  role       = aws_iam_role.backup[0].name
+  role       = aws_iam_role.backup.name
 }
 
 # Backup plan
 resource "aws_backup_plan" "rds" {
-  count = var.env == "dev" ? 1 : 0
-
   name = "notification-canada-ca-${var.env}-rds-plan"
 
   rule {
     rule_name         = "daily-backup"
-    target_vault_name = aws_backup_vault.rds[0].name
+    target_vault_name = aws_backup_vault.rds.name
     schedule          = "cron(0 7 * * ? *)" # Daily at 7 AM UTC
     start_window      = 120                 # 2 hours
     completion_window = 240                 # 4 hours
@@ -170,11 +155,9 @@ resource "aws_backup_plan" "rds" {
 
 # Backup selection - target the RDS cluster
 resource "aws_backup_selection" "rds" {
-  count = var.env == "dev" ? 1 : 0
-
   name         = "notification-canada-ca-${var.env}-rds-selection"
-  plan_id      = aws_backup_plan.rds[0].id
-  iam_role_arn = aws_iam_role.backup[0].arn
+  plan_id      = aws_backup_plan.rds.id
+  iam_role_arn = aws_iam_role.backup.arn
 
   resources = [
     aws_rds_cluster.notification-canada-ca.arn
@@ -183,10 +166,8 @@ resource "aws_backup_selection" "rds" {
 
 # SNS topic for backup notifications
 resource "aws_sns_topic" "backup_notifications" {
-  count = var.env == "dev" ? 1 : 0
-
   name              = "notification-canada-ca-${var.env}-backup-notifications"
-  kms_master_key_id = aws_kms_key.backup_vault[0].id
+  kms_master_key_id = aws_kms_key.backup_vault.id
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -195,24 +176,18 @@ resource "aws_sns_topic" "backup_notifications" {
 }
 
 resource "aws_backup_vault_notifications" "rds" {
-  count = var.env == "dev" ? 1 : 0
-
-  backup_vault_name   = aws_backup_vault.rds[0].name
-  sns_topic_arn       = aws_sns_topic.backup_notifications[0].arn
+  backup_vault_name   = aws_backup_vault.rds.name
+  sns_topic_arn       = aws_sns_topic.backup_notifications.arn
   backup_vault_events = ["BACKUP_JOB_COMPLETED", "BACKUP_JOB_FAILED", "RESTORE_JOB_COMPLETED", "RESTORE_JOB_FAILED"]
 }
 
 # IAM policy for SNS notifications
 resource "aws_sns_topic_policy" "backup_notifications" {
-  count = var.env == "dev" ? 1 : 0
-
-  arn    = aws_sns_topic.backup_notifications[0].arn
-  policy = data.aws_iam_policy_document.backup_notifications[0].json
+  arn    = aws_sns_topic.backup_notifications.arn
+  policy = data.aws_iam_policy_document.backup_notifications.json
 }
 
 data "aws_iam_policy_document" "backup_notifications" {
-  count = var.env == "dev" ? 1 : 0
-
   statement {
     effect = "Allow"
 
@@ -226,7 +201,7 @@ data "aws_iam_policy_document" "backup_notifications" {
     ]
 
     resources = [
-      aws_sns_topic.backup_notifications[0].arn
+      aws_sns_topic.backup_notifications.arn
     ]
   }
 }
