@@ -137,7 +137,7 @@ resource "aws_iam_policy" "quicksight-datalake-s3" {
         ]
         Effect = "Allow"
         Resource = [
-          "arn:aws:kms:${var.region}${var.datalake_account_id}:key/*",
+          "arn:aws:kms:${var.region}:${var.datalake_account_id}:key/*",
           "arn:aws:kms:${var.region}:${var.account_id}:key/*"
         ]
       },
