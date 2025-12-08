@@ -111,3 +111,45 @@ resource "aws_iam_role_policy_attachment" "datalake-reader-s3-attach" {
   role       = aws_iam_role.datalake-reader.name
   policy_arn = aws_iam_policy.datalake-reader-s3.arn
 }
+
+resource "aws_iam_policy" "quicksight-datalake-s3" {
+  name        = "AWSQuickSightDatalakeS3Policy"
+  description = "Allow access to S3 in the datalake account"
+  policy = jsonencode({
+
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:s3:::${var.datalake_bucket_name}",
+          "arn:aws:s3:::${var.datalake_bucket_name}/*"
+        ]
+      },
+      {
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:kms:${var.region}${var.datalake_account_id}:key/*",
+          "arn:aws:kms:${var.region}:${var.account_id}:key/*"
+        ]
+      },
+    ]
+  })
+}
+
+data "aws_iam_role" "quicksight_service_role" {
+  name = "aws-quicksight-service-role-v0"
+}
+
+resource "aws_iam_role_policy_attachment" "quicksight-datalake-s3-attach" {
+  role       = data.aws_iam_role.quicksight_service_role.name
+  policy_arn = aws_iam_policy.quicksight-datalake-s3.arn
+}
