@@ -1,4 +1,6 @@
 module "s3_scan_objects" {
+  count = 1
+
   source = "github.com/cds-snc/terraform-modules//S3_scan_object?ref=v10.9.1"
 
   s3_upload_bucket_names  = ["notification-canada-ca-${var.env}-document-download-scan-files"]
@@ -23,4 +25,49 @@ module "guardduty_malware_s3" {
   alarm_sns_topic_ok_arn                   = aws_sns_topic.notification-canada-ca-alert-ok.arn
 
   billing_tag_value = var.billing_tag_value
+}
+
+moved {
+  from = module.s3_scan_objects.aws_iam_policy.scan_files[0]
+  to   = module.s3_scan_objects[0].aws_iam_policy.scan_files[0]
+}
+
+moved {
+  from = module.s3_scan_objects.aws_iam_role.scan_files[0]
+  to   = module.s3_scan_objects[0].aws_iam_role.scan_files[0]
+}
+
+moved {
+  from = module.s3_scan_objects.aws_iam_role_policy_attachment.scan_files[0]
+  to   = module.s3_scan_objects[0].aws_iam_role_policy_attachment.scan_files[0]
+}
+
+moved {
+  from = module.s3_scan_objects.aws_kms_alias.s3_scan_object_queue
+  to   = module.s3_scan_objects[0].aws_kms_alias.s3_scan_object_queue
+}
+
+moved {
+  from = module.s3_scan_objects.aws_kms_key.s3_scan_object_queue
+  to   = module.s3_scan_objects[0].aws_kms_key.s3_scan_object_queue
+}
+
+moved {
+  from = module.s3_scan_objects.aws_s3_bucket_notification.s3_scan_object[0]
+  to   = module.s3_scan_objects[0].aws_s3_bucket_notification.s3_scan_object[0]
+}
+
+moved {
+  from = module.s3_scan_objects.aws_s3_bucket_policy.upload_bucket[0]
+  to   = module.s3_scan_objects[0].aws_s3_bucket_policy.upload_bucket[0]
+}
+
+moved {
+  from = module.s3_scan_objects.aws_sqs_queue.s3_scan_object
+  to   = module.s3_scan_objects[0].aws_sqs_queue.s3_scan_object
+}
+
+moved {
+  from = module.s3_scan_objects.aws_sqs_queue_policy.s3_scan_object
+  to   = module.s3_scan_objects[0].aws_sqs_queue_policy.s3_scan_object
 }
