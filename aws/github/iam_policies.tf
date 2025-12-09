@@ -193,6 +193,16 @@ data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
       "arn:aws:lambda:${var.region}:${var.account_id}:function:*"
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:ExportClientVpnClientConfiguration"
+    ]
+    resources = [
+      "arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "notification_api_build_push" {
