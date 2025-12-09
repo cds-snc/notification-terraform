@@ -1,5 +1,5 @@
 module "s3_scan_objects" {
-  count = 1
+  count = var.env == "staging" ? 0 : 1
 
   source = "github.com/cds-snc/terraform-modules//S3_scan_object?ref=v10.9.1"
 
@@ -16,7 +16,7 @@ module "guardduty_malware_s3" {
   source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=v10.9.1"
 
   s3_bucket_name = "notification-canada-ca-${var.env}-document-download-scan-files"
-  tagging_status = "DISABLED"
+  tagging_status = "ENABLED"
 
   alarms_enabled                           = true
   alarm_completed_scan_count_threshold     = 20000
