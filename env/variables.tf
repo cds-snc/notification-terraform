@@ -1126,3 +1126,8 @@ variable "api_gateway_timeout" {
 variable "datalake_bucket_name" {
   type = string
 }
+
+variable "datalake_account_id" {
+  type      = string
+  sensitive = true
+}
