@@ -5,14 +5,6 @@ resource "github_actions_secret" "manifests_account_id" {
   destroy_on_drift = false
 }
 
-resource "github_actions_secret" "document_download_account_id" {
-  repository       = data.github_repository.notification_document_download.name
-  secret_name      = "${upper(var.env)}_AWS_ACCOUNT_ID"
-  plaintext_value  = var.account_id
-  destroy_on_drift = false
-}
-
-
 resource "github_actions_secret" "manifests_openai_api_key" {
   count            = var.env == "production" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
