@@ -153,3 +153,86 @@ resource "aws_iam_role_policy_attachment" "quicksight-datalake-s3-attach" {
   role       = data.aws_iam_role.quicksight_service_role.name
   policy_arn = aws_iam_policy.quicksight-datalake-s3.arn
 }
+
+# IAM Role and Policy for Step Functions to update Athena table locations
+resource "aws_iam_role" "step_functions_update_tables_location_role" {
+  name = "step-functions-update-tables-location-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Effect = "Allow",
+      Principal = {
+        Service = "states.amazonaws.com"
+      }
+    }]
+  })
+}
+
+resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
+  name        = "StepFunctionsUpdateTablesLocationPolicy"
+  description = "Policy to allow Step Functions to run Athena queries to update table locations"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "athena:StartQueryExecution",
+          "athena:GetQueryExecution",
+          "athena:GetQueryResults"
+        ],
+        Resource = "arn:aws:athena:${var.region}:${var.account_id}:workgroup/*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
+        Resource = [
+          "arn:aws:s3:::notification-canada-ca-${var.env}-athena",
+          "arn:aws:s3:::notification-canada-ca-${var.env}-athena/*"
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "glue:GetDatabase",
+          "glue:GetTable",
+          "glue:UpdateTable"
+        ],
+        Resource = [
+          "arn:aws:glue:${var.region}:${var.account_id}:database/notification_quicksight",
+          "arn:aws:glue:${var.region}:${var.account_id}:table/notification_quicksight/*"
+        ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/stepfunctions/*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords"
+        ],
+        Resource = "arn:aws:states:${var.region}:${var.account_id}:stateMachine:*"
+      }
+
+
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_sf_policy" {
+  role       = aws_iam_role.step_functions_update_tables_location_role.name
+  policy_arn = aws_iam_policy.step_functions_update_tables_location_policy.arn
+}
