@@ -53,7 +53,25 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
           "arn:aws:glue:${var.region}:${var.account_id}:database/notification_quicksight",
           "arn:aws:glue:${var.region}:${var.account_id}:table/notification_quicksight/*"
         ]
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/stepfunctions/${aws_sfn_state_machine.athena_update_table_location.name}:*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords"
+        ],
+        Resource = "arn:aws:states:${var.region}:${var.account_id}:stateMachine:${aws_sfn_state_machine.athena_update_table_location.name}"
       }
+
+
     ]
   })
 }
