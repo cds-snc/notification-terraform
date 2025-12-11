@@ -490,7 +490,7 @@ resource "newrelic_nrql_alert_condition" "admin_monthly_ccu" {
 
   critical {
     operator              = "above_or_equals"
-    threshold             = 100
+    threshold             = 90 # 100 is the hard limit, set critical a bit lower at 90% capacity to allow for time to react
     threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
@@ -523,7 +523,7 @@ resource "newrelic_nrql_alert_condition" "admin_monthy_data_usage" {
 
   critical {
     operator              = "above_or_equals"
-    threshold             = 4000
+    threshold             = 3600 # 4000 is the hard limit, set critical a bit lower at 90% capacity to allow for time to react
     threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
