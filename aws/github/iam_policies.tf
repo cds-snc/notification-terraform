@@ -191,7 +191,8 @@ data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
       "lambda:CreateFunction",
       "lambda:DeleteFunction",
       "lambda:ListFunctions",
-      "lambda:PublishVersion"
+      "lambda:PublishVersion",
+      "lambda:UpdateAlias"
     ]
     resources = [
       "arn:aws:lambda:${var.region}:${var.account_id}:function:*"
