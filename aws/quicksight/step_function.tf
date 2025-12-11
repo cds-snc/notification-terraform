@@ -28,7 +28,7 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
           "athena:GetQueryExecution",
           "athena:GetQueryResults"
         ],
-        Resource = "*"
+        Resource = "arn:aws:athena:${var.region}:${var.account_id}:workgroup/*"
       },
       {
         Effect = "Allow",
@@ -50,7 +50,6 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
           "glue:UpdateTable"
         ],
         Resource = [
-          "arn:aws:glue:${var.region}:${var.account_id}:catalog",
           "arn:aws:glue:${var.region}:${var.account_id}:database/notification_quicksight",
           "arn:aws:glue:${var.region}:${var.account_id}:table/notification_quicksight/*"
         ]
