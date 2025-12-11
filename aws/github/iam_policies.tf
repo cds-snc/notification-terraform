@@ -187,10 +187,28 @@ data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
       "lambda:UpdateFunctionCode",
       "lambda:UpdateFunctionConfiguration",
       "lambda:GetFunction",
-      "lambda:GetFunctionConfiguration"
+      "lambda:GetFunctionConfiguration",
+      "lambda:CreateFunction",
+      "lambda:DeleteFunction",
+      "lambda:ListFunctions",
+      "lambda:PublishVersion"
     ]
     resources = [
       "arn:aws:lambda:${var.region}:${var.account_id}:function:*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter",
+      "ssm:GetParameters",
+      "ssm:PutParameter",
+      "ssm:DeleteParameter",
+      "ssm:DescribeParameters"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/*"
     ]
   }
 
