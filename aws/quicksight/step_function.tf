@@ -92,6 +92,12 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
     enabled = true
   }
 
+  logging_configuration {
+    level                  = "ALL" # OFF | ERROR | ALL
+    include_execution_data = true
+    log_destination        = aws_cloudwatch_log_group.step_functions_logs.arn
+  }
+
   definition = jsonencode({
     Comment = "Update multiple Athena tables daily with current UTC date",
     StartAt = "GenerateDatePath",
