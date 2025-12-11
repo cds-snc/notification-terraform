@@ -216,7 +216,7 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        Resource = "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/stepfunctions/*"
+        Resource = "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/stepfunctions/AthenaUpdateTableLocation:*"
       },
       {
         Effect = "Allow",
