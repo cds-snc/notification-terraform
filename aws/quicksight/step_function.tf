@@ -69,6 +69,11 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
   name     = "AthenaUpdateTableLocation"
   role_arn = aws_iam_role.step_functions_update_tables_location_role.arn
 
+  # Enable X-Ray tracing
+  tracing_configuration {
+    enabled = true
+  }
+
   definition = jsonencode({
     Comment = "Update multiple Athena tables daily with current UTC date",
     StartAt = "GenerateDatePath",
