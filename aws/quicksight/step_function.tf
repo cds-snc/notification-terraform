@@ -11,7 +11,7 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
   logging_configuration {
     level                  = "ALL" # OFF | ERROR | ALL
     include_execution_data = true
-    log_destination        = ${aws_cloudwatch_log_group.step_functions_logs[0].arn}:*
+    log_destination        = "${aws_cloudwatch_log_group.step_functions_logs[0].arn}:*"
   }
 
   definition = jsonencode({
