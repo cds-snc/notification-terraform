@@ -215,7 +215,8 @@ resource "aws_glue_catalog_table" "notifications" {
 
   lifecycle {
     ignore_changes = [
-      storage_descriptor[0].location
+      storage_descriptor[0].location,
+      parameters
     ]
   }
 }
@@ -412,7 +413,8 @@ resource "aws_glue_catalog_table" "notification_history" {
 
   lifecycle {
     ignore_changes = [
-      storage_descriptor[0].location
+      storage_descriptor[0].location,
+      parameters
     ]
   }
 }
@@ -604,7 +606,8 @@ resource "aws_glue_catalog_table" "services" {
 
   lifecycle {
     ignore_changes = [
-      storage_descriptor[0].location
+      storage_descriptor[0].location,
+      parameters
     ]
   }
 }
@@ -716,7 +719,8 @@ resource "aws_glue_catalog_table" "organisation" {
 
   lifecycle {
     ignore_changes = [
-      storage_descriptor[0].location
+      storage_descriptor[0].location,
+      parameters
     ]
   }
 }
@@ -828,7 +832,8 @@ resource "aws_glue_catalog_table" "templates" {
 
   lifecycle {
     ignore_changes = [
-      storage_descriptor[0].location
+      storage_descriptor[0].location,
+      parameters
     ]
   }
 }
@@ -920,7 +925,23 @@ resource "aws_glue_catalog_table" "template_categories" {
 
   lifecycle {
     ignore_changes = [
-      storage_descriptor[0].location
+      storage_descriptor[0].location,
+      parameters
     ]
+  }
+}
+
+resource "null_resource" "athena_vw_notification" {
+  triggers = {
+    view_sql_hash = sha1(file("${path.module}/sql/quicksight_vw_notification.sql.tmpl"))
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+aws athena start-query-execution \
+  --query-string "$(cat ${path.module}/sql/quicksight_vw_notification.sql.tmpl)" \
+  --query-execution-context Database=${aws_athena_database.notification_quicksight.name} \
+  --work-group ${aws_athena_workgroup.notification_quicksight.name}
+EOF
   }
 }

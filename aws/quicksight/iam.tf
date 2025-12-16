@@ -205,7 +205,8 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
         Action = [
           "s3:PutObject",
           "s3:GetObject",
-          "s3:ListBucket"
+          "s3:ListBucket",
+          "s3:GetBucketLocation"
         ],
         Resource = [
           "arn:aws:s3:::notification-canada-ca-${var.env}-athena",
@@ -221,7 +222,8 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
         ],
         Resource = [
           "arn:aws:glue:${var.region}:${var.account_id}:database/notification_quicksight",
-          "arn:aws:glue:${var.region}:${var.account_id}:table/notification_quicksight/*"
+          "arn:aws:glue:${var.region}:${var.account_id}:table/notification_quicksight/*",
+          "arn:aws:glue:${var.region}:${var.account_id}:catalog"
         ]
       },
       {
@@ -236,8 +238,7 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
           "logs:PutLogEvents",
           "logs:PutResourcePolicy",
           "logs:DescribeResourcePolicies",
-          "logs:DescribeLogGroups",
-          "logs:DescribeLogDelivery"
+          "logs:DescribeLogGroups"
         ],
         Resource = "*"
       },
