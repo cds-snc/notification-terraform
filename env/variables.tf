@@ -1003,6 +1003,18 @@ variable "manifest_pr_bot_github_token" {
   default   = "stagingonly"
 }
 
+variable "manifest_falco_credentials" {
+  type      = string
+  sensitive = true
+  default   = "devonly"
+}
+
+variable "manifest_falco_slack_webhook_url" {
+  type      = string
+  sensitive = true
+  default   = "devonly"
+}
+
 variable "github_app_id" {
   type      = string
   sensitive = true
