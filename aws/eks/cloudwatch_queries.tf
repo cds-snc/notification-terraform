@@ -171,8 +171,9 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 | filter kubernetes.container_name like /^${local.celery_name}/
 | parse "Warm shutdown" as @warm
 | parse "Worker exited prematurely" as @cold
-| filter ispresent(@warm) or ispresent(@cold)
-| stats count(@warm) as warm, count(@cold) as cold by bin(15m)
+| parse "worker shutdown:" as @shutdown
+| filter ispresent(@warm) or ispresent(@cold) or ispresent(@shutdown)
+| stats count(@warm) as warm, count(@cold) as cold, count(@shutdown) as shutdown by bin(15m)
 QUERY
 }
 

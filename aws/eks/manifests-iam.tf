@@ -469,3 +469,117 @@ resource "aws_iam_role_policy_attachment" "signoz_worker" {
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.signoz[0].name
 }
+
+#
+# FALCO SIDEKICK UI
+#
+
+data "aws_iam_policy_document" "assume_role_policy_falco_sidekick_ui" {
+  count = var.env == "dev" ? 1 : 0
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:falco:falco-falcosidekick-ui"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "falco_sidekick_ui" {
+  count              = var.env == "dev" ? 1 : 0
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick_ui[0].json
+  name               = "falco-sidekick-ui-eks-role"
+}
+
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick_ui" {
+  count      = var.env == "dev" ? 1 : 0
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.falco_sidekick_ui[0].name
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick_ui" {
+  count      = var.env == "dev" ? 1 : 0
+  policy_arn = aws_iam_policy.parameters_csi.arn
+  role       = aws_iam_role.falco_sidekick_ui[0].name
+}
+
+resource "aws_iam_role_policy_attachment" "falco_sidekick_ui_worker" {
+  count      = var.env == "dev" ? 1 : 0
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.falco_sidekick_ui[0].name
+}
+
+#
+# FALCO SIDEKICK
+#
+
+data "aws_iam_policy_document" "assume_role_policy_falco_sidekick" {
+  count = var.env == "dev" ? 1 : 0
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:falco:falco-falcosidekick"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "falco_sidekick" {
+  count              = var.env == "dev" ? 1 : 0
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick[0].json
+  name               = "falco-sidekick-eks-role"
+}
+
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick" {
+  count      = var.env == "dev" ? 1 : 0
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.falco_sidekick[0].name
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick" {
+  count      = var.env == "dev" ? 1 : 0
+  policy_arn = aws_iam_policy.parameters_csi.arn
+  role       = aws_iam_role.falco_sidekick[0].name
+}
+
+resource "aws_iam_role_policy_attachment" "falco_sidekick_worker" {
+  count      = var.env == "dev" ? 1 : 0
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
+  role       = aws_iam_role.falco_sidekick[0].name
+}
