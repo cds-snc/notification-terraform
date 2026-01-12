@@ -7,6 +7,7 @@ on:
       - "Merge to main (Staging)"
       - "Build and Push Github ARC Image (Production)"
       - "Build and Push Github ARC Image (Staging)"
+      - "DKIM Audit"
     types:
       - completed
 
