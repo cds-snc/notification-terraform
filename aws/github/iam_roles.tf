@@ -124,6 +124,7 @@ module "github_workflow_roles_notification_document_download" {
 module "github_workflow_roles_dkim_audit" {
   source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
 
   roles = [
     {
