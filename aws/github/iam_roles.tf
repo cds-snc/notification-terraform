@@ -7,6 +7,7 @@ locals {
   notification_api_build_push               = "notification-api-build-push"
   notification_admin_build_push             = "notification-admin-build-push"
   notification_document_download_build_push = "notification-document-download-build-push"
+  dkim_audit                                = "dkim-audit"
 }
 
 # 
@@ -116,6 +117,19 @@ module "github_workflow_roles_notification_document_download" {
       name      = "${local.notification_document_download_build_push}-main-branch"
       repo_name = "notification-document-download-api"
       claim     = "ref:refs/heads/main"
+    }
+  ]
+}
+
+module "github_workflow_roles_dkim_audit" {
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+
+  roles = [
+    {
+      name      = local.dkim_audit
+      repo_name = "notification-terraform"
+      claim     = "ref:refs/heads/dkim-audit"
     }
   ]
 }
@@ -402,5 +416,16 @@ resource "aws_iam_role_policy_attachment" "notification_document_download_build_
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [
     module.github_workflow_roles_notification_document_download
+  ]
+}
+
+#
+# DKIM Audit role
+#
+resource "aws_iam_role_policy_attachment" "dkim_audit" {
+  role       = local.dkim_audit
+  policy_arn = aws_iam_policy.dkim_audit.arn
+  depends_on = [
+    module.github_workflow_roles_dkim_audit
   ]
 }
