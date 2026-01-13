@@ -1006,13 +1006,13 @@ variable "manifest_pr_bot_github_token" {
 variable "manifest_falco_credentials" {
   type      = string
   sensitive = true
-  default   = "devonly"
+  default   = "changeme"
 }
 
 variable "manifest_falco_slack_webhook_url" {
   type      = string
   sensitive = true
-  default   = "devonly"
+  default   = "changeme"
 }
 
 variable "github_app_id" {
