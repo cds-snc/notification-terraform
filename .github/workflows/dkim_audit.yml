@@ -3,6 +3,7 @@ name: DKIM Audit
 on:
   schedule:
     - cron: '0 */3 * * *'
+  workflow_dispatch:
 
 permissions:
   id-token: write
