@@ -1,6 +1,8 @@
 name: DKIM Audit
 
 on:
+  schedule:
+    - cron: '0 */3 * * *'
   push:
     branches:
       - dkim-audit
@@ -44,3 +46,12 @@ jobs:
           else
             echo "❌ DKIM issues detected - check workflow logs for details" >> $GITHUB_STEP_SUMMARY
           fi
+
+  on-failure:
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Notify Slack
+        run: |
+          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform workflow failed: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }}>"}}]}'
+          curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
