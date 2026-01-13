@@ -1,8 +1,9 @@
-name: DKIM Audit
+name: DKIM Audit (Dev)
 
 on:
-  schedule:
-    - cron: '0 */3 * * *'
+  push:
+    branches:
+      - dkim-audit
 
 permissions:
   id-token: write
@@ -22,13 +23,13 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.PRODUCTION_ACCOUNT_ID }}:role/dkim-audit
+          role-to-assume: arn:aws:iam::${{ secrets.DEV_ACCOUNT_ID }}:role/dkim-audit
           role-session-name: dkimAudit
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Run DKIM audit
         id: audit
-        run: bash scripts/dkim_audit/check_dkim.sh production
+        run: bash scripts/dkim_audit/check_dkim.sh dev
 
       - name: Report results
         if: always()
@@ -80,7 +81,7 @@ jobs:
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: (":red_circle: *DKIM audit failed*\n\n" + $summary + "\n\n<" + $link + "|View workflow logs>")
+                    text: (":red_circle: *DKIM audit failed (DEV)*\n\n" + $summary + "\n\n<" + $link + "|View workflow logs>")
                   }
                 }
               ]
