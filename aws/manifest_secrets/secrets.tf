@@ -507,28 +507,28 @@ resource "aws_secretsmanager_secret_version" "manifest_enable_new_relic_version"
   secret_string = var.enable_new_relic
 }
 
-### Falco for Dev
+### Falco
 
 resource "aws_secretsmanager_secret" "manifest_falco_credentials" {
-  count                   = var.env == "dev" ? 1 : 0
+  count                   = var.env != "production" ? 1 : 0
   name                    = "MANIFEST_FALCO_CREDENTIALS"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_falco_credentials_version" {
-  count         = var.env == "dev" ? 1 : 0
+  count         = var.env != "production" ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_falco_credentials[0].id
   secret_string = var.manifest_falco_credentials
 }
 
 resource "aws_secretsmanager_secret" "manifest_falco_slack_webhook_url" {
-  count                   = var.env == "dev" ? 1 : 0
+  count                   = var.env != "production" ? 1 : 0
   name                    = "MANIFEST_FALCO_SLACK_WEBHOOK_URL"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_falco_slack_webhook_url_version" {
-  count         = var.env == "dev" ? 1 : 0
+  count         = var.env != "production" ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_falco_slack_webhook_url[0].id
   secret_string = var.manifest_falco_slack_webhook_url
 }
