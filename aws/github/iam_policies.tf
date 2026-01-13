@@ -338,6 +338,9 @@ data "aws_iam_policy_document" "dkim_audit" {
       "ses:List*",
       "ses:Describe*"
     ]
-    resources = ["*"]
+    resources = [
+      "arn:aws:ses:${var.region}:${var.account_id}:identity/*"
+    ]
   }
 }
+
