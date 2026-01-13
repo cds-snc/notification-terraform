@@ -28,14 +28,32 @@ jobs:
 
       - name: Run DKIM audit
         id: audit
-        run: bash scripts/dkim_audit/check_dkim.sh production
+        run: |
+          # Capture output to both stdout and a file
+          bash scripts/dkim_audit/check_dkim.sh production 2>&1 | tee /tmp/audit_output.txt
+          # Preserve exit code
+          exit ${PIPESTATUS[0]}
+
+      - name: Save audit output
+        if: always()
+        run: |
+          # Save the raw output for Slack notification
+          cp /tmp/audit_output.txt audit_output.txt || echo "No audit output" > audit_output.txt
+
+      - name: Upload audit output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-output
+          path: audit_output.txt
+          retention-days: 7
 
       - name: Report results
         if: always()
         run: |
           echo "## DKIM Audit Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** ${{ inputs.environment || matrix.env }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** production" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ ${{ steps.audit.outcome }} == 'success' ]; then
@@ -49,17 +67,10 @@ jobs:
     needs: dkim-audit
     if: always() && needs.dkim-audit.result == 'failure'
     steps:
-      - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
-
-      - name: Download step summary
-        run: |
-          # Get the summary content if available
-          if [ -f "$GITHUB_STEP_SUMMARY" ]; then
-            cp "$GITHUB_STEP_SUMMARY" /tmp/summary.txt
-          else
-            echo "No summary available" > /tmp/summary.txt
-          fi
+      - name: Download audit output
+        uses: actions/download-artifact@v4
+        with:
+          name: audit-output
 
       - name: Notify Slack
         run: |
@@ -67,20 +78,20 @@ jobs:
           
           RUN_LINK='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           
-          # Read summary and format for Slack
-          SUMMARY=$(cat /tmp/summary.txt 2>/dev/null || echo "Check logs for details")
+          # Read audit output
+          AUDIT_OUTPUT=$(cat audit_output.txt 2>/dev/null || echo "Check logs for details")
           
           # Build the Slack message using jq for proper JSON escaping
           MESSAGE=$(jq -nc \
             --arg link "$RUN_LINK" \
-            --arg summary "$SUMMARY" \
+            --arg output "$AUDIT_OUTPUT" \
             '{
               blocks: [
                 {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: (":red_circle: *DKIM audit failed*\n\n" + $summary + "\n\n<" + $link + "|View workflow logs>")
+                    text: (":red_circle: *DKIM audit failed*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>")
                   }
                 }
               ]
@@ -89,4 +100,4 @@ jobs:
           curl -s -X POST \
             -H 'Content-type: application/json' \
             --data "$MESSAGE" \
-            ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
+            ${{ secrets.NOTIFICATION_OPS_SLACK_WEBHOOK_CRITICAL_TOPIC }}
