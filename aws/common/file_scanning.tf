@@ -14,15 +14,3 @@ module "guardduty_malware_s3" {
 
   billing_tag_value = var.billing_tag_value
 }
-
-/*
- * Prevent the destruction of S3 bucket notifications when the `S3_scan_object` module
- * is removed.  This ensures that the GuardDuty Malware S3 EventBridge notifications
- * continue to be sent.
- */
-removed {
-  from = module.s3_scan_objects[0].aws_s3_bucket_notification.s3_scan_object[0]
-  lifecycle {
-    destroy = false
-  }
-}
