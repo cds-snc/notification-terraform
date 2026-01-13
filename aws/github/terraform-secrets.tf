@@ -14,9 +14,9 @@ resource "github_actions_secret" "notify_dev_slack_webhook" {
 }
 
 resource "github_actions_secret" "notification_ops_slack_webhook_critical_topic" {
-  count            = var.env == "production" ? 1 : 0
+  count            = var.env == "production" || var.env == "staging" ? 1 : 0
   repository       = data.github_repository.notification_terraform.name
-  secret_name      = "NOTIFICATION_OPS_SLACK_WEBHOOK_CRITICAL_TOPIC"
+  secret_name      = "NOTIFICATION_OPS_SLACK_WEBHOOK_CRITICAL_TOPIC_${upper(var.env)}"
   plaintext_value  = var.cloudwatch_slack_webhook_critical_topic
   destroy_on_drift = false
 }

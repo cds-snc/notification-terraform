@@ -1,4 +1,4 @@
-name: DKIM Audit
+name: DKIM Audit (Staging)
 
 on:
   schedule:
@@ -22,7 +22,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.PRODUCTION_ACCOUNT_ID }}:role/dkim-audit
+          role-to-assume: arn:aws:iam::${{ secrets.STAGING_ACCOUNT_ID }}:role/dkim-audit
           role-session-name: dkimAudit
           aws-region: ${{ env.AWS_REGION }}
 
@@ -30,7 +30,7 @@ jobs:
         id: audit
         run: |
           # Capture output to both stdout and a file
-          bash scripts/dkim_audit/check_dkim.sh production 2>&1 | tee /tmp/audit_output.txt
+          bash scripts/dkim_audit/check_dkim.sh staging 2>&1 | tee /tmp/audit_output.txt
           # Preserve exit code
           exit ${PIPESTATUS[0]}
 
@@ -53,7 +53,7 @@ jobs:
         run: |
           echo "## DKIM Audit Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** production" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** staging" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ ${{ steps.audit.outcome }} == 'success' ]; then
@@ -91,7 +91,7 @@ jobs:
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: (":red_circle: *DKIM audit failed*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>")
+                    text: (":red_circle: *DKIM audit failed (STAGING)*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>")
                   }
                 }
               ]
@@ -100,4 +100,4 @@ jobs:
           curl -s -X POST \
             -H 'Content-type: application/json' \
             --data "$MESSAGE" \
-            ${{ secrets.NOTIFICATION_OPS_SLACK_WEBHOOK_CRITICAL_TOPIC_PRODUCTION }}
+            ${{ secrets.NOTIFICATION_OPS_SLACK_WEBHOOK_CRITICAL_TOPIC_STAGING }}
