@@ -54,5 +54,6 @@ jobs:
     steps:
       - name: Notify Slack
         run: |
-          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Terraform workflow failed: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }}>"}}]}'
+          REPORT=$(cat $GITHUB_STEP_SUMMARY | sed 's/"/\\"/g')
+          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: DKIM audit failed: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>"}},{"type":"section","text":{"type":"mrkdwn","text":"'"$REPORT"'"}}]}'
           curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
