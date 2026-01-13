@@ -130,7 +130,7 @@ module "github_workflow_roles_dkim_audit" {
     {
       name      = local.dkim_audit
       repo_name = "notification-terraform"
-      claim     = "ref:refs/heads/dkim-audit"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
