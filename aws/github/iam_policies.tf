@@ -334,9 +334,9 @@ data "aws_iam_policy_document" "dkim_audit" {
   statement {
     effect = "Allow"
     actions = [
-      "ses:GetEmailIdentity",
-      "ses:ListEmailIdentities",
-      "ses:DescribeActiveReceiptRuleSet"
+      "ses:Get*",
+      "ses:List*",
+      "ses:Describe*"
     ]
     resources = ["*"]
   }
