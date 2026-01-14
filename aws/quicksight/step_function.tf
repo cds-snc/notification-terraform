@@ -20,7 +20,7 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
     States = {
       "GenerateDatePath" = {
         Type = "Pass",
-        Result = {
+        Parameters = {
           "current_date.$" : "States.Format('{}-{}-{}', States.ArrayGetItem(States.StringSplit($$.State.EnteredTime, '-,T'), 0), States.ArrayGetItem(States.StringSplit($$.State.EnteredTime, '-,T'), 1), States.ArrayGetItem(States.StringSplit($$.State.EnteredTime, '-,T'), 2))",
           tables = [
             { name = "notifications", database = "notification_quicksight" },
@@ -64,47 +64,50 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
   })
 }
 
+# Daily trigger for the Step Function and IAM Role for EventBridge
+resource "aws_cloudwatch_event_rule" "step_function_daily_trigger" {
+  count = var.env == "production" ? 1 : 0
 
-# # Daily trigger for the Step Function and IAM Role for EventBridge
-# resource "aws_cloudwatch_event_rule" "step_function_daily_trigger" {
-#   name                = "daily-athena-update-table-location"
-#   schedule_expression = "cron(10 5 * * ? *)" # daily at midnight UTC
-# }
+  name                = "daily-athena-update-table-location"
+  description         = "Daily trigger to update Athena table locations"
+  schedule_expression = "cron(10 5 * * ? *)" # daily at 05:10 UTC
+}
 
-# resource "aws_cloudwatch_event_target" "trigger_sf" {
-#   rule = aws_cloudwatch_event_rule.step_function_daily_trigger.name
-#   arn  = aws_sfn_state_machine.athena_update_table_location.arn
-# }
+resource "aws_iam_role" "eventbridge_role" {
+  count = var.env == "production" ? 1 : 0
 
-# resource "aws_iam_role" "eventbridge_role" {
-#   name = "eventbridge-invoke-sfn-role"
+  name = "eventbridge-invoke-sfn-role"
 
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [{
-#       Effect    = "Allow",
-#       Principal = { Service = "events.amazonaws.com" },
-#       Action    = "sts:AssumeRole"
-#     }]
-#   })
-# }
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect    = "Allow",
+      Principal = { Service = "events.amazonaws.com" },
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
 
-# resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
-#   name = "EventBridgeInvokeSFNPolicy"
-#   role = aws_iam_role.eventbridge_role.id
+resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
+  count = var.env == "production" ? 1 : 0
 
-#   policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [{
-#       Effect   = "Allow",
-#       Action   = "states:StartExecution",
-#       Resource = aws_sfn_state_machine.athena_update_table_location.arn
-#     }]
-#   })
-# }
+  name = "EventBridgeInvokeSFNPolicy"
+  role = aws_iam_role.eventbridge_role[0].id
 
-# resource "aws_cloudwatch_event_target" "target_with_role" {
-#   rule     = aws_cloudwatch_event_rule.step_function_daily_trigger.name
-#   arn      = aws_sfn_state_machine.athena_update_table_location.arn
-#   role_arn = aws_iam_role.eventbridge_role.arn
-# }
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect   = "Allow",
+      Action   = "states:StartExecution",
+      Resource = aws_sfn_state_machine.athena_update_table_location.arn
+    }]
+  })
+}
+
+resource "aws_cloudwatch_event_target" "target_with_role" {
+  count = var.env == "production" ? 1 : 0
+
+  rule     = aws_cloudwatch_event_rule.step_function_daily_trigger[0].name
+  arn      = aws_sfn_state_machine.athena_update_table_location.arn
+  role_arn = aws_iam_role.eventbridge_role[0].arn
+}
