@@ -303,6 +303,8 @@ resource "aws_quicksight_refresh_schedule" "notifications" {
 }
 
 resource "aws_quicksight_data_set" "notifications_athena" {
+  count = var.env == "staging" ? 1 : 0
+
   data_set_id = "notifications_athena"
   name        = "Notifications_Athena"
   import_mode = "SPICE"
@@ -497,6 +499,8 @@ resource "aws_quicksight_data_set" "notifications_athena" {
 }
 
 resource "aws_quicksight_refresh_schedule" "notifications_athena" {
+  count = var.env == "staging" ? 1 : 0
+  
   data_set_id = "notifications_athena"
   schedule_id = "schedule-notifications-athena"
   depends_on  = [aws_quicksight_data_set.notifications_athena]
