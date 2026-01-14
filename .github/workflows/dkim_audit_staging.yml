@@ -23,7 +23,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.STAGING_ACCOUNT_ID }}:role/dkim-audit-main
+          role-to-assume: arn:aws:iam::${{ secrets.STAGING_AWS_ACCOUNT_ID }}:role/dkim-audit-main
           role-session-name: dkimAudit
           aws-region: ${{ env.AWS_REGION }}
 
