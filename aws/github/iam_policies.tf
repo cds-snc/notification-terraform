@@ -336,7 +336,9 @@ data "aws_iam_policy_document" "dkim_audit" {
     actions = [
       "ses:Get*",
       "ses:List*",
-      "ses:Describe*"
+      "ses:Describe*",
+      "sesv2:Get*",
+      "sesv2:List*"
     ]
     resources = ["*"]
   }

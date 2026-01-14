@@ -1,8 +1,9 @@
-name: DKIM Audit (Staging)
+name: DKIM Audit (Dev)
 
 on:
-  schedule:
-    - cron: '0 */3 * * *'
+  push:
+    branches:
+      - dkim-fix
   workflow_dispatch:
 
 permissions:
@@ -23,7 +24,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.STAGING_ACCOUNT_ID }}:role/dkim-audit-main
+          role-to-assume: arn:aws:iam::${{ secrets.DEV_ACCOUNT_ID }}:role/dkim-audit-dkim-fix
           role-session-name: dkimAudit
           aws-region: ${{ env.AWS_REGION }}
 
@@ -31,7 +32,7 @@ jobs:
         id: audit
         run: |
           # Capture output to both stdout and a file
-          bash scripts/dkim_audit/check_dkim.sh staging 2>&1 | tee /tmp/audit_output.txt
+          bash scripts/dkim_audit/check_dkim.sh dev 2>&1 | tee /tmp/audit_output.txt
           # Preserve exit code
           exit ${PIPESTATUS[0]}
 
@@ -54,7 +55,7 @@ jobs:
         run: |
           echo "## DKIM Audit Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** staging" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** dev" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ ${{ steps.audit.outcome }} == 'success' ]; then
@@ -63,42 +64,42 @@ jobs:
             echo "❌ DKIM issues detected - check workflow logs for details" >> $GITHUB_STEP_SUMMARY
           fi
 
-  on-failure:
-    runs-on: ubuntu-latest
-    needs: dkim-audit
-    if: always() && needs.dkim-audit.result == 'failure'
-    steps:
-      - name: Download audit output
-        uses: actions/download-artifact@v4
-        with:
-          name: audit-output
+#   on-failure:
+#     runs-on: ubuntu-latest
+#     needs: dkim-audit
+#     if: always() && needs.dkim-audit.result == 'failure'
+#     steps:
+#       - name: Download audit output
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: audit-output
 
-      - name: Notify Slack
-        run: |
-          set -euo pipefail
+#       - name: Notify Slack
+#         run: |
+#           set -euo pipefail
           
-          RUN_LINK='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+#           RUN_LINK='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           
-          # Read audit output
-          AUDIT_OUTPUT=$(cat audit_output.txt 2>/dev/null || echo "Check logs for details")
+#           # Read audit output
+#           AUDIT_OUTPUT=$(cat audit_output.txt 2>/dev/null || echo "Check logs for details")
           
-          # Build the Slack message using jq for proper JSON escaping
-          MESSAGE=$(jq -nc \
-            --arg link "$RUN_LINK" \
-            --arg output "$AUDIT_OUTPUT" \
-            '{
-              blocks: [
-                {
-                  type: "section",
-                  text: {
-                    type: "mrkdwn",
-                    text: (":red_circle: *DKIM audit failed (STAGING)*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>")
-                  }
-                }
-              ]
-            }')
+#           # Build the Slack message using jq for proper JSON escaping
+#           MESSAGE=$(jq -nc \
+#             --arg link "$RUN_LINK" \
+#             --arg output "$AUDIT_OUTPUT" \
+#             '{
+#               blocks: [
+#                 {
+#                   type: "section",
+#                   text: {
+#                     type: "mrkdwn",
+#                     text: (":red_circle: *DKIM audit failed (DEV)*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>")
+#                   }
+#                 }
+#               ]
+#             }')
           
-          curl -s -X POST \
-            -H 'Content-type: application/json' \
-            --data "$MESSAGE" \
-            ${{ secrets.NOTIFICATION_OPS_SLACK_WEBHOOK_CRITICAL_TOPIC_STAGING }}
+#           curl -s -X POST \
+#             -H 'Content-type: application/json' \
+#             --data "$MESSAGE" \
+#             ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
