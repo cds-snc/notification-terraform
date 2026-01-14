@@ -128,9 +128,14 @@ module "github_workflow_roles_dkim_audit" {
 
   roles = [
     {
-      name      = local.dkim_audit
+      name      = "${local.dkim_audit}-main"
       repo_name = "notification-terraform"
       claim     = "ref:refs/heads/main"
+    },
+    {
+      name      = "${local.dkim_audit}-dkim-fix"
+      repo_name = "notification-terraform"
+      claim     = "ref:refs/heads/dkim-fix"
     }
   ]
 }
@@ -423,8 +428,16 @@ resource "aws_iam_role_policy_attachment" "notification_document_download_build_
 #
 # DKIM Audit role
 #
-resource "aws_iam_role_policy_attachment" "dkim_audit" {
-  role       = local.dkim_audit
+resource "aws_iam_role_policy_attachment" "dkim_audit_main" {
+  role       = "${local.dkim_audit}-main"
+  policy_arn = aws_iam_policy.dkim_audit.arn
+  depends_on = [
+    module.github_workflow_roles_dkim_audit
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "dkim_audit_dkim_fix" {
+  role       = "${local.dkim_audit}-dkim-fix"
   policy_arn = aws_iam_policy.dkim_audit.arn
   depends_on = [
     module.github_workflow_roles_dkim_audit
