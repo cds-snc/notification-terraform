@@ -61,3 +61,28 @@ resource "aws_quicksight_data_source" "s3_sms_usage" {
 
   type = "S3"
 }
+
+resource "aws_quicksight_data_source" "athena_source" {
+  data_source_id = "athena-quicksight-data-source" # Unique ID within the AWS account
+  name           = "AthenaDataSource"
+  type           = "ATHENA"
+
+  parameters {
+    athena {
+      work_group = "Notification_quicksight" # Athena workgroup
+    }
+  }
+
+  permission {
+    principal = aws_quicksight_group.dataset_owner.arn
+
+    actions = [
+      "quicksight:PassDataSource",
+      "quicksight:DescribeDataSourcePermissions",
+      "quicksight:UpdateDataSource",
+      "quicksight:UpdateDataSourcePermissions",
+      "quicksight:DescribeDataSource",
+      "quicksight:DeleteDataSource"
+    ]
+  }
+}

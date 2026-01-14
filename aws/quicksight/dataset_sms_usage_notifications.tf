@@ -3,6 +3,7 @@
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
 resource "aws_cloudformation_stack" "sms-usage-notifications" {
+  count = var.env == "production" ? 1 : 0
 
   timeouts {
     create = "2h"
@@ -67,7 +68,7 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
             notifications = {
               Alias = "notifications",
               Source = {
-                DataSetArn = aws_quicksight_data_set.notifications.arn
+                DataSetArn = aws_quicksight_data_set.notifications[0].arn
               }
             },
 
@@ -91,6 +92,8 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
 
 
 resource "aws_quicksight_refresh_schedule" "sms-usage-notifications" {
+  count = var.env == "production" ? 1 : 0
+  
   data_set_id = "sms-usage-notifications"
   schedule_id = "schedule-sms-usage-notifications"
   depends_on  = [aws_cloudformation_stack.sms-usage-notifications]
