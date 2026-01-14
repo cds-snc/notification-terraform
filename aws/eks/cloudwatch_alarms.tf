@@ -459,19 +459,24 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
   ok_actions          = [var.sns_alert_critical_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-scanfiles-timeout-1-minute-warning" {
+resource "aws_cloudwatch_metric_alarm" "logs-1-malware-scan-timeout-1-minute-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-1-scanfiles-timeout-5-minutes-warning"
-  alarm_description   = "One scanfiles timeout detected error in 1 minute"
+  alarm_name          = "logs-1-malware-scan-timeout-1-minute-warning"
+  alarm_description   = "One malware scan timeout detected error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.scanfiles-timeout[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.scanfiles-timeout[0].metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.malware-scan-timeout[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.malware-scan-timeout[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
+}
+
+moved {
+  from = aws_cloudwatch_metric_alarm.logs-1-scanfiles-timeout-1-minute-warning
+  to   = aws_cloudwatch_metric_alarm.logs-1-malware-scan-timeout-1-minute-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
