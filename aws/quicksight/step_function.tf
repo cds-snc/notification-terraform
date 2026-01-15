@@ -48,7 +48,7 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
               Type     = "Task",
               Resource = "arn:aws:states:::athena:startQueryExecution.sync",
               Parameters = {
-                "QueryString.$" = "States.Format('ALTER TABLE {}.{} SET LOCATION \"s3://${var.datalake_bucket_name}/platform/gc-notify/notification-canada-ca-production-cluster-{}/database/public.{}/1/\";', $.database, $.table_name, $.current_date, $.table_name)",
+                "QueryString.$" = "States.Format('ALTER TABLE {}.{} SET LOCATION \"s3://${var.datalake_bucket_name}/platform/gc-notify/notification-canada-ca-production-cluster-{}/NotificationCanadaCaproduction/public.{}/1/\";', $.database, $.table_name, $.current_date, $.table_name)",
                 QueryExecutionContext = {
                   "Database.$" = "$.database"
                 },
