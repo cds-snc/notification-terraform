@@ -320,7 +320,7 @@ resource "aws_quicksight_data_set" "notifications_athena" {
     relational_table {
       data_source_arn = aws_quicksight_data_source.athena_source.arn
       schema          = "notification_quicksight"
-      name            = "vw_notifications"
+      name            = "vw_notification"
 
       input_columns {
         name = "notification_id"
