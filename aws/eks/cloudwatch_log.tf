@@ -89,17 +89,22 @@ resource "aws_cloudwatch_log_metric_filter" "malware-detected" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "scanfiles-timeout" {
+resource "aws_cloudwatch_log_metric_filter" "malware-scan-timeout" {
   count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "scanfiles-timeout"
+  name           = "malware-scan-timeout"
   pattern        = "Malware scan timed out for notification.id"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
-    name      = "scanfiles-timeout"
+    name      = "malware-scan-timeout"
     namespace = "LogMetrics"
     value     = "1"
   }
+}
+
+moved {
+  from = aws_cloudwatch_log_metric_filter.scanfiles-timeout
+  to   = aws_cloudwatch_log_metric_filter.malware-scan-timeout
 }
 
 resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
