@@ -66,16 +66,12 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
 
 # Daily trigger for the Step Function and IAM Role for EventBridge
 resource "aws_cloudwatch_event_rule" "step_function_daily_trigger" {
-  count = var.env == "production" ? 1 : 0
-
   name                = "daily-athena-update-table-location"
   description         = "Daily trigger to update Athena table locations"
   schedule_expression = "cron(10 5 * * ? *)" # daily at 05:10 UTC
 }
 
 resource "aws_iam_role" "eventbridge_role" {
-  count = var.env == "production" ? 1 : 0
-
   name = "eventbridge-invoke-sfn-role"
 
   assume_role_policy = jsonencode({
@@ -89,10 +85,8 @@ resource "aws_iam_role" "eventbridge_role" {
 }
 
 resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
-  count = var.env == "production" ? 1 : 0
-
   name = "EventBridgeInvokeSFNPolicy"
-  role = aws_iam_role.eventbridge_role[0].id
+  role = aws_iam_role.eventbridge_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -105,9 +99,7 @@ resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
 }
 
 resource "aws_cloudwatch_event_target" "target_with_role" {
-  count = var.env == "production" ? 1 : 0
-
-  rule     = aws_cloudwatch_event_rule.step_function_daily_trigger[0].name
+  rule     = aws_cloudwatch_event_rule.step_function_daily_trigger.name
   arn      = aws_sfn_state_machine.athena_update_table_location.arn
-  role_arn = aws_iam_role.eventbridge_role[0].arn
+  role_arn = aws_iam_role.eventbridge_role.arn
 }
