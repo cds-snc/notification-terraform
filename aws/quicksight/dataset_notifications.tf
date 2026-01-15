@@ -316,7 +316,7 @@ resource "aws_quicksight_data_set" "notifications_athena" {
   }
 
   physical_table_map {
-    physical_table_map_id = "notifications_athena"
+    physical_table_map_id = "notifications-athena"
     relational_table {
       data_source_arn = aws_quicksight_data_source.athena_source.arn
       schema          = "notification_quicksight"
