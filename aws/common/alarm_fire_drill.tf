@@ -140,6 +140,8 @@ resource "aws_lambda_function" "alarm_fire_drill" {
     mode = "Active"
   }
 
+  #checkov:skip=CKV_AWS_272:Code signing not required for fire drill Lambda
+
   environment {
     variables = {
       WARNING_TOPIC_ARN  = aws_sns_topic.notification-canada-ca-alert-warning.arn
