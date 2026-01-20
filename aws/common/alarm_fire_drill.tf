@@ -30,7 +30,7 @@ def lambda_handler(event, context):
     ok_topic = os.environ['OK_TOPIC_ARN']
     environment = os.environ['ENVIRONMENT']
     timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
-    run_id = context.request_id
+    run_id = context.aws_request_id
     results = {}
     
     print('Fire drill run ID: ' + run_id)
@@ -202,18 +202,18 @@ resource "aws_iam_role_policy" "alarm_fire_drill_sns" {
         Action = [
           "kms:Decrypt",
           "kms:GenerateDataKey"
-          ,
-          {
-            Effect = "Allow"
-            Action = [
-              "xray:PutTraceSegments",
-              "xray:PutTelemetryRecords"
-            ]
-            Resource = "*"
-        }]
+        ]
         Resource = [
           aws_kms_key.notification-canada-ca.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords"
+        ]
+        Resource = "*"
       }
     ]
   })
