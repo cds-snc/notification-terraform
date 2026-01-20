@@ -1,0 +1,98 @@
+name: Verify Fire Drill Alerts
+
+# Runs hourly to check if fire drill alerts made it to Slack
+# Independent of AWS infrastructure - provides external monitoring
+on:
+  push:
+    branches:
+      - fire-drill
+  schedule:
+    # Run every hour at :30
+    - cron: '30 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  check-fire-drill:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check for fire drill messages in Slack
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.FIRE_DRILL_SLACK_CHANNEL_ID }}
+        run: |
+          # Calculate timestamp for 25 hours ago
+          CUTOFF_TIME=$(date -u -d '25 hours ago' +%s 2>/dev/null || date -u -v-25H +%s)
+          
+          echo "Checking for fire drill messages since $(date -u -d @$CUTOFF_TIME 2>/dev/null || date -u -r $CUTOFF_TIME)"
+          
+          # Get recent messages from Slack
+          RESPONSE=$(curl -s -X GET "https://slack.com/api/conversations.history" \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -G \
+            --data-urlencode "channel=$SLACK_CHANNEL_ID" \
+            --data-urlencode "oldest=$CUTOFF_TIME" \
+            --data-urlencode "limit=100")
+          
+          # Check if request succeeded
+          if ! echo "$RESPONSE" | jq -e '.ok == true' > /dev/null; then
+            echo "❌ Failed to fetch Slack messages"
+            echo "$RESPONSE" | jq .
+            exit 1
+          fi
+          
+          # Look for fire drill test messages
+          WARNING_FOUND=$(echo "$RESPONSE" | jq '[.messages[] | select(.text // "" | contains("fire-drill-warning-test") or (.attachments[]? | .text // "" | contains("fire-drill-warning-test")))] | length > 0')
+          CRITICAL_FOUND=$(echo "$RESPONSE" | jq '[.messages[] | select(.text // "" | contains("fire-drill-critical-test") or (.attachments[]? | .text // "" | contains("fire-drill-critical-test")))] | length > 0')
+          OK_FOUND=$(echo "$RESPONSE" | jq '[.messages[] | select(.text // "" | contains("fire-drill-ok-test") or (.attachments[]? | .text // "" | contains("fire-drill-ok-test")))] | length > 0')
+          
+          echo "Fire drill status (last 25 hours):"
+          echo "  WARNING alert: $WARNING_FOUND"
+          echo "  CRITICAL alert: $CRITICAL_FOUND"
+          echo "  OK alert: $OK_FOUND"
+          
+          # Fail if any messages are missing
+          if [ "$WARNING_FOUND" != "true" ] || [ "$CRITICAL_FOUND" != "true" ] || [ "$OK_FOUND" != "true" ]; then
+            echo ""
+            echo "❌ FIRE DRILL FAILED - Not all test alerts made it to Slack!"
+            echo ""
+            echo "This means your alert pipeline is broken. Check:"
+            echo "  - Is the fire drill Lambda running? (EventBridge schedule)"
+            echo "  - Are SNS topics configured correctly?"
+            echo "  - Is the Slack integration Lambda working?"
+            echo "  - Is the Slack webhook still valid?"
+            echo ""
+            exit 1
+          fi
+          
+          echo ""
+          echo "✅ Fire drill verification PASSED - All alerts reached Slack!"
+      
+      - name: Notify on failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_OPS_WEBHOOK }}
+        run: |
+          # Post to ops channel if fire drill verification fails
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "text": "🚨 FIRE DRILL VERIFICATION FAILED",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*🚨 Fire Drill Verification Failed*\n\nThe fire drill alerts did not appear in Slack within the last 25 hours. Your alerting pipeline may be broken!\n\n*Action Required:* Check AWS Lambda, SNS topics, and Slack integration."
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View GitHub Action logs>"
+                  }
+                }
+              ]
+            }'
