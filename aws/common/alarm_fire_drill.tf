@@ -258,7 +258,7 @@ resource "aws_lambda_permission" "alarm_fire_drill_cloudwatch" {
 resource "aws_cloudwatch_log_group" "alarm_fire_drill" {
   count             = var.cloudwatch_enabled && contains(["dev", "staging"], var.env) ? 1 : 0
   name              = "/aws/lambda/${aws_lambda_function.alarm_fire_drill[0].function_name}"
-  retention_in_days = 14
+  retention_in_days = 90
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
