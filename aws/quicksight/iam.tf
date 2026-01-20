@@ -141,6 +141,27 @@ resource "aws_iam_policy" "quicksight-datalake-s3" {
           "arn:aws:kms:${var.region}:${var.account_id}:key/*"
         ]
       },
+      {
+        Action = [
+          "s3:ListBucketMultipartUploads",
+          "s3:GetBucketLocation"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:s3:::notification-canada-ca-${var.env}-athena",
+        ]
+      },
+      {
+        Action = [
+          "s3:PutObject",
+          "s3:AbortMultipartUpload",
+          "s3:ListMultipartUploadParts"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:s3:::notification-canada-ca-${var.env}-athena/*",
+        ]
+      }
     ]
   })
 }
