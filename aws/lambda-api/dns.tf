@@ -32,7 +32,7 @@ resource "aws_route53_record" "api-weighted-100-notification-A" {
   }
 
   weighted_routing_policy {
-    weight = 100
+    weight = 50
   }
 }
 
