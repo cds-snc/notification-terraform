@@ -136,6 +136,10 @@ resource "aws_lambda_function" "alarm_fire_drill" {
   runtime          = "python3.11"
   timeout          = 30
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = {
       WARNING_TOPIC_ARN  = aws_sns_topic.notification-canada-ca-alert-warning.arn
@@ -196,7 +200,15 @@ resource "aws_iam_role_policy" "alarm_fire_drill_sns" {
         Action = [
           "kms:Decrypt",
           "kms:GenerateDataKey"
-        ]
+          ,
+          {
+            Effect = "Allow"
+            Action = [
+              "xray:PutTraceSegments",
+              "xray:PutTelemetryRecords"
+            ]
+            Resource = "*"
+        }]
         Resource = [
           aws_kms_key.notification-canada-ca.arn
         ]
