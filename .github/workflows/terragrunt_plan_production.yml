@@ -201,6 +201,7 @@ jobs:
           - component: eks
           - component: ses_validation_dns_entries
           - component: system_status_static_site
+          - component: quicksight
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
