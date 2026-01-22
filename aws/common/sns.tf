@@ -152,6 +152,7 @@ resource "aws_sns_topic_subscription" "sqs_callback_subscription" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_ok_us_west_2_to_sre_bot" {
+  count    = var.env == "production" ? 0 : 1
   provider = aws.us-west-2
 
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn
@@ -161,6 +162,7 @@ resource "aws_sns_topic_subscription" "sns_alert_ok_us_west_2_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_warning_us_west_2_to_sre_bot" {
+  count    = var.env == "production" ? 0 : 1
   provider = aws.us-west-2
 
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn
@@ -170,6 +172,7 @@ resource "aws_sns_topic_subscription" "sns_alert_warning_us_west_2_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_critical_us_west_2_to_sre_bot" {
+  count    = var.env == "production" ? 0 : 1
   provider = aws.us-west-2
 
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
@@ -260,6 +263,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-east-1" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_ok_us_east_1_to_sre_bot" {
+  count    = var.env == "production" ? 0 : 1
   provider = aws.us-east-1
 
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
@@ -269,6 +273,7 @@ resource "aws_sns_topic_subscription" "sns_alert_ok_us_east_1_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_warning_us_east_1_to_sre_bot" {
+  count    = var.env == "production" ? 0 : 1
   provider = aws.us-east-1
 
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn
@@ -278,6 +283,7 @@ resource "aws_sns_topic_subscription" "sns_alert_warning_us_east_1_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_critical_us_east_1_to_sre_bot" {
+  count    = var.env == "production" ? 0 : 1
   provider = aws.us-east-1
 
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
