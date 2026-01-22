@@ -1,5 +1,40 @@
+# SNS to SRE Bot - Direct HTTPS subscriptions (dev/staging only)
+resource "aws_sns_topic_subscription" "alert_warning_to_sre_bot" {
+  count                = var.env == "production" ? 0 : 1
+  topic_arn            = aws_sns_topic.notification-canada-ca-alert-warning.arn
+  protocol             = "https"
+  endpoint             = var.cloudwatch_slack_webhook_warning_topic
+  raw_message_delivery = false
+}
+
+resource "aws_sns_topic_subscription" "alert_ok_to_sre_bot" {
+  count                = var.env == "production" ? 0 : 1
+  topic_arn            = aws_sns_topic.notification-canada-ca-alert-ok.arn
+  protocol             = "https"
+  endpoint             = var.cloudwatch_slack_webhook_general_topic
+  raw_message_delivery = false
+}
+
+resource "aws_sns_topic_subscription" "alert_critical_to_sre_bot" {
+  count                = var.env == "production" ? 0 : 1
+  topic_arn            = aws_sns_topic.notification-canada-ca-alert-critical.arn
+  protocol             = "https"
+  endpoint             = var.cloudwatch_slack_webhook_critical_topic
+  raw_message_delivery = false
+}
+
+resource "aws_sns_topic_subscription" "alert_general_to_sre_bot" {
+  count                = var.env == "production" ? 0 : 1
+  topic_arn            = aws_sns_topic.notification-canada-ca-alert-general.arn
+  protocol             = "https"
+  endpoint             = var.cloudwatch_slack_webhook_general_topic
+  raw_message_delivery = false
+}
+
+# Legacy Lambda-based Slack integration (production only)
 # Doc: https://registry.terraform.io/modules/terraform-aws-modules/notify-slack/aws/
 module "notify_slack_warning" {
+  count   = var.env == "production" ? 1 : 0
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "6.5.1"
 
@@ -18,6 +53,7 @@ module "notify_slack_warning" {
 }
 
 module "notify_slack_ok" {
+  count   = var.env == "production" ? 1 : 0
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "6.5.1"
 
@@ -36,6 +72,7 @@ module "notify_slack_ok" {
 }
 
 module "notify_slack_critical" {
+  count   = var.env == "production" ? 1 : 0
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "6.5.1"
 
@@ -55,6 +92,7 @@ module "notify_slack_critical" {
 
 # Shared generic slack webhook & topic.
 module "notify_slack_general" {
+  count   = var.env == "production" ? 1 : 0
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "6.5.1"
 
