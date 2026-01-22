@@ -41,7 +41,7 @@ module "notify_slack_warning" {
   source  = "terraform-aws-modules/notify-slack/aws"
   version = "~> 6.5.1"
 
-  sns_topic_name   = aws_sns_topic.notification-canada-ca-alert-warning.name
+  sns_topic_name    = aws_sns_topic.notification-canada-ca-alert-warning.name
   slack_webhook_url = var.slack_channel_warning_topic
   slack_channel     = "notification-ops"
   slack_username    = "AWS"
