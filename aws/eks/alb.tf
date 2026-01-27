@@ -19,6 +19,7 @@ resource "aws_alb" "notification-canada-ca" {
   }
 
   enable_deletion_protection = var.enable_delete_protection
+  idle_timeout               = var.env == "production" ? 60 : 120
 
   tags = {
     Name       = "notification-canada-ca"
@@ -64,6 +65,7 @@ resource "aws_lb_listener" "notification-canada-ca-80" {
       status_code = "HTTP_301"
     }
   }
+
 }
 
 ###
