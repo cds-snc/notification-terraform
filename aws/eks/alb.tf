@@ -65,7 +65,6 @@ resource "aws_lb_listener" "notification-canada-ca-80" {
       status_code = "HTTP_301"
     }
   }
-
 }
 
 ###
