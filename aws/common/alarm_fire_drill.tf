@@ -77,13 +77,7 @@ def lambda_handler(event, context):
             TopicArn=critical_topic,
             Subject='ALARM: "fire-drill-critical-test" in ca-central-1',
             Message=json.dumps({'default': json.dumps(critical_message)}),
-            MessageStructure='json',
-            MessageAttributes={
-                'fire_drill': {
-                    'DataType': 'String',
-                    'StringValue': 'true'
-                }
-            }
+            MessageStructure='json'
         )
         results['critical'] = 'SUCCESS'
         print('Published CRITICAL: ' + critical_response['MessageId'])
