@@ -71,8 +71,7 @@ def lambda_handler(event, context):
             'StateChangeTime': timestamp,
             'Region': os.environ.get('AWS_REGION', 'ca-central-1'),
             'AlarmArn': 'arn:aws:cloudwatch:ca-central-1:123456789:alarm:fire-drill-critical-test',
-            'OldStateValue': 'OK',
-            'fire_drill': 'true'
+            'OldStateValue': 'OK'
         }
         critical_response = sns.publish(
             TopicArn=critical_topic,
