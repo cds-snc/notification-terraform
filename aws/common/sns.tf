@@ -188,9 +188,9 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
   endpoint_auto_confirms = true
   filter_policy_scope    = "MessageBody"
   filter_policy = jsonencode({
-    fire_drill = [
+    AlarmName = [
       {
-        "anything-but" = "true"
+        "anything-but" = "fire-drill-critical-test"
       }
     ]
   })
