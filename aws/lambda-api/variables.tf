@@ -93,3 +93,9 @@ variable "elasticache_queue_cache_primary_endpoint_address" {
   default = "changeme"
   type    = string
 }
+
+variable "ff_use_billable_units" {
+  type        = bool
+  description = "Feature flag to use billable units for the SMS limit"
+  default     = false
+}
