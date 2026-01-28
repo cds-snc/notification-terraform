@@ -119,4 +119,5 @@ inputs = {
   postgres_cluster_endpoint              = dependency.rds.outputs.postgres_cluster_endpoint
   redis_primary_endpoint_address         = dependency.elasticache.outputs.redis_primary_endpoint_address
   elasticache_queue_cache_primary_endpoint_address = dependency.elasticache.outputs.elasticache_queue_cache_primary_endpoint_address
+  ff_use_billable_units                  = false
 }

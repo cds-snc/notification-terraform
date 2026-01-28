@@ -69,6 +69,7 @@ EXTRA_MIME_TYPES=b7b2104c-011f-436a-a25f-3fd66b6591e4:application/octet-stream,b
 FF_SALESFORCE_CONTACT=true
 FF_RTL=true
 FF_ANNUAL_LIMIT=true
+FF_USE_BILLABLE_UNITS=${var.ff_use_billable_units}
 
 FIDO2_DOMAIN=${var.base_domain}
 FRESH_DESK_PRODUCT_ID=${var.manifest_fresh_desk_product_id}
@@ -190,6 +191,7 @@ EXTRA_MIME_TYPES=b7b2104c-011f-436a-a25f-3fd66b6591e4:application/octet-stream,b
 FF_SALESFORCE_CONTACT=true
 FF_RTL=true
 FF_ANNUAL_LIMIT=true
+FF_USE_BILLABLE_UNITS=${var.ff_use_billable_units}
 
 FIDO2_DOMAIN=${var.base_domain}
 FRESH_DESK_PRODUCT_ID=${var.manifest_fresh_desk_product_id}
