@@ -71,19 +71,14 @@ def lambda_handler(event, context):
             'StateChangeTime': timestamp,
             'Region': os.environ.get('AWS_REGION', 'ca-central-1'),
             'AlarmArn': 'arn:aws:cloudwatch:ca-central-1:123456789:alarm:fire-drill-critical-test',
-            'OldStateValue': 'OK'
+            'OldStateValue': 'OK',
+            'fire_drill': 'true'
         }
         critical_response = sns.publish(
             TopicArn=critical_topic,
             Subject='ALARM: "fire-drill-critical-test" in ca-central-1',
             Message=json.dumps({'default': json.dumps(critical_message)}),
-            MessageStructure='json',
-            MessageAttributes={
-                'fire_drill': {
-                    'DataType': 'String',
-                    'StringValue': 'true'
-                }
-            }
+            MessageStructure='json'
         )
         results['critical'] = 'SUCCESS'
         print('Published CRITICAL: ' + critical_response['MessageId'])

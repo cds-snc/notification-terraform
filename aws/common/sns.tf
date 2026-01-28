@@ -186,6 +186,7 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
   endpoint               = var.cloudwatch_opsgenie_alarm_webhook
   raw_message_delivery   = false
   endpoint_auto_confirms = true
+  filter_policy_scope    = "MessageBody"
   filter_policy = jsonencode({
     fire_drill = [
       {
