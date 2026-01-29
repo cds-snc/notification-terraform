@@ -184,10 +184,13 @@ resource "aws_lb_listener_rule" "document-host-route" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-api" {
-  name     = "notification-canada-ca-alb-api"
-  port     = 6011
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name                 = "notification-canada-ca-alb-api"
+  port                 = 6011
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  target_type          = "ip"
+  deregistration_delay = 30
+
   health_check {
     path    = "/_status?simple=true"
     matcher = "200"
