@@ -19,6 +19,7 @@ resource "aws_alb" "notification-canada-ca" {
   }
 
   enable_deletion_protection = var.enable_delete_protection
+  idle_timeout               = var.env == "production" ? 60 : 120
 
   tags = {
     Name       = "notification-canada-ca"
@@ -183,10 +184,13 @@ resource "aws_lb_listener_rule" "document-host-route" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-api" {
-  name     = "notification-canada-ca-alb-api"
-  port     = 6011
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name                 = "notification-canada-ca-alb-api"
+  port                 = 6011
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  target_type          = "ip"
+  deregistration_delay = 30
+
   health_check {
     path    = "/_status?simple=true"
     matcher = "200"

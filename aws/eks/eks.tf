@@ -181,6 +181,16 @@ resource "aws_eks_addon" "coredns" {
   resolve_conflicts_on_update = "OVERWRITE"
 
   configuration_values = jsonencode({
+    replicaCount = 3
+    resources = {
+      limits = {
+        memory = "256Mi"
+      }
+      requests = {
+        cpu    = "200m"
+        memory = "128Mi"
+      }
+    }
     corefile = <<-EOF
       .:53 {
           errors

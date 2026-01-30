@@ -475,7 +475,6 @@ resource "aws_iam_role_policy_attachment" "signoz_worker" {
 #
 
 data "aws_iam_policy_document" "assume_role_policy_falco_sidekick_ui" {
-  count = var.env != "production" ? 1 : 0
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -501,30 +500,26 @@ data "aws_iam_policy_document" "assume_role_policy_falco_sidekick_ui" {
 
 # Role
 resource "aws_iam_role" "falco_sidekick_ui" {
-  count              = var.env != "production" ? 1 : 0
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick_ui[0].json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick_ui.json
   name               = "falco-sidekick-ui-eks-role"
 }
 
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick_ui" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.secrets_csi.arn
-  role       = aws_iam_role.falco_sidekick_ui[0].name
+  role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick_ui" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.parameters_csi.arn
-  role       = aws_iam_role.falco_sidekick_ui[0].name
+  role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 resource "aws_iam_role_policy_attachment" "falco_sidekick_ui_worker" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.notification-worker-policy.arn
-  role       = aws_iam_role.falco_sidekick_ui[0].name
+  role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 #
@@ -532,7 +527,6 @@ resource "aws_iam_role_policy_attachment" "falco_sidekick_ui_worker" {
 #
 
 data "aws_iam_policy_document" "assume_role_policy_falco_sidekick" {
-  count = var.env != "production" ? 1 : 0
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -558,28 +552,24 @@ data "aws_iam_policy_document" "assume_role_policy_falco_sidekick" {
 
 # Role
 resource "aws_iam_role" "falco_sidekick" {
-  count              = var.env != "production" ? 1 : 0
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick[0].json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick.json
   name               = "falco-sidekick-eks-role"
 }
 
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.secrets_csi.arn
-  role       = aws_iam_role.falco_sidekick[0].name
+  role       = aws_iam_role.falco_sidekick.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.parameters_csi.arn
-  role       = aws_iam_role.falco_sidekick[0].name
+  role       = aws_iam_role.falco_sidekick.name
 }
 
 resource "aws_iam_role_policy_attachment" "falco_sidekick_worker" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.notification-worker-policy.arn
-  role       = aws_iam_role.falco_sidekick[0].name
+  role       = aws_iam_role.falco_sidekick.name
 }
