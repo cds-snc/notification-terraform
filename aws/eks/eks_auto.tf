@@ -166,3 +166,31 @@ resource "aws_security_group_rule" "eks_auto_egress_endpoints_gateway" {
   prefix_list_ids   = var.private-links-gateway-prefix-list-ids
 
 }
+
+resource "aws_eks_addon" "kube_proxy_auto" {
+  count                       = var.env == "dev" ? 1 : 0
+  cluster_name                = aws_eks_cluster.eks_auto[0].name
+  addon_name                  = "kube-proxy"
+  addon_version               = var.eks_addon_kube_proxy_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "vpc_cni_auto" {
+  count                       = var.env == "dev" ? 1 : 0
+  cluster_name                = aws_eks_cluster.eks_auto[0].name
+  addon_name                  = "vpc-cni"
+  addon_version               = var.eks_addon_vpc_cni_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+}
+
+resource "aws_eks_addon" "ebs_driver_auto" {
+  count                       = var.env == "dev" ? 1 : 0
+  cluster_name                = aws_eks_cluster.eks_auto[0].name
+  addon_name                  = "aws-ebs-csi-driver"
+  addon_version               = var.eks_addon_ebs_driver_version
+  service_account_role_arn    = aws_iam_role.ebs_csi_driver_auto[0].arn
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+}

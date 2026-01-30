@@ -185,6 +185,63 @@ resource "aws_iam_openid_connect_provider" "notification-canada-ca" {
   url             = aws_eks_cluster.notification-canada-ca-eks-cluster.identity[0].oidc[0].issuer
 }
 
+###
+# AWS EKS Auto OIDC provider
+###
+
+data "tls_certificate" "eks_auto" {
+  count = var.env == "dev" ? 1 : 0
+  url   = aws_eks_cluster.eks_auto[0].identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "eks_auto" {
+  count           = var.env == "dev" ? 1 : 0
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.eks_auto[0].certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.eks_auto[0].identity[0].oidc[0].issuer
+}
+
+###
+# EBS CSI Driver IAM Role for EKS Auto
+###
+
+data "aws_iam_policy_document" "ebs_csi_driver_assume_role_policy_auto" {
+  count = var.env == "dev" ? 1 : 0
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.eks_auto[0].url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.eks_auto[0].url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.eks_auto[0].arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "ebs_csi_driver_auto" {
+  count              = var.env == "dev" ? 1 : 0
+  name               = "eks-ebs-csi-driver-auto"
+  assume_role_policy = data.aws_iam_policy_document.ebs_csi_driver_assume_role_policy_auto[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi_driver_auto" {
+  count      = var.env == "dev" ? 1 : 0
+  role       = aws_iam_role.ebs_csi_driver_auto[0].name
+  policy_arn = aws_iam_policy.ebs_driver.arn
+}
+
 data "aws_iam_policy_document" "eks-assume-role-policy" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
