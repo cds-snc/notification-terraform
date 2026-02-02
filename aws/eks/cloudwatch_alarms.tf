@@ -1109,3 +1109,59 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
 }
+
+### Velero
+
+resource "aws_cloudwatch_metric_alarm" "velero_deployment_unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "velero-deployment-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  alarm_description   = "Velero Deployment Replicas Unavailable"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "breaching"
+  threshold           = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_deployment_status_replicas_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = "velero"
+        deployment  = "velero"
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "velero_daemonset_unavailable" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "velero-daemonset-replicas-unavailable"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  alarm_description   = "Velero Daemonset Replicas Unavailable"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  treat_missing_data  = "breaching"
+  threshold           = 1
+
+  metric_query {
+    id          = "m1"
+    return_data = "true"
+    metric {
+      metric_name = "kube_daemonset_status_number_unavailable"
+      namespace   = "ContainerInsights/Prometheus"
+      period      = 300
+      stat        = "Minimum"
+      dimensions = {
+        ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+        namespace   = "velero"
+        daemonset   = "node-agent"
+      }
+    }
+  }
+}
