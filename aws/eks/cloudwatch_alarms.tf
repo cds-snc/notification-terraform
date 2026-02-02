@@ -1112,6 +1112,21 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
 
 ### Velero
 
+resource "aws_cloudwatch_metric_alarm" "logs-1-velero-error-5-minute-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-1-velero-error-5-minute-warning"
+  alarm_description   = "Errors In Velero. Verify Backup Status"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.velero-error[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.velero-error[0].metric_transformation[0].namespace
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
 resource "aws_cloudwatch_metric_alarm" "velero_deployment_unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "velero-deployment-replicas-unavailable"
