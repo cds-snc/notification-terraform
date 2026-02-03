@@ -1,6 +1,5 @@
 # S3 bucket for Velero backups
 resource "aws_s3_bucket" "velero_backups" {
-  count  = var.env != "production" ? 1 : 0
   bucket = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-backups"
 
   tags = {
@@ -9,8 +8,7 @@ resource "aws_s3_bucket" "velero_backups" {
 }
 
 resource "aws_s3_bucket_versioning" "velero_backups" {
-  count  = var.env != "production" ? 1 : 0
-  bucket = aws_s3_bucket.velero_backups[0].id
+  bucket = aws_s3_bucket.velero_backups.id
 
   versioning_configuration {
     status = "Enabled"
@@ -18,8 +16,7 @@ resource "aws_s3_bucket_versioning" "velero_backups" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "velero_backups" {
-  count  = var.env != "production" ? 1 : 0
-  bucket = aws_s3_bucket.velero_backups[0].id
+  bucket = aws_s3_bucket.velero_backups.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -29,8 +26,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "velero_backups" {
 }
 
 resource "aws_s3_bucket_public_access_block" "velero_backups" {
-  count  = var.env != "production" ? 1 : 0
-  bucket = aws_s3_bucket.velero_backups[0].id
+  bucket = aws_s3_bucket.velero_backups.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -39,15 +35,13 @@ resource "aws_s3_bucket_public_access_block" "velero_backups" {
 }
 
 resource "aws_s3_bucket_notification" "velero_backups" {
-  count  = var.env != "production" ? 1 : 0
-  bucket = aws_s3_bucket.velero_backups[0].id
+  bucket = aws_s3_bucket.velero_backups.id
 
   eventbridge = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
-  count  = var.env != "production" ? 1 : 0
-  bucket = aws_s3_bucket.velero_backups[0].id
+  bucket = aws_s3_bucket.velero_backups.id
 
   rule {
     id     = "expire-old-backups"
@@ -75,7 +69,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
 
 # IAM policy for Velero
 resource "aws_iam_policy" "velero" {
-  count       = var.env != "production" ? 1 : 0
   name        = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-policy"
   description = "Policy for Velero backup and restore operations"
 
@@ -104,7 +97,7 @@ resource "aws_iam_policy" "velero" {
           "s3:ListMultipartUploadParts"
         ]
         Resource = [
-          "${aws_s3_bucket.velero_backups[0].arn}/*"
+          "${aws_s3_bucket.velero_backups.arn}/*"
         ]
       },
       {
@@ -113,7 +106,7 @@ resource "aws_iam_policy" "velero" {
           "s3:ListBucket"
         ]
         Resource = [
-          aws_s3_bucket.velero_backups[0].arn
+          aws_s3_bucket.velero_backups.arn
         ]
       }
     ]
@@ -122,8 +115,7 @@ resource "aws_iam_policy" "velero" {
 
 # IAM role for Velero service account
 resource "aws_iam_role" "velero" {
-  count = var.env != "production" ? 1 : 0
-  name  = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-role"
+  name = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -151,23 +143,22 @@ resource "aws_iam_role" "velero" {
 
 # Attach policy to role
 resource "aws_iam_role_policy_attachment" "velero" {
-  count      = var.env != "production" ? 1 : 0
-  role       = aws_iam_role.velero[0].name
-  policy_arn = aws_iam_policy.velero[0].arn
+  role       = aws_iam_role.velero.name
+  policy_arn = aws_iam_policy.velero.arn
 }
 
 # Outputs
 output "velero_s3_bucket_name" {
   description = "Name of the S3 bucket for Velero backups"
-  value       = var.env != "production" ? aws_s3_bucket.velero_backups[0].id : null
+  value       = aws_s3_bucket.velero_backups.id
 }
 
 output "velero_iam_role_arn" {
   description = "ARN of the IAM role for Velero"
-  value       = var.env != "production" ? aws_iam_role.velero[0].arn : null
+  value       = aws_iam_role.velero.arn
 }
 
 output "velero_s3_bucket_arn" {
   description = "ARN of the S3 bucket for Velero backups"
-  value       = var.env != "production" ? aws_s3_bucket.velero_backups[0].arn : null
+  value       = aws_s3_bucket.velero_backups.arn
 }
