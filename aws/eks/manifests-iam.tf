@@ -493,7 +493,7 @@ resource "aws_iam_user_policy" "signoz_smtp_user_policy" {
           "ses:SendRawEmail",
           "ses:SendEmail"
         ]
-        Resource = "*"
+        Resource = "arn:aws:ses:*:${var.account_id}:identity/*"
       }
     ]
   })
