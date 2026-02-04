@@ -118,3 +118,17 @@ output "gha_vpn_key" {
   sensitive = true
   value     = module.gha_vpn.client_vpn_private_key_pem
 }
+
+# Signoz SMTP
+
+# Outputs
+output "signoz_smtp_username" {
+  value     = var.env != "production" ? aws_iam_access_key.signoz_smtp_user_key[0].id : ""
+  sensitive = true
+}
+
+output "signoz_smtp_password" {
+  value     = var.env != "production" ? aws_iam_access_key.signoz_smtp_user_key[0].ses_smtp_password_v4 : ""
+  sensitive = true
+}
+
