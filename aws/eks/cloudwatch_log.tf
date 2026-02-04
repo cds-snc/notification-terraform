@@ -259,7 +259,7 @@ resource "aws_cloudwatch_log_metric_filter" "oom-errors" {
 resource "aws_cloudwatch_log_metric_filter" "velero-error" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "velero-error"
-  pattern        = "{ ($.kubernetes.pod_name = \"velero*\") && ($.log = *error*) && ($.log !=*warning*)}"
+  pattern        = "{ ($.kubernetes.pod_name = \"velero*\") && ($.log = *error*) && ($.log != *warning*)}"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
