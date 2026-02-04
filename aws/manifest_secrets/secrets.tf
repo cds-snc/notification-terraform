@@ -472,27 +472,27 @@ resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat" {
 }
 
 resource "aws_secretsmanager_secret" "manifest_signoz_smtp_username" {
-  count                   = var.env == "dev" ? 1 : 0
+  count                   = var.env != "production" ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_SMTP_USERNAME"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_username" {
-  count         = var.env == "dev" ? 1 : 0
+  count         = var.env != "production" ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_username[0].id
-  secret_string = var.manifest_signoz_smtp_username
+  secret_string = var.signoz_smtp_username
 }
 
 resource "aws_secretsmanager_secret" "manifest_signoz_smtp_password" {
-  count                   = var.env == "dev" ? 1 : 0
+  count                   = var.env != "production" ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_SMTP_PASSWORD"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
-  count         = var.env == "dev" ? 1 : 0
+  count         = var.env != "production" ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_password[0].id
-  secret_string = var.manifest_signoz_smtp_password
+  secret_string = var.signoz_smtp_password
 }
 
 # THIS ISN'T A SECRET, BUT THIS GETS THE VALUE INTO SECRETS MANAGER 
