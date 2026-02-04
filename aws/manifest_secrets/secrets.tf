@@ -480,7 +480,7 @@ resource "aws_secretsmanager_secret" "manifest_signoz_smtp_username" {
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_username" {
   count         = var.env != "production" ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_username[0].id
-  secret_string = var.manifest_signoz_smtp_username
+  secret_string = var.signoz_smtp_username
 }
 
 resource "aws_secretsmanager_secret" "manifest_signoz_smtp_password" {
@@ -492,7 +492,7 @@ resource "aws_secretsmanager_secret" "manifest_signoz_smtp_password" {
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
   count         = var.env != "production" ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_password[0].id
-  secret_string = var.manifest_signoz_smtp_password
+  secret_string = var.signoz_smtp_password
 }
 
 # THIS ISN'T A SECRET, BUT THIS GETS THE VALUE INTO SECRETS MANAGER 
