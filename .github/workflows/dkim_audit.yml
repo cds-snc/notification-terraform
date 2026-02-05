@@ -92,7 +92,7 @@ jobs:
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: (":red_circle: *DKIM audit failed*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>")
+                    text: (":red_circle: *DKIM audit failed*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>\n\n<https://docs.google.com/document/d/16LLelZ7WEKrnbocrl0Az74JqkCv5DBZ9QILRBUFJQt8/edit?tab=t.0|Tips and Tricks>\n<https://docs.google.com/document/d/1gQSBJ-kr4Pi0m121F66a5no4Sb6PPsObs7nfEAuzNcg/edit?pli=1&tab=t.db84hyceg8xe#heading=h.yve4tikg5m0l|Incident Management for Provincial Partners>")
                   }
                 }
               ]
