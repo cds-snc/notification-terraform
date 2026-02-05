@@ -28,3 +28,8 @@ variable "signoz_smtp_password" {
   default   = "changeme"
   sensitive = true
 }
+
+variable "manifest_signoz_postgres_password" {
+  default   = "changeme"
+  sensitive = true
+}
