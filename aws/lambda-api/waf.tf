@@ -179,6 +179,7 @@ resource "aws_wafv2_web_acl" "api_lambda" {
 
         managed_rule_group_configs {
           aws_managed_rules_bot_control_rule_set {
+            enable_machine_learning = true
             inspection_level = "TARGETED" # Can be COMMON or TARGETED
           }
         }
