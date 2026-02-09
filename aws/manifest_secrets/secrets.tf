@@ -495,6 +495,18 @@ resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
   secret_string = var.signoz_smtp_password
 }
 
+resource "aws_secretsmanager_secret" "manifest_signoz_postgres_password" {
+  count                   = var.env != "production" ? 1 : 0
+  name                    = "MANIFEST_SIGNOZ_POSTGRES_PASSWORD"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_postgres_password" {
+  count         = var.env != "production" ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_postgres_password[0].id
+  secret_string = var.manifest_signoz_postgres_password
+}
+
 # THIS ISN'T A SECRET, BUT THIS GETS THE VALUE INTO SECRETS MANAGER 
 # SO THAT IT CAN BE ACCESSED BY HELM IN MANIFESTS REPO
 resource "aws_secretsmanager_secret" "manifest_enable_new_relic" {
