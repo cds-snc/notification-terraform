@@ -7,8 +7,8 @@ billing_tag_key      = "CostCenter"
 
 ## EKS     
 primary_worker_desired_size     = 5
-primary_worker_instance_types   = ["c7i.xlarge"]
-secondary_worker_instance_types = ["c7i.xlarge"]
+primary_worker_instance_types   = ["m7i-flex.xlarge"]
+secondary_worker_instance_types = ["m7i-flex.xlarge"]
 node_upgrade                    = false
 force_upgrade                   = true
 primary_worker_max_size         = 7
