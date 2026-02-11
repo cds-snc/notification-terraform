@@ -8,6 +8,7 @@ locals {
   notification_admin_build_push             = "notification-admin-build-push"
   notification_document_download_build_push = "notification-document-download-build-push"
   dkim_audit                                = "dkim-audit"
+  notification_performance_test_results     = "notification-performance-test-results-sync"
 }
 
 # 
@@ -136,6 +137,21 @@ module "github_workflow_roles_dkim_audit" {
       name      = "${local.dkim_audit}-dkim-fix"
       repo_name = "notification-terraform"
       claim     = "ref:refs/heads/dkim-fix"
+    }
+  ]
+}
+
+module "github_workflow_roles_performance_test_results" {
+  count = var.env == "staging" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+
+  roles = [
+    {
+      name      = local.notification_performance_test_results
+      repo_name = "notification-performance-test-results"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
@@ -441,5 +457,18 @@ resource "aws_iam_role_policy_attachment" "dkim_audit_dkim_fix" {
   policy_arn = aws_iam_policy.dkim_audit.arn
   depends_on = [
     module.github_workflow_roles_dkim_audit
+  ]
+}
+
+#
+# Performance Test Results Sync role
+#
+resource "aws_iam_role_policy_attachment" "notification_performance_test_results" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_performance_test_results
+  policy_arn = aws_iam_policy.notification_performance_test_results[0].arn
+  depends_on = [
+    module.github_workflow_roles_performance_test_results
   ]
 }
