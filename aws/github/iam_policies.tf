@@ -371,9 +371,7 @@ data "aws_iam_policy_document" "notification_performance_test_results" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject"
+      "s3:GetObject"
     ]
     resources = [
       "arn:aws:s3:::notify-performance-test-results-${var.env}/*"
