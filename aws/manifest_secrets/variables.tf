@@ -33,3 +33,8 @@ variable "manifest_signoz_postgres_password" {
   default   = "changeme"
   sensitive = true
 }
+
+variable "manifest_signoz_dashboard_api_key" {
+  default   = "changeme"
+  sensitive = true
+}

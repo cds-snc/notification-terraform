@@ -495,6 +495,18 @@ resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
   secret_string = var.signoz_smtp_password
 }
 
+resource "aws_secretsmanager_secret" "manifest_signoz_dashboard_api_key" {
+  count                   = var.env != "production" ? 1 : 0
+  name                    = "MANIFEST_SIGNOZ_DASHBOARD_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_dashboard_api_key" {
+  count         = var.env != "production" ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_dashboard_api_key[0].id
+  secret_string = var.manifest_signoz_dashboard_api_key
+}
+
 resource "aws_secretsmanager_secret" "manifest_signoz_postgres_password" {
   count                   = var.env != "production" ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_POSTGRES_PASSWORD"
