@@ -151,7 +151,7 @@ module "github_workflow_roles_performance_test_results" {
     {
       name      = local.notification_performance_test_results
       repo_name = "notification-performance-test-results"
-      claim     = "*"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
