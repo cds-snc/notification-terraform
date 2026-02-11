@@ -344,3 +344,40 @@ data "aws_iam_policy_document" "dkim_audit" {
   }
 }
 
+#
+# Performance Test Results Sync policy
+#
+resource "aws_iam_policy" "notification_performance_test_results" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_performance_test_results
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_performance_test_results[0].json
+}
+
+data "aws_iam_policy_document" "notification_performance_test_results" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::notify-performance-test-results-${var.env}"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notify-performance-test-results-${var.env}/*"
+    ]
+  }
+}
+
