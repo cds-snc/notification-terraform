@@ -1133,3 +1133,13 @@ variable "datalake_account_id" {
   type      = string
   sensitive = true
 }
+
+variable "enable_signoz" {
+  type    = bool
+  default = false 
+}
+
+variable "signoz_worker_instance_types" {
+  type    = list
+  default = ["m7i-flex.xlarge"]
+}
