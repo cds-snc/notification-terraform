@@ -162,8 +162,7 @@ resource "aws_eks_node_group" "signoz_node_group" {
   }
 
   scaling_config {
-    # Since we are just using this node group as an interim group while we upgrade primary, 
-    # we will leverage primary settings here.
+    # Dedicated Signoz node group with a fixed capacity of 3 nodes.
     desired_size = 3
     max_size     = 3
     min_size     = 3
