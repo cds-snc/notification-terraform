@@ -401,6 +401,26 @@ resource "aws_security_group_rule" "client-vpn-ingress-redis" {
   security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
 }
 
+resource "aws_security_group_rule" "client-vpn-ingress-vpc-endpoints" {
+  description              = "Client VPN ingress to VPC endpoints (ECR, CloudWatch, SSM, etc.)"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = module.vpn.client_vpn_security_group_id
+  security_group_id        = var.private-links-vpc-endpoints-securitygroup
+}
+
+resource "aws_security_group_rule" "gha-vpn-ingress-vpc-endpoints" {
+  description              = "GHA VPN ingress to VPC endpoints (ECR, CloudWatch, SSM, etc.)"
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = module.gha_vpn.client_vpn_security_group_id
+  security_group_id        = var.private-links-vpc-endpoints-securitygroup
+}
+
 # Security Group For Internal
 resource "aws_security_group" "notification_internal" {
   name        = "notification-canada-ca-alb-internal"
