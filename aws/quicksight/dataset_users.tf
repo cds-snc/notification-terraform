@@ -68,6 +68,10 @@ resource "aws_quicksight_data_set" "users" {
         name = "password_expired"
         type = "BOOLEAN"
       }
+      input_columns {
+        name = "default_editor_is_rte"
+        type = "BOOLEAN"
+      }
     }
   }
   permissions {
