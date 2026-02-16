@@ -1136,7 +1136,7 @@ variable "datalake_account_id" {
 
 variable "enable_signoz" {
   type    = bool
-  default = false 
+  default = false
 }
 
 variable "signoz_worker_instance_types" {
