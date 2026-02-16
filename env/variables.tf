@@ -1140,6 +1140,6 @@ variable "enable_signoz" {
 }
 
 variable "signoz_worker_instance_types" {
-  type    = list
+  type    = list(string)
   default = ["m7i-flex.xlarge"]
 }
