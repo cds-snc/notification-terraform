@@ -9,6 +9,7 @@ billing_tag_key      = "CostCenter"
 primary_worker_desired_size     = 5
 primary_worker_instance_types   = ["m7i-flex.xlarge"]
 secondary_worker_instance_types = ["m7i-flex.xlarge"]
+enable_signoz                   = true
 node_upgrade                    = false
 force_upgrade                   = true
 primary_worker_max_size         = 7
