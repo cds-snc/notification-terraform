@@ -145,7 +145,7 @@ resource "aws_eks_node_group" "signoz_node_group" {
   cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   node_group_name      = "notification-canada-ca-${var.env}-signoz-node-group"
   node_role_arn        = aws_iam_role.eks-worker-role.arn
-  subnet_ids           = var.vpc_private_subnets_k8s
+  subnet_ids           = [var.vpc_private_subnets_k8s[0]]
   force_update_version = var.force_upgrade
 
   release_version = var.eks_node_ami_version
