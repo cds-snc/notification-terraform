@@ -107,3 +107,8 @@ variable "subnet_ids" {
   type        = list(string)
   description = "The IDs for the subnets"
 }
+
+variable "security_txt_content" {
+  type        = string
+  description = "The content of the security.txt file"
+}
