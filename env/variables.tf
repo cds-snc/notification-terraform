@@ -155,6 +155,10 @@ variable "cloudwatch_enabled" {
   type = bool
 }
 
+variable "enable_cloudwatch_fire_drills" {
+  type = bool
+}
+
 variable "recovery" {
   type = bool
 }
