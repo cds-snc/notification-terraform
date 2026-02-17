@@ -11,7 +11,7 @@
 # aws lambda invoke --function-name alarm-fire-drill response.json
 
 data "archive_file" "alarm_fire_drill_lambda" {
-  count       = var.cloudwatch_enabled ? 1 : 0
+  count       = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   type        = "zip"
   output_path = "/tmp/alarm_fire_drill.zip"
 
@@ -127,7 +127,7 @@ EOF
 }
 
 resource "aws_lambda_function" "alarm_fire_drill" {
-  count            = var.cloudwatch_enabled ? 1 : 0
+  count            = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   filename         = data.archive_file.alarm_fire_drill_lambda[0].output_path
   function_name    = "alarm-fire-drill"
   role             = aws_iam_role.alarm_fire_drill[0].arn
@@ -157,7 +157,7 @@ resource "aws_lambda_function" "alarm_fire_drill" {
 }
 
 resource "aws_iam_role" "alarm_fire_drill" {
-  count = var.cloudwatch_enabled ? 1 : 0
+  count = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   name  = "alarm-fire-drill-lambda-role"
 
   assume_role_policy = jsonencode({
@@ -179,7 +179,7 @@ resource "aws_iam_role" "alarm_fire_drill" {
 }
 
 resource "aws_iam_role_policy" "alarm_fire_drill_sns" {
-  count = var.cloudwatch_enabled ? 1 : 0
+  count = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   name  = "alarm-fire-drill-sns-publish"
   role  = aws_iam_role.alarm_fire_drill[0].id
 
@@ -220,7 +220,7 @@ resource "aws_iam_role_policy" "alarm_fire_drill_sns" {
 }
 
 resource "aws_iam_role_policy_attachment" "alarm_fire_drill_basic" {
-  count      = var.cloudwatch_enabled ? 1 : 0
+  count      = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   role       = aws_iam_role.alarm_fire_drill[0].name
 }
@@ -230,7 +230,7 @@ resource "aws_iam_role_policy_attachment" "alarm_fire_drill_basic" {
 # 9am ET = 2pm UTC (during standard time) or 1pm UTC (during daylight saving time)
 # Using 2pm UTC to account for Eastern Standard Time
 resource "aws_cloudwatch_event_rule" "alarm_fire_drill" {
-  count               = var.cloudwatch_enabled ? 1 : 0
+  count               = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   name                = "alarm-fire-drill-daily"
   description         = "Trigger alarm fire drill test daily at 9am ET"
   schedule_expression = "cron(0 14 * * ? *)"
@@ -241,13 +241,13 @@ resource "aws_cloudwatch_event_rule" "alarm_fire_drill" {
 }
 
 resource "aws_cloudwatch_event_target" "alarm_fire_drill" {
-  count = var.cloudwatch_enabled ? 1 : 0
+  count = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   rule  = aws_cloudwatch_event_rule.alarm_fire_drill[0].name
   arn   = aws_lambda_function.alarm_fire_drill[0].arn
 }
 
 resource "aws_lambda_permission" "alarm_fire_drill_cloudwatch" {
-  count         = var.cloudwatch_enabled ? 1 : 0
+  count         = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.alarm_fire_drill[0].function_name
@@ -256,7 +256,7 @@ resource "aws_lambda_permission" "alarm_fire_drill_cloudwatch" {
 }
 
 resource "aws_cloudwatch_log_group" "alarm_fire_drill" {
-  count             = var.cloudwatch_enabled ? 1 : 0
+  count             = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   name              = "/aws/lambda/${aws_lambda_function.alarm_fire_drill[0].function_name}"
   retention_in_days = 90
 
