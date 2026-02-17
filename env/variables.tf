@@ -1147,3 +1147,16 @@ variable "signoz_worker_instance_types" {
   type    = list(string)
   default = ["m7i-flex.xlarge"]
 }
+
+variable "security_txt_content" {
+  type        = string
+  description = "The content of the security.txt file"
+  default     = <<-EOT
+  Contact: mailto:ZZTBSCYBERS@tbs-sct.gc.ca
+  Contact: https://hackerone.com/tbs-sct/
+  Policy: https://hackerone.com/tbs-sct/policy
+  Canonical: https://cdssandbox.xyz/.well-known/security.txt
+  Preferred-Languages: en, fr
+  Expires: 2026-03-02T12:00:00.000Z
+  EOT
+}

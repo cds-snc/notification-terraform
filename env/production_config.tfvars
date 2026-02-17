@@ -4,6 +4,14 @@ account_budget_limit = 15000
 region               = "ca-central-1"
 billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
+security_txt_content = <<-EOT
+Contact: mailto:ZZTBSCYBERS@tbs-sct.gc.ca
+Contact: https://hackerone.com/tbs-sct/
+Policy: https://hackerone.com/tbs-sct/policy
+Canonical: https://notification.canada.ca/.well-known/security.txt
+Preferred-Languages: en, fr
+Expires: 2026-03-02T12:00:00.000Z
+EOT
 
 ## EKS
 primary_worker_desired_size     = 8
