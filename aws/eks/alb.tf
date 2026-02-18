@@ -67,6 +67,28 @@ resource "aws_lb_listener" "notification-canada-ca-80" {
   }
 }
 
+
+resource "aws_lb_listener_rule" "security-txt" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 5
+
+  action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = var.security_txt_content
+      status_code  = "200"
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/.well-known/security.txt"]
+    }
+  }
+}
+
 ###
 # Document API Specific routing
 ###
