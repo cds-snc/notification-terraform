@@ -39,7 +39,7 @@ resource "aws_cloudwatch_log_group" "blazer" {
 resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "web-500-errors"
-  pattern        = "\"\\\" 500 \""
+  pattern        = var.env != "production" ? "{ ($.kubernetes.namespace_name = \"notification-canada-ca\") && ($.log = \"*\\\" 500 *\") }" : "\"\\\" 500 \""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
