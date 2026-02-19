@@ -1,0 +1,26 @@
+9999-9999-9999999-99999
+
+RRJKX-VV-83kkk343k8899-99088978mkjhkhj
+
+# GC Notify secrets that should trigger gitleaks
+
+# Notify API Key
+gcntfy_api_key = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8"
+
+# Service API Key (UUID format)
+service_api_key = "f47ac10b-58cc-4372-a567-0e02b2c3d479-a1b2c3d4-5678-90ab-cdef-1234567890ab"
+
+# Callback Bearer Token
+callback_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U"
+
+# Admin Client Secret
+admin_client_secret = "super_secret_admin_key_12345678901234567890"
+
+# Dangerous Salt
+dangerous_salt = "cGFzc3dvcmRfc2FsdF8xMjM0NTY3ODkw"
+
+# Database Connection
+DATABASE_URL = "postgresql://notify_user:MySecureP@ssw0rd@db.internal:5432/notify_db"
+
+# Redis URL
+REDIS_URL = "redis://default:R3d1sP@ssw0rd123@redis.internal:6379/0"
