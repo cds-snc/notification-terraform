@@ -470,6 +470,69 @@ resource "aws_iam_role_policy_attachment" "signoz_worker" {
   role       = aws_iam_role.signoz[0].name
 }
 
+#
+# SIGNOZ PROMETHEUS CLOUDWATCH EXPORTER
+#
+
+resource "aws_iam_policy" "signoz_prometheus_cloudwatch_exporter" {
+  count = var.env != "production" ? 1 : 0
+  name  = "signoz-prometheus-cloudwatch-exporter-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudwatch:GetMetricStatistics",
+          "cloudwatch:ListMetrics",
+          "tag:GetResources",
+          "ec2:DescribeTags"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+data "aws_iam_policy_document" "assume_role_policy_signoz_prometheus_cloudwatch_exporter" {
+  count = var.env != "production" ? 1 : 0
+
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:signoz:prometheus-cloudwatch-exporter"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "signoz_prometheus_cloudwatch_exporter" {
+  count              = var.env != "production" ? 1 : 0
+  name               = "signoz-prometheus-cloudwatch-exporter-eks-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz_prometheus_cloudwatch_exporter[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "signoz_prometheus_cloudwatch_exporter" {
+  count      = var.env != "production" ? 1 : 0
+  role       = aws_iam_role.signoz_prometheus_cloudwatch_exporter[0].name
+  policy_arn = aws_iam_policy.signoz_prometheus_cloudwatch_exporter[0].arn
+}
+
 ## Signoz SMTP IAM User and Policy
 
 # IAM User for SES SMTP
