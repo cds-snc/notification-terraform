@@ -486,8 +486,12 @@ resource "aws_iam_policy" "signoz_prometheus_cloudwatch_exporter" {
         Action = [
           "cloudwatch:GetMetricStatistics",
           "cloudwatch:ListMetrics",
+          "cloudwatch:GetMetricData",
           "tag:GetResources",
-          "ec2:DescribeTags"
+          "ec2:DescribeTags",
+          "logs:DescribeLogGroups",
+          "logs:FilterLogEvents",
+
         ]
         Resource = "*"
       }
