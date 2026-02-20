@@ -424,9 +424,9 @@ data "aws_iam_policy_document" "assume_role_policy_signoz" {
     effect  = "Allow"
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:signoz:signoz"]
+      values   = ["system:serviceaccount:signoz:*"]
     }
 
     condition {
@@ -507,9 +507,9 @@ data "aws_iam_policy_document" "assume_role_policy_signoz_prometheus_cloudwatch_
     effect  = "Allow"
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:signoz:prometheus-cloudwatch-exporter"]
+      values   = ["system:serviceaccount:signoz:*"]
     }
 
     condition {
