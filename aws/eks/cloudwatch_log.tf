@@ -50,6 +50,8 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error" {
+  # This should be deprecated once we have the new category of Celery error
+  # classifications fully implemented.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error"
   pattern        = "%ERROR/.*Worker|ERROR/MainProcess%"
@@ -64,6 +66,8 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error" {
 
 # We are adding this alarm in to staging since we are seeing some issues with cypress tests causing not found errors in staging
 resource "aws_cloudwatch_log_metric_filter" "celery-not-found-error" {
+  # This should be deprecated once we have the new category of Celery error
+  # classifications fully implemented.
   count          = var.cloudwatch_enabled && var.env == "staging" ? 1 : 0
   name           = "celery-not-found-error"
   pattern        = "%notifications not found for SES references%"
@@ -71,6 +75,122 @@ resource "aws_cloudwatch_log_metric_filter" "celery-not-found-error" {
 
   metric_transformation {
     name      = "celery-not-found-error"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-unknown" {
+  # This is a catch all log metric filter for Celery when unexpected errors occur. We need
+  # to keep an eye on closely and monitor.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-unknown"
+  pattern        = "\"CELERY_UNKNOWN_ERROR\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-unknown"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-duplicate-record" {
+  # This monitors for database duplicate record errors in Celery.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-duplicate-record"
+  pattern        = "\"CELERY_KNOWN_ERROR::DUPLICATE_RECORD\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-duplicate-record"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-job-incomplete" {
+  # This monitors for incomplete jobs that couldn't be completed within Celery.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-job-incomplete"
+  pattern        = "\"CELERY_KNOWN_ERROR::JOB_INCOMPLETE\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-job-incomplete"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-notification-not-found" {
+  # This monitors for Celery errors when notifications were not found within the system.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-notification-not-found"
+  pattern        = "\"CELERY_KNOWN_ERROR::NOTIFICATION_NOT_FOUND\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-notification-not-found"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-shutdown" {
+  # This monitors for Celery workers shutting down.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-shutdown"
+  pattern        = "\"CELERY_KNOWN_ERROR::SHUTDOWN\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-shutdown"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-throttling" {
+  # This monitors for Celery errors related to throttling, which could indicate performance issues
+  # or capacity limits being hit.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-throttling"
+  pattern        = "\"CELERY_KNOWN_ERROR::THROTTLING\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-throttling"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout" {
+  # This monitors for Celery errors related to network timeouts, which could indicate 
+  # performance issues or external dependencies not responding in time.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-timeout"
+  pattern        = "\"CELERY_KNOWN_ERROR::TIMEOUT\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-timeout"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-xray" {
+  # This monitors for Celery errors related to AWS X-Ray, which could indicate issues
+  # with observability tracing.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-xray"
+  pattern        = "\"CELERY_KNOWN_ERROR::XRAY\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-xray"
     namespace = "LogMetrics"
     value     = "1"
   }
