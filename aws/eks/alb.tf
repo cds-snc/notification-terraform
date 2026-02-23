@@ -213,7 +213,7 @@ resource "aws_alb_target_group" "notification-canada-ca-api" {
   protocol             = "HTTP"
   vpc_id               = var.vpc_id
   target_type          = "ip"
-  deregistration_delay = 30
+  deregistration_delay = 120
 
   health_check {
     path    = "/_status?simple=true"
@@ -319,6 +319,7 @@ resource "aws_alb_target_group" "notification-canada-ca-documentation" {
     path    = "/"
     matcher = "200"
   }
+  deregistration_delay = 120
 }
 
 resource "aws_lb_listener_rule" "documentation-host-route" {
