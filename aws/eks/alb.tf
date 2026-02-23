@@ -94,10 +94,11 @@ resource "aws_lb_listener_rule" "security-txt" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-document-api" {
-  name     = "notification-document-api"
-  port     = 7000
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name                 = "notification-document-api"
+  port                 = 7000
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  deregistration_delay = 120
   health_check {
     path    = "/_status"
     matcher = "200"
@@ -158,6 +159,7 @@ resource "aws_alb_target_group" "notification-canada-ca-document" {
     path    = "/_status"
     matcher = "200"
   }
+  deregistration_delay = 120
 }
 
 resource "aws_lb_listener_rule" "alt-domain-document-host-route" {
@@ -273,6 +275,7 @@ resource "aws_alb_target_group" "notification-canada-ca-admin" {
     path    = "/_status?simple=true"
     matcher = "200"
   }
+  deregistration_delay = 120
 }
 
 ###
