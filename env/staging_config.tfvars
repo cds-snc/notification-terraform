@@ -53,7 +53,7 @@ enable_sentinel_forwarding  = true
 enable_delete_protection    = true
 enable_guardduty_malware_s3 = true
 cloudwatch_enabled          = true
-enable_cloudwatch_fire_drills = false
+enable_cloudwatch_fire_drills = true
 recovery                    = false
 aws_xray_sdk_enabled        = true
 
