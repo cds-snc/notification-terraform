@@ -12,10 +12,11 @@ locals {
 resource "aws_vpc_endpoint" "interface" {
   for_each = local.endpoints_interface
 
-  vpc_id              = aws_vpc.notification-canada-ca.id
-  vpc_endpoint_type   = "Interface"
-  service_name        = "com.amazonaws.${var.region}.${each.value}"
-  private_dns_enabled = true
+  vpc_id            = aws_vpc.notification-canada-ca.id
+  vpc_endpoint_type = "Interface"
+  service_name      = "com.amazonaws.${var.region}.${each.value}"
+  # Keep public AWS service DNS resolution intact for VPN clients.
+  private_dns_enabled = false
   security_group_ids = [
     aws_security_group.vpc_endpoints.id,
   ]
