@@ -231,14 +231,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unknown-critical" {
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-duplicate-record-warning"
-  alarm_description   = "One Celery duplicate record error in 1 minute"
+  alarm_description   = "50 Celery duplicate record errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-duplicate-record[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-duplicate-record[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 1
+  threshold           = 50
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
@@ -247,14 +247,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warni
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-duplicate-record-critical"
-  alarm_description   = "Ten Celery duplicate record errors in 1 minute"
+  alarm_description   = "200 Celery duplicate record errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-duplicate-record[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-duplicate-record[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 10
+  threshold           = 200
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
@@ -297,14 +297,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-critica
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-notification-not-found-warning"
-  alarm_description   = "One Celery notification not found error in 1 minute"
+  alarm_description   = "50 Celery notification not found errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-notification-not-found[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-notification-not-found[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 1
+  threshold           = 50
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
@@ -313,14 +313,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-notification-not-found-critical"
-  alarm_description   = "Ten Celery notification not found errors in 1 minute"
+  alarm_description   = "200 Celery notification not found errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-notification-not-found[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-notification-not-found[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 10
+  threshold           = 200
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
@@ -330,23 +330,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-shutdown-warning"
-  alarm_description   = "One Celery shutdown error in 1 minute"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].namespace
-  period              = 60
-  statistic           = "Sum"
-  threshold           = 1
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_warning_arn]
-}
-
-resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-shutdown-critical" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-10-celery-error-shutdown-critical"
-  alarm_description   = "Ten Celery shutdown errors in 1 minute"
+  alarm_description   = "10 Celery shutdown errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].name
@@ -355,22 +339,38 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-celery-error-shutdown-critical" 
   statistic           = "Sum"
   threshold           = 10
   treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-celery-error-shutdown-critical"
+  alarm_description   = "30 Celery shutdown errors in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 30
+  treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
 }
 
 # THROTTLING
-resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-throttling-warning" {
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-1-celery-error-throttling-warning"
-  alarm_description   = "One Celery throttling error in 1 minute"
+  alarm_name          = "logs-celery-error-throttling-warning"
+  alarm_description   = "1000 Celery throttling errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-throttling[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-throttling[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 1
+  threshold           = 1000
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
@@ -379,14 +379,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-throttling-warning" 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-throttling-critical"
-  alarm_description   = "Ten Celery throttling errors in 1 minute"
+  alarm_description   = "3000 Celery throttling errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-throttling[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-throttling[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 10
+  threshold           = 3000
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
@@ -429,14 +429,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-critical" {
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-xray-warning"
-  alarm_description   = "One Celery X-Ray error in 1 minute"
+  alarm_description   = "Five Celery X-Ray errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-xray[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-xray[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 1
+  threshold           = 5
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
@@ -445,14 +445,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-warning" {
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-xray-critical"
-  alarm_description   = "Ten Celery X-Ray errors in 1 minute"
+  alarm_description   = "Twenty-five Celery X-Ray errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-xray[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-xray[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 10
+  threshold           = 25
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
