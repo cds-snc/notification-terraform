@@ -370,7 +370,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-throttling-warning" 
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-throttling[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 1
+  threshold           = 1000
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_warning_arn]
@@ -386,7 +386,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-critical" {
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-throttling[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 10
+  threshold           = 3000
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
