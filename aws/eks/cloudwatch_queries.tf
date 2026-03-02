@@ -205,7 +205,7 @@ resource "aws_cloudwatch_query_definition" "celery-count-known-errors" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.celery_name}/
-| filter @message like /KNOWN_ERROR/
+| filter @message like /CELERY_KNOWN_ERROR/
 | parse @message /CELERY_KNOWN_ERROR::(?<error>[a-zA-Z_]+)/
 | stats count(*) as total by error
 | sort total desc
