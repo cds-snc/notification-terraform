@@ -231,7 +231,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unknown-critical" {
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-duplicate-record-warning"
-  alarm_description   = "50 Celery duplicate record error in 1 minute"
+  alarm_description   = "50 Celery duplicate record errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-duplicate-record[0].metric_transformation[0].name
@@ -330,7 +330,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-shutdown-warning"
-  alarm_description   = "10 Celery shutdown error in 1 minute"
+  alarm_description   = "10 Celery shutdown errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].name
@@ -363,7 +363,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-critical" {
 resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-throttling-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-celery-error-throttling-warning"
-  alarm_description   = "1000 Celery throttling error in 1 minute"
+  alarm_description   = "1000 Celery throttling errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-throttling[0].metric_transformation[0].name
