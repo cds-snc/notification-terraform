@@ -18,6 +18,26 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries" {
+  provider = aws.us-west-2
+
+  name              = "sns/${var.region_pinpoint_us}/${var.account_id}/PinpointDirectPublishToPhoneNumber"
+  retention_in_days = var.sensitive_log_retention_period_days
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries_failures" {
+  provider = aws.us-west-2
+
+  name              = "sns/${var.region_pinpoint_us}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure"
+  retention_in_days = var.sensitive_log_retention_period_days
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
 #
 # pinpoint_to_sqs_sms_callbacks lambda function logs
 #
@@ -126,6 +146,109 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-failures" {
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-failures-carriers" {
   count          = var.cloudwatch_enabled ? 1 : 0
   log_group_name = aws_cloudwatch_log_group.pinpoint_deliveries_failures.name
+
+  name    = "pinpoint-sms-failures-carriers"
+  pattern = "{ ($.isFinal IS TRUE) && ($.carrierName != \"\" && ( ($.messageStatus != \"SUCCESSFUL\") && ($.messageStatus != \"DELIVERED\") )) }"
+
+  metric_transformation {
+    name      = "pinpoint-sms-failures-carriers"
+    namespace = "LogMetrics"
+    value     = "1"
+    dimensions = {
+      Carrier = "$.carrierName"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-blocked-as-spam" {
+  provider = aws.us-west-2
+
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "pinpoint-sms-blocked-as-spam"
+  # See https://docs.aws.amazon.com/sms-voice/latest/userguide/configuration-sets-event-format.html
+  pattern        = "{ $.messageStatus = \"SPAM\" }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name
+
+  metric_transformation {
+    name          = "pinpoint-sms-blocked-as-spam"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-phone-carrier-unavailable" {
+  provider = aws.us-west-2
+
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "pinpoint-sms-phone-carrier-unavailable"
+  # See https://docs.aws.amazon.com/sms-voice/latest/userguide/configuration-sets-event-format.html
+  pattern        = "{ $.messageStatus = \"CARRIER_UNREACHABLE\" }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name
+
+  metric_transformation {
+    name          = "pinpoint-sms-phone-carrier-unavailable"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-rate-exceeded" {
+  provider = aws.us-west-2
+
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "pinpoint-sms-rate-exceeded"
+  # https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-long-codes.html
+  # Canadian long code numbers are limited at 1 SMS per second/number
+  pattern        = "{ $.messageStatusDescription = \"Rate exceeded.\" }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name
+
+  metric_transformation {
+    name          = "pinpoint-sms-rate-exceeded"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-successes" {
+  provider = aws.us-west-2
+
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "pinpoint-sms-successes"
+  pattern        = "{ ($.isFinal IS TRUE) && ( ($.messageStatus = \"SUCCESSFUL\") || ($.messageStatus = \"DELIVERED\") ) }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries.name
+
+  metric_transformation {
+    name          = "pinpoint-sms-successes"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-failures" {
+  provider = aws.us-west-2
+
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "pinpoint-sms-failures"
+  pattern        = "{ ($.isFinal IS TRUE) && ( ($.messageStatus != \"SUCCESSFUL\") && ($.messageStatus != \"DELIVERED\") ) }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name
+
+  metric_transformation {
+    name          = "pinpoint-sms-failures"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-failures-carriers" {
+  provider = aws.us-west-2
+
+  count          = var.cloudwatch_enabled ? 1 : 0
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name
 
   name    = "pinpoint-sms-failures-carriers"
   pattern = "{ ($.isFinal IS TRUE) && ($.carrierName != \"\" && ( ($.messageStatus != \"SUCCESSFUL\") && ($.messageStatus != \"DELIVERED\") )) }"

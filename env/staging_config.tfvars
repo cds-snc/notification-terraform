@@ -2,6 +2,7 @@
 env                  = "staging"
 account_budget_limit = 5000
 region               = "ca-central-1"
+region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-staging"
 billing_tag_key      = "CostCenter"
 
