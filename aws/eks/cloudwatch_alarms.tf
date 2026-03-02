@@ -360,9 +360,9 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-critical" {
 }
 
 # THROTTLING
-resource "aws_cloudwatch_metric_alarm" "logs-1-celery-error-throttling-warning" {
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-1-celery-error-throttling-warning"
+  alarm_name          = "logs-celery-error-throttling-warning"
   alarm_description   = "1000 Celery throttling errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"

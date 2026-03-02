@@ -194,7 +194,7 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "celery-errors" {
+resource "aws_cloudwatch_query_definition" "celery-count-known-errors" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Count of known errors"
 
