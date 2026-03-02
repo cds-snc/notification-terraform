@@ -2,6 +2,7 @@
 env                  = "production"
 account_budget_limit = 15000
 region               = "ca-central-1"
+region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
 security_txt_content = <<-EOT

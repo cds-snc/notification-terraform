@@ -69,6 +69,10 @@ variable "region" {
   type = string
 }
 
+variable "region_pinpoint_us" {
+  type = string
+}
+
 variable "billing_tag_value" {
   type = string
 }

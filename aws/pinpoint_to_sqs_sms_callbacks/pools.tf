@@ -6,6 +6,14 @@ resource "null_resource" "create_pools" {
   }
 }
 
+resource "null_resource" "create_pinpoint_configuration_set" {
+  depends_on = [aws_iam_role.pinpoint_logs, aws_cloudwatch_log_group.pinpoint_deliveries, aws_cloudwatch_log_group.pinpoint_deliveries_failures]
+
+  provisioner "local-exec" {
+    command = "./create_pinpoint_configuration_set.sh  ${var.region_pinpoint_us} ${aws_iam_role.pinpoint_logs.arn} ${aws_cloudwatch_log_group.pinpoint_us_deliveries.arn} ${aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.arn}"
+  }
+}
+
 data "external" "get_default_pool_id" {
   # Get the Default Pool Id
   program = ["helper_scripts/getDefaultPoolId.sh"]
