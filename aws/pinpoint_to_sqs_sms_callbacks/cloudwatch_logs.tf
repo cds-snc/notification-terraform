@@ -246,7 +246,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-failures" {
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-failures-carriers" {
   provider = aws.us-west-2
-  
+
   count          = var.cloudwatch_enabled ? 1 : 0
   log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name
 
