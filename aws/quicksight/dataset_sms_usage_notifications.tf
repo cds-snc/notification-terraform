@@ -99,7 +99,7 @@ resource "aws_quicksight_refresh_schedule" "sms-usage-notifications" {
 
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "07:45"
+      time_of_the_day = "09:00"
     }
   }
 }
