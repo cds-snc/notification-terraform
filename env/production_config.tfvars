@@ -15,12 +15,12 @@ Expires: 2026-03-02T12:00:00.000Z
 EOT
 
 ## EKS
-primary_worker_desired_size     = 8
+primary_worker_desired_size     = 9
 primary_worker_instance_types   = ["c7i.xlarge"]
 secondary_worker_instance_types = ["c7i.xlarge"]
 node_upgrade                    = false
 force_upgrade                   = false
-primary_worker_max_size         = 8
+primary_worker_max_size         = 9
 primary_worker_min_size         = 3
 eks_cluster_name                = "notification-canada-ca-production-eks-cluster"
 eks_cluster_version             = "1.34"
