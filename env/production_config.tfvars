@@ -11,7 +11,7 @@ Contact: https://hackerone.com/tbs-sct/
 Policy: https://hackerone.com/tbs-sct/policy
 Canonical: https://notification.canada.ca/.well-known/security.txt
 Preferred-Languages: en, fr
-Expires: 2026-03-02T12:00:00.000Z
+Expires: 2026-03-29T12:00:00.000Z
 EOT
 
 ## EKS
