@@ -933,13 +933,13 @@ resource "aws_glue_catalog_table" "template_categories" {
 
 resource "null_resource" "athena_vw_notification" {
   triggers = {
-    view_sql_hash = sha1(file("${path.module}/sql/quicksight_vw_notification_${var.env}.sql.tmpl"))
+    view_sql_hash = sha1(file("${path.module}/sql/${var.env == "production" ? "quicksight_vw_notification_production.sql.tmpl" : "quicksight_vw_notification_nonprod.sql.tmpl"}"))
   }
 
   provisioner "local-exec" {
     command = <<EOF
 aws athena start-query-execution \
-  --query-string "$(cat ${path.module}/sql/quicksight_vw_notification_${var.env}.sql.tmpl)" \
+  --query-string "$(cat ${path.module}/sql/${var.env == "production" ? "quicksight_vw_notification_production.sql.tmpl" : "quicksight_vw_notification_nonprod.sql.tmpl"})" \
   --query-execution-context Database=${aws_athena_database.notification_quicksight.name} \
   --work-group ${aws_athena_workgroup.notification_quicksight.name}
 EOF

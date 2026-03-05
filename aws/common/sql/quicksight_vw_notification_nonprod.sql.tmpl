@@ -46,7 +46,7 @@ UNION    SELECT
    , sms_message_encoding
    , sms_origination_phone_number
    FROM
-     notification_history
+     notification_history LIMIT 150000000
 ) 
 , service_data AS (
    SELECT
@@ -108,5 +108,3 @@ FROM
   ((notification_data n
 INNER JOIN service_data s ON (n.service_id = s.service_id))
 INNER JOIN template_data t ON (n.template_id = t.template_id))
-ORDER BY notification_created_at DESC, notification_id
-LIMIT 200000000
