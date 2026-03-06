@@ -29,6 +29,18 @@ output "public_nginx_target_group_arn" {
   value = aws_alb_target_group.public_nginx_http.arn
 }
 
+output "cert_manager_route53_irsa_role_arn" {
+  value = aws_iam_role.cert_manager_route53.arn
+}
+
+output "cert_manager_route53_role_arn" {
+  value = var.cert_manager_route53_role_arn
+}
+
+output "cert_manager_route53_zone_id" {
+  value = replace(var.route53_zone_id, "/hostedzone/", "")
+}
+
 
 ###
 # EKS cluster
