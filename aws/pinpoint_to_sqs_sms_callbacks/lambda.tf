@@ -59,7 +59,7 @@ resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_failures_
 
 module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.4.3"
-  name                       = "pinpoint_to_sqs_sms_callbacks"
+  name                       = "pinpoint_to_sqs_sms_callbacks_us_west_2"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn
   enable_lambda_insights     = true
