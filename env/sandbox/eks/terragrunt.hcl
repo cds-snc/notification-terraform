@@ -77,6 +77,7 @@ dependency "dns" {
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
     internal_dns_name = "staging.notification.internal.com"
     route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
+    cert_manager_route53_role_arn = "arn:aws:iam::123456789012:role/cert-manager-dns01"
   }
 }
 
@@ -127,4 +128,5 @@ inputs = {
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks  
   route53_zone_id                           = dependency.dns.outputs.route53_zone_id
+  cert_manager_route53_role_arn             = dependency.dns.outputs.cert_manager_route53_role_arn
 }

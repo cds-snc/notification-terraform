@@ -188,6 +188,11 @@ variable "route53_zone_id" {
   type = string
 }
 
+variable "cert_manager_route53_role_arn" {
+  type    = string
+  default = ""
+}
+
 variable "hosted_zone_id" {
   type = string
 }
