@@ -8,7 +8,7 @@ resource "null_resource" "lambda_repo_clone" {
   }
 
   provisioner "local-exec" {
-    command = "git clone 'https://github.com/cds-snc/notification-lambdas.git' /var/tmp/notification-lambdas"
+    command = "rm -rf /var/tmp/notification-lambdas && git clone 'https://github.com/cds-snc/notification-lambdas.git' /var/tmp/notification-lambdas"
   }
 }
 
