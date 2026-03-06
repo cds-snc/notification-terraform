@@ -8,6 +8,16 @@ resource "aws_secretsmanager_secret_version" "nginx_target_group_arn" {
   secret_string = aws_alb_target_group.internal_nginx_http.arn
 }
 
+resource "aws_secretsmanager_secret" "public_nginx_target_group_arn" {
+  name                    = "PUBLIC_NGINX_TARGET_GROUP_ARN"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "public_nginx_target_group_arn" {
+  secret_id     = aws_secretsmanager_secret.public_nginx_target_group_arn.id
+  secret_string = aws_alb_target_group.public_nginx_http.arn
+}
+
 resource "aws_secretsmanager_secret" "pr_bot_app_id" {
   name                    = "PR_BOT_APP_ID"
   recovery_window_in_days = 0
