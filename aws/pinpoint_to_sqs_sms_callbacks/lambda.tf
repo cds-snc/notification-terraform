@@ -93,6 +93,7 @@ resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_us_west_2
   log_group_name  = aws_cloudwatch_log_group.pinpoint_us_deliveries.name
   filter_pattern  = ""
   destination_arn = module.pinpoint_to_sqs_sms_callbacks_us_west_2.function_arn
+  depends_on      = [aws_lambda_permission.allow_cloudwatch_logs_pinpoint_us_successes]
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_us_failures" {
@@ -111,4 +112,5 @@ resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_failures_
   log_group_name  = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name
   filter_pattern  = ""
   destination_arn = module.pinpoint_to_sqs_sms_callbacks_us_west_2.function_arn
+  depends_on      = [aws_lambda_permission.allow_cloudwatch_logs_pinpoint_us_failures]
 }
