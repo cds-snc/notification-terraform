@@ -81,6 +81,19 @@ resource "aws_route53_record" "documentation-notification-canada-ca-cname" {
   ttl = "300"
 }
 
+resource "aws_route53_record" "wildcard-notification-canada-ca-cname" {
+  provider        = aws.dns
+  zone_id         = var.route53_zone_id
+  name            = "*.${var.domain}"
+  type            = "CNAME"
+  allow_overwrite = true
+
+  records = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
 resource "aws_route53_record" "notification-alt-root" {
   #TODO: For production
   count           = var.env != "production" ? 1 : 0

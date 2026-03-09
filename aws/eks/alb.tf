@@ -363,6 +363,43 @@ resource "aws_lb_listener_rule" "documentation-host-redirect" {
 }
 
 ###
+# Catch-all subdomain routing
+###
+
+resource "aws_lb_listener_rule" "public-nginx-catchall-subdomains" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 50000
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.public_nginx_http.arn
+  }
+
+  condition {
+    host_header {
+      values = ["*.${var.domain}"]
+    }
+  }
+}
+
+###
+# Public NGINX Target Group
+###
+
+resource "aws_alb_target_group" "public_nginx_http" {
+  name        = "notification-public-nginx-http"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+  health_check {
+    protocol = "HTTP"
+    path     = "/"
+    matcher  = "404"
+  }
+}
+
+###
 # WAF
 ###
 
@@ -370,4 +407,3 @@ resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
   resource_arn = aws_alb.notification-canada-ca.arn
   web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
 }
-
