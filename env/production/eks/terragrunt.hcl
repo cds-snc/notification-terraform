@@ -11,7 +11,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "output"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     vpc_private_subnets = [
@@ -70,13 +70,14 @@ dependency "dns" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "output"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     internal_dns_certificate_arn = ""
     internal_dns_zone_id = "ZQSVJUPU6J1EY"
     internal_dns_name = "staging.notification.internal.com"
     route53_zone_id = "Z04028033PLSHVOO9ZJ1Z"
+    cert_manager_route53_role_arn = "arn:aws:iam::123456789012:role/cert-manager-dns01"
   }
 }
 
@@ -85,7 +86,7 @@ dependency "cloudfront" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "output"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     cloudfront_assets_arn = ""
@@ -127,4 +128,5 @@ inputs = {
   subnet_ids                                = dependency.common.outputs.subnet_ids
   subnet_cidr_blocks                        = dependency.common.outputs.subnet_cidr_blocks  
   route53_zone_id                           = dependency.dns.outputs.route53_zone_id
+  cert_manager_route53_role_arn             = dependency.dns.outputs.cert_manager_route53_role_arn
 }
