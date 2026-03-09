@@ -8,46 +8,6 @@ resource "aws_secretsmanager_secret_version" "nginx_target_group_arn" {
   secret_string = aws_alb_target_group.internal_nginx_http.arn
 }
 
-resource "aws_secretsmanager_secret" "public_nginx_target_group_arn" {
-  name                    = "PUBLIC_NGINX_TARGET_GROUP_ARN"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "public_nginx_target_group_arn" {
-  secret_id     = aws_secretsmanager_secret.public_nginx_target_group_arn.id
-  secret_string = aws_alb_target_group.public_nginx_http.arn
-}
-
-resource "aws_secretsmanager_secret" "cert_manager_route53_irsa_role_arn" {
-  name                    = "CERT_MANAGER_ROUTE53_IRSA_ROLE_ARN"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "cert_manager_route53_irsa_role_arn" {
-  secret_id     = aws_secretsmanager_secret.cert_manager_route53_irsa_role_arn.id
-  secret_string = aws_iam_role.cert_manager_route53.arn
-}
-
-resource "aws_secretsmanager_secret" "cert_manager_route53_role_arn" {
-  name                    = "CERT_MANAGER_ROUTE53_ROLE_ARN"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "cert_manager_route53_role_arn" {
-  secret_id     = aws_secretsmanager_secret.cert_manager_route53_role_arn.id
-  secret_string = var.cert_manager_route53_role_arn
-}
-
-resource "aws_secretsmanager_secret" "cert_manager_route53_zone_id" {
-  name                    = "CERT_MANAGER_ROUTE53_ZONE_ID"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "cert_manager_route53_zone_id" {
-  secret_id     = aws_secretsmanager_secret.cert_manager_route53_zone_id.id
-  secret_string = replace(var.route53_zone_id, "/hostedzone/", "")
-}
-
 resource "aws_secretsmanager_secret" "pr_bot_app_id" {
   name                    = "PR_BOT_APP_ID"
   recovery_window_in_days = 0
