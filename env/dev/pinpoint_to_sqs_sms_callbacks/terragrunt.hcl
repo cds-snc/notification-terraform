@@ -18,6 +18,7 @@ dependency "common" {
     sns_alert_critical_arn                       = ""
     sns_alert_ok_arn                             = ""
     sqs_deliver_receipts_queue_arn               = ""
+    sqs_deliver_receipts_queue_us_west_2_arn     = ""
     sns_monthly_spend_limit                      = 1
     celery_queue_prefix                          = ""
     sqs_send_sms_high_queue_delay_warning_arn    = ""
@@ -58,6 +59,7 @@ inputs = {
   sns_alert_critical_arn                             = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_ok_arn                                   = dependency.common.outputs.sns_alert_ok_arn
   sqs_deliver_receipts_queue_arn                     = dependency.common.outputs.sqs_deliver_receipts_queue_arn
+  sqs_deliver_receipts_queue_us_west_2_arn           = dependency.common.outputs.sqs_deliver_receipts_queue_us_west_2_arn
   pinpoint_to_sqs_sms_callbacks_ecr_repository_url          = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
   pinpoint_to_sqs_sms_callbacks_ecr_arn                     = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_arn
   pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url = dependency.ecr_us_west_2.outputs.pinpoint_to_sqs_sms_callbacks_ecr_repository_url

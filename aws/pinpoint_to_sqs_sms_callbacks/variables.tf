@@ -15,6 +15,11 @@ variable "sqs_deliver_receipts_queue_arn" {
   description = "The arn of the SQS queue for receipts processing celery tasks"
 }
 
+variable "sqs_deliver_receipts_queue_us_west_2_arn" {
+  type        = string
+  description = "The arn of the SQS queue for receipts processing celery tasks in US West 2"
+}
+
 variable "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"

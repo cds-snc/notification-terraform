@@ -212,6 +212,10 @@ output "sqs_deliver_receipts_queue_arn" {
   value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
 }
 
+output "sqs_deliver_receipts_queue_us_west_2_arn" {
+  value = aws_sqs_queue.eks_notification_canada_usdelivery_receipts.arn
+}
+
 output "subnet_ids" {
   value = aws_subnet.notification-canada-ca-private[*].id
 }

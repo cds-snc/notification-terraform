@@ -65,6 +65,22 @@ resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
   }
 }
 
+resource "aws_sqs_queue" "eks_notification_canada_usdelivery_receipts" {
+  provider = aws.us-west-2
+
+  name             = "eks-notification-canada-usdelivery-receipts"
+  delay_seconds    = 0
+  max_message_size = var.sqs_max_message_size
+  #4 Days
+  message_retention_seconds  = 345600
+  receive_wait_time_seconds  = 0
+  visibility_timeout_seconds = var.sqs_visibility_timeout_default
+
+  tags = {
+    Environment = var.env
+  }
+}
+
 resource "aws_sqs_queue" "ses_receipt_callback_buffer" {
   name                       = "ses-receipt-callback-buffer"
   delay_seconds              = 0

@@ -116,6 +116,23 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam-us-west-2" 
   }
 }
 
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-blocked-as-spam-us-west-2" {
+  provider = aws.us-west-2
+
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "pinpoint-sms-blocked-as-spam-us-west-2"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  pattern        = "{ $.delivery.providerResponse = \"Blocked as spam by phone carrier\" }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures[0].name
+
+  metric_transformation {
+    name          = "pinpoint-sms-blocked-as-spam-us-west-2"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable" {
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "sns-sms-phone-carrier-unavailable"
@@ -142,6 +159,23 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable-u
 
   metric_transformation {
     name          = "sns-sms-phone-carrier-unavailable-us-west-2"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-phone-carrier-unavailable-us-west-2" {
+  provider = aws.us-west-2
+
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "pinpoint-sms-phone-carrier-unavailable-us-west-2"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  pattern        = "{ $.delivery.providerResponse = \"Phone carrier is currently unreachable/unavailable\" }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures[0].name
+
+  metric_transformation {
+    name          = "pinpoint-sms-phone-carrier-unavailable-us-west-2"
     namespace     = "LogMetrics"
     value         = "1"
     default_value = "0"
@@ -184,4 +218,21 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
   }
 }
 
+resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-rate-exceeded-us-west-2" {
+  provider = aws.us-west-2
 
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "pinpoint-sms-rate-exceeded-us-west-2"
+  # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
+  # https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-long-codes.html
+  # Canadian long code numbers are limited at 1 SMS per second/number
+  pattern        = "{ $.delivery.providerResponse = \"Rate exceeded.\" }"
+  log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures[0].name
+
+  metric_transformation {
+    name          = "sns-sms-rate-exceeded-us-west-2"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}

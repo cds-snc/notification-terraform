@@ -674,6 +674,10 @@ variable "sns_monthly_spend_limit_us_west_2" {
   type = number
 }
 
+variable "pinpoint_monthly_spend_limit_us_west_2" {
+  type = number
+}
+
 variable "sqs_visibility_timeout_default" {
   type = number
 }
