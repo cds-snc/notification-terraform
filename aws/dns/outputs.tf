@@ -39,8 +39,3 @@ output "internal_dns_name" {
 output "route53_zone_id" {
   value = var.env == "production" ? aws_route53_zone.notification-canada-ca[0].zone_id : var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
 }
-
-output "cert_manager_route53_role_arn" {
-  value     = "arn:aws:iam::${var.env == "production" ? var.dns_account_id : var.staging_account_id}:role/cert-manager-dns01"
-  sensitive = true
-}
