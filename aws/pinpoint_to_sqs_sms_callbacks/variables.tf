@@ -25,6 +25,16 @@ variable "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
   description = "The ARN of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"
 }
 
+variable "pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url" {
+  type        = string
+  description = "The URL of the ECR repository for the pinpoint_to_sqs_sms_callbacks image in us-west-2"
+}
+
+variable "pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn" {
+  type        = string
+  description = "The ARN of the ECR repository for the pinpoint_to_sqs_sms_callbacks image in us-west-2"
+}
+
 variable "sms_monthly_spend_limit" {
   type        = number
   description = "The total monthly spending limit for SMS (SNS plus Pinpoint)"
