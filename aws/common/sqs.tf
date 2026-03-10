@@ -75,7 +75,7 @@ resource "aws_sqs_queue" "eks_notification_canada_usdelivery_receipts" {
   message_retention_seconds  = 345600
   receive_wait_time_seconds  = 0
   visibility_timeout_seconds = var.sqs_visibility_timeout_default
-  sqs_managed_sse_enabled = true
+  sqs_managed_sse_enabled    = true
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
   # AWS managed encryption is good enough for us
 
