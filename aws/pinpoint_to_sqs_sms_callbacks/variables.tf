@@ -79,7 +79,7 @@ variable "sns_alert_warning_arn_us_west_2" {
   type = string
 }
 
-variable "sns_alert_critical_arn" {
+variable "sns_alert_critical_arn_us_west_2" {
   type = string
 }
 
