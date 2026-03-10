@@ -728,7 +728,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-w
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-us-sms-phone-carrier-unavailable[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-phone-carrier-unavailable[0].metric_transformation[0].namespace
+  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-us-sms-phone-carrier-unavailable[0].metric_transformation[0].namespace
   period              = 60 * 60 * 3
   statistic           = "Sum"
   threshold           = 100
@@ -748,6 +748,6 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-rate-exceeded-warning-us-we
   period              = 60 * 5
   statistic           = "Sum"
   threshold           = 1
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_actions       = [var.sns_alert_warning_arn_us_west_2]
   treat_missing_data  = "notBreaching"
 }
