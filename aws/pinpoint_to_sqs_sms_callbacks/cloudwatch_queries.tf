@@ -15,7 +15,6 @@ messageStatusDescription as `Message status description`, @message
 | filter eventType = 'TEXT_SPAM'
 | sort Timestamp desc
 | limit 100
-}
 QUERY
 }
 
@@ -221,7 +220,6 @@ messageStatusDescription as `Message status description`, @message
 | filter eventType = 'TEXT_SPAM'
 | sort Timestamp desc
 | limit 100
-}
 QUERY
 }
 
