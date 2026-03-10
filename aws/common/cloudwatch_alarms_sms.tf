@@ -37,23 +37,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-warning" {
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-us-west-2-warning" {
-  provider = aws.us-west-2
-
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-spending-us-west-2-warning"
-  alarm_description   = "Pinpoint spending reached 80% of limit this month"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "SMSMonthToDateSpentUSD"
-  namespace           = "AWS/SNS"
-  period              = "300"
-  statistic           = "Maximum"
-  threshold           = 0.8 * var.pinpoint_monthly_spend_limit_us_west_2
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
-}
-
 resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-critical"
@@ -88,24 +71,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
   ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "pinpoint-spending-us-west-2-critical" {
-  provider = aws.us-west-2
-
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-spending-us-west-2-critical"
-  alarm_description   = "Pinpoint spending reached 90% of limit this month"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "SMSMonthToDateSpentUSD"
-  namespace           = "AWS/SNS"
-  period              = "300"
-  statistic           = "Maximum"
-  threshold           = 0.9 * var.pinpoint_monthly_spend_limit_us_west_2
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
-}
-
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
@@ -131,59 +96,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   count    = var.cloudwatch_enabled ? 1 : 0
 
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-warning"
-  alarm_description   = "SMS success rate to Canadian numbers is below 85% over 2 consecutive periods of 12 hours"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "2"
-  datapoints_to_alarm = "2"
-  threshold           = "1"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
-  treat_missing_data  = "notBreaching"
-
-  metric_query {
-    id          = "successRate"
-    label       = "Success Rate"
-    return_data = false
-    metric {
-      namespace   = "AWS/SNS"
-      metric_name = "SMSSuccessRate"
-      period      = 60 * 60 * 12
-      stat        = "Average"
-      dimensions = {
-        SMSType = "Transactional"
-        Country = "CA"
-      }
-    }
-  }
-
-  metric_query {
-    id          = "messagesPublished"
-    label       = "Messages Published"
-    return_data = false
-    metric {
-      namespace   = "AWS/SNS"
-      metric_name = "NumberOfMessagesPublished"
-      period      = 60 * 60 * 12
-      stat        = "Sum"
-      dimensions = {
-        SMSType = "Transactional"
-        Country = "CA"
-      }
-    }
-  }
-
-  metric_query {
-    id          = "alarmCondition"
-    label       = "Guarded Alarm Condition"
-    return_data = true
-    expression  = "IF(successRate < 0.85 AND messagesPublished > 75, 0, 1)"
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-canadian-numbers-us-west-2-warning" {
-  provider = aws.us-west-2
-  count    = var.cloudwatch_enabled ? 1 : 0
-
-  alarm_name          = "pinpoint-sms-success-rate-canadian-numbers-us-west-2-warning"
   alarm_description   = "SMS success rate to Canadian numbers is below 85% over 2 consecutive periods of 12 hours"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
@@ -307,29 +219,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-canadian-numbers-us-west-2-critical" {
-  provider = aws.us-west-2
-
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-success-rate-canadian-numbers-us-west-2-critical"
-  alarm_description   = "SMS success rate to Canadian numbers is below 50% over 4 consecutive periods of 6 hrs"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "4"
-  datapoints_to_alarm = "4"
-  metric_name         = "SMSSuccessRate"
-  namespace           = "AWS/SNS"
-  period              = 60 * 60 * 6
-  statistic           = "Average"
-  threshold           = 50 / 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn]
-  ok_actions          = [aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn]
-  treat_missing_data  = "notBreaching"
-  dimensions = {
-    SMSType = "Transactional"
-    Country = "CA"
-  }
-}
-
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-blocked-as-spam-warning"
@@ -355,23 +244,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warnin
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.sns-sms-blocked-as-spam-us-west-2[0].metric_transformation[0].namespace
-  period              = 60 * 60 * 12
-  statistic           = "Sum"
-  threshold           = 10
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
-  treat_missing_data  = "notBreaching"
-}
-
-resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-blocked-as-spam-us-west-2-warning" {
-  provider = aws.us-west-2
-
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-blocked-as-spam-us-west-2-warning"
-  alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-blocked-as-spam-us-west-2[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-blocked-as-spam-us-west-2[0].metric_transformation[0].namespace
   period              = 60 * 60 * 12
   statistic           = "Sum"
   threshold           = 10
@@ -411,23 +283,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
   treat_missing_data  = "notBreaching"
 }
 
-resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-us-west-2-warning" {
-  provider = aws.us-west-2
-
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-phone-carrier-unavailable-us-west-2-warning"
-  alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-phone-carrier-unavailable-us-west-2[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-phone-carrier-unavailable-us-west-2[0].metric_transformation[0].namespace
-  period              = 60 * 60 * 3
-  statistic           = "Sum"
-  threshold           = 100
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
-  treat_missing_data  = "notBreaching"
-}
-
 resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-rate-exceeded-warning"
@@ -453,23 +308,6 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.sns-sms-rate-exceeded-us-west-2[0].metric_transformation[0].namespace
-  period              = 60 * 5
-  statistic           = "Sum"
-  threshold           = 1
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn]
-  treat_missing_data  = "notBreaching"
-}
-
-resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-rate-exceeded-us-west-2-warning" {
-  provider = aws.us-west-2
-
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "pinpoint-sms-rate-exceeded-us-west-2-warning"
-  alarm_description   = "At least 1 Pinpoint SMS rate exceeded error in 5 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.pinpoint-sms-rate-exceeded-us-west-2[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.pinpoint-sms-rate-exceeded-us-west-2[0].metric_transformation[0].namespace
   period              = 60 * 5
   statistic           = "Sum"
   threshold           = 1

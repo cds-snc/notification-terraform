@@ -74,3 +74,15 @@ variable "sqs_send_sms_low_queue_delay_critical_arn" {
   description = "ARN for the corresponding alarm"
   type        = string
 }
+
+variable "sns_alert_warning_arn_us_west_2" {
+  type = string
+}
+
+variable "sns_alert_critical_arn" {
+  type = string
+}
+
+variable "sns_alert_ok_arn_us_west_2" {
+  type = string
+}
