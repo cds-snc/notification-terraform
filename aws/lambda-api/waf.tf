@@ -269,10 +269,10 @@ resource "aws_wafv2_web_acl" "api_lambda" {
           }
         }
         positional_constraint = "CONTAINS"
-        search_string         = "Fuzz Faster"
+        search_string         = "fuzz faster"
         text_transformation {
           priority = 0
-          type     = "NONE"
+          type     = "LOWERCASE"
         }
       }
     }
