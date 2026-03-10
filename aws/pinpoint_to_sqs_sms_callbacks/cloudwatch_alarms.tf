@@ -721,7 +721,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-blocked-as-spam-warning-us-
 }
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-warning-us-west-2" {
-  provider = aws.us-west-2
+  provider            = aws.us-west-2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "pinpoint-sms-phone-carrier-unavailable-warning"
   alarm_description   = "More than 100 Pinpoint SMS failed because a phone carrier is unavailable over 3 hours"
@@ -737,7 +737,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-w
 }
 
 resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-rate-exceeded-warning-us-west-2" {
-  provider = aws.us-west-2
+  provider            = aws.us-west-2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "pinpoint-sms-rate-exceeded-warning"
   alarm_description   = "At least 1 Pinpoint SMS rate exceeded error in 5 minutes"
