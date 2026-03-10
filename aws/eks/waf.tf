@@ -282,6 +282,37 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
+    name     = "BlockFFUFUserAgent"
+    priority = 9
+
+    action {
+      block {}
+    }
+
+    statement {
+      byte_match_statement {
+        field_to_match {
+          single_header {
+            name = "user-agent"
+          }
+        }
+        positional_constraint = "CONTAINS"
+        search_string         = "Fuzz Faster"
+        text_transformation {
+          priority = 0
+          type     = "NONE"
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockFFUFUserAgent"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
     name     = "valid_paths"
     priority = 10
 
