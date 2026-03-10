@@ -297,10 +297,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           }
         }
         positional_constraint = "CONTAINS"
-        search_string         = "Fuzz Faster"
+        search_string         = "fuzz faster"
         text_transformation {
           priority = 0
-          type     = "NONE"
+          type     = "LOWERCASE"
         }
       }
     }
