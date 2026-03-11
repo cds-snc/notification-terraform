@@ -544,11 +544,11 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-warning-us-west-2" {
   provider = aws.us-west-2
 
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "total-sms-spending-warning"
+  alarm_name          = "total-sms-spending-warning-us-west-2"
   alarm_description   = "SMS spending reached 80% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  threshold           = 0.8 * var.sms_monthly_spend_limit
+  threshold           = 0.8 * var.pinpoint_monthly_spend_limit_us_west_2
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn_us_west_2]
 
@@ -584,11 +584,11 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical-us-west-2" {
   provider = aws.us-west-2
 
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "total-sms-spending-critical"
+  alarm_name          = "total-sms-spending-critical-us-west-2"
   alarm_description   = "SMS spending reached 90% of limit this month"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  threshold           = 0.9 * var.sms_monthly_spend_limit
+  threshold           = 0.9 * var.pinpoint_monthly_spend_limit_us_west_2
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn_us_west_2]
 
@@ -732,7 +732,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-phone-carrier-unavailable-w
   period              = 60 * 60 * 3
   statistic           = "Sum"
   threshold           = 100
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_actions       = [var.sns_alert_warning_arn_us_west_2]
   treat_missing_data  = "notBreaching"
 }
 
