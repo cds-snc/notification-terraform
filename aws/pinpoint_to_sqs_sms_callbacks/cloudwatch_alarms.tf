@@ -465,7 +465,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-rate-exceeded-warning" {
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-pinpoint_to_sqs_sms_callbacks-api-us-west-2" {
   provider = aws.us-west-2
 
-  count               = var.cloudwatch_enabled ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0 && var.env != "production" ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning-pinpoint_to_sqs_sms_callbacks-api"
   alarm_description   = "One 500 error in 1 minute for pinpoint_to_sqs_sms_callbacks api"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -483,7 +483,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-pinpoi
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-pinpoint_to_sqs_sms_callbacks-api-us-west-2" {
   provider = aws.us-west-2
 
-  count               = var.cloudwatch_enabled ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0 && var.env != "production" ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical-pinpoint_to_sqs_sms_callbacks-api"
   alarm_description   = "Ten 500 errors in 5 minutes for pinpoint_to_sqs_sms_callbacks api"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -501,7 +501,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-pin
 resource "aws_cloudwatch_metric_alarm" "lambda-image-pinpoint-delivery-receipts-errors-warning-us-west-2" {
   provider = aws.us-west-2
 
-  count               = var.cloudwatch_enabled ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0 && var.env != "production" ? 1 : 0
   alarm_name          = "lambda-image-pinpoint-delivery-receipts-errors-warning"
   alarm_description   = "5 errors on Lambda pinpoint-to-sqs-sms-callbacks in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -522,7 +522,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-pinpoint-delivery-receipts-
 resource "aws_cloudwatch_metric_alarm" "lambda-image-pinpoint-delivery-receipts-errors-critical-us-west-2" {
   provider = aws.us-west-2
 
-  count               = var.cloudwatch_enabled ? 1 : 0
+  count               = var.cloudwatch_enabled ? 1 : 0 && var.env != "production" ? 1 : 0
   alarm_name          = "lambda-image-pinpoint-delivery-receipts-errors-critical"
   alarm_description   = "20 errors on Lambda pinpoint-to-sqs-sms-callbacks in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
