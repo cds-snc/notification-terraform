@@ -535,6 +535,11 @@ variable "sqs_region" {
   type = string
 }
 
+variable "sqs_deliver_receipts_queue_url" {
+  type      = string
+  sensitive = true
+}
+
 variable "gc_notify_service_email" {
   type = string
 }

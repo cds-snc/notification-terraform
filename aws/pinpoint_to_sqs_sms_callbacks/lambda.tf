@@ -9,6 +9,10 @@ module "pinpoint_to_sqs_sms_callbacks" {
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
 
+  environment_variables = {
+    SQS_QUEUE_URL = var.sqs_deliver_receipts_queue_url
+  }
+
   policies = [
     data.aws_iam_policy_document.pinpoint_to_sqs_sms_callbacks.json
   ]
@@ -74,6 +78,10 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
 
   providers = {
     aws = aws.us-west-2
+  }
+
+  environment_variables = {
+    SQS_QUEUE_URL = var.sqs_deliver_receipts_queue_url
   }
 
   policies = [
