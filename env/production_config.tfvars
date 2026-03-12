@@ -145,6 +145,7 @@ system_status_schedule_expression       = "rate(5 minutes)"
 ## COMMON
 sns_monthly_spend_limit                                            = 30000
 sns_monthly_spend_limit_us_west_2                                  = 2000
+pinpoint_monthly_spend_limit_us_west_2                             = 2000
 alarm_warning_document_download_bucket_size_gb                     = 100
 alarm_warning_inflight_processed_created_delta_threshold           = 100
 alarm_critical_inflight_processed_created_delta_threshold          = 200

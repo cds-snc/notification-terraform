@@ -20,8 +20,11 @@ data "aws_iam_policy_document" "pinpoint_to_sqs_sms_callbacks" {
       "sqs:Get*",
       "sqs:SendMessage"
     ]
-    effect    = "Allow"
-    resources = [var.sqs_deliver_receipts_queue_arn]
+    effect = "Allow"
+    resources = [
+      var.sqs_deliver_receipts_queue_arn,
+      var.sqs_deliver_receipts_queue_us_west_2_arn
+    ]
   }
 }
 
