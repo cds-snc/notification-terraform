@@ -10,7 +10,7 @@ module "pinpoint_to_sqs_sms_callbacks" {
   log_group_retention_period = var.sensitive_log_retention_period_days
 
   environment_variables = {
-    SQS_QUEUE_URL = var.sqs_deliver_receipts_queue_url
+    SQS_QUEUE_URL = "https://sqs.ca-central-1.amazonaws.com/${var.account_id}/eks-notification-canada-cadelivery-receipts"
   }
 
   policies = [
@@ -81,7 +81,7 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   }
 
   environment_variables = {
-    SQS_QUEUE_URL = var.sqs_deliver_receipts_queue_url
+    SQS_QUEUE_URL = "https://sqs.ca-central-1.amazonaws.com/${var.account_id}/eks-notification-canada-cadelivery-receipts"
   }
 
   policies = [
