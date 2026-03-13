@@ -269,14 +269,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-warning" {
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-shutdown-critical"
-  alarm_description   = "30 Celery shutdown errors in 1 minute"
+  alarm_description   = "20 Celery shutdown errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.celery-error-shutdown[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
-  threshold           = 30
+  threshold           = 20
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
@@ -407,7 +407,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   namespace           = aws_cloudwatch_log_metric_filter.web-500-errors[0].metric_transformation[0].namespace
   period              = 300
   statistic           = "Sum"
-  threshold           = 50
+  threshold           = 50 # Temporary value until end of HackerOne March 2026: revert to 20 afterwards
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
