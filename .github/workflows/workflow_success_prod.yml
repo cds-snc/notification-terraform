@@ -14,5 +14,5 @@ jobs:
     steps:
       - name: Notify Slack
         run: |
-          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":white_check_mark: Production workflow succeeded: <${{ github.event.workflow_run.html_url }}|${{ github.event.workflow.name }}>"}}]}'
+          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":white_check_mark: Terraform release to PRODUCTION complete: <${{ github.event.workflow_run.html_url }}|${{ github.event.workflow.name }}>"}}]}'
           curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
