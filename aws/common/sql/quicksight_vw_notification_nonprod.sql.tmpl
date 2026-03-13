@@ -24,7 +24,7 @@ WITH
    , sms_origination_phone_number
    FROM
      notifications
-UNION    SELECT
+UNION ALL    SELECT
      id notification_id
    , billable_units notification_billable_units
    , created_at notification_created_at
@@ -46,7 +46,8 @@ UNION    SELECT
    , sms_message_encoding
    , sms_origination_phone_number
    FROM
-     notification_history LIMIT 150000000
+     notification_history
+   LIMIT 100000000
 ) 
 , service_data AS (
    SELECT
