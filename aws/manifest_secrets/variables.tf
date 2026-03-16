@@ -19,6 +19,11 @@ variable "elasticache_queue_cache_primary_endpoint_address" {
   type    = string
 }
 
+variable "enable_signoz" {
+  type    = bool
+  default = false
+}
+
 variable "signoz_smtp_username" {
   default   = "changeme"
   sensitive = true
