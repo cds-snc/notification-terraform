@@ -69,10 +69,10 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint_to_sqs_sms_callbacks-500-e
 resource "aws_cloudwatch_log_metric_filter" "pinpoint_us_to_sqs_sms_callbacks-500-errors-api" {
   provider = aws.us-west-2
 
-  count          = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count          = var.cloudwatch_enabled ? 1 : 0
   name           = "pinpoint_to_sqs_sms_callbacks-500-errors-api"
   pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\""
-  log_group_name = var.env != "production" ? "/aws/lambda/${module.pinpoint_to_sqs_sms_callbacks_us_west_2[0].function_name}" : ""
+  log_group_name = "/aws/lambda/${module.pinpoint_to_sqs_sms_callbacks_us_west_2[0].function_name}"
 
   metric_transformation {
     name      = "500-errors-pinpoint_to_sqs_sms_callbacks-api"
