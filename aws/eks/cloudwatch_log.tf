@@ -155,7 +155,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-xray" {
   # with observability tracing.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-xray"
-  pattern        = "\"CELERY_KNOWN_ERROR::XRAY\""
+  pattern        = "\"xray-celery: Failed\""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
@@ -303,7 +303,7 @@ resource "aws_cloudwatch_log_metric_filter" "callback-request-failures" {
 resource "aws_cloudwatch_log_metric_filter" "throttling-exceptions" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "throttling-exceptions"
-  pattern        = "ThrottlingException"
+  pattern        = "{ ($.log = \"*ThrottlingException*\") && ($.log != \"*awscloudwatchreceiver*\") }"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
