@@ -123,11 +123,11 @@ output "gha_vpn_key" {
 
 # Outputs
 output "signoz_smtp_username" {
-  value     = var.env != "production" ? aws_iam_access_key.signoz_smtp_user_key[0].id : ""
+  value     = var.enable_signoz ? aws_iam_access_key.signoz_smtp_user_key[0].id : ""
   sensitive = true
 }
 
 output "signoz_smtp_password" {
-  value     = var.env != "production" ? aws_iam_access_key.signoz_smtp_user_key[0].ses_smtp_password_v4 : ""
+  value     = var.enable_signoz ? aws_iam_access_key.signoz_smtp_user_key[0].ses_smtp_password_v4 : ""
   sensitive = true
 }
