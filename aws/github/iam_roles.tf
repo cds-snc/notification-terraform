@@ -4,6 +4,7 @@ locals {
   notification_manifests_helmfile_diff      = "notification-manifests-helmfile-diff"
   notification_manifests_staging_smoke_test = "notification-manifests-staging-smoke-test"
   notification_manifests_k8s_lambda_apply   = "notification-manifests-k8s-lambda-apply"
+  notification_lambdas_apply                = "notification-lambdas-apply"
   notification_api_build_push               = "notification-api-build-push"
   notification_admin_build_push             = "notification-admin-build-push"
   notification_document_download_build_push = "notification-document-download-build-push"
@@ -439,6 +440,11 @@ resource "aws_iam_role_policy_attachment" "notification_document_download_build_
   depends_on = [
     module.github_workflow_roles_notification_document_download
   ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_lambdas_apply" {
+  role       = local.notification_lambdas_apply
+  policy_arn = aws_iam_policy.notification_lambdas_apply.arn
 }
 
 #

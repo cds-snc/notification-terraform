@@ -230,6 +230,60 @@ resource "aws_iam_policy" "notification_api_build_push" {
   policy = data.aws_iam_policy_document.notification_api_build_push.json
 }
 
+resource "aws_iam_policy" "notification_lambdas_apply" {
+  name   = local.notification_lambdas_apply
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_lambdas_apply.json
+}
+
+data "aws_iam_policy_document" "notification_lambdas_apply" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchDeleteImage",
+      "ecr:DescribeImages",
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage"
+    ]
+    resources = [
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/pinpoint_to_sqs_sms_callbacks",
+      "arn:aws:ecr:us-west-2:${var.account_id}:repository/notify/pinpoint_to_sqs_sms_callbacks"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:CreateAlias",
+      "lambda:GetAlias",
+      "lambda:GetFunction",
+      "lambda:GetFunctionConfiguration",
+      "lambda:ListAliases",
+      "lambda:ListVersionsByFunction",
+      "lambda:PublishVersion",
+      "lambda:UpdateAlias",
+      "lambda:UpdateFunctionCode"
+    ]
+    resources = [
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks",
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks:*",
+      "arn:aws:lambda:us-west-2:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks_us_west_2",
+      "arn:aws:lambda:us-west-2:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks_us_west_2:*"
+    ]
+  }
+}
+
 data "aws_iam_policy_document" "notification_api_build_push" {
   statement {
     effect = "Allow"
