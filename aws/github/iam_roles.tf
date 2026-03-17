@@ -23,6 +23,10 @@ data "aws_iam_policy" "oidcplanpolicy" {
   name = "OIDCPlanPolicy"
 }
 
+data "aws_iam_role" "notification_lambdas_apply" {
+  name = local.notification_lambdas_apply
+}
+
 #
 # Create the OIDC roles used by the GitHub workflows
 # The roles can be assumed by the GitHub workflows according to the `claim`
@@ -443,7 +447,7 @@ resource "aws_iam_role_policy_attachment" "notification_document_download_build_
 }
 
 resource "aws_iam_role_policy_attachment" "notification_lambdas_apply" {
-  role       = local.notification_lambdas_apply
+  role       = data.aws_iam_role.notification_lambdas_apply.name
   policy_arn = aws_iam_policy.notification_lambdas_apply.arn
 }
 
