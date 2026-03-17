@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '0 */3 * * *'
   workflow_dispatch:
+    inputs:
+      force_failure:
+        description: 'Force a failure for testing purposes'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   id-token: write
@@ -30,6 +36,10 @@ jobs:
       - name: Run DKIM audit
         id: audit
         run: |
+          if [[ "${{ inputs.force_failure }}" == "true" ]]; then
+            echo "Forcing failure for testing..." | tee /tmp/audit_output.txt
+            exit 1
+          fi
           # Capture output to both stdout and a file
           bash scripts/dkim_audit/check_dkim.sh staging 2>&1 | tee /tmp/audit_output.txt
           # Preserve exit code
@@ -92,7 +102,7 @@ jobs:
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: (":red_circle: *DKIM audit failed (STAGING)*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>")
+                    text: (":red_circle: *DKIM audit failed (STAGING)*\n\n```\n" + $output + "\n```\n\n<" + $link + "|View workflow logs>\n\n<https://docs.google.com/document/d/16LLelZ7WEKrnbocrl0Az74JqkCv5DBZ9QILRBUFJQt8/edit?tab=t.0|Tips and Tricks>\n<https://docs.google.com/document/d/1gQSBJ-kr4Pi0m121F66a5no4Sb6PPsObs7nfEAuzNcg/edit?pli=1&tab=t.db84hyceg8xe#heading=h.yve4tikg5m0l|Incident Management for Provincial Partners>")
                   }
                 }
               ]

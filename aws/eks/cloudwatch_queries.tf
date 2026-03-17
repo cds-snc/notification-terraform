@@ -194,6 +194,41 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "celery-count-known-errors" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Celery / Count of known errors"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.celery_name}/
+| filter @message like /CELERY_KNOWN_ERROR/
+| parse @message /CELERY_KNOWN_ERROR::(?<error>[a-zA-Z_]+)/
+| stats count(*) as total by error
+| sort total desc
+| limit 20
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "celery-unknown-errors" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Celery / Unknown errors"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.celery_name}/
+| filter @message like /CELERY_UNKNOWN_ERROR/
+| limit 200
+QUERY
+}
+
 ################################ UNSORTED YET #################################
 
 resource "aws_cloudwatch_query_definition" "admin-50X-errors" {

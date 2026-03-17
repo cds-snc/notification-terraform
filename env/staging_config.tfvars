@@ -2,13 +2,15 @@
 env                  = "staging"
 account_budget_limit = 5000
 region               = "ca-central-1"
+region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-staging"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
-primary_worker_desired_size     = 5
+primary_worker_desired_size     = 6
 primary_worker_instance_types   = ["c7i.xlarge"]
 secondary_worker_instance_types = ["c7i.xlarge"]
+enable_signoz                   = true
 node_upgrade                    = false
 force_upgrade                   = true
 primary_worker_max_size         = 7
@@ -19,8 +21,8 @@ eks_addon_coredns_version       = "v1.12.1-eksbuild.2"
 eks_addon_kube_proxy_version    = "v1.34.0-eksbuild.2"
 eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
 eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
-eks_node_ami_version            = "1.34.2-20260114"
-eks_karpenter_ami_id            = "ami-02da1e32cad7f8c40"
+eks_node_ami_version            = "1.34.4-20260304"
+eks_karpenter_ami_id            = "ami-0741cf73b7b16f66f"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -52,6 +54,7 @@ enable_sentinel_forwarding  = true
 enable_delete_protection    = true
 enable_guardduty_malware_s3 = true
 cloudwatch_enabled          = true
+enable_cloudwatch_fire_drills = true
 recovery                    = false
 aws_xray_sdk_enabled        = true
 
@@ -132,6 +135,7 @@ perf_test_csv_directory_path = "/tmp/notify_performance_test"
 ## COMMON
 sns_monthly_spend_limit                                            = 100
 sns_monthly_spend_limit_us_west_2                                  = 30
+pinpoint_monthly_spend_limit_us_west_2                             = 30
 alarm_warning_document_download_bucket_size_gb                     = 0.5
 alarm_warning_inflight_processed_created_delta_threshold           = 100
 alarm_critical_inflight_processed_created_delta_threshold          = 200

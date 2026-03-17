@@ -2,16 +2,26 @@
 env                  = "production"
 account_budget_limit = 15000
 region               = "ca-central-1"
+region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-production"
 billing_tag_key      = "CostCenter"
+security_txt_content = <<-EOT
+Contact: mailto:ZZTBSCYBERS@tbs-sct.gc.ca
+Contact: https://hackerone.com/tbs-sct/
+Policy: https://hackerone.com/tbs-sct/policy
+Canonical: https://notification.canada.ca/.well-known/security.txt
+Preferred-Languages: en, fr
+Expires: 2026-03-29T12:00:00.000Z
+EOT
 
 ## EKS
-primary_worker_desired_size     = 8
+primary_worker_desired_size     = 9
 primary_worker_instance_types   = ["c7i.xlarge"]
 secondary_worker_instance_types = ["c7i.xlarge"]
 node_upgrade                    = false
 force_upgrade                   = false
-primary_worker_max_size         = 8
+enable_signoz                   = true
+primary_worker_max_size         = 9
 primary_worker_min_size         = 3
 eks_cluster_name                = "notification-canada-ca-production-eks-cluster"
 eks_cluster_version             = "1.34"
@@ -19,8 +29,8 @@ eks_addon_coredns_version       = "v1.12.1-eksbuild.2"
 eks_addon_kube_proxy_version    = "v1.34.0-eksbuild.2"
 eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
 eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
-eks_node_ami_version            = "1.34.2-20260114"
-eks_karpenter_ami_id            = "ami-02da1e32cad7f8c40"
+eks_node_ami_version            = "1.34.3-20260209"
+eks_karpenter_ami_id            = "ami-0a1dbce011cb936b7"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -52,6 +62,7 @@ enable_sentinel_forwarding  = true
 enable_delete_protection    = true
 enable_guardduty_malware_s3 = true
 cloudwatch_enabled          = true
+enable_cloudwatch_fire_drills = true
 recovery                    = false
 aws_xray_sdk_enabled        = true
 
@@ -135,6 +146,7 @@ system_status_schedule_expression       = "rate(5 minutes)"
 ## COMMON
 sns_monthly_spend_limit                                            = 30000
 sns_monthly_spend_limit_us_west_2                                  = 2000
+pinpoint_monthly_spend_limit_us_west_2                             = 2000
 alarm_warning_document_download_bucket_size_gb                     = 100
 alarm_warning_inflight_processed_created_delta_threshold           = 100
 alarm_critical_inflight_processed_created_delta_threshold          = 200
