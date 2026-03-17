@@ -142,7 +142,7 @@ resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
   }
 
   weighted_routing_policy {
-    weight = 0
+    weight = var.env == "production" ? 0 : 50
   }
 }
 

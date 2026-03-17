@@ -35,7 +35,8 @@ data "aws_iam_policy_document" "pinpoint_assume" {
       test     = "ArnLike"
       variable = "aws:SourceArn"
       values = [
-        "arn:aws:sms-voice:${var.region}:${var.account_id}:configuration-set/pinpoint-configuration"
+        "arn:aws:sms-voice:${var.region}:${var.account_id}:configuration-set/pinpoint-configuration",
+        "arn:aws:sms-voice:${var.region_pinpoint_us}:${var.account_id}:configuration-set/pinpoint-configuration"
       ]
     }
   }
@@ -52,7 +53,9 @@ data "aws_iam_policy_document" "pinpoint_logs" {
     ]
     resources = [
       "${aws_cloudwatch_log_group.pinpoint_deliveries.arn}:*",
-      "${aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn}:*"
+      "${aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn}:*",
+      "${aws_cloudwatch_log_group.pinpoint_us_deliveries.arn}:*",
+      "${aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.arn}:*"
     ]
   }
 }

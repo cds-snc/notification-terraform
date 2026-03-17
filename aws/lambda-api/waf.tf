@@ -175,6 +175,14 @@ resource "aws_wafv2_web_acl" "api_lambda" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesBotControlRuleSet"
         vendor_name = "AWS"
+        version     = "Version_3.3"
+
+        managed_rule_group_configs {
+          aws_managed_rules_bot_control_rule_set {
+            enable_machine_learning = var.env == "production"
+            inspection_level        = "TARGETED" # Can be COMMON or TARGETED
+          }
+        }
       }
     }
 
@@ -241,6 +249,37 @@ resource "aws_wafv2_web_acl" "api_lambda" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "BlockedIP"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "BlockFFUFUserAgent"
+    priority = 9
+
+    action {
+      block {}
+    }
+
+    statement {
+      byte_match_statement {
+        field_to_match {
+          single_header {
+            name = "user-agent"
+          }
+        }
+        positional_constraint = "CONTAINS"
+        search_string         = "fuzz faster"
+        text_transformation {
+          priority = 0
+          type     = "LOWERCASE"
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockFFUFUserAgent"
       sampled_requests_enabled   = true
     }
   }

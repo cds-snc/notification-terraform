@@ -36,6 +36,7 @@ jobs:
       dns: ${{ steps.filter.outputs.dns }}
       ecr: ${{ steps.filter.outputs.ecr }}
       ecr-us-east: ${{ steps.filter.outputs.ecr-us-east }}
+      ecr-us-west-2: ${{ steps.filter.outputs.ecr-us-west-2 }}
       elasticache: ${{ steps.filter.outputs.elasticache }}
       eks: ${{ steps.filter.outputs.eks }}
       github: ${{ steps.filter.outputs.github }}
@@ -83,6 +84,10 @@ jobs:
             ecr-us-east:
               - 'aws/ecr-us-east/**'
               - 'env/${{env.ENVIRONMENT}}/ecr-us-east/**'
+              - 'env/terragrunt.hcl'
+            ecr-us-west-2:
+              - 'aws/ecr-us-west-2/**'
+              - 'env/${{env.ENVIRONMENT}}/ecr-us-west-2/**'
               - 'env/terragrunt.hcl'
             eks:
               - 'aws/eks/**'
@@ -176,6 +181,7 @@ jobs:
       needs.terragrunt-filter.outputs.common == 'true' || 
       needs.terragrunt-filter.outputs.ecr == 'true' ||
       needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
+      needs.terragrunt-filter.outputs.ecr-us-west-2 == 'true' ||
       needs.terragrunt-filter.outputs.newrelic == 'true' ||
       needs.terragrunt-filter.outputs.config == 'true'
 
@@ -184,7 +190,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [common, ecr, ecr-us-east, newrelic]
+        component: [common, ecr, ecr-us-east, ecr-us-west-2, newrelic]
     env:
       COMPONENT: ${{ matrix.component }}
     steps:

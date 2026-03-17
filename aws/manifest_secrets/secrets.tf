@@ -472,27 +472,51 @@ resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat" {
 }
 
 resource "aws_secretsmanager_secret" "manifest_signoz_smtp_username" {
-  count                   = var.env == "dev" ? 1 : 0
+  count                   = var.enable_signoz ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_SMTP_USERNAME"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_username" {
-  count         = var.env == "dev" ? 1 : 0
+  count         = var.enable_signoz ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_username[0].id
-  secret_string = var.manifest_signoz_smtp_username
+  secret_string = var.signoz_smtp_username
 }
 
 resource "aws_secretsmanager_secret" "manifest_signoz_smtp_password" {
-  count                   = var.env == "dev" ? 1 : 0
+  count                   = var.enable_signoz ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_SMTP_PASSWORD"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
-  count         = var.env == "dev" ? 1 : 0
+  count         = var.enable_signoz ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_password[0].id
-  secret_string = var.manifest_signoz_smtp_password
+  secret_string = var.signoz_smtp_password
+}
+
+resource "aws_secretsmanager_secret" "manifest_signoz_dashboard_api_key" {
+  count                   = var.enable_signoz ? 1 : 0
+  name                    = "MANIFEST_SIGNOZ_DASHBOARD_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_dashboard_api_key" {
+  count         = var.enable_signoz ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_dashboard_api_key[0].id
+  secret_string = var.manifest_signoz_dashboard_api_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_signoz_postgres_password" {
+  count                   = var.enable_signoz ? 1 : 0
+  name                    = "MANIFEST_SIGNOZ_POSTGRES_PASSWORD"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_postgres_password" {
+  count         = var.enable_signoz ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_postgres_password[0].id
+  secret_string = var.manifest_signoz_postgres_password
 }
 
 # THIS ISN'T A SECRET, BUT THIS GETS THE VALUE INTO SECRETS MANAGER 
@@ -510,25 +534,21 @@ resource "aws_secretsmanager_secret_version" "manifest_enable_new_relic_version"
 ### Falco
 
 resource "aws_secretsmanager_secret" "manifest_falco_credentials" {
-  count                   = var.env != "production" ? 1 : 0
   name                    = "MANIFEST_FALCO_CREDENTIALS"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_falco_credentials_version" {
-  count         = var.env != "production" ? 1 : 0
-  secret_id     = aws_secretsmanager_secret.manifest_falco_credentials[0].id
+  secret_id     = aws_secretsmanager_secret.manifest_falco_credentials.id
   secret_string = var.manifest_falco_credentials
 }
 
 resource "aws_secretsmanager_secret" "manifest_falco_slack_webhook_url" {
-  count                   = var.env != "production" ? 1 : 0
   name                    = "MANIFEST_FALCO_SLACK_WEBHOOK_URL"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_falco_slack_webhook_url_version" {
-  count         = var.env != "production" ? 1 : 0
-  secret_id     = aws_secretsmanager_secret.manifest_falco_slack_webhook_url[0].id
+  secret_id     = aws_secretsmanager_secret.manifest_falco_slack_webhook_url.id
   secret_string = var.manifest_falco_slack_webhook_url
 }

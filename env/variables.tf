@@ -69,6 +69,10 @@ variable "region" {
   type = string
 }
 
+variable "region_pinpoint_us" {
+  type = string
+}
+
 variable "billing_tag_value" {
   type = string
 }
@@ -152,6 +156,10 @@ variable "enable_guardduty_malware_s3" {
 }
 
 variable "cloudwatch_enabled" {
+  type = bool
+}
+
+variable "enable_cloudwatch_fire_drills" {
   type = bool
 }
 
@@ -666,6 +674,10 @@ variable "sns_monthly_spend_limit_us_west_2" {
   type = number
 }
 
+variable "pinpoint_monthly_spend_limit_us_west_2" {
+  type = number
+}
+
 variable "sqs_visibility_timeout_default" {
   type = number
 }
@@ -1047,16 +1059,6 @@ variable "op_service_account_token" {
   sensitive = true
 }
 
-variable "aws_access_key_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "aws_secret_access_key" {
-  type      = string
-  sensitive = true
-}
-
 variable "admin_cypress_env_json" {
   type      = string
   sensitive = true
@@ -1142,4 +1144,27 @@ variable "datalake_bucket_name" {
 variable "datalake_account_id" {
   type      = string
   sensitive = true
+}
+
+variable "enable_signoz" {
+  type    = bool
+  default = false
+}
+
+variable "signoz_worker_instance_types" {
+  type    = list(string)
+  default = ["m7i-flex.xlarge"]
+}
+
+variable "security_txt_content" {
+  type        = string
+  description = "The content of the security.txt file"
+  default     = <<-EOT
+    Contact: mailto:ZZTBSCYBERS@tbs-sct.gc.ca
+    Contact: https://hackerone.com/tbs-sct/
+    Policy: https://hackerone.com/tbs-sct/policy
+    Canonical: https://cdssandbox.xyz/.well-known/security.txt
+    Preferred-Languages: en, fr
+    Expires: 2026-03-29T12:00:00.000Z
+  EOT
 }

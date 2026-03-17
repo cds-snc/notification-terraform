@@ -418,15 +418,15 @@ resource "aws_iam_role_policy_attachment" "database_worker" {
 #
 
 data "aws_iam_policy_document" "assume_role_policy_signoz" {
-  count = var.env == "dev" ? 1 : 0
+  count = var.enable_signoz ? 1 : 0
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:signoz:signoz"]
+      values   = ["system:serviceaccount:signoz:*"]
     }
 
     condition {
@@ -444,7 +444,7 @@ data "aws_iam_policy_document" "assume_role_policy_signoz" {
 
 # Role
 resource "aws_iam_role" "signoz" {
-  count              = var.env == "dev" ? 1 : 0
+  count              = var.enable_signoz ? 1 : 0
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz[0].json
   name               = "signoz-eks-role"
 }
@@ -452,22 +452,124 @@ resource "aws_iam_role" "signoz" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_signoz" {
-  count      = var.env == "dev" ? 1 : 0
+  count      = var.enable_signoz ? 1 : 0
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.signoz[0].name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_signoz" {
-  count      = var.env == "dev" ? 1 : 0
+  count      = var.enable_signoz ? 1 : 0
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.signoz[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "signoz_worker" {
-  count      = var.env == "dev" ? 1 : 0
+  count      = var.enable_signoz ? 1 : 0
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.signoz[0].name
+}
+
+#
+# SIGNOZ PROMETHEUS CLOUDWATCH EXPORTER
+#
+
+resource "aws_iam_policy" "signoz_prometheus_cloudwatch_exporter" {
+  count = var.enable_signoz ? 1 : 0
+  name  = "signoz-prometheus-cloudwatch-exporter-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudwatch:GetMetricStatistics",
+          "cloudwatch:ListMetrics",
+          "cloudwatch:GetMetricData",
+          "tag:GetResources",
+          "ec2:DescribeTags",
+          "logs:DescribeLogGroups",
+          "logs:FilterLogEvents",
+
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+data "aws_iam_policy_document" "assume_role_policy_signoz_prometheus_cloudwatch_exporter" {
+  count = var.enable_signoz ? 1 : 0
+
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringLike"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:signoz:*"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "signoz_prometheus_cloudwatch_exporter" {
+  count              = var.enable_signoz ? 1 : 0
+  name               = "signoz-prometheus-cloudwatch-exporter-eks-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz_prometheus_cloudwatch_exporter[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "signoz_prometheus_cloudwatch_exporter" {
+  count      = var.enable_signoz ? 1 : 0
+  role       = aws_iam_role.signoz_prometheus_cloudwatch_exporter[0].name
+  policy_arn = aws_iam_policy.signoz_prometheus_cloudwatch_exporter[0].arn
+}
+
+## Signoz SMTP IAM User and Policy
+
+# IAM User for SES SMTP
+resource "aws_iam_user" "signoz_smtp_user" {
+  count = var.enable_signoz ? 1 : 0
+  name  = "signoz-${var.env}"
+}
+
+# Policy for sending emails via SES
+resource "aws_iam_user_policy" "signoz_smtp_user_policy" {
+  count = var.enable_signoz ? 1 : 0
+  name  = "ses-smtp-policy"
+  user  = aws_iam_user.signoz_smtp_user[0].name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendRawEmail",
+          "ses:SendEmail"
+        ]
+        Resource = "arn:aws:ses:*:${var.account_id}:identity/*"
+      }
+    ]
+  })
+}
+
+# Access key for SMTP credentials
+resource "aws_iam_access_key" "signoz_smtp_user_key" {
+  count = var.enable_signoz ? 1 : 0
+  user  = aws_iam_user.signoz_smtp_user[0].name
 }
 
 #
@@ -475,7 +577,6 @@ resource "aws_iam_role_policy_attachment" "signoz_worker" {
 #
 
 data "aws_iam_policy_document" "assume_role_policy_falco_sidekick_ui" {
-  count = var.env != "production" ? 1 : 0
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -501,30 +602,26 @@ data "aws_iam_policy_document" "assume_role_policy_falco_sidekick_ui" {
 
 # Role
 resource "aws_iam_role" "falco_sidekick_ui" {
-  count              = var.env != "production" ? 1 : 0
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick_ui[0].json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick_ui.json
   name               = "falco-sidekick-ui-eks-role"
 }
 
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick_ui" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.secrets_csi.arn
-  role       = aws_iam_role.falco_sidekick_ui[0].name
+  role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick_ui" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.parameters_csi.arn
-  role       = aws_iam_role.falco_sidekick_ui[0].name
+  role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 resource "aws_iam_role_policy_attachment" "falco_sidekick_ui_worker" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.notification-worker-policy.arn
-  role       = aws_iam_role.falco_sidekick_ui[0].name
+  role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 #
@@ -532,7 +629,6 @@ resource "aws_iam_role_policy_attachment" "falco_sidekick_ui_worker" {
 #
 
 data "aws_iam_policy_document" "assume_role_policy_falco_sidekick" {
-  count = var.env != "production" ? 1 : 0
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -558,28 +654,24 @@ data "aws_iam_policy_document" "assume_role_policy_falco_sidekick" {
 
 # Role
 resource "aws_iam_role" "falco_sidekick" {
-  count              = var.env != "production" ? 1 : 0
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick[0].json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick.json
   name               = "falco-sidekick-eks-role"
 }
 
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.secrets_csi.arn
-  role       = aws_iam_role.falco_sidekick[0].name
+  role       = aws_iam_role.falco_sidekick.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.parameters_csi.arn
-  role       = aws_iam_role.falco_sidekick[0].name
+  role       = aws_iam_role.falco_sidekick.name
 }
 
 resource "aws_iam_role_policy_attachment" "falco_sidekick_worker" {
-  count      = var.env != "production" ? 1 : 0
   policy_arn = aws_iam_policy.notification-worker-policy.arn
-  role       = aws_iam_role.falco_sidekick[0].name
+  role       = aws_iam_role.falco_sidekick.name
 }
