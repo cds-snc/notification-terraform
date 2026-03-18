@@ -569,7 +569,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "us-west-2",
+                "region": "${var.region_pinpoint_us}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "SMS delivered per 5m - us-west-2"
@@ -587,7 +587,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "us-west-2",
+                "region": "${var.region_pinpoint_us}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "SMS failures per 5m - us-west-2"
@@ -606,7 +606,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 ],
                 "view": "timeSeries",
                 "stacked": true,
-                "region": "us-west-2",
+                "region": "${var.region_pinpoint_us}",
                 "stat": "Sum",
                 "period": 300,
                 "title": "Pinpoint Callback Lambda invocations per 5m - us-west-2"
