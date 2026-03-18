@@ -72,7 +72,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-warning" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-daily-email-quota-warning"
   alarm_description         = "SES sends over the last 24 hours have reached 70% of the daily email quota"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -88,7 +88,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-critical" {
-  count                     = var.cloudwatch_enabled && var.env != "production" ? 1 : 0
+  count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-daily-email-quota-critical"
   alarm_description         = "SES sends over the last 24 hours have reached 90% of the daily email quota"
   comparison_operator       = "GreaterThanOrEqualToThreshold"

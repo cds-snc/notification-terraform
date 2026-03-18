@@ -38,10 +38,8 @@ resource "aws_cloudwatch_dashboard" "emails" {
                     "${aws_cloudwatch_metric_alarm.sqs-send-email-medium-queue-delay-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.sqs-send-email-low-queue-delay-critical[0].arn}",
-%{if var.env != "production"}
                     "${aws_cloudwatch_metric_alarm.ses-daily-email-quota-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-daily-email-quota-critical[0].arn}",
-%{endif}
                     "${aws_cloudwatch_metric_alarm.ses-bounce-rate-critical[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-bounce-rate-warning[0].arn}",
                     "${aws_cloudwatch_metric_alarm.ses-complaint-rate-warning[0].arn}",
