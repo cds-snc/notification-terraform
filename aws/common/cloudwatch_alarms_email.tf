@@ -72,18 +72,19 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-warning" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "ses-daily-email-quota-warning"
-  alarm_description   = "SES sends over the last 24 hours reached 70% of the daily email quota"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "Send"
-  namespace           = "AWS/SES"
-  period              = 60 * 60 * 24
-  statistic           = "Sum"
-  threshold           = 0.7 * var.ses_daily_email_limit
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  count                     = var.cloudwatch_enabled ? 1 : 0
+  alarm_name                = "ses-daily-email-quota-warning"
+  alarm_description         = "SES sends over the last 24 hours reached 70% of the daily email quota"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Send"
+  namespace                 = "AWS/SES"
+  period                    = 60 * 60 * 24
+  statistic                 = "Sum"
+  threshold                 = 0.7 * var.ses_daily_email_limit
+  treat_missing_data        = "notBreaching"
+  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-critical" {
