@@ -540,6 +540,77 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "period": 86400,
                 "title": "Carrier failures over the past day"
             }
+        },
+        {
+            "type": "alarm",
+            "x": 0,
+            "y": 3,
+            "width": 24,
+            "height": 3,
+            "properties": {
+                "title": "Alarms - us-west-2",
+                "alarms": [
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-critical[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.total-sms-spending-critical-us-west-2[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.total-sms-spending-warning-us-west-2[0].arn}"
+                ]
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 8,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-successes" ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "us-west-2",
+                "stat": "Sum",
+                "period": 300,
+                "title": "SMS delivered per 5m - us-west-2"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 14,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-failures" ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "us-west-2",
+                "stat": "Sum",
+                "period": 300,
+                "title": "SMS failures per 5m - us-west-2"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 48,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Lambda", "Invocations", "FunctionName", "pinpoint_to_sqs_sms_callbacks_us_west_2" ],
+                    [ ".", "Errors", ".", ".", { "color": "#d62728", "yAxis": "right" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "us-west-2",
+                "stat": "Sum",
+                "period": 300,
+                "title": "Pinpoint Callback Lambda invocations per 5m - us-west-2"
+            }
         }
     ]
 }
