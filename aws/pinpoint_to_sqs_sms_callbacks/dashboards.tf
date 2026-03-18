@@ -33,7 +33,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 5,
+            "y": 8,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -51,7 +51,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 11,
+            "y": 14,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 45,
+            "y": 54,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -103,7 +103,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 45,
+            "y": 54,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -121,7 +121,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 11,
+            "y": 20,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -153,7 +153,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 39,
+            "y": 48,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -171,7 +171,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 2,
             "width": 24,
-            "y": 3,
+            "y": 6,
             "x": 0,
             "type": "text",
             "properties": {
@@ -181,7 +181,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 2,
             "width": 24,
-            "y": 37,
+            "y": 46,
             "x": 0,
             "type": "text",
             "properties": {
@@ -191,7 +191,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 39,
+            "y": 48,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -210,7 +210,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 18,
             "width": 6,
-            "y": 5,
+            "y": 8,
             "x": 18,
             "type": "text",
             "properties": {
@@ -220,8 +220,8 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 17,
-            "x": 9,
+            "y": 26,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -238,7 +238,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 9,
             "width": 6,
-            "y": 39,
+            "y": 48,
             "x": 18,
             "type": "text",
             "properties": {
@@ -248,7 +248,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 3,
             "width": 24,
-            "y": 51,
+            "y": 66,
             "x": 0,
             "type": "log",
             "properties": {
@@ -262,8 +262,8 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 5,
-            "x": 9,
+            "y": 20,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "sparkline": true,
@@ -306,7 +306,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 24,
-            "y": 63,
+            "y": 84,
             "x": 0,
             "type": "log",
             "properties": {
@@ -319,7 +319,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 24,
-            "y": 57,
+            "y": 78,
             "x": 0,
             "type": "log",
             "properties": {
@@ -333,7 +333,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 25,
+            "y": 34,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -372,7 +372,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 25,
+            "y": 34,
             "x": 8,
             "type": "metric",
             "properties": {
@@ -406,7 +406,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 25,
+            "y": 34,
             "x": 16,
             "type": "metric",
             "properties": {
@@ -440,7 +440,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 2,
             "width": 24,
-            "y": 23,
+            "y": 32,
             "x": 0,
             "type": "text",
             "properties": {
@@ -450,7 +450,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 31,
+            "y": 40,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -468,7 +468,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 31,
+            "y": 40,
             "x": 16,
             "type": "metric",
             "properties": {
@@ -486,7 +486,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 31,
+            "y": 40,
             "x": 8,
             "type": "metric",
             "properties": {
@@ -504,7 +504,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "type": "metric",
             "x": 0,
-            "y": 54,
+            "y": 69,
             "width": 24,
             "height": 9,
             "properties": {
@@ -596,7 +596,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "type": "metric",
             "x": 9,
-            "y": 48,
+            "y": 60,
             "width": 9,
             "height": 6,
             "properties": {
