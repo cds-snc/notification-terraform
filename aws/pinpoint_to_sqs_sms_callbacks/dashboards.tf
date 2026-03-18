@@ -550,8 +550,8 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
             "properties": {
                 "title": "Alarms - us-west-2",
                 "alarms": [
-                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-critical[0].arn}",
-                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-warning[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-critical-us-west-2[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-warning-us-west-2[0].arn}",
                     "${aws_cloudwatch_metric_alarm.total-sms-spending-critical-us-west-2[0].arn}",
                     "${aws_cloudwatch_metric_alarm.total-sms-spending-warning-us-west-2[0].arn}"
                 ]
