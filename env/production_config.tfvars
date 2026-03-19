@@ -145,7 +145,7 @@ system_status_schedule_expression       = "rate(5 minutes)"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 30000
-ses_daily_email_limit                                              = 1000000
+ses_daily_email_limit                                              = 3000000
 sns_monthly_spend_limit_us_west_2                                  = 2000
 pinpoint_monthly_spend_limit_us_west_2                             = 2000
 alarm_warning_document_download_bucket_size_gb                     = 100
