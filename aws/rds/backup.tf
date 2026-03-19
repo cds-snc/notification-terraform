@@ -69,10 +69,90 @@ resource "aws_kms_alias" "backup_vault" {
   target_key_id = aws_kms_key.backup_vault.key_id
 }
 
+# KMS key policy for secondary backup vault
+data "aws_iam_policy_document" "backup_vault_kms_secondary" {
+  provider = aws.ca-west-1
+
+  # Allow account root full access
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.account_id}:root"]
+    }
+
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+
+  # Allow AWS Backup service to use the key
+  statement {
+    sid    = "Allow AWS Backup to use the key"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["backup.amazonaws.com"]
+    }
+
+    actions = [
+      "kms:CreateGrant",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey",
+      "kms:GenerateDataKeyWithoutPlaintext",
+      "kms:ReEncrypt*"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["backup.ca-west-1.amazonaws.com"]
+    }
+  }
+}
+
+# KMS key for encrypting backups in secondary region
+resource "aws_kms_key" "backup_vault_secondary" {
+  provider                = aws.ca-west-1
+  description             = "KMS key for RDS backup vault encryption in secondary region - ${var.env}"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+  policy                  = data.aws_iam_policy_document.backup_vault_kms_secondary.json
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+    Terraform  = "true"
+  }
+}
+
+resource "aws_kms_alias" "backup_vault_secondary" {
+  provider      = aws.ca-west-1
+  name          = "alias/backup-vault-secondary-${var.env}"
+  target_key_id = aws_kms_key.backup_vault_secondary.key_id
+}
+
 # Backup vault with encryption
 resource "aws_backup_vault" "rds" {
   name        = "notification-canada-ca-${var.env}-rds-vault"
   kms_key_arn = aws_kms_key.backup_vault.arn
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+    Terraform  = "true"
+  }
+}
+
+# Secondary backup vault in a different region for disaster recovery
+resource "aws_backup_vault" "rds_secondary" {
+  provider   = aws.ca-west-1
+  name       = "notification-canada-ca-${var.env}-rds-vault-secondary"
+  kms_key_arn = aws_kms_key.backup_vault_secondary.arn
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -126,7 +206,7 @@ resource "aws_iam_role_policy_attachment" "backup_restore" {
   role       = aws_iam_role.backup.name
 }
 
-# Backup plan
+# Backup plan with cross-region copy
 resource "aws_backup_plan" "rds" {
   name = "notification-canada-ca-${var.env}-rds-plan"
 
@@ -139,6 +219,15 @@ resource "aws_backup_plan" "rds" {
 
     lifecycle {
       delete_after = 8 # Match existing backup_retention_period
+    }
+
+    # Copy backups to secondary region for disaster recovery
+    copy_action {
+      destination_vault_arn = aws_backup_vault.rds_secondary.arn
+
+      lifecycle {
+        delete_after = 8 # Match primary backup retention
+      }
     }
 
     recovery_point_tags = {
