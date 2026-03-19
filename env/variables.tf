@@ -670,6 +670,11 @@ variable "sns_monthly_spend_limit" {
   type = number
 }
 
+variable "ses_daily_email_limit" {
+  type    = number
+  default = 1000000
+}
+
 variable "sns_monthly_spend_limit_us_west_2" {
   type = number
 }
