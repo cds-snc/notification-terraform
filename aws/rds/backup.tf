@@ -126,7 +126,7 @@ resource "aws_backup_vault_lock_configuration" "rds" {
 
 resource "aws_backup_vault_lock_configuration" "rds_secondary" {
   provider = aws.ca-west-1
-  count = var.env == "production" ? 1 : 0
+  count    = var.env == "production" ? 1 : 0
 
   backup_vault_name   = aws_backup_vault.rds_secondary.name
   min_retention_days  = 7
