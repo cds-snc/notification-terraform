@@ -60,6 +60,12 @@ provider "aws" {
   allowed_account_ids = [${local.secret_inputs.account_id}]
 }
 
+provider "aws" {
+  alias               = "ca-west-1"
+  region              = "ca-west-1"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+}
+
 # For whatever reason, Dev uses the DNS from the Staging account and 
 # Production uses the DNS from the Production account, but also has a 
 # different name :/  So we need to handle that here with if Logic

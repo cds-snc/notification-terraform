@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "backup_vault_kms" {
     condition {
       test     = "StringEquals"
       variable = "kms:ViaService"
-      values   = ["backup.${var.region}.amazonaws.com"]
+      values   = ["backup.${var.region}.amazonaws.com", "backup.ca-west-1.amazonaws.com"]
     }
   }
 }
@@ -69,10 +69,42 @@ resource "aws_kms_alias" "backup_vault" {
   target_key_id = aws_kms_key.backup_vault.key_id
 }
 
+# KMS key for encrypting backups in secondary region
+resource "aws_kms_key" "backup_vault_secondary" {
+  provider                = aws.ca-west-1
+  description             = "KMS key for RDS backup vault encryption in secondary region - ${var.env}"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+  policy                  = data.aws_iam_policy_document.backup_vault_kms.json
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+    Terraform  = "true"
+  }
+}
+
+resource "aws_kms_alias" "backup_vault_secondary" {
+  provider      = aws.ca-west-1
+  name          = "alias/backup-vault-secondary-${var.env}"
+  target_key_id = aws_kms_key.backup_vault_secondary.key_id
+}
+
 # Backup vault with encryption
 resource "aws_backup_vault" "rds" {
   name        = "notification-canada-ca-${var.env}-rds-vault"
   kms_key_arn = aws_kms_key.backup_vault.arn
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+    Terraform  = "true"
+  }
+}
+
+# Secondary backup vault in a different region for disaster recovery
+resource "aws_backup_vault" "rds_secondary" {
+  provider    = aws.ca-west-1
+  name        = "notification-canada-ca-${var.env}-rds-vault-secondary"
+  kms_key_arn = aws_kms_key.backup_vault_secondary.arn
 
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
@@ -87,6 +119,16 @@ resource "aws_backup_vault_lock_configuration" "rds" {
   count = var.env == "production" ? 1 : 0
 
   backup_vault_name   = aws_backup_vault.rds.name
+  min_retention_days  = 7
+  max_retention_days  = 8
+  changeable_for_days = 365
+}
+
+resource "aws_backup_vault_lock_configuration" "rds_secondary" {
+  provider = aws.ca-west-1
+  count    = var.env == "production" ? 1 : 0
+
+  backup_vault_name   = aws_backup_vault.rds_secondary.name
   min_retention_days  = 7
   max_retention_days  = 8
   changeable_for_days = 365
@@ -126,7 +168,7 @@ resource "aws_iam_role_policy_attachment" "backup_restore" {
   role       = aws_iam_role.backup.name
 }
 
-# Backup plan
+# Backup plan with cross-region copy
 resource "aws_backup_plan" "rds" {
   name = "notification-canada-ca-${var.env}-rds-plan"
 
@@ -139,6 +181,15 @@ resource "aws_backup_plan" "rds" {
 
     lifecycle {
       delete_after = 8 # Match existing backup_retention_period
+    }
+
+    # Copy backups to secondary region for disaster recovery
+    copy_action {
+      destination_vault_arn = aws_backup_vault.rds_secondary.arn
+
+      lifecycle {
+        delete_after = 8 # Match primary backup retention
+      }
     }
 
     recovery_point_tags = {
