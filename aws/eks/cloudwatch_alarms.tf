@@ -945,7 +945,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "admin-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 2
+  evaluation_periods  = 4
   alarm_description   = "Notify Admin Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
