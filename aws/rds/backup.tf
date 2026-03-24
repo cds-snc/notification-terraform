@@ -103,7 +103,7 @@ resource "aws_backup_vault" "rds" {
 # Secondary backup vault in a different region for disaster recovery
 resource "aws_backup_vault" "rds_secondary" {
   provider    = aws.ca-west-1
-  name        = "notification-canada-ca-${var.env}-rds-vault-secondary"
+  name        = "notify-${var.env}-rds-vault-secondary"
   kms_key_arn = aws_kms_key.backup_vault_secondary.arn
 
   tags = {
