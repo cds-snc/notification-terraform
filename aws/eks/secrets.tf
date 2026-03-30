@@ -98,6 +98,16 @@ resource "aws_secretsmanager_secret_version" "document_download_api_target_group
   secret_string = aws_alb_target_group.notification-canada-ca-document-api.arn
 }
 
+resource "aws_secretsmanager_secret" "public_nginx_target_group_arn" {
+  name                    = "PUBLIC_NGINX_TARGET_GROUP_ARN"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "public_nginx_target_group_arn" {
+  secret_id     = aws_secretsmanager_secret.public_nginx_target_group_arn.id
+  secret_string = aws_alb_target_group.public_nginx_http.arn
+}
+
 resource "aws_secretsmanager_secret" "eks_karpenter_ami_id" {
   name                    = "EKS_KARPENTER_AMI_ID"
   recovery_window_in_days = 0

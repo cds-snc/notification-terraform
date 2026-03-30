@@ -51,6 +51,12 @@ resource "aws_lb_listener_certificate" "alt_domain_certificate" {
   certificate_arn = aws_acm_certificate.notification-canada-ca-alt[0].arn
 }
 
+resource "aws_lb_listener_certificate" "gateway_certificate" {
+  depends_on      = [aws_acm_certificate_validation.notification-canada-ca-gateway]
+  listener_arn    = aws_alb_listener.notification-canada-ca.arn
+  certificate_arn = aws_acm_certificate.notification-canada-ca-gateway.arn
+}
+
 resource "aws_lb_listener" "notification-canada-ca-80" {
   load_balancer_arn = aws_alb.notification-canada-ca.id
   port              = 80 #tfsec:ignore:AWS004
@@ -358,6 +364,39 @@ resource "aws_lb_listener_rule" "documentation-host-redirect" {
   condition {
     host_header {
       values = ["doc.*"]
+    }
+  }
+}
+
+###
+# Public Nginx Specific Routing
+###
+
+resource "aws_alb_target_group" "public_nginx_http" {
+  name        = "notification-public-nginx-http"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+  health_check {
+    protocol = "HTTP"
+    path     = "/"
+    matcher  = "404"
+  }
+}
+
+resource "aws_lb_listener_rule" "public-nginx-host-route" {
+  listener_arn = aws_alb_listener.notification-canada-ca.arn
+  priority     = 400
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.public_nginx_http.arn
+  }
+
+  condition {
+    host_header {
+      values = ["*.gateway.${var.domain}"]
     }
   }
 }

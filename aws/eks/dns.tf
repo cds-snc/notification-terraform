@@ -142,7 +142,7 @@ resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
   }
 
   weighted_routing_policy {
-    weight = var.env == "production" ? 10 : 50
+    weight = var.env == "production" ? 20 : 50
   }
 }
 
@@ -169,5 +169,18 @@ resource "aws_route53_record" "wildcard_CNAME" {
   ttl             = "60"
   records         = [var.internal_dns_name]
   allow_overwrite = true
+}
+
+resource "aws_route53_record" "otlp-gateway-cname" {
+  provider        = aws.dns
+  zone_id         = var.route53_zone_id
+  name            = "otlp.gateway.${var.domain}"
+  type            = "CNAME"
+  allow_overwrite = true
+
+  records = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
 }
 
