@@ -171,3 +171,16 @@ resource "aws_route53_record" "wildcard_CNAME" {
   allow_overwrite = true
 }
 
+resource "aws_route53_record" "otlp-gateway-cname" {
+  provider        = aws.dns
+  zone_id         = var.route53_zone_id
+  name            = "otlp.gateway.${var.domain}"
+  type            = "CNAME"
+  allow_overwrite = true
+
+  records = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
