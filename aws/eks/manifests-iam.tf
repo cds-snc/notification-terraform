@@ -93,6 +93,50 @@ resource "aws_iam_role_policy_attachment" "parameters_csi_nginx" {
 }
 
 
+# NGINX PUBLIC
+
+data "aws_iam_policy_document" "secrets_csi_assume_role_policy_nginx_public" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:nginx-public:secrets-csi-role-nginx-public"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "secrets_csi_nginx_public" {
+  assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy_nginx_public.json
+  name               = "secrets-csi-role-nginx-public"
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "secrets_csi_nginx_public" {
+  policy_arn = aws_iam_policy.secrets_csi.arn
+  role       = aws_iam_role.secrets_csi_nginx_public.name
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "parameters_csi_nginx_public" {
+  policy_arn = aws_iam_policy.parameters_csi.arn
+  role       = aws_iam_role.secrets_csi_nginx_public.name
+}
+
 
 #
 # BLAZER
