@@ -16,5 +16,6 @@ All times are UTC.
 
 0735 - login_events
 0740 - users
+0745 - ft_billing
 
 0900 - sms_usage_notifications
