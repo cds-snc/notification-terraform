@@ -951,17 +951,17 @@ resource "aws_glue_catalog_table" "ft_billing" {
 
     columns {
       name = "bst_date"
-      type = "date"
+      type = "timestamp"
     }
 
     columns {
       name = "updated_at"
-      type = "string"
+      type = "timestamp"
     }
 
     columns {
       name = "created_at"
-      type = "string"
+      type = "timestamp"
     }
 
     columns {
