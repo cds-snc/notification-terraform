@@ -63,15 +63,4 @@ data "aws_iam_policy_document" "ecr" {
     ]
     resources = [aws_lambda_function.api.arn]
   }
-
-  statement {
-    sid    = "PermissionsToDownloadNewRelicLambdaLayers"
-    effect = "Allow"
-    actions = [
-      "lambda:GetLayerVersion"
-    ]
-    # New Relic Python Lambda layers
-    # https://layers.newrelic-external.com/
-    resources = ["arn:aws:lambda:ca-central-1:451483290750:layer:NewRelicPython*:*"]
-  }
 }

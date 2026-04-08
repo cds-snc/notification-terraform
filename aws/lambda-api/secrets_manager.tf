@@ -1,25 +1,3 @@
-resource "aws_secretsmanager_secret" "new-relic-license-key" {
-  name                    = "NEW_RELIC_LICENSE_KEY"
-  description             = "The New Relic license key, for sending telemetry"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "new-relic-license-key" {
-  secret_id     = aws_secretsmanager_secret.new-relic-license-key.id
-  secret_string = var.new_relic_license_key
-}
-
-resource "aws_secretsmanager_secret" "lambda-new-relic-license-key" {
-  name                    = "LAMBDA_NEW_RELIC_LICENSE_KEY"
-  description             = "The New Relic license key, for sending telemetry"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "lambda-new-relic-license-key" {
-  secret_id     = aws_secretsmanager_secret.lambda-new-relic-license-key.id
-  secret_string = var.manifest_new_relic_license_key
-}
-
 resource "aws_ssm_parameter" "environment_variables" {
   count       = var.bootstrap ? 1 : 0
   name        = "ENVIRONMENT_VARIABLES"
@@ -88,15 +66,7 @@ IP_GEOLOCATE_SERVICE=http://ipv4.notification-canada-ca.svc.cluster.local:8080
 
 MIXPANEL_PROJECT_TOKEN=${var.manifest_mixpanel_project_token}
 
-NEW_RELIC_LICENSE_KEY=${var.manifest_new_relic_license_key}
-NEW_RELIC_MONITOR_MODE=true
-
 POSTGRES_HOST=${var.postgres_cluster_endpoint}
-POSTGRES_SQL=postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}
-
-REDIS_URL=redis://${var.redis_primary_endpoint_address}
-CACHE_OPS_URL=redis://${var.elasticache_queue_cache_primary_endpoint_address}
-REPORTS_BUCKET_NAME=notification-canada-ca-${var.env}-reports
 
 CRM_GITHUB_PERSONAL_ACCESS_TOKEN=${var.manifest_crm_github_personal_access_token}
 CRM_ORG_LIST_URL=https://raw.githubusercontent.com/cds-snc/gc-organisations-qa/main/data/all.json
@@ -208,9 +178,6 @@ HC_FR_SERVICE_ID=
 IP_GEOLOCATE_SERVICE=http://ipv4.notification-canada-ca.svc.cluster.local:8080
 
 MIXPANEL_PROJECT_TOKEN=${var.manifest_mixpanel_project_token}
-
-NEW_RELIC_LICENSE_KEY=${var.manifest_new_relic_license_key}
-NEW_RELIC_MONITOR_MODE=true
 
 POSTGRES_HOST=${var.postgres_cluster_endpoint}
 POSTGRES_SQL=postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}
