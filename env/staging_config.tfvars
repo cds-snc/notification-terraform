@@ -6,6 +6,7 @@ region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-staging"
 billing_tag_key      = "CostCenter"
 
+
 ## EKS     
 primary_worker_desired_size     = 6
 primary_worker_instance_types   = ["c7i.xlarge"]
