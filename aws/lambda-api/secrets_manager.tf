@@ -67,6 +67,9 @@ IP_GEOLOCATE_SERVICE=http://ipv4.notification-canada-ca.svc.cluster.local:8080
 MIXPANEL_PROJECT_TOKEN=${var.manifest_mixpanel_project_token}
 
 POSTGRES_HOST=${var.postgres_cluster_endpoint}
+POSTGRES_SQL=${var.postgres_cluster_endpoint}
+REDIS_URL=${aws_elasticache_replication_group.redis.primary_endpoint_address}
+REPORTS_BUCKET_NAME=notification-canada-ca-${var.env}-reports
 
 CRM_GITHUB_PERSONAL_ACCESS_TOKEN=${var.manifest_crm_github_personal_access_token}
 CRM_ORG_LIST_URL=https://raw.githubusercontent.com/cds-snc/gc-organisations-qa/main/data/all.json
