@@ -101,26 +101,8 @@ variable "high_demand_max_concurrency" {
   type = number
 }
 
-variable "lambda_new_relic_app_name" {
-  type = string
-}
-
-variable "lambda_new_relic_handler" {
-  type        = string
-  description = "The actual Lambda handler function that New Relic wrapper should invoke"
-}
-
-variable "lambda_new_relic_config_file" {
-  type        = string
-  description = "Path to the New Relic configuration file in the Lambda container"
-}
-
 variable "notification_queue_prefix" {
   type = string
-}
-
-variable "enable_new_relic" {
-  type = bool
 }
 
 variable "create_cbs_bucket" {
@@ -382,31 +364,6 @@ variable "cloudwatch_opsgenie_alarm_webhook" {
   sensitive = true
 }
 
-variable "new_relic_aws_account_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_license_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_account_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_api_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_slack_webhook_url" {
-  type      = string
-  sensitive = true
-}
-
 variable "aws_config_recorder_name" {
   type        = string
   description = "The name of the AWS Configuration Recorder"
@@ -448,6 +405,16 @@ variable "heartbeat_sms_number" {
 
 variable "heartbeat_schedule_expression" {
   type = string
+}
+
+variable "new_relic_account_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "new_relic_api_key" {
+  type      = string
+  sensitive = true
 }
 
 variable "system_status_schedule_expression" {
@@ -881,21 +848,6 @@ variable "manifest_mixpanel_project_token" {
   sensitive = true
 }
 
-variable "manifest_new_relic_license_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_new_relic_account_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_new_relic_api_key" {
-  type      = string
-  sensitive = true
-}
-
 variable "manifest_crm_github_personal_access_token" {
   type      = string
   sensitive = true
@@ -1119,20 +1071,10 @@ variable "sqs_max_message_size" {
   default = 1048576 # 1 MB
 }
 
-variable "new_relic_user_id" {
-  type      = string
-  sensitive = true
-}
-
 variable "system_status_static_site_cloudfront_distribution" {
   type      = string
   sensitive = true
   default   = "E1234567890ABC"
-}
-
-variable "api_enable_new_relic" {
-  type    = bool
-  default = false
 }
 
 variable "api_gateway_timeout" {
