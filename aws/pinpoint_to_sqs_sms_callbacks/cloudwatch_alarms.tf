@@ -351,7 +351,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning" {
 
   metric_query {
     id          = "success_rate"
-    expression  = "successes / (successes + failures)"
+    expression  = "IF(successes + failures >= 100, successes / (successes + failures), 1)"
     label       = "Success Rate"
     return_data = "true"
   }
@@ -391,7 +391,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-critical" {
 
   metric_query {
     id          = "success_rate"
-    expression  = "successes / (successes + failures)"
+    expression  = "IF(successes + failures >= 100, successes / (successes + failures), 1)"
     label       = "Success Rate"
     return_data = "true"
   }
@@ -635,7 +635,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-warning-us-wes
 
   metric_query {
     id          = "success_rate"
-    expression  = "successes / (successes + failures)"
+    expression  = "IF(successes + failures >= 100, successes / (successes + failures), 1)"
     label       = "Success Rate"
     return_data = "true"
   }
@@ -677,7 +677,7 @@ resource "aws_cloudwatch_metric_alarm" "pinpoint-sms-success-rate-critical-us-we
 
   metric_query {
     id          = "success_rate"
-    expression  = "successes / (successes + failures)"
+    expression  = "IF(successes + failures >= 100, successes / (successes + failures), 1)"
     label       = "Success Rate"
     return_data = "true"
   }
