@@ -26,12 +26,13 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          component: [common, ecr, ecr-us-east, ecr-us-west-2]
+          component: [common, ecr, ecr-us-east, ecr-us-west-2, newrelic]
           include:
             - component: common
             - component: ecr
             - component: ecr-us-east
             - component: ecr-us-west-2
+            - component: newrelic
       env:
         COMPONENT: ${{ matrix.component }}
       steps:

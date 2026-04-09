@@ -45,6 +45,7 @@ jobs:
       lambda-api: ${{ steps.filter.outputs.lambda-api }}
       lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
       manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
+      newrelic: ${{ steps.filter.outputs.newrelic }}
       performance-test: ${{ steps.filter.outputs.performance-test }}
       pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}
       quicksight: ${{ steps.filter.outputs.quicksight }}
@@ -160,6 +161,10 @@ jobs:
               - 'aws/pinpoint_to_sqs_sms_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks/**'
               - 'env/terragrunt.hcl'
+            newrelic:
+              - 'aws/newrelic/**'
+              - 'env/${{env.ENVIRONMENT}}/newrelic/**'
+              - 'env/terragrunt.hcl'
             manifest_secrets:
               - 'aws/manifest_secrets/**'
               - 'env/${{env.ENVIRONMENT}}/manifest_secrets/**'
@@ -177,6 +182,7 @@ jobs:
       needs.terragrunt-filter.outputs.ecr == 'true' ||
       needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
       needs.terragrunt-filter.outputs.ecr-us-west-2 == 'true' ||
+      needs.terragrunt-filter.outputs.newrelic == 'true' ||
       needs.terragrunt-filter.outputs.config == 'true'
 
     needs: terragrunt-filter
@@ -184,7 +190,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [common, ecr, ecr-us-east, ecr-us-west-2]
+        component: [common, ecr, ecr-us-east, ecr-us-west-2, newrelic]
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
