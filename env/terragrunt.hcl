@@ -32,10 +32,6 @@ terraform {
       source  = "hashicorp/tls"
       version = "4.1.0"
     }
-    newrelic = {
-      source  = "newrelic/newrelic"
-      version = "3.70.5"
-    }
     github = {
       source  = "integrations/github"
       version = "6.7.3"
