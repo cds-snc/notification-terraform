@@ -400,14 +400,14 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical"
-  alarm_description   = "Fifty 500 errors in 5 minutes"
+  alarm_description   = "Ten 500 errors in 5 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.web-500-errors[0].metric_transformation[0].name
   namespace           = aws_cloudwatch_log_metric_filter.web-500-errors[0].metric_transformation[0].namespace
   period              = 300
   statistic           = "Sum"
-  threshold           = 50 # Temporary value until end of HackerOne March 2026: revert to 20 afterwards
+  threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]
