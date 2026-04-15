@@ -376,6 +376,164 @@ data "aws_iam_policy_document" "notification_document_download_build_push" {
 }
 
 #
+# notification-terraform workflow policies
+#
+
+resource "aws_iam_policy" "notification_terraform_check_eks_ami_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_terraform_check_eks_ami_update
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_check_eks_ami_update[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_check_eks_ami_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "eks:DescribeCluster",
+      "eks:DescribeNodegroup"
+    ]
+    resources = [
+      "arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-*",
+      "arn:aws:eks:${var.region}:${var.account_id}:nodegroup/notification-canada-ca-*/*/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.region}::parameter/aws/service/eks/optimized-ami/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_terraform_check_eks_cluster_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_terraform_check_eks_cluster_update
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_check_eks_cluster_update[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_check_eks_cluster_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "eks:DescribeAddonVersions"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "eks:DescribeCluster"
+    ]
+    resources = [
+      "arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_terraform_sanitize_staging_sms" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_terraform_sanitize_staging_sms
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_sanitize_staging_sms[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_sanitize_staging_sms" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-logs",
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-west-2-logs"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-logs/*",
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-west-2-logs/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-logs-san/*",
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-west-2-logs-san/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_terraform_sanitize_production_sms" {
+  count = var.env == "production" ? 1 : 0
+
+  name   = local.notification_terraform_sanitize_production_sms
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_sanitize_production_sms[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_sanitize_production_sms" {
+  count = var.env == "production" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-logs",
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-west-2-logs"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-logs/*",
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-west-2-logs/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-logs-san/*",
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-west-2-logs-san/*"
+    ]
+  }
+}
+
+#
 # DKIM Audit read-only policy
 #
 resource "aws_iam_policy" "dkim_audit" {

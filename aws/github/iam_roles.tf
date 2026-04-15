@@ -1,15 +1,19 @@
 locals {
-  notification_admin_test_admin_workflows   = "notification-admin-test-admin-workflows"
-  notification_admin_cypress_e2e_tests      = "notification-admin-cypress-e2e-tests"
-  notification_manifests_helmfile_diff      = "notification-manifests-helmfile-diff"
-  notification_manifests_staging_smoke_test = "notification-manifests-staging-smoke-test"
-  notification_manifests_k8s_lambda_apply   = "notification-manifests-k8s-lambda-apply"
-  notification_lambdas_apply                = "notification-lambdas-apply"
-  notification_api_build_push               = "notification-api-build-push"
-  notification_admin_build_push             = "notification-admin-build-push"
-  notification_document_download_build_push = "notification-document-download-build-push"
-  dkim_audit                                = "dkim-audit"
-  notification_performance_test_results     = "notification-performance-test-results-sync"
+  notification_admin_test_admin_workflows           = "notification-admin-test-admin-workflows"
+  notification_admin_cypress_e2e_tests              = "notification-admin-cypress-e2e-tests"
+  notification_manifests_helmfile_diff              = "notification-manifests-helmfile-diff"
+  notification_manifests_staging_smoke_test         = "notification-manifests-staging-smoke-test"
+  notification_manifests_k8s_lambda_apply           = "notification-manifests-k8s-lambda-apply"
+  notification_lambdas_apply                        = "notification-lambdas-apply"
+  notification_api_build_push                       = "notification-api-build-push"
+  notification_admin_build_push                     = "notification-admin-build-push"
+  notification_document_download_build_push         = "notification-document-download-build-push"
+  dkim_audit                                        = "dkim-audit"
+  notification_performance_test_results             = "notification-performance-test-results-sync"
+  notification_terraform_check_eks_ami_update       = "notification-terraform-check-eks-ami-update"
+  notification_terraform_check_eks_cluster_update   = "notification-terraform-check-eks-cluster-update"
+  notification_terraform_sanitize_production_sms    = "notification-terraform-sanitize-production-sms-usage"
+  notification_terraform_sanitize_staging_sms       = "notification-terraform-sanitize-staging-sms-usage"
 }
 
 # 
@@ -449,6 +453,83 @@ resource "aws_iam_role_policy_attachment" "notification_document_download_build_
 resource "aws_iam_role_policy_attachment" "notification_lambdas_apply" {
   role       = data.aws_iam_role.notification_lambdas_apply.name
   policy_arn = aws_iam_policy.notification_lambdas_apply.arn
+}
+
+#
+# notification-terraform workflow roles
+#
+module "github_workflow_roles_notification_terraform_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_terraform_check_eks_ami_update
+      repo_name = "notification-terraform"
+      claim     = "ref:refs/heads/main"
+    },
+    {
+      name      = local.notification_terraform_check_eks_cluster_update
+      repo_name = "notification-terraform"
+      claim     = "ref:refs/heads/main"
+    },
+    {
+      name      = local.notification_terraform_sanitize_staging_sms
+      repo_name = "notification-terraform"
+      claim     = "ref:refs/heads/main"
+    }
+  ]
+}
+
+module "github_workflow_roles_notification_terraform_production" {
+  count = var.env == "production" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_terraform_sanitize_production_sms
+      repo_name = "notification-terraform"
+      claim     = "ref:refs/heads/main"
+    }
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_terraform_check_eks_ami_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_terraform_check_eks_ami_update
+  policy_arn = aws_iam_policy.notification_terraform_check_eks_ami_update[0].arn
+  depends_on = [module.github_workflow_roles_notification_terraform_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_terraform_check_eks_cluster_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_terraform_check_eks_cluster_update
+  policy_arn = aws_iam_policy.notification_terraform_check_eks_cluster_update[0].arn
+  depends_on = [module.github_workflow_roles_notification_terraform_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_terraform_sanitize_staging_sms" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_terraform_sanitize_staging_sms
+  policy_arn = aws_iam_policy.notification_terraform_sanitize_staging_sms[0].arn
+  depends_on = [module.github_workflow_roles_notification_terraform_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_terraform_sanitize_production_sms" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_terraform_sanitize_production_sms
+  policy_arn = aws_iam_policy.notification_terraform_sanitize_production_sms[0].arn
+  depends_on = [module.github_workflow_roles_notification_terraform_production]
 }
 
 #
