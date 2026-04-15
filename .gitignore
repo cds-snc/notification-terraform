@@ -28,6 +28,9 @@ crash.log
 
 # secrets file
 terraform.tfvars
+
+# Local agent customizations
+.github/agents/
 stgTerraform.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
