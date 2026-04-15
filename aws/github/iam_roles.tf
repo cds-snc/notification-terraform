@@ -1,19 +1,30 @@
 locals {
-  notification_admin_test_admin_workflows         = "notification-admin-test-admin-workflows"
-  notification_admin_cypress_e2e_tests            = "notification-admin-cypress-e2e-tests"
-  notification_manifests_helmfile_diff            = "notification-manifests-helmfile-diff"
-  notification_manifests_staging_smoke_test       = "notification-manifests-staging-smoke-test"
-  notification_manifests_k8s_lambda_apply         = "notification-manifests-k8s-lambda-apply"
-  notification_lambdas_apply                      = "notification-lambdas-apply"
-  notification_api_build_push                     = "notification-api-build-push"
-  notification_admin_build_push                   = "notification-admin-build-push"
-  notification_document_download_build_push       = "notification-document-download-build-push"
-  dkim_audit                                      = "dkim-audit"
-  notification_performance_test_results           = "notification-performance-test-results-sync"
-  notification_terraform_check_eks_ami_update     = "notification-terraform-check-eks-ami-update"
-  notification_terraform_check_eks_cluster_update = "notification-terraform-check-eks-cluster-update"
-  notification_terraform_sanitize_production_sms  = "notification-terraform-sanitize-production-sms-usage"
-  notification_terraform_sanitize_staging_sms     = "notification-terraform-sanitize-staging-sms-usage"
+  notification_admin_test_admin_workflows                    = "notification-admin-test-admin-workflows"
+  notification_admin_cypress_e2e_tests                       = "notification-admin-cypress-e2e-tests"
+  notification_manifests_helmfile_diff                       = "notification-manifests-helmfile-diff"
+  notification_manifests_staging_smoke_test                  = "notification-manifests-staging-smoke-test"
+  notification_manifests_k8s_lambda_apply                    = "notification-manifests-k8s-lambda-apply"
+  notification_lambdas_apply                                 = "notification-lambdas-apply"
+  notification_api_build_push                                = "notification-api-build-push"
+  notification_admin_build_push                              = "notification-admin-build-push"
+  notification_document_download_build_push                  = "notification-document-download-build-push"
+  dkim_audit                                                 = "dkim-audit"
+  notification_performance_test_results                      = "notification-performance-test-results-sync"
+  notification_terraform_check_eks_ami_update                = "notification-terraform-check-eks-ami-update"
+  notification_terraform_check_eks_cluster_update            = "notification-terraform-check-eks-cluster-update"
+  notification_terraform_sanitize_production_sms             = "notification-terraform-sanitize-production-sms-usage"
+  notification_terraform_sanitize_staging_sms                = "notification-terraform-sanitize-staging-sms-usage"
+  notification_manifests_helmfile_staging_apply              = "notification-manifests-helmfile-staging-apply"
+  notification_manifests_helmfile_production_apply           = "notification-manifests-helmfile-production-apply"
+  notification_manifests_database_migration_staging          = "notification-manifests-database-migration-staging"
+  notification_manifests_database_migration_production       = "notification-manifests-database-migration-production"
+  notification_manifests_smoke_test_production               = "notification-manifests-smoke-test-production"
+  notification_admin_test_delete_unused                      = "notification-admin-test-delete-unused"
+  notification_api_build_push_performance_test               = "notification-api-build-push-performance-test"
+  notification_api_lambda_production                         = "notification-api-lambda-production"
+  notification_api_lambda_staging                            = "notification-api-lambda-staging"
+  notification_system_status_frontend_upload_to_s3           = "notification-system-status-frontend-upload-to-s3"
+  notification_system_status_frontend_prod_upload_to_s3      = "notification-system-status-frontend-prod-upload-to-s3"
 }
 
 # 
@@ -562,4 +573,236 @@ resource "aws_iam_role_policy_attachment" "notification_performance_test_results
   depends_on = [
     module.github_workflow_roles_performance_test_results
   ]
+}
+
+#
+# notification-manifests workflow roles
+#
+module "github_workflow_roles_notification_manifests_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_manifests_helmfile_staging_apply
+      repo_name = "notification-manifests"
+      claim     = "ref:refs/heads/main"
+    },
+    {
+      name      = local.notification_manifests_database_migration_staging
+      repo_name = "notification-manifests"
+      claim     = "*"
+    }
+  ]
+}
+
+module "github_workflow_roles_notification_manifests_production" {
+  count = var.env == "production" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_manifests_helmfile_production_apply
+      repo_name = "notification-manifests"
+      claim     = "ref:refs/heads/main"
+    },
+    {
+      name      = local.notification_manifests_database_migration_production
+      repo_name = "notification-manifests"
+      claim     = "*"
+    },
+    {
+      name      = local.notification_manifests_smoke_test_production
+      repo_name = "notification-manifests"
+      claim     = "*"
+    }
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_staging_apply" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_staging_apply
+  policy_arn = aws_iam_policy.notification_manifests_helmfile_apply[0].arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_staging
+  policy_arn = aws_iam_policy.notification_manifests_database_migration[0].arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_production_apply" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_production_apply
+  policy_arn = aws_iam_policy.notification_manifests_helmfile_apply_production[0].arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_production" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_production
+  policy_arn = aws_iam_policy.notification_manifests_database_migration_production[0].arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_smoke_test_production" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_smoke_test_production
+  policy_arn = aws_iam_policy.notification_manifests_smoke_test_production[0].arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
+#
+# notification-admin workflow roles
+#
+module "github_workflow_roles_notification_admin_staging_ops" {
+  count = var.env == "staging" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_admin_test_delete_unused
+      repo_name = "notification-admin"
+      claim     = "*"
+    }
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_admin_test_delete_unused" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_admin_test_delete_unused
+  policy_arn = aws_iam_policy.notification_admin_test_delete_unused[0].arn
+  depends_on = [module.github_workflow_roles_notification_admin_staging_ops]
+}
+
+#
+# notification-api workflow roles
+#
+module "github_workflow_roles_notification_api_ops_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_api_build_push_performance_test
+      repo_name = "notification-api"
+      claim     = "ref:refs/heads/main"
+    },
+    {
+      name      = local.notification_api_lambda_staging
+      repo_name = "notification-api"
+      claim     = "ref:refs/heads/main"
+    }
+  ]
+}
+
+module "github_workflow_roles_notification_api_ops_production" {
+  count = var.env == "production" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_api_lambda_production
+      repo_name = "notification-api"
+      claim     = "ref:refs/heads/main"
+    }
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_build_push_performance_test" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_api_build_push_performance_test
+  policy_arn = aws_iam_policy.notification_api_build_push_performance_test[0].arn
+  depends_on = [module.github_workflow_roles_notification_api_ops_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_lambda_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_api_lambda_staging
+  policy_arn = aws_iam_policy.notification_api_lambda_staging[0].arn
+  depends_on = [module.github_workflow_roles_notification_api_ops_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_api_lambda_production" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_api_lambda_production
+  policy_arn = aws_iam_policy.notification_api_lambda_production[0].arn
+  depends_on = [module.github_workflow_roles_notification_api_ops_production]
+}
+
+#
+# notification-system-status-frontend workflow roles
+#
+module "github_workflow_roles_notification_system_status_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_system_status_frontend_upload_to_s3
+      repo_name = "notification-system-status-frontend"
+      claim     = "ref:refs/heads/main"
+    }
+  ]
+}
+
+module "github_workflow_roles_notification_system_status_production" {
+  count = var.env == "production" ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    {
+      name      = local.notification_system_status_frontend_prod_upload_to_s3
+      repo_name = "notification-system-status-frontend"
+      claim     = "ref:refs/tags/*"
+    }
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_system_status_frontend_upload_to_s3" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_system_status_frontend_upload_to_s3
+  policy_arn = aws_iam_policy.notification_system_status_frontend_upload_to_s3[0].arn
+  depends_on = [module.github_workflow_roles_notification_system_status_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_system_status_frontend_prod_upload_to_s3" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_system_status_frontend_prod_upload_to_s3
+  policy_arn = aws_iam_policy.notification_system_status_frontend_prod_upload_to_s3[0].arn
+  depends_on = [module.github_workflow_roles_notification_system_status_production]
 }
