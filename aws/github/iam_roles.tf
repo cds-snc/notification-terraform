@@ -649,6 +649,14 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_stagi
   depends_on = [module.github_workflow_roles_notification_manifests_staging]
 }
 
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_staging_apply_k8s_lambda" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_staging_apply
+  policy_arn = aws_iam_policy.notification_manifests_k8s_lambda_apply.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
 resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_staging" {
   count = var.env == "staging" ? 1 : 0
 
@@ -670,6 +678,14 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_database_migra
 
   role       = local.notification_manifests_database_migration_staging
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_staging_k8s_lambda" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_staging
+  policy_arn = aws_iam_policy.notification_manifests_k8s_lambda_apply.arn
   depends_on = [module.github_workflow_roles_notification_manifests_staging]
 }
 
@@ -697,6 +713,14 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_produ
   depends_on = [module.github_workflow_roles_notification_manifests_production]
 }
 
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_production_apply_k8s_lambda" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_production_apply
+  policy_arn = aws_iam_policy.notification_manifests_k8s_lambda_apply.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
 resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_production" {
   count = var.env == "production" ? 1 : 0
 
@@ -718,6 +742,14 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_database_migra
 
   role       = local.notification_manifests_database_migration_production
   policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_production_k8s_lambda" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_production
+  policy_arn = aws_iam_policy.notification_manifests_k8s_lambda_apply.arn
   depends_on = [module.github_workflow_roles_notification_manifests_production]
 }
 
