@@ -58,6 +58,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
       "arn:aws:s3:::notification-canada-ca-staging-tf/*"
     ]
   }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
 }
 
 #
@@ -115,6 +121,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
       "arn:aws:s3:::notification-canada-ca-production-tf/*"
     ]
   }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
 }
 
 #
@@ -163,6 +175,12 @@ data "aws_iam_policy_document" "notification_manifests_database_migration" {
       "arn:aws:s3:::notification-canada-ca-staging-tf/*"
     ]
   }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
 }
 
 #
@@ -210,6 +228,12 @@ data "aws_iam_policy_document" "notification_manifests_database_migration_produc
       "arn:aws:s3:::notification-canada-ca-production-tf",
       "arn:aws:s3:::notification-canada-ca-production-tf/*"
     ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
   }
 }
 
