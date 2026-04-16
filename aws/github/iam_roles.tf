@@ -786,7 +786,7 @@ module "github_workflow_roles_notification_system_status_production" {
     {
       name      = local.notification_system_status_frontend_prod_upload_to_s3
       repo_name = "notification-system-status-frontend"
-      claim     = "ref:refs/tags/*"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
