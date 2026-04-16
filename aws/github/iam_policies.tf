@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
 
   statement {
     effect  = "Allow"
-    actions = ["s3:GetObject", "s3:ListBucket"]
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning"]
     resources = [
       "arn:aws:s3:::notification-canada-ca-staging-tf",
       "arn:aws:s3:::notification-canada-ca-staging-tf/*"
@@ -109,7 +109,7 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
 
   statement {
     effect  = "Allow"
-    actions = ["s3:GetObject", "s3:ListBucket"]
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning"]
     resources = [
       "arn:aws:s3:::notification-canada-ca-production-tf",
       "arn:aws:s3:::notification-canada-ca-production-tf/*"
@@ -157,7 +157,7 @@ data "aws_iam_policy_document" "notification_manifests_database_migration" {
 
   statement {
     effect  = "Allow"
-    actions = ["s3:GetObject", "s3:ListBucket"]
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning"]
     resources = [
       "arn:aws:s3:::notification-canada-ca-staging-tf",
       "arn:aws:s3:::notification-canada-ca-staging-tf/*"
@@ -205,7 +205,7 @@ data "aws_iam_policy_document" "notification_manifests_database_migration_produc
 
   statement {
     effect  = "Allow"
-    actions = ["s3:GetObject", "s3:ListBucket"]
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning"]
     resources = [
       "arn:aws:s3:::notification-canada-ca-production-tf",
       "arn:aws:s3:::notification-canada-ca-production-tf/*"
