@@ -77,6 +77,36 @@ module "eks" {
       username = "notification-manifests-k8s-lambda-apply-main-branch"
       groups   = ["system:masters"]
     },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-staging-apply"
+      username = "notification-manifests-helmfile-staging-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-database-migration-staging"
+      username = "notification-manifests-database-migration-staging"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-production-apply"
+      username = "notification-manifests-helmfile-production-apply"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-database-migration-production"
+      username = "notification-manifests-database-migration-production"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-api-lambda-staging"
+      username = "notification-api-lambda-staging"
+      groups   = ["system:masters"]
+    },
+    {
+      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-api-lambda-production"
+      username = "notification-api-lambda-production"
+      groups   = ["system:masters"]
+    },
   ]
 
   aws_auth_accounts = [
