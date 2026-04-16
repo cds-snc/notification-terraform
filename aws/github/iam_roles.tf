@@ -633,11 +633,43 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_stagi
   depends_on = [module.github_workflow_roles_notification_manifests_staging]
 }
 
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_staging_apply_read_only" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_staging_apply
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_staging_apply_oidc_plan_policy" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_staging_apply
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
 resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_staging" {
   count = var.env == "staging" ? 1 : 0
 
   role       = local.notification_manifests_database_migration_staging
   policy_arn = aws_iam_policy.notification_manifests_database_migration[0].arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_staging_read_only" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_staging
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_staging]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_staging_oidc_plan_policy" {
+  count = var.env == "staging" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_staging
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [module.github_workflow_roles_notification_manifests_staging]
 }
 
@@ -649,11 +681,43 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_produ
   depends_on = [module.github_workflow_roles_notification_manifests_production]
 }
 
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_production_apply_read_only" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_production_apply
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_helmfile_production_apply_oidc_plan_policy" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_helmfile_production_apply
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
 resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_production" {
   count = var.env == "production" ? 1 : 0
 
   role       = local.notification_manifests_database_migration_production
   policy_arn = aws_iam_policy.notification_manifests_database_migration_production[0].arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_production_read_only" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_production
+  policy_arn = data.aws_iam_policy.readonly.arn
+  depends_on = [module.github_workflow_roles_notification_manifests_production]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_manifests_database_migration_production_oidc_plan_policy" {
+  count = var.env == "production" ? 1 : 0
+
+  role       = local.notification_manifests_database_migration_production
+  policy_arn = data.aws_iam_policy.oidcplanpolicy.arn
   depends_on = [module.github_workflow_roles_notification_manifests_production]
 }
 
