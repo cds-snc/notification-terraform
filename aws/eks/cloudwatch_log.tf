@@ -136,8 +136,8 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-throttling" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout-client" {
-  # This monitors for Celery errors related to network timeouts, which could indicate 
-  # performance issues or external dependencies not responding in time.
+  # This monitors for client library errors related to network timeouts occurring within Celery,
+  # which could indicate performance issues or external dependencies not responding in time.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-timeout-client"
   pattern        = "\"CELERY_KNOWN_ERROR::TIMEOUT_CLIENT\""
