@@ -931,6 +931,108 @@ resource "aws_glue_catalog_table" "template_categories" {
   }
 }
 
+resource "aws_glue_catalog_table" "ft_billing" {
+  name          = "ft_billing"
+  database_name = aws_athena_database.notification_quicksight.name
+  table_type    = "EXTERNAL_TABLE"
+
+  parameters = {
+    EXTERNAL = "TRUE"
+  }
+
+  storage_descriptor {
+    location      = "s3://bucket_placeholder/table/"
+    input_format  = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+    output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+
+    ser_de_info {
+      serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+    }
+
+    columns {
+      name = "bst_date"
+      type = "timestamp"
+    }
+
+    columns {
+      name = "updated_at"
+      type = "timestamp"
+    }
+
+    columns {
+      name = "created_at"
+      type = "timestamp"
+    }
+
+    columns {
+      name = "template_id"
+      type = "string"
+    }
+
+    columns {
+      name = "service_id"
+      type = "string"
+    }
+
+    columns {
+      name = "notification_type"
+      type = "string"
+    }
+
+    columns {
+      name = "provider"
+      type = "string"
+    }
+
+    columns {
+      name = "rate_multiplier"
+      type = "int"
+    }
+
+    columns {
+      name = "international"
+      type = "boolean"
+    }
+
+    columns {
+      name = "rate"
+      type = "double"
+    }
+
+    columns {
+      name = "billable_units"
+      type = "int"
+    }
+
+    columns {
+      name = "notifications_sent"
+      type = "int"
+    }
+
+    columns {
+      name = "postage"
+      type = "string"
+    }
+
+    columns {
+      name = "sms_sending_vehicle"
+      type = "string"
+    }
+
+    columns {
+      name = "billing_total"
+      type = "double"
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      storage_descriptor[0].location,
+      parameters
+    ]
+  }
+}
+
 resource "null_resource" "athena_vw_notification" {
   triggers = {
     view_sql_hash = sha1(file("${path.module}/sql/${var.env == "production" ? "quicksight_vw_notification_production.sql.tmpl" : "quicksight_vw_notification_nonprod.sql.tmpl"}"))

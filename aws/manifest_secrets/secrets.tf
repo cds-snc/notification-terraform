@@ -138,36 +138,6 @@ resource "aws_secretsmanager_secret_version" "manifest_mixpanel_project_token_ve
   secret_string = var.manifest_mixpanel_project_token
 }
 
-resource "aws_secretsmanager_secret" "manifest_new_relic_license_key" {
-  name                    = "MANIFEST_NEW_RELIC_LICENSE_KEY"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_new_relic_license_key_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_new_relic_license_key.id
-  secret_string = var.manifest_new_relic_license_key
-}
-
-resource "aws_secretsmanager_secret" "manifest_new_relic_account_id" {
-  name                    = "MANIFEST_NEW_RELIC_ACCOUNT_ID"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_new_relic_account_id_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_new_relic_account_id.id
-  secret_string = var.manifest_new_relic_account_id
-}
-
-resource "aws_secretsmanager_secret" "manifest_new_relic_api_key" {
-  name                    = "MANIFEST_NEW_RELIC_API_KEY"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_new_relic_api_key_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_new_relic_api_key.id
-  secret_string = var.manifest_new_relic_api_key
-}
-
 resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token" {
   name                    = "MANIFEST_CRM_GITHUB_PERSONAL_ACCESS_TOKEN"
   recovery_window_in_days = 0
@@ -517,18 +487,6 @@ resource "aws_secretsmanager_secret_version" "manifest_signoz_postgres_password"
   count         = var.enable_signoz ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_postgres_password[0].id
   secret_string = var.manifest_signoz_postgres_password
-}
-
-# THIS ISN'T A SECRET, BUT THIS GETS THE VALUE INTO SECRETS MANAGER 
-# SO THAT IT CAN BE ACCESSED BY HELM IN MANIFESTS REPO
-resource "aws_secretsmanager_secret" "manifest_enable_new_relic" {
-  name                    = "MANIFEST_ENABLE_NEW_RELIC"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "manifest_enable_new_relic_version" {
-  secret_id     = aws_secretsmanager_secret.manifest_enable_new_relic.id
-  secret_string = var.enable_new_relic
 }
 
 ### Falco

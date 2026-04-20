@@ -126,8 +126,12 @@ resource "aws_route53_record" "api-k8s-scratch-notification-CNAME" {
   records = [aws_alb.notification-canada-ca.dns_name]
 }
 
-resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
-  # Send no API traffic to K8s
+moved {
+  from = aws_route53_record.api-weighted-0-scratch-notification-A
+  to   = aws_route53_record.api-weighted-notification-A
+}
+
+resource "aws_route53_record" "api-weighted-notification-A" {
   provider        = aws.dns
   zone_id         = var.route53_zone_id
   name            = "api.${var.domain}"
@@ -142,7 +146,7 @@ resource "aws_route53_record" "api-weighted-0-scratch-notification-A" {
   }
 
   weighted_routing_policy {
-    weight = var.env == "production" ? 20 : 50
+    weight = 100
   }
 }
 

@@ -35,14 +35,6 @@ resource "github_actions_secret" "manifests_cache_clear_client_secret" {
   destroy_on_drift = false
 }
 
-resource "github_actions_secret" "manifests_new_relic_api_key" {
-  count            = var.env == "production" ? 1 : 0
-  repository       = data.github_repository.notification_manifests.name
-  secret_name      = "${upper(var.env)}_NEW_RELIC_API_KEY"
-  plaintext_value  = var.new_relic_api_key
-  destroy_on_drift = false
-}
-
 resource "github_actions_secret" "smoke_admin_client_secret" {
   count            = var.env == "production" || var.env == "staging" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name

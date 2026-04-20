@@ -6,6 +6,7 @@ region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-staging"
 billing_tag_key      = "CostCenter"
 
+
 ## EKS     
 primary_worker_desired_size     = 6
 primary_worker_instance_types   = ["c7i.xlarge"]
@@ -16,13 +17,13 @@ force_upgrade                   = true
 primary_worker_max_size         = 7
 primary_worker_min_size         = 4
 eks_cluster_name                = "notification-canada-ca-staging-eks-cluster"
-eks_cluster_version             = "1.34"
-eks_addon_coredns_version       = "v1.12.1-eksbuild.2"
-eks_addon_kube_proxy_version    = "v1.34.0-eksbuild.2"
-eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
-eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
-eks_node_ami_version            = "1.34.4-20260318"
-eks_karpenter_ami_id            = "ami-0bec92aeffbca3421"
+eks_cluster_version             = "1.35"
+eks_addon_coredns_version       = "v1.13.2-eksbuild.4"
+eks_addon_kube_proxy_version    = "v1.35.2-eksbuild.4"
+eks_addon_vpc_cni_version       = "v1.21.1-eksbuild.5"
+eks_addon_ebs_driver_version    = "v1.57.1-eksbuild.1"
+eks_node_ami_version            = "1.35.2-20260403"
+eks_karpenter_ami_id            = "ami-08b2c3fc1275a8fe5"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -39,12 +40,8 @@ high_demand_max_concurrency            = 10
 notification_queue_prefix              = "eks-notification-canada-ca"
 
 # New Relic Lambda API configuration
-lambda_new_relic_app_name                       = "notification-lambda-api-staging"
-lambda_new_relic_config_file                    = "/app/newrelic.ini"
-lambda_new_relic_handler                        = "application.handler"
 
 # ENVIRONMENT
-enable_new_relic            = true
 create_cbs_bucket           = false
 force_destroy_s3            = false
 force_delete_ecr            = false

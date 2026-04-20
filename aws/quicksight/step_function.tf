@@ -28,7 +28,8 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
             { name = "organisation", database = "notification_quicksight" },
             { name = "services", database = "notification_quicksight" },
             { name = "templates", database = "notification_quicksight" },
-            { name = "template_categories", database = "notification_quicksight" }
+            { name = "template_categories", database = "notification_quicksight" },
+            { name = "ft_billing", database = "notification_quicksight" }
           ]
         },
         Next = "UpdateTables"
