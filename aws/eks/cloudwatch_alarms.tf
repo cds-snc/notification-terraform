@@ -315,15 +315,15 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-critical" {
   ok_actions          = [var.sns_alert_critical_arn]
 }
 
-# TIMEOUT
-resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-warning" {
+# NOTIFICATIONS TIMEOUT
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-timeout-warning"
-  alarm_description   = "One Celery timeout error in 1 minute"
+  alarm_description   = "Warning notification timeout error in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout[0].metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout-notification[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout-notification[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 1
@@ -332,17 +332,50 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-warning" {
   ok_actions          = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-critical" {
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-celery-error-timeout-critical"
-  alarm_description   = "Ten Celery timeout errors in 1 minute"
+  alarm_name          = "logs-celery-error-timeout-notification-critical"
+  alarm_description   = "Critical notification timeout errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout[0].metric_transformation[0].namespace
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout-notification[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout-notification[0].metric_transformation[0].namespace
   period              = 60
   statistic           = "Sum"
   threshold           = 10
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
+}
+
+# CLIENTS TIMEOUT
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-celery-error-timeout-client-warning"
+  alarm_description   = "Warning client timeout error in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 10
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-celery-error-timeout-client-critical"
+  alarm_description   = "Critical for client timeout errors in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 50
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_critical_arn]

@@ -68,7 +68,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-duplicate-record" {
   # This monitors for database duplicate record errors in Celery.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-duplicate-record"
-  pattern        = "\"CELERY_KNOWN_ERROR::DUPLICATE_RECORD\""
+  pattern        = "\"duplicate key value violates unique constraint\""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
@@ -135,16 +135,31 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-throttling" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout" {
-  # This monitors for Celery errors related to network timeouts, which could indicate 
-  # performance issues or external dependencies not responding in time.
+resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout-client" {
+  # This monitors for client library errors related to network timeouts occurring within Celery,
+  # which could indicate performance issues or external dependencies not responding in time.
   count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "celery-error-timeout"
-  pattern        = "\"CELERY_KNOWN_ERROR::TIMEOUT\""
+  name           = "celery-error-timeout-client"
+  pattern        = "\"CELERY_KNOWN_ERROR::TIMEOUT_CLIENT\""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
-    name      = "celery-error-timeout"
+    name      = "celery-error-timeout-client"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout-notification" {
+  # This monitors for Celery errors related to network timeouts, which could indicate 
+  # performance issues or external dependencies not responding in time.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-timeout-notification"
+  pattern        = "\"CELERY_KNOWN_ERROR::TIMEOUT_NOTIFICATION\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-timeout-notification"
     namespace = "LogMetrics"
     value     = "1"
   }
