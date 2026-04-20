@@ -21,7 +21,7 @@ moved {
 }
 
 resource "aws_route53_record" "api-weighted-notification-A" {
-  # Send all API traffic to Lambda
+  # Weighted record configured to send 0% of API traffic to Lambda
   provider = aws.dns
 
   zone_id         = var.route53_zone_id
