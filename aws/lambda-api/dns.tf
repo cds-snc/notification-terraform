@@ -15,7 +15,12 @@ resource "aws_route53_record" "api-lambda-notification-A" {
 
 }
 
-resource "aws_route53_record" "api-weighted-100-notification-A" {
+moved {
+  from = aws_route53_record.api-weighted-100-notification-A
+  to   = aws_route53_record.api-weighted-notification-A
+}
+
+resource "aws_route53_record" "api-weighted-notification-A" {
   # Send all API traffic to Lambda
   provider = aws.dns
 
@@ -32,7 +37,7 @@ resource "aws_route53_record" "api-weighted-100-notification-A" {
   }
 
   weighted_routing_policy {
-    weight = 25
+    weight = 0
   }
 }
 
