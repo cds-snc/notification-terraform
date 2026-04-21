@@ -10,7 +10,13 @@ When running `terragrunt plan/apply` locally, your AWS SSO session is not author
 
 - AWS CLI configured with SSO (`AWSAdministratorAccess` permission set)
 - `jq` installed (`brew install jq`)
-- An active AWS SSO session (`aws sso login --profile <profile>`)
+- An active AWS SSO session for the management account, set as your active profile:
+  ```bash
+  export AWS_PROFILE=<your-notify-management-profile>
+  aws sso login --profile $AWS_PROFILE
+  ```
+
+> **Note:** The scripts do not accept a `--profile` flag. They use whichever AWS CLI profile is active in your shell (`AWS_PROFILE` env var or the default profile). Make sure you have the correct account's profile active before running them.
 
 ## Running a DNS Plan/Apply
 
@@ -44,11 +50,13 @@ source scripts/revokeDnsRole.sh
 ```
 
 This script:
-1. Unsets the `AWS_*` environment variables from your shell
-2. Removes the account root statement from the `notification-terraform-apply` trust policy, restoring it to its original state
+1. Verifies your current identity and reverts the `notification-terraform-apply` trust policy **before** unsetting credentials, ensuring the right account is targeted
+2. Unsets the `AWS_*` environment variables from your shell
 
 ## Why This Is Necessary
 
-In normal CI operation, GitHub Actions assumes `notification-terraform-apply` via OIDC (`sts:AssumeRoleWithWebIdentity`). That role is then authorized to chain-assume `notify_prod_dns_manager` in the production account. AWS SSO roles cannot be directly referenced in trust policies, so the account root is used as a temporary principal to bridge the gap for local use.
+In normal CI operation, GitHub Actions assumes `notification-terraform-apply` via OIDC (`sts:AssumeRoleWithWebIdentity`). That role is then authorized to chain-assume `notify_prod_dns_manager` in the production account.
+
+AWS SSO role ARNs (e.g. `arn:aws:iam::ACCOUNT:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_*`) can be referenced in IAM identity-based policies (such as KMS key policies), but AWS rejects them as principals in IAM role **trust policies** with an `Invalid principal` error. The account root is therefore used as a temporary trust principal, which delegates access control to the identity-based policies attached to the SSO role.
 
 The trust policy patch should never be left in place permanently — always run `source scripts/revokeDnsRole.sh` when done.
