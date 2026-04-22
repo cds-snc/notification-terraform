@@ -216,11 +216,44 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-critica
   ok_actions          = [var.sns_alert_critical_arn]
 }
 
+# METRICS
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-metrics-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-celery-error-metrics-warning"
+  alarm_description   = "30 Celery metrics related error in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-metrics[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-metrics[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 30
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-metrics-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-celery-error-metrics-critical"
+  alarm_description   = "60 Celery metrics related errors in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-metrics[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-metrics[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 60
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_critical_arn]
+}
+
 # NOTIFICATION_NOT_FOUND
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-notification-not-found-warning"
-  alarm_description   = "50 Celery notification not found errors in 1 minute"
+  alarm_description   = "50 Celery notifications not found errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-notification-not-found[0].metric_transformation[0].name
@@ -236,7 +269,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found-critical" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-notification-not-found-critical"
-  alarm_description   = "200 Celery notification not found errors in 1 minute"
+  alarm_description   = "200 Celery notifications not found errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = aws_cloudwatch_log_metric_filter.celery-error-notification-not-found[0].metric_transformation[0].name

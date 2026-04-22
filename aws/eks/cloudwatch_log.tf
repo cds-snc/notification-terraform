@@ -92,6 +92,20 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-job-incomplete" {
   }
 }
 
+resource "aws_cloudwatch_log_metric_filter" "celery-error-metrics" {
+  # This monitors for incomplete jobs that couldn't be completed within Celery.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-metrics"
+  pattern        = "\"CELERY_KNOWN_ERROR::METRICS\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-job-incomplete"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
 resource "aws_cloudwatch_log_metric_filter" "celery-error-notification-not-found" {
   # This monitors for Celery errors when notifications were not found within the system.
   count          = var.cloudwatch_enabled ? 1 : 0
