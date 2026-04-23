@@ -189,7 +189,7 @@ resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
   dynamic "regular_expression" {
     for_each = var.alt_domain != null && trimspace(var.alt_domain) != "" ? [var.alt_domain] : []
     content {
-      regex_string = regular_expression.value
+      regex_string = "${regular_expression.value}$"
     }
   }
 
