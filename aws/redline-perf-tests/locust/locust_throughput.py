@@ -69,6 +69,13 @@ def _(parser):
         env_var="LOCUST_WAF_SECRET",
         help="Value for the waf-secret header, used to bypass WAF rate limiting",
     )
+    parser.add_argument(
+        "--endpoint",
+        type=str,
+        default="/_status?simple=1",
+        env_var="LOCUST_ENDPOINT",
+        help="Endpoint path to hit on the host (default: /_status?simple=1)",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -86,11 +93,12 @@ class ThroughputUser(HttpUser):
     @task
     def ping(self):
         headers = {}
-        waf_secret = self.environment.parsed_options.waf_secret
+        opts = self.environment.parsed_options
+        waf_secret = opts.waf_secret
         if waf_secret:
             headers["waf-secret"] = waf_secret
-        # simple=1 skips the DB version check — pure Flask routing overhead only
-        self.client.get("/_status?simple=1", name="/_status?simple=1", headers=headers)
+        endpoint = opts.endpoint
+        self.client.get(endpoint, name=endpoint, headers=headers)
 
 
 # ---------------------------------------------------------------------------
