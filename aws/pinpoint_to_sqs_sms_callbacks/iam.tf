@@ -35,8 +35,8 @@ data "aws_iam_policy_document" "pinpoint_assume" {
       test     = "ArnLike"
       variable = "aws:SourceArn"
       values = [
-        "arn:aws:sms-voice:${var.region}:${var.account_id}:configuration-set/pinpoint-configuration",
-        "arn:aws:sms-voice:${var.region_pinpoint_us}:${var.account_id}:configuration-set/pinpoint-configuration"
+        aws_pinpointsmsvoicev2_configuration_set.ca.arn,
+        aws_pinpointsmsvoicev2_configuration_set.us_west_2.arn,
       ]
     }
   }
