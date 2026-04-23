@@ -466,6 +466,12 @@ data "aws_iam_policy_document" "notification_system_status_frontend_upload_to_s3
 
   statement {
     effect    = "Allow"
+    actions   = ["s3:GetBucketTagging", "s3:PutBucketTagging"]
+    resources = ["arn:aws:s3:::notification-canada-ca-staging-system-status"]
+  }
+
+  statement {
+    effect    = "Allow"
     actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
     resources = ["arn:aws:s3:::notification-canada-ca-staging-system-status/*"]
   }
@@ -494,6 +500,12 @@ data "aws_iam_policy_document" "notification_system_status_frontend_prod_upload_
   statement {
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
+    resources = ["arn:aws:s3:::notification-canada-ca-production-system-status"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetBucketTagging", "s3:PutBucketTagging"]
     resources = ["arn:aws:s3:::notification-canada-ca-production-system-status"]
   }
 
