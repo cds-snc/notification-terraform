@@ -1,0 +1,24 @@
+name: Terraform Release PR
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - terraform-release
+
+jobs:
+  terraform-release-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtain a Notify PR Bot GitHub App Installation Access Token
+        run: |
+          TOKEN="$(npx obtain-github-app-installation-access-token@1.1.0 ci ${{ secrets.PR_BOT_GITHUB_TOKEN }})"
+          echo "::add-mask::$TOKEN"
+          echo "GITHUB_TOKEN=$TOKEN" >> $GITHUB_ENV
+
+      - name: Create terraform release draft PR
+        uses: cds-snc/notification-pr-bot@main
+        env:
+          TOKEN: ${{ env.GITHUB_TOKEN }}
+          TARGET_REPO: notification-terraform
