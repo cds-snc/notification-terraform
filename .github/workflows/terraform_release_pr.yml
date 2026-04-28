@@ -6,6 +6,8 @@ on:
     types:
       - terraform-release
 
+permissions: {}
+
 jobs:
   terraform-release-pr:
     runs-on: ubuntu-latest
