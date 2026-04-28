@@ -2,6 +2,14 @@ name: Terraform Release AUTO-PR
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - pr-bot-auto-release-tf
+    paths:
+      - ".github/workflows/terraform_release_autopr.yml"
+      - ".github/scripts/terraform-release-autopr.ts"
+      - "package.json"
+      - "tsconfig.json"
 
 permissions:
   contents: write
@@ -13,17 +21,25 @@ jobs:
 
     steps:
       - name: Generate PR Bot Token
+        if: github.event_name == 'workflow_dispatch'
         id: generate-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
           private-key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
 
-      - name: Checkout
+      - name: Checkout (manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         with:
           fetch-depth: 0
           token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Checkout (validation)
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -38,7 +54,7 @@ jobs:
         run: npm run autopr:terraform-release
 
       - name: Create Terraform AUTO-PR
-        if: steps.prepare.outputs.should_create_pr == 'true'
+        if: github.event_name == 'workflow_dispatch' && steps.prepare.outputs.should_create_pr == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.generate-token.outputs.token }}
@@ -47,6 +63,14 @@ jobs:
           body: ${{ steps.prepare.outputs.pr_body }}
           branch: ${{ steps.prepare.outputs.branch_name }}
           delete-branch: true
+
+      - name: Validation mode summary
+        if: github.event_name != 'workflow_dispatch'
+        run: |
+          echo "Validation run only. AUTO-PR creation is disabled for ${GITHUB_EVENT_NAME}."
+          echo "Current version: ${{ steps.prepare.outputs.current_version }}"
+          echo "Target version: ${{ steps.prepare.outputs.target_version }}"
+          echo "Would create PR: ${{ steps.prepare.outputs.should_create_pr }}"
 
       - name: No release PR needed
         if: steps.prepare.outputs.should_create_pr != 'true'
