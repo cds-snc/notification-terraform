@@ -8,10 +8,10 @@ WORKDIR /mnt/locust
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir "locust>=2,<3" \
+    && pip install --no-cache-dir "locust>=2,<3" "python-dotenv>=1,<2" \
     && adduser --disabled-password --gecos "" locust
 
-COPY --chown=locust:locust locust_throughput.py locust.conf ./
+COPY --chown=locust:locust locust_throughput.py locust.conf scaling_api.py ./
 
 USER locust
 

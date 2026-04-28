@@ -25,6 +25,9 @@ resource "null_resource" "push_locust_redline_docker_image" {
   depends_on = [
     null_resource.build_locust_redline_docker_image
   ]
+  triggers = {
+    always_run = timestamp()
+  }
 
   provisioner "local-exec" {
     command = "docker push ${aws_ecr_repository.locust_redline.repository_url}:bootstrap"

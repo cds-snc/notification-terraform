@@ -46,7 +46,7 @@ variable "locust_target_host" {
 variable "locust_worker_count" {
   type        = number
   description = "Number of Locust worker containers to run"
-  default     = 2
+  default     = 4
 }
 
 ###
@@ -55,25 +55,25 @@ variable "locust_worker_count" {
 variable "master_cpu" {
   type        = number
   description = "CPU units for the Locust master task (1024 = 1 vCPU)"
-  default     = 1024
+  default     = 2048
 }
 
 variable "master_memory" {
   type        = number
   description = "Memory (MiB) for the Locust master task"
-  default     = 2048
+  default     = 4096
 }
 
 variable "worker_cpu" {
   type        = number
   description = "CPU units for each Locust worker task"
-  default     = 1024
+  default     = 2048
 }
 
 variable "worker_memory" {
   type        = number
   description = "Memory (MiB) for each Locust worker task"
-  default     = 2048
+  default     = 4096
 }
 
 ###
