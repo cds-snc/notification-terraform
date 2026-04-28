@@ -1,0 +1,54 @@
+name: Terraform Release AUTO-PR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  terraform-release-autopr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate PR Bot Token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
+          private-key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install TypeScript tooling
+        run: npm install --no-fund --no-audit
+
+      - name: Prepare Terraform AUTO-PR payload
+        id: prepare
+        run: npm run autopr:terraform-release
+
+      - name: Create Terraform AUTO-PR
+        if: steps.prepare.outputs.should_create_pr == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          commit-message: ${{ steps.prepare.outputs.commit_message }}
+          title: ${{ steps.prepare.outputs.pr_title }}
+          body: ${{ steps.prepare.outputs.pr_body }}
+          branch: ${{ steps.prepare.outputs.branch_name }}
+          delete-branch: true
+
+      - name: No release PR needed
+        if: steps.prepare.outputs.should_create_pr != 'true'
+        run: |
+          echo "No AUTO-PR created: ${{ steps.prepare.outputs.reason }}"

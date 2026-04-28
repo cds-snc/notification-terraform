@@ -1,0 +1,13 @@
+{
+  "name": "notification-terraform-release-bot",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "autopr:terraform-release": "tsx .github/scripts/terraform-release-autopr.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
