@@ -1,22 +1,30 @@
-## What happens when this PR merges?
+## What happens when your PR merges?
 
-Merging this PR deploys the infrastructure version listed below to **production** via `terraform apply`.
+- Prefix the title of your PR:
+  - `fix:` - tag `main` as a new patch release
+  - `feat:` - tag `main` as a new minor release
+  - `BREAKING CHANGE:` - tag `main` as a new major release
+  - `[AUTO-PR]` - tag `main` as a new patch release and deploy to production
+  - `chore:` - use for changes to non-app code (ex: GitHub actions)
 
-## Infrastructure version being deployed
+## What are you changing?
+
+- [ ] Releasing a new infrastructure version
+- [ ] Changing Terraform configuration
+
+## Provide some background on the changes
 
 > Give details ex. Security patching, content update, more API pods etc
 
-## Pre-merge checklist | Liste de vérification avant fusion
+## Checklist before merging
 
-- [ ] I have reviewed the changes included in this release and they are as expected.
-- [ ] I have verified that the staging environment is healthy before promoting to production.
-- [ ] I am aware of any infrastructure changes that may cause downtime or require a maintenance window.
-- [ ] This PR does not raise new security concerns. Refer to our GC Notify Risk Register document on our Google drive.
+- [ ] I have verified that the changes are as expected in [Notify staging](https://staging.notification.cdssandbox.xyz/)
+- [ ] I am aware of any infrastructure changes that may cause downtime or require a maintenance window
 
-## After merging this PR | Après la fusion
+## After merging this PR
 
-- [ ] I have verified that the `terraform apply` GitHub Actions workflow succeeded.
-- [ ] I have verified that affected AWS resources (ECS services, RDS, etc.) are healthy.
-- [ ] I have verified that I can still log into [Notify production](https://notification.canada.ca).
-- [ ] I have verified that the smoke tests still pass on production.
-- [ ] I have communicated the release in the #notify Slack channel if it may impact users.
+- [ ] I have verified that the `terraform apply` GitHub Actions workflow succeeded
+- [ ] I have verified that affected AWS resources (ECS services, RDS, Lambda functions, etc.) are healthy
+- [ ] I have verified that I can still log into [Notify production](https://notification.canada.ca)
+- [ ] I have verified that the smoke tests still pass on production
+- [ ] I have communicated the release in the #notify Slack channel
