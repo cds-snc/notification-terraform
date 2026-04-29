@@ -19,6 +19,22 @@ jobs:
           echo "::add-mask::$TOKEN"
           echo "GITHUB_TOKEN=$TOKEN" >> $GITHUB_ENV
 
+      - name: Close old draft release PRs
+        env:
+          GH_TOKEN: ${{ env.GITHUB_TOKEN }}
+        run: |
+          gh pr list \
+            --repo cds-snc/notification-terraform \
+            --state open \
+            --draft \
+            --search "[AUTO-PR] in:title" \
+            --json number,title \
+            --jq '.[] | select(.title | startswith("[AUTO-PR]")) | .number' \
+          | xargs -r -I{} gh pr close {} \
+            --repo cds-snc/notification-terraform \
+            --delete-branch \
+            --comment "Superseded by a new automated release PR."
+
       - name: Create terraform release draft PR
         uses: cds-snc/notification-pr-bot@main
         env:
