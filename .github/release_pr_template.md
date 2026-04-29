@@ -1,30 +1,40 @@
-## What happens when your PR merges?
+## Summary
 
-- Prefix the title of your PR:
-  - `fix:` - tag `main` as a new patch release
-  - `feat:` - tag `main` as a new minor release
-  - `BREAKING CHANGE:` - tag `main` as a new major release
-  - `[AUTO-PR]` - tag `main` as a new patch release and deploy to production
-  - `chore:` - use for changes to non-app code (ex: GitHub actions)
+> What is changing and why? (e.g. security patching, scaling API pods, new feature deployment)
 
-## What are you changing?
+## Type of change
 
-- [ ] Releasing a new infrastructure version
-- [ ] Changing Terraform configuration
+- [ ] Infrastructure / module version bump
+- [ ] Terraform configuration change (variables, policies, etc.)
+- [ ] Dependency or container image update
+- [ ] Breaking change (requires downtime or a maintenance window)
+- [ ] Other: ___
 
-## Provide some background on the changes
+## Pre-merge checklist
 
-> Give details ex. Security patching, content update, more API pods etc
+- [ ] Terraform plan output has been reviewed and changes are as expected
+- [ ] Changes have been verified in [Notify staging](https://staging.notification.cdssandbox.xyz/)
+- [ ] Any risk of downtime or need for a maintenance window has been considered
 
-## Checklist before merging
+## Post-merge checklist
 
-- [ ] I have verified that the changes are as expected in [Notify staging](https://staging.notification.cdssandbox.xyz/)
-- [ ] I am aware of any infrastructure changes that may cause downtime or require a maintenance window
+- [ ] The `terraform apply` GitHub Actions workflow succeeded
+- [ ] Affected AWS resources (ECS services, RDS, Lambda functions, etc.) are healthy
+- [ ] Can still log into [Notify production](https://notification.canada.ca)
+- [ ] Smoke tests still pass on production
+- [ ] Release communicated in the #notify Slack channel
 
-## After merging this PR
+---
 
-- [ ] I have verified that the `terraform apply` GitHub Actions workflow succeeded
-- [ ] I have verified that affected AWS resources (ECS services, RDS, Lambda functions, etc.) are healthy
-- [ ] I have verified that I can still log into [Notify production](https://notification.canada.ca)
-- [ ] I have verified that the smoke tests still pass on production
-- [ ] I have communicated the release in the #notify Slack channel
+<details>
+<summary>PR title prefixes (controls versioning on merge)</summary>
+
+| Prefix | Effect |
+|---|---|
+| `fix:` | Patch release |
+| `feat:` | Minor release |
+| `BREAKING CHANGE:` | Major release |
+| `[AUTO-PR]` | Patch release + auto-deploy to production |
+| `chore:` | No release (use for non-app changes like GitHub Actions) |
+
+</details>
