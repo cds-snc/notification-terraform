@@ -1,6 +1,6 @@
 ## Summary
 
-> What is changing and why? (e.g. security patching, scaling API pods, new feature deployment)
+<!-- RELEASE_SUMMARY -->
 
 ## Type of change
 
