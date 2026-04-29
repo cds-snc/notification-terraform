@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Generate PR Bot Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@<FULL_40_CHAR_COMMIT_SHA> # v1
         id: generate-token
         with:
           app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
