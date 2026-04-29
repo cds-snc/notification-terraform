@@ -1,13 +1,3 @@
-## PR title prefix (controls versioning on merge)
-
-| Prefix | Effect |
-|---|---|
-| `fix:` | Patch release |
-| `feat:` | Minor release |
-| `BREAKING CHANGE:` | Major release |
-| `[AUTO-PR]` | Patch release + auto-deploy to production |
-| `chore:` | No release (use for non-app changes like GitHub Actions) |
-
 ## Summary
 
 > What is changing and why? (e.g. security patching, scaling API pods, new feature deployment)
