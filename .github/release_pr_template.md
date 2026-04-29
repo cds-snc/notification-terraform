@@ -1,3 +1,13 @@
+## PR title prefix (controls versioning on merge)
+
+| Prefix | Effect |
+|---|---|
+| `fix:` | Patch release |
+| `feat:` | Minor release |
+| `BREAKING CHANGE:` | Major release |
+| `[AUTO-PR]` | Patch release + auto-deploy to production |
+| `chore:` | No release (use for non-app changes like GitHub Actions) |
+
 ## Summary
 
 > What is changing and why? (e.g. security patching, scaling API pods, new feature deployment)
@@ -23,18 +33,3 @@
 - [ ] Can still log into [Notify production](https://notification.canada.ca)
 - [ ] Smoke tests still pass on production
 - [ ] Release communicated in the #notify Slack channel
-
----
-
-<details>
-<summary>PR title prefixes (controls versioning on merge)</summary>
-
-| Prefix | Effect |
-|---|---|
-| `fix:` | Patch release |
-| `feat:` | Minor release |
-| `BREAKING CHANGE:` | Major release |
-| `[AUTO-PR]` | Patch release + auto-deploy to production |
-| `chore:` | No release (use for non-app changes like GitHub Actions) |
-
-</details>
