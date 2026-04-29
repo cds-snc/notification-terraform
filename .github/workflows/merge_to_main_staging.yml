@@ -980,7 +980,7 @@ jobs:
     needs: [bump-version-and-push-tag]
     steps:
       - name: Generate PR Bot Token
-        uses: actions/create-github-app-token@8f0f3f6b1107e38f22c0c5a1c0f2de8a1b9f0d9f # v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
         id: generate-token
         with:
           app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
