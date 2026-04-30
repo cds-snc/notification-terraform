@@ -38,8 +38,7 @@ resource "aws_lambda_function" "api" {
         REDIS_ENABLED                  = var.redis_enabled
         FF_CLOUDWATCH_METRICS_ENABLED  = var.ff_cloudwatch_metrics_enabled
         AWS_XRAY_SDK_ENABLED           = var.aws_xray_sdk_enabled
-      },
-      local.newrelic_env_vars
+      }
     )
   }
   lifecycle {

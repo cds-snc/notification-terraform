@@ -2,6 +2,526 @@
 # Create and Manage github workflow policies
 #
 
+#
+# notification-manifests helmfile apply policy (staging)
+# Needs: EKS kubeconfig, EC2 VPN cert, Secrets Manager context, SSM lambda env vars
+#
+resource "aws_iam_policy" "notification_manifests_helmfile_apply" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_manifests_helmfile_staging_apply
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_manifests_helmfile_apply[0].json
+}
+
+data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["eks:DescribeCluster"]
+    resources = ["arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-staging-eks-cluster"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ec2:ExportClientVpnClientConfiguration"]
+    resources = ["arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["ssm:GetParameter", "ssm:GetParameters", "ssm:PutParameter", "ssm:DescribeParameters"]
+    resources = [
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES",
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES_ADMIN"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["kms:Decrypt", "kms:GenerateDataKey"]
+    resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning", "s3:GetEncryptionConfiguration", "s3:GetBucket*"]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-tf",
+      "arn:aws:s3:::notification-canada-ca-staging-tf/*"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
+}
+
+#
+# notification-manifests helmfile apply policy (production)
+#
+resource "aws_iam_policy" "notification_manifests_helmfile_apply_production" {
+  count = var.env == "production" ? 1 : 0
+
+  name   = local.notification_manifests_helmfile_production_apply
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_manifests_helmfile_apply_production[0].json
+}
+
+data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production" {
+  count = var.env == "production" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["eks:DescribeCluster"]
+    resources = ["arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-production-eks-cluster"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ec2:ExportClientVpnClientConfiguration"]
+    resources = ["arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["ssm:GetParameter", "ssm:GetParameters", "ssm:PutParameter", "ssm:DescribeParameters"]
+    resources = [
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES",
+      "arn:aws:ssm:${var.region}:${var.account_id}:parameter/ENVIRONMENT_VARIABLES_ADMIN"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["kms:Decrypt", "kms:GenerateDataKey"]
+    resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning", "s3:GetEncryptionConfiguration", "s3:GetBucket*"]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-tf",
+      "arn:aws:s3:::notification-canada-ca-production-tf/*"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
+}
+
+#
+# notification-manifests database migration policy (staging)
+#
+resource "aws_iam_policy" "notification_manifests_database_migration" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_manifests_database_migration_staging
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_manifests_database_migration[0].json
+}
+
+data "aws_iam_policy_document" "notification_manifests_database_migration" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["eks:DescribeCluster"]
+    resources = ["arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-staging-eks-cluster"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ec2:ExportClientVpnClientConfiguration"]
+    resources = ["arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning", "s3:GetEncryptionConfiguration", "s3:GetBucket*"]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-tf",
+      "arn:aws:s3:::notification-canada-ca-staging-tf/*"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
+}
+
+#
+# notification-manifests database migration policy (production)
+#
+resource "aws_iam_policy" "notification_manifests_database_migration_production" {
+  count = var.env == "production" ? 1 : 0
+
+  name   = local.notification_manifests_database_migration_production
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_manifests_database_migration_production[0].json
+}
+
+data "aws_iam_policy_document" "notification_manifests_database_migration_production" {
+  count = var.env == "production" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["eks:DescribeCluster"]
+    resources = ["arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-production-eks-cluster"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ec2:ExportClientVpnClientConfiguration"]
+    resources = ["arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketVersioning", "s3:GetEncryptionConfiguration", "s3:GetBucket*"]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-tf",
+      "arn:aws:s3:::notification-canada-ca-production-tf/*"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
+    resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
+}
+
+#
+# notification-manifests smoke test production policy
+#
+resource "aws_iam_policy" "notification_manifests_smoke_test_production" {
+  count = var.env == "production" ? 1 : 0
+
+  name   = local.notification_manifests_smoke_test_production
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_manifests_smoke_test_production[0].json
+}
+
+data "aws_iam_policy_document" "notification_manifests_smoke_test_production" {
+  count = var.env == "production" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:ListBucket"]
+    resources = ["arn:aws:s3:::notification-canada-ca-production-csv-upload"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
+    resources = ["arn:aws:s3:::notification-canada-ca-production-csv-upload/*"]
+  }
+}
+
+#
+# notification-admin test-delete-unused policy
+#
+resource "aws_iam_policy" "notification_admin_test_delete_unused" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_admin_test_delete_unused
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_admin_test_delete_unused[0].json
+}
+
+data "aws_iam_policy_document" "notification_admin_test_delete_unused" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["lambda:ListFunctions"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:DeleteFunction",
+      "lambda:DeleteFunctionUrlConfig",
+      "lambda:GetFunctionUrlConfig"
+    ]
+    resources = ["arn:aws:lambda:${var.region}:${var.account_id}:function:notify-admin-pr-*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["logs:DeleteLogGroup"]
+    resources = ["arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/lambda/notify-admin-pr-*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecr:BatchDeleteImage", "ecr:DescribeImages", "ecr:ListImages"]
+    resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/admin"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+}
+
+#
+# notification-api build-and-push performance test policy (staging)
+#
+resource "aws_iam_policy" "notification_api_build_push_performance_test" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_api_build_push_performance_test
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_api_build_push_performance_test[0].json
+}
+
+data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchDeleteImage",
+      "ecr:DescribeImages",
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage",
+      "ecr:BatchGetImage",
+      "ecr:GetDownloadUrlForLayer"
+    ]
+    resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/performance-test"]
+  }
+}
+
+#
+# notification-api lambda staging policy
+# Needs: ECR push to notify/api-lambda + Lambda update/publish/alias
+#
+resource "aws_iam_policy" "notification_api_lambda_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_api_lambda_staging
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_api_lambda_staging[0].json
+}
+
+data "aws_iam_policy_document" "notification_api_lambda_staging" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchDeleteImage",
+      "ecr:DescribeImages",
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage",
+      "ecr:BatchGetImage",
+      "ecr:GetDownloadUrlForLayer"
+    ]
+    resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api-lambda"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "lambda:UpdateFunctionCode",
+      "lambda:PublishVersion",
+      "lambda:UpdateAlias",
+      "lambda:GetFunction",
+      "lambda:GetFunctionConfiguration",
+      "lambda:GetAlias",
+      "lambda:ListAliases",
+      "lambda:ListVersionsByFunction"
+    ]
+    resources = [
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:api-lambda",
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:api-lambda:*"
+    ]
+  }
+}
+
+#
+# notification-api lambda production policy
+# ECR push only — production Lambda deploy goes through manifests, not this workflow
+#
+resource "aws_iam_policy" "notification_api_lambda_production" {
+  count = var.env == "production" ? 1 : 0
+
+  name   = local.notification_api_lambda_production
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_api_lambda_production[0].json
+}
+
+data "aws_iam_policy_document" "notification_api_lambda_production" {
+  count = var.env == "production" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchDeleteImage",
+      "ecr:DescribeImages",
+      "ecr:ListImages",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:PutImage",
+      "ecr:BatchGetImage",
+      "ecr:GetDownloadUrlForLayer"
+    ]
+    resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api-lambda"]
+  }
+}
+
+#
+# notification-system-status-frontend upload-to-s3 policy (staging)
+#
+resource "aws_iam_policy" "notification_system_status_frontend_upload_to_s3" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_system_status_frontend_upload_to_s3
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_system_status_frontend_upload_to_s3[0].json
+}
+
+data "aws_iam_policy_document" "notification_system_status_frontend_upload_to_s3" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:ListBucket"]
+    resources = ["arn:aws:s3:::notification-canada-ca-staging-system-status"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetBucketTagging", "s3:PutBucketTagging"]
+    resources = ["arn:aws:s3:::notification-canada-ca-staging-system-status"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
+    resources = ["arn:aws:s3:::notification-canada-ca-staging-system-status/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["cloudfront:CreateInvalidation"]
+    resources = ["*"]
+  }
+}
+
+#
+# notification-system-status-frontend prod-upload-to-s3 policy (production)
+#
+resource "aws_iam_policy" "notification_system_status_frontend_prod_upload_to_s3" {
+  count = var.env == "production" ? 1 : 0
+
+  name   = local.notification_system_status_frontend_prod_upload_to_s3
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_system_status_frontend_prod_upload_to_s3[0].json
+}
+
+data "aws_iam_policy_document" "notification_system_status_frontend_prod_upload_to_s3" {
+  count = var.env == "production" ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:ListBucket"]
+    resources = ["arn:aws:s3:::notification-canada-ca-production-system-status"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetBucketTagging", "s3:PutBucketTagging"]
+    resources = ["arn:aws:s3:::notification-canada-ca-production-system-status"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
+    resources = ["arn:aws:s3:::notification-canada-ca-production-system-status/*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["cloudfront:CreateInvalidation"]
+    resources = ["*"]
+  }
+}
+
 # resource policies for GitHub OIDC roles
 resource "aws_iam_policy" "notification_admin_test_admin_workflows" {
   count = var.env == "staging" ? 1 : 0
@@ -371,6 +891,164 @@ data "aws_iam_policy_document" "notification_document_download_build_push" {
     ]
     resources = [
       "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/document-download"
+    ]
+  }
+}
+
+#
+# notification-terraform workflow policies
+#
+
+resource "aws_iam_policy" "notification_terraform_check_eks_ami_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_terraform_check_eks_ami_update
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_check_eks_ami_update[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_check_eks_ami_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "eks:DescribeCluster",
+      "eks:DescribeNodegroup"
+    ]
+    resources = [
+      "arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-*",
+      "arn:aws:eks:${var.region}:${var.account_id}:nodegroup/notification-canada-ca-*/*/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.region}::parameter/aws/service/eks/optimized-ami/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_terraform_check_eks_cluster_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_terraform_check_eks_cluster_update
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_check_eks_cluster_update[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_check_eks_cluster_update" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "eks:DescribeAddonVersions"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "eks:DescribeCluster"
+    ]
+    resources = [
+      "arn:aws:eks:${var.region}:${var.account_id}:cluster/notification-canada-ca-*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_terraform_sanitize_staging_sms" {
+  count = var.env == "staging" ? 1 : 0
+
+  name   = local.notification_terraform_sanitize_staging_sms
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_sanitize_staging_sms[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_sanitize_staging_sms" {
+  count = var.env == "staging" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-logs",
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-west-2-logs"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-logs/*",
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-west-2-logs/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-logs-san/*",
+      "arn:aws:s3:::notification-canada-ca-staging-sms-usage-west-2-logs-san/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notification_terraform_sanitize_production_sms" {
+  count = var.env == "production" ? 1 : 0
+
+  name   = local.notification_terraform_sanitize_production_sms
+  path   = "/"
+  policy = data.aws_iam_policy_document.notification_terraform_sanitize_production_sms[0].json
+}
+
+data "aws_iam_policy_document" "notification_terraform_sanitize_production_sms" {
+  count = var.env == "production" ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-logs",
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-west-2-logs"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-logs/*",
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-west-2-logs/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-logs-san/*",
+      "arn:aws:s3:::notification-canada-ca-production-sms-usage-west-2-logs-san/*"
     ]
   }
 }
