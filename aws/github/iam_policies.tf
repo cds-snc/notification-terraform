@@ -931,6 +931,14 @@ data "aws_iam_policy_document" "notification_terraform_check_eks_ami_update" {
       "arn:aws:ssm:${var.region}::parameter/aws/service/eks/optimized-ami/*"
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeImages"
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "notification_terraform_check_eks_cluster_update" {
