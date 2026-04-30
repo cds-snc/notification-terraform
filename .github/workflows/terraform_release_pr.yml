@@ -14,14 +14,14 @@ jobs:
 
     steps:
       - name: Generate PR Bot Token
-        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
         id: generate-token
         with:
           app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
           private-key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
 
       - name: Create terraform release draft PR
-        uses: cds-snc/notification-pr-bot@main
+        uses: cds-snc/notification-pr-bot@7367ffdc3f8d54c370b67f94a3fcc7e2d5a0f14e # main
         env:
           TOKEN: ${{ steps.generate-token.outputs.token }}
           TARGET_REPO: notification-terraform
