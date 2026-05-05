@@ -11,6 +11,8 @@ on:
       - "aws/**"
       - "env/staging/**"
       - "env/staging_config.tfvars"
+      - "env/production/**"
+      - "env/production_config.tfvars"
       - ".github/workflows/merge_to_main_staging.yml"
 
 defaults:
