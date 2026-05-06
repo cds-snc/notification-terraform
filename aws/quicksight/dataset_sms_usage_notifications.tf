@@ -102,10 +102,4 @@ resource "aws_quicksight_refresh_schedule" "sms-usage-notifications" {
       time_of_the_day = "12:00"
     }
   }
-
-  lifecycle {
-    ignore_changes = [
-      schedule[0].start_after_date_time
-    ]
-  }
 }

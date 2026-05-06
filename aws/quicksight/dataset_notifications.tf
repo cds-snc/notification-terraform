@@ -207,10 +207,4 @@ resource "aws_quicksight_refresh_schedule" "notifications_athena" {
       time_of_the_day = "09:20"
     }
   }
-
-  lifecycle {
-    ignore_changes = [
-      schedule[0].start_after_date_time
-    ]
-  }
 }
