@@ -6,8 +6,6 @@ All times are UTC.
 
 0500 - sms_usage
 
-0520 - notifications_athena (takes about 3 hours. Rest of tables are under 5 minutes to refresh)
-
 0715 - jobs
 0720 - templates
 
@@ -18,4 +16,6 @@ All times are UTC.
 0740 - users
 0745 - ft_billing
 
-0900 - sms_usage_notifications
+0920 - notifications_athena (takes about 3 hours. Rest of tables are under 5 minutes to refresh)
+
+1200 - sms_usage_notifications
