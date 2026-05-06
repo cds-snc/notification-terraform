@@ -69,7 +69,7 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
 resource "aws_cloudwatch_event_rule" "step_function_daily_trigger" {
   name                = "daily-athena-update-table-location"
   description         = "Daily trigger to update Athena table locations"
-  schedule_expression = "cron(10 9 * * ? *)" # daily at 09:10 UTC
+  schedule_expression = "cron(10 5 * * ? *)" # daily at 05:10 UTC
 }
 
 resource "aws_iam_role" "eventbridge_role" {

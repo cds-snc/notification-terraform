@@ -204,7 +204,7 @@ resource "aws_quicksight_refresh_schedule" "notifications_athena" {
 
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "09:20"
+      time_of_the_day = "05:20"
     }
   }
 }
