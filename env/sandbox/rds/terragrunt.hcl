@@ -22,6 +22,7 @@ dependency "common" {
     sns_alert_general_arn = ""
     sns_alert_critical_arn = ""
     sns_alert_warning_arn = ""
+    sns_alert_ok_arn = ""
   }
 }
 
@@ -49,6 +50,7 @@ inputs = {
   sns_alert_general_arn     = dependency.common.outputs.sns_alert_general_arn
   sns_alert_critical_arn    = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_warning_arn     = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_ok_arn          = dependency.common.outputs.sns_alert_ok_arn
   sentinel_forwarder_cloudwatch_lambda_arn  = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_arn
   sentinel_forwarder_cloudwatch_lambda_name = dependency.eks.outputs.sentinel_forwarder_cloudwatch_lambda_name
 }

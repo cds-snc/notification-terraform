@@ -5,8 +5,6 @@ on:
   pull_request:
     paths:
       - ".github/workflows/infrastructure_version.txt"
-      - "env/production/**"
-      - "env/production_config.tfvars"
 
 permissions:
   id-token: write

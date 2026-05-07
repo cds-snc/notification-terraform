@@ -1291,6 +1291,7 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-criti
   threshold           = 100
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 
