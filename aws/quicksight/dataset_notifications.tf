@@ -194,9 +194,9 @@ resource "aws_quicksight_data_set" "notifications_athena" {
   }
 }
 
-resource "aws_quicksight_refresh_schedule" "notifications_athena" {
+resource "aws_quicksight_refresh_schedule" "notifications_athena_schedule" {
   data_set_id = "notifications_athena"
-  schedule_id = "schedule-notifications-athena"
+  schedule_id = "schedule-notifications-athena-v2"
   depends_on  = [aws_quicksight_data_set.notifications_athena]
 
   schedule {
@@ -204,7 +204,7 @@ resource "aws_quicksight_refresh_schedule" "notifications_athena" {
 
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "05:20"
+      time_of_the_day = "09:20"
     }
   }
 
