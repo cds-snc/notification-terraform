@@ -196,7 +196,7 @@ resource "aws_quicksight_data_set" "notifications_athena" {
 
 resource "aws_quicksight_refresh_schedule" "notifications_athena_schedule" {
   data_set_id = "notifications_athena"
-  schedule_id = "schedule-notifications-athena-id"
+  schedule_id = "schedule-notifications-athena-v2"
   depends_on  = [aws_quicksight_data_set.notifications_athena]
 
   schedule {

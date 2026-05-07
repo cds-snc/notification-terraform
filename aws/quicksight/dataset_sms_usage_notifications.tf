@@ -91,7 +91,7 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
 
 resource "aws_quicksight_refresh_schedule" "sms_usage_notifications_schedule" {
   data_set_id = "sms-usage-notifications"
-  schedule_id = "schedule-sms-usage-notifications-id"
+  schedule_id = "schedule-sms-usage-notifications-v2"
   depends_on  = [aws_cloudformation_stack.sms-usage-notifications]
 
   schedule {
@@ -99,7 +99,7 @@ resource "aws_quicksight_refresh_schedule" "sms_usage_notifications_schedule" {
 
     schedule_frequency {
       interval        = "DAILY"
-      time_of_the_day = "12:00"
+      time_of_the_day = "12:30"
     }
   }
 

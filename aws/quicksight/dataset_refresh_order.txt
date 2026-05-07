@@ -18,4 +18,4 @@ All times are UTC.
 
 0920 - notifications_athena (takes about 3 hours. Rest of tables are under 5 minutes to refresh)
 
-1200 - sms_usage_notifications
+1230 - sms_usage_notifications
