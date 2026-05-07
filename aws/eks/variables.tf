@@ -22,6 +22,10 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
+variable "sns_alert_ok_arn" {
+  type = string
+}
+
 variable "sns_alert_general_arn" {
   type = string
 }
