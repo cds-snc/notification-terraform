@@ -188,3 +188,58 @@ resource "aws_route53_record" "otlp-gateway-cname" {
   ttl = "300"
 }
 
+resource "aws_route53_record" "admin-gateway-cname" {
+  count           = var.env == "dev" ? 1 : 0
+  provider        = aws.dns
+  zone_id         = var.route53_zone_id
+  name            = "admin.gateway.${var.domain}"
+  type            = "CNAME"
+  allow_overwrite = true
+
+  records = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
+resource "aws_route53_record" "api-gateway-cname" {
+  count           = var.env == "dev" ? 1 : 0
+  provider        = aws.dns
+  zone_id         = var.route53_zone_id
+  name            = "api.gateway.${var.domain}"
+  type            = "CNAME"
+  allow_overwrite = true
+
+  records = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
+resource "aws_route53_record" "document-download-gateway-cname" {
+  count           = var.env == "dev" ? 1 : 0
+  provider        = aws.dns
+  zone_id         = var.route53_zone_id
+  name            = "document-download.gateway.${var.domain}"
+  type            = "CNAME"
+  allow_overwrite = true
+
+  records = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
+
+resource "aws_route53_record" "documentation-gateway-cname" {
+  count           = var.env == "dev" ? 1 : 0
+  provider        = aws.dns
+  zone_id         = var.route53_zone_id
+  name            = "documentation.gateway.${var.domain}"
+  type            = "CNAME"
+  allow_overwrite = true
+
+  records = [
+    aws_alb.notification-canada-ca.dns_name
+  ]
+  ttl = "300"
+}
