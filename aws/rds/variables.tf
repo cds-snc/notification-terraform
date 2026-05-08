@@ -32,6 +32,10 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
+variable "sns_alert_ok_arn" {
+  type = string
+}
+
 variable "platform_data_lake_kms_key_arn" {
   type        = string
   description = "Platform Data Lake KMS key ARN used for encrypting RDS snapshot exports"

@@ -60,6 +60,19 @@ jobs:
         echo "ami=${CURRENT_AMI}" >> "$GITHUB_OUTPUT"
 
 
+    - name: Close existing Dev and Staging AMI PRs
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      env:
+        GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+      run: |
+        prs=$(gh pr list \
+          --search "Dev and Staging EKS AMI patch in:title is:open" \
+          --json number \
+          --jq '.[].number')
+        for pr in $prs; do
+          gh pr close "$pr" --delete-branch --comment "Superseded by a newer AMI update."
+        done
+
     - name: Patch Dev and Staging AMI
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
@@ -109,6 +122,19 @@ jobs:
           * [ ] Additional required documentation resulting of these changes is covered (such as the README, setup instructions, a related ADR or the technical documentation).
 
           > ⚠ If boxes cannot be checked off before merging the PR, they should be moved to the "Release Instructions" section with appropriate steps required to verify before release. For example, changes to celery code may require tests on staging to verify that performance has not been affected.
+
+    - name: Close existing Production AMI PRs
+      if: steps.latest.outputs.ami != steps.current.outputs.ami
+      env:
+        GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+      run: |
+        prs=$(gh pr list \
+          --search "Production EKS AMI patch in:title is:open" \
+          --json number \
+          --jq '.[].number')
+        for pr in $prs; do
+          gh pr close "$pr" --delete-branch --comment "Superseded by a newer AMI update."
+        done
 
     - name: Patch Prod AMI
       if: steps.latest.outputs.ami != steps.current.outputs.ami

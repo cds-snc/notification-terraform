@@ -39,7 +39,7 @@ def lambda_handler(event, context):
     try:
         warning_message = {
             'AlarmName': 'fire-drill-warning-test',
-            'AlarmDescription': 'Fire drill test of WARNING alert path at ' + timestamp,
+            'AlarmDescription': 'Fire drill test WARNING alert path at ' + timestamp,
             'AWSAccountId': '123456789',
             'NewStateValue': 'ALARM',
             'NewStateReason': 'Fire drill test - verifying warning notification path. Run ID: ' + run_id,

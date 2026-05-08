@@ -1,0 +1,27 @@
+name: Terraform Release PR
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - terraform-release
+
+permissions: {}
+
+jobs:
+  terraform-release-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate PR Bot Token
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
+          private-key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
+
+      - name: Create terraform release draft PR
+        uses: cds-snc/notification-pr-bot@main
+        env:
+          TOKEN: ${{ steps.generate-token.outputs.token }}
+          TARGET_REPO: notification-terraform

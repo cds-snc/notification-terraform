@@ -46,6 +46,7 @@ dependency "common" {
     sns_alert_warning_arn                     = ""
     sns_alert_critical_arn                    = ""
     sns_alert_general_arn                     = ""
+    sns_alert_ok_arn                          = ""
     firehose_waf_logs_iam_role_arn            = ""
     ip_blocklist_arn                          = ""
     re_admin_arn                              = ""
@@ -104,6 +105,7 @@ inputs = {
   sns_alert_warning_arn                     = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn                    = dependency.common.outputs.sns_alert_critical_arn
   sns_alert_general_arn                     = dependency.common.outputs.sns_alert_general_arn
+  sns_alert_ok_arn                          = dependency.common.outputs.sns_alert_ok_arn
   firehose_waf_logs_iam_role_arn            = dependency.common.outputs.firehose_waf_logs_iam_role_arn
   cloudfront_assets_arn                     = dependency.cloudfront.outputs.cloudfront_assets_arn
   ip_blocklist_arn                          = dependency.common.outputs.ip_blocklist_arn

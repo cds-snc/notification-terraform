@@ -34,6 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "high-dbload-critical" {
   statistic           = "Average"
   threshold           = 100
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
@@ -109,6 +110,7 @@ resource "aws_cloudwatch_metric_alarm" "low-db-memory-critical" {
   statistic           = "Average"
   threshold           = 2 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
@@ -145,6 +147,7 @@ resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-critical" {
   statistic           = "Average"
   threshold           = 10 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
