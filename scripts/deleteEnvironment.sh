@@ -85,7 +85,7 @@ echo "Deleting Cloud Based Sensor S3 Bucket..."
 pushd ../env/$ENVIRONMENT/common
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
 echo "Done."
-
+popd
 
 pip install boto3
 
