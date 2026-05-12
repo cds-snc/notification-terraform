@@ -35,6 +35,7 @@ echo "Deleting environment $ENVIRONMENT in account $ACCOUNT_ID"
 # System Status Cloudfront Distribution
 echo "Deleting System Status Cloudfront Distribution..."
 pushd ../env/$ENVIRONMENT/system_status_static_site
+terragrunt init --reconfigure
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --terragrunt-non-interactive -auto-approve
 popd
 echo "Done."
@@ -43,6 +44,7 @@ echo "Done."
 # We cannot delete all of the DNS TF because the ACM Certificates are still in use and will fail
 echo "Deleting SES Receipt Rule Set..."
 pushd ../env/$ENVIRONMENT/dns
+terragrunt init --reconfigure
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target aws_ses_receipt_rule_set.main --terragrunt-non-interactive -auto-approve
 popd
 echo "Done."
@@ -50,6 +52,7 @@ echo "Done."
 # Notify Cloudfront must be deleted
 echo "Deleting Notify Cloudfront Distribution..."
 pushd ../env/$ENVIRONMENT/cloudfront
+terragrunt init --reconfigure
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --terragrunt-non-interactive -auto-approve
 popd
 echo "Done."
@@ -57,6 +60,7 @@ echo "Done."
 # Delete Cloud Based Sensor Bucket and New Relic resources
 echo "Deleting Cloud Based Sensor S3 Bucket..."
 pushd ../env/$ENVIRONMENT/common
+terragrunt init --reconfigure
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
 echo "Done."
 
