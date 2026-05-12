@@ -120,93 +120,134 @@ echo "Done."
 
 # Delete the remaining resources that aws-nuke can't delete
 echo "Deleting remaining resources..."
+
+echo "Deleting KMS alias s3_scan_object_queue..."
 aws kms delete-alias --alias-name alias/s3_scan_object_queue
+echo "Done."
 
+echo "Deleting IAM service-linked role AWSServiceRoleForEC2Spot..."
 aws iam delete-service-linked-role --role-name AWSServiceRoleForEC2Spot
+echo "Done."
 
+echo "Deleting EKS CloudWatch log group..."
 aws logs delete-log-group --log-group-name '/aws/eks/notification-canada-ca-dev-eks-cluster/cluster'
-aws logs delete-log-group --log-group-name '/aws/rds/cluster/notification-canada-ca-dev-cluster/postgresql'
+echo "Done."
 
+echo "Deleting RDS CloudWatch log group..."
+aws logs delete-log-group --log-group-name '/aws/rds/cluster/notification-canada-ca-dev-cluster/postgresql'
+echo "Done."
+
+echo "Deleting CloudWatch query definitions..."
 QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
 for query in $QUERIES; do
-  echo "Deleting cloudwatch query $query"
+  echo "Deleting cloudwatch query $query..."
   aws logs delete-query-definition --query-definition-id $query
+  echo "Done."
 done
+echo "Done."
 
+echo "Deleting IAM SAML provider..."
 aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-provider/client-vpn
+echo "Done."
 
+echo "Deleting IAM user ecr-user..."
 aws iam delete-user --user-name ecr-user
+echo "Done."
 
+echo "Deleting event rule dailyBudgetSpend..."
 aws events remove-targets --rule dailyBudgetSpend --ids $(aws events list-targets-by-rule --rule dailyBudgetSpend --query 'Targets[].Id' --output text)
 aws events delete-rule --name dailyBudgetSpend
+echo "Done."
 
+echo "Deleting event rule weeklyBudgetSpend..."
 aws events remove-targets --rule weeklyBudgetSpend --ids $(aws events list-targets-by-rule --rule weeklyBudgetSpend --query 'Targets[].Id' --output text)
 aws events delete-rule --name weeklyBudgetSpend
+echo "Done."
 
+echo "Deleting event rule google_cidr_testing..."
 aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
 aws events delete-rule --name google_cidr_testing
+echo "Done."
 
+echo "Deleting SES email identity dev.notification.cdssandbox.xyz..."
 aws sesv2 delete-email-identity --email-identity dev.notification.cdssandbox.xyz
+echo "Done."
 
+echo "Deleting system_status_testing event targets..."
 SYSTEM_STATUS_TARGET=$(aws events list-targets-by-rule --rule system_status_testing --query 'Targets[].Id' --output text)
-
 for target in $SYSTEM_STATUS_TARGET; do
-  echo "Deleting event target $target"
+  echo "Deleting event target $target..."
   aws events remove-targets --rule "system_status_testing" --ids "$target"
   echo "Done."
 done
+echo "Done."
 
+echo "Deleting heartbeat_testing event targets..."
 HEARTBEAT_TESTING_TARGET=$(aws events list-targets-by-rule --rule heartbeat_testing --query 'Targets[].Id' --output text)
-
 for target in $HEARTBEAT_TESTING_TARGET; do
-  echo "Deleting event target $target"
+  echo "Deleting event target $target..."
   aws events remove-targets --rule "heartbeat_testing" --ids "$target"
   echo "Done."
 done
+echo "Done."
 
+echo "Deleting perf_test_event_rule event targets..."
 PERFTEST_TARGET=$(aws events list-targets-by-rule --rule perf_test_event_rule --query 'Targets[].Id' --output text)
-
 for target in $PERFTEST_TARGET; do
-  echo "Deleting event target $target"
+  echo "Deleting event target $target..."
   aws events remove-targets --rule "perf_test_event_rule" --ids "$target"
   echo "Done."
 done
+echo "Done."
 
+echo "Clearing active SES receipt rule set..."
+AWS_REGION=us-east-1 aws ses set-active-receipt-rule-set
+echo "Done."
 
-AWS_REGION=us-east-1  aws ses set-active-receipt-rule-set
+echo "Deleting SES receipt rule set main..."
 AWS_REGION=us-east-1 aws ses delete-receipt-rule-set --rule-set-name main
+echo "Done."
 
+echo "Deleting SES email identities..."
 IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
-
 for identity in $IDENTITIES; do
-  echo "Deleting ses email identity $identity"
+  echo "Deleting SES email identity $identity..."
   aws sesv2 delete-email-identity --email-identity $identity
   echo "Done."
 done
+echo "Done."
 
 # We have to switch to US-EAST-1 to delete the email identities
 export AWS_REGION=us-east-1
+echo "Deleting SES email identities in us-east-1..."
 US_IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
-
 for identity in $US_IDENTITIES; do
-  echo "Deleting ses email identity $identity"
+  echo "Deleting SES email identity $identity..."
   aws sesv2 delete-email-identity --email-identity $identity
   echo "Done."
 done
+echo "Done."
 
+echo "Deleting CloudWatch query definitions (us-east-1)..."
 QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
 for query in $QUERIES; do
-  echo "Deleting cloudwatch query $query"
+  echo "Deleting cloudwatch query $query..."
   aws logs delete-query-definition --query-definition-id $query
+  echo "Done."
 done
+echo "Done."
 
+echo "Deleting Route53 Resolver query log configs..."
 R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'ResolverQueryLogConfigs[].Id' --output text)
 for query in $R53_QUERIES; do
+    echo "Deleting Route53 Resolver query log config $query..."
     association=$(aws route53resolver list-resolver-query-log-config-associations --query "ResolverQueryLogConfigAssociations[? ResolverQueryLogConfigId=='$query'].Id" --output text)
     resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
     aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
     aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
+    echo "Done."
 done
+echo "Done."
 
 END_TIME=$(date +%s.%N)
 
