@@ -12,7 +12,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     kms_arn = ""
@@ -37,7 +37,7 @@ dependency "eks" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     eks-cluster-securitygroup = "mocksecurity-group-id"
@@ -50,7 +50,7 @@ dependency "eks" {
 
 dependency "ecr" {
   config_path = "../ecr"
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     ecr_output = "mock-ecr-output"
@@ -63,7 +63,7 @@ dependency "dns" {
 
   config_path = "../dns"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
@@ -76,7 +76,7 @@ dependency "dns" {
 
 dependency "rds" {
   config_path = "../rds"
-  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init"]
+  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "destroy"]
   mock_outputs = {
     database_read_only_proxy_endpoint = "thisisamockstring_database_read_only_proxy_endpoint"
     database_read_write_proxy_endpoint = "thisisamockstring_database_read_write_proxy_endpoint"
@@ -86,7 +86,7 @@ dependency "rds" {
 
 dependency "elasticache" {
   config_path = "../elasticache"
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     redis_primary_endpoint_address = "thisisamockstring_redis_primary_endpoint_address"
