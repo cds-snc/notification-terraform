@@ -128,6 +128,16 @@ resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_pass
   secret_string = var.manifest_gc_articles_api_auth_password
 }
 
+resource "aws_secretsmanager_secret" "manifest_gc_articles_waf_rate_bypass_secret" {
+  name                    = "MANIFEST_GC_ARTICLES_WAF_RATE_BYPASS_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_gc_articles_waf_rate_bypass_secret_version" {
+  secret_id     = aws_secretsmanager_secret.manifest_gc_articles_waf_rate_bypass_secret.id
+  secret_string = var.manifest_gc_articles_waf_rate_bypass_secret
+}
+
 resource "aws_secretsmanager_secret" "manifest_mixpanel_project_token" {
   name                    = "MANIFEST_MIXPANEL_PROJECT_TOKEN"
   recovery_window_in_days = 0
