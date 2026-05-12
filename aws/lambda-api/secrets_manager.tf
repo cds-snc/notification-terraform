@@ -174,7 +174,7 @@ FRESH_DESK_ENABLED=False
 GC_ARTICLES_API_AUTH_USERNAME=${var.manifest_gc_articles_api_auth_username}
 GC_ARTICLES_API_AUTH_PASSWORD="${var.manifest_gc_articles_api_auth_password}"
 GC_ARTICLES_API=articles.alpha.canada.ca/notification-gc-notify
-GC_ARTICLES_WAF_RATE_BYPASS_SECRET=${var.manifest_gc_articles_waf_rate_bypass_secret}
+GC_ARTICLES_WAF_RATE_BYPASS_SECRET="${var.manifest_gc_articles_waf_rate_bypass_secret}"
 GC_ORGANISATIONS_BUCKET_NAME=notification-canada-ca-${var.env}-gc-organisations
 
 HC_EN_SERVICE_ID=c2fe9fac-2f28-40ca-b152-08ee41cd6843
