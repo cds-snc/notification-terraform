@@ -836,6 +836,7 @@ variable "manifest_gc_articles_api_auth_password" {
 variable "manifest_gc_articles_waf_rate_bypass_secret" {
   type      = string
   sensitive = true
+  default   = null
 }
 
 variable "manifest_mixpanel_project_token" {
