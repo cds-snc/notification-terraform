@@ -30,6 +30,25 @@ echo "Done."
 
 echo "Deleting environment $ENVIRONMENT in account $ACCOUNT_ID"
 
+# Clear any stale DynamoDB state checksums that would block init
+# These can be left behind by interrupted applies and cause "checksum mismatch" errors
+echo "Clearing stale DynamoDB state checksums..."
+DYNAMO_TABLE="terraform-state-lock-dynamo"
+STATE_BUCKET="notification-canada-ca-${ENVIRONMENT}-tf"
+MD5_KEYS=$(aws dynamodb scan \
+  --table-name "$DYNAMO_TABLE" \
+  --filter-expression "contains(LockID, :suffix)" \
+  --expression-attribute-values '{":suffix":{"S":"-md5"}}' \
+  --query "Items[?starts_with(LockID.S, '${STATE_BUCKET}')].LockID.S" \
+  --output text)
+for key in $MD5_KEYS; do
+  echo "Removing stale checksum entry: $key"
+  aws dynamodb delete-item \
+    --table-name "$DYNAMO_TABLE" \
+    --key "{\"LockID\": {\"S\": \"$key\"}}"
+done
+echo "Done."
+
 # Initialize all modules in the environment so providers are installed for all dependencies
 echo "Initializing all modules..."
 pushd ../env/$ENVIRONMENT
