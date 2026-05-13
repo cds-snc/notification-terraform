@@ -833,6 +833,12 @@ variable "manifest_gc_articles_api_auth_password" {
   sensitive = true
 }
 
+variable "manifest_gc_articles_waf_rate_bypass_secret" {
+  type      = string
+  sensitive = true
+  default   = "changeme"
+}
+
 variable "manifest_mixpanel_project_token" {
   type      = string
   sensitive = true
