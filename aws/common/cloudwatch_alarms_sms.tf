@@ -433,7 +433,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-critical" {
 resource "aws_cloudwatch_metric_alarm" "sqs-dedicated-number-throttled-sms-stuck-in-queue-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-dedicated-number-throttled-sms-stuck-in-queue-warning"
-  alarm_description   = "Delay in throttled SMS queue for dedicated numbers >= 4 hours"
+  alarm_description   = "Delay in throttled SMS queue for dedicated numbers >= 1 hour"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
