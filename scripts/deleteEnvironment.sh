@@ -1,13 +1,13 @@
 #!/bin/bash
 # This script will delete the aws environment according to the inputs provided
 # Both the environment and the account_id are required
-# Usage: ./deleteEnv.sh <ENVIRONMENT> <ACCOUNT_ID>
-# Example: ./deleteEnv.sh sandbox 123456789012
+# Usage: ./deleteEnvironment.sh <ENVIRONMENT> <ACCOUNT_ID>
+# Example: ./deleteEnvironment.sh sandbox 123456789012
 
 ENVIRONMENT=$1
 ACCOUNT_ID=$2
 
-USAGE="Usage: ./deleteEnv.sh <ENVIRONMENT> <ACCOUNT_ID>"
+USAGE="Usage: ./deleteEnvironment.sh <ENVIRONMENT> <ACCOUNT_ID>"
 
 export AWS_REGION=ca-central-1
 SECONDARY_REGION=ca-west-1
