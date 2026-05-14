@@ -125,7 +125,21 @@ echo "Deleting remaining resources..."
 
 echo "Deleting KMS alias s3_scan_object_queue..."
 aws kms delete-alias --alias-name alias/s3_scan_object_queue
-aws kms delete-alias --alias-name alias/backup-vault-$ENVIRONMENT
+
+echo "Deleting backup vault KMS aliases and scheduling backup vault keys for deletion..."
+PRIMARY_BACKUP_ALIAS="alias/backup-vault-$ENVIRONMENT"
+PRIMARY_BACKUP_KEY_ID=$(aws kms list-aliases --query "Aliases[?AliasName=='${PRIMARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
+aws kms delete-alias --alias-name "$PRIMARY_BACKUP_ALIAS"
+if [ -n "$PRIMARY_BACKUP_KEY_ID" ] && [ "$PRIMARY_BACKUP_KEY_ID" != "None" ]; then
+  aws kms schedule-key-deletion --key-id "$PRIMARY_BACKUP_KEY_ID" --pending-window-in-days 7
+fi
+
+SECONDARY_BACKUP_ALIAS="alias/backup-vault-secondary-$ENVIRONMENT"
+SECONDARY_BACKUP_KEY_ID=$(AWS_REGION=ca-west-1 aws kms list-aliases --query "Aliases[?AliasName=='${SECONDARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
+AWS_REGION=ca-west-1 aws kms delete-alias --alias-name "$SECONDARY_BACKUP_ALIAS"
+if [ -n "$SECONDARY_BACKUP_KEY_ID" ] && [ "$SECONDARY_BACKUP_KEY_ID" != "None" ]; then
+  AWS_REGION=ca-west-1 aws kms schedule-key-deletion --key-id "$SECONDARY_BACKUP_KEY_ID" --pending-window-in-days 7
+fi
 echo "Done."
 
 echo "Deleting IAM service-linked role AWSServiceRoleForEC2Spot..."
