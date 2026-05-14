@@ -10,7 +10,7 @@ dependency "rds" {
   config_path = "../rds"
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     shared_staging_kms_key_id = "mock-shared-test-snapshot"
@@ -22,7 +22,7 @@ dependency "lambda-admin-pr" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     admin_pr_security_group_id = "sg-1234567890abcdef0"
@@ -34,7 +34,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     vpc_private_subnets = "subnet-1234567890abcdef0,subnet-1234567890abcdef1"
@@ -46,7 +46,7 @@ dependency "system_status_static_site" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     system_status_static_site_cloudfront_distribution = "E1234567890ABC"

@@ -9,7 +9,7 @@ dependencies {
 dependency "ecr" {
   config_path = "../ecr"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     sns_to_sqs_sms_callbacks_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/sns-to-sqs-sms-callbacks"
@@ -22,7 +22,7 @@ dependency "common" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     sns_deliveries_ca_central_arn           = "arn:aws:logs:ca-central-1:111111111111:log-group:sns/ca-central-1/111111111111/DirectPublishToPhoneNumber"
