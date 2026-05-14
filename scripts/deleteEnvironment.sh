@@ -9,6 +9,8 @@ ACCOUNT_ID=$2
 
 USAGE="Usage: ./deleteEnv.sh <ENVIRONMENT> <ACCOUNT_ID>"
 
+export AWS_REGION=ca-central-1
+
 START_TIME=$(date +%s.%N)
 
 if [ -z "$ENVIRONMENT" ]; then
@@ -84,8 +86,8 @@ echo "Done."
 echo "Deleting Cloud Based Sensor S3 Bucket..."
 pushd ../env/$ENVIRONMENT/common
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
-echo "Done."
 popd
+echo "Done."
 
 pip install boto3
 
@@ -123,6 +125,7 @@ echo "Deleting remaining resources..."
 
 echo "Deleting KMS alias s3_scan_object_queue..."
 aws kms delete-alias --alias-name alias/s3_scan_object_queue
+aws kms delete-alias --alias-name alias/backup-vault-$ENVIRONMENT
 echo "Done."
 
 echo "Deleting IAM service-linked role AWSServiceRoleForEC2Spot..."
@@ -130,11 +133,11 @@ aws iam delete-service-linked-role --role-name AWSServiceRoleForEC2Spot
 echo "Done."
 
 echo "Deleting EKS CloudWatch log group..."
-aws logs delete-log-group --log-group-name '/aws/eks/notification-canada-ca-dev-eks-cluster/cluster'
+aws logs delete-log-group --log-group-name "/aws/eks/notification-canada-ca-${ENVIRONMENT}-eks-cluster/cluster"
 echo "Done."
 
 echo "Deleting RDS CloudWatch log group..."
-aws logs delete-log-group --log-group-name '/aws/rds/cluster/notification-canada-ca-dev-cluster/postgresql'
+aws logs delete-log-group --log-group-name "/aws/rds/cluster/notification-canada-ca-${ENVIRONMENT}-cluster/postgresql"
 echo "Done."
 
 echo "Deleting CloudWatch query definitions..."
@@ -151,21 +154,40 @@ aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-p
 echo "Done."
 
 echo "Deleting IAM user ecr-user..."
+for key in $(aws iam list-access-keys --user-name ecr-user --query 'AccessKeyMetadata[].AccessKeyId' --output text); do
+  aws iam delete-access-key --user-name ecr-user --access-key-id $key
+done
 aws iam delete-user --user-name ecr-user
 echo "Done."
 
+echo "Deleting IAM user signoz-$ENVIRONMENT..."
+for key in $(aws iam list-access-keys --user-name signoz-$ENVIRONMENT --query 'AccessKeyMetadata[].AccessKeyId' --output text); do
+  aws iam delete-access-key --user-name signoz-$ENVIRONMENT --access-key-id $key
+done
+aws iam delete-user --user-name signoz-$ENVIRONMENT
+echo "Done."
+
 echo "Deleting event rule dailyBudgetSpend..."
-aws events remove-targets --rule dailyBudgetSpend --ids $(aws events list-targets-by-rule --rule dailyBudgetSpend --query 'Targets[].Id' --output text)
+DAILY_BUDGET_TARGETS=$(aws events list-targets-by-rule --rule dailyBudgetSpend --query 'Targets[].Id' --output text)
+if [ -n "$DAILY_BUDGET_TARGETS" ]; then
+  aws events remove-targets --rule dailyBudgetSpend --ids $DAILY_BUDGET_TARGETS
+fi
 aws events delete-rule --name dailyBudgetSpend
 echo "Done."
 
 echo "Deleting event rule weeklyBudgetSpend..."
-aws events remove-targets --rule weeklyBudgetSpend --ids $(aws events list-targets-by-rule --rule weeklyBudgetSpend --query 'Targets[].Id' --output text)
+WEEKLY_BUDGET_TARGETS=$(aws events list-targets-by-rule --rule weeklyBudgetSpend --query 'Targets[].Id' --output text)
+if [ -n "$WEEKLY_BUDGET_TARGETS" ]; then
+  aws events remove-targets --rule weeklyBudgetSpend --ids $WEEKLY_BUDGET_TARGETS
+fi
 aws events delete-rule --name weeklyBudgetSpend
 echo "Done."
 
 echo "Deleting event rule google_cidr_testing..."
-aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
+GOOGLE_CIDR_TARGETS=$(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
+if [ -n "$GOOGLE_CIDR_TARGETS" ]; then
+  aws events remove-targets --rule google_cidr_testing --ids $GOOGLE_CIDR_TARGETS
+fi
 aws events delete-rule --name google_cidr_testing
 echo "Done."
 
@@ -229,6 +251,7 @@ done
 echo "Done."
 
 echo "Deleting CloudWatch query definitions (us-east-1)..."
+
 QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
 for query in $QUERIES; do
   echo "Deleting cloudwatch query $query..."
@@ -242,8 +265,45 @@ R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'Resol
 for query in $R53_QUERIES; do
     echo "Deleting Route53 Resolver query log config $query..."
     association=$(aws route53resolver list-resolver-query-log-config-associations --query "ResolverQueryLogConfigAssociations[? ResolverQueryLogConfigId=='$query'].Id" --output text)
-    resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
-    aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    if [ -n "$association" ]; then
+        resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
+        aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    fi
+    aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
+    echo "Done."
+done
+echo "Done."
+
+# We have to switch to US-WEST-2 to delete the email identities
+export AWS_REGION=us-west-2
+echo "Deleting SES email identities in us-west-2..."
+US_IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
+for identity in $US_IDENTITIES; do
+  echo "Deleting SES email identity $identity..."
+  aws sesv2 delete-email-identity --email-identity $identity
+  echo "Done."
+done
+echo "Done."
+
+echo "Deleting CloudWatch query definitions (us-west-2)..."
+
+QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
+for query in $QUERIES; do
+  echo "Deleting cloudwatch query $query..."
+  aws logs delete-query-definition --query-definition-id $query
+  echo "Done."
+done
+echo "Done."
+
+echo "Deleting Route53 Resolver query log configs..."
+R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'ResolverQueryLogConfigs[].Id' --output text)
+for query in $R53_QUERIES; do
+    echo "Deleting Route53 Resolver query log config $query..."
+    association=$(aws route53resolver list-resolver-query-log-config-associations --query "ResolverQueryLogConfigAssociations[? ResolverQueryLogConfigId=='$query'].Id" --output text)
+    if [ -n "$association" ]; then
+        resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
+        aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    fi
     aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
     echo "Done."
 done
