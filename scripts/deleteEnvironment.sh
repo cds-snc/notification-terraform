@@ -10,6 +10,7 @@ ACCOUNT_ID=$2
 USAGE="Usage: ./deleteEnv.sh <ENVIRONMENT> <ACCOUNT_ID>"
 
 export AWS_REGION=ca-central-1
+SECONDARY_REGION=ca-west-1
 
 START_TIME=$(date +%s.%N)
 
@@ -128,17 +129,21 @@ aws kms delete-alias --alias-name alias/s3_scan_object_queue
 
 echo "Deleting backup vault KMS aliases and scheduling backup vault keys for deletion..."
 PRIMARY_BACKUP_ALIAS="alias/backup-vault-$ENVIRONMENT"
-PRIMARY_BACKUP_KEY_ID=$(aws kms list-aliases --query "Aliases[?AliasName=='${PRIMARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
-aws kms delete-alias --alias-name "$PRIMARY_BACKUP_ALIAS"
+PRIMARY_BACKUP_KEY_ID=$(aws kms list-aliases --region "$AWS_REGION" --query "Aliases[?AliasName=='${PRIMARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
 if [ -n "$PRIMARY_BACKUP_KEY_ID" ] && [ "$PRIMARY_BACKUP_KEY_ID" != "None" ]; then
-  aws kms schedule-key-deletion --key-id "$PRIMARY_BACKUP_KEY_ID" --pending-window-in-days 7
+  aws kms delete-alias --region "$AWS_REGION" --alias-name "$PRIMARY_BACKUP_ALIAS"
+  aws kms schedule-key-deletion --region "$AWS_REGION" --key-id "$PRIMARY_BACKUP_KEY_ID" --pending-window-in-days 7
+else
+  echo "Primary backup vault alias not found: $PRIMARY_BACKUP_ALIAS"
 fi
 
 SECONDARY_BACKUP_ALIAS="alias/backup-vault-secondary-$ENVIRONMENT"
-SECONDARY_BACKUP_KEY_ID=$(AWS_REGION=ca-west-1 aws kms list-aliases --query "Aliases[?AliasName=='${SECONDARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
-AWS_REGION=ca-west-1 aws kms delete-alias --alias-name "$SECONDARY_BACKUP_ALIAS"
+SECONDARY_BACKUP_KEY_ID=$(aws kms list-aliases --region "$SECONDARY_REGION" --query "Aliases[?AliasName=='${SECONDARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
 if [ -n "$SECONDARY_BACKUP_KEY_ID" ] && [ "$SECONDARY_BACKUP_KEY_ID" != "None" ]; then
-  AWS_REGION=ca-west-1 aws kms schedule-key-deletion --key-id "$SECONDARY_BACKUP_KEY_ID" --pending-window-in-days 7
+  aws kms delete-alias --region "$SECONDARY_REGION" --alias-name "$SECONDARY_BACKUP_ALIAS"
+  aws kms schedule-key-deletion --region "$SECONDARY_REGION" --key-id "$SECONDARY_BACKUP_KEY_ID" --pending-window-in-days 7
+else
+  echo "Secondary backup vault alias not found: $SECONDARY_BACKUP_ALIAS"
 fi
 echo "Done."
 
