@@ -28,3 +28,8 @@ variable "perf_test_security_group_id" {
   type        = string
   description = "performance test security group id"
 }
+
+variable "manifests_waf_secret" {
+  type        = string
+  description = "ARN of the Secrets Manager secret containing the WAF secret for redline performance tests"
+}
