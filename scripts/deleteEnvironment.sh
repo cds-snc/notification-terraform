@@ -127,6 +127,42 @@ echo "Deleting remaining resources..."
 echo "Deleting KMS alias s3_scan_object_queue..."
 aws kms delete-alias --alias-name alias/s3_scan_object_queue
 
+echo "Deleting backup vault recovery points and vaults..."
+PRIMARY_VAULT_NAME="notification-canada-ca-${ENVIRONMENT}-rds-vault"
+RECOVERY_POINTS=$(aws backup list-recovery-points-by-backup-vault --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME" --query 'RecoveryPoints[].RecoveryPointArn' --output text 2>/dev/null)
+if [ -n "$RECOVERY_POINTS" ]; then
+  for rp in $RECOVERY_POINTS; do
+    echo "Deleting recovery point $rp from $PRIMARY_VAULT_NAME..."
+    aws backup delete-recovery-point --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME" --recovery-point-arn "$rp"
+  done
+  echo "Waiting for recovery points to be deleted..."
+  sleep 10
+fi
+if aws backup describe-backup-vault --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME" &>/dev/null; then
+  aws backup delete-backup-vault --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME"
+  echo "Deleted primary backup vault: $PRIMARY_VAULT_NAME"
+else
+  echo "Primary backup vault not found: $PRIMARY_VAULT_NAME"
+fi
+
+SECONDARY_VAULT_NAME="notify-${ENVIRONMENT}-rds-vault-secondary"
+SECONDARY_RECOVERY_POINTS=$(aws backup list-recovery-points-by-backup-vault --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME" --query 'RecoveryPoints[].RecoveryPointArn' --output text 2>/dev/null)
+if [ -n "$SECONDARY_RECOVERY_POINTS" ]; then
+  for rp in $SECONDARY_RECOVERY_POINTS; do
+    echo "Deleting recovery point $rp from $SECONDARY_VAULT_NAME..."
+    aws backup delete-recovery-point --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME" --recovery-point-arn "$rp"
+  done
+  echo "Waiting for recovery points to be deleted..."
+  sleep 10
+fi
+if aws backup describe-backup-vault --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME" &>/dev/null; then
+  aws backup delete-backup-vault --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME"
+  echo "Deleted secondary backup vault: $SECONDARY_VAULT_NAME"
+else
+  echo "Secondary backup vault not found: $SECONDARY_VAULT_NAME"
+fi
+echo "Done."
+
 echo "Deleting backup vault KMS aliases and scheduling backup vault keys for deletion..."
 PRIMARY_BACKUP_ALIAS="alias/backup-vault-$ENVIRONMENT"
 PRIMARY_BACKUP_KEY_ID=$(aws kms list-aliases --region "$AWS_REGION" --query "Aliases[?AliasName=='${PRIMARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
