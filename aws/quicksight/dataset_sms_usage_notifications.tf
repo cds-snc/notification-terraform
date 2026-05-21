@@ -89,9 +89,9 @@ resource "aws_cloudformation_stack" "sms-usage-notifications" {
 }
 
 
-resource "aws_quicksight_refresh_schedule" "sms_usage_notifications_schedule" {
+resource "aws_quicksight_refresh_schedule" "sms_usage_notifications" {
   data_set_id = "sms-usage-notifications"
-  schedule_id = "schedule-sms-usage-notifications-v2"
+  schedule_id = "schedule-sms-usage-notifications"
   depends_on  = [aws_cloudformation_stack.sms-usage-notifications]
 
   schedule {
