@@ -869,7 +869,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warnin
 
   metric_name = "batch_saving_inflight"
   namespace   = "NotificationCanadaCa"
-  period      = "60"
+  period      = "300"
   statistic   = "Sum"
   unit        = "Count"
   dimensions = {
