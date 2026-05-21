@@ -858,7 +858,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "expired-inflight-any"
+  alarm_name          = "expired-inflight-poisoned-message-warning"
   alarm_description   = "Possible poisoned message - inflights are expiring. Investigate if this is repeated. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
