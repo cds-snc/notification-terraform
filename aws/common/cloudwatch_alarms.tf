@@ -856,6 +856,29 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warning" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "expired-inflight-any"
+  alarm_description   = "Possible poisoned message - inflights are expiring. Investigate if this is repeated. Check the Redis-batch-saving dashboard"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
+
+  metric_name = "batch_saving_inflight"
+  namespace   = "NotificationCanadaCa"
+  period      = "60"
+  statistic   = "Sum"
+  unit        = "Count"
+  dimensions = {
+    expired           = "True"
+    notification_type = "any"
+    priority          = "any"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "expired-inflight-warning"
@@ -968,3 +991,4 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
     return_data = "true"
   }
 }
+
