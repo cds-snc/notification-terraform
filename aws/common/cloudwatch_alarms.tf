@@ -856,10 +856,10 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "expired-inflight-warning"
-  alarm_description   = "An inflight has expired. Check the Redis-batch-saving dashboard"
+  alarm_name          = "expired-inflight-poisoned-message-warning"
+  alarm_description   = "Possible poisoned message - inflights are expiring. Investigate if this is repeated. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 1
@@ -867,42 +867,35 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 
-  metric_query {
-    id          = "expired_inflights_1_minute"
-    label       = "Expired inflights in one minute"
-    return_data = "true"
-
-    metric {
-      metric_name = "batch_saving_inflight"
-      namespace   = "NotificationCanadaCa"
-      period      = "60"
-      stat        = "Sum"
-      unit        = "Count"
-      dimensions = {
-        expired           = "True"
-        notification_type = "any"
-        priority          = "any"
-      }
-    }
+  metric_name = "batch_saving_inflight"
+  namespace   = "NotificationCanadaCa"
+  period      = "300"
+  statistic   = "Sum"
+  unit        = "Count"
+  dimensions = {
+    expired           = "True"
+    notification_type = "any"
+    priority          = "any"
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "expired-inflight-critical"
-  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes, check the Redis-batch-saving dashboard"
+  alarm_name          = "expired-inflight-warning"
+  alarm_description   = "Inflights are expiring faster than they are being acknowledged in 5 minutes - queue is deteriorating. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  threshold           = var.alarm_critical_expired_inflights_threshold
+  threshold           = 1
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 
+  # Warn when the queue is losing ground: more inflights are expiring than celery
+  # is acknowledging. This is distinct from the critical alarm (zero throughput) and
+  # from normal high-load bursts where celery processes far more than it drops.
   metric_query {
-    id          = "expired_inflights_5_minutes"
-    label       = "Expired inflights in 5 minutes"
-    return_data = "true"
+    id    = "expired_inflights"
+    label = "Expired inflights in 5 minutes"
 
     metric {
       metric_name = "batch_saving_inflight"
@@ -917,4 +910,85 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
       }
     }
   }
+
+  metric_query {
+    id    = "inflight_processed"
+    label = "Inflights acknowledged in 5 minutes"
+
+    metric {
+      metric_name = "batch_saving_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "alarm_condition"
+    expression  = "IF(expired_inflights >= 1, 1, 0) * IF(FILL(inflight_processed, 0) < expired_inflights, 1, 0)"
+    label       = "Expiries outnumber acknowledgments"
+    return_data = "true"
+  }
 }
+
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "expired-inflight-critical"
+  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes AND celery acknowledgment throughput is zero - system is stuck, check the Redis-batch-saving dashboard"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  # Only alarm when inflights are expiring AND nothing is being acknowledged.
+  # This avoids false positives during high-load bursts (many bulk requests) where
+  # celery is actively processing but cannot keep up with the inflow rate.
+  metric_query {
+    id    = "expired_inflights"
+    label = "Expired inflights in 5 minutes"
+
+    metric {
+      metric_name = "batch_saving_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        expired           = "True"
+        notification_type = "any"
+        priority          = "any"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "inflight_processed"
+    label = "Inflights acknowledged in 5 minutes"
+
+    metric {
+      metric_name = "batch_saving_inflight"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "alarm_condition"
+    expression  = "IF(expired_inflights >= ${var.alarm_critical_expired_inflights_threshold}, 1, 0) * IF(FILL(inflight_processed, 0) < 1, 1, 0)"
+    label       = "Expiries over threshold with zero throughput"
+    return_data = "true"
+  }
+}
+
