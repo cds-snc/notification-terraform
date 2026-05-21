@@ -9,7 +9,7 @@ dependencies {
 dependency "common" {
   config_path = "../common"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     sns_alert_warning_arn = ""
@@ -19,7 +19,7 @@ dependency "common" {
 dependency "ecr" {
   config_path = "../ecr"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     google_cidr_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/google-cidr"
@@ -32,7 +32,7 @@ dependency "eks" {
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show"]
+  mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     google_cidr_prefix_list_id      = ""
