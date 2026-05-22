@@ -882,7 +882,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warnin
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "expired-inflight-warning"
-  alarm_description   = "Inflights are expiring faster than they are being acknowledged in 10 minutes - queue is deteriorating. Check the Redis-batch-saving dashboard"
+  alarm_description   = "Inflights are expiring faster than they are being acknowledged in two consecutive 5-minute periods - queue is deteriorating. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
   threshold           = 1
