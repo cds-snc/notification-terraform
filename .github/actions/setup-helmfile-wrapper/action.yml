@@ -35,7 +35,7 @@ runs:
   using: "composite"
   steps:
     - name: Setup helmfile toolchain
-      uses: mamezou-tech/setup-helmfile@03233e1cd9b19b2ba320e431f7bcc0618db4248d # v2.0.0
+      uses: mamezou-tech/setup-helmfile@c04e83ec7650bf2ec910864bcb409479cf56d8e6 # v2.2.0
       with:
         install-kubectl: ${{ inputs.install-kubectl }}
         install-helm: ${{ inputs.install-helm }}
