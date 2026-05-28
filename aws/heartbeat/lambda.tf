@@ -3,7 +3,7 @@ locals {
 }
 
 module "heartbeat" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.6.4"
+  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.6.8"
   name                   = "heartbeat"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn

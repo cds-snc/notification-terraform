@@ -56,7 +56,7 @@ resource "aws_budgets_budget" "cloudwatch_data_scanned" {
 }
 
 module "budget_notifier" {
-  source                     = "github.com/cds-snc/terraform-modules//spend_notifier?ref=v9.6.4"
+  source                     = "github.com/cds-snc/terraform-modules//spend_notifier?ref=v9.6.8"
   daily_spend_notifier_hook  = var.budget_sre_bot_webhook
   weekly_spend_notifier_hook = var.budget_sre_bot_webhook
   billing_tag_value          = "notification-canada-ca-${var.env}"
