@@ -22,6 +22,10 @@ inputs:
     description: helm-diff plugin version
     required: false
     default: "v3.9.8"
+  helm-s3-plugin-version:
+    description: helm-s3 plugin version
+    required: false
+    default: "v0.17.2"
   kubectl-version:
     description: AWS EKS kubectl version (must align with cluster minor)
     required: false
@@ -42,5 +46,6 @@ runs:
         helmfile-version: ${{ inputs.helmfile-version }}
         helm-version: ${{ inputs.helm-version }}
         helm-diff-plugin-version: ${{ inputs.helm-diff-plugin-version }}
+        helm-s3-plugin-version: ${{ inputs.helm-s3-plugin-version }}
         kubectl-version: ${{ inputs.kubectl-version }}
         kubectl-release-date: ${{ inputs.kubectl-release-date }}
