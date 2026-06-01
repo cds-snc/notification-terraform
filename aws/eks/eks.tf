@@ -228,6 +228,12 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
   # Note: evictionMaxPodGracePeriod caps per-pod terminationGracePeriodSeconds
   # at 180s during eviction — adjust if workloads require longer shutdown windows.
   user_data = base64encode(<<-USERDATA
+    MIME-Version: 1.0
+    Content-Type: multipart/mixed; boundary="//"
+
+    --//
+    Content-Type: application/node.eks.aws
+
     ---
     apiVersion: node.eks.aws/v1alpha1
     kind: NodeConfig
@@ -251,6 +257,7 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
           evictionMaxPodGracePeriod: 180
           systemReserved:
             memory: "512Mi"
+    --//--
   USERDATA
   )
 
