@@ -229,6 +229,25 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
+resource "aws_cloudwatch_query_definition" "celery-notifications-timeouts" {
+  count = var.cloudwatch_enabled ? 1 : 0
+  name  = "Celery / Notifications timeout"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.celery_name}/
+| filter @message like /Timeout period reached for/
+| parse @message "*stderr F [*,*: INFO/ForkPoolWorker-*] Timeout period reached for * notifications*" as @ignore, @date, @time_ms, @worker_id, @notification_count, @ignore2
+| sort @timestamp desc
+| display @date, @notification_count
+| limit 200
+QUERY
+}
+
 ################################ UNSORTED YET #################################
 
 resource "aws_cloudwatch_query_definition" "admin-50X-errors" {
@@ -475,24 +494,5 @@ fields @timestamp, @notification_id, @url, @error
 | filter @message like /send_delivery_status_to_service request failed for notification_id:/
 | parse @message 'send_delivery_status_to_service request failed for notification_id: * and url: * service: * exc: *' as @notification_id, @url, @service_id, @error
 | limit 10000
-QUERY
-}
-
-resource "aws_cloudwatch_query_definition" "celery-notifications-timeouts" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Notifications timeout"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^${local.celery_name}/
-| filter @message like /Timeout period reached for/
-| parse @message "*stderr F [*,*: INFO/ForkPoolWorker-*] Timeout period reached for * notifications*" as @ignore, @date, @time_ms, @worker_id, @notification_count, @ignore2
-| sort @timestamp desc
-| display @date, @notification_count
-| limit 200
 QUERY
 }
