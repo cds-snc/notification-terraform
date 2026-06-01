@@ -12,12 +12,7 @@
 set -euo pipefail
 
 CLUSTER_NAME="${1:-}"
-<<<<<<< HEAD
-AWS_REGION="${2:-${AWS_DEFAULT_REGION:-us-east-1}}"
-
-=======
 AWS_REGION="${2:-${AWS_DEFAULT_REGION:-ca-central-1}}"
->>>>>>> origin/main
 if [[ -z "$CLUSTER_NAME" ]]; then
   echo "Usage: $0 <eks-cluster-name> [aws-region]" >&2
   exit 1
@@ -39,11 +34,7 @@ aws eks update-kubeconfig \
   --name "$CLUSTER_NAME" \
   --region "$AWS_REGION" \
   --no-cli-pager \
-<<<<<<< HEAD
-  2>/dev/null
-=======
   >/dev/null
->>>>>>> origin/main
 
 # ── 2. Get EC2 instance IDs registered as EKS nodes ─────────────────────────
 echo "Fetching EKS node list..."
