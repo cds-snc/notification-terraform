@@ -35,7 +35,7 @@ aws eks update-kubeconfig \
   --name "$CLUSTER_NAME" \
   --region "$AWS_REGION" \
   --no-cli-pager \
-  2>/dev/null
+  >/dev/null
 
 # ── 2. Get EC2 instance IDs registered as EKS nodes ─────────────────────────
 echo "Fetching EKS node list..."
