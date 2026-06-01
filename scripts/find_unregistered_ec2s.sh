@@ -12,8 +12,7 @@
 set -euo pipefail
 
 CLUSTER_NAME="${1:-}"
-AWS_REGION="${2:-${AWS_DEFAULT_REGION:-us-east-1}}"
-
+AWS_REGION="${2:-${AWS_DEFAULT_REGION:-ca-central-1}}"
 if [[ -z "$CLUSTER_NAME" ]]; then
   echo "Usage: $0 <eks-cluster-name> [aws-region]" >&2
   exit 1
