@@ -226,7 +226,7 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
   # Review pod resource requests if scheduling issues arise after rollout.
   #
   # Note: evictionMaxPodGracePeriod caps per-pod terminationGracePeriodSeconds
-  # at 60s during eviction — adjust if workloads require longer shutdown windows.
+  # at 180s during eviction — adjust if workloads require longer shutdown windows.
   user_data = base64encode(<<-USERDATA
     ---
     apiVersion: node.eks.aws/v1alpha1
