@@ -217,6 +217,43 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
     http_tokens                 = "required"
   }
 
+  # Aggressive memory eviction configuration (AL2023 nodeadm format).
+  # Defaults: evictionHard.memory.available=100Mi, no soft eviction.
+  # Raises thresholds so kubelet reclaims memory earlier, before the kernel
+  # OOM killer freezes the node.
+  #
+  # Note: systemReserved.memory reduces node allocatable memory by 512Mi.
+  # Review pod resource requests if scheduling issues arise after rollout.
+  #
+  # Note: evictionMaxPodGracePeriod caps per-pod terminationGracePeriodSeconds
+  # at 180s during eviction — adjust if workloads require longer shutdown windows.
+  user_data = base64encode(<<-USERDATA
+    ---
+    apiVersion: node.eks.aws/v1alpha1
+    kind: NodeConfig
+    spec:
+      kubelet:
+        config:
+          evictionHard:
+            memory.available: "500Mi"
+            nodefs.available: "10%"
+            imagefs.available: "15%"
+          evictionSoft:
+            memory.available: "1Gi"
+            nodefs.available: "15%"
+            imagefs.available: "20%"
+          evictionSoftGracePeriod:
+            memory.available: "1m30s"
+            nodefs.available: "1m30s"
+            imagefs.available: "1m30s"
+          evictionMinimumReclaim:
+            memory.available: "128Mi"
+          evictionMaxPodGracePeriod: 180
+          systemReserved:
+            memory: "512Mi"
+  USERDATA
+  )
+
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
