@@ -51,7 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -89,7 +89,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
   statistic           = "Sum"
   threshold           = 10
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
@@ -147,7 +147,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unknown-critical" {
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # DUPLICATE_RECORD
@@ -180,7 +180,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-criti
   threshold           = 200
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # JOB_INCOMPLETE
@@ -213,7 +213,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-critica
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # METRICS
@@ -246,7 +246,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-metrics-critical" {
   threshold           = 60
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # NOTIFICATION_NOT_FOUND
@@ -279,7 +279,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found
   threshold           = 200
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # SHUTDOWN
@@ -312,7 +312,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-critical" {
   threshold           = 20
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # THROTTLING
@@ -345,7 +345,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-critical" {
   threshold           = 3000
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # NOTIFICATIONS TIMEOUT
@@ -378,7 +378,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-c
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # CLIENTS TIMEOUT
@@ -411,7 +411,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-critica
   threshold           = 50
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 # XRAY
@@ -444,7 +444,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-critical" {
   threshold           = 25
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 ###### END OF CELERY ERROR CLASSIFICATION ALARMS ######
 
@@ -476,7 +476,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
@@ -682,7 +682,7 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   dimensions = {
     ResourceArn = aws_shield_protection.notification-canada-ca.resource_arn
   }
@@ -716,7 +716,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-malware-scan-timeout-1-minute-warning" {
@@ -1261,7 +1261,7 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-
   threshold           = 1
   treat_missing_data  = "breaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warning" {
