@@ -752,6 +752,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
@@ -1308,6 +1309,7 @@ resource "aws_cloudwatch_metric_alarm" "db-migration-failure-critical" {
   threshold           = 1
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 

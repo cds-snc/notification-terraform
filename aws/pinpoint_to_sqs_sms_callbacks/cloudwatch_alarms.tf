@@ -120,6 +120,7 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical" {
   threshold           = 0.9 * var.sms_monthly_spend_limit
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 
   metric_query {
     id          = "total_spend"
@@ -591,6 +592,7 @@ resource "aws_cloudwatch_metric_alarm" "total-sms-spending-critical-us-west-2" {
   threshold           = 0.9 * var.pinpoint_monthly_spend_limit_us_west_2
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn_us_west_2]
+  ok_actions          = [var.sns_alert_ok_arn_us_west_2]
 
   metric_query {
     id          = "total_spend"

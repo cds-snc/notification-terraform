@@ -34,6 +34,10 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
+variable "sns_alert_ok_arn" {
+  type = string
+}
+
 locals {
   api_lambda_log_group  = "/aws/lambda/api-lambda"
   api_gateway_log_group = "api_gateway_log_group"

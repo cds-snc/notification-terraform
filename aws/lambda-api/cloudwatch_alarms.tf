@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-error-5-minutes-critical-lambda-
   threshold                 = 10
   treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_critical_arn]
-  ok_actions                = [var.sns_alert_critical_arn]
+  ok_actions                = [var.sns_alert_ok_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
 }
 
@@ -89,7 +89,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-critical" {
   threshold                 = 10
   treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_critical_arn]
-  ok_actions                = [var.sns_alert_critical_arn]
+  ok_actions                = [var.sns_alert_ok_arn]
   insufficient_data_actions = [var.sns_alert_critical_arn]
 
   dimensions = {
@@ -151,6 +151,7 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-critical" {
   threshold           = 5
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-warning" {
@@ -188,7 +189,7 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-critical" {
   threshold                 = 10
   treat_missing_data        = "notBreaching"
   alarm_actions             = [var.sns_alert_critical_arn]
-  ok_actions                = [var.sns_alert_critical_arn]
+  ok_actions                = [var.sns_alert_ok_arn]
   insufficient_data_actions = [var.sns_alert_critical_arn]
 
   dimensions = {
