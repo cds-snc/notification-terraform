@@ -6,6 +6,10 @@ variable "sns_alert_critical_arn" {
   type = string
 }
 
+variable "sns_alert_ok_arn" {
+  type = string
+}
+
 variable "system_status_ecr_arn" {
   type        = string
   description = "Inherited from ecr dependency"
