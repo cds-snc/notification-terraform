@@ -72,8 +72,8 @@ resource "aws_ecs_task_definition" "perf_test_task" {
 }
 
 data "template_file" "perf_test_failure_scenarios_container_definition" {
+  count    = var.env == "production" ? 0 : 1
   template = file("container_definitions/perf_test_failure_scenarios.json.tmpl")
-
   vars = {
     AWS_LOGS_GROUP         = var.cloudwatch_enabled ? aws_cloudwatch_log_group.perf_test_ecs_logs[0].name : "none"
     AWS_LOGS_REGION        = var.region
