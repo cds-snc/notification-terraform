@@ -77,7 +77,7 @@ data "template_file" "perf_test_failure_scenarios_container_definition" {
   vars = {
     AWS_LOGS_GROUP         = var.cloudwatch_enabled ? aws_cloudwatch_log_group.perf_test_ecs_logs[0].name : "none"
     AWS_LOGS_REGION        = var.region
-    AWS_LOGS_STREAM_PREFIX = "${aws_ecs_cluster.perf_test.name}-task"
+    AWS_LOGS_STREAM_PREFIX = "${aws_ecs_cluster.perf_test.name}-failure-scenarios-task"
     ECR_REPOSITORY_URL     = var.performance_test_ecr_repository_url
 
     PERF_TEST_AWS_S3_BUCKET             = var.perf_test_aws_s3_bucket
