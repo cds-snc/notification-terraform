@@ -95,6 +95,7 @@ data "template_file" "perf_test_failure_scenarios_container_definition" {
 }
 
 resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task" {
+  count                    = var.env == "production" ? 0 : 1
   family                   = "performance_test_cluster_failure_scenarios"
   cpu                      = 2048
   memory                   = 4096
@@ -102,7 +103,7 @@ resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task" {
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.container_execution_role.arn
   task_role_arn            = aws_iam_role.perf_test_ecs_task.arn
-  container_definitions    = data.template_file.perf_test_failure_scenarios_container_definition.rendered
+  container_definitions    = data.template_file.perf_test_failure_scenarios_container_definition[0].rendered
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
