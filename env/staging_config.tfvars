@@ -178,7 +178,7 @@ pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
 blazer_image_tag   = "latest"
-blazer_rds_version = "15.5"
+blazer_rds_version = "15.18"
 
 ## DATA LAKE
 datalake_bucket_name = "cds-data-lake-raw-production"
