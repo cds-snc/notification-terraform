@@ -6,6 +6,7 @@
 
 
 resource "aws_cloudwatch_metric_alarm" "coredns-nxdomain-notification-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "coredns-nxdomain-notification-warning"
   alarm_description   = "More than 30 NXDOMAIN responses containing the basedomain in CoreDNS logs in 5 minutes"
@@ -22,6 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "coredns-nxdomain-notification-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-1-500-error-1-minute-warning"
   alarm_description   = "One 500 error in 1 minute"
@@ -40,6 +42,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-500-error-1-minute-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-10-500-error-5-minutes-critical"
   alarm_description   = "Ten 500 errors in 5 minutes"
@@ -60,6 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-500-error-5-minutes-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-1-502-error-1-minute-warning"
   alarm_description   = "One 502 error in 1 minute"
@@ -78,6 +82,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-1-502-error-1-minute-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "load-balancer-10-502-error-5-minutes-critical"
   alarm_description   = "Ten 502 errors in 5 minutes"
@@ -97,6 +102,7 @@ resource "aws_cloudwatch_metric_alarm" "load-balancer-10-502-error-5-minutes-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-high-request-count-warning"
   alarm_description   = "More than 300 4XX requests in 10 minutes on ${aws_alb_target_group.notification-canada-ca-document-api.name} target group"
@@ -119,6 +125,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
 
 # UNKNOWN — most sensitive, these are unexpected errors
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unknown-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-unknown-warning"
   alarm_description   = "One unclassified Celery error in 1 minute"
@@ -135,6 +142,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unknown-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unknown-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-unknown-critical"
   alarm_description   = "Ten unclassified Celery errors in 1 minute"
@@ -152,6 +160,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unknown-critical" {
 
 # DUPLICATE_RECORD
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-duplicate-record-warning"
   alarm_description   = "50 Celery duplicate record errors in 1 minute"
@@ -168,6 +177,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-duplicate-record-critical"
   alarm_description   = "200 Celery duplicate record errors in 1 minute"
@@ -185,6 +195,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-criti
 
 # JOB_INCOMPLETE
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-job-incomplete-warning"
   alarm_description   = "One Celery job incomplete error in 1 minute"
@@ -201,6 +212,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-job-incomplete-critical"
   alarm_description   = "Ten Celery job incomplete errors in 1 minute"
@@ -218,6 +230,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-critica
 
 # METRICS
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-metrics-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-metrics-warning"
   alarm_description   = "30 Celery metrics related error in 1 minute"
@@ -234,6 +247,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-metrics-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-metrics-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-metrics-critical"
   alarm_description   = "60 Celery metrics related errors in 1 minute"
@@ -251,6 +265,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-metrics-critical" {
 
 # NOTIFICATION_NOT_FOUND
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-notification-not-found-warning"
   alarm_description   = "50 Celery notifications not found errors in 1 minute"
@@ -267,6 +282,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-notification-not-found-critical"
   alarm_description   = "200 Celery notifications not found errors in 1 minute"
@@ -284,6 +300,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-notification-not-found
 
 # SHUTDOWN
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-shutdown-warning"
   alarm_description   = "10 Celery shutdown errors in 1 minute"
@@ -300,6 +317,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-shutdown-critical"
   alarm_description   = "20 Celery shutdown errors in 1 minute"
@@ -317,6 +335,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-shutdown-critical" {
 
 # THROTTLING
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-throttling-warning"
   alarm_description   = "1000 Celery throttling errors in 1 minute"
@@ -333,6 +352,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-throttling-critical"
   alarm_description   = "3000 Celery throttling errors in 1 minute"
@@ -350,6 +370,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-throttling-critical" {
 
 # NOTIFICATIONS TIMEOUT
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-timeout-warning"
   alarm_description   = "Warning notification timeout error in 1 minute"
@@ -366,6 +387,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-w
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-timeout-notification-critical"
   alarm_description   = "Critical notification timeout errors in 1 minute"
@@ -383,6 +405,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-c
 
 # CLIENTS TIMEOUT
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-timeout-client-warning"
   alarm_description   = "Warning client timeout error in 1 minute"
@@ -399,6 +422,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-timeout-client-critical"
   alarm_description   = "Critical for client timeout errors in 1 minute"
@@ -416,6 +440,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-critica
 
 # XRAY
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-xray-warning"
   alarm_description   = "Five Celery X-Ray errors in 1 minute"
@@ -432,6 +457,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-celery-error-xray-critical"
   alarm_description   = "Twenty-five Celery X-Ray errors in 1 minute"
@@ -449,6 +475,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-critical" {
 ###### END OF CELERY ERROR CLASSIFICATION ALARMS ######
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning"
   alarm_description   = "One 500 error in 1 minute"
@@ -464,6 +491,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical"
   alarm_description   = "Ten 500 errors in 5 minutes"
@@ -480,6 +508,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "admin-pods-high-cpu-warning"
   alarm_description         = "Average CPU of admin pods >=50% during 10 minutes"
@@ -501,6 +530,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-pods-high-cpu-warning"
   alarm_description         = "Average CPU of API pods >=50% during 10 minutes"
@@ -522,6 +552,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-cpu-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-core-tasks-static-pods-high-cpu-warning"
   alarm_description         = "Average CPU of celery-core-tasks-static pods >=50% during 10 minutes"
@@ -543,6 +574,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-cpu-w
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-pods-high-cpu-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-core-tasks-scalable-pods-high-cpu-warning"
   alarm_description         = "Average CPU of celery-core-tasks-scalable pods >=50% during 10 minutes"
@@ -564,6 +596,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-pods-high-cpu
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-dedicated-static-pods-high-cpu-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-sms-dedicated-static-pods-high-cpu-warning"
   alarm_description         = "Average CPU of celery-sms-dedicated-static pods >=50% during 10 minutes"
@@ -586,6 +619,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-dedicated-static-pods-high-cp
 
 
 resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "admin-pods-high-memory-warning"
   alarm_description         = "Average memory of admin pods >=50% during 10 minutes"
@@ -607,6 +641,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-pods-high-memory-warning"
   alarm_description         = "Average memory of API pods >=50% during 10 minutes"
@@ -628,6 +663,7 @@ resource "aws_cloudwatch_metric_alarm" "api-pods-high-memory-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-memory-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-core-tasks-static-pods-high-memory-warning"
   alarm_description         = "Average memory of celery-core-tasks-static pods >=50% during 10 minutes"
@@ -649,6 +685,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-memor
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-dedicated-static-pods-high-memory-warning" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "celery-sms-dedicated-static-pods-high-memory-warning"
   alarm_description         = "Average memory of celery-sms-dedicated-static >=50% during 10 minutes"
@@ -670,6 +707,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-dedicated-static-pods-high-me
 }
 
 resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "ddos-detected-load-balancer-critical"
   alarm_description   = "DDoS has been detected on the load balancer"
@@ -689,6 +727,7 @@ resource "aws_cloudwatch_metric_alarm" "ddos-detected-load-balancer-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-malware-detected-1-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-malware-detected-1-minute-warning"
   alarm_description   = "One malware detected error in 1 minute"
@@ -704,6 +743,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-malware-detected-1-minute-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-malware-detected-1-minute-critical"
   alarm_description   = "Ten malware detected errors in 1 minute"
@@ -720,6 +760,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-malware-detected-1-minute-critic
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-malware-scan-timeout-1-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-malware-scan-timeout-1-minute-warning"
   alarm_description   = "One malware scan timeout detected error in 1 minute"
@@ -740,6 +781,7 @@ moved {
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-bounce-rate-critical"
   alarm_description   = "Bounce rate exceeding 10% in a 12 hour period"
@@ -756,6 +798,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "kubernetes-failed-nodes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -782,6 +825,7 @@ resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-core-tasks-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -811,6 +855,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-replicas-unavai
 
 
 resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-core-tasks-scalable-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -839,6 +884,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-replicas-unav
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-beat-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -867,6 +913,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-beat-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-dedicated-static-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-dedicated-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -895,6 +942,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-dedicated-static-replicas-una
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-email-send-static-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-email-send-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -924,6 +972,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-static-replicas-unavai
 
 
 resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-email-send-scalable-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -952,6 +1001,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unav
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-send-static-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-send-static-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -981,6 +1031,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-static-replicas-unavaila
 
 
 resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "celery-sms-send-scalable-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1009,6 +1060,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavai
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "admin-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1037,6 +1089,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1065,6 +1118,7 @@ resource "aws_cloudwatch_metric_alarm" "api-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "documentation-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1093,6 +1147,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1121,6 +1176,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-replicas-unavailab
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-api-pods-detected"
   alarm_description         = "One or more Kubernetes API Pods is reporting as Evicted"
@@ -1138,6 +1194,7 @@ resource "aws_cloudwatch_metric_alarm" "api-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-celery-pods-detected"
   alarm_description         = "One or more Kubernetes Celery Pods is reporting as Evicted"
@@ -1155,6 +1212,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-admin-pods-detected"
   alarm_description         = "One or more Kubernetes Admin Pods is reporting as Evicted"
@@ -1172,6 +1230,7 @@ resource "aws_cloudwatch_metric_alarm" "admin-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-document-download-pods-detected"
   alarm_description         = "One or more Kubernetes Document Download Pods is reporting as Evicted"
@@ -1189,6 +1248,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
+  provider = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "evicted-documentation-pods-detected"
   alarm_description         = "One or more Kubernetes Documentation Pods is reporting as Evicted"
@@ -1206,6 +1266,7 @@ resource "aws_cloudwatch_metric_alarm" "documentation-evicted-pods" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "karpenter-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1234,6 +1295,7 @@ resource "aws_cloudwatch_metric_alarm" "karpenter-replicas-unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-1-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "aggregating-queues-not-active-1-minute-warning"
   alarm_description   = "Beat inbox tasks have not been active for one minute"
@@ -1249,6 +1311,7 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-1-minute-w
 }
 
 resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "aggregating-queues-not-active-5-minutes-critical"
   alarm_description   = "Beat inbox tasks have not been active for 5 minutes"
@@ -1265,6 +1328,7 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-
 }
 
 resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "service-callback-too-many-failures-warning"
   alarm_description   = "Service reached the max number of callback retries 25 times in 5 minutes"
@@ -1280,6 +1344,7 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "service-callback-too-many-failures-critical"
   alarm_description   = "Service reached the max number of callback retries 100 times in 10 minutes"
@@ -1297,6 +1362,7 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-criti
 
 
 resource "aws_cloudwatch_metric_alarm" "db-migration-failure-critical" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "db-migration-failure-critical"
   alarm_description   = "The database migration running in the api k8s pods has failed"
@@ -1314,6 +1380,7 @@ resource "aws_cloudwatch_metric_alarm" "db-migration-failure-critical" {
 
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-oom-error-1-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-oom-error-1-minute-warning"
   alarm_description   = "One oom error in 1 minute"
@@ -1330,6 +1397,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-oom-error-1-minute-warning" {
 
 # both of these are set to warning atm
 resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-oom-error-5-minute-warning"
   alarm_description   = "Ten oom errors in 5 minute"
@@ -1347,6 +1415,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-oom-error-5-minute-warning" {
 ### Velero
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-velero-error-5-minute-warning" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-velero-error-5-minute-warning"
   alarm_description   = "Errors In Velero. Verify Backup Status"
@@ -1362,6 +1431,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-velero-error-5-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "velero_deployment_unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "velero-deployment-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -1389,6 +1459,7 @@ resource "aws_cloudwatch_metric_alarm" "velero_deployment_unavailable" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "velero_daemonset_unavailable" {
+  provider = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "velero-daemonset-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"

@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_query_definition" "sms-sns-blocked-as-spam" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Block as spam"
 
@@ -16,6 +17,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "sms-sns-carrier-dwell-times" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Carrier dwell times"
 
@@ -31,6 +33,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "sms-sns-get-failures" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Get failures"
 
@@ -47,6 +50,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "sms-sns-get-sms-logs-by-phone-number" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Get SMS logs by phone number"
 
@@ -66,6 +70,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "sms-sns-international-sending-status" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / International sending status"
 
@@ -84,6 +89,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "sms-sns-success-vs-unreachable" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Success vs Unreachable"
 
@@ -102,6 +108,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "sms-sns-unreachable-phone-numbers" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (SNS) / Unreachable phone numbers"
 

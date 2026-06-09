@@ -3,30 +3,35 @@
 ###
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-cluster-logs" {
+  provider = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/eks/${var.eks_cluster_name}/cluster"
   retention_in_days = var.log_retention_period_days
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-application-logs" {
+  provider = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/containerinsights/${var.eks_cluster_name}/application"
   retention_in_days = var.log_retention_period_days
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-prometheus-logs" {
+  provider = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/containerinsights/${var.eks_cluster_name}/prometheus"
   retention_in_days = var.log_retention_period_days
 }
 
 resource "aws_cloudwatch_log_group" "notification-canada-ca-eks-host-logs" {
+  provider = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/containerinsights/${var.eks_cluster_name}/host"
   retention_in_days = var.log_retention_period_days
 }
 
 resource "aws_cloudwatch_log_group" "blazer" {
+  provider = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "blazer"
   retention_in_days = 1827 # 5 years
@@ -37,6 +42,7 @@ resource "aws_cloudwatch_log_group" "blazer" {
 # AWS EKS Cloudwatch log metric filters
 ###
 resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "web-500-errors"
   pattern        = "{ ($.kubernetes.namespace_name = \"notification-canada-ca\") && ($.log = \"*\\\" 500 *\") }"
@@ -50,6 +56,7 @@ resource "aws_cloudwatch_log_metric_filter" "web-500-errors" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-unknown" {
+  provider = aws.core_services
   # This is a catch all log metric filter for Celery when unexpected errors occur. We need
   # to keep an eye on closely and monitor.
   count          = var.cloudwatch_enabled ? 1 : 0
@@ -65,6 +72,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-unknown" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-duplicate-record" {
+  provider = aws.core_services
   # This monitors for database duplicate record errors in Celery.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-duplicate-record"
@@ -79,6 +87,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-duplicate-record" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-job-incomplete" {
+  provider = aws.core_services
   # This monitors for incomplete jobs that couldn't be completed within Celery.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-job-incomplete"
@@ -93,6 +102,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-job-incomplete" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-metrics" {
+  provider = aws.core_services
   # This monitors for incomplete jobs that couldn't be completed within Celery.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-metrics"
@@ -107,6 +117,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-metrics" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-notification-not-found" {
+  provider = aws.core_services
   # This monitors for Celery errors when notifications were not found within the system.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-notification-not-found"
@@ -121,6 +132,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-notification-not-found
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-shutdown" {
+  provider = aws.core_services
   # This monitors for Celery workers shutting down.
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-shutdown"
@@ -135,6 +147,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-shutdown" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-throttling" {
+  provider = aws.core_services
   # This monitors for Celery errors related to throttling, which could indicate performance issues
   # or capacity limits being hit.
   count          = var.cloudwatch_enabled ? 1 : 0
@@ -150,6 +163,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-throttling" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout-client" {
+  provider = aws.core_services
   # This monitors for client library errors related to network timeouts occurring within Celery,
   # which could indicate performance issues or external dependencies not responding in time.
   count          = var.cloudwatch_enabled ? 1 : 0
@@ -165,6 +179,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout-client" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout-notification" {
+  provider = aws.core_services
   # This monitors for Celery errors related to network timeouts, which could indicate 
   # performance issues or external dependencies not responding in time.
   count          = var.cloudwatch_enabled ? 1 : 0
@@ -180,6 +195,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-timeout-notification" 
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-xray" {
+  provider = aws.core_services
   # This monitors for Celery errors related to AWS X-Ray, which could indicate issues
   # with observability tracing.
   count          = var.cloudwatch_enabled ? 1 : 0
@@ -195,6 +211,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-xray" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "malware-detected" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "malware-detected"
   pattern        = jsonencode("Malicious content detected! Download and attachment failed")
@@ -208,6 +225,7 @@ resource "aws_cloudwatch_log_metric_filter" "malware-detected" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "malware-scan-timeout" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "malware-scan-timeout"
   pattern        = "Malware scan timed out for notification.id"
@@ -226,6 +244,7 @@ moved {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "bounce-rate-critical"
   pattern        = "critical bounce rate threshold of 10"
@@ -239,6 +258,7 @@ resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "api-evicted-pods"
   pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-api-*\") }"
@@ -252,6 +272,7 @@ resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "celery-evicted-pods" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-evicted-pods"
   pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-celery-*\") }"
@@ -265,6 +286,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-evicted-pods" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "admin-evicted-pods" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "admin-evicted-pods"
   pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-admin-*\") }"
@@ -278,6 +300,7 @@ resource "aws_cloudwatch_log_metric_filter" "admin-evicted-pods" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "document-download-evicted-pods" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "document-download-evicted-pods"
   pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-document-download-*\") }"
@@ -291,6 +314,7 @@ resource "aws_cloudwatch_log_metric_filter" "document-download-evicted-pods" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "documentation-evicted-pods" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "documentation-evicted-pods"
   pattern        = "{ ($.reason = \"Evicted\") && ($.kube_pod_status_reason = 1) && ($.pod = \"notify-documentation-*\") }"
@@ -304,6 +328,7 @@ resource "aws_cloudwatch_log_metric_filter" "documentation-evicted-pods" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "aggregating-queues-are-active" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "aggregating-queues-are-active"
   pattern        = "Batch saving with"
@@ -317,6 +342,7 @@ resource "aws_cloudwatch_log_metric_filter" "aggregating-queues-are-active" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "callback-request-failures" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "callback-request-failures"
   pattern        = "send_delivery_status_to_service request failed for notification_id"
@@ -330,6 +356,7 @@ resource "aws_cloudwatch_log_metric_filter" "callback-request-failures" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "throttling-exceptions" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "throttling-exceptions"
   pattern        = "{ ($.log = \"*ThrottlingException*\") && ($.log != \"*awscloudwatchreceiver*\") }"
@@ -343,6 +370,7 @@ resource "aws_cloudwatch_log_metric_filter" "throttling-exceptions" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "db-migration-failure" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "db-migration-failure"
   pattern        = "\"database migration failed\""
@@ -358,6 +386,7 @@ resource "aws_cloudwatch_log_metric_filter" "db-migration-failure" {
 
 # AWS EKS host log metric filters
 resource "aws_cloudwatch_log_metric_filter" "oom-errors" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "oom-errors"
   pattern        = "%Memory cgroup out of memory%"
@@ -375,6 +404,7 @@ resource "aws_cloudwatch_log_metric_filter" "oom-errors" {
 ###
 
 resource "aws_cloudwatch_log_metric_filter" "velero-error" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "velero-error"
   pattern        = "{ ($.kubernetes.pod_name = \"velero*\") && ($.log = *error*) && ($.log != *warning*) && ($.log != \"*file already closed*\")}"
@@ -392,6 +422,7 @@ resource "aws_cloudwatch_log_metric_filter" "velero-error" {
 ###
 
 resource "aws_cloudwatch_log_metric_filter" "coredns-nxdomain-notification-filter" {
+  provider = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "CoreDNSNXDOMAINNotificationFilter"
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name

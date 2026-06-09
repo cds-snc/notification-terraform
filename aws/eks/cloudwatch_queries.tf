@@ -10,6 +10,7 @@ locals {
 ################################ CELERY FOLDER ################################
 
 resource "aws_cloudwatch_query_definition" "celery-errors" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Errors"
 
@@ -27,6 +28,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-filter-by-job" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Filter by job"
 
@@ -44,6 +46,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-filter-by-notification-id" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Filter by notification id"
 
@@ -61,6 +64,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-memory-usage-by-pod" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Memory Usage By Pod"
 
@@ -77,6 +81,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-pods-over-cpu-limit" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Pods over CPU Limit"
 
@@ -93,6 +98,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-queues" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Queues"
 
@@ -110,6 +116,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-starts" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Starts"
 
@@ -127,6 +134,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exited-normally" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Worker exited normally"
 
@@ -143,6 +151,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exited-prematurely" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Worker exited prematurely"
 
@@ -159,6 +168,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exits-cold-vs-warm" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Worker exits, cold vs warm"
 
@@ -178,6 +188,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "retry-attemps-by-duration" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Retry attempts by duration"
 
@@ -195,6 +206,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-count-known-errors" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Count of known errors"
 
@@ -214,6 +226,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-unknown-errors" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Celery / Unknown errors"
 
@@ -232,6 +245,7 @@ QUERY
 ################################ UNSORTED YET #################################
 
 resource "aws_cloudwatch_query_definition" "admin-50X-errors" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Admin / 50X errors"
 
@@ -249,6 +263,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "admin-svc-audit-removed-users" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Admin / Service audit - removed users"
 
@@ -269,6 +284,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "admin-slow-dashboards" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Admin / Slow Dashboards"
 
@@ -289,6 +305,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "api-50X-errors" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "API / 50X errors"
 
@@ -306,6 +323,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "API / GUnicorn total running time"
 
@@ -322,6 +340,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "API / Non-existent domain resolution errors"
 
@@ -336,6 +355,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "API / Non-existent domain resolution error stats"
 
@@ -354,6 +374,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats-by-5-minutes" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "API / Non-existent domain resolution errors by 5 minutes"
 
@@ -373,6 +394,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Bounces / Critical bounces"
 
@@ -390,6 +412,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Bounces / Warning bounces"
 
@@ -407,6 +430,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-warnings-and-criticals" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Bounces / Bounce warnings and criticals grouped by type"
 
@@ -425,6 +449,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "callback-errors-by-url" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Callbacks / Callback errors by URL"
 
@@ -443,6 +468,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "callback-max-retry-failures-by-service" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Callbacks / Callbacks that exceeded MaxRetries by service"
 
@@ -462,6 +488,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "callback-failures" {
+  provider = aws.core_services
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "Callbacks / Callback errors by notification_id"
 
