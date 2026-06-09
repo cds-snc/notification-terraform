@@ -11,8 +11,8 @@ locals {
 
 resource "aws_cloudwatch_query_definition" "celery-errors" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Errors"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -29,8 +29,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-filter-by-job" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Filter by job"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Filter by job"
 
   log_group_names = [
     local.eks_application_log_group
@@ -47,8 +47,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-filter-by-notification-id" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Filter by notification id"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Filter by notification id"
 
   log_group_names = [
     local.eks_application_log_group
@@ -65,8 +65,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-memory-usage-by-pod" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Memory Usage By Pod"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Memory Usage By Pod"
 
   log_group_names = [
     local.eks_application_log_group
@@ -82,8 +82,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-pods-over-cpu-limit" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Pods over CPU Limit"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Pods over CPU Limit"
 
   log_group_names = [
     local.eks_application_log_group
@@ -99,8 +99,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-queues" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Queues"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Queues"
 
   log_group_names = [
     local.eks_application_log_group
@@ -117,8 +117,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-starts" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Starts"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Starts"
 
   log_group_names = [
     local.eks_application_log_group
@@ -135,8 +135,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exited-normally" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Worker exited normally"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Worker exited normally"
 
   log_group_names = [
     local.eks_application_log_group
@@ -152,8 +152,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exited-prematurely" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Worker exited prematurely"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Worker exited prematurely"
 
   log_group_names = [
     local.eks_application_log_group
@@ -169,8 +169,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-worker-exits-cold-vs-warm" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Worker exits, cold vs warm"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Worker exits, cold vs warm"
 
   log_group_names = [
     local.eks_application_log_group
@@ -189,8 +189,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "retry-attemps-by-duration" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Retry attempts by duration"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Retry attempts by duration"
 
   log_group_names = [
     local.eks_application_log_group
@@ -207,8 +207,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-count-known-errors" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Count of known errors"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Count of known errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -227,8 +227,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "celery-unknown-errors" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Unknown errors"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Unknown errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -246,8 +246,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "admin-50X-errors" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Admin / 50X errors"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Admin / 50X errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -264,8 +264,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "admin-svc-audit-removed-users" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Admin / Service audit - removed users"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Admin / Service audit - removed users"
 
   log_group_names = [
     local.eks_application_log_group
@@ -285,8 +285,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "admin-slow-dashboards" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Admin / Slow Dashboards"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Admin / Slow Dashboards"
 
   log_group_names = [
     local.eks_application_log_group
@@ -306,8 +306,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api-50X-errors" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / 50X errors"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / 50X errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -324,8 +324,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / GUnicorn total running time"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / GUnicorn total running time"
 
   log_group_names = [
     local.eks_application_log_group
@@ -341,8 +341,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Non-existent domain resolution errors"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Non-existent domain resolution errors"
 
   log_group_names = [
     local.eks_application_log_group
@@ -356,8 +356,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Non-existent domain resolution error stats"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Non-existent domain resolution error stats"
 
   log_group_names = [
     local.eks_application_log_group
@@ -375,8 +375,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors-stats-by-5-minutes" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "API / Non-existent domain resolution errors by 5 minutes"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Non-existent domain resolution errors by 5 minutes"
 
   log_group_names = [
     local.eks_application_log_group
@@ -395,8 +395,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Bounces / Critical bounces"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Bounces / Critical bounces"
 
   log_group_names = [
     local.eks_application_log_group
@@ -413,8 +413,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Bounces / Warning bounces"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Bounces / Warning bounces"
 
   log_group_names = [
     local.eks_application_log_group
@@ -431,8 +431,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "bounce-rate-warnings-and-criticals" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Bounces / Bounce warnings and criticals grouped by type"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Bounces / Bounce warnings and criticals grouped by type"
 
   log_group_names = [
     local.eks_application_log_group
@@ -450,8 +450,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "callback-errors-by-url" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Callbacks / Callback errors by URL"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Callbacks / Callback errors by URL"
 
   log_group_names = [
     local.eks_application_log_group
@@ -469,8 +469,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "callback-max-retry-failures-by-service" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Callbacks / Callbacks that exceeded MaxRetries by service"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Callbacks / Callbacks that exceeded MaxRetries by service"
 
   log_group_names = [
     local.eks_application_log_group
@@ -489,8 +489,8 @@ QUERY
 
 resource "aws_cloudwatch_query_definition" "callback-failures" {
   provider = aws.core_services
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Callbacks / Callback errors by notification_id"
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Callbacks / Callback errors by notification_id"
 
   log_group_names = [
     local.eks_application_log_group

@@ -5,7 +5,7 @@
 # There are also alarms defined in aws/eks/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-priority-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in high priority queue >= 20 seconds for 3 minutes"
@@ -24,7 +24,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
-  provider = aws.core_services
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-priority-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in high priority queue >= 60 seconds for 5 minutes"
@@ -46,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-queue-delay-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-bulk-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in bulk queue reached 60 minutes"
@@ -65,7 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
-  provider = aws.core_services
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-bulk-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in bulk queue reached 3 hours"
@@ -86,7 +86,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-priority-db-tasks-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 5 minutes in a 1-minute period"
@@ -105,7 +105,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-war
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-critical" {
-  provider = aws.core_services
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-priority-db-tasks-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 15 minute for 1 minute"
@@ -126,7 +126,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-cri
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-normal-db-tasks-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 5 minutes in a 1-minute period"
@@ -145,7 +145,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-critical" {
-  provider = aws.core_services
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-normal-db-tasks-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 15 minute for 1 minute"
@@ -166,7 +166,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-criti
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-bulk-db-tasks-stuck-in-queue-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 5 minutes in a 1-minute period"
@@ -185,7 +185,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critical" {
-  provider = aws.core_services
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-bulk-db-tasks-stuck-in-queue-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 15 minute for 1 minute"
@@ -207,7 +207,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critica
 
 
 resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "healtheck-page-slow-response-warning"
   alarm_description   = "Healthcheck page response time is above 100ms for 10 minutes"
@@ -226,7 +226,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
-  provider = aws.core_services
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "healtheck-page-slow-response-critical"
   alarm_description         = "Healthcheck page response time is above 200ms for 10 minutes"
@@ -247,7 +247,7 @@ resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sign-in-3-500-error-15-minutes-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sign-in-3-500-error-15-minutes-critical"
   alarm_description   = "Three 500 errors in 15 minutes for sign-in"
@@ -264,7 +264,7 @@ resource "aws_cloudwatch_metric_alarm" "sign-in-3-500-error-15-minutes-critical"
 }
 
 resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "contact-3-500-error-15-minutes-critical"
   alarm_description   = "Three 500 errors in 15 minutes for contact us"
@@ -281,7 +281,7 @@ resource "aws_cloudwatch_metric_alarm" "contact-3-500-error-15-minutes-critical"
 }
 
 resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-bucket-size-warning"
   alarm_description   = "Document download S3 bucket size is larger than ${var.alarm_warning_document_download_bucket_size_gb} GB"
@@ -300,7 +300,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-bucket-size-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scan-files-document-download-bucket-size-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "scan-files-document-download-bucket-size-warning"
   alarm_description   = "Scan files document download S3 bucket size is larger than ${var.alarm_warning_document_download_bucket_size_gb} GB"
@@ -319,7 +319,7 @@ resource "aws_cloudwatch_metric_alarm" "scan-files-document-download-bucket-size
 }
 
 resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "live-service-over-daily-rate-limit-warning"
   alarm_description   = "A live service reached its daily rate limit and has been blocked from sending more notifications"
@@ -338,7 +338,7 @@ resource "aws_cloudwatch_metric_alarm" "live-service-over-daily-rate-limit-warni
 }
 
 resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "inflights-not-being-processed-warning"
   alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_warning_inflight_processed_created_delta_threshold} for 5 minutes"
@@ -391,7 +391,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "inflights-not-being-processed-critical"
   alarm_description   = "Batch saving inflights are being created but are not being processed fast enough. Difference > ${var.alarm_critical_inflight_processed_created_delta_threshold} for 5 minutes"
@@ -444,7 +444,7 @@ resource "aws_cloudwatch_metric_alarm" "inflights-not-being-processed-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-buffer-not-being-processed-warning"
   alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -498,7 +498,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-buffer-not-being-processed-critical"
   alarm_description   = "Bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -551,7 +551,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-not-being-processed-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "priority-bulk-buffer-not-being-processed-warning"
   alarm_description   = "Priority bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -606,7 +606,7 @@ resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "priority_bulk-buffer-not-being-processed-critical"
   alarm_description   = "Priority bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -662,7 +662,7 @@ resource "aws_cloudwatch_metric_alarm" "priority-bulk-not-being-processed-critic
 }
 
 resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "normal-bulk-buffer-not-being-processed-warning"
   alarm_description   = "Normal bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -717,7 +717,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "normal_bulk-buffer-not-being-processed-critical"
   alarm_description   = "Normal bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -773,7 +773,7 @@ resource "aws_cloudwatch_metric_alarm" "normal-bulk-not-being-processed-critical
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk-bulk-buffer-not-being-processed-warning"
   alarm_description   = "Bulk bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_warning_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -828,7 +828,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "bulk_bulk-buffer-not-being-processed-critical"
   alarm_description   = "Bulk bulk saving are being created but are not being processed fast enough. Difference > ${var.alarm_critical_bulk_processed_created_delta_threshold} for 5 minutes"
@@ -884,7 +884,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-bulk-not-being-processed-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "expired-inflight-any"
   alarm_description   = "Possible poisoned message - inflights are expiring. Investigate if this is repeated. Check the Redis-batch-saving dashboard"
@@ -908,7 +908,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "expired-inflight-warning"
   alarm_description   = "Inflights are expiring faster than they are being acknowledged in two consecutive 5-minute periods - queue is deteriorating. Check the Redis-batch-saving dashboard"
@@ -965,7 +965,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
-  provider = aws.core_services
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "expired-inflight-critical"
   alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes AND celery acknowledgment throughput is zero - system is stuck, check the Redis-batch-saving dashboard"
