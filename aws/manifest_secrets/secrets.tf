@@ -520,3 +520,13 @@ resource "aws_secretsmanager_secret_version" "manifest_falco_slack_webhook_url_v
   secret_id     = aws_secretsmanager_secret.manifest_falco_slack_webhook_url.id
   secret_string = var.manifest_falco_slack_webhook_url
 }
+
+resource "aws_secretsmanager_secret" "manifest_scan_verdict_callback_token" {
+  name                    = "MANIFEST_SCAN_VERDICT_CALLBACK_TOKEN"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_scan_verdict_callback_token" {
+  secret_id     = aws_secretsmanager_secret.manifest_scan_verdict_callback_token.id
+  secret_string = var.manifest_scan_verdict_callback_token
+}
