@@ -979,6 +979,11 @@ variable "manifest_falco_slack_webhook_url" {
   default   = "changeme"
 }
 
+variable "manifest_scan_verdict_callback_token" {
+  type      = string
+  sensitive = true
+}
+
 variable "github_app_id" {
   type      = string
   sensitive = true
@@ -1109,9 +1114,4 @@ variable "security_txt_content" {
     Preferred-Languages: en, fr
     Expires: 2026-03-29T12:00:00.000Z
   EOT
-}
-
-variable "manifest_scan_verdict_callback_token" {
-  type = string
-  sensitive = true
 }
