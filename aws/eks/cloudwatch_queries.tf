@@ -325,7 +325,7 @@ QUERY
 resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
   provider = aws.core_services
   count    = var.cloudwatch_enabled ? 1 : 0
-  name     = "API / GUnicorn total running time"
+  name     = "API / Gunicorn total running time"
 
   log_group_names = [
     local.eks_application_log_group

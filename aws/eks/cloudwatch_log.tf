@@ -110,7 +110,7 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-metrics" {
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
-    name      = "celery-error-job-incomplete"
+    name      = "celery-error-metrics"
     namespace = "LogMetrics"
     value     = "1"
   }
