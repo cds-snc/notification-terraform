@@ -1110,3 +1110,8 @@ variable "security_txt_content" {
     Expires: 2026-03-29T12:00:00.000Z
   EOT
 }
+
+variable "manifest_scan_verdict_callback_token" {
+  type = string
+  sensitive = true
+}
