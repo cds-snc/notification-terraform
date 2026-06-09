@@ -91,8 +91,11 @@ resource "aws_kms_key" "rds_snapshot" {
         }
     ]
 }
+POLICY
+
   tags = {
-    ssc_cbrid = "22DH"
+    CostCenter = "notification-canada-ca-${var.env}"
+    Terraform  = "true"
+    ssc_cbrid  = "22DH"
   }
-    POLICY
 }
