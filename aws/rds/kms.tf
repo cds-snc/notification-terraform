@@ -91,5 +91,8 @@ resource "aws_kms_key" "rds_snapshot" {
         }
     ]
 }
+  tags = {
+    ssc_cbrid = "22DH"
+  }
     POLICY
 }

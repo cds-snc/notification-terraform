@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "emails" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Emails"
   dashboard_body = <<EOF
@@ -376,6 +377,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Email_Bounce_Rate"
   dashboard_body = <<EOF

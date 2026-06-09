@@ -61,7 +61,13 @@ resource "aws_kms_key" "backup_vault" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
     Terraform  = "true"
+    ssc_cbrid  = "22DH"
   }
+}
+
+resource "aws_kms_alias" "backup_vault" {
+  name          = "alias/backup-vault-${var.env}"
+  target_key_id = aws_kms_key.backup_vault.key_id
 }
 
 resource "aws_kms_alias" "backup_vault" {
@@ -80,6 +86,7 @@ resource "aws_kms_key" "backup_vault_secondary" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
     Terraform  = "true"
+    ssc_cbrid  = "22DH"
   }
 }
 
@@ -97,6 +104,7 @@ resource "aws_backup_vault" "rds" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
     Terraform  = "true"
+    ssc_cbrid  = "22DH"
   }
 }
 
@@ -109,6 +117,7 @@ resource "aws_backup_vault" "rds_secondary" {
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
     Terraform  = "true"
+    ssc_cbrid  = "22DH"
   }
 }
 

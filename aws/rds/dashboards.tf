@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "database" {
+  provider       = aws.core_services
   dashboard_name = "Database"
   dashboard_body = <<EOF
 {
