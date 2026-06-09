@@ -70,11 +70,6 @@ resource "aws_kms_alias" "backup_vault" {
   target_key_id = aws_kms_key.backup_vault.key_id
 }
 
-resource "aws_kms_alias" "backup_vault" {
-  name          = "alias/backup-vault-${var.env}"
-  target_key_id = aws_kms_key.backup_vault.key_id
-}
-
 # KMS key for encrypting backups in secondary region
 resource "aws_kms_key" "backup_vault_secondary" {
   provider                = aws.ca-west-1
