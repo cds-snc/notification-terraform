@@ -879,10 +879,11 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warnin
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "expired-inflight-warning"
-  alarm_description   = "Inflights are expiring faster than they are being acknowledged in two consecutive 5-minute periods - queue is deteriorating. Check the Redis-batch-saving dashboard"
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-warning" {
+  for_each = var.cloudwatch_enabled ? { for q in local.inflight_queues : q.name => q } : {}
+
+  alarm_name          = "expired-inflight-${each.key}-warning"
+  alarm_description   = "Inflights are expiring faster than they are being acknowledged on the ${each.key} queue in two consecutive 5-minute periods - queue is deteriorating. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
   threshold           = 1
@@ -905,8 +906,8 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
       unit        = "Count"
       dimensions = {
         expired           = "True"
-        notification_type = "any"
-        priority          = "any"
+        notification_type = each.value.notification_type
+        priority          = each.value.priority
       }
     }
   }
@@ -922,7 +923,9 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
       stat        = "Sum"
       unit        = "Count"
       dimensions = {
-        acknowledged = "True"
+        acknowledged      = "True"
+        notification_type = each.value.notification_type
+        priority          = each.value.priority
       }
     }
   }
