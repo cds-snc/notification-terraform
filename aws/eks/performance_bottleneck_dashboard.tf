@@ -4,6 +4,7 @@ locals {
 }
 
 resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Performance-Bottlenecks"
   dashboard_body = <<EOF

@@ -2,6 +2,7 @@
 # AWS CloudWatch Log Groups
 ###
 resource "aws_cloudwatch_log_group" "sns_deliveries" {
+  provider          = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
@@ -11,6 +12,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
+  provider          = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
@@ -85,8 +87,9 @@ resource "aws_cloudwatch_log_resource_policy" "route53_resolver_query_logging_po
 # AWS CloudWatch Logs Metrics
 ###
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "sns-sms-blocked-as-spam"
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "sns-sms-blocked-as-spam"
   # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
   pattern        = "{ $.delivery.providerResponse = \"Blocked as spam by phone carrier\" }"
   log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures[0].name
@@ -117,8 +120,9 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam-us-west-2" 
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "sns-sms-phone-carrier-unavailable"
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "sns-sms-phone-carrier-unavailable"
   # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
   pattern        = "{ $.delivery.providerResponse = \"Phone carrier is currently unreachable/unavailable\" }"
   log_group_name = aws_cloudwatch_log_group.sns_deliveries_failures[0].name
@@ -149,8 +153,9 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable-u
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "sns-sms-rate-exceeded"
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "sns-sms-rate-exceeded"
   # See https://docs.amazonaws.cn/en_us/sns/latest/dg/sms_stats_cloudwatch.html#sms_stats_delivery_fail_reasons
   # https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-long-codes.html
   # Canadian long code numbers are limited at 1 SMS per second/number
