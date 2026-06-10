@@ -1,5 +1,5 @@
 module "lambda-google-cidr" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v11.3.5"
+  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228"
   name                   = "google-cidr"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.google_cidr_ecr_arn

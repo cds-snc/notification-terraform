@@ -1,5 +1,5 @@
 module "sns_to_sqs_sms_callbacks" {
-  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v11.3.5"
+  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228"
   name                       = "sns_to_sqs_sms_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.sns_to_sqs_sms_callbacks_ecr_arn
