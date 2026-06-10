@@ -401,7 +401,7 @@ module "cbs_logs_bucket" {
 }
 
 module "sns_sms_usage_report_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v11.3.5"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs"
   force_destroy     = var.force_destroy_s3
@@ -482,7 +482,7 @@ module "sns_sms_usage_report_bucket_us_west_2" {
     aws = aws.us-west-2
   }
 
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v11.3.5"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs"
   force_destroy     = var.force_destroy_s3
@@ -560,7 +560,7 @@ POLICY
 }
 
 module "sns_sms_usage_report_sanitized_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v11.3.5"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-logs-san"
   force_destroy     = var.force_destroy_s3
@@ -577,7 +577,7 @@ module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
     aws = aws.us-west-2
   }
 
-  source = "github.com/cds-snc/terraform-modules//S3?ref=v9.6.4"
+  source = "github.com/cds-snc/terraform-modules//S3?ref=v11.3.5"
 
   bucket_name       = "notification-canada-ca-${var.env}-sms-usage-west-2-logs-san"
   force_destroy     = var.force_destroy_s3
