@@ -10,6 +10,7 @@ resource "aws_kms_key" "notification-canada-ca" {
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
+    ssc_cbrid  = "22DH"
   }
 }
 
@@ -128,6 +129,7 @@ EOF
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
+    ssc_cbrid  = "22DH"
   }
 }
 
@@ -173,5 +175,6 @@ EOF
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
+    ssc_cbrid  = "22DH"
   }
 }
