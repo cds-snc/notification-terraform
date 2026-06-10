@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "notify_system" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Notify-System-Overview"
   dashboard_body = <<EOF
@@ -711,6 +712,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "elb" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Elastic-Load-Balancers"
   dashboard_body = <<EOF
@@ -1010,6 +1012,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "errors" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Errors"
   dashboard_body = <<EOF
@@ -1079,6 +1082,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "kubernetes" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Kubernetes"
   dashboard_body = <<EOF
@@ -1219,6 +1223,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "new-slo" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "New-SLO"
   dashboard_body = <<EOF
@@ -1480,6 +1485,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "slos" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SLOs"
   dashboard_body = <<EOF

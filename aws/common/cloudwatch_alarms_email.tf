@@ -6,6 +6,7 @@
 
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-bounce-rate-warning"
   alarm_description         = "Bounce rate >=5% over the last 12 hours"
@@ -22,6 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-bounce-rate-critical"
   alarm_description         = "Bounce rate >=7% over the last 12 hours"
@@ -39,6 +41,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-bounce-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-complaint-rate-warning"
   alarm_description         = "Complaint rate >=0.3% over the last 12 hours"
@@ -55,6 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-complaint-rate-critical"
   alarm_description         = "Complaint rate >=0.4% over the last 12 hours"
@@ -72,6 +76,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-complaint-rate-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-warning" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-daily-email-quota-warning"
   alarm_description         = "SES sends over the last 24 hours have reached 70% of the daily email quota"
@@ -88,6 +93,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "ses-daily-email-quota-critical"
   alarm_description         = "SES sends over the last 24 hours have reached 90% of the daily email quota"
@@ -105,6 +111,7 @@ resource "aws_cloudwatch_metric_alarm" "ses-daily-email-quota-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-high-queue-delay-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-email-high-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in send email high priority queue >= 20 seconds for 3 minutes"
@@ -123,6 +130,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-high-queue-delay-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-high-queue-delay-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-send-email-high-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-email-high queue >= 60 seconds for 5 minutes"
@@ -144,6 +152,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-high-queue-delay-critical
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-email-medium-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in send-email-medium queue is >= 30 minutes for 5 minutes"
@@ -162,6 +171,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-send-email-medium-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-email-medium queue is >= 45 minutes for 5 minutes"
@@ -182,6 +192,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-medium-queue-delay-critic
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-low-queue-delay-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-email-low-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in send-email-low queue is >= 1 hour for 5 minutes"
@@ -200,6 +211,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-low-queue-delay-warning" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-email-low-queue-delay-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-send-email-low-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-email-low queue is >= 3 hours"
@@ -220,6 +232,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-email-low-queue-delay-critical"
 }
 
 resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "no-emails-sent-1-minute-warning"
   alarm_description   = "SES sending rate is less than 1 per minute"
@@ -235,6 +248,7 @@ resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "no-emails-sent-5-minutes-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "no-emails-sent-5-minutes-critical"
   alarm_description         = "No emails delivered with SES in 5 minutes"

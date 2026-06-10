@@ -42,24 +42,60 @@ terraform {
 provider "aws" {
   region              = "${local.config_inputs.region}"
   allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "21JC"
+    }
+  }
+}
+
+provider "aws" {
+  alias               = "core_services"
+  region              = "${local.config_inputs.region}"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "22DH"
+    }
+  }
 }
 
 provider "aws" {
   alias               = "us-west-2"
   region              = "us-west-2"
   allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "21JC"
+    }
+  }
 }
 
 provider "aws" {
   alias               = "us-east-1"
   region              = "us-east-1"
   allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "21JC"
+    }
+  }
 }
 
 provider "aws" {
   alias               = "ca-west-1"
   region              = "ca-west-1"
   allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "21JC"
+    }
+  }
 }
 
 # For whatever reason, Dev uses the DNS from the Staging account and 

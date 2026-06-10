@@ -60,8 +60,16 @@ jobs:
 
             cat /var/tmp/output.txt
 
+            PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+            if (( $PLAN_SIZE < 60000 )); then
+              PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+            else
+              PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+              cat /var/tmp/output.txt
+            fi
+
             echo 'plan<<EOF' >> $GITHUB_OUTPUT
-            cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+            echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
             echo 'EOF' >> $GITHUB_OUTPUT
 
         - name: Comment on PR with plan output
@@ -119,8 +127,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -173,8 +189,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -229,8 +253,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -314,8 +346,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -370,8 +410,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -428,8 +476,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -481,8 +537,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
