@@ -35,6 +35,7 @@ resource "random_string" "perf_test_database_uri_postfix" {
 }
 
 resource "aws_secretsmanager_secret" "perf_test_phone_number" {
+  provider                = aws.core_services
   count                   = var.env == "production" ? 0 : 1
   name                    = var.env == "staging" ? "perf_test_phone_number" : "perf_test_phone_number_${random_string.perf_test_phone_number_postfix[0].result}"
   recovery_window_in_days = 0
@@ -47,6 +48,7 @@ resource "aws_secretsmanager_secret_version" "perf_test_phone_number" {
 }
 
 resource "aws_secretsmanager_secret" "perf_test_email" {
+  provider                = aws.core_services
   count                   = var.env == "production" ? 0 : 1
   name                    = var.env == "staging" ? "perf_test_email" : "perf_test_email${random_string.perf_test_email_postfix[0].result}"
   recovery_window_in_days = 0
@@ -59,6 +61,7 @@ resource "aws_secretsmanager_secret_version" "perf_test_email" {
 }
 
 resource "aws_secretsmanager_secret" "perf_test_domain" {
+  provider                = aws.core_services
   count                   = var.env == "production" ? 0 : 1
   name                    = var.env == "staging" ? "perf_test_domain" : "perf_test_domain${random_string.perf_test_domain_postfix[0].result}"
   recovery_window_in_days = 0
@@ -71,6 +74,7 @@ resource "aws_secretsmanager_secret_version" "perf_test_domain" {
 }
 
 resource "aws_secretsmanager_secret" "perf_test_api_key" {
+  provider                = aws.core_services
   count                   = var.env == "production" ? 0 : 1
   name                    = var.env == "staging" ? "perf_test_api_key" : "perf_test_api_key${random_string.perf_test_api_key_postfix[0].result}"
   recovery_window_in_days = 0
@@ -83,6 +87,7 @@ resource "aws_secretsmanager_secret_version" "perf_test_api_key" {
 }
 
 resource "aws_secretsmanager_secret" "perf_test_slack_webhook" {
+  provider                = aws.core_services
   count                   = var.env == "production" ? 0 : 1
   name                    = var.env == "staging" ? "perf_test_slack_webhook" : "perf_test_slack_webhook${random_string.perf_test_slack_webhook_postfix[0].result}"
   recovery_window_in_days = 0
@@ -95,6 +100,7 @@ resource "aws_secretsmanager_secret_version" "perf_test_slack_webhook" {
 }
 
 resource "aws_secretsmanager_secret" "perf_test_database_uri" {
+  provider                = aws.core_services
   count                   = var.env == "production" ? 0 : 1
   name                    = var.env == "staging" ? "perf_test_database_uri" : "perf_test_database_uri${random_string.perf_test_database_uri_postfix[0].result}"
   recovery_window_in_days = 0

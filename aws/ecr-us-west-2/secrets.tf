@@ -1,4 +1,5 @@
 resource "aws_secretsmanager_secret" "pinpoint_to_sqs_sms_callbacks_us_west_2_repository_url" {
+  provider                = aws.core_services
   name                    = "PINPOINT_TO_SQS_SMS_CALLBACKS_US_WEST_2_REPOSITORY_URL"
   recovery_window_in_days = 0
 }

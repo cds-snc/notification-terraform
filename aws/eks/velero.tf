@@ -1,6 +1,7 @@
 # S3 bucket for Velero backups
 resource "aws_s3_bucket" "velero_backups" {
-  bucket = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-backups"
+  provider = aws.core_services
+  bucket   = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-backups"
 
   tags = {
     Name = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-backups"
@@ -8,7 +9,8 @@ resource "aws_s3_bucket" "velero_backups" {
 }
 
 resource "aws_s3_bucket_versioning" "velero_backups" {
-  bucket = aws_s3_bucket.velero_backups.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.velero_backups.id
 
   versioning_configuration {
     status = "Enabled"
@@ -16,7 +18,8 @@ resource "aws_s3_bucket_versioning" "velero_backups" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "velero_backups" {
-  bucket = aws_s3_bucket.velero_backups.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.velero_backups.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -26,7 +29,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "velero_backups" {
 }
 
 resource "aws_s3_bucket_public_access_block" "velero_backups" {
-  bucket = aws_s3_bucket.velero_backups.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.velero_backups.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -35,13 +39,15 @@ resource "aws_s3_bucket_public_access_block" "velero_backups" {
 }
 
 resource "aws_s3_bucket_notification" "velero_backups" {
-  bucket = aws_s3_bucket.velero_backups.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.velero_backups.id
 
   eventbridge = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
-  bucket = aws_s3_bucket.velero_backups.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.velero_backups.id
 
   rule {
     id     = "expire-old-backups"

@@ -1,4 +1,5 @@
 resource "aws_secretsmanager_secret" "nginx_target_group_arn" {
+  provider                = aws.core_services
   name                    = "NGINX_TARGET_GROUP_ARN"
   recovery_window_in_days = 0
 }
@@ -9,6 +10,7 @@ resource "aws_secretsmanager_secret_version" "nginx_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "pr_bot_app_id" {
+  provider                = aws.core_services
   name                    = "PR_BOT_APP_ID"
   recovery_window_in_days = 0
 }
@@ -19,6 +21,7 @@ resource "aws_secretsmanager_secret_version" "pr_bot_app_id" {
 }
 
 resource "aws_secretsmanager_secret" "pr_bot_private_key" {
+  provider                = aws.core_services
   name                    = "PR_BOT_PRIVATE_KEY"
   recovery_window_in_days = 0
 }
@@ -29,6 +32,7 @@ resource "aws_secretsmanager_secret_version" "pr_bot_private_key" {
 }
 
 resource "aws_secretsmanager_secret" "pr_bot_installation_id" {
+  provider                = aws.core_services
   name                    = "PR_BOT_INSTALLATION_ID"
   recovery_window_in_days = 0
 }
@@ -39,6 +43,7 @@ resource "aws_secretsmanager_secret_version" "pr_bot_installation_id" {
 }
 
 resource "aws_secretsmanager_secret" "base_domain" {
+  provider                = aws.core_services
   name                    = "BASE_DOMAIN"
   recovery_window_in_days = 0
 }
@@ -49,6 +54,7 @@ resource "aws_secretsmanager_secret_version" "base_domain" {
 }
 
 resource "aws_secretsmanager_secret" "aws_region" {
+  provider                = aws.core_services
   name                    = "AWS_REGION"
   recovery_window_in_days = 0
 }
@@ -59,6 +65,7 @@ resource "aws_secretsmanager_secret_version" "aws_region" {
 }
 
 resource "aws_secretsmanager_secret" "admin_target_group_arn" {
+  provider                = aws.core_services
   name                    = "ADMIN_TARGET_GROUP_ARN"
   recovery_window_in_days = 0
 }
@@ -69,6 +76,7 @@ resource "aws_secretsmanager_secret_version" "admin_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "api_target_group_arn" {
+  provider                = aws.core_services
   name                    = "API_TARGET_GROUP_ARN"
   recovery_window_in_days = 0
 }
@@ -79,6 +87,7 @@ resource "aws_secretsmanager_secret_version" "api_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "documentation_target_group_arn" {
+  provider                = aws.core_services
   name                    = "DOCUMENTATION_TARGET_GROUP_ARN"
   recovery_window_in_days = 0
 }
@@ -89,6 +98,7 @@ resource "aws_secretsmanager_secret_version" "documentation_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "document_download_api_target_group_arn" {
+  provider                = aws.core_services
   name                    = "DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN"
   recovery_window_in_days = 0
 }
@@ -99,6 +109,7 @@ resource "aws_secretsmanager_secret_version" "document_download_api_target_group
 }
 
 resource "aws_secretsmanager_secret" "public_nginx_target_group_arn" {
+  provider                = aws.core_services
   name                    = "PUBLIC_NGINX_TARGET_GROUP_ARN"
   recovery_window_in_days = 0
 }
@@ -109,6 +120,7 @@ resource "aws_secretsmanager_secret_version" "public_nginx_target_group_arn" {
 }
 
 resource "aws_secretsmanager_secret" "eks_karpenter_ami_id" {
+  provider                = aws.core_services
   name                    = "EKS_KARPENTER_AMI_ID"
   recovery_window_in_days = 0
 }
@@ -119,6 +131,7 @@ resource "aws_secretsmanager_secret_version" "eks_karpenter_ami_id" {
 }
 
 resource "aws_secretsmanager_secret" "gha_vpn_cert" {
+  provider                = aws.core_services
   name                    = "GHA_VPN_CERT"
   recovery_window_in_days = 0
 }
@@ -129,6 +142,7 @@ resource "aws_secretsmanager_secret_version" "gha_vpn_cert" {
 }
 
 resource "aws_secretsmanager_secret" "gha_vpn_key" {
+  provider                = aws.core_services
   name                    = "GHA_VPN_KEY"
   recovery_window_in_days = 0
 }

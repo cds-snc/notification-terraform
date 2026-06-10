@@ -221,6 +221,7 @@ resource "aws_backup_selection" "rds" {
 
 # SNS topic for backup notifications
 resource "aws_sns_topic" "backup_notifications" {
+  provider          = aws.core_services
   name              = "notification-canada-ca-${var.env}-backup-notifications"
   kms_master_key_id = aws_kms_key.backup_vault.id
 
@@ -238,8 +239,9 @@ resource "aws_backup_vault_notifications" "rds" {
 
 # IAM policy for SNS notifications
 resource "aws_sns_topic_policy" "backup_notifications" {
-  arn    = aws_sns_topic.backup_notifications.arn
-  policy = data.aws_iam_policy_document.backup_notifications.json
+  provider = aws.core_services
+  arn      = aws_sns_topic.backup_notifications.arn
+  policy   = data.aws_iam_policy_document.backup_notifications.json
 }
 
 data "aws_iam_policy_document" "backup_notifications" {

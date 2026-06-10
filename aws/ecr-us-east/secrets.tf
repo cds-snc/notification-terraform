@@ -1,4 +1,5 @@
 resource "aws_secretsmanager_secret" "ses_receiving_emails_repository_url" {
+  provider                = aws.core_services
   name                    = "SES_RECEIVING_EMAILS_REPOSITORY_URL"
   recovery_window_in_days = 0
 }

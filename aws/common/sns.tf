@@ -1,4 +1,5 @@
 resource "aws_sns_topic" "notification-canada-ca-ses-callback" {
+  provider          = aws.core_services
   name              = "ses-callback"
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
@@ -8,6 +9,7 @@ resource "aws_sns_topic" "notification-canada-ca-ses-callback" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-ok" {
+  provider          = aws.core_services
   name              = "alert-ok"
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
@@ -17,6 +19,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-warning" {
+  provider          = aws.core_services
   name              = "alert-warning"
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
@@ -38,6 +41,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-west-2" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-critical" {
+  provider          = aws.core_services
   name              = "alert-critical"
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
 
@@ -70,6 +74,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-general" {
+  provider          = aws.core_services
   name              = "alert-general"
   kms_master_key_id = aws_kms_key.notification-canada-ca.arn
   tags = {
@@ -145,6 +150,7 @@ resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
 }
 
 resource "aws_sns_topic_subscription" "sqs_callback_subscription" {
+  provider             = aws.core_services
   topic_arn            = aws_sns_topic.notification-canada-ca-ses-callback.arn
   protocol             = "sqs"
   endpoint             = aws_sqs_queue.ses_receipt_callback_buffer.arn
@@ -179,7 +185,8 @@ resource "aws_sns_topic_subscription" "sns_alert_critical_us_west_2_to_sre_bot" 
 }
 
 resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-critical.arn
   protocol               = "https"
@@ -197,7 +204,8 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie" {
 }
 
 resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie_ok" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-ok.arn
   protocol               = "https"

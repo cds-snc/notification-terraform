@@ -3,6 +3,7 @@
 ###
 
 resource "aws_s3_bucket" "csv_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-csv-upload"
   acl           = "private"
   force_destroy = var.force_destroy_s3
@@ -35,7 +36,8 @@ resource "aws_s3_bucket" "csv_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "csv_bucket" {
-  bucket = aws_s3_bucket.csv_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.csv_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -44,7 +46,7 @@ resource "aws_s3_bucket_public_access_block" "csv_bucket" {
 }
 
 module "csv_bucket_logs" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v11.3.5"
 
   bucket_name       = "notification-canada-ca-${var.env}-csv-upload-logs"
   force_destroy     = var.force_destroy_s3
@@ -59,6 +61,7 @@ module "csv_bucket_logs" {
 }
 
 resource "aws_s3_bucket" "asset_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-asset-upload"
   force_destroy = var.force_destroy_s3
   server_side_encryption_configuration {
@@ -78,7 +81,8 @@ resource "aws_s3_bucket" "asset_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "asset_bucket" {
-  bucket = aws_s3_bucket.asset_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.asset_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -87,6 +91,7 @@ resource "aws_s3_bucket_public_access_block" "asset_bucket" {
 }
 
 resource "aws_s3_bucket" "legacy_asset_bucket" {
+  provider      = aws.core_services
   count         = var.env == "production" ? 1 : 0
   bucket        = "notification-alpha-canada-ca-asset-upload"
   acl           = "private"
@@ -109,7 +114,8 @@ resource "aws_s3_bucket" "legacy_asset_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "legacy_asset_bucket" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   bucket = aws_s3_bucket.legacy_asset_bucket[0].id
 
@@ -120,6 +126,7 @@ resource "aws_s3_bucket_public_access_block" "legacy_asset_bucket" {
 }
 
 resource "aws_s3_bucket" "document_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-document-download"
   acl           = "private"
   force_destroy = var.force_destroy_s3
@@ -167,6 +174,7 @@ resource "aws_s3_bucket" "document_bucket" {
 }
 
 resource "aws_s3_bucket" "scan_files_document_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-document-download-scan-files"
   acl           = "private"
   force_destroy = var.force_destroy_s3
@@ -201,7 +209,8 @@ resource "aws_s3_bucket" "scan_files_document_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "document_bucket" {
-  bucket = aws_s3_bucket.document_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.document_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -210,7 +219,8 @@ resource "aws_s3_bucket_public_access_block" "document_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
-  bucket = aws_s3_bucket.scan_files_document_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.scan_files_document_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -219,7 +229,7 @@ resource "aws_s3_bucket_public_access_block" "scan_files_document_bucket" {
 }
 
 module "document_download_logs" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v11.3.5"
 
   bucket_name       = "notification-canada-ca-${var.env}-document-download-logs"
   force_destroy     = var.force_destroy_s3
@@ -234,6 +244,7 @@ module "document_download_logs" {
 }
 
 resource "aws_s3_bucket" "alb_log_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-alb-logs"
   acl           = "private"
   force_destroy = var.force_destroy_s3
@@ -262,7 +273,8 @@ resource "aws_s3_bucket" "alb_log_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "alb_log_bucket" {
-  bucket = aws_s3_bucket.alb_log_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.alb_log_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -271,7 +283,8 @@ resource "aws_s3_bucket_public_access_block" "alb_log_bucket" {
 }
 
 resource "aws_s3_bucket_policy" "alb_log_bucket_allow_elb_account" {
-  bucket = aws_s3_bucket.alb_log_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.alb_log_bucket.id
 
   policy = <<POLICY
 {
@@ -312,6 +325,7 @@ POLICY
 }
 
 resource "aws_s3_bucket" "athena_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-athena"
   acl           = "private"
   force_destroy = var.force_destroy_s3
@@ -344,7 +358,8 @@ resource "aws_s3_bucket" "athena_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "athena_bucket" {
-  bucket = aws_s3_bucket.athena_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.athena_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -353,7 +368,7 @@ resource "aws_s3_bucket_public_access_block" "athena_bucket" {
 }
 
 module "athena_logs_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v11.3.5"
 
   bucket_name       = "notification-canada-ca-${var.env}-athena-logs"
   force_destroy     = var.force_destroy_s3
@@ -368,7 +383,7 @@ module "athena_logs_bucket" {
 }
 
 module "cbs_logs_bucket" {
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v11.3.5"
   count  = var.create_cbs_bucket ? 1 : 0
 
   bucket_name                    = var.cbs_satellite_bucket_name
@@ -400,7 +415,8 @@ module "sns_sms_usage_report_bucket" {
 }
 
 resource "aws_s3_bucket_policy" "sns_sms_usage_report_bucket_policy" {
-  bucket = module.sns_sms_usage_report_bucket.s3_bucket_id
+  provider = aws.core_services
+  bucket   = module.sns_sms_usage_report_bucket.s3_bucket_id
 
   policy = <<POLICY
 {
@@ -573,6 +589,7 @@ module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
 }
 
 resource "aws_s3_bucket" "gc_organisations_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-gc-organisations"
   force_destroy = var.force_destroy_s3
 
@@ -590,7 +607,8 @@ resource "aws_s3_bucket" "gc_organisations_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "gc_organisations_bucket" {
-  bucket = aws_s3_bucket.gc_organisations_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.gc_organisations_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -599,6 +617,7 @@ resource "aws_s3_bucket_public_access_block" "gc_organisations_bucket" {
 }
 
 resource "aws_s3_bucket" "reports_bucket" {
+  provider      = aws.core_services
   bucket        = "notification-canada-ca-${var.env}-reports"
   force_destroy = var.force_destroy_s3
 
@@ -624,7 +643,8 @@ resource "aws_s3_bucket" "reports_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "reports_bucket" {
-  bucket = aws_s3_bucket.reports_bucket.id
+  provider = aws.core_services
+  bucket   = aws_s3_bucket.reports_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
