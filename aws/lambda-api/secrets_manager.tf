@@ -1,4 +1,5 @@
 resource "aws_ssm_parameter" "environment_variables" {
+  provider    = aws.core_services
   count       = var.bootstrap ? 1 : 0
   name        = "ENVIRONMENT_VARIABLES"
   description = "Environment variables for the API Lambda function"
@@ -116,6 +117,7 @@ EOF
 }
 
 resource "aws_ssm_parameter" "environment_variables_admin" {
+  provider    = aws.core_services
   count       = var.bootstrap ? 1 : 0
   name        = "ENVIRONMENT_VARIABLES_ADMIN"
   description = "Environment variables for the PR ADMIN Lambda function"

@@ -1,5 +1,6 @@
 # Step Function to update Athena table locations daily
 resource "aws_sfn_state_machine" "athena_update_table_location" {
+  provider = aws.core_services
   name     = "AthenaUpdateTableLocation"
   role_arn = aws_iam_role.step_functions_update_tables_location_role.arn
 
@@ -73,7 +74,8 @@ resource "aws_cloudwatch_event_rule" "step_function_daily_trigger" {
 }
 
 resource "aws_iam_role" "eventbridge_role" {
-  name = "eventbridge-invoke-sfn-role"
+  provider = aws.core_services
+  name     = "eventbridge-invoke-sfn-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -86,8 +88,9 @@ resource "aws_iam_role" "eventbridge_role" {
 }
 
 resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
-  name = "EventBridgeInvokeSFNPolicy"
-  role = aws_iam_role.eventbridge_role.id
+  provider = aws.core_services
+  name     = "EventBridgeInvokeSFNPolicy"
+  role     = aws_iam_role.eventbridge_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",

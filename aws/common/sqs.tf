@@ -73,8 +73,7 @@ resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
 }
 
 resource "aws_sqs_queue" "eks_notification_canada_usdelivery_receipts" {
-  provider = aws.us-west-2
-
+  provider         = aws.core_services_us_west_2
   name             = "eks-notification-canada-usdelivery-receipts"
   delay_seconds    = 0
   max_message_size = var.sqs_max_message_size

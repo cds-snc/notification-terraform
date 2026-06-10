@@ -5,11 +5,13 @@
 ###
 
 resource "aws_iam_role" "blazer_execution_role" {
+  provider           = aws.core_services
   name               = "blazer_execution_role"
   assume_role_policy = data.aws_iam_policy_document.blazer_execution_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "ce_cs" {
+  provider   = aws.core_services
   role       = aws_iam_role.blazer_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
@@ -37,12 +39,14 @@ data "aws_iam_policy_document" "blazer_execution_role" {
 }
 
 resource "aws_iam_policy" "blazer_exection_role_parameter_policy" {
-  name   = "blazer_exection_role_parameter_policy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.blazer_exection_role_parameter_policy_actions.json
+  provider = aws.core_services
+  name     = "blazer_exection_role_parameter_policy"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.blazer_exection_role_parameter_policy_actions.json
 }
 
 resource "aws_iam_role_policy_attachment" "blazer_exection_role_parameter_policy_actions" {
+  provider   = aws.core_services
   role       = aws_iam_role.blazer_execution_role.name
   policy_arn = aws_iam_policy.blazer_exection_role_parameter_policy.arn
 }

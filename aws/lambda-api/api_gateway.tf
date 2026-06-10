@@ -176,6 +176,7 @@ resource "aws_api_gateway_method_settings" "all" {
 }
 
 resource "aws_wafv2_web_acl_association" "waf_association" {
+  provider     = aws.core_services
   resource_arn = aws_api_gateway_stage.api.arn
   web_acl_arn  = aws_wafv2_web_acl.api_lambda.arn
 }

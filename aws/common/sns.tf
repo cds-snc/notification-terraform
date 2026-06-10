@@ -29,8 +29,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-west-2" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   name              = "alert-warning-us-west-2"
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-west-2.arn
 
@@ -51,8 +50,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-west-2" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   name              = "alert-ok-us-west-2"
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-west-2.arn
 
@@ -62,8 +60,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-west-2" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-west-2" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   name              = "alert-critical-us-west-2"
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-west-2.arn
 
@@ -158,8 +155,7 @@ resource "aws_sns_topic_subscription" "sqs_callback_subscription" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_ok_us_west_2_to_sre_bot" {
-  provider = aws.us-west-2
-
+  provider             = aws.core_services_us_west_2
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn
   protocol             = "https"
   endpoint             = var.cloudwatch_slack_webhook_general_topic
@@ -167,8 +163,7 @@ resource "aws_sns_topic_subscription" "sns_alert_ok_us_west_2_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_warning_us_west_2_to_sre_bot" {
-  provider = aws.us-west-2
-
+  provider             = aws.core_services_us_west_2
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn
   protocol             = "https"
   endpoint             = var.cloudwatch_slack_webhook_warning_topic
@@ -176,8 +171,7 @@ resource "aws_sns_topic_subscription" "sns_alert_warning_us_west_2_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_critical_us_west_2_to_sre_bot" {
-  provider = aws.us-west-2
-
+  provider             = aws.core_services_us_west_2
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
   protocol             = "https"
   endpoint             = var.cloudwatch_slack_webhook_critical_topic
@@ -215,9 +209,8 @@ resource "aws_sns_topic_subscription" "alert_to_sns_to_opsgenie_ok" {
 }
 
 resource "aws_sns_topic_subscription" "alert_critical_us_west_2_to_opsgenie" {
-  provider = aws.us-west-2
-
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services_us_west_2
+  count    = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
   protocol               = "https"
@@ -227,9 +220,8 @@ resource "aws_sns_topic_subscription" "alert_critical_us_west_2_to_opsgenie" {
 }
 
 resource "aws_sns_topic_subscription" "alert_critical_us_west_2_to_opsgenie_ok" {
-  provider = aws.us-west-2
-
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services_us_west_2
+  count    = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn
   protocol               = "https"
@@ -241,8 +233,7 @@ resource "aws_sns_topic_subscription" "alert_critical_us_west_2_to_opsgenie_ok" 
 # SNS creation for us-east-1
 
 resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-east-1" {
-  provider = aws.us-east-1
-
+  provider          = aws.core_services_us_east_1
   name              = "alert-ok-us-east-1"
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-east-1.arn
 
@@ -252,8 +243,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-ok-us-east-1" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-east-1" {
-  provider = aws.us-east-1
-
+  provider          = aws.core_services_us_east_1
   name              = "alert-warning-us-east-1"
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-east-1.arn
 
@@ -264,8 +254,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-warning-us-east-1" {
 }
 
 resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-east-1" {
-  provider = aws.us-east-1
-
+  provider          = aws.core_services_us_east_1
   name              = "alert-critical-us-east-1"
   kms_master_key_id = aws_kms_key.notification-canada-ca-us-east-1.arn
 
@@ -276,8 +265,7 @@ resource "aws_sns_topic" "notification-canada-ca-alert-critical-us-east-1" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_ok_us_east_1_to_sre_bot" {
-  provider = aws.us-east-1
-
+  provider             = aws.core_services_us_east_1
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
   protocol             = "https"
   endpoint             = var.cloudwatch_slack_webhook_general_topic
@@ -285,8 +273,7 @@ resource "aws_sns_topic_subscription" "sns_alert_ok_us_east_1_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_warning_us_east_1_to_sre_bot" {
-  provider = aws.us-east-1
-
+  provider             = aws.core_services_us_east_1
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn
   protocol             = "https"
   endpoint             = var.cloudwatch_slack_webhook_warning_topic
@@ -294,8 +281,7 @@ resource "aws_sns_topic_subscription" "sns_alert_warning_us_east_1_to_sre_bot" {
 }
 
 resource "aws_sns_topic_subscription" "sns_alert_critical_us_east_1_to_sre_bot" {
-  provider = aws.us-east-1
-
+  provider             = aws.core_services_us_east_1
   topic_arn            = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
   protocol             = "https"
   endpoint             = var.cloudwatch_slack_webhook_critical_topic
@@ -303,9 +289,8 @@ resource "aws_sns_topic_subscription" "sns_alert_critical_us_east_1_to_sre_bot" 
 }
 
 resource "aws_sns_topic_subscription" "alert_critical_us_east_1_to_opsgenie" {
-  provider = aws.us-east-1
-
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services_us_east_1
+  count    = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn
   protocol               = "https"
@@ -315,9 +300,8 @@ resource "aws_sns_topic_subscription" "alert_critical_us_east_1_to_opsgenie" {
 }
 
 resource "aws_sns_topic_subscription" "alert_critical_us_east_1_to_opsgenie_ok" {
-  provider = aws.us-east-1
-
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services_us_east_1
+  count    = var.env == "production" ? 1 : 0
 
   topic_arn              = aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn
   protocol               = "https"

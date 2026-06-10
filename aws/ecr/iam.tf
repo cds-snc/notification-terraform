@@ -14,6 +14,7 @@ module "oidc" {
 
 
 resource "aws_iam_role_policy" "github_docker_push" {
+  provider = aws.core_services
 
   depends_on = [module.oidc]
 

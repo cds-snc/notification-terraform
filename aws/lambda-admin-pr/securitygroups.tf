@@ -3,6 +3,7 @@
 # with the Redis cluster, VPC private endpoints and recieve HTTPS requests.
 #
 resource "aws_security_group" "lambda_admin_pr_review" {
+  provider    = aws.core_services
   count       = var.env == "staging" ? 1 : 0
   name        = "lambda-admin-pr-review"
   description = "Lambda admin PR review environment"

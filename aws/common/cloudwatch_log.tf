@@ -23,8 +23,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
 }
 
 resource "aws_cloudwatch_log_group" "sns_deliveries_us_west_2" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "sns/us-west-2/${var.account_id}/DirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
@@ -35,8 +34,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_us_west_2" {
 }
 
 resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "sns/us-west-2/${var.account_id}/DirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
@@ -47,7 +45,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
 }
 
 resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
-  provider          = aws.us-east-1 # Ensure this log group is created in us-east-1
+  provider          = aws.core_services_us_east_1
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "route53/us-east-1/${var.account_id}/DNS/logs"
   retention_in_days = var.log_retention_period_days

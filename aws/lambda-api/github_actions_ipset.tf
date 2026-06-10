@@ -21,6 +21,7 @@ locals {
 # GitHub Actions IP Set for WAF exception
 # This IP set contains the GitHub Actions runner IP ranges to allow them through geo-restrictions
 resource "aws_wafv2_ip_set" "github_actions" {
+  provider           = aws.core_services
   name               = "github-actions-ip-set"
   description        = "IP ranges for GitHub Actions runners auto-updated"
   scope              = "REGIONAL"

@@ -4,6 +4,7 @@
 #
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-sns_to_sqs_sms_callbacks-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning-sns_to_sqs_sms_callbacks-api"
   alarm_description   = "One 500 error in 1 minute for sns_to_sqs_sms_callbacks api"
@@ -20,6 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-sns_to
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-sns_to_sqs_sms_callbacks-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical-sns_to_sqs_sms_callbacks-api"
   alarm_description   = "Ten 500 errors in 5 minutes for sns_to_sqs_sms_callbacks api"
@@ -36,6 +38,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-sns
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-image-sns-delivery-receipts-errors-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "lambda-image-sns-delivery-receipts-errors-warning"
   alarm_description   = "5 errors on Lambda sns-to-sqs-sms-callbacks in 10 minutes"
@@ -55,6 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-image-sns-delivery-receipts-error
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-image-sns-delivery-receipts-errors-critical" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "lambda-image-sns-delivery-receipts-errors-critical"
   alarm_description   = "20 errors on Lambda sns-to-sqs-sms-callbacks in 10 minutes"

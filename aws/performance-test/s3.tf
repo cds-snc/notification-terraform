@@ -4,9 +4,10 @@ module "notify_performance_test_results" {
   billing_tag_value = "notification-canada-ca-${var.env}"
 }
 resource "aws_iam_policy" "notify_performance_test_s3" {
-  name   = "NotifyPerformanceTestS3Access"
-  path   = "/"
-  policy = data.aws_iam_policy_document.notify_performance_test_s3.json
+  provider = aws.core_services
+  name     = "NotifyPerformanceTestS3Access"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notify_performance_test_s3.json
 }
 data "aws_iam_policy_document" "notify_performance_test_s3" {
   statement {
@@ -26,11 +27,13 @@ data "aws_iam_policy_document" "notify_performance_test_s3" {
   }
 }
 resource "aws_iam_role_policy_attachment" "s3_notify_performance_test" {
+  provider   = aws.core_services
   role       = aws_iam_role.performance-test.name
   policy_arn = aws_iam_policy.notify_performance_test_s3.arn
 }
 resource "aws_iam_role" "performance-test" {
-  name = "performance-test-iam-role"
+  provider = aws.core_services
+  name     = "performance-test-iam-role"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.

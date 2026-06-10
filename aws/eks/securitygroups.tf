@@ -3,6 +3,7 @@
 ###
 
 resource "aws_security_group" "notification-canada-ca-alb" {
+  provider    = aws.core_services
   name        = "notification-canada-ca-alb"
   description = "Ingress - Application load balancer"
   vpc_id      = var.vpc_id
@@ -39,6 +40,7 @@ data "aws_security_group" "eks-securitygroup-rds" {
 ###
 
 resource "aws_security_group" "blazer" {
+  provider    = aws.core_services
   name        = "blazer"
   description = "Allow inbound traffic to internal service"
   vpc_id      = var.vpc_id
@@ -67,6 +69,7 @@ resource "aws_security_group_rule" "blazer-access-dbtools-db" {
 
 
 resource "aws_security_group" "database-tools-db-securitygroup" {
+  provider    = aws.core_services
   name        = "Database tools Database Security Group"
   description = "Security group for database in database-tools"
   vpc_id      = var.vpc_id
@@ -116,6 +119,7 @@ resource "aws_security_group_rule" "database-tools-internal-egress" {
 # following https://cloudcompiled.com/tutorials/amazon-quicksight-rds-vpc/
 
 resource "aws_security_group" "quicksight" {
+  provider    = aws.core_services
   name        = "quicksight"
   description = "Allow Quicksight to connect to RDS"
   vpc_id      = var.vpc_id
@@ -144,6 +148,7 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-quicksight-ingres
 # Performance test security group
 
 resource "aws_security_group" "perf-test" {
+  provider    = aws.core_services
   name        = "performance_test"
   description = "Performance Test Security Group"
   vpc_id      = var.vpc_id
@@ -198,6 +203,7 @@ resource "aws_security_group_rule" "blazer-egress-google-cidrs" {
 ###
 
 resource "aws_security_group" "notification-canada-ca-worker" {
+  provider    = aws.core_services
   name        = "notification-canada-ca-worker"
   description = "ALB to Worker communication"
   vpc_id      = var.vpc_id
@@ -423,6 +429,7 @@ resource "aws_security_group_rule" "gha-vpn-ingress-vpc-endpoints" {
 
 # Security Group For Internal
 resource "aws_security_group" "notification_internal" {
+  provider    = aws.core_services
   name        = "notification-canada-ca-alb-internal"
   description = "Ingress - Application load balancer"
   vpc_id      = var.vpc_id

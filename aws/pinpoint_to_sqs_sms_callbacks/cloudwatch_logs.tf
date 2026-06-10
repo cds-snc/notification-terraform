@@ -3,6 +3,7 @@
 #
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
+  provider          = aws.core_services
   name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -11,6 +12,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
+  provider          = aws.core_services
   name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -19,8 +21,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   name              = "sns/${var.region_pinpoint_us}/${var.account_id}/PinpointDirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -29,8 +30,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries_failures" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   name              = "sns/${var.region_pinpoint_us}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -43,6 +43,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries_failures" {
 #
 
 resource "aws_cloudwatch_log_group" "pinpoint_to_sqs_sms_callbacks_log_group" {
+  provider          = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "pinpoint_to_sqs_sms_callbacks_log_group"
   retention_in_days = var.sensitive_log_retention_period_days

@@ -26,6 +26,7 @@ data "aws_iam_policy_document" "scheduled_task_perf_test_event_role_cloudwatch_p
 }
 
 resource "aws_iam_role" "scheduled_task_perf_test_event_role" {
+  provider           = aws.core_services
   name               = "perf_test_scheduled_task_role"
   assume_role_policy = data.aws_iam_policy_document.scheduled_task_perf_test_event_role_assume_role_policy.json
   tags = {
@@ -34,7 +35,8 @@ resource "aws_iam_role" "scheduled_task_perf_test_event_role" {
 }
 
 resource "aws_iam_role_policy" "scheduled_task_perf_test_event_role_cloudwatch_policy" {
-  name   = "${aws_ecs_cluster.perf_test.name}-ecs-scheduled-policy"
-  role   = aws_iam_role.scheduled_task_perf_test_event_role.id
-  policy = data.aws_iam_policy_document.scheduled_task_perf_test_event_role_cloudwatch_policy.json
+  provider = aws.core_services
+  name     = "${aws_ecs_cluster.perf_test.name}-ecs-scheduled-policy"
+  role     = aws_iam_role.scheduled_task_perf_test_event_role.id
+  policy   = data.aws_iam_policy_document.scheduled_task_perf_test_event_role_cloudwatch_policy.json
 }

@@ -8,6 +8,7 @@ resource "aws_quicksight_vpc_connection" "rds" {
 }
 
 resource "aws_iam_role" "vpc_connection_role" {
+  provider = aws.core_services
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -23,6 +24,7 @@ resource "aws_iam_role" "vpc_connection_role" {
 }
 
 resource "aws_iam_policy" "quicksight_vpc_connection_iam" {
+  provider    = aws.core_services
   name        = "quicksight-vpc-connection-iam"
   description = "IAM permissions for the Quicksight VPC connection"
   policy = jsonencode({
@@ -86,11 +88,13 @@ resource "aws_iam_policy" "quicksight_vpc_connection_iam" {
 }
 
 resource "aws_iam_role_policy_attachment" "iam-qs-attach" {
+  provider   = aws.core_services
   role       = aws_iam_role.vpc_connection_role.name
   policy_arn = aws_iam_policy.quicksight_vpc_connection_iam.arn
 }
 
 resource "aws_iam_policy" "quicksight_vpc_connection_ec2" {
+  provider    = aws.core_services
   name        = "quicksight-vpc-connection-ec2"
   description = "EC2 permissions for the Quicksight VPC connection"
   policy = jsonencode({
@@ -112,6 +116,7 @@ resource "aws_iam_policy" "quicksight_vpc_connection_ec2" {
 }
 
 resource "aws_iam_role_policy_attachment" "ec2-qs-attach" {
+  provider   = aws.core_services
   role       = aws_iam_role.vpc_connection_role.name
   policy_arn = aws_iam_policy.quicksight_vpc_connection_ec2.arn
 }

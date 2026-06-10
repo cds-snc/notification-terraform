@@ -75,6 +75,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "velero_backups" {
 
 # IAM policy for Velero
 resource "aws_iam_policy" "velero" {
+  provider    = aws.core_services
   name        = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-policy"
   description = "Policy for Velero backup and restore operations"
 
@@ -121,7 +122,8 @@ resource "aws_iam_policy" "velero" {
 
 # IAM role for Velero service account
 resource "aws_iam_role" "velero" {
-  name = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-role"
+  provider = aws.core_services
+  name     = "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}-velero-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -149,6 +151,7 @@ resource "aws_iam_role" "velero" {
 
 # Attach policy to role
 resource "aws_iam_role_policy_attachment" "velero" {
+  provider   = aws.core_services
   role       = aws_iam_role.velero.name
   policy_arn = aws_iam_policy.velero.arn
 }

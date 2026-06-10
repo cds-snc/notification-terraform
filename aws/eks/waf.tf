@@ -1,6 +1,7 @@
 resource "aws_wafv2_web_acl" "notification-canada-ca" {
-  name  = "notification-canada-ca-waf"
-  scope = "REGIONAL"
+  provider = aws.core_services
+  name     = "notification-canada-ca-waf"
+  scope    = "REGIONAL"
 
   default_action {
     allow {}
@@ -724,6 +725,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
 }
 
 resource "aws_wafv2_web_acl_logging_configuration" "firehose-waf-logs" {
+  provider                = aws.core_services
   log_destination_configs = [aws_kinesis_firehose_delivery_stream.firehose-waf-logs.arn]
   resource_arn            = aws_wafv2_web_acl.notification-canada-ca.arn
 
