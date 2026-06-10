@@ -979,7 +979,9 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
       stat        = "Sum"
       unit        = "Count"
       dimensions = {
-        acknowledged = "True"
+        acknowledged      = "True"
+        notification_type = "any"
+        priority          = "any"
       }
     }
   }
