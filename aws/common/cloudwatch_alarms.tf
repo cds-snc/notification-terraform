@@ -935,10 +935,22 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-warning" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "expired-inflight-critical"
-  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes AND celery acknowledgment throughput is zero - system is stuck, check the Redis-batch-saving dashboard"
+locals {
+  inflight_queues = [
+    { name = "email-bulk", notification_type = "email", priority = "bulk" },
+    { name = "email-normal", notification_type = "email", priority = "normal" },
+    { name = "email-priority", notification_type = "email", priority = "priority" },
+    { name = "sms-bulk", notification_type = "sms", priority = "bulk" },
+    { name = "sms-normal", notification_type = "sms", priority = "normal" },
+    { name = "sms-priority", notification_type = "sms", priority = "priority" },
+  ]
+}
+
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-critical" {
+  for_each = var.cloudwatch_enabled ? { for q in local.inflight_queues : q.name => q } : {}
+
+  alarm_name          = "expired-inflight-${each.key}-critical"
+  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes on the ${each.key} queue AND celery acknowledgment throughput for that queue is zero - queue is stuck, check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 1
@@ -947,9 +959,6 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
-  # Only alarm when inflights are expiring AND nothing is being acknowledged.
-  # This avoids false positives during high-load bursts (many bulk requests) where
-  # celery is actively processing but cannot keep up with the inflow rate.
   metric_query {
     id    = "expired_inflights"
     label = "Expired inflights in 5 minutes"
@@ -962,8 +971,8 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
       unit        = "Count"
       dimensions = {
         expired           = "True"
-        notification_type = "any"
-        priority          = "any"
+        notification_type = each.value.notification_type
+        priority          = each.value.priority
       }
     }
   }
@@ -980,8 +989,8 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-critical" {
       unit        = "Count"
       dimensions = {
         acknowledged      = "True"
-        notification_type = "any"
-        priority          = "any"
+        notification_type = each.value.notification_type
+        priority          = each.value.priority
       }
     }
   }
