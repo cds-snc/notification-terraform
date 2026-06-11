@@ -175,7 +175,7 @@ POLICY
 resource "aws_iam_role_policy_attachment" "eks-fargate-worker-AmazonEKSFargatePodExecutionRolePolicy" {
   provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
-  role       = aws_iam_role.eks-fargate-worker-role.name
+  role       = aws_iam_role.eks-worker-role.name
 }
 
 resource "aws_iam_role_policy_attachment" "notification-fargate-worker-policy" {
