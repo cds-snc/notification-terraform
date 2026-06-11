@@ -1,6 +1,6 @@
 #
 # Security group allowing the lambda admin PR review environment to communicate
-# with the Redis cluster, VPC private endpoints and recieve HTTPS requests.
+# with the Redis cluster, VPC private endpoints and receive HTTPS requests.
 #
 resource "aws_security_group" "lambda_admin_pr_review" {
   provider    = aws.core_services

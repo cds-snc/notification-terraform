@@ -412,7 +412,7 @@ resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
   recovery_window_in_days = 0
 }
 
-# THESE BELOW ARE ARE DEPENDENT ON DYNAMICALLY GENERATED AWS INFORMATION
+# THESE BELOW ARE DEPENDENT ON DYNAMICALLY GENERATED AWS INFORMATION
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri" {
   provider      = aws.core_services
