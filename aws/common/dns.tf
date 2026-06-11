@@ -2,6 +2,10 @@
 # AWS Route 53 for Notification application
 ###
 
+resource "aws_route53_resolver_dnssec_config" "main" {
+  resource_id = aws_vpc.notification-canada-ca.id
+}
+
 # Route53 Resolver Query Logging Configuration
 resource "aws_route53_resolver_query_log_config" "main" {
   provider = aws.us-east-1
