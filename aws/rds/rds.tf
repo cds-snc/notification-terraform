@@ -5,6 +5,7 @@ resource "random_string" "random" {
 }
 
 resource "aws_db_subnet_group" "notification-canada-ca" {
+  provider   = aws.core_services
   name       = "notification-canada-ca-${var.env}"
   subnet_ids = var.vpc_private_subnets
 
@@ -173,6 +174,7 @@ resource "aws_rds_cluster_parameter_group" "pgaudit" {
 }
 
 resource "aws_rds_cluster" "notification-canada-ca" {
+  provider = aws.core_services
 
   depends_on = [
     aws_cloudwatch_log_group.logs_exports

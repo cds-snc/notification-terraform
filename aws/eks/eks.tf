@@ -3,6 +3,7 @@
 ###
 
 resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
+  provider = aws.core_services
   name     = var.eks_cluster_name
   role_arn = aws_iam_role.eks-cluster-role.arn
   version  = var.eks_cluster_version
@@ -56,6 +57,7 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 ###
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
+  provider             = aws.core_services
   cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   node_group_name      = "notification-canada-ca-${var.env}-eks-primary-node-group-k8s"
   node_role_arn        = aws_iam_role.eks-worker-role.arn
@@ -97,6 +99,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
 }
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" {
+  provider             = aws.core_services
   count                = var.node_upgrade ? 1 : 0
   cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   node_group_name      = "notification-canada-ca-${var.env}-eks-secondary-node-group"
@@ -141,6 +144,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
 }
 
 resource "aws_eks_node_group" "signoz_node_group" {
+  provider             = aws.core_services
   count                = var.enable_signoz ? 1 : 0
   cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   node_group_name      = "notification-canada-ca-${var.env}-signoz-node-group"

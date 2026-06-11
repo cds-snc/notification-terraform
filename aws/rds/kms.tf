@@ -1,4 +1,5 @@
 resource "aws_kms_key" "rds_snapshot" {
+  provider                = aws.core_services
   count                   = var.env == "staging" ? 1 : 0
   description             = "A KMS key for encrypting RDS snapshots"
   enable_key_rotation     = true
