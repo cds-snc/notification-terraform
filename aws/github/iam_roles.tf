@@ -50,7 +50,7 @@ data "aws_iam_role" "notification_lambdas_apply" {
 module "github_workflow_roles_admin" {
   count = var.env == "staging" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   roles = [
     {
@@ -67,7 +67,7 @@ module "github_workflow_roles_admin" {
 }
 
 module "github_workflow_roles_manifests" {
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   roles = [
     {
@@ -89,7 +89,7 @@ module "github_workflow_roles_manifests" {
 }
 
 module "github_workflow_roles_notification_api" {
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
   roles = [
@@ -107,7 +107,7 @@ module "github_workflow_roles_notification_api" {
 }
 
 module "github_workflow_roles_notification_admin" {
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
   roles = [
@@ -125,7 +125,7 @@ module "github_workflow_roles_notification_admin" {
 }
 
 module "github_workflow_roles_notification_document_download" {
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
   roles = [
@@ -143,7 +143,7 @@ module "github_workflow_roles_notification_document_download" {
 }
 
 module "github_workflow_roles_dkim_audit" {
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -164,7 +164,7 @@ module "github_workflow_roles_dkim_audit" {
 module "github_workflow_roles_performance_test_results" {
   count = var.env == "staging" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
 
   roles = [
@@ -506,7 +506,7 @@ resource "aws_iam_role_policy_attachment" "notification_lambdas_apply" {
 module "github_workflow_roles_notification_terraform_staging" {
   count = var.env == "staging" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -532,7 +532,7 @@ module "github_workflow_roles_notification_terraform_staging" {
 module "github_workflow_roles_notification_terraform_production" {
   count = var.env == "production" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -622,7 +622,7 @@ resource "aws_iam_role_policy_attachment" "notification_performance_test_results
 module "github_workflow_roles_notification_manifests_staging" {
   count = var.env == "staging" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -643,7 +643,7 @@ module "github_workflow_roles_notification_manifests_staging" {
 module "github_workflow_roles_notification_manifests_production" {
   count = var.env == "production" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -825,7 +825,7 @@ resource "aws_iam_role_policy_attachment" "notification_manifests_smoke_test_pro
 module "github_workflow_roles_notification_admin_staging_ops" {
   count = var.env == "staging" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -853,7 +853,7 @@ resource "aws_iam_role_policy_attachment" "notification_admin_test_delete_unused
 module "github_workflow_roles_notification_api_ops_staging" {
   count = var.env == "staging" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -874,7 +874,7 @@ module "github_workflow_roles_notification_api_ops_staging" {
 module "github_workflow_roles_notification_api_ops_production" {
   count = var.env == "production" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -920,7 +920,7 @@ resource "aws_iam_role_policy_attachment" "notification_api_lambda_production" {
 module "github_workflow_roles_notification_system_status_staging" {
   count = var.env == "staging" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
@@ -936,7 +936,7 @@ module "github_workflow_roles_notification_system_status_staging" {
 module "github_workflow_roles_notification_system_status_production" {
   count = var.env == "production" ? 1 : 0
 
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
   billing_tag_value = var.billing_tag_value
   org_name          = "cds-snc"
 
