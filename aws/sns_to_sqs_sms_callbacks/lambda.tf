@@ -78,7 +78,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_successes_us_west_2"
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_us_west_2_to_lambda" {
   count           = var.cloudwatch_enabled ? 1 : 0
-  provider        = aws.us-west-2
+  provider        = aws.core_services_us_west_2
   name            = "sns_deliveries_us_west_2_to_lambda"
   log_group_name  = var.sns_deliveries_us_west_2_name
   filter_pattern  = ""
@@ -95,7 +95,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_sns_failures_us_west_2" 
 
 resource "aws_cloudwatch_log_subscription_filter" "sns_deliveries_failures_us_west_2_to_lambda" {
   count           = var.cloudwatch_enabled ? 1 : 0
-  provider        = aws.us-west-2
+  provider        = aws.core_services_us_west_2
   name            = "sns_deliveries_failures_us_west_2_to_lambda"
   log_group_name  = var.sns_deliveries_failures_us_west_2_name
   filter_pattern  = ""

@@ -57,7 +57,7 @@ resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
 
 # Resource policy to allow Route 53 to write to CloudWatch Logs
 resource "aws_cloudwatch_log_resource_policy" "route53_resolver_query_logging_policy" {
-  provider    = aws.us-east-1 # Ensure policy is created in us-east-1 for the log group
+  provider    = aws.core_services_us_east_1 # Ensure policy is created in us-east-1 for the log group
   count       = var.cloudwatch_enabled ? 1 : 0
   policy_name = "route53-resolver-query-logging-policy"
   policy_document = jsonencode({
@@ -101,7 +101,7 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "sns-sms-blocked-as-spam-us-west-2"
@@ -134,7 +134,7 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable" 
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "sns-sms-phone-carrier-unavailable-us-west-2"
@@ -169,7 +169,7 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "sns-sms-rate-exceeded-us-west-2"

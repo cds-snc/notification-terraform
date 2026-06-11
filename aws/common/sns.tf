@@ -136,7 +136,7 @@ resource "aws_sns_sms_preferences" "update-sms-prefs" {
 }
 
 resource "aws_sns_sms_preferences" "update-sms-prefs-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   delivery_status_iam_role_arn          = aws_iam_role.sns-delivery-role.arn
   delivery_status_success_sampling_rate = 100
