@@ -32,5 +32,5 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-hea
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }

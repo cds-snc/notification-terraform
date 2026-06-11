@@ -22,8 +22,8 @@ eks_addon_coredns_version       = "v1.13.2-eksbuild.4"
 eks_addon_kube_proxy_version    = "v1.35.2-eksbuild.4"
 eks_addon_vpc_cni_version       = "v1.21.1-eksbuild.5"
 eks_addon_ebs_driver_version    = "v1.57.1-eksbuild.1"
-eks_node_ami_version            = "1.35.4-20260512"
-eks_karpenter_ami_id            = "ami-07681d8941b15a338"
+eks_node_ami_version            = "1.35.5-20260529"
+eks_karpenter_ami_id            = "ami-0b60ccaf23f4eb89c"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
@@ -178,7 +178,7 @@ pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
 blazer_image_tag   = "latest"
-blazer_rds_version = "15.5"
+blazer_rds_version = "15.18"
 
 ## DATA LAKE
 datalake_bucket_name = "cds-data-lake-raw-production"

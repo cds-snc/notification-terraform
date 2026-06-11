@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "notify_system" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Notify-System-Overview"
   dashboard_body = <<EOF
@@ -154,7 +155,12 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-priority-queue-delay-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-celery-error-1-minute-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-${var.sqs_send_sms_low_queue_name}-queue-delay-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-email-bulk-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-email-normal-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-email-priority-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-sms-bulk-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-sms-normal-critical",
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:expired-inflight-sms-priority-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-priority-db-tasks-stuck-in-queue-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:sqs-${var.sqs_send_sms_medium_queue_name}-queue-delay-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-error-5-minutes-critical-lambda-api",
@@ -711,6 +717,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "elb" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Elastic-Load-Balancers"
   dashboard_body = <<EOF
@@ -1010,6 +1017,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "errors" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Errors"
   dashboard_body = <<EOF
@@ -1079,6 +1087,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "kubernetes" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Kubernetes"
   dashboard_body = <<EOF
@@ -1219,6 +1228,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "new-slo" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "New-SLO"
   dashboard_body = <<EOF
@@ -1480,6 +1490,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "slos" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SLOs"
   dashboard_body = <<EOF

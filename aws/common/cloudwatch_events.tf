@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_event_rule" "aws_health" {
+  provider    = aws.core_services
   count       = var.cloudwatch_enabled ? 1 : 0
   name        = "aws_health"
   description = "Subscribe to AWS health events"
@@ -37,6 +38,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "aws_health_sns_warning" {
+  provider  = aws.core_services
   count     = var.cloudwatch_enabled ? 1 : 0
   rule      = aws_cloudwatch_event_rule.aws_health[0].name
   target_id = "aws_health_sns_warning"

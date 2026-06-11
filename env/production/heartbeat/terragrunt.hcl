@@ -14,6 +14,7 @@ dependency "common" {
   mock_outputs = {
     sns_alert_warning_arn  = ""
     sns_alert_critical_arn = ""
+    sns_alert_ok_arn       = ""
   }
 }
 
@@ -35,6 +36,7 @@ include {
 inputs = {
   sns_alert_warning_arn  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                       = dependency.common.outputs.sns_alert_ok_arn
   heartbeat_ecr_repository_url = dependency.ecr.outputs.heartbeat_ecr_repository_url
   heartbeat_ecr_arn            = dependency.ecr.outputs.heartbeat_ecr_arn
 }
