@@ -1,5 +1,6 @@
 # Create a security group for the EC2 instance
 resource "aws_security_group" "instance_security_group" {
+  provider    = aws.core_services
   name_prefix = "instance-sg"
   vpc_id      = aws_vpc.vpc.id
   description = "security group for the EC2 instance"
@@ -20,6 +21,7 @@ resource "aws_security_group" "instance_security_group" {
 
 # Security group for VPC Endpoints
 resource "aws_security_group" "vpc_endpoint_security_group" {
+  provider    = aws.core_services
   name_prefix = "vpc-endpoint-sg"
   vpc_id      = aws_vpc.vpc.id
   description = "security group for VPC Endpoints"

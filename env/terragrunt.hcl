@@ -75,6 +75,18 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias               = "core_services_us_west_2"
+  region              = "us-west-2"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "22DH"
+    }
+  }
+}
+
+provider "aws" {
   alias               = "us-east-1"
   region              = "us-east-1"
   allowed_account_ids = [${local.secret_inputs.account_id}]
@@ -87,6 +99,18 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias               = "core_services_us_east_1"
+  region              = "us-east-1"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "22DH"
+    }
+  }
+}
+
+provider "aws" {
   alias               = "ca-west-1"
   region              = "ca-west-1"
   allowed_account_ids = [${local.secret_inputs.account_id}]
@@ -94,6 +118,18 @@ provider "aws" {
   default_tags {
     tags = {
       ssc_cbrid = "21JC"
+    }
+  }
+}
+
+provider "aws" {
+  alias               = "core_services_ca_west_1"
+  region              = "ca-west-1"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "22DH"
     }
   }
 }

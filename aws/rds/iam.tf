@@ -1,15 +1,18 @@
 resource "aws_iam_role" "platform_data_lake_export" {
+  provider           = aws.core_services
   name               = "NotifyExportToPlatformDataLake"
   description        = "Export RDS snapshots to the Platform Data Lake"
   assume_role_policy = data.aws_iam_policy_document.platform_data_lake_export_assume.json
 }
 
 resource "aws_iam_policy" "platform_data_lake_export" {
-  name   = "NotifyExportToPlatformDataLake"
-  policy = data.aws_iam_policy_document.platform_data_lake_export.json
+  provider = aws.core_services
+  name     = "NotifyExportToPlatformDataLake"
+  policy   = data.aws_iam_policy_document.platform_data_lake_export.json
 }
 
 resource "aws_iam_role_policy_attachment" "platform_data_lake_export" {
+  provider   = aws.core_services
   role       = aws_iam_role.platform_data_lake_export.name
   policy_arn = aws_iam_policy.platform_data_lake_export.arn
 }

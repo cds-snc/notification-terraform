@@ -21,11 +21,13 @@ data "external" "get_default_pool_id" {
 }
 
 resource "aws_secretsmanager_secret" "pinpoint_default_pool_id" {
+  provider                = aws.core_services
   name                    = "PINPOINT_DEFAULT_POOL_ID"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "pinpoint_default_pool_id" {
+  provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.pinpoint_default_pool_id.id
   secret_string = data.external.get_default_pool_id.result.poolId
 }
@@ -37,11 +39,13 @@ data "external" "get_short_code_pool_id" {
 }
 
 resource "aws_secretsmanager_secret" "pinpoint_shortcode_pool_id" {
+  provider                = aws.core_services
   name                    = "PINPOINT_SHORT_CODE_POOL_ID"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "pinpoint_shortcode_pool_id" {
+  provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.pinpoint_shortcode_pool_id.id
   secret_string = data.external.get_short_code_pool_id.result.poolId != "" ? data.external.get_short_code_pool_id.result.poolId : data.external.get_default_pool_id.result.poolId
 }

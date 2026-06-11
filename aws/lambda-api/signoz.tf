@@ -1,6 +1,6 @@
 module "signoz_api_lambda_logs" {
   count  = var.env == "dev" ? 1 : 0
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=v6.1.5"
+  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
 
   bucket_name       = "notification-canada-ca-${var.env}-lambda-api-signoz-logs"
   force_destroy     = var.force_destroy_s3
@@ -28,13 +28,15 @@ data "aws_iam_policy_document" "signoz_api_lambda_s3_permissions" {
 }
 
 resource "aws_iam_policy" "signoz_s3_permissions" {
-  count  = var.env == "dev" ? 1 : 0
-  name   = "signoz_s3_permissions"
-  path   = "/"
-  policy = data.aws_iam_policy_document.signoz_api_lambda_s3_permissions[0].json
+  provider = aws.core_services
+  count    = var.env == "dev" ? 1 : 0
+  name     = "signoz_s3_permissions"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.signoz_api_lambda_s3_permissions[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "signoz_s3_permissions" {
+  provider   = aws.core_services
   count      = var.env == "dev" ? 1 : 0
   role       = aws_iam_role.api.name
   policy_arn = aws_iam_policy.signoz_s3_permissions[0].arn

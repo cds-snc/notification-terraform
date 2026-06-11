@@ -3,7 +3,7 @@
 # access to the private subnets.
 #
 module "vpn" {
-  source = "github.com/cds-snc/terraform-modules//client_vpn?ref=v9.5.3"
+  source = "github.com/cds-snc/terraform-modules//client_vpn?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
 
   endpoint_name         = "private-subnets"
   access_group_id       = var.client_vpn_access_group_id
@@ -29,7 +29,7 @@ module "vpn" {
 
 # GHA VPN
 module "gha_vpn" {
-  source = "github.com/cds-snc/terraform-modules//client_vpn?ref=v10.6.0"
+  source = "github.com/cds-snc/terraform-modules//client_vpn?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
 
   endpoint_name   = "gha-vpn"
   access_group_id = var.client_vpn_access_group_id

@@ -1,5 +1,5 @@
 module "pinpoint_to_sqs_sms_callbacks" {
-  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.4.3"
+  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "pinpoint_to_sqs_sms_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_ecr_arn
@@ -66,7 +66,7 @@ resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_failures_
 
 module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   count                      = 1
-  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=v7.4.3"
+  source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "pinpoint_to_sqs_sms_callbacks_us_west_2"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn
@@ -77,7 +77,7 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   log_group_retention_period = var.sensitive_log_retention_period_days
 
   providers = {
-    aws = aws.us-west-2
+    aws = aws.core_services_us_west_2
   }
 
   environment_variables = {
@@ -90,7 +90,7 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_us_successes" {
-  provider      = aws.us-west-2
+  provider      = aws.core_services_us_west_2
   count         = var.cloudwatch_enabled ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = module.pinpoint_to_sqs_sms_callbacks_us_west_2[0].function_name
@@ -99,7 +99,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_us_successes" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_us_west_2_to_lambda" {
-  provider        = aws.us-west-2
+  provider        = aws.core_services_us_west_2
   count           = var.cloudwatch_enabled ? 1 : 0
   name            = "pinpoint_deliveries_us_west_2"
   log_group_name  = aws_cloudwatch_log_group.pinpoint_us_deliveries.name
@@ -109,7 +109,7 @@ resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_us_west_2
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_us_failures" {
-  provider      = aws.us-west-2
+  provider      = aws.core_services_us_west_2
   count         = var.cloudwatch_enabled ? 1 : 0
   action        = "lambda:InvokeFunction"
   function_name = module.pinpoint_to_sqs_sms_callbacks_us_west_2[0].function_name
@@ -118,7 +118,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_logs_pinpoint_us_failures" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "pinpoint_deliveries_failures_us_west_2_to_lambda" {
-  provider        = aws.us-west-2
+  provider        = aws.core_services_us_west_2
   count           = var.cloudwatch_enabled ? 1 : 0
   name            = "pinpoint_deliveries_failures_us_west_2"
   log_group_name  = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name

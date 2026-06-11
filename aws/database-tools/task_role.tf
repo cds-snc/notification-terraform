@@ -1,4 +1,5 @@
 resource "aws_iam_role" "blazer_ecs_task" {
+  provider           = aws.core_services
   name               = "${aws_ecs_cluster.blazer.name}-ecs-task"
   assume_role_policy = data.aws_iam_policy_document.ecs_task_assume.json
   tags = {
@@ -7,6 +8,7 @@ resource "aws_iam_role" "blazer_ecs_task" {
 }
 
 resource "aws_iam_role_policy_attachment" "blazer_ecs_task_policy_attach" {
+  provider   = aws.core_services
   role       = aws_iam_role.blazer_ecs_task.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
@@ -22,12 +24,14 @@ data "aws_iam_policy_document" "ecs_task_assume" {
 }
 
 resource "aws_iam_policy" "blazer_task_role_policy" {
-  name   = "blazer_task_role_policy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.blazer_task_role_actions.json
+  provider = aws.core_services
+  name     = "blazer_task_role_policy"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.blazer_task_role_actions.json
 }
 
 resource "aws_iam_role_policy_attachment" "blazer_task_role_actions" {
+  provider   = aws.core_services
   role       = aws_iam_role.blazer_ecs_task.name
   policy_arn = aws_iam_policy.blazer_task_role_policy.arn
 }

@@ -157,8 +157,9 @@ resource "aws_lambda_function" "alarm_fire_drill" {
 }
 
 resource "aws_iam_role" "alarm_fire_drill" {
-  count = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
-  name  = "alarm-fire-drill-lambda-role"
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
+  name     = "alarm-fire-drill-lambda-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -179,9 +180,10 @@ resource "aws_iam_role" "alarm_fire_drill" {
 }
 
 resource "aws_iam_role_policy" "alarm_fire_drill_sns" {
-  count = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
-  name  = "alarm-fire-drill-sns-publish"
-  role  = aws_iam_role.alarm_fire_drill[0].id
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
+  name     = "alarm-fire-drill-sns-publish"
+  role     = aws_iam_role.alarm_fire_drill[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -220,6 +222,7 @@ resource "aws_iam_role_policy" "alarm_fire_drill_sns" {
 }
 
 resource "aws_iam_role_policy_attachment" "alarm_fire_drill_basic" {
+  provider   = aws.core_services
   count      = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   role       = aws_iam_role.alarm_fire_drill[0].name
@@ -256,6 +259,7 @@ resource "aws_lambda_permission" "alarm_fire_drill_cloudwatch" {
 }
 
 resource "aws_cloudwatch_log_group" "alarm_fire_drill" {
+  provider          = aws.core_services
   count             = var.cloudwatch_enabled && var.enable_cloudwatch_fire_drills ? 1 : 0
   name              = "/aws/lambda/${aws_lambda_function.alarm_fire_drill[0].function_name}"
   retention_in_days = 90

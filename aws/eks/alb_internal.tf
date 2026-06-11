@@ -1,4 +1,5 @@
 resource "aws_lb" "internal_alb" {
+  provider                   = aws.core_services
   name                       = "notify-${var.env}-internal-alb"
   internal                   = true
   load_balancer_type         = "application"
@@ -39,6 +40,7 @@ resource "aws_alb_listener" "internal_alb_tls" {
 }
 
 resource "aws_lb_listener" "internal_alb-80" {
+  provider          = aws.core_services
   load_balancer_arn = aws_lb.internal_alb.id
   port              = 80 #tfsec:ignore:AWS004
   protocol          = "HTTP"

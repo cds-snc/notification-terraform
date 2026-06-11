@@ -1,4 +1,5 @@
 resource "aws_wafv2_ip_set" "ip_blocklist" {
+  provider           = aws.core_services
   name               = "ip_blocklist"
   scope              = "REGIONAL"
   ip_address_version = "IPV4"
@@ -13,6 +14,7 @@ resource "aws_wafv2_ip_set" "ip_blocklist" {
 }
 
 resource "aws_wafv2_regex_pattern_set" "re_api" {
+  provider    = aws.core_services
   name        = "re_api"
   description = "Regex matching valid api endpoints"
   scope       = "REGIONAL"
@@ -31,6 +33,7 @@ resource "aws_wafv2_regex_pattern_set" "re_api" {
 }
 
 resource "aws_wafv2_regex_pattern_set" "re_admin" {
+  provider    = aws.core_services
   name        = "re_admin"
   description = "Regex matching valid admin endpoints"
   scope       = "REGIONAL"
@@ -91,6 +94,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
 }
 
 resource "aws_wafv2_regex_pattern_set" "re_admin2" {
+  provider    = aws.core_services
   name        = "re_admin2"
   description = "Regex matching valid admin endpoints"
   scope       = "REGIONAL"
@@ -114,6 +118,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
 }
 
 resource "aws_wafv2_regex_pattern_set" "re_document_download" {
+  provider    = aws.core_services
   name        = "re_document_download"
   description = "Regex matching valid document download endpoints"
   scope       = "REGIONAL"
@@ -148,6 +153,7 @@ resource "aws_wafv2_regex_pattern_set" "re_document_download" {
 }
 
 resource "aws_wafv2_regex_pattern_set" "re_documentation" {
+  provider    = aws.core_services
   name        = "re_documentation"
   description = "Regex matching valid documentation website endpoints"
   scope       = "REGIONAL"
@@ -174,6 +180,7 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
 }
 
 resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
+  provider    = aws.core_services
   name        = "notification_base_url"
   description = "Regex matching the root domain of notify"
   scope       = "REGIONAL"

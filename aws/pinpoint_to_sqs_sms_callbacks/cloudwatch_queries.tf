@@ -202,7 +202,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-blocked-as-spam" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Block as spam"
@@ -224,7 +224,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-carrier-dwell-times" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Carrier dwell times"
@@ -244,7 +244,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-failures-by-carrier" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Failures by carrier"
@@ -263,7 +263,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-get-failures" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Get failures"
@@ -284,7 +284,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-international-sending-status" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / International sending status"
@@ -308,7 +308,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-international-sending-status-sender-id" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / International sending status (with Sender IDs)"
@@ -337,7 +337,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-get-sms-logs-by-dest-phone-number" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Get SMS logs by destination phone number"
@@ -359,7 +359,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-get-sms-logs-by-orig-phone-number" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Get SMS logs by origination phone number"
@@ -381,7 +381,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-get-logs" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Logs"
@@ -403,7 +403,7 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "pinpoint-us-sms-success-vs-unreachable" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "SMS (Pinpoint) / Success vs Unreachable"
