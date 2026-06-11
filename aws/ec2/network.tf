@@ -50,7 +50,8 @@ resource "aws_nat_gateway" "nat_gateway" {
 
 # Create an EIP for the NAT gateway
 resource "aws_eip" "nat_eip" {
-  vpc = true
+  provider = aws.core_services
+  vpc      = true
 }
 
 # Create a public route table and associate it with the public subnet

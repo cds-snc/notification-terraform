@@ -95,6 +95,7 @@ resource "aws_kms_alias" "backup_vault_secondary" {
 
 # Backup vault with encryption
 resource "aws_backup_vault" "rds" {
+  provider    = aws.core_services
   name        = "notification-canada-ca-${var.env}-rds-vault"
   kms_key_arn = aws_kms_key.backup_vault.arn
 
