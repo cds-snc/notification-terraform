@@ -1,5 +1,5 @@
 module "notify_performance_test_results" {
-  source            = "github.com/cds-snc/terraform-modules//S3?ref=94729229cfcb754146c82a566227e55df6612228"
+  source            = "github.com/cds-snc/terraform-modules//S3?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   bucket_name       = "notify-performance-test-results-${var.env}"
   billing_tag_value = "notification-canada-ca-${var.env}"
 }

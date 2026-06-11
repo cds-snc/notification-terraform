@@ -1,7 +1,7 @@
 module "guardduty_malware_s3" {
   count = var.enable_guardduty_malware_s3 ? 1 : 0
 
-  source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=94729229cfcb754146c82a566227e55df6612228"
+  source = "github.com/cds-snc/terraform-modules//guardduty_malware_s3?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
 
   s3_bucket_name = "notification-canada-ca-${var.env}-document-download-scan-files"
   tagging_status = "ENABLED"
