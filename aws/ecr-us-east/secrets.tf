@@ -5,6 +5,7 @@ resource "aws_secretsmanager_secret" "ses_receiving_emails_repository_url" {
 }
 
 resource "aws_secretsmanager_secret_version" "ses_receiving_emails_repository_url" {
+  provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.ses_receiving_emails_repository_url.id
   secret_string = aws_ecr_repository.ses_receiving_emails.repository_url
 }

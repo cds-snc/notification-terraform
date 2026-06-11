@@ -15,6 +15,7 @@ resource "aws_security_group" "lambda_admin_pr_review" {
 }
 
 resource "aws_security_group_rule" "cluster_ingress_from_lambda" {
+  provider                 = aws.core_services
   count                    = var.env == "staging" ? 1 : 0
   description              = "Allow inbound connections to cluster from the lambda admin PR review env"
   type                     = "ingress"
@@ -26,6 +27,7 @@ resource "aws_security_group_rule" "cluster_ingress_from_lambda" {
 }
 
 resource "aws_security_group_rule" "lambda_egress_to_cluster" {
+  provider                 = aws.core_services
   count                    = var.env == "staging" ? 1 : 0
   description              = "Allow outbound connections from the lambda admin PR review env to the cluster"
   type                     = "egress"
@@ -37,6 +39,7 @@ resource "aws_security_group_rule" "lambda_egress_to_cluster" {
 }
 
 resource "aws_security_group_rule" "lambda_egress_to_vpc_interface_endpoints" {
+  provider                 = aws.core_services
   count                    = var.env == "staging" ? 1 : 0
   description              = "Allow outbound connection from the lambda admin PR review env to the VPC private interface endpoints"
   type                     = "egress"
@@ -48,6 +51,7 @@ resource "aws_security_group_rule" "lambda_egress_to_vpc_interface_endpoints" {
 }
 
 resource "aws_security_group_rule" "vpc_endpoints_ingress_from_lambda" {
+  provider                 = aws.core_services
   count                    = var.env == "staging" ? 1 : 0
   description              = "Allow inbound connections to VPC private endpoints from the lambda admin PR review env"
   type                     = "ingress"
@@ -59,6 +63,7 @@ resource "aws_security_group_rule" "vpc_endpoints_ingress_from_lambda" {
 }
 
 resource "aws_security_group_rule" "lambda_egress_to_vpc_gateway_endpoints" {
+  provider          = aws.core_services
   count             = var.env == "staging" ? 1 : 0
   description       = "Allow outbound connection from the lambda admin PR review env to the VPC gateway endpoints"
   type              = "egress"
@@ -70,6 +75,7 @@ resource "aws_security_group_rule" "lambda_egress_to_vpc_gateway_endpoints" {
 }
 
 resource "aws_security_group_rule" "internet_ingress_to_lambda" {
+  provider          = aws.core_services
   count             = var.env == "staging" ? 1 : 0
   description       = "Allow inbound connections from the internet to the lambda admin PR review env"
   type              = "ingress"
@@ -81,6 +87,7 @@ resource "aws_security_group_rule" "internet_ingress_to_lambda" {
 }
 
 resource "aws_security_group_rule" "lambda_egress_to_internet" {
+  provider          = aws.core_services
   count             = var.env == "staging" ? 1 : 0
   description       = "Allow outbound connections from lambda admin PR review env to the internet"
   type              = "egress"

@@ -42,6 +42,7 @@ resource "aws_secretsmanager_secret" "perf_test_phone_number" {
 }
 
 resource "aws_secretsmanager_secret_version" "perf_test_phone_number" {
+  provider      = aws.core_services
   count         = var.env == "production" ? 0 : 1
   secret_id     = aws_secretsmanager_secret.perf_test_phone_number[0].id
   secret_string = var.perf_test_phone_number
@@ -55,6 +56,7 @@ resource "aws_secretsmanager_secret" "perf_test_email" {
 }
 
 resource "aws_secretsmanager_secret_version" "perf_test_email" {
+  provider      = aws.core_services
   count         = var.env == "production" ? 0 : 1
   secret_id     = aws_secretsmanager_secret.perf_test_email[0].id
   secret_string = var.perf_test_email
@@ -68,6 +70,7 @@ resource "aws_secretsmanager_secret" "perf_test_domain" {
 }
 
 resource "aws_secretsmanager_secret_version" "perf_test_domain" {
+  provider      = aws.core_services
   count         = var.env == "production" ? 0 : 1
   secret_id     = aws_secretsmanager_secret.perf_test_domain[0].id
   secret_string = var.perf_test_domain
@@ -81,6 +84,7 @@ resource "aws_secretsmanager_secret" "perf_test_api_key" {
 }
 
 resource "aws_secretsmanager_secret_version" "perf_test_api_key" {
+  provider      = aws.core_services
   count         = var.env == "production" ? 0 : 1
   secret_id     = aws_secretsmanager_secret.perf_test_api_key[0].id
   secret_string = var.perf_test_api_key
@@ -94,6 +98,7 @@ resource "aws_secretsmanager_secret" "perf_test_slack_webhook" {
 }
 
 resource "aws_secretsmanager_secret_version" "perf_test_slack_webhook" {
+  provider      = aws.core_services
   count         = var.env == "production" ? 0 : 1
   secret_id     = aws_secretsmanager_secret.perf_test_slack_webhook[0].id
   secret_string = var.perf_test_slack_webhook
@@ -107,6 +112,7 @@ resource "aws_secretsmanager_secret" "perf_test_database_uri" {
 }
 
 resource "aws_secretsmanager_secret_version" "perf_test_database_uri" {
+  provider      = aws.core_services
   count         = var.env == "production" ? 0 : 1
   secret_id     = aws_secretsmanager_secret.perf_test_database_uri[0].id
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"

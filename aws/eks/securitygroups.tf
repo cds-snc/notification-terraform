@@ -47,6 +47,7 @@ resource "aws_security_group" "blazer" {
 }
 
 resource "aws_security_group_rule" "blazer-access-rds-eks" {
+  provider                 = aws.core_services
   description              = "Access to RDS DB through the EKS Security Group"
   from_port                = 5432
   to_port                  = 5432
@@ -57,6 +58,7 @@ resource "aws_security_group_rule" "blazer-access-rds-eks" {
 }
 
 resource "aws_security_group_rule" "blazer-access-dbtools-db" {
+  provider                 = aws.core_services
   description              = "Access to the Database tool DB"
   from_port                = 5432
   to_port                  = 5432
@@ -76,6 +78,7 @@ resource "aws_security_group" "database-tools-db-securitygroup" {
 }
 
 resource "aws_security_group_rule" "database-tools-db-ingress" {
+  provider                 = aws.core_services
   description              = "Access Blazer task security group"
   type                     = "ingress"
   from_port                = 5432
@@ -86,6 +89,7 @@ resource "aws_security_group_rule" "database-tools-db-ingress" {
 }
 
 resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-ingress" {
+  provider                 = aws.core_services
   description              = "Access to database-tools (blazer) access through its security group"
   type                     = "ingress"
   from_port                = 5432
@@ -96,6 +100,7 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-database-tools-in
 }
 
 resource "aws_security_group_rule" "database-tools-internal-ingress" {
+  provider          = aws.core_services
   description       = "Allow Internal access to blazer DB"
   type              = "ingress"
   from_port         = 5432
@@ -106,6 +111,7 @@ resource "aws_security_group_rule" "database-tools-internal-ingress" {
 }
 
 resource "aws_security_group_rule" "database-tools-internal-egress" {
+  provider          = aws.core_services
   description       = "Allow Internal access to blazer DB"
   type              = "egress"
   from_port         = 5432
@@ -126,6 +132,7 @@ resource "aws_security_group" "quicksight" {
 }
 
 resource "aws_security_group_rule" "quicksight-access-rds-eks" {
+  provider                 = aws.core_services
   description              = "Connect Quicksight to RDS"
   type                     = "egress"
   protocol                 = "tcp"
@@ -136,6 +143,7 @@ resource "aws_security_group_rule" "quicksight-access-rds-eks" {
 }
 
 resource "aws_security_group_rule" "notification-canada-ca-alb-quicksight-ingress" {
+  provider                 = aws.core_services
   description              = "Access to Quicksight access through its security group"
   type                     = "ingress"
   from_port                = 5432
@@ -155,6 +163,7 @@ resource "aws_security_group" "perf-test" {
 }
 
 resource "aws_security_group_rule" "perf-test-access-rds-eks" {
+  provider                 = aws.core_services
   description              = "Connect performance test to RDS"
   type                     = "egress"
   protocol                 = "tcp"
@@ -165,6 +174,7 @@ resource "aws_security_group_rule" "perf-test-access-rds-eks" {
 }
 
 resource "aws_security_group_rule" "notification-canada-ca-alb-perf-test-ingress" {
+  provider                 = aws.core_services
   description              = "Access to performance test access through its security group"
   type                     = "ingress"
   from_port                = 5432
@@ -187,6 +197,7 @@ resource "aws_ec2_managed_prefix_list" "google_cidrs" {
 }
 
 resource "aws_security_group_rule" "blazer-egress-google-cidrs" {
+  provider          = aws.core_services
   description       = "Access Google Services from Blazer"
   type              = "egress"
   from_port         = 443
@@ -221,6 +232,7 @@ resource "aws_security_group" "notification-canada-ca-worker" {
 
 # the load balancer
 resource "aws_security_group_rule" "loadbalancer-egress-private-endpoints" {
+  provider                 = aws.core_services
   description              = "Internal egress to VPC PrivateLink endpoints from notification loadbalancer"
   type                     = "egress"
   from_port                = 443
@@ -231,6 +243,7 @@ resource "aws_security_group_rule" "loadbalancer-egress-private-endpoints" {
 }
 
 resource "aws_security_group_rule" "private-endpoints-ingress-loadbalancer" {
+  provider                 = aws.core_services
   description              = "VPC PrivateLink endpoints ingress from notification loadbalancer"
   type                     = "ingress"
   from_port                = 443
@@ -241,6 +254,7 @@ resource "aws_security_group_rule" "private-endpoints-ingress-loadbalancer" {
 }
 
 resource "aws_security_group_rule" "notify-lb-egress-endpoints-gateway" {
+  provider          = aws.core_services
   description       = "Security group rule for notification loadbalancer to S3 gateway"
   type              = "egress"
   from_port         = 443
@@ -253,6 +267,7 @@ resource "aws_security_group_rule" "notify-lb-egress-endpoints-gateway" {
 # eks-securitygroup
 
 resource "aws_security_group_rule" "eks-egress-private-endpoints" {
+  provider                 = aws.core_services
   description              = "Internal egress to VPC PrivateLink endpoints from eks securitygroup"
   type                     = "egress"
   from_port                = 443
@@ -263,6 +278,7 @@ resource "aws_security_group_rule" "eks-egress-private-endpoints" {
 }
 
 resource "aws_security_group_rule" "private-endpoints-ingress-eks" {
+  provider                 = aws.core_services
   description              = "VPC PrivateLink endpoints ingress from eks securitygroup"
   type                     = "ingress"
   from_port                = 443
@@ -273,6 +289,7 @@ resource "aws_security_group_rule" "private-endpoints-ingress-eks" {
 }
 
 resource "aws_security_group_rule" "eks-egress-endpoints-gateway" {
+  provider          = aws.core_services
   description       = "Security group rule for eks securitygroup to S3 gateway"
   type              = "egress"
   from_port         = 443
@@ -285,6 +302,7 @@ resource "aws_security_group_rule" "eks-egress-endpoints-gateway" {
 # blazer
 
 resource "aws_security_group_rule" "blazer-egress-private-endpoints" {
+  provider                 = aws.core_services
   description              = "Internal egress to VPC PrivateLink endpoints from blazer"
   type                     = "egress"
   from_port                = 443
@@ -295,6 +313,7 @@ resource "aws_security_group_rule" "blazer-egress-private-endpoints" {
 }
 
 resource "aws_security_group_rule" "private-endpoints-ingress-blazer" {
+  provider                 = aws.core_services
   description              = "VPC PrivateLink endpoints ingress from blazer"
   type                     = "ingress"
   from_port                = 443
@@ -305,6 +324,7 @@ resource "aws_security_group_rule" "private-endpoints-ingress-blazer" {
 }
 
 resource "aws_security_group_rule" "blazer-egress-endpoints-gateway" {
+  provider          = aws.core_services
   description       = "Security group rule for blazer to S3 gateway"
   type              = "egress"
   from_port         = 443
@@ -317,6 +337,7 @@ resource "aws_security_group_rule" "blazer-egress-endpoints-gateway" {
 # Database-tools
 
 resource "aws_security_group_rule" "dbtools-db-egress-private-endpoints" {
+  provider                 = aws.core_services
   description              = "Internal egress to VPC PrivateLink endpoints from dbtools-db"
   type                     = "egress"
   from_port                = 443
@@ -327,6 +348,7 @@ resource "aws_security_group_rule" "dbtools-db-egress-private-endpoints" {
 }
 
 resource "aws_security_group_rule" "private-endpoints-ingress-dbtools-db" {
+  provider                 = aws.core_services
   description              = "VPC PrivateLink endpoints ingress from dbtools-db"
   type                     = "ingress"
   from_port                = 443
@@ -337,6 +359,7 @@ resource "aws_security_group_rule" "private-endpoints-ingress-dbtools-db" {
 }
 
 resource "aws_security_group_rule" "dbtools-egress-endpoints-gateway" {
+  provider          = aws.core_services
   description       = "Security group rule for dbtools to S3 gateway"
   type              = "egress"
   from_port         = 443
@@ -349,6 +372,7 @@ resource "aws_security_group_rule" "dbtools-egress-endpoints-gateway" {
 # Notification worker
 
 resource "aws_security_group_rule" "notification-worker-egress-private-endpoints" {
+  provider                 = aws.core_services
   description              = "Internal egress to VPC PrivateLink endpoints from notification worker"
   type                     = "egress"
   from_port                = 443
@@ -359,6 +383,7 @@ resource "aws_security_group_rule" "notification-worker-egress-private-endpoints
 }
 
 resource "aws_security_group_rule" "private-endpoints-ingress-notification-worker" {
+  provider                 = aws.core_services
   description              = "VPC PrivateLink endpoints ingress from notification worker"
   type                     = "ingress"
   from_port                = 443
@@ -369,6 +394,7 @@ resource "aws_security_group_rule" "private-endpoints-ingress-notification-worke
 }
 
 resource "aws_security_group_rule" "notification-worker-egress-endpoints-gateway" {
+  provider          = aws.core_services
   description       = "Security group rule for notification worker to S3 gateway"
   type              = "egress"
   from_port         = 443
@@ -388,6 +414,7 @@ resource "aws_ec2_tag" "eks_created_security_group_tag" {
 # Client VPN access
 
 resource "aws_security_group_rule" "client-vpn-ingress-database" {
+  provider                 = aws.core_services
   description              = "Client VPN ingress to the database"
   type                     = "ingress"
   from_port                = 5432
@@ -398,6 +425,7 @@ resource "aws_security_group_rule" "client-vpn-ingress-database" {
 }
 
 resource "aws_security_group_rule" "client-vpn-ingress-redis" {
+  provider                 = aws.core_services
   description              = "Client VPN ingress to the redis cluster"
   type                     = "ingress"
   from_port                = 6379
@@ -468,6 +496,7 @@ resource "aws_security_group" "notification_internal" {
 }
 
 resource "aws_security_group_rule" "internal_alb_http_ingress" {
+  provider                 = aws.core_services
   description              = "Internal ALB HTTP"
   type                     = "ingress"
   from_port                = 80
@@ -477,6 +506,7 @@ resource "aws_security_group_rule" "internal_alb_http_ingress" {
   security_group_id        = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }
 resource "aws_security_group_rule" "internal_alb_http_egress" {
+  provider                 = aws.core_services
   description              = "Internal ALB HTTP"
   type                     = "egress"
   from_port                = 80

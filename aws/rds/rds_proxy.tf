@@ -30,6 +30,7 @@ resource "aws_secretsmanager_secret" "database_user" {
 }
 
 resource "aws_secretsmanager_secret_version" "database_user" {
+  provider  = aws.core_services
   secret_id = aws_secretsmanager_secret.database_user.id
   secret_string = jsonencode({
     username = local.db_user
@@ -47,6 +48,7 @@ resource "aws_secretsmanager_secret" "app_db_user" {
 }
 
 resource "aws_secretsmanager_secret_version" "app_db_user" {
+  provider  = aws.core_services
   secret_id = aws_secretsmanager_secret.app_db_user.id
   secret_string = jsonencode({
     username = local.app_db_user
