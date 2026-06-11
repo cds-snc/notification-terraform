@@ -146,11 +146,24 @@ provider "aws" {
     role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
   }
 }
+
+provider "aws" {
+  alias  = "dns-us-east-1"
+  region = "us-east-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
+  }
+}
 %{ endif }
 %{ if local.config_inputs.env == "staging" }
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
+}
+
+provider "aws" {
+  alias  = "dns-us-east-1"
+  region = "us-east-1"
 }
 
 provider "aws" {
@@ -165,6 +178,14 @@ provider "aws" {
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.secret_inputs.dns_account_id}:role/notify_prod_dns_manager"
+  }
+}
+
+provider "aws" {
+  alias  = "dns-us-east-1"
+  region = "us-east-1"
   assume_role {
     role_arn = "arn:aws:iam::${local.secret_inputs.dns_account_id}:role/notify_prod_dns_manager"
   }
