@@ -122,7 +122,7 @@ keywords_to_set = [
     },
     {
         "Keyword": "AIDE",
-        "KeywordMessage": "Notification GC https://www.canada.ca/en/contact.html Frais de msg/données std applicables. La fréquence des messages peut varier. textez ARRÊT pour annuler.",
+        "KeywordMessage": "Notification GC https://www.canada.ca/en/contact.html Frais de msg/données std applicables. La fréquence des messages peut varier. Textez ARRÊT pour annuler.",
         "KeywordAction": "AUTOMATIC_RESPONSE",
     },
     {
