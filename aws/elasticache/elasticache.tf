@@ -3,6 +3,7 @@
 ###
 
 resource "aws_elasticache_subnet_group" "notification-canada-ca-cache-subnet" {
+  provider   = aws.core_services
   name       = "notification-canada-ca-${var.env}-cache-subnet"
   subnet_ids = var.vpc_private_subnets
 }
@@ -12,6 +13,7 @@ resource "aws_elasticache_subnet_group" "notification-canada-ca-cache-subnet" {
 ###
 
 resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz-group" {
+  provider = aws.core_services
   # Default is false with this param, it looks counter-intuitive because
   # applied changes would only happen during maintenance window if false.
   apply_immediately           = true
@@ -59,6 +61,7 @@ resource "aws_elasticache_replication_group" "notification-cluster-cache-multiaz
 ###
 
 resource "aws_elasticache_replication_group" "elasticache_queue_cache" {
+  provider = aws.core_services
 
   apply_immediately           = true
   automatic_failover_enabled  = true
