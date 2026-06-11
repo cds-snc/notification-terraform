@@ -47,11 +47,6 @@ resource "aws_cloudwatch_event_target" "aws_health_sns_warning" {
 
 
 # EventBridge API destination rules - forwards GuardDuty scan verdicts to API
-data "aws_secretsmanager_secret_version" "scan_verdict_callback_token" {
-  count     = var.enable_guardduty_scan_api_destination ? 1 : 0
-  secret_id = "MANIFEST_SCAN_VERDICT_CALLBACK_TOKEN"
-}
-
 resource "aws_cloudwatch_event_connection" "guardduty_scan_verdict_callback" {
   count = var.enable_guardduty_scan_api_destination ? 1 : 0
 
@@ -62,7 +57,7 @@ resource "aws_cloudwatch_event_connection" "guardduty_scan_verdict_callback" {
   auth_parameters {
     api_key {
       key   = "X-Scan-Callback-Token"
-      value = data.aws_secretsmanager_secret_version.scan_verdict_callback_token[0].secret_string
+      value = var.manifest_scan_verdict_callback_token
     }
   }
 }
