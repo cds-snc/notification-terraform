@@ -479,7 +479,7 @@ POLICY
 
 module "sns_sms_usage_report_bucket_us_west_2" {
   providers = {
-    aws = aws.us-west-2
+    aws = aws.core_services_us_west_2
   }
 
   source = "github.com/cds-snc/terraform-modules//S3?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
@@ -574,7 +574,7 @@ module "sns_sms_usage_report_sanitized_bucket" {
 
 module "sns_sms_usage_report_sanitized_bucket_us_west_2" {
   providers = {
-    aws = aws.us-west-2
+    aws = aws.core_services_us_west_2
   }
 
   source = "github.com/cds-snc/terraform-modules//S3?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5

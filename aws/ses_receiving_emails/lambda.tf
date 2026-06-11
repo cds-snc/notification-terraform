@@ -1,7 +1,7 @@
 module "ses_receiving_emails" {
 
   providers = {
-    aws = aws.us-east-1
+    aws = aws.core_services_us_east_1
   }
 
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
