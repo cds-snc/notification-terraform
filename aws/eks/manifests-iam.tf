@@ -4,7 +4,8 @@
 
 # Policy
 resource "aws_iam_policy" "secrets_csi" {
-  name = "secrets-csi-policy"
+  provider = aws.core_services
+  name     = "secrets-csi-policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -21,7 +22,8 @@ resource "aws_iam_policy" "secrets_csi" {
 }
 
 resource "aws_iam_policy" "parameters_csi" {
-  name = "parameters-csi-policy"
+  provider = aws.core_services
+  name     = "parameters-csi-policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -73,6 +75,7 @@ data "aws_iam_policy_document" "secrets_csi_assume_role_policy_nginx" {
 
 # Role
 resource "aws_iam_role" "secrets_csi_nginx" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy_nginx.json
   name               = "secrets-csi-role-nginx"
 }
@@ -80,6 +83,7 @@ resource "aws_iam_role" "secrets_csi_nginx" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_nginx" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.secrets_csi_nginx.name
 }
@@ -88,6 +92,7 @@ resource "aws_iam_role_policy_attachment" "secrets_csi_nginx" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_nginx" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.secrets_csi_nginx.name
 }
@@ -121,18 +126,21 @@ data "aws_iam_policy_document" "secrets_csi_assume_role_policy_nginx_public" {
 
 # Role
 resource "aws_iam_role" "secrets_csi_nginx_public" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy_nginx_public.json
   name               = "secrets-csi-role-nginx-public"
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_nginx_public" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.secrets_csi_nginx_public.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_nginx_public" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.secrets_csi_nginx_public.name
 }
@@ -168,6 +176,7 @@ data "aws_iam_policy_document" "secrets_csi_assume_role_policy_blazer" {
 
 # Role
 resource "aws_iam_role" "secrets_csi_blazer" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.secrets_csi_assume_role_policy_blazer.json
   name               = "secrets-csi-role-blazer"
 }
@@ -175,12 +184,14 @@ resource "aws_iam_role" "secrets_csi_blazer" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_blazer" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.secrets_csi_blazer.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_blazer" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.secrets_csi_blazer.name
 }
@@ -218,6 +229,7 @@ data "aws_iam_policy_document" "assume_role_policy_api" {
 
 # Role
 resource "aws_iam_role" "api" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_api.json
   name               = "api-eks-role"
 }
@@ -225,17 +237,20 @@ resource "aws_iam_role" "api" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_api" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.api.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_api" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.api.name
 }
 
 resource "aws_iam_role_policy_attachment" "api_worker" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.api.name
 }
@@ -273,6 +288,7 @@ data "aws_iam_policy_document" "assume_role_policy_admin" {
 
 # Role
 resource "aws_iam_role" "admin" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_admin.json
   name               = "admin-eks-role"
 }
@@ -280,17 +296,20 @@ resource "aws_iam_role" "admin" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_admin" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.admin.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_admin" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.admin.name
 }
 
 resource "aws_iam_role_policy_attachment" "admin_worker" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.admin.name
 }
@@ -328,23 +347,27 @@ data "aws_iam_policy_document" "assume_role_policy_document_download" {
 
 # Role
 resource "aws_iam_role" "document_download" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_document_download.json
   name               = "document-download-eks-role"
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_document_download" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.document_download.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_document_download" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.document_download.name
 }
 
 resource "aws_iam_role_policy_attachment" "document_download_worker" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.document_download.name
 }
@@ -382,23 +405,27 @@ data "aws_iam_policy_document" "assume_role_policy_celery" {
 
 # Role
 resource "aws_iam_role" "celery" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_celery.json
   name               = "celery-eks-role"
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_celery" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.celery.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_celery" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.celery.name
 }
 
 resource "aws_iam_role_policy_attachment" "celery_worker" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.celery.name
 }
@@ -436,23 +463,27 @@ data "aws_iam_policy_document" "assume_role_policy_database" {
 
 # Role
 resource "aws_iam_role" "database" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_database.json
   name               = "secrets-csi-role-database"
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_database" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.database.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_database" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.database.name
 }
 
 resource "aws_iam_role_policy_attachment" "database_worker" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.database.name
 }
@@ -488,6 +519,7 @@ data "aws_iam_policy_document" "assume_role_policy_signoz" {
 
 # Role
 resource "aws_iam_role" "signoz" {
+  provider           = aws.core_services
   count              = var.enable_signoz ? 1 : 0
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz[0].json
   name               = "signoz-eks-role"
@@ -496,6 +528,7 @@ resource "aws_iam_role" "signoz" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_signoz" {
+  provider   = aws.core_services
   count      = var.enable_signoz ? 1 : 0
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.signoz[0].name
@@ -503,12 +536,14 @@ resource "aws_iam_role_policy_attachment" "secrets_csi_signoz" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_signoz" {
+  provider   = aws.core_services
   count      = var.enable_signoz ? 1 : 0
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.signoz[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "signoz_worker" {
+  provider   = aws.core_services
   count      = var.enable_signoz ? 1 : 0
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.signoz[0].name
@@ -519,8 +554,9 @@ resource "aws_iam_role_policy_attachment" "signoz_worker" {
 #
 
 resource "aws_iam_policy" "signoz_prometheus_cloudwatch_exporter" {
-  count = var.enable_signoz ? 1 : 0
-  name  = "signoz-prometheus-cloudwatch-exporter-policy"
+  provider = aws.core_services
+  count    = var.enable_signoz ? 1 : 0
+  name     = "signoz-prometheus-cloudwatch-exporter-policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -570,12 +606,14 @@ data "aws_iam_policy_document" "assume_role_policy_signoz_prometheus_cloudwatch_
 }
 
 resource "aws_iam_role" "signoz_prometheus_cloudwatch_exporter" {
+  provider           = aws.core_services
   count              = var.enable_signoz ? 1 : 0
   name               = "signoz-prometheus-cloudwatch-exporter-eks-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz_prometheus_cloudwatch_exporter[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "signoz_prometheus_cloudwatch_exporter" {
+  provider   = aws.core_services
   count      = var.enable_signoz ? 1 : 0
   role       = aws_iam_role.signoz_prometheus_cloudwatch_exporter[0].name
   policy_arn = aws_iam_policy.signoz_prometheus_cloudwatch_exporter[0].arn
@@ -585,15 +623,17 @@ resource "aws_iam_role_policy_attachment" "signoz_prometheus_cloudwatch_exporter
 
 # IAM User for SES SMTP
 resource "aws_iam_user" "signoz_smtp_user" {
-  count = var.enable_signoz ? 1 : 0
-  name  = "signoz-${var.env}"
+  provider = aws.core_services
+  count    = var.enable_signoz ? 1 : 0
+  name     = "signoz-${var.env}"
 }
 
 # Policy for sending emails via SES
 resource "aws_iam_user_policy" "signoz_smtp_user_policy" {
-  count = var.enable_signoz ? 1 : 0
-  name  = "ses-smtp-policy"
-  user  = aws_iam_user.signoz_smtp_user[0].name
+  provider = aws.core_services
+  count    = var.enable_signoz ? 1 : 0
+  name     = "ses-smtp-policy"
+  user     = aws_iam_user.signoz_smtp_user[0].name
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -612,8 +652,9 @@ resource "aws_iam_user_policy" "signoz_smtp_user_policy" {
 
 # Access key for SMTP credentials
 resource "aws_iam_access_key" "signoz_smtp_user_key" {
-  count = var.enable_signoz ? 1 : 0
-  user  = aws_iam_user.signoz_smtp_user[0].name
+  provider = aws.core_services
+  count    = var.enable_signoz ? 1 : 0
+  user     = aws_iam_user.signoz_smtp_user[0].name
 }
 
 #
@@ -646,6 +687,7 @@ data "aws_iam_policy_document" "assume_role_policy_falco_sidekick_ui" {
 
 # Role
 resource "aws_iam_role" "falco_sidekick_ui" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick_ui.json
   name               = "falco-sidekick-ui-eks-role"
 }
@@ -653,17 +695,20 @@ resource "aws_iam_role" "falco_sidekick_ui" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick_ui" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick_ui" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.falco_sidekick_ui.name
 }
 
 resource "aws_iam_role_policy_attachment" "falco_sidekick_ui_worker" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.falco_sidekick_ui.name
 }
@@ -698,6 +743,7 @@ data "aws_iam_policy_document" "assume_role_policy_falco_sidekick" {
 
 # Role
 resource "aws_iam_role" "falco_sidekick" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_falco_sidekick.json
   name               = "falco-sidekick-eks-role"
 }
@@ -705,17 +751,20 @@ resource "aws_iam_role" "falco_sidekick" {
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "secrets_csi_falco_sidekick" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.secrets_csi.arn
   role       = aws_iam_role.falco_sidekick.name
 }
 
 # Policy Attachment
 resource "aws_iam_role_policy_attachment" "parameters_csi_falco_sidekick" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.parameters_csi.arn
   role       = aws_iam_role.falco_sidekick.name
 }
 
 resource "aws_iam_role_policy_attachment" "falco_sidekick_worker" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.falco_sidekick.name
 }

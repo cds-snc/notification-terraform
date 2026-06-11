@@ -3,6 +3,7 @@
 #
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
+  provider          = aws.core_services
   name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -11,6 +12,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
+  provider          = aws.core_services
   name              = "sns/${var.region}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -19,8 +21,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_deliveries_failures" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   name              = "sns/${var.region_pinpoint_us}/${var.account_id}/PinpointDirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -29,8 +30,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries" {
 }
 
 resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries_failures" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   name              = "sns/${var.region_pinpoint_us}/${var.account_id}/PinpointDirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
   tags = {
@@ -43,6 +43,7 @@ resource "aws_cloudwatch_log_group" "pinpoint_us_deliveries_failures" {
 #
 
 resource "aws_cloudwatch_log_group" "pinpoint_to_sqs_sms_callbacks_log_group" {
+  provider          = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "pinpoint_to_sqs_sms_callbacks_log_group"
   retention_in_days = var.sensitive_log_retention_period_days
@@ -67,7 +68,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint_to_sqs_sms_callbacks-500-e
 }
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint_us_to_sqs_sms_callbacks-500-errors-api" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "pinpoint_to_sqs_sms_callbacks-500-errors-api"
@@ -176,7 +177,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-sms-failures-carriers" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-blocked-as-spam" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "pinpoint-sms-blocked-as-spam"
@@ -193,7 +194,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-blocked-as-spam" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-phone-carrier-unavailable" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "pinpoint-sms-phone-carrier-unavailable"
@@ -210,7 +211,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-phone-carrier-unava
 }
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-rate-exceeded" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "pinpoint-sms-rate-exceeded"
@@ -228,7 +229,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-rate-exceeded" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-successes" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "pinpoint-sms-successes"
@@ -244,7 +245,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-successes" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-failures" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "pinpoint-sms-failures"
@@ -260,7 +261,7 @@ resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-failures" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "pinpoint-us-sms-failures-carriers" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count          = var.cloudwatch_enabled ? 1 : 0
   log_group_name = aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.name

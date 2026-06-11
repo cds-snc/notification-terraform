@@ -23,8 +23,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures" {
 }
 
 resource "aws_cloudwatch_log_group" "sns_deliveries_us_west_2" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "sns/us-west-2/${var.account_id}/DirectPublishToPhoneNumber"
   retention_in_days = var.sensitive_log_retention_period_days
@@ -35,8 +34,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_us_west_2" {
 }
 
 resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
-  provider = aws.us-west-2
-
+  provider          = aws.core_services_us_west_2
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "sns/us-west-2/${var.account_id}/DirectPublishToPhoneNumber/Failure"
   retention_in_days = var.sensitive_log_retention_period_days
@@ -47,7 +45,7 @@ resource "aws_cloudwatch_log_group" "sns_deliveries_failures_us_west_2" {
 }
 
 resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
-  provider          = aws.us-east-1 # Ensure this log group is created in us-east-1
+  provider          = aws.core_services_us_east_1
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "route53/us-east-1/${var.account_id}/DNS/logs"
   retention_in_days = var.log_retention_period_days
@@ -59,7 +57,7 @@ resource "aws_cloudwatch_log_group" "route53_resolver_query_log" {
 
 # Resource policy to allow Route 53 to write to CloudWatch Logs
 resource "aws_cloudwatch_log_resource_policy" "route53_resolver_query_logging_policy" {
-  provider    = aws.us-east-1 # Ensure policy is created in us-east-1 for the log group
+  provider    = aws.core_services_us_east_1 # Ensure policy is created in us-east-1 for the log group
   count       = var.cloudwatch_enabled ? 1 : 0
   policy_name = "route53-resolver-query-logging-policy"
   policy_document = jsonencode({
@@ -103,7 +101,7 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-blocked-as-spam-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "sns-sms-blocked-as-spam-us-west-2"
@@ -136,7 +134,7 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable" 
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-phone-carrier-unavailable-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "sns-sms-phone-carrier-unavailable-us-west-2"
@@ -171,7 +169,7 @@ resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded" {
 }
 
 resource "aws_cloudwatch_log_metric_filter" "sns-sms-rate-exceeded-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   count = var.cloudwatch_enabled ? 1 : 0
   name  = "sns-sms-rate-exceeded-us-west-2"

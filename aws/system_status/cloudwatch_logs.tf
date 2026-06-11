@@ -3,6 +3,7 @@
 #
 
 resource "aws_cloudwatch_log_group" "system_status_log_group" {
+  provider          = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "system_status_log_group"
   retention_in_days = var.log_retention_period_days

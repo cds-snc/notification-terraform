@@ -2,7 +2,8 @@
 ##### Quicksight connect to RDS
 
 resource "aws_iam_role" "quicksight" {
-  name = "quicksight"
+  provider = aws.core_services
+  name     = "quicksight"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -19,6 +20,7 @@ resource "aws_iam_role" "quicksight" {
 }
 
 resource "aws_iam_policy" "quicksight-rds" {
+  provider    = aws.core_services
   name        = "rds-access"
   description = "Allow access to RDS"
   policy = jsonencode({
@@ -39,11 +41,13 @@ resource "aws_iam_policy" "quicksight-rds" {
 }
 
 resource "aws_iam_role_policy_attachment" "rds-qs-attach" {
+  provider   = aws.core_services
   role       = aws_iam_role.quicksight.name
   policy_arn = aws_iam_policy.quicksight-rds.arn
 }
 
 resource "aws_iam_policy" "quicksight-s3-usage" {
+  provider    = aws.core_services
   name        = "s3-usage"
   description = "Allow access to S3"
   policy = jsonencode({
@@ -64,12 +68,14 @@ resource "aws_iam_policy" "quicksight-s3-usage" {
 }
 
 resource "aws_iam_role_policy_attachment" "s3-qs-attach" {
+  provider   = aws.core_services
   role       = aws_iam_role.quicksight.name
   policy_arn = aws_iam_policy.quicksight-s3-usage.arn
 }
 
 resource "aws_iam_role" "datalake-reader" {
-  name = "datalake-reader-cross-account-role"
+  provider = aws.core_services
+  name     = "datalake-reader-cross-account-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -86,6 +92,7 @@ resource "aws_iam_role" "datalake-reader" {
 }
 
 resource "aws_iam_policy" "datalake-reader-s3" {
+  provider    = aws.core_services
   name        = "s3-access-cross-account"
   description = "Allow access to S3 in the datalake account"
   policy = jsonencode({
@@ -108,11 +115,13 @@ resource "aws_iam_policy" "datalake-reader-s3" {
 }
 
 resource "aws_iam_role_policy_attachment" "datalake-reader-s3-attach" {
+  provider   = aws.core_services
   role       = aws_iam_role.datalake-reader.name
   policy_arn = aws_iam_policy.datalake-reader-s3.arn
 }
 
 resource "aws_iam_policy" "quicksight-datalake-s3" {
+  provider    = aws.core_services
   name        = "AWSQuickSightDatalakeS3Policy"
   description = "Allow access to S3 in the datalake account"
   policy = jsonencode({
@@ -173,13 +182,15 @@ data "aws_iam_role" "quicksight_service_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "quicksight-datalake-s3-attach" {
+  provider   = aws.core_services
   role       = data.aws_iam_role.quicksight_service_role.name
   policy_arn = aws_iam_policy.quicksight-datalake-s3.arn
 }
 
 # IAM Role and Policy for Step Functions to update Athena table locations
 resource "aws_iam_role" "step_functions_update_tables_location_role" {
-  name = "step-functions-update-tables-location-role"
+  provider = aws.core_services
+  name     = "step-functions-update-tables-location-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -194,6 +205,7 @@ resource "aws_iam_role" "step_functions_update_tables_location_role" {
 }
 
 resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
+  provider    = aws.core_services
   name        = "StepFunctionsUpdateTablesLocationPolicy"
   description = "Policy to allow Step Functions to run Athena queries to update table locations"
 
@@ -282,6 +294,7 @@ resource "aws_iam_policy" "step_functions_update_tables_location_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "attach_sf_policy" {
+  provider   = aws.core_services
   role       = aws_iam_role.step_functions_update_tables_location_role.name
   policy_arn = aws_iam_policy.step_functions_update_tables_location_policy.arn
 }

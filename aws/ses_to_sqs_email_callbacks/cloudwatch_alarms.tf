@@ -4,6 +4,7 @@
 #
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_to_sqs_email_callbacks-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning-ses_to_sqs_email_callbacks-api"
   alarm_description   = "One 500 error in 1 minute for ses_to_sqs_email_callbacks api"
@@ -20,6 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-ses_to
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical-ses_to_sqs_email_callbacks-500-errors-api"
   alarm_description   = "Ten 500 errors in 5 minutes for ses_to_sqs_email_callbacks-500-errors api"
@@ -36,6 +38,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-ses
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "lambda-ses-delivery-receipts-errors-warning"
   alarm_description   = "5 errors on Lambda ses-to-sqs-email-callbacks in 10 minutes"
@@ -55,6 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-warn
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-ses-delivery-receipts-errors-critical" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "lambda-ses-delivery-receipts-errors-critical"
   alarm_description   = "10 errors on Lambda ses-to-sqs-email-callbacks in 10 minutes"

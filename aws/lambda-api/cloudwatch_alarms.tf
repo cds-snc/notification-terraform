@@ -5,6 +5,7 @@
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-lambda-api" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "logs-1-error-1-minute-warning-lambda-api"
   alarm_description         = "One error in 1 minute for lambda api"
@@ -22,6 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-lambda-api
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-error-5-minutes-critical-lambda-api" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "logs-10-error-5-minutes-critical-lambda-api"
   alarm_description         = "Ten errors in 5 minutes for lambda api"
@@ -39,6 +41,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-error-5-minutes-critical-lambda-
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-salesforce-api" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "logs-1-error-1-minute-warning-salesforce-api"
   alarm_description         = "One Salesforce API error in 1 minute"
@@ -56,6 +59,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-salesforce
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-warning" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "lambda-api-throttle-warning"
   alarm_description         = "API Lambda function is being throttled"
@@ -77,6 +81,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "lambda-api-throttle-critical"
   alarm_description         = "API Lambda function is being throttled"
@@ -108,6 +113,7 @@ module "lambda_no_log_detection" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "failed-login-count-5-minute-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "failed-login-count-5-minute-warning"
   alarm_description   = "One user had a failed login count of more than 10 times in 5 minutes"
@@ -124,6 +130,7 @@ resource "aws_cloudwatch_metric_alarm" "failed-login-count-5-minute-warning" {
 
 
 resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-gateway-1-timeout-5-minute-warning"
   alarm_description   = "At least 1 API gateway time out in 5 minutes"
@@ -139,6 +146,7 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-critical" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "api-gateway-1-timeout-5-minute-critical"
   alarm_description   = "Requests to the API gateway timed out more than 5 times in 5 minutes"
@@ -155,6 +163,7 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-timeout-5-minute-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-warning" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-gateway-5xx-error-warning"
   alarm_description         = "API Gateway is returning 5XX errors"
@@ -177,6 +186,7 @@ resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "api-gateway-5xx-error-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "api-gateway-5xx-error-critical"
   alarm_description         = "API Gateway is returning 5XX errors"

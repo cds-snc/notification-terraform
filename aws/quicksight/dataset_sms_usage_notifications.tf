@@ -3,6 +3,7 @@
 # Ref: https://github.com/hashicorp/terraform-provider-aws/issues/34199
 
 resource "aws_cloudformation_stack" "sms-usage-notifications" {
+  provider = aws.core_services
   timeouts {
     create = "2h"
     update = "2h"

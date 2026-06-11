@@ -7,7 +7,8 @@
 # Needs: EKS kubeconfig, EC2 VPN cert, Secrets Manager context, SSM lambda env vars
 #
 resource "aws_iam_policy" "notification_manifests_helmfile_apply" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_manifests_helmfile_staging_apply
   path   = "/"
@@ -70,7 +71,8 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
 # notification-manifests helmfile apply policy (production)
 #
 resource "aws_iam_policy" "notification_manifests_helmfile_apply_production" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   name   = local.notification_manifests_helmfile_production_apply
   path   = "/"
@@ -133,7 +135,8 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
 # notification-manifests database migration policy (staging)
 #
 resource "aws_iam_policy" "notification_manifests_database_migration" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_manifests_database_migration_staging
   path   = "/"
@@ -187,7 +190,8 @@ data "aws_iam_policy_document" "notification_manifests_database_migration" {
 # notification-manifests database migration policy (production)
 #
 resource "aws_iam_policy" "notification_manifests_database_migration_production" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   name   = local.notification_manifests_database_migration_production
   path   = "/"
@@ -241,7 +245,8 @@ data "aws_iam_policy_document" "notification_manifests_database_migration_produc
 # notification-manifests smoke test production policy
 #
 resource "aws_iam_policy" "notification_manifests_smoke_test_production" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   name   = local.notification_manifests_smoke_test_production
   path   = "/"
@@ -268,7 +273,8 @@ data "aws_iam_policy_document" "notification_manifests_smoke_test_production" {
 # notification-admin test-delete-unused policy
 #
 resource "aws_iam_policy" "notification_admin_test_delete_unused" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_admin_test_delete_unused
   path   = "/"
@@ -317,7 +323,8 @@ data "aws_iam_policy_document" "notification_admin_test_delete_unused" {
 # notification-api build-and-push performance test policy (staging)
 #
 resource "aws_iam_policy" "notification_api_build_push_performance_test" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_api_build_push_performance_test
   path   = "/"
@@ -355,7 +362,8 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
 # Needs: ECR push to notify/api-lambda + Lambda update/publish/alias
 #
 resource "aws_iam_policy" "notification_api_lambda_staging" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_api_lambda_staging
   path   = "/"
@@ -411,7 +419,8 @@ data "aws_iam_policy_document" "notification_api_lambda_staging" {
 # ECR push only — production Lambda deploy goes through manifests, not this workflow
 #
 resource "aws_iam_policy" "notification_api_lambda_production" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   name   = local.notification_api_lambda_production
   path   = "/"
@@ -448,7 +457,8 @@ data "aws_iam_policy_document" "notification_api_lambda_production" {
 # notification-system-status-frontend upload-to-s3 policy (staging)
 #
 resource "aws_iam_policy" "notification_system_status_frontend_upload_to_s3" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_system_status_frontend_upload_to_s3
   path   = "/"
@@ -487,7 +497,8 @@ data "aws_iam_policy_document" "notification_system_status_frontend_upload_to_s3
 # notification-system-status-frontend prod-upload-to-s3 policy (production)
 #
 resource "aws_iam_policy" "notification_system_status_frontend_prod_upload_to_s3" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   name   = local.notification_system_status_frontend_prod_upload_to_s3
   path   = "/"
@@ -524,7 +535,8 @@ data "aws_iam_policy_document" "notification_system_status_frontend_prod_upload_
 
 # resource policies for GitHub OIDC roles
 resource "aws_iam_policy" "notification_admin_test_admin_workflows" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_admin_test_admin_workflows
   path   = "/"
@@ -612,7 +624,8 @@ data "aws_iam_policy_document" "notification_admin_test_admin_workflows" {
 }
 
 resource "aws_iam_policy" "notification_admin_cypress_e2e_tests" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_admin_cypress_e2e_tests
   path   = "/"
@@ -634,9 +647,10 @@ data "aws_iam_policy_document" "notification_admin_cypress_e2e_tests" {
 }
 
 resource "aws_iam_policy" "notification_manifests_helmfile_diff" {
-  name   = local.notification_manifests_helmfile_diff
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_manifests_helmfile_diff.json
+  provider = aws.core_services
+  name     = local.notification_manifests_helmfile_diff
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notification_manifests_helmfile_diff.json
 }
 
 data "aws_iam_policy_document" "notification_manifests_helmfile_diff" {
@@ -662,7 +676,8 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_diff" {
 }
 
 resource "aws_iam_policy" "notification_manifests_staging_smoke_test" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_manifests_staging_smoke_test
   path   = "/"
@@ -685,9 +700,10 @@ data "aws_iam_policy_document" "notification_manifests_staging_smoke_test" {
 }
 
 resource "aws_iam_policy" "notification_manifests_k8s_lambda_apply" {
-  name   = local.notification_manifests_k8s_lambda_apply
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_manifests_k8s_lambda_apply.json
+  provider = aws.core_services
+  name     = local.notification_manifests_k8s_lambda_apply
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notification_manifests_k8s_lambda_apply.json
 }
 
 data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
@@ -745,15 +761,17 @@ data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
 }
 
 resource "aws_iam_policy" "notification_api_build_push" {
-  name   = local.notification_api_build_push
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_api_build_push.json
+  provider = aws.core_services
+  name     = local.notification_api_build_push
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notification_api_build_push.json
 }
 
 resource "aws_iam_policy" "notification_lambdas_apply" {
-  name   = local.notification_lambdas_apply
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_lambdas_apply.json
+  provider = aws.core_services
+  name     = local.notification_lambdas_apply
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notification_lambdas_apply.json
 }
 
 data "aws_iam_policy_document" "notification_lambdas_apply" {
@@ -832,9 +850,10 @@ data "aws_iam_policy_document" "notification_api_build_push" {
 }
 
 resource "aws_iam_policy" "notification_admin_build_push" {
-  name   = local.notification_admin_build_push
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_admin_build_push.json
+  provider = aws.core_services
+  name     = local.notification_admin_build_push
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notification_admin_build_push.json
 }
 
 data "aws_iam_policy_document" "notification_admin_build_push" {
@@ -864,9 +883,10 @@ data "aws_iam_policy_document" "notification_admin_build_push" {
 }
 
 resource "aws_iam_policy" "notification_document_download_build_push" {
-  name   = local.notification_document_download_build_push
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_document_download_build_push.json
+  provider = aws.core_services
+  name     = local.notification_document_download_build_push
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notification_document_download_build_push.json
 }
 
 data "aws_iam_policy_document" "notification_document_download_build_push" {
@@ -900,7 +920,8 @@ data "aws_iam_policy_document" "notification_document_download_build_push" {
 #
 
 resource "aws_iam_policy" "notification_terraform_check_eks_ami_update" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_terraform_check_eks_ami_update
   path   = "/"
@@ -942,7 +963,8 @@ data "aws_iam_policy_document" "notification_terraform_check_eks_ami_update" {
 }
 
 resource "aws_iam_policy" "notification_terraform_check_eks_cluster_update" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_terraform_check_eks_cluster_update
   path   = "/"
@@ -972,7 +994,8 @@ data "aws_iam_policy_document" "notification_terraform_check_eks_cluster_update"
 }
 
 resource "aws_iam_policy" "notification_terraform_sanitize_staging_sms" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_terraform_sanitize_staging_sms
   path   = "/"
@@ -1017,7 +1040,8 @@ data "aws_iam_policy_document" "notification_terraform_sanitize_staging_sms" {
 }
 
 resource "aws_iam_policy" "notification_terraform_sanitize_production_sms" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   name   = local.notification_terraform_sanitize_production_sms
   path   = "/"
@@ -1065,9 +1089,10 @@ data "aws_iam_policy_document" "notification_terraform_sanitize_production_sms" 
 # DKIM Audit read-only policy
 #
 resource "aws_iam_policy" "dkim_audit" {
-  name   = local.dkim_audit
-  path   = "/"
-  policy = data.aws_iam_policy_document.dkim_audit.json
+  provider = aws.core_services
+  name     = local.dkim_audit
+  path     = "/"
+  policy   = data.aws_iam_policy_document.dkim_audit.json
 }
 
 data "aws_iam_policy_document" "dkim_audit" {
@@ -1088,7 +1113,8 @@ data "aws_iam_policy_document" "dkim_audit" {
 # Performance Test Results Sync policy
 #
 resource "aws_iam_policy" "notification_performance_test_results" {
-  count = var.env == "staging" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
 
   name   = local.notification_performance_test_results
   path   = "/"
