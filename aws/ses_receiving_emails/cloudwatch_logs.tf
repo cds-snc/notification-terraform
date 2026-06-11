@@ -3,7 +3,7 @@
 #
 
 resource "aws_cloudwatch_log_metric_filter" "ses_receiving_emails-500-errors-api" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
 
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "ses_receiving_emails-500-errors-api"

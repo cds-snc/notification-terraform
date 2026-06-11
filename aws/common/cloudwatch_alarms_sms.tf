@@ -22,8 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-us-west-2-warning"
   alarm_description   = "SNS spending reached 80% of limit this month"
@@ -56,8 +55,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-us-west-2-critical"
   alarm_description   = "SNS spending reached 90% of limit this month"
@@ -95,7 +93,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-warning" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
   count    = var.cloudwatch_enabled ? 1 : 0
 
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-warning"
@@ -201,8 +199,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-critical" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-critical"
   alarm_description   = "SMS success rate to Canadian numbers is below 50% over 4 consecutive periods of 6 hrs"
@@ -240,8 +237,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-blocked-as-spam-us-west-2-warning"
   alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
@@ -273,8 +269,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-phone-carrier-unavailable-us-west-2-warning"
   alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
@@ -306,8 +301,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-rate-exceeded-us-west-2-warning"
   alarm_description   = "At least 1 SNS SMS rate exceeded error in 5 minutes"

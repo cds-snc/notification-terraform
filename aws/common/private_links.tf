@@ -10,6 +10,7 @@ locals {
 }
 
 resource "aws_vpc_endpoint" "interface" {
+  provider = aws.core_services
   for_each = local.endpoints_interface
 
   vpc_id              = aws_vpc.notification-canada-ca.id
@@ -23,6 +24,7 @@ resource "aws_vpc_endpoint" "interface" {
 }
 
 resource "aws_vpc_endpoint" "gateway" {
+  provider = aws.core_services
   for_each = local.endpoints_gateway
 
   vpc_id            = aws_vpc.notification-canada-ca.id
@@ -35,6 +37,7 @@ resource "aws_vpc_endpoint" "gateway" {
 }
 
 resource "aws_security_group" "vpc_endpoints" {
+  provider    = aws.core_services
   name        = "vpc_endpoints"
   description = "PrivateLink VPC endpoints"
   vpc_id      = aws_vpc.notification-canada-ca.id

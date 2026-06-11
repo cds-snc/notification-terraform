@@ -18,6 +18,7 @@ resource "null_resource" "api_gateway_cloudwatch_logging" {
 }
 
 resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
+  provider          = aws.core_services
   name              = "api_gateway_log_group"
   retention_in_days = var.log_retention_period_days
   tags = {
@@ -28,6 +29,7 @@ resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
 }
 
 resource "aws_cloudwatch_log_group" "api_lambda_log_group" {
+  provider          = aws.core_services
   count             = var.cloudwatch_enabled ? 1 : 0
   name              = "/aws/lambda/${aws_lambda_function.api.function_name}"
   retention_in_days = var.log_retention_period_days
@@ -47,12 +49,14 @@ resource "aws_api_gateway_account" "api_cloudwatch" {
 }
 
 resource "aws_iam_role" "api_cloudwatch" {
+  provider           = aws.core_services
   count              = var.cloudwatch_enabled ? 1 : 0
   name               = "ApiGatewayCloudWatchRole"
   assume_role_policy = data.aws_iam_policy_document.api_assume.json
 }
 
 resource "aws_iam_role_policy_attachment" "api_cloudwatch" {
+  provider   = aws.core_services
   count      = var.cloudwatch_enabled ? 1 : 0
   role       = aws_iam_role.api_cloudwatch[0].name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"

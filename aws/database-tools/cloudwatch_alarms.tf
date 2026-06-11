@@ -5,6 +5,7 @@
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "blazer-task-unavailable" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "blazer-task-unavailable"
   comparison_operator       = "LessThanThreshold"

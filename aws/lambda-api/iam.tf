@@ -12,6 +12,7 @@ data "aws_iam_policy_document" "service_principal" {
 }
 
 resource "aws_iam_role" "api" {
+  provider           = aws.core_services
   name               = "notify-api"
   assume_role_policy = data.aws_iam_policy_document.service_principal.json
 }
@@ -21,6 +22,7 @@ data "aws_iam_policy" "lambda_insights" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_insights" {
+  provider   = aws.core_services
   role       = aws_iam_role.api.name
   policy_arn = data.aws_iam_policy.lambda_insights.arn
 }
@@ -112,12 +114,14 @@ data "aws_iam_policy_document" "api_policies" {
 }
 
 resource "aws_iam_policy" "api" {
-  name   = "notify-api"
-  path   = "/"
-  policy = data.aws_iam_policy_document.api_policies.json
+  provider = aws.core_services
+  name     = "notify-api"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.api_policies.json
 }
 
 resource "aws_iam_role_policy_attachment" "api" {
+  provider   = aws.core_services
   role       = aws_iam_role.api.name
   policy_arn = aws_iam_policy.api.arn
 }
@@ -129,6 +133,7 @@ resource "aws_iam_role_policy_attachment" "api" {
 # interfaces and write permissions to CloudWatch Logs.
 ####
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
+  provider   = aws.core_services
   role       = aws_iam_role.api.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }

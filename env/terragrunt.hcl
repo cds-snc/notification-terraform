@@ -75,6 +75,18 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias               = "core_services_us_west_2"
+  region              = "us-west-2"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "22DH"
+    }
+  }
+}
+
+provider "aws" {
   alias               = "us-east-1"
   region              = "us-east-1"
   allowed_account_ids = [${local.secret_inputs.account_id}]
@@ -82,6 +94,18 @@ provider "aws" {
   default_tags {
     tags = {
       ssc_cbrid = "21JC"
+    }
+  }
+}
+
+provider "aws" {
+  alias               = "core_services_us_east_1"
+  region              = "us-east-1"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "22DH"
     }
   }
 }
@@ -98,6 +122,18 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias               = "core_services_ca_west_1"
+  region              = "ca-west-1"
+  allowed_account_ids = [${local.secret_inputs.account_id}]
+
+  default_tags {
+    tags = {
+      ssc_cbrid = "22DH"
+    }
+  }
+}
+
 # For whatever reason, Dev uses the DNS from the Staging account and 
 # Production uses the DNS from the Production account, but also has a 
 # different name :/  So we need to handle that here with if Logic
@@ -110,11 +146,24 @@ provider "aws" {
     role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
   }
 }
+
+provider "aws" {
+  alias  = "dns-us-east-1"
+  region = "us-east-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
+  }
+}
 %{ endif }
 %{ if local.config_inputs.env == "staging" }
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
+}
+
+provider "aws" {
+  alias  = "dns-us-east-1"
+  region = "us-east-1"
 }
 
 provider "aws" {
@@ -129,6 +178,14 @@ provider "aws" {
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
+  assume_role {
+    role_arn = "arn:aws:iam::${local.secret_inputs.dns_account_id}:role/notify_prod_dns_manager"
+  }
+}
+
+provider "aws" {
+  alias  = "dns-us-east-1"
+  region = "us-east-1"
   assume_role {
     role_arn = "arn:aws:iam::${local.secret_inputs.dns_account_id}:role/notify_prod_dns_manager"
   }

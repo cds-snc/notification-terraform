@@ -58,6 +58,7 @@ resource "aws_lb_listener_certificate" "gateway_certificate" {
 }
 
 resource "aws_lb_listener" "notification-canada-ca-80" {
+  provider          = aws.core_services
   load_balancer_arn = aws_alb.notification-canada-ca.id
   port              = 80 #tfsec:ignore:AWS004
   protocol          = "HTTP"
@@ -75,6 +76,7 @@ resource "aws_lb_listener" "notification-canada-ca-80" {
 
 
 resource "aws_lb_listener_rule" "security-txt" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 5
 
@@ -112,6 +114,7 @@ resource "aws_alb_target_group" "notification-canada-ca-document-api" {
 }
 
 resource "aws_lb_listener_rule" "alt-domain-document-api-host-route" {
+  provider     = aws.core_services
   count        = var.alt_domain != "" ? 1 : 0
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 10
@@ -137,6 +140,7 @@ resource "aws_lb_listener_rule" "alt-domain-document-api-host-route" {
 }
 
 resource "aws_lb_listener_rule" "document-api-host-route" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 100
 
@@ -169,6 +173,7 @@ resource "aws_alb_target_group" "notification-canada-ca-document" {
 }
 
 resource "aws_lb_listener_rule" "alt-domain-document-host-route" {
+  provider     = aws.core_services
   count        = var.alt_domain != "" ? 1 : 0
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 20
@@ -194,6 +199,7 @@ resource "aws_lb_listener_rule" "alt-domain-document-host-route" {
 }
 
 resource "aws_lb_listener_rule" "document-host-route" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 200
 
@@ -228,6 +234,7 @@ resource "aws_alb_target_group" "notification-canada-ca-api" {
 }
 
 resource "aws_lb_listener_rule" "api-host-route" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 300
 
@@ -248,6 +255,7 @@ resource "aws_lb_listener_rule" "api-host-route" {
 ###
 
 resource "aws_lb_listener_rule" "alt-domain-host-route" {
+  provider     = aws.core_services
   count        = var.alt_domain != "" ? 1 : 0
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 40
@@ -289,6 +297,7 @@ resource "aws_alb_target_group" "notification-canada-ca-admin" {
 ###
 
 resource "aws_lb_listener_rule" "www-domain-host-route" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 50
 
@@ -329,6 +338,7 @@ resource "aws_alb_target_group" "notification-canada-ca-documentation" {
 }
 
 resource "aws_lb_listener_rule" "documentation-host-route" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 60
 
@@ -345,6 +355,7 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
 }
 
 resource "aws_lb_listener_rule" "documentation-host-redirect" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 70
 
@@ -386,6 +397,7 @@ resource "aws_alb_target_group" "public_nginx_http" {
 }
 
 resource "aws_lb_listener_rule" "public-nginx-host-route" {
+  provider     = aws.core_services
   listener_arn = aws_alb_listener.notification-canada-ca.arn
   priority     = 400
 
@@ -406,6 +418,7 @@ resource "aws_lb_listener_rule" "public-nginx-host-route" {
 ###
 
 resource "aws_wafv2_web_acl_association" "notification-canada-ca" {
+  provider     = aws.core_services
   resource_arn = aws_alb.notification-canada-ca.arn
   web_acl_arn  = aws_wafv2_web_acl.notification-canada-ca.arn
 }

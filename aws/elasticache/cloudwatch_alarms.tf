@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-medium-cpu-warning" {
+  provider            = aws.core_services
   count               = var.elasticache_admin_cache_node_count
   alarm_name          = "redis-elasticache-medium-cpu-warning-CacheCluster00${count.index + 1}CPUUtilization"
   alarm_description   = "Average CPU of Redis ElastiCache >= 50% during 1 minute"
@@ -19,6 +20,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-medium-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-cpu-warning" {
+  provider            = aws.core_services
   count               = var.elasticache_admin_cache_node_count
   alarm_name          = "redis-elasticache-high-cpu-warning-CacheCluster00${count.index + 1}CPUUtilization"
   alarm_description   = "Average CPU of Redis ElastiCache >= 70% during 1 minute "
@@ -38,6 +40,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning" {
+  provider            = aws.core_services
   count               = var.elasticache_admin_cache_node_count
   alarm_name          = "redis-elasticache-high-db-memory-warning-CacheCluster00${count.index + 1}"
   alarm_description   = "Average DB Memory on Redis ElastiCache >= 60% during 1 minute"
@@ -57,6 +60,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-critical" {
+  provider            = aws.core_services
   count               = var.elasticache_admin_cache_node_count
   alarm_name          = "redis-elasticache-high-db-memory-critical-CacheCluster00${count.index + 1}"
   alarm_description   = "Average DB Memory on Redis ElastiCache >= 85% during 1 minute"
@@ -76,6 +80,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-db-memory-critica
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warning" {
+  provider            = aws.core_services
   count               = var.elasticache_admin_cache_node_count
   alarm_name          = "redis-elasticache-high-connection-warning-CacheCluster00${count.index + 1}"
   alarm_description   = "Average Number of Connections on Redis ElastiCache >= 1000 connections during 1 minute"
@@ -98,6 +103,7 @@ resource "aws_cloudwatch_metric_alarm" "redis-elasticache-high-connection-warnin
 # Queue Cache Alarms
 
 resource "aws_cloudwatch_metric_alarm" "elasticache_queue_medium_cpu_warning" {
+  provider            = aws.core_services
   count               = var.elasticache_cache_ops_node_count
   alarm_name          = "elasticache-queue-medium-cpu-warning-CacheCluster00${count.index + 1}CPUUtilization"
   alarm_description   = "Average CPU of Redis ElastiCache >= 50% during 1 minute"
@@ -118,6 +124,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_queue_medium_cpu_warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "elasticache_queue_high_cpu_warning" {
+  provider            = aws.core_services
   count               = var.elasticache_cache_ops_node_count
   alarm_name          = "elasticache-queue-high-cpu-warning-CacheCluster00${count.index + 1}CPUUtilization"
   alarm_description   = "Average CPU of Redis ElastiCache >= 70% during 1 minute "
@@ -137,6 +144,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_queue_high_cpu_warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "elasticache_queue_high_db_memory_warning" {
+  provider            = aws.core_services
   count               = var.elasticache_cache_ops_node_count
   alarm_name          = "elasticache-queue-high-db-memory-warning-CacheCluster00${count.index + 1}"
   alarm_description   = "Average DB Memory on Redis ElastiCache >= 60% during 1 minute"
@@ -156,6 +164,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_queue_high_db_memory_warning
 }
 
 resource "aws_cloudwatch_metric_alarm" "elasticache_queue_high_db_memory_critical" {
+  provider            = aws.core_services
   count               = var.elasticache_cache_ops_node_count
   alarm_name          = "elasticache-queue-high-db-memory-critical-CacheCluster00${count.index + 1}"
   alarm_description   = "Average DB Memory on Redis ElastiCache >= 85% during 1 minute"
@@ -175,6 +184,7 @@ resource "aws_cloudwatch_metric_alarm" "elasticache_queue_high_db_memory_critica
 }
 
 resource "aws_cloudwatch_metric_alarm" "elasticache_queue_high_db_connection_warning" {
+  provider            = aws.core_services
   count               = var.elasticache_cache_ops_node_count
   alarm_name          = "elasticache-queue-high-connection-warning-CacheCluster00${count.index + 1}"
   alarm_description   = "Average Number of Connections on Redis ElastiCache >= 1000 connections during 1 minute"

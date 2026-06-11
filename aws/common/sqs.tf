@@ -1,4 +1,5 @@
 resource "aws_sqs_queue" "priority_db_tasks_queue" {
+  provider                = aws.core_services
   name                    = "${var.celery_queue_prefix}-${var.sqs_priority_db_tasks_queue_name}"
   fifo_queue              = true
   deduplication_scope     = "messageGroup"
@@ -9,6 +10,7 @@ resource "aws_sqs_queue" "priority_db_tasks_queue" {
 }
 
 resource "aws_sqs_queue" "normal_db_tasks_queue" {
+  provider                = aws.core_services
   name                    = "${var.celery_queue_prefix}-${var.sqs_normal_db_tasks_queue_name}"
   sqs_managed_sse_enabled = true
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
@@ -16,6 +18,7 @@ resource "aws_sqs_queue" "normal_db_tasks_queue" {
 }
 
 resource "aws_sqs_queue" "bulk_db_tasks_queue" {
+  provider                = aws.core_services
   name                    = "${var.celery_queue_prefix}-${var.sqs_bulk_db_tasks_queue_name}"
   sqs_managed_sse_enabled = true
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
@@ -23,7 +26,8 @@ resource "aws_sqs_queue" "bulk_db_tasks_queue" {
 }
 
 resource "aws_sqs_queue" "notify_internal_tasks_queue" {
-  name = "${var.celery_queue_prefix}notify-internal-tasks"
+  provider = aws.core_services
+  name     = "${var.celery_queue_prefix}notify-internal-tasks"
   # This queue was created outside of terraform and has this value set to false in staging and production.
   sqs_managed_sse_enabled = false
   max_message_size        = var.sqs_max_message_size
@@ -32,6 +36,7 @@ resource "aws_sqs_queue" "notify_internal_tasks_queue" {
 }
 
 resource "aws_sqs_queue" "eks_notification_canada_ca_sms_high_queue" {
+  provider                = aws.core_services
   name                    = "${var.celery_queue_prefix}send-sms-high"
   sqs_managed_sse_enabled = true
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
@@ -42,6 +47,7 @@ resource "aws_sqs_queue" "eks_notification_canada_ca_sms_high_queue" {
 }
 
 resource "aws_sqs_queue" "eks_notification_canada_ca_email_high_queue" {
+  provider                = aws.core_services
   name                    = "${var.celery_queue_prefix}send-email-high"
   sqs_managed_sse_enabled = true
   # tfsec:ignore:AWS015 - Queues should be encrypted with customer managed KMS keys
@@ -52,6 +58,7 @@ resource "aws_sqs_queue" "eks_notification_canada_ca_email_high_queue" {
 }
 
 resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
+  provider         = aws.core_services
   name             = "eks-notification-canada-cadelivery-receipts"
   delay_seconds    = 0
   max_message_size = var.sqs_max_message_size
@@ -66,8 +73,7 @@ resource "aws_sqs_queue" "eks_notification_canada_cadelivery_receipts" {
 }
 
 resource "aws_sqs_queue" "eks_notification_canada_usdelivery_receipts" {
-  provider = aws.us-west-2
-
+  provider         = aws.core_services_us_west_2
   name             = "eks-notification-canada-usdelivery-receipts"
   delay_seconds    = 0
   max_message_size = var.sqs_max_message_size
@@ -85,6 +91,7 @@ resource "aws_sqs_queue" "eks_notification_canada_usdelivery_receipts" {
 }
 
 resource "aws_sqs_queue" "ses_receipt_callback_buffer" {
+  provider                   = aws.core_services
   name                       = "ses-receipt-callback-buffer"
   delay_seconds              = 0
   max_message_size           = var.sqs_max_message_size
