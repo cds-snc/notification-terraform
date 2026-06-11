@@ -39,3 +39,11 @@ output "internal_dns_name" {
 output "route53_zone_id" {
   value = var.env == "production" ? aws_route53_zone.notification-canada-ca[0].zone_id : var.env == "staging" ? aws_route53_zone.notification-sandbox[0].zone_id : var.hosted_zone_id
 }
+
+# Provide this DS record to the cdssandbox.xyz registrar to complete the DNSSEC
+# chain of trust. Without this delegation, DNSSEC will sign records but resolvers
+# cannot validate them.
+output "dnssec_ds_record" {
+  description = "DS record to be added to the cdssandbox.xyz registrar to establish the DNSSEC chain of trust"
+  value       = var.env == "staging" ? aws_route53_key_signing_key.notification-sandbox[0].ds_record : null
+}
