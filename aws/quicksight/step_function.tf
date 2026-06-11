@@ -68,6 +68,7 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
 
 # Daily trigger for the Step Function and IAM Role for EventBridge
 resource "aws_cloudwatch_event_rule" "step_function_daily_trigger" {
+  provider            = aws.core_services
   name                = "daily-athena-update-table-location"
   description         = "Daily trigger to update Athena table locations"
   schedule_expression = "cron(10 9 * * ? *)" # daily at 09:10 UTC
@@ -103,6 +104,7 @@ resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
 }
 
 resource "aws_cloudwatch_event_target" "target_with_role" {
+  provider = aws.core_services
   rule     = aws_cloudwatch_event_rule.step_function_daily_trigger.name
   arn      = aws_sfn_state_machine.athena_update_table_location.arn
   role_arn = aws_iam_role.eventbridge_role.arn

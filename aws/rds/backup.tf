@@ -53,6 +53,7 @@ data "aws_iam_policy_document" "backup_vault_kms" {
 
 # KMS key for encrypting backups
 resource "aws_kms_key" "backup_vault" {
+  provider                = aws.core_services
   description             = "KMS key for RDS backup vault encryption - ${var.env}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
@@ -73,7 +74,7 @@ resource "aws_kms_alias" "backup_vault" {
 
 # KMS key for encrypting backups in secondary region
 resource "aws_kms_key" "backup_vault_secondary" {
-  provider                = aws.ca-west-1
+  provider                = aws.core_services_ca_west_1
   description             = "KMS key for RDS backup vault encryption in secondary region - ${var.env}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
@@ -106,7 +107,7 @@ resource "aws_backup_vault" "rds" {
 
 # Secondary backup vault in a different region for disaster recovery
 resource "aws_backup_vault" "rds_secondary" {
-  provider    = aws.ca-west-1
+  provider    = aws.core_services_ca_west_1
   name        = "notify-${var.env}-rds-vault-secondary"
   kms_key_arn = aws_kms_key.backup_vault_secondary.arn
 

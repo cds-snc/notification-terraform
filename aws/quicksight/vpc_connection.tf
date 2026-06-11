@@ -1,4 +1,5 @@
 resource "aws_quicksight_vpc_connection" "rds" {
+  provider           = aws.core_services
   depends_on         = [aws_quicksight_account_subscription.subscription]
   vpc_connection_id  = var.vpc_id
   name               = "Quicksight RDS connection"
