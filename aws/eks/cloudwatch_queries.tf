@@ -243,8 +243,9 @@ QUERY
 }
 
 resource "aws_cloudwatch_query_definition" "celery-notifications-timeouts" {
-  count = var.cloudwatch_enabled ? 1 : 0
-  name  = "Celery / Notifications timeout"
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Celery / Notifications timeout"
 
   log_group_names = [
     local.eks_application_log_group
