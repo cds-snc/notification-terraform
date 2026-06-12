@@ -53,6 +53,7 @@ data "aws_iam_policy_document" "backup_vault_kms" {
 
 # KMS key for encrypting backups
 resource "aws_kms_key" "backup_vault" {
+  provider                = aws.core_services
   description             = "KMS key for RDS backup vault encryption - ${var.env}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
@@ -66,13 +67,14 @@ resource "aws_kms_key" "backup_vault" {
 }
 
 resource "aws_kms_alias" "backup_vault" {
+  provider      = aws.core_services
   name          = "alias/backup-vault-${var.env}"
   target_key_id = aws_kms_key.backup_vault.key_id
 }
 
 # KMS key for encrypting backups in secondary region
 resource "aws_kms_key" "backup_vault_secondary" {
-  provider                = aws.ca-west-1
+  provider                = aws.core_services_ca_west_1
   description             = "KMS key for RDS backup vault encryption in secondary region - ${var.env}"
   deletion_window_in_days = 10
   enable_key_rotation     = true
@@ -86,7 +88,7 @@ resource "aws_kms_key" "backup_vault_secondary" {
 }
 
 resource "aws_kms_alias" "backup_vault_secondary" {
-  provider      = aws.ca-west-1
+  provider      = aws.core_services_ca_west_1
   name          = "alias/backup-vault-secondary-${var.env}"
   target_key_id = aws_kms_key.backup_vault_secondary.key_id
 }
@@ -105,7 +107,7 @@ resource "aws_backup_vault" "rds" {
 
 # Secondary backup vault in a different region for disaster recovery
 resource "aws_backup_vault" "rds_secondary" {
-  provider    = aws.ca-west-1
+  provider    = aws.core_services_ca_west_1
   name        = "notify-${var.env}-rds-vault-secondary"
   kms_key_arn = aws_kms_key.backup_vault_secondary.arn
 
@@ -120,7 +122,8 @@ resource "aws_backup_vault" "rds_secondary" {
 # This prevents deletion of backups for the specified retention period
 # Only enabled in production for ransomware protection
 resource "aws_backup_vault_lock_configuration" "rds" {
-  count = var.env == "production" ? 1 : 0
+  provider = aws.core_services
+  count    = var.env == "production" ? 1 : 0
 
   backup_vault_name   = aws_backup_vault.rds.name
   min_retention_days  = 7
@@ -129,7 +132,7 @@ resource "aws_backup_vault_lock_configuration" "rds" {
 }
 
 resource "aws_backup_vault_lock_configuration" "rds_secondary" {
-  provider = aws.ca-west-1
+  provider = aws.core_services_ca_west_1
   count    = var.env == "production" ? 1 : 0
 
   backup_vault_name   = aws_backup_vault.rds_secondary.name
@@ -140,6 +143,7 @@ resource "aws_backup_vault_lock_configuration" "rds_secondary" {
 
 # IAM role for AWS Backup
 resource "aws_iam_role" "backup" {
+  provider           = aws.core_services
   name               = "AWSBackupRole-${var.env}"
   assume_role_policy = data.aws_iam_policy_document.backup_assume_role.json
 
@@ -163,18 +167,21 @@ data "aws_iam_policy_document" "backup_assume_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "backup" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
   role       = aws_iam_role.backup.name
 }
 
 resource "aws_iam_role_policy_attachment" "backup_restore" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
   role       = aws_iam_role.backup.name
 }
 
 # Backup plan with cross-region copy
 resource "aws_backup_plan" "rds" {
-  name = "notification-canada-ca-${var.env}-rds-plan"
+  provider = aws.core_services
+  name     = "notification-canada-ca-${var.env}-rds-plan"
 
   rule {
     rule_name         = "daily-backup"
@@ -210,6 +217,7 @@ resource "aws_backup_plan" "rds" {
 
 # Backup selection - target the RDS cluster
 resource "aws_backup_selection" "rds" {
+  provider     = aws.core_services
   name         = "notification-canada-ca-${var.env}-rds-selection"
   plan_id      = aws_backup_plan.rds.id
   iam_role_arn = aws_iam_role.backup.arn
@@ -221,6 +229,7 @@ resource "aws_backup_selection" "rds" {
 
 # SNS topic for backup notifications
 resource "aws_sns_topic" "backup_notifications" {
+  provider          = aws.core_services
   name              = "notification-canada-ca-${var.env}-backup-notifications"
   kms_master_key_id = aws_kms_key.backup_vault.id
 
@@ -231,6 +240,7 @@ resource "aws_sns_topic" "backup_notifications" {
 }
 
 resource "aws_backup_vault_notifications" "rds" {
+  provider            = aws.core_services
   backup_vault_name   = aws_backup_vault.rds.name
   sns_topic_arn       = aws_sns_topic.backup_notifications.arn
   backup_vault_events = ["BACKUP_JOB_COMPLETED", "BACKUP_JOB_FAILED", "RESTORE_JOB_COMPLETED", "RESTORE_JOB_FAILED"]
@@ -238,8 +248,9 @@ resource "aws_backup_vault_notifications" "rds" {
 
 # IAM policy for SNS notifications
 resource "aws_sns_topic_policy" "backup_notifications" {
-  arn    = aws_sns_topic.backup_notifications.arn
-  policy = data.aws_iam_policy_document.backup_notifications.json
+  provider = aws.core_services
+  arn      = aws_sns_topic.backup_notifications.arn
+  policy   = data.aws_iam_policy_document.backup_notifications.json
 }
 
 data "aws_iam_policy_document" "backup_notifications" {

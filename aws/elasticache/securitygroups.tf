@@ -3,6 +3,7 @@
 # in Staging only such as the lambda admin PR review environment.
 #
 resource "aws_security_group" "redis_cluster" {
+  provider    = aws.core_services
   count       = var.env == "staging" ? 1 : 0
   name        = "redis-cluster"
   description = "Access to the Redis cluster"

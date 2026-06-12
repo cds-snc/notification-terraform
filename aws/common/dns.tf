@@ -2,9 +2,13 @@
 # AWS Route 53 for Notification application
 ###
 
+resource "aws_route53_resolver_dnssec_config" "main" {
+  resource_id = aws_vpc.notification-canada-ca.id
+}
+
 # Route53 Resolver Query Logging Configuration
 resource "aws_route53_resolver_query_log_config" "main" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
   count    = var.cloudwatch_enabled ? 1 : 0
   name     = "route53-query-logging"
 
@@ -23,7 +27,7 @@ resource "aws_route53_resolver_query_log_config" "main" {
 
 # Metric Filter for SERVFAIL errors on notification.cdssandbox.ca domain - public DNS only
 resource "aws_cloudwatch_log_metric_filter" "route53_servfail_notification" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
   count    = var.cloudwatch_enabled ? 1 : 0
   name     = "Route53SERVFAILNotificationDomain"
   # Pattern simplified to only exclude internal queries
@@ -44,7 +48,7 @@ resource "aws_cloudwatch_log_metric_filter" "route53_servfail_notification" {
 
 # Metric Filter for NXDOMAIN errors on notification.cdssandbox.ca domain - public DNS only
 resource "aws_cloudwatch_log_metric_filter" "route53_nxdomain_notification" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
   count    = var.cloudwatch_enabled ? 1 : 0
   name     = "Route53NXDOMAINNotificationDomain"
   # Pattern simplified to only exclude internal queries

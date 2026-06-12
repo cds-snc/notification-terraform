@@ -4,6 +4,7 @@
 #
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-heartbeat-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning-heartbeat-api"
   alarm_description   = "One 500 error in 1 minute for heartbeat api"
@@ -20,6 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-heartb
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-heartbeat-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical-heartbeat-api"
   alarm_description   = "Ten 500 errors in 5 minutes for heartbeat api"

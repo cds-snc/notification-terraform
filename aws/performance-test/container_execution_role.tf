@@ -5,16 +5,19 @@
 ###
 
 resource "aws_iam_role" "container_execution_role" {
+  provider           = aws.core_services
   name               = "container_execution_role"
   assume_role_policy = data.aws_iam_policy_document.container_execution_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "ce_cs" {
+  provider   = aws.core_services
   role       = aws_iam_role.container_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
 resource "aws_iam_role_policy_attachment" "perf_test_secretsmanager" {
+  provider   = aws.core_services
   role       = aws_iam_role.container_execution_role.name
   policy_arn = aws_iam_policy.perf_test_secretsmanager.arn
 }
@@ -42,9 +45,10 @@ data "aws_iam_policy_document" "container_execution_role" {
 }
 
 resource "aws_iam_policy" "perf_test_secretsmanager" {
-  name   = "PerfTestEcsTaskGetSecretValue"
-  path   = "/"
-  policy = data.aws_iam_policy_document.perf_test_secretsmanager.json
+  provider = aws.core_services
+  name     = "PerfTestEcsTaskGetSecretValue"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.perf_test_secretsmanager.json
 }
 
 data "aws_iam_policy_document" "perf_test_secretsmanager" {

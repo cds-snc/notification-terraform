@@ -10,6 +10,7 @@ data "aws_iam_policy_document" "notify_admin_pr_assume" {
 }
 
 resource "aws_iam_role" "notify_admin_pr" {
+  provider           = aws.core_services
   name               = "notify-admin-pr"
   assume_role_policy = data.aws_iam_policy_document.notify_admin_pr_assume.json
 }
@@ -86,17 +87,20 @@ data "aws_iam_policy_document" "notify_admin_pr" {
 }
 
 resource "aws_iam_policy" "notify_admin_pr" {
-  name   = "notify-admin-pr"
-  path   = "/"
-  policy = data.aws_iam_policy_document.notify_admin_pr.json
+  provider = aws.core_services
+  name     = "notify-admin-pr"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.notify_admin_pr.json
 }
 
 resource "aws_iam_role_policy_attachment" "notify_admin_pr" {
+  provider   = aws.core_services
   role       = aws_iam_role.notify_admin_pr.name
   policy_arn = aws_iam_policy.notify_admin_pr.arn
 }
 
 resource "aws_iam_role_policy_attachment" "notify_admin_pr_vpc_access" {
+  provider   = aws.core_services
   role       = aws_iam_role.notify_admin_pr.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }

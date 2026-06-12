@@ -3,7 +3,7 @@
 # to be used when don't specify a phone number
 # while sending SMS
 resource "aws_pinpoint_app" "notification-canada-ca" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
   name     = "notification-canada-ca-${var.env}"
 
   tags = {
@@ -12,6 +12,6 @@ resource "aws_pinpoint_app" "notification-canada-ca" {
 }
 
 resource "aws_pinpoint_sms_channel" "sms" {
-  provider       = aws.us-west-2
+  provider       = aws.core_services_us_west_2
   application_id = aws_pinpoint_app.notification-canada-ca.application_id
 }

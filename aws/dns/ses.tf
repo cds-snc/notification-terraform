@@ -56,25 +56,25 @@ resource "aws_sesv2_email_identity" "notification-canada-ca-receiving" {
   # Email receiving with SES is available in only 3 regions
   # so we use us-east-1
   # https://docs.aws.amazon.com/general/latest/gr/ses.html
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
 
   email_identity = var.domain
 }
 
 resource "aws_ses_domain_dkim" "notification-canada-ca-receiving" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
   domain   = var.domain
 }
 
 
 resource "aws_ses_receipt_rule_set" "main" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
 
   rule_set_name = "main"
 }
 
 resource "aws_ses_active_receipt_rule_set" "main" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
 
   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
 }
@@ -127,7 +127,7 @@ resource "aws_ses_domain_mail_from" "custom_sending_domains" {
 
 ### SES receiving emails lambda image
 resource "aws_ses_receipt_rule" "ses_receiving_emails_inbound-to-lambda-arn" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
 
   name          = "ses_receiving_emails_inbound-to-lambda"
   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
