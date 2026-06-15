@@ -48,7 +48,8 @@ resource "aws_cloudwatch_event_target" "aws_health_sns_warning" {
 
 # EventBridge API destination rules - forwards GuardDuty scan verdicts to API
 resource "aws_cloudwatch_event_connection" "guardduty_scan_verdict_callback" {
-  count = var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
 
   name               = "guardduty-scan-verdict-callback-${var.env}"
   description        = "Connection for GuardDuty scan verdict callback API destination"
@@ -63,7 +64,8 @@ resource "aws_cloudwatch_event_connection" "guardduty_scan_verdict_callback" {
 }
 
 resource "aws_cloudwatch_event_api_destination" "guardduty_scan_verdict_callback" {
-  count = var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
 
   name                             = "guardduty-scan-verdict-callback-${var.env}"
   description                      = "GuardDuty scan verdict callback endpoint"
@@ -74,7 +76,8 @@ resource "aws_cloudwatch_event_api_destination" "guardduty_scan_verdict_callback
 }
 
 resource "aws_cloudwatch_event_rule" "guardduty_scan_verdict" {
-  count = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
 
   name        = "guardduty_scan_verdict_${var.env}"
   description = "Route GuardDuty malware scan result events for document-download scan bucket"
@@ -96,7 +99,8 @@ EOF
 }
 
 resource "aws_cloudwatch_event_target" "guardduty_scan_verdict_api_destination" {
-  count = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
 
   rule      = aws_cloudwatch_event_rule.guardduty_scan_verdict[0].name
   target_id = "guardduty-scan-verdict-api-destination"

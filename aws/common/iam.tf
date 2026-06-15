@@ -240,7 +240,8 @@ data "aws_iam_policy_document" "eventbridge_invoke_api_destination_assume" {
 }
 
 resource "aws_iam_role" "eventbridge_invoke_scan_verdict_api_destination" {
-  count = var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
 
   name               = "eventbridge-invoke-scan-verdict-api-destination-${var.env}"
   assume_role_policy = data.aws_iam_policy_document.eventbridge_invoke_api_destination_assume.json
@@ -257,7 +258,8 @@ data "aws_iam_policy_document" "eventbridge_invoke_api_destination" {
 }
 
 resource "aws_iam_role_policy" "eventbridge_invoke_scan_verdict_api_destination" {
-  count = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
 
   name   = "eventbridge-invoke-scan-verdict-api-destination-${var.env}"
   role   = aws_iam_role.eventbridge_invoke_scan_verdict_api_destination[0].id
