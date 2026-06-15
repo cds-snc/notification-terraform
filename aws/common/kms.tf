@@ -1,6 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "notification-canada-ca" {
+  provider            = aws.core_services
   description         = "notification-canada-ca ${var.env} encryption key"
   enable_key_rotation = true
 
