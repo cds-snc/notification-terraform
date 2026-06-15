@@ -700,6 +700,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 # WAF logging to Cloud Based Sensor satellite bucket
 #
 resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
+  provider    = aws.core_services
   name        = "aws-waf-logs-notification-canada-ca-waf"
   destination = "extended_s3"
 

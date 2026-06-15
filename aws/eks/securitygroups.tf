@@ -187,6 +187,7 @@ resource "aws_security_group_rule" "notification-canada-ca-alb-perf-test-ingress
 # Google CIDR security groups
 
 resource "aws_ec2_managed_prefix_list" "google_cidrs" {
+  provider       = aws.core_services
   name           = "Google Service CIDRs"
   address_family = "IPv4"
   max_entries    = var.env == "production" || var.env == "staging" ? 100 : 20
