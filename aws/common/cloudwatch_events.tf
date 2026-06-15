@@ -48,7 +48,7 @@ resource "aws_cloudwatch_event_target" "aws_health_sns_warning" {
 
 # EventBridge API destination rules - forwards GuardDuty scan verdicts to API
 resource "aws_cloudwatch_event_connection" "guardduty_scan_verdict_callback" {
-  count    = var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
   provider = aws.core_services
 
   name               = "guardduty-scan-verdict-callback-${var.env}"
@@ -64,7 +64,7 @@ resource "aws_cloudwatch_event_connection" "guardduty_scan_verdict_callback" {
 }
 
 resource "aws_cloudwatch_event_api_destination" "guardduty_scan_verdict_callback" {
-  count    = var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
   provider = aws.core_services
 
   name                             = "guardduty-scan-verdict-callback-${var.env}"
