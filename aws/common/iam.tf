@@ -240,7 +240,7 @@ data "aws_iam_policy_document" "eventbridge_invoke_api_destination_assume" {
 }
 
 resource "aws_iam_role" "eventbridge_invoke_scan_verdict_api_destination" {
-  count    = var.enable_guardduty_scan_api_destination ? 1 : 0
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
   provider = aws.core_services
 
   name               = "eventbridge-invoke-scan-verdict-api-destination-${var.env}"
