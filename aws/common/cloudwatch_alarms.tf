@@ -85,125 +85,49 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-warning" {
+resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-warning" {
+  for_each            = var.cloudwatch_enabled ? { for q in local.sqs_database_queue_configs : q.name => q } : {}
   provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-priority-db-tasks-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 5 minutes in a 1-minute period"
+  alarm_name          = "sqs-${each.key}-db-tasks-stuck-in-queue-warning"
+  alarm_description   = "ApproximateAgeOfOldestMessage in ${each.key} DB tasks queue is older than ${each.value.warning_age_seconds / 60} minutes (priority=${each.value.priority})"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Maximum"
-  threshold           = 60 * 5
+  threshold           = each.value.warning_age_seconds
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
-    QueueName = aws_sqs_queue.priority_db_tasks_queue.name
+    QueueName = each.value.queue_ref
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-critical" {
+resource "aws_cloudwatch_metric_alarm" "sqs-db-tasks-stuck-in-queue-critical" {
+  for_each                  = var.cloudwatch_enabled ? { for q in local.sqs_database_queue_configs : q.name => q } : {}
   provider                  = aws.core_services
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-priority-db-tasks-stuck-in-queue-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in priority DB tasks queue is older than 15 minute for 1 minute"
+  alarm_name                = "sqs-${each.key}-db-tasks-stuck-in-queue-critical"
+  alarm_description         = "ApproximateAgeOfOldestMessage in ${each.key} DB tasks queue is older than ${each.value.critical_age_seconds / 60} minutes for 1 minute (priority=${each.value.priority})"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "15"
+  evaluation_periods        = "1"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
   period                    = 60
   statistic                 = "Maximum"
-  threshold                 = 60 * 15
+  threshold                 = each.value.critical_age_seconds
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
   dimensions = {
-    QueueName = aws_sqs_queue.priority_db_tasks_queue.name
+    QueueName = each.value.queue_ref
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-warning" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-normal-db-tasks-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 5 minutes in a 1-minute period"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "ApproximateAgeOfOldestMessage"
-  namespace           = "AWS/SQS"
-  period              = 60
-  statistic           = "Maximum"
-  threshold           = 60 * 5
-  treat_missing_data  = "missing"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  dimensions = {
-    QueueName = aws_sqs_queue.normal_db_tasks_queue.name
-  }
-}
 
-resource "aws_cloudwatch_metric_alarm" "sqs-normal-db-tasks-stuck-in-queue-critical" {
-  provider                  = aws.core_services
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-normal-db-tasks-stuck-in-queue-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in normal DB tasks queue is older than 15 minute for 1 minute"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "15"
-  metric_name               = "ApproximateAgeOfOldestMessage"
-  namespace                 = "AWS/SQS"
-  period                    = 60
-  statistic                 = "Maximum"
-  threshold                 = 60 * 15
-  treat_missing_data        = "missing"
-  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  dimensions = {
-    QueueName = aws_sqs_queue.normal_db_tasks_queue.name
-  }
-}
 
-resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-warning" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-bulk-db-tasks-stuck-in-queue-warning"
-  alarm_description   = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 5 minutes in a 1-minute period"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "ApproximateAgeOfOldestMessage"
-  namespace           = "AWS/SQS"
-  period              = 60
-  statistic           = "Maximum"
-  threshold           = 60 * 5
-  treat_missing_data  = "missing"
-  alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  dimensions = {
-    QueueName = aws_sqs_queue.bulk_db_tasks_queue.name
-  }
-}
 
-resource "aws_cloudwatch_metric_alarm" "sqs-bulk-db-tasks-stuck-in-queue-critical" {
-  provider                  = aws.core_services
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-bulk-db-tasks-stuck-in-queue-critical"
-  alarm_description         = "ApproximateAgeOfOldestMessage in bulk DB tasks queue is older than 15 minute for 1 minute"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "15"
-  metric_name               = "ApproximateAgeOfOldestMessage"
-  namespace                 = "AWS/SQS"
-  period                    = 60
-  statistic                 = "Maximum"
-  threshold                 = 60 * 15
-  treat_missing_data        = "missing"
-  alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
-  insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
-  ok_actions                = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
-  dimensions = {
-    QueueName = aws_sqs_queue.bulk_db_tasks_queue.name
-  }
-}
 
 
 resource "aws_cloudwatch_metric_alarm" "healtheck-page-slow-response-warning" {
@@ -908,21 +832,18 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-warning" {
-  for_each = var.cloudwatch_enabled ? { for q in local.inflight_queues : q.name => q } : {}
+  for_each = var.cloudwatch_enabled ? { for q in local.inflight_queue_configs : q.name => q } : {}
   provider = aws.core_services
 
   alarm_name          = "expired-inflight-${each.key}-warning"
-  alarm_description   = "Inflights are expiring faster than they are being acknowledged on the ${each.key} queue in two consecutive 5-minute periods - queue is deteriorating. Check the Redis-batch-saving dashboard"
+  alarm_description   = "Inflights are expiring (>${each.value.warning_expiry_count} in 5min) on the ${each.key} queue (priority=${each.value.priority}, max_expiry=${each.value.max_expiry_minutes}min) - queue is deteriorating. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
-  threshold           = 1
+  threshold           = each.value.warning_expiry_count
   treat_missing_data  = "notBreaching"
 
   alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
 
-  # Warn when the queue is losing ground: more inflights are expiring than celery
-  # is acknowledging. This is distinct from the critical alarm (zero throughput) and
-  # from normal high-load bursts where celery processes far more than it drops.
   metric_query {
     id    = "expired_inflights"
     label = "Expired inflights in 5 minutes"
@@ -942,48 +863,44 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-warning" {
   }
 
   metric_query {
-    id    = "inflight_processed"
-    label = "Inflights acknowledged in 5 minutes"
-
-    metric {
-      metric_name = "batch_saving_inflight"
-      namespace   = "NotificationCanadaCa"
-      period      = "300"
-      stat        = "Sum"
-      unit        = "Count"
-      dimensions = {
-        acknowledged      = "True"
-        notification_type = each.value.notification_type
-        priority          = each.value.priority
-      }
-    }
-  }
-
-  metric_query {
     id          = "alarm_condition"
-    expression  = "IF(expired_inflights >= 1, 1, 0) * IF(FILL(inflight_processed, 0) < expired_inflights, 1, 0)"
-    label       = "Expiries outnumber acknowledgments"
+    expression  = "expired_inflights"
+    label       = "Expiry count"
     return_data = "true"
   }
 }
 
 locals {
-  inflight_queues = [
-    { name = "email-bulk", notification_type = "email", priority = "bulk" },
-    { name = "email-normal", notification_type = "email", priority = "normal" },
-    { name = "email-priority", notification_type = "email", priority = "priority" },
-    { name = "sms-bulk", notification_type = "sms", priority = "bulk" },
-    { name = "sms-normal", notification_type = "sms", priority = "normal" },
-    { name = "sms-priority", notification_type = "sms", priority = "priority" },
+  # Inflight queue configurations with priority-specific expiry thresholds
+  # max_expiry_minutes: how long a message can sit in inflight before being auto-returned to inbox
+  # warning_expiry_count: alarm if this many messages expire in 5 minutes (indicates queue deteriorating)
+  # critical_expiry_count: alarm if this many messages expire in 5 minutes (indicates queue stuck)
+  inflight_queue_configs = [
+    { name = "email-bulk", notification_type = "email", priority = "bulk", max_expiry_minutes = 45, warning_expiry_count = 50, critical_expiry_count = 100 },
+    { name = "email-normal", notification_type = "email", priority = "normal", max_expiry_minutes = 30, warning_expiry_count = 20, critical_expiry_count = 50 },
+    { name = "email-priority", notification_type = "email", priority = "priority", max_expiry_minutes = 5, warning_expiry_count = 5, critical_expiry_count = 10 },
+    { name = "sms-bulk", notification_type = "sms", priority = "bulk", max_expiry_minutes = 45, warning_expiry_count = 50, critical_expiry_count = 100 },
+    { name = "sms-normal", notification_type = "sms", priority = "normal", max_expiry_minutes = 30, warning_expiry_count = 20, critical_expiry_count = 50 },
+    { name = "sms-priority", notification_type = "sms", priority = "priority", max_expiry_minutes = 5, warning_expiry_count = 5, critical_expiry_count = 10 },
+  ]
+
+  # SQS database queue configurations with priority-specific age thresholds
+  # warning_age_seconds: alarm if oldest message in queue exceeds this age
+  # critical_age_seconds: alarm if oldest message in queue exceeds this age
+  # Aligned with inflight max_expiry_minutes for consistent queue lifecycle expectations
+  sqs_database_queue_configs = [
+    { name = "email-bulk", queue_ref = aws_sqs_queue.bulk_db_tasks_queue.name, priority = "bulk", warning_age_seconds = 1800, critical_age_seconds = 2700 },
+    { name = "email-normal", queue_ref = aws_sqs_queue.normal_db_tasks_queue.name, priority = "normal", warning_age_seconds = 1200, critical_age_seconds = 1800 },
+    { name = "email-priority", queue_ref = aws_sqs_queue.priority_db_tasks_queue.name, priority = "priority", warning_age_seconds = 180, critical_age_seconds = 300 },
   ]
 }
 
 resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-critical" {
-  for_each = var.cloudwatch_enabled ? { for q in local.inflight_queues : q.name => q } : {}
+  for_each = var.cloudwatch_enabled ? { for q in local.inflight_queue_configs : q.name => q } : {}
   provider = aws.core_services
 
   alarm_name          = "expired-inflight-${each.key}-critical"
-  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes on the ${each.key} queue AND celery acknowledgment throughput for that queue is zero - queue is stuck, check the Redis-batch-saving dashboard"
+  alarm_description   = "More than ${each.value.critical_expiry_count} inflights expired in 5 minutes on ${each.key} (priority=${each.value.priority}, max_expiry=${each.value.max_expiry_minutes}min) AND celery acknowledgment throughput is zero - inflight queue is stuck. Check the Redis-batch-saving dashboard."
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 1
@@ -1030,8 +947,8 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-critical" {
 
   metric_query {
     id          = "alarm_condition"
-    expression  = "IF(expired_inflights >= ${var.alarm_critical_expired_inflights_threshold}, 1, 0) * IF(FILL(inflight_processed, 0) < 1, 1, 0)"
-    label       = "Expiries over threshold with zero throughput"
+    expression  = "IF(expired_inflights >= ${each.value.critical_expiry_count}, 1, 0) * IF(FILL(inflight_processed, 0) < 1, 1, 0)"
+    label       = "Expiries over threshold AND zero acks"
     return_data = "true"
   }
 }
