@@ -86,10 +86,11 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "bulk-queue-stuck-critical" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "bulk-queue-stuck-critical"
-  alarm_description   = "Bulk messages aging in SQS queue AND processing throughput cannot keep pace - bulk queue is stuck and losing message timeliness"
+  provider = aws.core_services
+  for_each = var.cloudwatch_enabled ? toset(["email", "sms"]) : toset([])
+
+  alarm_name          = "bulk-queue-${each.value}-stuck-critical"
+  alarm_description   = "Bulk ${each.value} messages aging in SQS queue AND processing throughput cannot keep pace - bulk queue is stuck and losing message timeliness"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 1
@@ -115,7 +116,7 @@ resource "aws_cloudwatch_metric_alarm" "bulk-queue-stuck-critical" {
 
   metric_query {
     id    = "bulk_created_total"
-    label = "Total bulk messages created in 5 minutes"
+    label = "Total bulk ${each.value} messages created in 5 minutes"
 
     metric {
       metric_name = "batch_saving_bulk"
@@ -124,14 +125,16 @@ resource "aws_cloudwatch_metric_alarm" "bulk-queue-stuck-critical" {
       stat        = "Sum"
       unit        = "Count"
       dimensions = {
-        created = "True"
+        created           = "True"
+        notification_type = each.value
+        priority          = "bulk"
       }
     }
   }
 
   metric_query {
     id    = "bulk_processed_total"
-    label = "Total bulk messages processed in 5 minutes"
+    label = "Total bulk ${each.value} messages processed in 5 minutes"
 
     metric {
       metric_name = "batch_saving_bulk"
@@ -140,7 +143,9 @@ resource "aws_cloudwatch_metric_alarm" "bulk-queue-stuck-critical" {
       stat        = "Sum"
       unit        = "Count"
       dimensions = {
-        acknowledged = "True"
+        acknowledged      = "True"
+        notification_type = each.value
+        priority          = "bulk"
       }
     }
   }
