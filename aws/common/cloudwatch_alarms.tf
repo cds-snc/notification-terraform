@@ -85,6 +85,74 @@ resource "aws_cloudwatch_metric_alarm" "sqs-bulk-queue-delay-critical" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "bulk-queue-stuck-critical" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "bulk-queue-stuck-critical"
+  alarm_description   = "Bulk messages aging in SQS queue AND processing throughput cannot keep pace - bulk queue is stuck and losing message timeliness"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
+
+  metric_query {
+    id    = "queue_age"
+    label = "Bulk SQS queue oldest message age in seconds"
+
+    metric {
+      metric_name = "ApproximateAgeOfOldestMessage"
+      namespace   = "AWS/SQS"
+      period      = "60"
+      stat        = "Maximum"
+      dimensions = {
+        QueueName = "${var.celery_queue_prefix}${var.sqs_bulk_queue_name}"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_created_total"
+    label = "Total bulk messages created in 5 minutes"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        created = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id    = "bulk_processed_total"
+    label = "Total bulk messages processed in 5 minutes"
+
+    metric {
+      metric_name = "batch_saving_bulk"
+      namespace   = "NotificationCanadaCa"
+      period      = "300"
+      stat        = "Sum"
+      unit        = "Count"
+      dimensions = {
+        acknowledged = "True"
+      }
+    }
+  }
+
+  metric_query {
+    id          = "alarm_condition"
+    expression  = "IF(queue_age > 600, 1, 0) * IF(FILL(bulk_created_total, 0) > FILL(bulk_processed_total, 0), 1, 0)"
+    label       = "Queue age > 10 min AND created > processed"
+    return_data = "true"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "sqs-priority-db-tasks-stuck-in-queue-warning" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
@@ -983,7 +1051,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-critical" {
   provider = aws.core_services
 
   alarm_name          = "expired-inflight-${each.key}-critical"
-  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes on the ${each.key} queue AND celery acknowledgment throughput for that queue is zero - queue is stuck, check the Redis-batch-saving dashboard"
+  alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes on ${each.key} AND celery acknowledgment throughput is zero - inflight queue is stuck. Check the Redis-batch-saving dashboard. Note: inflight stalls may be independent of bulk queue health; use sqs-bulk-queue-delay-critical to verify bulk processing is not blocked."
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 1
@@ -1031,7 +1099,7 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-critical" {
   metric_query {
     id          = "alarm_condition"
     expression  = "IF(expired_inflights >= ${var.alarm_critical_expired_inflights_threshold}, 1, 0) * IF(FILL(inflight_processed, 0) < 1, 1, 0)"
-    label       = "Expiries over threshold with zero throughput"
+    label       = "Expiries over threshold with zero acknowledgment throughput"
     return_data = "true"
   }
 }
