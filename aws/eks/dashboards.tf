@@ -14,7 +14,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "${local.celery_name}-email-send-static", { "region": "${var.region}", "label": "${local.celery_name}-email-send-static" } ],
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "${local.celery_name}-email-send-scalable", { "region": "${var.region}", "label": "${local.celery_name}-email-send-scalable" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "${local.celery_name}-email-send-burst", { "region": "${var.region}", "label": "${local.celery_name}-email-send-burst" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -349,8 +349,8 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "${local.celery_name}-core-tasks-static", { "region": "${var.region}", "label": "${local.celery_name}-core-tasks-static" } ],
-                    [ "...", "${local.celery_name}-core-tasks-scalable", { "region": "${var.region}", "label": "${local.celery_name}-core-tasks-scalable" } ],
-                    [ "...", "${local.celery_name}-delivery-receipts-scalable", { "region": "${var.region}", "label": "${local.celery_name}-delivery-receipts-scalable" } ]
+                    [ "...", "${local.celery_name}-core-tasks-burst", { "region": "${var.region}", "label": "${local.celery_name}-core-tasks-burst" } ],
+                    [ "...", "${local.celery_name}-delivery-receipts-burst", { "region": "${var.region}", "label": "${local.celery_name}-delivery-receipts-burst" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",
@@ -369,7 +369,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "${aws_eks_cluster.notification-canada-ca-eks-cluster.name}", "deployment", "${local.celery_name}-sms-send-static", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-static" } ],
-                    [ "...", "${local.celery_name}-sms-send-scalable", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-scalable" } ]
+                    [ "...", "${local.celery_name}-sms-send-burst", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-burst" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",

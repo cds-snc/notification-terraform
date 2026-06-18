@@ -3,6 +3,7 @@
 ###
 
 resource "aws_alb" "notification-canada-ca" {
+  provider           = aws.core_services
   name               = "notification-${var.env}-alb"
   internal           = false #tfsec:ignore:AWS005
   load_balancer_type = "application"
@@ -28,6 +29,7 @@ resource "aws_alb" "notification-canada-ca" {
 }
 
 resource "aws_alb_listener" "notification-canada-ca" {
+  provider = aws.core_services
 
   depends_on = [aws_acm_certificate_validation.notification-canada-ca, aws_acm_certificate_validation.notification-canada-ca-alt]
 
@@ -102,6 +104,7 @@ resource "aws_lb_listener_rule" "security-txt" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-document-api" {
+  provider             = aws.core_services
   name                 = "notification-document-api"
   port                 = 7000
   protocol             = "HTTP"
@@ -161,6 +164,7 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-document" {
+  provider = aws.core_services
   name     = "notification-alb-document"
   port     = 7001
   protocol = "HTTP"
@@ -220,6 +224,7 @@ resource "aws_lb_listener_rule" "document-host-route" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-api" {
+  provider             = aws.core_services
   name                 = "notification-canada-ca-alb-api"
   port                 = 6011
   protocol             = "HTTP"
@@ -281,6 +286,7 @@ resource "aws_lb_listener_rule" "alt-domain-host-route" {
 }
 
 resource "aws_alb_target_group" "notification-canada-ca-admin" {
+  provider = aws.core_services
   name     = "notification-canada-ca-alb-admin"
   port     = 6012
   protocol = "HTTP"
@@ -326,6 +332,7 @@ resource "aws_lb_listener_rule" "www-domain-host-route" {
 ###
 
 resource "aws_alb_target_group" "notification-canada-ca-documentation" {
+  provider = aws.core_services
   name     = "notification-documentation"
   port     = 80
   protocol = "HTTP"
@@ -384,6 +391,7 @@ resource "aws_lb_listener_rule" "documentation-host-redirect" {
 ###
 
 resource "aws_alb_target_group" "public_nginx_http" {
+  provider    = aws.core_services
   name        = "notification-public-nginx-http"
   port        = 80
   protocol    = "HTTP"
