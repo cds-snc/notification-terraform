@@ -573,11 +573,11 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-pods-high-cpu-w
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-pods-high-cpu-warning" {
+resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-burst-pods-high-cpu-warning" {
   provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "celery-core-tasks-scalable-pods-high-cpu-warning"
-  alarm_description         = "Average CPU of celery-core-tasks-scalable pods >=50% during 10 minutes"
+  alarm_name                = "celery-core-tasks-burst-pods-high-cpu-warning"
+  alarm_description         = "Average CPU of celery-core-tasks-burst pods >=50% during 10 minutes"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
   metric_name               = "pod_cpu_utilization"
@@ -590,7 +590,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-pods-high-cpu
   treat_missing_data        = "missing"
   dimensions = {
     Namespace   = "notification-canada-ca"
-    Service     = "notify-celery-core-tasks-scalable"
+    Service     = "notify-celery-core-tasks-burst"
     ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   }
 }
@@ -854,13 +854,13 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-static-replicas-unavai
 }
 
 
-resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-replicas-unavailable" {
+resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-burst-replicas-unavailable" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "celery-core-tasks-scalable-replicas-unavailable"
+  alarm_name          = "celery-core-tasks-burst-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
-  alarm_description   = "Celery Core Tasks Scalable Replicas Unavailable"
+  alarm_description   = "Celery Core Tasks Burst Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
@@ -877,7 +877,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-core-tasks-scalable-replicas-unav
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-core-tasks-scalable"
+        deployment  = "notify-celery-core-tasks-burst"
       }
     }
   }
@@ -971,13 +971,13 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-static-replicas-unavai
 }
 
 
-resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unavailable" {
+resource "aws_cloudwatch_metric_alarm" "celery-email-send-burst-replicas-unavailable" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "celery-email-send-scalable-replicas-unavailable"
+  alarm_name          = "celery-email-send-burst-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
-  alarm_description   = "Celery Email Send Scalable Replicas Unavailable"
+  alarm_description   = "Celery Email Send Burst Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
@@ -994,7 +994,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-email-send-scalable-replicas-unav
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-email-send-scalable"
+        deployment  = "notify-celery-email-send-burst"
       }
     }
   }
@@ -1030,13 +1030,13 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-static-replicas-unavaila
 }
 
 
-resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavailable" {
+resource "aws_cloudwatch_metric_alarm" "celery-sms-send-burst-replicas-unavailable" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "celery-sms-send-scalable-replicas-unavailable"
+  alarm_name          = "celery-sms-send-burst-replicas-unavailable"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
-  alarm_description   = "Celery SMS Send Scalable Replicas Unavailable"
+  alarm_description   = "Celery SMS Send Burst Replicas Unavailable"
   #Setting to warn until we verify that it is working as expected
   alarm_actions      = [var.sns_alert_warning_arn]
   treat_missing_data = "breaching"
@@ -1053,7 +1053,7 @@ resource "aws_cloudwatch_metric_alarm" "celery-sms-send-scalable-replicas-unavai
       dimensions = {
         ClusterName = aws_eks_cluster.notification-canada-ca-eks-cluster.name
         namespace   = var.notify_k8s_namespace
-        deployment  = "notify-celery-sms-send-scalable"
+        deployment  = "notify-celery-sms-send-burst"
       }
     }
   }
