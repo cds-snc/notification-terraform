@@ -907,11 +907,11 @@ resource "aws_cloudwatch_metric_alarm" "expired-inflight-poisoned-message-warnin
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-warning" {
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-outnumber-warning" {
   for_each = var.cloudwatch_enabled ? { for q in local.inflight_queues : q.name => q } : {}
   provider = aws.core_services
 
-  alarm_name          = "expired-inflight-${each.key}-warning"
+  alarm_name          = "expired-inflight-queue-outnumber-${each.key}-warning"
   alarm_description   = "Inflights are expiring faster than they are being acknowledged on the ${each.key} queue in two consecutive 5-minute periods - queue is deteriorating. Check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
@@ -978,18 +978,18 @@ locals {
   ]
 }
 
-resource "aws_cloudwatch_metric_alarm" "expired-inflight-queue-critical" {
+resource "aws_cloudwatch_metric_alarm" "expired-inflight-zero-throughput-queue-warning" {
   for_each = var.cloudwatch_enabled ? { for q in local.inflight_queues : q.name => q } : {}
   provider = aws.core_services
 
-  alarm_name          = "expired-inflight-${each.key}-critical"
+  alarm_name          = "expired-inflight-zero-throughput-${each.key}-warning"
   alarm_description   = "More than ${var.alarm_critical_expired_inflights_threshold} inflights expired in 5 minutes on the ${each.key} queue AND celery acknowledgment throughput for that queue is zero - queue is stuck, check the Redis-batch-saving dashboard"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 1
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
+  alarm_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   ok_actions    = [aws_sns_topic.notification-canada-ca-alert-ok.arn]
 
   metric_query {
