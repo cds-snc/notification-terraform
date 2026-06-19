@@ -337,15 +337,15 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "view": "timeSeries",
                 "stacked": false,
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_ready", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "notify-celery-sms-send-scalable" ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_ready", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "notify-celery-sms-send-burst" ],
                     [ "...", "notify-celery-core-tasks-static" ],
-                    [ "...", "notify-celery-email-send-scalable" ],
+                    [ "...", "notify-celery-email-send-burst" ],
                     [ "...", "notify-celery-email-send-static" ],
                     [ "...", "notify-celery-generate-reports-static" ],
                     [ "...", "notify-celery-beat" ],
-                    [ "...", "notify-celery-delivery-receipts-scalable" ],
+                    [ "...", "notify-celery-delivery-receipts-burst" ],
                     [ "...", "notify-celery-sms-send-static" ],
-                    [ "...", "notify-celery-core-tasks-scalable" ],
+                    [ "...", "notify-celery-core-tasks-burst" ],
                     [ "...", "notify-celery-sms-dedicated-static" ]
                 ],
                 "region": "ca-central-1",
@@ -539,16 +539,16 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "stacked": false,
                 "region": "ca-central-1",
                 "metrics": [
-                    [ "ContainerInsights", "pod_cpu_utilization", "PodName", "notify-celery-sms-send-scalable", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
+                    [ "ContainerInsights", "pod_cpu_utilization", "PodName", "notify-celery-sms-send-burst", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-email-send-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-delivery-receipts-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-delivery-receipts-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-beat", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ]
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ]
                 ],
                 "title": "Celery CPU Utilization"
             }
@@ -569,10 +569,10 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-delivery-receipts-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-sms-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-delivery-receipts-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-sms-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ]
                 ],
                 "title": "Celery Memory Usage"
@@ -589,15 +589,15 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "stacked": false,
                 "region": "ca-central-1",
                 "metrics": [
-                    [ "ContainerInsights", "pod_network_tx_bytes", "PodName", "notify-celery-delivery-receipts-scalable", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
+                    [ "ContainerInsights", "pod_network_tx_bytes", "PodName", "notify-celery-delivery-receipts-burst", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-beat", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-sms-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-sms-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-email-send-static", ".", ".", ".", "." ]
                 ],
                 "title": "Celery Network TX Bytes"
@@ -614,15 +614,15 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "stacked": false,
                 "region": "ca-central-1",
                 "metrics": [
-                    [ "ContainerInsights", "pod_network_rx_bytes", "PodName", "notify-celery-sms-send-scalable", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-delivery-receipts-scalable", ".", ".", ".", "." ],
+                    [ "ContainerInsights", "pod_network_rx_bytes", "PodName", "notify-celery-sms-send-burst", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-delivery-receipts-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-beat", ".", ".", ".", "." ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-email-send-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ]
                 ],
                 "title": "Celery Network RX Bytes"
