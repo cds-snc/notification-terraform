@@ -8,13 +8,13 @@ billing_tag_key      = "CostCenter"
 
 
 ## EKS     
-primary_worker_desired_size     = 9
+primary_worker_desired_size     = 10
 primary_worker_instance_types   = ["c7i.xlarge"]
 secondary_worker_instance_types = ["c7i.xlarge"]
 enable_signoz                   = true
 node_upgrade                    = false
 force_upgrade                   = true
-primary_worker_max_size         = 9
+primary_worker_max_size         = 10
 primary_worker_min_size         = 4
 eks_cluster_name                = "notification-canada-ca-staging-eks-cluster"
 eks_cluster_version             = "1.36"
