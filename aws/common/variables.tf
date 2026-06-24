@@ -12,8 +12,17 @@ variable "enable_guardduty_scan_api_destination" {
 
 variable "scan_verdict_callback_url" {
   type        = string
-  description = "Public HTTPS endpoint for scan verdict callback"
-  default     = ""
+  description = "Public HTTPS endpoint for scan verdict callback. Required when enable_guardduty_scan_api_destination is true."
+  default     = null
+
+  validation {
+    condition = !var.enable_guardduty_scan_api_destination || (
+      var.scan_verdict_callback_url != null &&
+      trimspace(var.scan_verdict_callback_url) != "" &&
+      startswith(var.scan_verdict_callback_url, "https://")
+    )
+    error_message = "scan_verdict_callback_url must be a non-empty HTTPS URL when enable_guardduty_scan_api_destination is true."
+  }
 }
 
 variable "scan_verdict_api_destination_rate_limit_per_second" {
