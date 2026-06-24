@@ -15,22 +15,22 @@ Expires: 2026-03-29T12:00:00.000Z
 EOT
 
 ## EKS
-primary_worker_desired_size     = 9
+primary_worker_desired_size     = 10
 primary_worker_instance_types   = ["c7i.xlarge"]
 secondary_worker_instance_types = ["c7i.xlarge"]
 node_upgrade                    = false
 force_upgrade                   = false
 enable_signoz                   = true
-primary_worker_max_size         = 9
+primary_worker_max_size         = 10
 primary_worker_min_size         = 3
 eks_cluster_name                = "notification-canada-ca-production-eks-cluster"
-eks_cluster_version             = "1.35"
-eks_addon_coredns_version       = "v1.13.2-eksbuild.4"
-eks_addon_kube_proxy_version    = "v1.35.2-eksbuild.4"
-eks_addon_vpc_cni_version       = "v1.21.1-eksbuild.5"
-eks_addon_ebs_driver_version    = "v1.57.1-eksbuild.1"
-eks_node_ami_version            = "1.35.5-20260529"
-eks_karpenter_ami_id            = "ami-0b60ccaf23f4eb89c"
+eks_cluster_version             = "1.36"
+eks_addon_coredns_version       = "v1.14.3-eksbuild.2"
+eks_addon_kube_proxy_version    = "v1.36.0-eksbuild.7"
+eks_addon_vpc_cni_version       = "v1.22.2-eksbuild.1"
+eks_addon_ebs_driver_version    = "v1.61.1-eksbuild.1"
+eks_node_ami_version            = "1.36.1-20260529"
+eks_karpenter_ami_id            = "ami-00b1260805311fb7b"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
