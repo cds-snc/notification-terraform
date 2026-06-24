@@ -229,6 +229,8 @@ resource "aws_iam_service_linked_role" "spotInstances" {
 
 # EventBridge scan verdict API destination callbacks
 data "aws_iam_policy_document" "eventbridge_invoke_api_destination_assume" {
+  count = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+
   statement {
     effect = "Allow"
     principals {
@@ -236,6 +238,18 @@ data "aws_iam_policy_document" "eventbridge_invoke_api_destination_assume" {
       identifiers = ["events.amazonaws.com"]
     }
     actions = ["sts:AssumeRole"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [var.account_id]
+    }
+
+    condition {
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
+      values   = [aws_cloudwatch_event_rule.guardduty_scan_verdict[0].arn]
+    }
   }
 }
 
@@ -244,7 +258,7 @@ resource "aws_iam_role" "eventbridge_invoke_scan_verdict_api_destination" {
   provider = aws.core_services
 
   name               = "eventbridge-invoke-scan-verdict-api-destination-${var.env}"
-  assume_role_policy = data.aws_iam_policy_document.eventbridge_invoke_api_destination_assume.json
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_invoke_api_destination_assume[0].json
 }
 
 data "aws_iam_policy_document" "eventbridge_invoke_api_destination" {
