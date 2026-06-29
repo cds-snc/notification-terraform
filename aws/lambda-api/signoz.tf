@@ -1,32 +1,3 @@
-module "signoz_api_lambda_logs" {
-  count  = var.env == "dev" ? 1 : 0
-  source = "github.com/cds-snc/terraform-modules//S3_log_bucket?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
-
-  bucket_name       = "notification-canada-ca-${var.env}-lambda-api-signoz-logs"
-  force_destroy     = var.force_destroy_s3
-  billing_tag_value = "notification-canada-ca-${var.env}"
-  versioning_status = "Enabled"
-
-  lifecycle_rule = { "lifecycle_rule" : { "enabled" : "true", "expiration" : { "days" : "90" } } }
-
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
-}
-
-data "aws_iam_policy_document" "signoz_api_lambda_s3_permissions" {
-  count = var.env == "dev" ? 1 : 0
-  statement {
-    sid     = "AllowS3Access"
-    effect  = "Allow"
-    actions = ["s3:*"]
-    resources = [
-      "arn:aws:s3:::notification-canada-ca-${var.env}-lambda-api-signoz-logs",
-      "arn:aws:s3:::notification-canada-ca-${var.env}-lambda-api-signoz-logs/*"
-    ]
-  }
-}
-
 resource "aws_iam_policy" "signoz_s3_permissions" {
   provider = aws.core_services
   count    = var.env == "dev" ? 1 : 0

@@ -24,15 +24,6 @@ popd
 echo "Pause to start perfomance test"
 read -p "Press [Enter] to continue or [Ctrl+C] to cancel..."
 
-pushd ../env/$ENVIRONMENT/lambda-api
-echo "Updating Lambda function in $ENVIRONMENT environment..."
-terragrunt apply
-if [ $? -ne 0 ]; then
-  echo "Failed to apply changes in $ENVIRONMENT environment."
-  exit 1
-fi
-popd
-echo "Successfully updated Lambda function in $ENVIRONMENT environment."
 pushd ../env/$ENVIRONMENT/manifest_secrets
 echo "Updating manifest secrets in $ENVIRONMENT environment..."
 terragrunt apply

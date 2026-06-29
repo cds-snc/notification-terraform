@@ -4,42 +4,6 @@
 #
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-lambda-api" {
-  provider                  = aws.core_services
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "logs-1-error-1-minute-warning-lambda-api"
-  alarm_description         = "One error in 1 minute for lambda api"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
-  metric_name               = aws_cloudwatch_log_metric_filter.errors-lambda-api[0].metric_transformation[0].name
-  namespace                 = aws_cloudwatch_log_metric_filter.errors-lambda-api[0].metric_transformation[0].namespace
-  period                    = "60"
-  statistic                 = "Sum"
-  threshold                 = 1
-  treat_missing_data        = "notBreaching"
-  alarm_actions             = [var.sns_alert_warning_arn]
-  ok_actions                = [var.sns_alert_warning_arn]
-  insufficient_data_actions = [var.sns_alert_warning_arn]
-}
-
-resource "aws_cloudwatch_metric_alarm" "logs-10-error-5-minutes-critical-lambda-api" {
-  provider                  = aws.core_services
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "logs-10-error-5-minutes-critical-lambda-api"
-  alarm_description         = "Ten errors in 5 minutes for lambda api"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "1"
-  metric_name               = aws_cloudwatch_log_metric_filter.errors-lambda-api[0].metric_transformation[0].name
-  namespace                 = aws_cloudwatch_log_metric_filter.errors-lambda-api[0].metric_transformation[0].namespace
-  period                    = "300"
-  statistic                 = "Sum"
-  threshold                 = 10
-  treat_missing_data        = "notBreaching"
-  alarm_actions             = [var.sns_alert_critical_arn]
-  ok_actions                = [var.sns_alert_ok_arn]
-  insufficient_data_actions = [var.sns_alert_warning_arn]
-}
-
 resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-salesforce-api" {
   provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
@@ -56,50 +20,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-error-1-minute-warning-salesforce
   alarm_actions             = [var.sns_alert_warning_arn]
   ok_actions                = [var.sns_alert_warning_arn]
   insufficient_data_actions = [var.sns_alert_warning_arn]
-}
-
-resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-warning" {
-  provider                  = aws.core_services
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "lambda-api-throttle-warning"
-  alarm_description         = "API Lambda function is being throttled"
-  comparison_operator       = "GreaterThanThreshold"
-  evaluation_periods        = "1"
-  metric_name               = "Throttles"
-  namespace                 = "AWS/Lambda"
-  period                    = "60"
-  statistic                 = "Sum"
-  threshold                 = 0
-  treat_missing_data        = "notBreaching"
-  alarm_actions             = [var.sns_alert_warning_arn]
-  ok_actions                = [var.sns_alert_warning_arn]
-  insufficient_data_actions = [var.sns_alert_warning_arn]
-
-  dimensions = {
-    FunctionName = aws_lambda_function.api.function_name
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "lambda-api-throttle-critical" {
-  provider                  = aws.core_services
-  count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "lambda-api-throttle-critical"
-  alarm_description         = "API Lambda function is being throttled"
-  comparison_operator       = "GreaterThanThreshold"
-  evaluation_periods        = "1"
-  metric_name               = "Throttles"
-  namespace                 = "AWS/Lambda"
-  period                    = "60"
-  statistic                 = "Sum"
-  threshold                 = 10
-  treat_missing_data        = "notBreaching"
-  alarm_actions             = [var.sns_alert_critical_arn]
-  ok_actions                = [var.sns_alert_ok_arn]
-  insufficient_data_actions = [var.sns_alert_critical_arn]
-
-  dimensions = {
-    FunctionName = aws_lambda_function.api.function_name
-  }
 }
 
 module "lambda_no_log_detection" {

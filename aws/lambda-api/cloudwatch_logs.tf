@@ -75,19 +75,6 @@ data "aws_iam_policy_document" "api_assume" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "errors-lambda-api" {
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "errors-lambda-api"
-  pattern        = "\"\\\"levelname\\\": \\\"ERROR\\\"\" -\"SF_ERR\""
-  log_group_name = aws_cloudwatch_log_group.api_lambda_log_group[0].name
-
-  metric_transformation {
-    name      = "errors-lambda-api"
-    namespace = "LogMetrics"
-    value     = "1"
-  }
-}
-
 resource "aws_cloudwatch_log_metric_filter" "errors-salesforce-api" {
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "errors-salesforce-api"
