@@ -21,7 +21,7 @@ fi
 echo "Successfully created the Valkey cluster in $ENVIRONMENT environment."
 popd
 
-echo "Pause to start perfomance test"
+echo "Pause to start performance test"
 read -p "Press [Enter] to continue or [Ctrl+C] to cancel..."
 
 pushd ../env/$ENVIRONMENT/manifest_secrets

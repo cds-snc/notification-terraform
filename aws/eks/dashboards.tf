@@ -1047,7 +1047,8 @@ resource "aws_cloudwatch_dashboard" "errors" {
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-1-500-error-1-minute-warning",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-1-celery-error-1-minute-warning",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-500-error-5-minutes-critical",
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-celery-error-1-minute-critical"                ]
+                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-10-celery-error-1-minute-critical" 
+                ]
             }
         },
         {
