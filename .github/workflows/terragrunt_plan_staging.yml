@@ -42,6 +42,7 @@ jobs:
       github: ${{ steps.filter.outputs.github }}
       heartbeat: ${{ steps.filter.outputs.heartbeat }}
       lambda-admin-pr: ${{ steps.filter.outputs.lambda-admin-pr }}
+      lambda-api: ${{ steps.filter.outputs.lambda-api }}
       lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
       manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
       performance-test: ${{ steps.filter.outputs.performance-test }}
@@ -106,6 +107,10 @@ jobs:
             cloudfront:
               - 'aws/cloudfront/**'
               - 'env/${{env.ENVIRONMENT}}/cloudfront/**'
+              - 'env/terragrunt.hcl'
+            lambda-api:
+              - 'aws/lambda-api/**'
+              - 'env/${{env.ENVIRONMENT}}/lambda-api/**'
               - 'env/terragrunt.hcl'
             lambda-admin-pr:
               - 'aws/lambda-admin-pr/**'
@@ -600,6 +605,7 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.database-tools == 'true' || 
       needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' ||
+      needs.terragrunt-filter.outputs.lambda-api == 'true' ||
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
       needs.terragrunt-filter.outputs.system_status == 'true' ||
       needs.terragrunt-filter.outputs.performance-test == 'true' ||
@@ -612,7 +618,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [database-tools, lambda-admin-pr, manifest_secrets, system_status, performance-test]
+        component: [database-tools, lambda-admin-pr, lambda-api, manifest_secrets, system_status, performance-test]
 
     env:
       COMPONENT: ${{ matrix.component }}
