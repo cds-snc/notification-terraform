@@ -40,7 +40,7 @@ jobs:
       manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
       
     steps:
-      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+      - uses: dorny/paths-filter@7267a8516b6f92bdb098633497bad573efdbf271 # v2.12.0
         id: filter
         with:
           filters: |
@@ -119,7 +119,7 @@ jobs:
       COMPONENT: "common"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -131,7 +131,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -151,7 +151,7 @@ jobs:
       COMPONENT: "ecr" 
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -164,7 +164,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -184,7 +184,7 @@ jobs:
       COMPONENT: "ecr-us-east" 
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -197,7 +197,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -217,7 +217,7 @@ jobs:
       COMPONENT: "ecr-us-west-2" 
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-plan
@@ -230,7 +230,7 @@ jobs:
           cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -251,7 +251,7 @@ jobs:
     needs: [terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-ecr-us-east,terragrunt-plan-ecr-us-west-2]
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -263,7 +263,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -284,7 +284,7 @@ jobs:
     needs: [terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -296,7 +296,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -317,7 +317,7 @@ jobs:
     needs: [terragrunt-plan-common,terragrunt-plan-dns]
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -329,7 +329,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -350,7 +350,7 @@ jobs:
       COMPONENT: "cloudfront"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -362,7 +362,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -383,7 +383,7 @@ jobs:
       COMPONENT: "eks"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -395,7 +395,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -418,7 +418,7 @@ jobs:
       COMPONENT: "aws-auth"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         
       - uses: ./.github/actions/setup-terraform
         with:
@@ -471,7 +471,7 @@ jobs:
           echo_config: false       
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@master
+        uses: aws-actions/configure-aws-credentials@ffc08eae7350b1061d7de219e2135c75561fb680 # master
         with:
           role-to-assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-manifests-apply
           role-session-name: NotifyTerraformPlan
@@ -483,7 +483,7 @@ jobs:
           kubectl config rename-context arn:aws:eks:ca-central-1:${{env.ACCOUNT_ID}}:cluster/notification-canada-ca-${{env.ENVIRONMENT}}-eks-cluster ${{env.ENVIRONMENT}}
 
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -504,7 +504,7 @@ jobs:
       COMPONENT: "elasticache"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -516,7 +516,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -537,7 +537,7 @@ jobs:
       COMPONENT: "rds"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -549,7 +549,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -570,7 +570,7 @@ jobs:
       COMPONENT: "lambda-admin-pr"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -582,7 +582,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -603,7 +603,7 @@ jobs:
       COMPONENT: "performance-test"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -615,7 +615,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -637,7 +637,7 @@ jobs:
       COMPONENT: "heartbeat"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -649,7 +649,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -670,7 +670,7 @@ jobs:
       COMPONENT: "database-tools"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -682,7 +682,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -703,7 +703,7 @@ jobs:
       COMPONENT: "quicksight"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -715,7 +715,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -736,7 +736,7 @@ jobs:
       COMPONENT: "lambda-google-cidr"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -748,7 +748,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -769,7 +769,7 @@ jobs:
       COMPONENT: "ses_to_sqs_email_callbacks"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -781,7 +781,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -802,7 +802,7 @@ jobs:
       COMPONENT: "sns_to_sqs_sms_callbacks"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -814,7 +814,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -835,7 +835,7 @@ jobs:
       COMPONENT: "pinpoint_to_sqs_sms_callbacks"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -847,7 +847,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -868,7 +868,7 @@ jobs:
       COMPONENT: "system_status"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -880,7 +880,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -901,7 +901,7 @@ jobs:
       COMPONENT: "system_status_static_site"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -913,7 +913,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -934,7 +934,7 @@ jobs:
       COMPONENT: "manifest_secrets"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -946,7 +946,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
@@ -967,7 +967,7 @@ jobs:
       COMPONENT: "github"
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - uses: ./.github/actions/setup-terraform
         with:
           role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
@@ -979,7 +979,7 @@ jobs:
           sudo mkdir -p aws && cd aws
           op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars          
       - name: Terragrunt plan ${{env.COMPONENT}}
-        uses: cds-snc/terraform-plan@7f4ce4a4bdffaba639d32a45272804e37a569408 # v3.0.6
+        uses: cds-snc/terraform-plan@39b0058bcf977fbd8b067b84d5a9f6165e356c32 # v3.7.0
         with:
           directory: "env/${{env.ENVIRONMENT}}/${{env.COMPONENT}}"
           comment-delete: "true"
