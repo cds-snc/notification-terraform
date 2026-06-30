@@ -151,19 +151,6 @@ resource "aws_secretsmanager_secret_version" "manifest_new_api_key" {
 }
 ```
 
-4. Reference this secret in the API Lambda code under the lambda-api terraform folder
-
-```terraform
-environment {
-    variables = {
-      ADMIN_BASE_URL                 = "https://${var.base_domain}"
-      API_HOST_NAME                  = "https://api.${var.base_domain}"
-      DOCUMENT_DOWNLOAD_API_HOST     = "https://api.document.${var.base_domain}"
-      NEW_API_KEY                    = var.manifest_new_api_key
-    }
-}
-```
-
 #### Step By Step Example: Kubernetes
 
 Suppose we need to add the same API Key above to the Kubernetes API deployment

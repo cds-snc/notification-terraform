@@ -77,34 +77,6 @@ variable "billing_tag_value" {
   type = string
 }
 
-variable "api_image_tag" {
-  type = string
-}
-
-variable "redis_enabled" {
-  type = string
-}
-
-variable "low_demand_min_concurrency" {
-  type = number
-}
-
-variable "low_demand_max_concurrency" {
-  type = number
-}
-
-variable "high_demand_min_concurrency" {
-  type = number
-}
-
-variable "high_demand_max_concurrency" {
-  type = number
-}
-
-variable "notification_queue_prefix" {
-  type = string
-}
-
 variable "create_cbs_bucket" {
   type = bool
 }
