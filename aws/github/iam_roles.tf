@@ -21,8 +21,6 @@ locals {
   notification_manifests_smoke_test_production          = "notification-manifests-smoke-test-production"
   notification_admin_test_delete_unused                 = "notification-admin-test-delete-unused"
   notification_api_build_push_performance_test          = "notification-api-build-push-performance-test"
-  notification_api_lambda_production                    = "notification-api-lambda-production"
-  notification_api_lambda_staging                       = "notification-api-lambda-staging"
   notification_system_status_frontend_upload_to_s3      = "notification-system-status-frontend-upload-to-s3"
   notification_system_status_frontend_prod_upload_to_s3 = "notification-system-status-frontend-prod-upload-to-s3"
 }

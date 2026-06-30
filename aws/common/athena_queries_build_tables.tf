@@ -39,7 +39,7 @@ resource "aws_athena_named_query" "create_table_waf_logs_api_lambda" {
 
 resource "aws_athena_named_query" "create_table_all_waf_logs" {
   name        = "WAF: create table waf_logs"
-  description = "TF: Create table containing both k8s and api-lambda WAF logs: waf_logs"
+  description = "TF: Create table containing k8s WAF logs: waf_logs"
   workgroup   = aws_athena_workgroup.build_tables.name
   database    = aws_athena_database.notification_athena.name
   query = templatefile("${path.module}/sql/waf_log_create_table.sql.tmpl",

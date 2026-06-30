@@ -53,12 +53,6 @@ resource "aws_secretsmanager_secret" "api_lambda_repository_url" {
   recovery_window_in_days = 0
 }
 
-resource "aws_secretsmanager_secret_version" "api_lambda_repository_url" {
-  provider      = aws.core_services
-  secret_id     = aws_secretsmanager_secret.api_lambda_repository_url.id
-  secret_string = aws_ecr_repository.api-lambda.repository_url
-}
-
 resource "aws_secretsmanager_secret" "google_cidr_repository_url" {
   provider                = aws.core_services
   name                    = "GOOGLE_CIDR_REPOSITORY_URL"
