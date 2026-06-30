@@ -75,20 +75,6 @@ resource "null_resource" "push_admin_docker_image" {
 
 }
 
-
-#API Lambda Build and Push
-
-resource "null_resource" "api_repo_clone" {
-  count = var.bootstrap ? 1 : 0
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "git clone 'https://github.com/cds-snc/notification-api.git' /var/tmp/notification-api"
-  }
-}
-
 # Clone Lambda Repository
 resource "null_resource" "lambda_repo_clone" {
   count = var.bootstrap ? 1 : 0

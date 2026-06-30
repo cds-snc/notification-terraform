@@ -862,16 +862,6 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "text",
             "x": 0,
-            "y": 93,
-            "width": 24,
-            "height": 1,
-            "properties": {
-                "markdown": "# API Lambda"
-            }
-        },
-        {
-            "type": "text",
-            "x": 0,
             "y": 106,
             "width": 24,
             "height": 1,

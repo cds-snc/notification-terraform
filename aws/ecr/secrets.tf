@@ -47,12 +47,6 @@ resource "aws_secretsmanager_secret_version" "heartbeat_repository_url" {
   secret_string = aws_ecr_repository.heartbeat.repository_url
 }
 
-resource "aws_secretsmanager_secret" "api_lambda_repository_url" {
-  provider                = aws.core_services
-  name                    = "API_LAMBDA_REPOSITORY_URL"
-  recovery_window_in_days = 0
-}
-
 resource "aws_secretsmanager_secret" "google_cidr_repository_url" {
   provider                = aws.core_services
   name                    = "GOOGLE_CIDR_REPOSITORY_URL"
