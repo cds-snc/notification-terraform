@@ -158,7 +158,7 @@ sqs_send_sms_high_queue_name                                       = "send-sms-h
 sqs_send_sms_medium_queue_name                                     = "send-sms-medium"
 sqs_send_sms_low_queue_name                                        = "send-sms-low"
 enable_guardduty_scan_api_destination                              = true
-scan_verdict_callback_url                                          = "https://api.staging.notification.cdssandbox.xyz/template_attachments/scan-verdict-callback"
+scan_verdict_callback_url                                          = "https://api.staging.notification.cdssandbox.xyz/templates/scan-verdict-callback"
 
 # RANDOM DOCKER TAGS
 system_status_docker_tag                 = "bootstrap"
