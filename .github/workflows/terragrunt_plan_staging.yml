@@ -56,7 +56,7 @@ jobs:
       system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}
 
     steps:
-      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+      - uses: dorny/paths-filter@7267a8516b6f92bdb098633497bad573efdbf271 # v2.12.0
         id: filter
         with:
           filters: |
@@ -184,7 +184,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -254,7 +254,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -319,7 +319,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -386,7 +386,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -446,7 +446,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -549,7 +549,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -618,7 +618,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -683,7 +683,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
