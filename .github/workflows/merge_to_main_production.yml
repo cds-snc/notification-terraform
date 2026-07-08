@@ -510,38 +510,6 @@ jobs:
           terragrunt init -upgrade
           terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
 
-  terragrunt-apply-lambda-api:
-    if: |
-      always() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
-    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr,terragrunt-apply-rds]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-        
-      - name: setup-terraform
-        uses: ./.github/actions/setup-terraform
-        with:
-          role_to_assume: arn:aws:iam::${{env.ACCOUNT_ID}}:role/notification-terraform-apply
-          role_session_name: NotifyTerraformApply        
-
-      - name: Install 1Pass CLI
-        run: |
-          curl -o 1pass.deb https://downloads.1password.com/linux/debian/amd64/stable/1password-cli-amd64-latest.deb
-          sudo dpkg -i 1pass.deb
-          sudo mkdir -p aws
-          cd aws
-          op read op://ppnxsriom3alsxj4ogikyjxlzi/"TERRAFORM_SECRETS_${{env.ENVIRONMENT}}"/notesPlain > ${{env.ENVIRONMENT}}.tfvars   
-
-      - name: terragrunt apply lambda-api
-        run: |
-          cd env/${{env.ENVIRONMENT}}/lambda-api
-          terragrunt init -upgrade
-          terragrunt apply --terragrunt-non-interactive -auto-approve -lock-timeout=10m
-
   terragrunt-apply-heartbeat:
     if: |
       always() &&
