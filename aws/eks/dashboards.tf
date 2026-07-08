@@ -25,24 +25,6 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             }
         },
         {
-            "height": 4,
-            "width": 4,
-            "y": 17,
-            "x": 8,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/Lambda", "Invocations", "FunctionName", "api-lambda", { "region": "${var.region}", "color": "#b088f5", "label": "Calls / min" } ]
-                ],
-                "sparkline": true,
-                "view": "singleValue",
-                "region": "${var.region}",
-                "title": "API Lambda Invocations",
-                "period": 60,
-                "stat": "Sum"
-            }
-        },
-        {
             "height": 6,
             "width": 16,
             "y": 27,
@@ -401,20 +383,6 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             }
         },
         {
-            "height": 6,
-            "width": 16,
-            "y": 33,
-            "x": 8,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/lambda/api-lambda' | fields @timestamp, @message, @logStream\n| filter levelname like /ERROR/\n| sort @timestamp desc\n",
-                "region": "${var.region}",
-                "stacked": false,
-                "title": "API lambda errors",
-                "view": "table"
-            }
-        },
-        {
             "height": 1,
             "width": 24,
             "y": 21,
@@ -532,20 +500,6 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                     ]
                 },
                 "stacked": false
-            }
-        },
-        {
-            "height": 6,
-            "width": 8,
-            "y": 33,
-            "x": 0,
-            "type": "log",
-            "properties": {
-                "query": "SOURCE '/aws/lambda/api-lambda' | fields @timestamp, @message, @logStream\n| fields levelname like /ERROR/ as is_error\n| stats sum(is_error) as errors by bin(1m)",
-                "region": "${var.region}",
-                "stacked": false,
-                "title": "API lambda errors",
-                "view": "timeSeries"
             }
         },
         {
@@ -1071,7 +1025,7 @@ resource "aws_cloudwatch_dashboard" "errors" {
             "x": 0,
             "type": "log",
             "properties": {
-                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | SOURCE '/aws/lambda/api-lambda' | filter (ispresent(application) or ispresent(kubernetes.host)) and @message like /has been rate limited/\n| parse @message /service (?<service>.*?) has been rate limited for (?<limit_type>..........).*/\n| stats count(*) by service, limit_type\n",
+                "query": "SOURCE '/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application' | filter (ispresent(application) or ispresent(kubernetes.host)) and @message like /has been rate limited/\n| parse @message /service (?<service>.*?) has been rate limited for (?<limit_type>..........).*/\n| stats count(*) by service, limit_type\n",
                 "region": "${var.region}",
                 "stacked": false,
                 "title": "Services going over the daily limit",
@@ -1271,40 +1225,6 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "height": 6,
             "width": 6,
             "y": 0,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ { "expression": "100 - 100 * m2 / m1", "label": "Success rate", "id": "e1", "region": "${var.region}", "color": "#1f77b4" } ],
-                    [ "AWS/ApiGateway", "Count", "ApiName", "api-lambda", { "visible": false, "id": "m1" } ],
-                    [ ".", "5XXError", ".", ".", { "id": "m2", "visible": false } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "stat": "Sum",
-                "period": 86400,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "99%",
-                            "value": 99,
-                            "fill": "below"
-                        }
-                    ]
-                },
-                "title": "Api lambda success rate",
-                "yAxis": {
-                    "left": {
-                        "showUnits": false
-                    }
-                }
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 0,
             "x": 6,
             "type": "metric",
             "properties": {
@@ -1399,43 +1319,6 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
                             "color": "#d62728",
                             "label": "400 ms",
                             "value": 0.4,
-                            "fill": "above"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
-            "y": 6,
-            "x": 12,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Admin p90", "visible": false } ],
-                    [ "...", { "label": "Admin p99", "visible": false } ],
-                    [ "...", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", ".", ".", { "stat": "p90", "label": "Api k8s p90", "visible": false } ],
-                    [ "...", { "label": "Api k8s p99", "visible": false } ],
-                    [ "AWS/ApiGateway", "Latency", "ApiName", "api-lambda", { "stat": "p90", "color": "#1f77b4" } ],
-                    [ "...", { "color": "#ff7f0e" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "stat": "p99",
-                "period": 86400,
-                "title": "Api lambda latency",
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "200 ms",
-                            "value": 200
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "400 ms",
-                            "value": 400,
                             "fill": "above"
                         }
                     ]
@@ -1910,30 +1793,6 @@ resource "aws_cloudwatch_dashboard" "slos" {
                 "start": "-PT72H",
                 "end": "P0D",
                 "title": "Time to process email delivery receipts, per 15 minutes"
-            }
-        },
-        {
-            "height": 6,
-            "width": 12,
-            "y": 0,
-            "x": 0,
-            "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/Lambda", "ConcurrentExecutions", "FunctionName", "${var.region}-api-lambda", { "stat": "Maximum", "yAxis": "left" } ],
-                    [ ".", "Duration", ".", ".", { "stat": "Average", "yAxis": "right" } ],
-                    [ ".", "Throttles", ".", ".", { "stat": "Sum", "yAxis": "left" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "title": "API-Lambda concurrent executions, duration and throttles",
-                "period": 300,
-                "legend": { "position": "bottom" },
-                "yAxis": {
-                    "left": { "label": "Count", "min": 0 },
-                    "right": { "label": "Duration (ms)", "min": 0 }
-                }
             }
         }
     ]

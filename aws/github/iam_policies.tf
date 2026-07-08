@@ -358,102 +358,6 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
 }
 
 #
-# notification-api lambda staging policy
-# Needs: ECR push to notify/api-lambda + Lambda update/publish/alias
-#
-resource "aws_iam_policy" "notification_api_lambda_staging" {
-  provider = aws.core_services
-  count    = var.env == "staging" ? 1 : 0
-
-  name   = local.notification_api_lambda_staging
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_api_lambda_staging[0].json
-}
-
-data "aws_iam_policy_document" "notification_api_lambda_staging" {
-  count = var.env == "staging" ? 1 : 0
-
-  statement {
-    effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken"]
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "ecr:BatchDeleteImage",
-      "ecr:DescribeImages",
-      "ecr:ListImages",
-      "ecr:InitiateLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:CompleteLayerUpload",
-      "ecr:PutImage",
-      "ecr:BatchGetImage",
-      "ecr:GetDownloadUrlForLayer"
-    ]
-    resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api-lambda"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "lambda:UpdateFunctionCode",
-      "lambda:PublishVersion",
-      "lambda:UpdateAlias",
-      "lambda:GetFunction",
-      "lambda:GetFunctionConfiguration",
-      "lambda:GetAlias",
-      "lambda:ListAliases",
-      "lambda:ListVersionsByFunction"
-    ]
-    resources = [
-      "arn:aws:lambda:${var.region}:${var.account_id}:function:api-lambda",
-      "arn:aws:lambda:${var.region}:${var.account_id}:function:api-lambda:*"
-    ]
-  }
-}
-
-#
-# notification-api lambda production policy
-# ECR push only — production Lambda deploy goes through manifests, not this workflow
-#
-resource "aws_iam_policy" "notification_api_lambda_production" {
-  provider = aws.core_services
-  count    = var.env == "production" ? 1 : 0
-
-  name   = local.notification_api_lambda_production
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_api_lambda_production[0].json
-}
-
-data "aws_iam_policy_document" "notification_api_lambda_production" {
-  count = var.env == "production" ? 1 : 0
-
-  statement {
-    effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken"]
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "ecr:BatchDeleteImage",
-      "ecr:DescribeImages",
-      "ecr:ListImages",
-      "ecr:InitiateLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:CompleteLayerUpload",
-      "ecr:PutImage",
-      "ecr:BatchGetImage",
-      "ecr:GetDownloadUrlForLayer"
-    ]
-    resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api-lambda"]
-  }
-}
-
-#
 # notification-system-status-frontend upload-to-s3 policy (staging)
 #
 resource "aws_iam_policy" "notification_system_status_frontend_upload_to_s3" {
@@ -843,8 +747,7 @@ data "aws_iam_policy_document" "notification_api_build_push" {
       "ecr:PutImage"
     ]
     resources = [
-      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api",
-      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api-lambda"
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/api"
     ]
   }
 }
