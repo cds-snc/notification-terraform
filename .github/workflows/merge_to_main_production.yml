@@ -803,7 +803,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-lambda-api, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
+    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
     runs-on: ubuntu-latest
 
     steps:
@@ -835,7 +835,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-lambda-api, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
+    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
     runs-on: ubuntu-latest
 
     steps:

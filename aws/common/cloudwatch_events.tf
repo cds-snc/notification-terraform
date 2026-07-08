@@ -91,7 +91,7 @@ resource "aws_cloudwatch_event_rule" "guardduty_scan_verdict" {
   "detail": {
     "s3ObjectDetails": {
       "bucketName": ["notification-canada-ca-${var.env}-document-download-scan-files"],
-      "objectKey": [{"prefix": "template/"}]
+      "objectKey": [{"prefix": "template_attachments/"}]
     }
   }
 }

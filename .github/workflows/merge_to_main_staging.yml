@@ -874,7 +874,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-lambda-api, terragrunt-apply-lambda-admin-pr, terragrunt-apply-performance-test, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-quicksight, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
+    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-lambda-admin-pr, terragrunt-apply-performance-test, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-quicksight, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
     runs-on: ubuntu-latest  
 
     steps:
@@ -906,7 +906,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-lambda-api, terragrunt-apply-lambda-admin-pr, terragrunt-apply-performance-test, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-quicksight, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
+    needs: [terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-eks, terragrunt-apply-ecr, terragrunt-apply-lambda-admin-pr, terragrunt-apply-performance-test, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-quicksight, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
     runs-on: ubuntu-latest  
 
     steps:
@@ -940,7 +940,7 @@ jobs:
         !contains(needs.*.result, 'failure') &&
         !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
-    needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-dns,terragrunt-apply-ses_validation_dns_entries,terragrunt-apply-cloudfront,terragrunt-apply-eks,terragrunt-apply-elasticache,terragrunt-apply-rds,terragrunt-apply-lambda-api,terragrunt-apply-heartbeat,terragrunt-apply-database-tools,terragrunt-apply-quicksight,terragrunt-apply-lambda-google-cidr,terragrunt-apply-ses_to_sqs_email_callbacks,terragrunt-apply-sns_to_sqs_sms_callbacks,terragrunt-apply-pinpoint_to_sqs_sms_callbacks,terragrunt-apply-system_status,terragrunt-apply-ses_receiving_emails,terragrunt-apply-system_status_static_site,terragrunt-apply-manifest_secrets]
+    needs: [terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-dns,terragrunt-apply-ses_validation_dns_entries,terragrunt-apply-cloudfront,terragrunt-apply-eks,terragrunt-apply-elasticache,terragrunt-apply-rds,terragrunt-apply-heartbeat,terragrunt-apply-database-tools,terragrunt-apply-quicksight,terragrunt-apply-lambda-google-cidr,terragrunt-apply-ses_to_sqs_email_callbacks,terragrunt-apply-sns_to_sqs_sms_callbacks,terragrunt-apply-pinpoint_to_sqs_sms_callbacks,terragrunt-apply-system_status,terragrunt-apply-ses_receiving_emails,terragrunt-apply-system_status_static_site,terragrunt-apply-manifest_secrets]
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1

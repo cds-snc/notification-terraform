@@ -862,100 +862,6 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
         {
             "type": "text",
             "x": 0,
-            "y": 93,
-            "width": 24,
-            "height": 1,
-            "properties": {
-                "markdown": "# API Lambda"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 0,
-            "y": 94,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "metrics": [
-                    [ "AWS/Lambda", "ConcurrentExecutions", "FunctionName", "api-lambda" ]
-                ],
-                "title": "API Lambda Concurrent Executions"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 6,
-            "y": 94,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "metrics": [
-                    [ "AWS/Lambda", "Duration", "FunctionName", "api-lambda" ]
-                ],
-                "title": "API Lambda Request Duration"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 0,
-            "y": 100,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ "AWS/Lambda", "Throttles", "FunctionName", "api-lambda", { "region": "ca-central-1", "color": "#fe6e73" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "title": "API Lambda Throttles"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 6,
-            "y": 100,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ "AWS/Lambda", "Errors", "FunctionName", "api-lambda", { "region": "ca-central-1", "color": "#fe6e73" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "title": "API Lambda Errors"
-            }
-        },
-        {
-            "type": "text",
-            "x": 0,
             "y": 106,
             "width": 24,
             "height": 1,
@@ -1240,22 +1146,6 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
             "height": 1,
             "properties": {
                 "markdown": "# Send Rates"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 12,
-            "y": 81,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "view": "timeSeries",
-                "stacked": false,
-                "metrics": [
-                    [ "AWS/ApiGateway", "Latency", "ApiName", "api-lambda" ]
-                ],
-                "region": "ca-central-1",
-                "title": "API Gateway Latency"
             }
         },
         {

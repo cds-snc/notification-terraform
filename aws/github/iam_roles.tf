@@ -21,8 +21,6 @@ locals {
   notification_manifests_smoke_test_production          = "notification-manifests-smoke-test-production"
   notification_admin_test_delete_unused                 = "notification-admin-test-delete-unused"
   notification_api_build_push_performance_test          = "notification-api-build-push-performance-test"
-  notification_api_lambda_production                    = "notification-api-lambda-production"
-  notification_api_lambda_staging                       = "notification-api-lambda-staging"
   notification_system_status_frontend_upload_to_s3      = "notification-system-status-frontend-upload-to-s3"
   notification_system_status_frontend_prod_upload_to_s3 = "notification-system-status-frontend-prod-upload-to-s3"
 }
@@ -862,27 +860,6 @@ module "github_workflow_roles_notification_api_ops_staging" {
       name      = local.notification_api_build_push_performance_test
       repo_name = "notification-api"
       claim     = "ref:refs/heads/main"
-    },
-    {
-      name      = local.notification_api_lambda_staging
-      repo_name = "notification-api"
-      claim     = "ref:refs/heads/main"
-    }
-  ]
-}
-
-module "github_workflow_roles_notification_api_ops_production" {
-  count = var.env == "production" ? 1 : 0
-
-  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
-  billing_tag_value = var.billing_tag_value
-  org_name          = "cds-snc"
-
-  roles = [
-    {
-      name      = local.notification_api_lambda_production
-      repo_name = "notification-api"
-      claim     = "ref:refs/heads/main"
     }
   ]
 }
@@ -894,24 +871,6 @@ resource "aws_iam_role_policy_attachment" "notification_api_build_push_performan
   role       = local.notification_api_build_push_performance_test
   policy_arn = aws_iam_policy.notification_api_build_push_performance_test[0].arn
   depends_on = [module.github_workflow_roles_notification_api_ops_staging]
-}
-
-resource "aws_iam_role_policy_attachment" "notification_api_lambda_staging" {
-  provider = aws.core_services
-  count    = var.env == "staging" ? 1 : 0
-
-  role       = local.notification_api_lambda_staging
-  policy_arn = aws_iam_policy.notification_api_lambda_staging[0].arn
-  depends_on = [module.github_workflow_roles_notification_api_ops_staging]
-}
-
-resource "aws_iam_role_policy_attachment" "notification_api_lambda_production" {
-  provider = aws.core_services
-  count    = var.env == "production" ? 1 : 0
-
-  role       = local.notification_api_lambda_production
-  policy_arn = aws_iam_policy.notification_api_lambda_production[0].arn
-  depends_on = [module.github_workflow_roles_notification_api_ops_production]
 }
 
 #
