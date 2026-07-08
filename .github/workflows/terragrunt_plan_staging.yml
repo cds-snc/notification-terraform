@@ -36,15 +36,14 @@ jobs:
       dns: ${{ steps.filter.outputs.dns }}
       ecr: ${{ steps.filter.outputs.ecr }}
       ecr-us-east: ${{ steps.filter.outputs.ecr-us-east }}
+      ecr-us-west-2: ${{ steps.filter.outputs.ecr-us-west-2 }}
       elasticache: ${{ steps.filter.outputs.elasticache }}
       eks: ${{ steps.filter.outputs.eks }}
       github: ${{ steps.filter.outputs.github }}
       heartbeat: ${{ steps.filter.outputs.heartbeat }}
       lambda-admin-pr: ${{ steps.filter.outputs.lambda-admin-pr }}
-      lambda-api: ${{ steps.filter.outputs.lambda-api }}
       lambda-google-cidr: ${{ steps.filter.outputs.lambda-google-cidr }}
       manifest_secrets: ${{ steps.filter.outputs.manifest_secrets }}
-      newrelic: ${{ steps.filter.outputs.newrelic }}
       performance-test: ${{ steps.filter.outputs.performance-test }}
       pinpoint_to_sqs_sms_callbacks: ${{ steps.filter.outputs.pinpoint_to_sqs_sms_callbacks }}
       quicksight: ${{ steps.filter.outputs.quicksight }}
@@ -57,7 +56,7 @@ jobs:
       system_status_static_site: ${{ steps.filter.outputs.system_status_static_site }}
 
     steps:
-      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+      - uses: dorny/paths-filter@7267a8516b6f92bdb098633497bad573efdbf271 # v2.12.0
         id: filter
         with:
           filters: |
@@ -84,6 +83,10 @@ jobs:
               - 'aws/ecr-us-east/**'
               - 'env/${{env.ENVIRONMENT}}/ecr-us-east/**'
               - 'env/terragrunt.hcl'
+            ecr-us-west-2:
+              - 'aws/ecr-us-west-2/**'
+              - 'env/${{env.ENVIRONMENT}}/ecr-us-west-2/**'
+              - 'env/terragrunt.hcl'
             eks:
               - 'aws/eks/**'
               - 'env/${{env.ENVIRONMENT}}/eks/**'
@@ -103,10 +106,6 @@ jobs:
             cloudfront:
               - 'aws/cloudfront/**'
               - 'env/${{env.ENVIRONMENT}}/cloudfront/**'
-              - 'env/terragrunt.hcl'
-            lambda-api:
-              - 'aws/lambda-api/**'
-              - 'env/${{env.ENVIRONMENT}}/lambda-api/**'
               - 'env/terragrunt.hcl'
             lambda-admin-pr:
               - 'aws/lambda-admin-pr/**'
@@ -156,10 +155,6 @@ jobs:
               - 'aws/pinpoint_to_sqs_sms_callbacks/**'
               - 'env/${{env.ENVIRONMENT}}/pinpoint_to_sqs_sms_callbacks/**'
               - 'env/terragrunt.hcl'
-            newrelic:
-              - 'aws/newrelic/**'
-              - 'env/${{env.ENVIRONMENT}}/newrelic/**'
-              - 'env/terragrunt.hcl'
             manifest_secrets:
               - 'aws/manifest_secrets/**'
               - 'env/${{env.ENVIRONMENT}}/manifest_secrets/**'
@@ -176,7 +171,7 @@ jobs:
       needs.terragrunt-filter.outputs.common == 'true' || 
       needs.terragrunt-filter.outputs.ecr == 'true' ||
       needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
-      needs.terragrunt-filter.outputs.newrelic == 'true' ||
+      needs.terragrunt-filter.outputs.ecr-us-west-2 == 'true' ||
       needs.terragrunt-filter.outputs.config == 'true'
 
     needs: terragrunt-filter
@@ -184,12 +179,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [common, ecr, ecr-us-east, newrelic]
+        component: [common, ecr, ecr-us-east, ecr-us-west-2]
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -212,8 +207,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -251,7 +254,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -274,8 +277,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -308,7 +319,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -331,8 +342,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -367,7 +386,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -390,8 +409,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -419,7 +446,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -479,8 +506,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -514,7 +549,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -537,8 +572,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -557,7 +600,6 @@ jobs:
       always() &&
       needs.terragrunt-filter.outputs.database-tools == 'true' || 
       needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' ||
-      needs.terragrunt-filter.outputs.lambda-api == 'true' ||
       needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
       needs.terragrunt-filter.outputs.system_status == 'true' ||
       needs.terragrunt-filter.outputs.performance-test == 'true' ||
@@ -570,13 +612,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [database-tools, lambda-admin-pr, lambda-api, manifest_secrets, system_status, performance-test]
+        component: [database-tools, lambda-admin-pr, manifest_secrets, system_status, performance-test]
 
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -599,8 +641,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -633,7 +683,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -656,8 +706,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output

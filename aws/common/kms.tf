@@ -1,6 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_kms_key" "notification-canada-ca" {
+  provider            = aws.core_services
   description         = "notification-canada-ca ${var.env} encryption key"
   enable_key_rotation = true
 
@@ -10,6 +11,7 @@ resource "aws_kms_key" "notification-canada-ca" {
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
+    ssc_cbrid  = "22DH"
   }
 }
 
@@ -88,7 +90,7 @@ data "aws_iam_policy_document" "encrypted_kms_policy" {
 }
 
 resource "aws_kms_key" "notification-canada-ca-us-west-2" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
 
   description         = "notification-canada-ca ${var.env} encryption key in us-west-2"
   enable_key_rotation = true
@@ -128,12 +130,13 @@ EOF
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
+    ssc_cbrid  = "22DH"
   }
 }
 
 
 resource "aws_kms_key" "notification-canada-ca-us-east-1" {
-  provider = aws.us-east-1
+  provider = aws.core_services_us_east_1
 
   description         = "notification-canada-ca ${var.env} encryption key in us-east-1"
   enable_key_rotation = true
@@ -173,5 +176,6 @@ EOF
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
+    ssc_cbrid  = "22DH"
   }
 }

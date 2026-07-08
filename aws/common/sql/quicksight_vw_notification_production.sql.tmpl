@@ -1,0 +1,110 @@
+CREATE OR REPLACE VIEW vw_notification AS
+WITH
+  notification_data AS (
+   SELECT
+     id notification_id
+   , billable_units notification_billable_units
+   , created_at notification_created_at
+   , queue_name notification_queue_name
+   , sent_at notification_sent_at
+   , notification_status
+   , notification_type
+   , updated_at notification_updated_at
+   , job_id
+   , api_key_id
+   , key_type api_key_type
+   , service_id
+   , template_id
+   , reference notification_reference
+   , sms_total_message_price
+   , sms_total_carrier_fee
+   , sms_iso_country_code
+   , sms_carrier_name
+   , sms_message_encoding
+   , sms_origination_phone_number
+   FROM
+     notifications
+UNION    SELECT
+     id notification_id
+   , billable_units notification_billable_units
+   , created_at notification_created_at
+   , queue_name notification_queue_name
+   , sent_at notification_sent_at
+   , notification_status
+   , notification_type
+   , updated_at notification_updated_at
+   , job_id
+   , api_key_id
+   , key_type api_key_type
+   , service_id
+   , template_id
+   , reference notification_reference
+   , sms_total_message_price
+   , sms_total_carrier_fee
+   , sms_iso_country_code
+   , sms_carrier_name
+   , sms_message_encoding
+   , sms_origination_phone_number
+   FROM
+     notification_history
+) 
+, service_data AS (
+   SELECT
+     s.id service_id
+   , s.active service_active
+   , s.restricted service_restricted
+   , s.research_mode service_research_mode
+   , count_as_live service_count_as_live
+   , CAST(s.go_live_at AS timestamp) service_go_live_at
+   , s.name service_name
+   , s.message_limit service_message_limit
+   , s.rate_limit service_rate_limit
+   , s.sms_daily_limit service_sms_daily_limit
+   , o.name organisation_name
+   , s.organisation_id
+   FROM
+     (services s
+   INNER JOIN organisation o ON (s.organisation_id = o.id))
+) 
+, template_data AS (
+   SELECT
+     t.id template_id
+   , CAST(t.created_at AS timestamp) template_created_at
+   , t.name template_name
+   , CAST(t.updated_at AS timestamp) template_updated_at
+   , t.version template_version
+   , tc.id tc_id
+   , tc.name_en tc_name_en
+   , tc.name_fr tc_name_fr
+   , tc.email_process_type tc_email_process_type
+   , tc.sms_process_type tc_sms_process_type
+   , tc.sms_sending_vehicle tc_sms_sending_vehicle
+   FROM
+     (templates t
+   LEFT JOIN template_categories tc ON (tc.id = t.template_category_id))
+) 
+SELECT
+  notification_id
+, notification_billable_units
+, CAST(notification_created_at AS timestamp) notification_created_at
+, CAST(notification_sent_at AS timestamp) notification_sent_at
+, notification_status
+, notification_queue_name
+, notification_type
+, CAST(notification_updated_at AS timestamp) notification_updated_at
+, notification_reference
+, job_id
+, api_key_id
+, api_key_type
+, sms_total_message_price
+, sms_total_carrier_fee
+, sms_iso_country_code
+, sms_carrier_name
+, sms_message_encoding
+, sms_origination_phone_number
+, s.*
+, t.*
+FROM
+  ((notification_data n
+INNER JOIN service_data s ON (n.service_id = s.service_id))
+INNER JOIN template_data t ON (n.template_id = t.template_id))

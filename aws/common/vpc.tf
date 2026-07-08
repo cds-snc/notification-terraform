@@ -7,6 +7,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_vpc" "notification-canada-ca" {
+  provider             = aws.core_services
   cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
 
@@ -21,7 +22,8 @@ resource "aws_vpc" "notification-canada-ca" {
 ###
 
 resource "aws_default_security_group" "default" {
-  vpc_id = aws_vpc.notification-canada-ca.id
+  provider = aws.core_services
+  vpc_id   = aws_vpc.notification-canada-ca.id
 }
 
 ###
@@ -29,7 +31,8 @@ resource "aws_default_security_group" "default" {
 ###
 
 resource "aws_internet_gateway" "notification-canada-ca" {
-  vpc_id = aws_vpc.notification-canada-ca.id
+  provider = aws.core_services
+  vpc_id   = aws_vpc.notification-canada-ca.id
 
   tags = {
     Name       = "notification-canada-ca"
@@ -42,6 +45,7 @@ resource "aws_internet_gateway" "notification-canada-ca" {
 ###
 
 resource "aws_eip" "notification-canada-ca-natgw" {
+  provider   = aws.core_services
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
 
@@ -52,6 +56,7 @@ resource "aws_eip" "notification-canada-ca-natgw" {
 }
 
 resource "aws_eip" "notification-canada-ca-natgw-k8s" {
+  provider   = aws.core_services
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
 
@@ -62,6 +67,7 @@ resource "aws_eip" "notification-canada-ca-natgw-k8s" {
 }
 
 resource "aws_nat_gateway" "notification-canada-ca" {
+  provider   = aws.core_services
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
 
@@ -75,6 +81,7 @@ resource "aws_nat_gateway" "notification-canada-ca" {
 }
 
 resource "aws_nat_gateway" "notification-canada-ca-k8s" {
+  provider   = aws.core_services
   count      = 3
   depends_on = [aws_internet_gateway.notification-canada-ca]
 
@@ -94,7 +101,8 @@ resource "aws_nat_gateway" "notification-canada-ca-k8s" {
 ###
 
 resource "aws_subnet" "notification-canada-ca-private" {
-  count = 3
+  provider = aws.core_services
+  count    = 3
 
   vpc_id            = aws_vpc.notification-canada-ca.id
   cidr_block        = cidrsubnet(var.vpc_cidr_block, 8, count.index)
@@ -111,7 +119,8 @@ resource "aws_subnet" "notification-canada-ca-private" {
 }
 
 resource "aws_subnet" "notification-canada-ca-public" {
-  count = 3
+  provider = aws.core_services
+  count    = 3
 
   vpc_id            = aws_vpc.notification-canada-ca.id
   cidr_block        = cidrsubnet(var.vpc_cidr_block, 8, count.index + 3)
@@ -126,7 +135,8 @@ resource "aws_subnet" "notification-canada-ca-public" {
 }
 
 resource "aws_subnet" "notification-canada-ca-private-k8s" {
-  count = 3
+  provider = aws.core_services
+  count    = 3
 
   vpc_id            = aws_vpc.notification-canada-ca.id
   cidr_block        = cidrsubnet(var.vpc_cidr_block, 3, count.index + 1)
@@ -147,7 +157,8 @@ resource "aws_subnet" "notification-canada-ca-private-k8s" {
 ###
 
 resource "aws_route_table" "notification-canada-ca-public_subnet" {
-  vpc_id = aws_vpc.notification-canada-ca.id
+  provider = aws.core_services
+  vpc_id   = aws_vpc.notification-canada-ca.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -168,7 +179,8 @@ resource "aws_route_table_association" "notification-canada-ca" {
 }
 
 resource "aws_route_table" "notification-canada-ca-private_subnet" {
-  count = 3
+  provider = aws.core_services
+  count    = 3
 
   vpc_id = aws_vpc.notification-canada-ca.id
 
@@ -191,7 +203,8 @@ resource "aws_route_table_association" "notification-canada-ca-private" {
 }
 
 resource "aws_route_table" "notification-canada-ca-private_subnet_k8s" {
-  count = 3
+  provider = aws.core_services
+  count    = 3
 
   vpc_id = aws_vpc.notification-canada-ca.id
 
@@ -218,6 +231,7 @@ resource "aws_route_table_association" "notification-canada-ca-private-k8s" {
 ###
 
 resource "aws_default_network_acl" "notification-canada-ca" {
+  provider               = aws.core_services
   default_network_acl_id = aws_vpc.notification-canada-ca.default_network_acl_id
 
   ingress {
@@ -267,6 +281,7 @@ resource "aws_default_network_acl" "notification-canada-ca" {
 }
 
 resource "aws_flow_log" "cloud-based-sensor" {
+  provider = aws.core_services
   depends_on = [
     module.cbs_logs_bucket
   ]

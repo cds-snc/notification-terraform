@@ -1,4 +1,5 @@
 resource "aws_lb" "internal_alb" {
+  provider                   = aws.core_services
   name                       = "notify-${var.env}-internal-alb"
   internal                   = true
   load_balancer_type         = "application"
@@ -23,6 +24,7 @@ resource "aws_lb" "internal_alb" {
 }
 
 resource "aws_alb_listener" "internal_alb_tls" {
+  provider = aws.core_services
 
   load_balancer_arn = aws_lb.internal_alb.arn
   port              = 443
@@ -39,6 +41,7 @@ resource "aws_alb_listener" "internal_alb_tls" {
 }
 
 resource "aws_lb_listener" "internal_alb-80" {
+  provider          = aws.core_services
   load_balancer_arn = aws_lb.internal_alb.id
   port              = 80 #tfsec:ignore:AWS004
   protocol          = "HTTP"
@@ -55,6 +58,7 @@ resource "aws_lb_listener" "internal_alb-80" {
 }
 
 resource "aws_alb_target_group" "internal_nginx_http" {
+  provider    = aws.core_services
   name        = "notification-internal-nginx-http"
   port        = 80
   protocol    = "HTTP"

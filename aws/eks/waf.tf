@@ -1,6 +1,7 @@
 resource "aws_wafv2_web_acl" "notification-canada-ca" {
-  name  = "notification-canada-ca-waf"
-  scope = "REGIONAL"
+  provider = aws.core_services
+  name     = "notification-canada-ca-waf"
+  scope    = "REGIONAL"
 
   default_action {
     allow {}
@@ -164,28 +165,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   rule {
-    name     = "AWSManagedRulesBotControlRuleSet"
-    priority = 6
-
-    override_action {
-      count {}
-    }
-
-    statement {
-      managed_rule_group_statement {
-        name        = "AWSManagedRulesBotControlRuleSet"
-        vendor_name = "AWS"
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "AWSManagedRulesBotControlRuleSet"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  rule {
     name     = "SigninRateLimitRule"
     priority = 7
 
@@ -268,6 +247,37 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           }
         }
       }
+    }
+  }
+
+  rule {
+    name     = "BlockFFUFUserAgent"
+    priority = 9
+
+    action {
+      block {}
+    }
+
+    statement {
+      byte_match_statement {
+        field_to_match {
+          single_header {
+            name = "user-agent"
+          }
+        }
+        positional_constraint = "CONTAINS"
+        search_string         = "fuzz faster"
+        text_transformation {
+          priority = 0
+          type     = "LOWERCASE"
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockFFUFUserAgent"
+      sampled_requests_enabled   = true
     }
   }
 
@@ -690,6 +700,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 # WAF logging to Cloud Based Sensor satellite bucket
 #
 resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
+  provider    = aws.core_services
   name        = "aws-waf-logs-notification-canada-ca-waf"
   destination = "extended_s3"
 
@@ -715,6 +726,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-waf-logs" {
 }
 
 resource "aws_wafv2_web_acl_logging_configuration" "firehose-waf-logs" {
+  provider                = aws.core_services
   log_destination_configs = [aws_kinesis_firehose_delivery_stream.firehose-waf-logs.arn]
   resource_arn            = aws_wafv2_web_acl.notification-canada-ca.arn
 

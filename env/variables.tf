@@ -69,54 +69,12 @@ variable "region" {
   type = string
 }
 
+variable "region_pinpoint_us" {
+  type = string
+}
+
 variable "billing_tag_value" {
   type = string
-}
-
-variable "api_image_tag" {
-  type = string
-}
-
-variable "redis_enabled" {
-  type = string
-}
-
-variable "low_demand_min_concurrency" {
-  type = number
-}
-
-variable "low_demand_max_concurrency" {
-  type = number
-}
-
-variable "high_demand_min_concurrency" {
-  type = number
-}
-
-variable "high_demand_max_concurrency" {
-  type = number
-}
-
-variable "lambda_new_relic_app_name" {
-  type = string
-}
-
-variable "lambda_new_relic_handler" {
-  type        = string
-  description = "The actual Lambda handler function that New Relic wrapper should invoke"
-}
-
-variable "lambda_new_relic_config_file" {
-  type        = string
-  description = "Path to the New Relic configuration file in the Lambda container"
-}
-
-variable "notification_queue_prefix" {
-  type = string
-}
-
-variable "enable_new_relic" {
-  type = bool
 }
 
 variable "create_cbs_bucket" {
@@ -152,6 +110,10 @@ variable "enable_guardduty_malware_s3" {
 }
 
 variable "cloudwatch_enabled" {
+  type = bool
+}
+
+variable "enable_cloudwatch_fire_drills" {
   type = bool
 }
 
@@ -370,31 +332,6 @@ variable "budget_sre_bot_webhook" {
 }
 
 variable "cloudwatch_opsgenie_alarm_webhook" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_aws_account_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_license_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_account_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_api_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "new_relic_slack_webhook_url" {
   type      = string
   sensitive = true
 }
@@ -662,7 +599,15 @@ variable "sns_monthly_spend_limit" {
   type = number
 }
 
+variable "ses_daily_email_limit" {
+  type = number
+}
+
 variable "sns_monthly_spend_limit_us_west_2" {
+  type = number
+}
+
+variable "pinpoint_monthly_spend_limit_us_west_2" {
   type = number
 }
 
@@ -860,22 +805,13 @@ variable "manifest_gc_articles_api_auth_password" {
   sensitive = true
 }
 
+variable "manifest_gc_articles_waf_rate_bypass_secret" {
+  type      = string
+  sensitive = true
+  default   = "changeme"
+}
+
 variable "manifest_mixpanel_project_token" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_new_relic_license_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_new_relic_account_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_new_relic_api_key" {
   type      = string
   sensitive = true
 }
@@ -1015,6 +951,11 @@ variable "manifest_falco_slack_webhook_url" {
   default   = "changeme"
 }
 
+variable "manifest_scan_verdict_callback_token" {
+  type      = string
+  sensitive = true
+}
+
 variable "github_app_id" {
   type      = string
   sensitive = true
@@ -1043,16 +984,6 @@ variable "openai_api_key" {
 }
 
 variable "op_service_account_token" {
-  type      = string
-  sensitive = true
-}
-
-variable "aws_access_key_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "aws_secret_access_key" {
   type      = string
   sensitive = true
 }
@@ -1113,20 +1044,10 @@ variable "sqs_max_message_size" {
   default = 1048576 # 1 MB
 }
 
-variable "new_relic_user_id" {
-  type      = string
-  sensitive = true
-}
-
 variable "system_status_static_site_cloudfront_distribution" {
   type      = string
   sensitive = true
   default   = "E1234567890ABC"
-}
-
-variable "api_enable_new_relic" {
-  type    = bool
-  default = false
 }
 
 variable "api_gateway_timeout" {
@@ -1142,4 +1063,27 @@ variable "datalake_bucket_name" {
 variable "datalake_account_id" {
   type      = string
   sensitive = true
+}
+
+variable "enable_signoz" {
+  type    = bool
+  default = false
+}
+
+variable "signoz_worker_instance_types" {
+  type    = list(string)
+  default = ["m7i-flex.xlarge"]
+}
+
+variable "security_txt_content" {
+  type        = string
+  description = "The content of the security.txt file"
+  default     = <<-EOT
+    Contact: mailto:ZZTBSCYBERS@tbs-sct.gc.ca
+    Contact: https://hackerone.com/tbs-sct/
+    Policy: https://hackerone.com/tbs-sct/policy
+    Canonical: https://cdssandbox.xyz/.well-known/security.txt
+    Preferred-Languages: en, fr
+    Expires: 2026-03-29T12:00:00.000Z
+  EOT
 }

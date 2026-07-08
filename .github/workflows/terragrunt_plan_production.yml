@@ -26,18 +26,18 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          component: [common, ecr, ecr-us-east, newrelic]
+          component: [common, ecr, ecr-us-east, ecr-us-west-2]
           include:
             - component: common
             - component: ecr
             - component: ecr-us-east
-            - component: newrelic
+            - component: ecr-us-west-2
       env:
         COMPONENT: ${{ matrix.component }}
       steps:
       
         - name: Checkout
-          uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+          uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         
         - name: Setup Terraform
           uses: ./.github/actions/setup-terraform
@@ -60,8 +60,16 @@ jobs:
 
             cat /var/tmp/output.txt
 
+            PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+            if (( $PLAN_SIZE < 60000 )); then
+              PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+            else
+              PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+              cat /var/tmp/output.txt
+            fi
+
             echo 'plan<<EOF' >> $GITHUB_OUTPUT
-            cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+            echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
             echo 'EOF' >> $GITHUB_OUTPUT
 
         - name: Comment on PR with plan output
@@ -96,7 +104,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -119,8 +127,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -150,7 +166,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -173,8 +189,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -201,11 +225,12 @@ jobs:
           - component: eks
           - component: ses_validation_dns_entries
           - component: system_status_static_site
+          - component: quicksight
     env:
       COMPONENT: ${{ matrix.component }}
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -228,8 +253,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -253,7 +286,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -313,8 +346,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -346,7 +387,7 @@ jobs:
     steps:
       
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -369,8 +410,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -392,10 +441,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [database-tools, lambda-api, manifest_secrets, system_status]
+        component: [database-tools, manifest_secrets, system_status]
         include:
           - component: database-tools
-          - component: lambda-api
           - component: manifest_secrets
           - component: system_status
 
@@ -404,7 +452,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -427,8 +475,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output
@@ -457,7 +513,7 @@ jobs:
       COMPONENT: ${{ matrix.component }}
     steps:      
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Setup Terraform
         uses: ./.github/actions/setup-terraform
@@ -480,8 +536,16 @@ jobs:
 
           cat /var/tmp/output.txt
 
+          PLAN_SIZE=$(wc -m < /var/tmp/output.txt)
+          if (( $PLAN_SIZE < 60000 )); then
+            PLAN_OUTPUT=$(cat /var/tmp/output.txt)
+          else
+            PLAN_OUTPUT="Plan output too large to display in PR comment. See GitHub Actions logs for full plan details."
+            cat /var/tmp/output.txt
+          fi
+
           echo 'plan<<EOF' >> $GITHUB_OUTPUT
-          cat /var/tmp/output.txt >> $GITHUB_OUTPUT
+          echo "$PLAN_OUTPUT" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Comment on PR with plan output

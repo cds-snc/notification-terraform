@@ -5,6 +5,7 @@
 # There are also alarms defined in aws/common/cloudwatch_alarms.tf
 
 resource "aws_cloudwatch_metric_alarm" "high-dbload-warning" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "high-dbload-warning-instance-${count.index}"
   alarm_description   = "DBLoad > 10. Check if there's a query that is causing this."
@@ -23,6 +24,7 @@ resource "aws_cloudwatch_metric_alarm" "high-dbload-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "high-dbload-critical" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "high-dbload-critical-instance-${count.index}"
   alarm_description   = "DBLoad > 100. Check if there's a query that is causing this."
@@ -34,6 +36,7 @@ resource "aws_cloudwatch_metric_alarm" "high-dbload-critical" {
   statistic           = "Average"
   threshold           = 100
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
@@ -41,6 +44,7 @@ resource "aws_cloudwatch_metric_alarm" "high-dbload-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "high-db-cpu-warning" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "high-db-cpu-warning-instance-${count.index}"
   alarm_description   = "CPU usage of the RDS instance > 80% for 5 minutes"
@@ -60,6 +64,7 @@ resource "aws_cloudwatch_metric_alarm" "high-db-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "very-high-db-cpu-warning" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "very-high-db-cpu-warning-instance-${count.index}"
   alarm_description   = "CPU usage of the RDS instance > 95% for 5 minutes"
@@ -79,6 +84,7 @@ resource "aws_cloudwatch_metric_alarm" "very-high-db-cpu-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "low-db-memory-warning" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "low-db-memory-warning-instance-${count.index}"
   alarm_description   = "Freeable memory of the RDS instance < 4G"
@@ -98,6 +104,7 @@ resource "aws_cloudwatch_metric_alarm" "low-db-memory-warning" {
 
 
 resource "aws_cloudwatch_metric_alarm" "low-db-memory-critical" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "low-db-memory-critical-instance-${count.index}"
   alarm_description   = "Freeable memory of the RDS instance < 2G"
@@ -109,6 +116,7 @@ resource "aws_cloudwatch_metric_alarm" "low-db-memory-critical" {
   statistic           = "Average"
   threshold           = 2 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier
@@ -116,6 +124,7 @@ resource "aws_cloudwatch_metric_alarm" "low-db-memory-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-warning" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "db-free-local-storage-warning-instance-${count.index}"
   alarm_description   = "Free local storage of instance is less than 20GB"
@@ -134,6 +143,7 @@ resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-critical" {
+  provider            = aws.core_services
   count               = var.rds_instance_count
   alarm_name          = "db-free-local-storage-critical-instance-${count.index}"
   alarm_description   = "Free local storage of instance is less than 10GB"
@@ -145,6 +155,7 @@ resource "aws_cloudwatch_metric_alarm" "db-free-local-storage-critical" {
   statistic           = "Average"
   threshold           = 10 * 1024 * 1024 * 1024
   alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
   treat_missing_data  = "notBreaching"
   dimensions = {
     DBInstanceIdentifier = aws_rds_cluster_instance.notification-canada-ca-instances[count.index].identifier

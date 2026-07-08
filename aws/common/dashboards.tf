@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "redis_batch_saving" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Redis-batch-saving"
   dashboard_body = <<EOF
@@ -180,6 +181,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "queues" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Queues"
   dashboard_body = <<EOF
@@ -257,6 +259,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "sms" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SMS"
   dashboard_body = <<EOF
@@ -816,6 +819,7 @@ EOF
 
 
 resource "aws_cloudwatch_dashboard" "sensitive" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Platform-admin-access-of-sensitive-services"
   dashboard_body = <<EOF

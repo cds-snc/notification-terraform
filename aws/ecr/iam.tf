@@ -14,6 +14,7 @@ module "oidc" {
 
 
 resource "aws_iam_role_policy" "github_docker_push" {
+  provider = aws.core_services
 
   depends_on = [module.oidc]
 
@@ -38,6 +39,19 @@ resource "aws_iam_role_policy" "github_docker_push" {
               "ecr:BatchGetImage"
           ],
           "Resource": "arn:aws:ecr:${var.region}:${var.account_id}:repository/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:CompleteLayerUpload",
+                "ecr:GetAuthorizationToken",
+                "ecr:UploadLayerPart",
+                "ecr:InitiateLayerUpload",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:PutImage",
+                "ecr:BatchGetImage"
+            ],
+            "Resource": "arn:aws:ecr:us-west-2:${var.account_id}:repository/*"
         },
         {
             "Effect": "Allow",

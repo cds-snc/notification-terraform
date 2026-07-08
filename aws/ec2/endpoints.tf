@@ -13,6 +13,7 @@ locals {
 }
 
 resource "aws_vpc_endpoint" "endpoints" {
+  provider          = aws.core_services
   vpc_id            = aws_vpc.vpc.id
   for_each          = local.endpoints
   vpc_endpoint_type = "Interface"

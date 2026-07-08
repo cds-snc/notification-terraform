@@ -5,7 +5,8 @@
 
 
 resource "aws_iam_role" "eks-cluster-role" {
-  name = "eks-cluster-role"
+  provider = aws.core_services
+  name     = "eks-cluster-role"
 
   assume_role_policy = <<POLICY
 {
@@ -31,12 +32,14 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "eks-AmazonEKSClusterPolicy" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.eks-cluster-role.name
 }
 
 # Reference: https://docs.aws.amazon.com/eks/latest/userguide/security-groups-for-pods.html
 resource "aws_iam_role_policy_attachment" "eks-AmazonEKSVPCResourceController" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
   role       = aws_iam_role.eks-cluster-role.name
 }
@@ -47,7 +50,8 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEKSVPCResourceController" {
 ###
 
 resource "aws_iam_role" "eks-worker-role" {
-  name = "eks-worker-role"
+  provider = aws.core_services
+  name     = "eks-worker-role"
 
   assume_role_policy = <<POLICY
 {
@@ -66,33 +70,39 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEKSWorkerNodePolicy" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.eks-worker-role.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEKS_CNI_Policy" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.eks-worker-role.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks-worker-AmazonEC2ContainerRegistryReadOnly" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.eks-worker-role.name
 }
 
 # Reference: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-prerequisites.html
 resource "aws_iam_role_policy_attachment" "eks-worker-CloudWatchAgentServerPolicy" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
   role       = aws_iam_role.eks-worker-role.name
 }
 
 # Reference: https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
 resource "aws_iam_policy" "ALB-eks-controller-policy" {
-  name   = "AWSLoadBalancerControllerIAMPolicy"
-  policy = file("alb_iam_policy.json")
+  provider = aws.core_services
+  name     = "AWSLoadBalancerControllerIAMPolicy"
+  policy   = file("alb_iam_policy.json")
 }
 
 resource "aws_iam_role_policy_attachment" "eks-worker-AWSLoadBalancerControllerIAMPolicy" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.ALB-eks-controller-policy.arn
   role       = aws_iam_role.eks-worker-role.name
 }
@@ -102,6 +112,7 @@ resource "aws_iam_role_policy_attachment" "eks-worker-AWSLoadBalancerControllerI
 ###
 
 resource "aws_iam_policy" "notification-worker-policy" {
+  provider    = aws.core_services
   name        = "notification-worker-policy"
   description = "Permissions for a notification worker"
 
@@ -131,6 +142,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "notification-worker-policy" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.eks-worker-role.name
 }
@@ -140,7 +152,8 @@ resource "aws_iam_role_policy_attachment" "notification-worker-policy" {
 ###
 
 resource "aws_iam_role" "eks-fargate-worker-role" {
-  name = "eks-fargate-worker-role"
+  provider = aws.core_services
+  name     = "eks-fargate-worker-role"
 
   assume_role_policy = <<POLICY
 {
@@ -160,11 +173,13 @@ POLICY
 
 # Reference: https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html
 resource "aws_iam_role_policy_attachment" "eks-fargate-worker-AmazonEKSFargatePodExecutionRolePolicy" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
   role       = aws_iam_role.eks-worker-role.name
 }
 
 resource "aws_iam_role_policy_attachment" "notification-fargate-worker-policy" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.eks-fargate-worker-role.name
 }
@@ -180,6 +195,7 @@ data "tls_certificate" "notification-canada-ca" {
 }
 
 resource "aws_iam_openid_connect_provider" "notification-canada-ca" {
+  provider        = aws.core_services
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.notification-canada-ca.certificates[0].sha1_fingerprint]
   url             = aws_eks_cluster.notification-canada-ca-eks-cluster.identity[0].oidc[0].issuer
@@ -204,11 +220,13 @@ data "aws_iam_policy_document" "eks-assume-role-policy" {
 }
 
 resource "aws_iam_role" "notification-service-account-role" {
+  provider           = aws.core_services
   assume_role_policy = data.aws_iam_policy_document.eks-assume-role-policy.json
   name               = "notification-service-account-role"
 }
 
 resource "aws_iam_role_policy_attachment" "notification-service-worker-policy" {
+  provider   = aws.core_services
   policy_arn = aws_iam_policy.notification-worker-policy.arn
   role       = aws_iam_role.notification-service-account-role.name
 }
@@ -238,38 +256,46 @@ module "iam_assumable_role_karpenter" {
 }
 
 resource "aws_iam_instance_profile" "karpenter" {
-  name = "KarpenterNodeInstanceProfile-karpenter-controller-eks"
-  role = aws_iam_role.eks-worker-role.name
+  provider = aws.core_services
+  name     = "KarpenterNodeInstanceProfile-karpenter-controller-eks"
+  role     = aws_iam_role.eks-worker-role.name
 }
 
 resource "aws_iam_role_policy_attachment" "karpenter_ssm_policy" {
+  provider   = aws.core_services
   role       = aws_iam_role.eks-worker-role.name
   policy_arn = data.aws_iam_policy.ssm_managed_instance.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ebs_csi_policy" {
+  provider   = aws.core_services
   role       = aws_iam_role.eks-worker-role.name
   policy_arn = aws_iam_policy.ebs_driver.arn
 }
 
 resource "aws_iam_role_policy_attachment" "karpenter-cluster-worker-node" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = module.iam_assumable_role_karpenter.iam_role_name
 }
 resource "aws_iam_role_policy_attachment" "karpenter-cluster-cni" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = module.iam_assumable_role_karpenter.iam_role_name
 }
 resource "aws_iam_role_policy_attachment" "karpenter-cluster-ecr" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = module.iam_assumable_role_karpenter.iam_role_name
 }
 resource "aws_iam_role_policy_attachment" "karpenter-cluster-managed-instance-core" {
+  provider   = aws.core_services
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   role       = module.iam_assumable_role_karpenter.iam_role_name
 }
 
 resource "aws_iam_role_policy" "karpenter_controller" {
+  provider = aws.core_services
   #checkov:skip=CKV_AWS_290:The Karpenter IAM requires blanket access
   #checkov:skip=CKV_AWS_286:The Karpenter IAM requires privilege escalation
   #checkov:skip=CKV_AWS_289:The Karpenter IAM requires wide scale permissions management
@@ -321,6 +347,7 @@ resource "aws_iam_role_policy" "karpenter_controller" {
 #checkov:skip=CKV_AWS_290:The EKS worker IAM requires the ability to create EBS
 #checkov:skip=CKV_AWS_355:The EKS worker IAM requires the ability to create EBS
 resource "aws_iam_policy" "ebs_driver" {
+  provider = aws.core_services
 
   name   = "eks-ebs-csi-driver-${var.eks_cluster_name}"
   policy = <<POLICY
@@ -454,6 +481,16 @@ resource "aws_iam_policy" "ebs_driver" {
           "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
         }
       }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVolume"
+      ],
+      "Resource": [
+        "arn:aws:ec2:*:*:volume/*",
+        "arn:aws:ec2:*:*:snapshot/*"
+      ]
     }
   ]
 }
@@ -462,7 +499,8 @@ POLICY
 
 #XRAY IAM
 resource "aws_iam_role" "xray_daemon_role" {
-  name = "xray-daemon-role"
+  provider = aws.core_services
+  name     = "xray-daemon-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -488,11 +526,13 @@ resource "aws_iam_role" "xray_daemon_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "xray_daemon_policy_attachment" {
+  provider   = aws.core_services
   role       = aws_iam_role.xray_daemon_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
 }
 
 resource "aws_iam_instance_profile" "xray_daemon_instance_profile" {
-  name = "xray-daemon-instance-profile"
-  role = aws_iam_role.xray_daemon_role.name
+  provider = aws.core_services
+  name     = "xray-daemon-instance-profile"
+  role     = aws_iam_role.xray_daemon_role.name
 }

@@ -5,6 +5,7 @@ resource "random_string" "random" {
 }
 
 resource "aws_db_subnet_group" "notification-canada-ca" {
+  provider   = aws.core_services
   name       = "notification-canada-ca-${var.env}"
   subnet_ids = var.vpc_private_subnets
 
@@ -173,6 +174,7 @@ resource "aws_rds_cluster_parameter_group" "pgaudit" {
 }
 
 resource "aws_rds_cluster" "notification-canada-ca" {
+  provider = aws.core_services
 
   depends_on = [
     aws_cloudwatch_log_group.logs_exports
@@ -181,6 +183,7 @@ resource "aws_rds_cluster" "notification-canada-ca" {
   cluster_identifier           = "notification-canada-ca-${var.env}-cluster"
   engine                       = "aurora-postgresql"
   engine_version               = var.rds_version
+  apply_immediately            = true
   database_name                = var.rds_database_name
   final_snapshot_identifier    = "server-${random_string.random.result}"
   master_username              = "postgres"
@@ -219,7 +222,8 @@ resource "aws_rds_cluster" "notification-canada-ca" {
 
 # Holds the exported postgresql logs
 resource "aws_cloudwatch_log_group" "logs_exports" {
-  name = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
+  provider = aws.core_services
+  name     = "/aws/rds/cluster/notification-canada-ca-${var.env}-cluster/postgresql"
   #checkov:skip=CKV_AWS_338:The short retention is required to respect Notify's privacy policy
   retention_in_days = 3
 

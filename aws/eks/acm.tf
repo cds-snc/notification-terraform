@@ -18,6 +18,45 @@ resource "aws_acm_certificate" "notification-canada-ca" {
   }
 }
 
+resource "aws_acm_certificate" "notification-canada-ca-gateway" {
+  domain_name       = "*.gateway.${var.domain}"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_route53_record" "notification-canada-ca-gateway" {
+  provider = aws.dns
+
+  for_each = {
+    for dvo in aws_acm_certificate.notification-canada-ca-gateway.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  type            = each.value.type
+  ttl             = 300
+  zone_id         = var.route53_zone_id
+}
+
+resource "aws_acm_certificate_validation" "notification-canada-ca-gateway" {
+  depends_on = [aws_route53_record.notification-canada-ca-gateway]
+
+  certificate_arn         = aws_acm_certificate.notification-canada-ca-gateway.arn
+  validation_record_fqdns = [for record in aws_route53_record.notification-canada-ca-gateway : record.fqdn]
+}
+
 resource "aws_acm_certificate" "notification-canada-ca-alt" {
   count = var.alt_domain != "" ? 1 : 0
 

@@ -14,13 +14,14 @@ dependency "common" {
   mock_outputs = {
     sns_alert_warning_arn  = ""
     sns_alert_critical_arn = ""
+    sns_alert_ok_arn       = ""
   }
 }
 
 dependency "ecr" {
   config_path = "../ecr"
   
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     heartbeat_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/heartbeat"
@@ -35,6 +36,7 @@ include {
 inputs = {
   sns_alert_warning_arn  = dependency.common.outputs.sns_alert_warning_arn
   sns_alert_critical_arn = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                       = dependency.common.outputs.sns_alert_ok_arn
   heartbeat_ecr_repository_url = dependency.ecr.outputs.heartbeat_ecr_repository_url
   heartbeat_ecr_arn            = dependency.ecr.outputs.heartbeat_ecr_arn
 }

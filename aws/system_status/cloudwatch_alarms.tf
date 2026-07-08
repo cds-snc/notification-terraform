@@ -4,6 +4,7 @@
 #
 
 resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-system_status-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-1-500-error-1-minute-warning-system_status-api"
   alarm_description   = "One 500 error in 1 minute for system_status api"
@@ -20,6 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-500-error-1-minute-warning-system
 }
 
 resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-system_status-api" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "logs-10-500-error-5-minutes-critical-system_status-api"
   alarm_description   = "Ten 500 errors in 5 minutes for system_status api"
@@ -32,12 +34,13 @@ resource "aws_cloudwatch_metric_alarm" "logs-10-500-error-5-minutes-critical-sys
   threshold           = 10
   treat_missing_data  = "notBreaching"
   alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 }
 
 
 # Email Down - Warning Alarm
 resource "aws_cloudwatch_metric_alarm" "system_status_email_down_warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "system-status-email-down-warning"
   alarm_description   = "Email system status reported as 'down'"
@@ -55,6 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "system_status_email_down_warning" {
 
 # Email Degraded - Warning Alarm
 resource "aws_cloudwatch_metric_alarm" "system_status_email_degraded_warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "system-status-email-degraded-warning"
   alarm_description   = "Email system status reported as 'degraded' 2 or more times in 10 minutes"
@@ -72,6 +76,7 @@ resource "aws_cloudwatch_metric_alarm" "system_status_email_degraded_warning" {
 
 # SMS Down - Warning Alarm
 resource "aws_cloudwatch_metric_alarm" "system_status_sms_down_warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "system-status-sms-down-warning"
   alarm_description   = "SMS system status reported as 'down'"
@@ -89,6 +94,7 @@ resource "aws_cloudwatch_metric_alarm" "system_status_sms_down_warning" {
 
 # SMS Degraded - Warning Alarm
 resource "aws_cloudwatch_metric_alarm" "system_status_sms_degraded_warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "system-status-sms-degraded-warning"
   alarm_description   = "SMS system status reported as 'degraded' 2 or more times in 10 minutes"

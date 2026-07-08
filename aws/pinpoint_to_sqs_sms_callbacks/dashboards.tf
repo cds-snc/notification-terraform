@@ -3,6 +3,7 @@ locals {
 }
 
 resource "aws_cloudwatch_dashboard" "pinpoint" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "SMS-Pinpoint"
   dashboard_body = <<EOF
@@ -33,7 +34,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 5,
+            "y": 8,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -51,7 +52,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 11,
+            "y": 14,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -69,7 +70,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 45,
+            "y": 54,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -103,7 +104,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 45,
+            "y": 54,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -121,7 +122,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 11,
+            "y": 20,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -153,7 +154,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 39,
+            "y": 48,
             "x": 9,
             "type": "metric",
             "properties": {
@@ -171,7 +172,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 2,
             "width": 24,
-            "y": 3,
+            "y": 6,
             "x": 0,
             "type": "text",
             "properties": {
@@ -181,7 +182,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 2,
             "width": 24,
-            "y": 37,
+            "y": 46,
             "x": 0,
             "type": "text",
             "properties": {
@@ -191,7 +192,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 39,
+            "y": 48,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -210,18 +211,18 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 18,
             "width": 6,
-            "y": 5,
+            "y": 8,
             "x": 18,
             "type": "text",
             "properties": {
-                "markdown": "\n## Limits\n- [Spending limit](https://${var.region}.console.aws.amazon.com/sns/v3/home?region=${var.region}#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [${var.celery_queue_prefix}send-sms-low](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-low), [${var.celery_queue_prefix}send-sms-medium](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-medium), or [${var.celery_queue_prefix}send-sms-high](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-high) depending on the SMS priority. This task calls the SNS pr Pinpoint API to send a text message.\n\n## SMS IDs\nAWS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS/Pinpoint API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `${var.region}` use phone numbers reserved for Notify's use\n\n### ⚠️  SNS in `us-west-2`\nIf a Notify service has an inbound number attached, SMS will be sent with SNS using a long code phone number ordered on Pinpoint in the `us-west-2` region. Statistics for this region and alarms are **not visible on this dashboard**.\n"
+                "markdown": "\n## Limits\n- [Spending limit](https://${var.region}.console.aws.amazon.com/sns/v3/home?region=${var.region}#/mobile/text-messaging) of 30,000 USD/month\n\n## Message flow\nAfter a notification has been created in the database, Celery sends the SMS to the provider using the `deliver_sms` Celery task. This Celery task is assigned to the SQS queue [${var.celery_queue_prefix}send-sms-low](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-low), [${var.celery_queue_prefix}send-sms-medium](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-medium), or [${var.celery_queue_prefix}send-sms-high](#/queues/https%3A%2F%2Fsqs.${var.region}.amazonaws.com%2F${var.account_id}%2F${var.celery_queue_prefix}send-sms-high) depending on the SMS priority. This task calls the SNS or Pinpoint API to send a text message.\n\n## SMS IDs\nAWS keeps track of SMS with a `messageId`, the value of SNS' `messageId` is stored in the `Notification` object in the `reference` column.\n\n## Logging\nCelery tasks output multiple messages when processing tasks/calling the SNS/Pinpoint API, take a look at the relevant Celery code to know more.\n\nAfter an SMS has been sent by SNS, the delivery details are stored in CloudWatch Log groups:\n\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber) for successful deliveries\n- [sns/${var.region}/${var.account_id}/DirectPublishToPhoneNumber/Failure](#logsV2:log-groups/log-group/sns$252F${var.region}$252F${var.account_id}$252FDirectPublishToPhoneNumber$252FFailure) for failures\n\n## Phone numbers\n\nSMS sent in `${var.region}` use phone numbers reserved for Notify's use\n"
             }
         },
         {
             "height": 6,
             "width": 9,
-            "y": 17,
-            "x": 9,
+            "y": 26,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "metrics": [
@@ -238,7 +239,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 9,
             "width": 6,
-            "y": 39,
+            "y": 48,
             "x": 18,
             "type": "text",
             "properties": {
@@ -248,7 +249,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 3,
             "width": 24,
-            "y": 51,
+            "y": 66,
             "x": 0,
             "type": "log",
             "properties": {
@@ -262,8 +263,8 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 9,
-            "y": 5,
-            "x": 9,
+            "y": 20,
+            "x": 0,
             "type": "metric",
             "properties": {
                 "sparkline": true,
@@ -306,7 +307,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 24,
-            "y": 63,
+            "y": 84,
             "x": 0,
             "type": "log",
             "properties": {
@@ -319,7 +320,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 24,
-            "y": 57,
+            "y": 78,
             "x": 0,
             "type": "log",
             "properties": {
@@ -333,7 +334,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 25,
+            "y": 34,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -372,7 +373,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 25,
+            "y": 34,
             "x": 8,
             "type": "metric",
             "properties": {
@@ -406,7 +407,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 25,
+            "y": 34,
             "x": 16,
             "type": "metric",
             "properties": {
@@ -440,7 +441,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 2,
             "width": 24,
-            "y": 23,
+            "y": 32,
             "x": 0,
             "type": "text",
             "properties": {
@@ -450,7 +451,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 31,
+            "y": 40,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -468,7 +469,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 31,
+            "y": 40,
             "x": 16,
             "type": "metric",
             "properties": {
@@ -486,7 +487,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "height": 6,
             "width": 8,
-            "y": 31,
+            "y": 40,
             "x": 8,
             "type": "metric",
             "properties": {
@@ -504,7 +505,7 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
         {
             "type": "metric",
             "x": 0,
-            "y": 54,
+            "y": 69,
             "width": 24,
             "height": 9,
             "properties": {
@@ -540,6 +541,77 @@ resource "aws_cloudwatch_dashboard" "pinpoint" {
                 "period": 86400,
                 "title": "Carrier failures over the past day"
             }
+        },
+        {
+            "type": "alarm",
+            "x": 0,
+            "y": 3,
+            "width": 24,
+            "height": 3,
+            "properties": {
+                "title": "Alarms - us-west-2",
+                "alarms": [
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-critical-us-west-2[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.pinpoint-sms-success-rate-warning-us-west-2[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.total-sms-spending-critical-us-west-2[0].arn}",
+                    "${aws_cloudwatch_metric_alarm.total-sms-spending-warning-us-west-2[0].arn}"
+                ]
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 8,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-successes" ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region_pinpoint_us}",
+                "stat": "Sum",
+                "period": 300,
+                "title": "SMS delivered per 5m - us-west-2"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 14,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "LogMetrics", "pinpoint-sms-failures" ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region_pinpoint_us}",
+                "stat": "Sum",
+                "period": 300,
+                "title": "SMS failures per 5m - us-west-2"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 60,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Lambda", "Invocations", "FunctionName", "pinpoint_to_sqs_sms_callbacks_us_west_2" ],
+                    [ ".", "Errors", ".", ".", { "color": "#d62728", "yAxis": "right" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "${var.region_pinpoint_us}",
+                "stat": "Sum",
+                "period": 300,
+                "title": "Pinpoint Callback Lambda invocations per 5m - us-west-2"
+            }
         }
     ]
 }
@@ -547,6 +619,7 @@ EOF
 }
 
 resource "aws_cloudwatch_dashboard" "sms-send-rate" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Specialized-sms-send-rate"
   dashboard_body = <<EOF
@@ -596,7 +669,7 @@ resource "aws_cloudwatch_dashboard" "sms-send-rate" {
             "properties": {
                 "metrics": [
                     [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-static", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-static" } ],
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-scalable", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-scalable" } ]
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_available", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "${local.celery_name}-sms-send-burst", { "region": "${var.region}", "label": "${local.celery_name}-sms-send-burst" } ]
                 ],
                 "sparkline": true,
                 "view": "singleValue",

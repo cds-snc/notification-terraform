@@ -3,6 +3,7 @@
 ###
 
 resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
+  provider = aws.core_services
   name     = var.eks_cluster_name
   role_arn = aws_iam_role.eks-cluster-role.arn
   version  = var.eks_cluster_version
@@ -56,6 +57,7 @@ resource "aws_eks_cluster" "notification-canada-ca-eks-cluster" {
 ###
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
+  provider             = aws.core_services
   cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   node_group_name      = "notification-canada-ca-${var.env}-eks-primary-node-group-k8s"
   node_role_arn        = aws_iam_role.eks-worker-role.arn
@@ -97,6 +99,7 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-node-group-k8s" {
 }
 
 resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" {
+  provider             = aws.core_services
   count                = var.node_upgrade ? 1 : 0
   cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
   node_group_name      = "notification-canada-ca-${var.env}-eks-secondary-node-group"
@@ -140,6 +143,61 @@ resource "aws_eks_node_group" "notification-canada-ca-eks-secondary-node-group" 
   }
 }
 
+resource "aws_eks_node_group" "signoz_node_group" {
+  provider             = aws.core_services
+  count                = var.enable_signoz ? 1 : 0
+  cluster_name         = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  node_group_name      = "notification-canada-ca-${var.env}-signoz-node-group"
+  node_role_arn        = aws_iam_role.eks-worker-role.arn
+  subnet_ids           = [var.vpc_private_subnets_k8s[0]]
+  force_update_version = var.force_upgrade
+
+  release_version = var.eks_node_ami_version
+  instance_types  = var.signoz_worker_instance_types
+
+  labels = {
+    workload-type = "signoz"
+  }
+
+  taint {
+    key    = "dedicated"
+    value  = "signoz"
+    effect = "NO_SCHEDULE"
+  }
+
+  scaling_config {
+    # Dedicated Signoz node group with a fixed capacity of 3 nodes.
+    desired_size = 3
+    max_size     = 3
+    min_size     = 3
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  launch_template {
+    id      = aws_launch_template.notification-canada-ca-eks-node-group.id
+    version = aws_launch_template.notification-canada-ca-eks-node-group.default_version
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
+  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+  depends_on = [
+    aws_iam_role_policy_attachment.eks-worker-AWSLoadBalancerControllerIAMPolicy,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.eks-worker-AmazonEKS_CNI_Policy
+  ]
+
+  tags = {
+    Name                     = "notification-canada-ca"
+    CostCenter               = "notification-canada-ca-${var.env}"
+    "karpenter.sh/discovery" = aws_eks_cluster.notification-canada-ca-eks-cluster.name
+  }
+}
+
+
 resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
   name        = "notification-canada-ca-${var.env}-eks-node-group"
   description = "EKS worker node group launch template"
@@ -163,6 +221,50 @@ resource "aws_launch_template" "notification-canada-ca-eks-node-group" {
     http_tokens                 = "required"
   }
 
+  # Aggressive memory eviction configuration (AL2023 nodeadm format).
+  # Defaults: evictionHard.memory.available=100Mi, no soft eviction.
+  # Raises thresholds so kubelet reclaims memory earlier, before the kernel
+  # OOM killer freezes the node.
+  #
+  # Note: systemReserved.memory reduces node allocatable memory by 512Mi.
+  # Review pod resource requests if scheduling issues arise after rollout.
+  #
+  # Note: evictionMaxPodGracePeriod caps per-pod terminationGracePeriodSeconds
+  # at 180s during eviction — adjust if workloads require longer shutdown windows.
+  user_data = base64encode(<<-USERDATA
+    MIME-Version: 1.0
+    Content-Type: multipart/mixed; boundary="//"
+
+    --//
+    Content-Type: application/node.eks.aws
+
+    ---
+    apiVersion: node.eks.aws/v1alpha1
+    kind: NodeConfig
+    spec:
+      kubelet:
+        config:
+          evictionHard:
+            memory.available: "500Mi"
+            nodefs.available: "10%"
+            imagefs.available: "15%"
+          evictionSoft:
+            memory.available: "1Gi"
+            nodefs.available: "15%"
+            imagefs.available: "20%"
+          evictionSoftGracePeriod:
+            memory.available: "1m30s"
+            nodefs.available: "1m30s"
+            imagefs.available: "1m30s"
+          evictionMinimumReclaim:
+            memory.available: "128Mi"
+          evictionMaxPodGracePeriod: 180
+          systemReserved:
+            memory: "512Mi"
+    --//--
+  USERDATA
+  )
+
   tags = {
     Name       = "notification-canada-ca"
     CostCenter = "notification-canada-ca-${var.env}"
@@ -181,6 +283,16 @@ resource "aws_eks_addon" "coredns" {
   resolve_conflicts_on_update = "OVERWRITE"
 
   configuration_values = jsonencode({
+    replicaCount = 3
+    resources = {
+      limits = {
+        memory = "256Mi"
+      }
+      requests = {
+        cpu    = "200m"
+        memory = "128Mi"
+      }
+    }
     corefile = <<-EOF
       .:53 {
           errors

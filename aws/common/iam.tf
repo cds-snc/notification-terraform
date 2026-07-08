@@ -3,7 +3,8 @@
 ###
 
 resource "aws_iam_role" "sns-delivery-role" {
-  name = "sns-delivery-role"
+  provider = aws.core_services
+  name     = "sns-delivery-role"
 
   assume_role_policy = <<POLICY
 {
@@ -23,8 +24,9 @@ POLICY
 }
 
 resource "aws_iam_role_policy" "sns-delivery-role-policy" {
-  name = "sns-delivery-role-policy"
-  role = aws_iam_role.sns-delivery-role.id
+  provider = aws.core_services
+  name     = "sns-delivery-role-policy"
+  role     = aws_iam_role.sns-delivery-role.id
 
   policy = <<POLICY
 {
@@ -53,7 +55,8 @@ POLICY
 ###
 
 resource "aws_iam_role" "iam_lambda_to_sqs" {
-  name = "iam_lambda_to_sqs"
+  provider = aws.core_services
+  name     = "iam_lambda_to_sqs"
 
   assume_role_policy = <<POLICY
 {
@@ -73,6 +76,7 @@ POLICY
 }
 
 resource "aws_iam_policy" "lambda_logging" {
+  provider    = aws.core_services
   name        = "lambda_logging"
   path        = "/"
   description = "IAM policy for logging from a Lambda"
@@ -96,11 +100,13 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
+  provider   = aws.core_services
   role       = aws_iam_role.iam_lambda_to_sqs.name
   policy_arn = aws_iam_policy.lambda_logging.arn
 }
 
 resource "aws_iam_policy" "lambda_sqs_send" {
+  provider    = aws.core_services
   name        = "lambda_sqs_send"
   path        = "/"
   description = "IAM policy for sending messages to SQS from Lambda"
@@ -123,6 +129,7 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_sqs" {
+  provider   = aws.core_services
   role       = aws_iam_role.iam_lambda_to_sqs.name
   policy_arn = aws_iam_policy.lambda_sqs_send.arn
 }
@@ -132,17 +139,20 @@ resource "aws_iam_role_policy_attachment" "lambda_sqs" {
 # Cloud Based Sensor S3 satellite bucket
 ##
 resource "aws_iam_role" "firehose_waf_logs" {
+  provider           = aws.core_services
   name               = "FirehoseWafLogs"
   assume_role_policy = data.aws_iam_policy_document.firehose_assume.json
 }
 
 resource "aws_iam_policy" "firehose_waf_logs" {
-  name   = "FirehoseWafLogsPolicy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.firehose_waf_logs.json
+  provider = aws.core_services
+  name     = "FirehoseWafLogsPolicy"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.firehose_waf_logs.json
 }
 
 resource "aws_iam_role_policy_attachment" "firehose_waf_logs" {
+  provider   = aws.core_services
   role       = aws_iam_role.firehose_waf_logs.name
   policy_arn = aws_iam_policy.firehose_waf_logs.arn
 }
@@ -213,5 +223,59 @@ data "aws_iam_policy_document" "sns_to_sqs" {
 
 # This is required for Karpenter. Older accounts do not have this enabled by default
 resource "aws_iam_service_linked_role" "spotInstances" {
+  provider         = aws.core_services
   aws_service_name = "spot.amazonaws.com"
+}
+
+# EventBridge scan verdict API destination callbacks
+data "aws_iam_policy_document" "eventbridge_invoke_api_destination_assume" {
+  count = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [var.account_id]
+    }
+
+    condition {
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
+      values   = [aws_cloudwatch_event_rule.guardduty_scan_verdict[0].arn]
+    }
+  }
+}
+
+resource "aws_iam_role" "eventbridge_invoke_scan_verdict_api_destination" {
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
+
+  name               = "eventbridge-invoke-scan-verdict-api-destination-${var.env}"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_invoke_api_destination_assume[0].json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_api_destination" {
+  count = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["events:InvokeApiDestination"]
+    resources = [aws_cloudwatch_event_api_destination.guardduty_scan_verdict_callback[0].arn]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_scan_verdict_api_destination" {
+  count    = var.cloudwatch_enabled && var.enable_guardduty_scan_api_destination ? 1 : 0
+  provider = aws.core_services
+
+  name   = "eventbridge-invoke-scan-verdict-api-destination-${var.env}"
+  role   = aws_iam_role.eventbridge_invoke_scan_verdict_api_destination[0].id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_api_destination[0].json
 }

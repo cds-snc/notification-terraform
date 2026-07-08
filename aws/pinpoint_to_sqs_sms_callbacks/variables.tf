@@ -15,6 +15,11 @@ variable "sqs_deliver_receipts_queue_arn" {
   description = "The arn of the SQS queue for receipts processing celery tasks"
 }
 
+variable "sqs_deliver_receipts_queue_us_west_2_arn" {
+  type        = string
+  description = "The arn of the SQS queue for receipts processing celery tasks in US West 2"
+}
+
 variable "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
   type        = string
   description = "The URL of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"
@@ -23,6 +28,16 @@ variable "pinpoint_to_sqs_sms_callbacks_ecr_repository_url" {
 variable "pinpoint_to_sqs_sms_callbacks_ecr_arn" {
   type        = string
   description = "The ARN of the ECR repository for the pinpoint_to_sqs_sms_callbacks image"
+}
+
+variable "pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url" {
+  type        = string
+  description = "The URL of the ECR repository for the pinpoint_to_sqs_sms_callbacks image in us-west-2"
+}
+
+variable "pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn" {
+  type        = string
+  description = "The ARN of the ECR repository for the pinpoint_to_sqs_sms_callbacks image in us-west-2"
 }
 
 variable "sms_monthly_spend_limit" {
@@ -58,4 +73,16 @@ variable "sqs_send_sms_low_queue_delay_warning_arn" {
 variable "sqs_send_sms_low_queue_delay_critical_arn" {
   description = "ARN for the corresponding alarm"
   type        = string
+}
+
+variable "sns_alert_warning_arn_us_west_2" {
+  type = string
+}
+
+variable "sns_alert_critical_arn_us_west_2" {
+  type = string
+}
+
+variable "sns_alert_ok_arn_us_west_2" {
+  type = string
 }

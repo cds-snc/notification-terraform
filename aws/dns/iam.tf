@@ -1,7 +1,8 @@
 resource "aws_iam_role_policy" "scratch_dns_manager_policy" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "scratch_dns_manager_policy"
-  role  = aws_iam_role.scratch_dns_manager[0].id
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "scratch_dns_manager_policy"
+  role     = aws_iam_role.scratch_dns_manager[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -22,8 +23,9 @@ resource "aws_iam_role_policy" "scratch_dns_manager_policy" {
 }
 
 resource "aws_iam_role" "scratch_dns_manager" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "scratch_dns_manager_role"
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "scratch_dns_manager_role"
 
   assume_role_policy = <<EOF
 {
@@ -43,9 +45,10 @@ EOF
 }
 
 resource "aws_iam_role_policy" "staging_dns_manager_policy" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "staging_dns_manager_policy"
-  role  = aws_iam_role.staging_dns_manager[0].id
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "staging_dns_manager_policy"
+  role     = aws_iam_role.staging_dns_manager[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -66,8 +69,9 @@ resource "aws_iam_role_policy" "staging_dns_manager_policy" {
 }
 
 resource "aws_iam_role" "staging_dns_manager" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "staging_dns_manager_role"
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "staging_dns_manager_role"
 
   assume_role_policy = <<EOF
 {
@@ -87,9 +91,10 @@ EOF
 }
 
 resource "aws_iam_role_policy" "production_dns_manager_policy" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "production_dns_manager_policy"
-  role  = aws_iam_role.production_dns_manager[0].id
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "production_dns_manager_policy"
+  role     = aws_iam_role.production_dns_manager[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -110,8 +115,9 @@ resource "aws_iam_role_policy" "production_dns_manager_policy" {
 }
 
 resource "aws_iam_role" "production_dns_manager" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "production_dns_manager_role"
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "production_dns_manager_role"
 
   assume_role_policy = <<EOF
 {
@@ -131,9 +137,10 @@ EOF
 }
 
 resource "aws_iam_role_policy" "dev_dns_manager_policy" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "dev_dns_manager_policy"
-  role  = aws_iam_role.dev_dns_manager[0].id
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "dev_dns_manager_policy"
+  role     = aws_iam_role.dev_dns_manager[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -154,8 +161,9 @@ resource "aws_iam_role_policy" "dev_dns_manager_policy" {
 }
 
 resource "aws_iam_role" "dev_dns_manager" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "dev_dns_manager_role"
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "dev_dns_manager_role"
 
   assume_role_policy = <<EOF
 {
@@ -176,9 +184,10 @@ EOF
 
 
 resource "aws_iam_role_policy" "sandbox_dns_manager_policy" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "sandbox_dns_manager_policy"
-  role  = aws_iam_role.sandbox_dns_manager[0].id
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "sandbox_dns_manager_policy"
+  role     = aws_iam_role.sandbox_dns_manager[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -199,8 +208,9 @@ resource "aws_iam_role_policy" "sandbox_dns_manager_policy" {
 }
 
 resource "aws_iam_role" "sandbox_dns_manager" {
-  count = var.env == "staging" ? 1 : 0
-  name  = "sandbox_dns_manager_role"
+  provider = aws.core_services
+  count    = var.env == "staging" ? 1 : 0
+  name     = "sandbox_dns_manager_role"
 
   assume_role_policy = <<EOF
 {

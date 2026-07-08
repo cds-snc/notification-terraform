@@ -1,13 +1,16 @@
 #!/bin/bash
 # This script will delete the aws environment according to the inputs provided
 # Both the environment and the account_id are required
-# Usage: ./deleteEnv.sh <ENVIRONMENT> <ACCOUNT_ID>
-# Example: ./deleteEnv.sh sandbox 123456789012
+# Usage: ./deleteEnvironment.sh <ENVIRONMENT> <ACCOUNT_ID>
+# Example: ./deleteEnvironment.sh sandbox 123456789012
 
 ENVIRONMENT=$1
 ACCOUNT_ID=$2
 
-USAGE="Usage: ./deleteEnv.sh <ENVIRONMENT> <ACCOUNT_ID>"
+USAGE="Usage: ./deleteEnvironment.sh <ENVIRONMENT> <ACCOUNT_ID>"
+
+export AWS_REGION=ca-central-1
+SECONDARY_REGION=ca-west-1
 
 START_TIME=$(date +%s.%N)
 
@@ -29,6 +32,32 @@ sed -i'' -e "s/SCRATCH_ACCOUNT_ID/$ACCOUNT_ID/g" awsNuke.cfg
 echo "Done."
 
 echo "Deleting environment $ENVIRONMENT in account $ACCOUNT_ID"
+
+# Clear any stale DynamoDB state checksums that would block init
+# These can be left behind by interrupted applies and cause "checksum mismatch" errors
+echo "Clearing stale DynamoDB state checksums..."
+DYNAMO_TABLE="terraform-state-lock-dynamo"
+STATE_BUCKET="notification-canada-ca-${ENVIRONMENT}-tf"
+MD5_KEYS=$(aws dynamodb scan \
+  --table-name "$DYNAMO_TABLE" \
+  --filter-expression "contains(LockID, :suffix)" \
+  --expression-attribute-values '{":suffix":{"S":"-md5"}}' \
+  --query "Items[?starts_with(LockID.S, '${STATE_BUCKET}')].LockID.S" \
+  --output text)
+for key in $MD5_KEYS; do
+  echo "Removing stale checksum entry: $key"
+  aws dynamodb delete-item \
+    --table-name "$DYNAMO_TABLE" \
+    --key "{\"LockID\": {\"S\": \"$key\"}}"
+done
+echo "Done."
+
+# Initialize all modules in the environment so providers are installed for all dependencies
+echo "Initializing all modules..."
+pushd ../env/$ENVIRONMENT
+terragrunt run-all init -upgrade --terragrunt-non-interactive --queue-ignore-errors
+popd
+echo "Done."
 
 # We need to destroy cloudfront distributions and base DNS records using Terraform since they are in a different account
 # Where I could, I put allow_overwrite = true on DNS records so that we don't have to destroy them, but cloudfront and some validation records need to be destroyed
@@ -58,14 +87,8 @@ echo "Done."
 echo "Deleting Cloud Based Sensor S3 Bucket..."
 pushd ../env/$ENVIRONMENT/common
 terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target module.cbs_logs_bucket --terragrunt-non-interactive -auto-approve
-echo "Done." 
-echo "Deleting new relic resources..."
-terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_push[0]' --terragrunt-non-interactive -auto-approve
-terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_api_access_key.newrelic_aws_access_key[0]' --terragrunt-non-interactive -auto-approve
-terragrunt destroy -var-file ../$ENVIRONMENT.tfvars --target 'newrelic_cloud_aws_link_account.newrelic_cloud_integration_pull[0]' --terragrunt-non-interactive -auto-approve
 popd
 echo "Done."
-
 
 pip install boto3
 
@@ -100,93 +123,246 @@ echo "Done."
 
 # Delete the remaining resources that aws-nuke can't delete
 echo "Deleting remaining resources..."
+
+echo "Deleting KMS alias s3_scan_object_queue..."
 aws kms delete-alias --alias-name alias/s3_scan_object_queue
 
+echo "Deleting backup vault recovery points and vaults..."
+PRIMARY_VAULT_NAME="notification-canada-ca-${ENVIRONMENT}-rds-vault"
+RECOVERY_POINTS=$(aws backup list-recovery-points-by-backup-vault --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME" --query 'RecoveryPoints[].RecoveryPointArn' --output text 2>/dev/null)
+if [ -n "$RECOVERY_POINTS" ]; then
+  for rp in $RECOVERY_POINTS; do
+    echo "Deleting recovery point $rp from $PRIMARY_VAULT_NAME..."
+    aws backup delete-recovery-point --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME" --recovery-point-arn "$rp"
+  done
+  echo "Waiting for recovery points to be deleted..."
+  sleep 10
+fi
+if aws backup describe-backup-vault --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME" &>/dev/null; then
+  aws backup delete-backup-vault --region "$AWS_REGION" --backup-vault-name "$PRIMARY_VAULT_NAME"
+  echo "Deleted primary backup vault: $PRIMARY_VAULT_NAME"
+else
+  echo "Primary backup vault not found: $PRIMARY_VAULT_NAME"
+fi
+
+SECONDARY_VAULT_NAME="notify-${ENVIRONMENT}-rds-vault-secondary"
+SECONDARY_RECOVERY_POINTS=$(aws backup list-recovery-points-by-backup-vault --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME" --query 'RecoveryPoints[].RecoveryPointArn' --output text 2>/dev/null)
+if [ -n "$SECONDARY_RECOVERY_POINTS" ]; then
+  for rp in $SECONDARY_RECOVERY_POINTS; do
+    echo "Deleting recovery point $rp from $SECONDARY_VAULT_NAME..."
+    aws backup delete-recovery-point --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME" --recovery-point-arn "$rp"
+  done
+  echo "Waiting for recovery points to be deleted..."
+  sleep 10
+fi
+if aws backup describe-backup-vault --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME" &>/dev/null; then
+  aws backup delete-backup-vault --region "$SECONDARY_REGION" --backup-vault-name "$SECONDARY_VAULT_NAME"
+  echo "Deleted secondary backup vault: $SECONDARY_VAULT_NAME"
+else
+  echo "Secondary backup vault not found: $SECONDARY_VAULT_NAME"
+fi
+echo "Done."
+
+echo "Deleting backup vault KMS aliases and scheduling backup vault keys for deletion..."
+PRIMARY_BACKUP_ALIAS="alias/backup-vault-$ENVIRONMENT"
+PRIMARY_BACKUP_KEY_ID=$(aws kms list-aliases --region "$AWS_REGION" --query "Aliases[?AliasName=='${PRIMARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
+if [ -n "$PRIMARY_BACKUP_KEY_ID" ] && [ "$PRIMARY_BACKUP_KEY_ID" != "None" ]; then
+  aws kms delete-alias --region "$AWS_REGION" --alias-name "$PRIMARY_BACKUP_ALIAS"
+  aws kms schedule-key-deletion --region "$AWS_REGION" --key-id "$PRIMARY_BACKUP_KEY_ID" --pending-window-in-days 7
+else
+  echo "Primary backup vault alias not found: $PRIMARY_BACKUP_ALIAS"
+fi
+
+SECONDARY_BACKUP_ALIAS="alias/backup-vault-secondary-$ENVIRONMENT"
+SECONDARY_BACKUP_KEY_ID=$(aws kms list-aliases --region "$SECONDARY_REGION" --query "Aliases[?AliasName=='${SECONDARY_BACKUP_ALIAS}'].TargetKeyId" --output text)
+if [ -n "$SECONDARY_BACKUP_KEY_ID" ] && [ "$SECONDARY_BACKUP_KEY_ID" != "None" ]; then
+  aws kms delete-alias --region "$SECONDARY_REGION" --alias-name "$SECONDARY_BACKUP_ALIAS"
+  aws kms schedule-key-deletion --region "$SECONDARY_REGION" --key-id "$SECONDARY_BACKUP_KEY_ID" --pending-window-in-days 7
+else
+  echo "Secondary backup vault alias not found: $SECONDARY_BACKUP_ALIAS"
+fi
+echo "Done."
+
+echo "Deleting IAM service-linked role AWSServiceRoleForEC2Spot..."
 aws iam delete-service-linked-role --role-name AWSServiceRoleForEC2Spot
+echo "Done."
 
-aws logs delete-log-group --log-group-name '/aws/eks/notification-canada-ca-dev-eks-cluster/cluster'
-aws logs delete-log-group --log-group-name '/aws/rds/cluster/notification-canada-ca-dev-cluster/postgresql'
+echo "Deleting EKS CloudWatch log group..."
+aws logs delete-log-group --log-group-name "/aws/eks/notification-canada-ca-${ENVIRONMENT}-eks-cluster/cluster"
+echo "Done."
 
+echo "Deleting RDS CloudWatch log group..."
+aws logs delete-log-group --log-group-name "/aws/rds/cluster/notification-canada-ca-${ENVIRONMENT}-cluster/postgresql"
+echo "Done."
+
+echo "Deleting CloudWatch query definitions..."
 QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
 for query in $QUERIES; do
-  echo "Deleting cloudwatch query $query"
+  echo "Deleting cloudwatch query $query..."
   aws logs delete-query-definition --query-definition-id $query
+  echo "Done."
 done
+echo "Done."
 
+echo "Deleting IAM SAML provider..."
 aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-provider/client-vpn
+echo "Done."
 
+echo "Deleting IAM user ecr-user..."
+for key in $(aws iam list-access-keys --user-name ecr-user --query 'AccessKeyMetadata[].AccessKeyId' --output text); do
+  aws iam delete-access-key --user-name ecr-user --access-key-id $key
+done
 aws iam delete-user --user-name ecr-user
+echo "Done."
 
-aws events remove-targets --rule dailyBudgetSpend --ids $(aws events list-targets-by-rule --rule dailyBudgetSpend --query 'Targets[].Id' --output text)
+echo "Deleting IAM user signoz-$ENVIRONMENT..."
+for key in $(aws iam list-access-keys --user-name signoz-$ENVIRONMENT --query 'AccessKeyMetadata[].AccessKeyId' --output text); do
+  aws iam delete-access-key --user-name signoz-$ENVIRONMENT --access-key-id $key
+done
+aws iam delete-user --user-name signoz-$ENVIRONMENT
+echo "Done."
+
+echo "Deleting event rule dailyBudgetSpend..."
+DAILY_BUDGET_TARGETS=$(aws events list-targets-by-rule --rule dailyBudgetSpend --query 'Targets[].Id' --output text)
+if [ -n "$DAILY_BUDGET_TARGETS" ]; then
+  aws events remove-targets --rule dailyBudgetSpend --ids $DAILY_BUDGET_TARGETS
+fi
 aws events delete-rule --name dailyBudgetSpend
+echo "Done."
 
-aws events remove-targets --rule weeklyBudgetSpend --ids $(aws events list-targets-by-rule --rule weeklyBudgetSpend --query 'Targets[].Id' --output text)
+echo "Deleting event rule weeklyBudgetSpend..."
+WEEKLY_BUDGET_TARGETS=$(aws events list-targets-by-rule --rule weeklyBudgetSpend --query 'Targets[].Id' --output text)
+if [ -n "$WEEKLY_BUDGET_TARGETS" ]; then
+  aws events remove-targets --rule weeklyBudgetSpend --ids $WEEKLY_BUDGET_TARGETS
+fi
 aws events delete-rule --name weeklyBudgetSpend
+echo "Done."
 
-aws events remove-targets --rule google_cidr_testing --ids $(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
+echo "Deleting event rule google_cidr_testing..."
+GOOGLE_CIDR_TARGETS=$(aws events list-targets-by-rule --rule google_cidr_testing --query 'Targets[].Id' --output text)
+if [ -n "$GOOGLE_CIDR_TARGETS" ]; then
+  aws events remove-targets --rule google_cidr_testing --ids $GOOGLE_CIDR_TARGETS
+fi
 aws events delete-rule --name google_cidr_testing
+echo "Done."
 
+echo "Deleting SES email identity dev.notification.cdssandbox.xyz..."
 aws sesv2 delete-email-identity --email-identity dev.notification.cdssandbox.xyz
+echo "Done."
 
+echo "Deleting system_status_testing event targets..."
 SYSTEM_STATUS_TARGET=$(aws events list-targets-by-rule --rule system_status_testing --query 'Targets[].Id' --output text)
-
 for target in $SYSTEM_STATUS_TARGET; do
-  echo "Deleting event target $target"
+  echo "Deleting event target $target..."
   aws events remove-targets --rule "system_status_testing" --ids "$target"
   echo "Done."
 done
+echo "Done."
 
+echo "Deleting heartbeat_testing event targets..."
 HEARTBEAT_TESTING_TARGET=$(aws events list-targets-by-rule --rule heartbeat_testing --query 'Targets[].Id' --output text)
-
 for target in $HEARTBEAT_TESTING_TARGET; do
-  echo "Deleting event target $target"
+  echo "Deleting event target $target..."
   aws events remove-targets --rule "heartbeat_testing" --ids "$target"
   echo "Done."
 done
+echo "Done."
 
+echo "Deleting perf_test_event_rule event targets..."
 PERFTEST_TARGET=$(aws events list-targets-by-rule --rule perf_test_event_rule --query 'Targets[].Id' --output text)
-
 for target in $PERFTEST_TARGET; do
-  echo "Deleting event target $target"
+  echo "Deleting event target $target..."
   aws events remove-targets --rule "perf_test_event_rule" --ids "$target"
   echo "Done."
 done
+echo "Done."
 
+echo "Clearing active SES receipt rule set..."
+AWS_REGION=us-east-1 aws ses set-active-receipt-rule-set
+echo "Done."
 
-AWS_REGION=us-east-1  aws ses set-active-receipt-rule-set
+echo "Deleting SES receipt rule set main..."
 AWS_REGION=us-east-1 aws ses delete-receipt-rule-set --rule-set-name main
+echo "Done."
 
+echo "Deleting SES email identities..."
 IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
-
 for identity in $IDENTITIES; do
-  echo "Deleting ses email identity $identity"
+  echo "Deleting SES email identity $identity..."
   aws sesv2 delete-email-identity --email-identity $identity
   echo "Done."
 done
+echo "Done."
 
 # We have to switch to US-EAST-1 to delete the email identities
 export AWS_REGION=us-east-1
+echo "Deleting SES email identities in us-east-1..."
 US_IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
-
 for identity in $US_IDENTITIES; do
-  echo "Deleting ses email identity $identity"
+  echo "Deleting SES email identity $identity..."
   aws sesv2 delete-email-identity --email-identity $identity
   echo "Done."
 done
+echo "Done."
+
+echo "Deleting CloudWatch query definitions (us-east-1)..."
 
 QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
 for query in $QUERIES; do
-  echo "Deleting cloudwatch query $query"
+  echo "Deleting cloudwatch query $query..."
   aws logs delete-query-definition --query-definition-id $query
+  echo "Done."
 done
+echo "Done."
 
+echo "Deleting Route53 Resolver query log configs..."
 R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'ResolverQueryLogConfigs[].Id' --output text)
 for query in $R53_QUERIES; do
+    echo "Deleting Route53 Resolver query log config $query..."
     association=$(aws route53resolver list-resolver-query-log-config-associations --query "ResolverQueryLogConfigAssociations[? ResolverQueryLogConfigId=='$query'].Id" --output text)
-    resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
-    aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    if [ -n "$association" ]; then
+        resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
+        aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    fi
     aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
+    echo "Done."
 done
+echo "Done."
+
+# We have to switch to US-WEST-2 to delete the email identities
+export AWS_REGION=us-west-2
+echo "Deleting SES email identities in us-west-2..."
+US_IDENTITIES=$(aws sesv2 list-email-identities --query 'EmailIdentities[].IdentityName' --output text)
+for identity in $US_IDENTITIES; do
+  echo "Deleting SES email identity $identity..."
+  aws sesv2 delete-email-identity --email-identity $identity
+  echo "Done."
+done
+echo "Done."
+
+echo "Deleting CloudWatch query definitions (us-west-2)..."
+
+QUERIES=$(aws logs describe-query-definitions --query 'queryDefinitions[].queryDefinitionId' --output text)
+for query in $QUERIES; do
+  echo "Deleting cloudwatch query $query..."
+  aws logs delete-query-definition --query-definition-id $query
+  echo "Done."
+done
+echo "Done."
+
+echo "Deleting Route53 Resolver query log configs..."
+R53_QUERIES=$(aws route53resolver list-resolver-query-log-configs --query 'ResolverQueryLogConfigs[].Id' --output text)
+for query in $R53_QUERIES; do
+    echo "Deleting Route53 Resolver query log config $query..."
+    association=$(aws route53resolver list-resolver-query-log-config-associations --query "ResolverQueryLogConfigAssociations[? ResolverQueryLogConfigId=='$query'].Id" --output text)
+    if [ -n "$association" ]; then
+        resourceid=$(aws route53resolver get-resolver-query-log-config-association --resolver-query-log-config-association-id $association --query 'ResolverQueryLogConfigAssociation.ResourceId' --output text)
+        aws route53resolver disassociate-resolver-query-log-config --resolver-query-log-config-id $query --resource-id $resourceid
+    fi
+    aws route53resolver delete-resolver-query-log-config --resolver-query-log-config-id $query
+    echo "Done."
+done
+echo "Done."
 
 END_TIME=$(date +%s.%N)
 

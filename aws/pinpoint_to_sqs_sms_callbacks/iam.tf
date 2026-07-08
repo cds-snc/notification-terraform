@@ -1,18 +1,21 @@
 # see https://docs.aws.amazon.com/sms-voice/latest/userguide/configuration-sets-cloud-watch.html
 
 resource "aws_iam_role" "pinpoint_logs" {
+  provider           = aws.core_services
   name               = "PinpointLogs"
   assume_role_policy = data.aws_iam_policy_document.pinpoint_assume.json
 }
 
 resource "aws_iam_policy" "pinpoint_logs" {
-  count  = var.cloudwatch_enabled ? 1 : 0
-  name   = "PinpointLogsPolicy"
-  path   = "/"
-  policy = data.aws_iam_policy_document.pinpoint_logs[0].json
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "PinpointLogsPolicy"
+  path     = "/"
+  policy   = data.aws_iam_policy_document.pinpoint_logs[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "pinpoint_logs" {
+  provider   = aws.core_services
   count      = var.cloudwatch_enabled ? 1 : 0
   role       = aws_iam_role.pinpoint_logs.name
   policy_arn = aws_iam_policy.pinpoint_logs[0].arn
@@ -35,7 +38,8 @@ data "aws_iam_policy_document" "pinpoint_assume" {
       test     = "ArnLike"
       variable = "aws:SourceArn"
       values = [
-        "arn:aws:sms-voice:${var.region}:${var.account_id}:configuration-set/pinpoint-configuration"
+        "arn:aws:sms-voice:${var.region}:${var.account_id}:configuration-set/pinpoint-configuration",
+        "arn:aws:sms-voice:${var.region_pinpoint_us}:${var.account_id}:configuration-set/pinpoint-configuration"
       ]
     }
   }
@@ -52,7 +56,9 @@ data "aws_iam_policy_document" "pinpoint_logs" {
     ]
     resources = [
       "${aws_cloudwatch_log_group.pinpoint_deliveries.arn}:*",
-      "${aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn}:*"
+      "${aws_cloudwatch_log_group.pinpoint_deliveries_failures.arn}:*",
+      "${aws_cloudwatch_log_group.pinpoint_us_deliveries.arn}:*",
+      "${aws_cloudwatch_log_group.pinpoint_us_deliveries_failures.arn}:*"
     ]
   }
 }

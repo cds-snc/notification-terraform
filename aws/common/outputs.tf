@@ -154,6 +154,18 @@ output "sns_deliveries_us_west_2_name" {
   sensitive = true
 }
 
+output "sns_alert_warning_arn_us_west_2" {
+  value = aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn
+}
+
+output "sns_alert_critical_arn_us_west_2" {
+  value = aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn
+}
+
+output "sns_alert_ok_arn_us_west_2" {
+  value = aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn
+}
+
 output "sns_deliveries_failures_us_west_2_arn" {
   value = var.cloudwatch_enabled ? aws_cloudwatch_log_group.sns_deliveries_failures_us_west_2[0].arn : ""
 }
@@ -210,6 +222,10 @@ output "sqs_send_email_high_queue_name" {
 
 output "sqs_deliver_receipts_queue_arn" {
   value = aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn
+}
+
+output "sqs_deliver_receipts_queue_us_west_2_arn" {
+  value = aws_sqs_queue.eks_notification_canada_usdelivery_receipts.arn
 }
 
 output "subnet_ids" {

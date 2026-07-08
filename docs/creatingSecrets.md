@@ -151,19 +151,6 @@ resource "aws_secretsmanager_secret_version" "manifest_new_api_key" {
 }
 ```
 
-4. Reference this secret in the API Lambda code under the lambda-api terraform folder
-
-```terraform
-environment {
-    variables = {
-      ADMIN_BASE_URL                 = "https://${var.base_domain}"
-      API_HOST_NAME                  = "https://api.${var.base_domain}"
-      DOCUMENT_DOWNLOAD_API_HOST     = "https://api.document.${var.base_domain}"
-      NEW_API_KEY                    = var.manifest_new_api_key
-    }
-}
-```
-
 #### Step By Step Example: Kubernetes
 
 Suppose we need to add the same API Key above to the Kubernetes API deployment
@@ -207,15 +194,15 @@ flowchart LR
 
 ```
 
-Suppose we need to add a new AWS Access Key to a GitHub Workflow
+### Using 1Password CLI in GitHub Workflows
+
+The following example shows how to download secrets from 1Password in a GitHub workflow:
 
 1. Add the secret as a key/value pair in the 1Password TERRAFORM_SECRETS_ENVIRONMENT entry.
 
 ```
 ## GITHUB
-aws_access_key_id             = "SUPERSECRET1234567"
-aws_secret_access_key         = "dfajslkfjdaslkjakldsfjkladsjadsf"
-new_aws_secret_access_key     = "somenewvalues123434qradsfjdskafa"
+my_secret_key                 = "somenewvalues123434qradsfjdskafa"
 ```
 
 2. Customize and add the following GitHub action step to your workflow.
@@ -227,7 +214,7 @@ new_aws_secret_access_key     = "somenewvalues123434qradsfjdskafa"
           sudo dpkg -i 1pass.deb
           sudo mkdir -p aws && cd aws
           # Find specific secret and export as a variable
-          export NEW_AWS_SECRET_ACCESS_KEY=$(op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_STAGING/notesPlain" | grep "new_aws_secret_access_key" | awk '{print $3}')
+          export MY_SECRET_KEY=$(op read op://4eyyuwddp6w4vxlabrr2i2duxm/"TERRAFORM_SECRETS_STAGING/notesPlain" | grep "my_secret_key" | awk '{print $3}')
 ```
 
 #### Step By Step Example: Github Actions Secret in Terraform
@@ -256,21 +243,19 @@ flowchart LR
 
 ```
 
-Suppose we need to add a new AWS Access Key to a GitHub Workflow
+Suppose we need to add a new secret to a GitHub Workflow
 
 1. Add the secret as a key/value pair in the 1Password TERRAFORM_SECRETS_ENVIRONMENT entry.
 
 ```
 ## GITHUB
-aws_access_key_id             = "SUPERSECRET1234567"
-aws_secret_access_key         = "dfajslkfjdaslkjakldsfjkladsjadsf"
-new_aws_secret_access_key     = "somenewvalues123434qradsfjdskafa"
+my_new_secret                 = "somenewvalues123434qradsfjdskafa"
 ```
 
-2. Declare the new access key as a sensitive variable in the env/variables.tf file in notification-terraform. __Make sure to mark it as sensitive__
+2. Declare the new secret as a sensitive variable in the env/variables.tf file in notification-terraform. __Make sure to mark it as sensitive__
 
 ```terraform
-variable "api_new_aws_secret_access_key" {
+variable "api_my_new_secret" {
   type = string
   sensitive = true
 }
@@ -285,10 +270,10 @@ notification-terraform/aws/github/api-secrets.tf
 4. Add a new Github Action Secret
 
 ```terraform
-resource "github_actions_secret" "api_new_aws_secret_access_key" {
+resource "github_actions_secret" "api_my_new_secret" {
   repository      = data.github_repository.notification_api.name
-  secret_name     = "NEW_AWS_SECRET_ACCESS_KEY"
-  plaintext_value = var.api_new_aws_secret_access_key
+  secret_name     = "MY_NEW_SECRET"
+  plaintext_value = var.api_my_new_secret
 }
 ```
 
@@ -300,7 +285,7 @@ env:
   ACCOUNT_ID: ${{ secrets.DEV_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
-  NEW_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEW_AWS_SECRET_ACCESS_KEY }}
+  MY_NEW_SECRET: ${{ secrets.MY_NEW_SECRET }}
 ```
 
 ## Updating Existing Secrets

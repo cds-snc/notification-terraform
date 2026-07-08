@@ -1,5 +1,6 @@
 # Step Function to update Athena table locations daily
 resource "aws_sfn_state_machine" "athena_update_table_location" {
+  provider = aws.core_services
   name     = "AthenaUpdateTableLocation"
   role_arn = aws_iam_role.step_functions_update_tables_location_role.arn
 
@@ -28,7 +29,8 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
             { name = "organisation", database = "notification_quicksight" },
             { name = "services", database = "notification_quicksight" },
             { name = "templates", database = "notification_quicksight" },
-            { name = "template_categories", database = "notification_quicksight" }
+            { name = "template_categories", database = "notification_quicksight" },
+            { name = "ft_billing", database = "notification_quicksight" }
           ]
         },
         Next = "UpdateTables"
@@ -66,13 +68,15 @@ resource "aws_sfn_state_machine" "athena_update_table_location" {
 
 # Daily trigger for the Step Function and IAM Role for EventBridge
 resource "aws_cloudwatch_event_rule" "step_function_daily_trigger" {
+  provider            = aws.core_services
   name                = "daily-athena-update-table-location"
   description         = "Daily trigger to update Athena table locations"
-  schedule_expression = "cron(10 5 * * ? *)" # daily at 05:10 UTC
+  schedule_expression = "cron(10 9 * * ? *)" # daily at 09:10 UTC
 }
 
 resource "aws_iam_role" "eventbridge_role" {
-  name = "eventbridge-invoke-sfn-role"
+  provider = aws.core_services
+  name     = "eventbridge-invoke-sfn-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -85,8 +89,9 @@ resource "aws_iam_role" "eventbridge_role" {
 }
 
 resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
-  name = "EventBridgeInvokeSFNPolicy"
-  role = aws_iam_role.eventbridge_role.id
+  provider = aws.core_services
+  name     = "EventBridgeInvokeSFNPolicy"
+  role     = aws_iam_role.eventbridge_role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -99,6 +104,7 @@ resource "aws_iam_role_policy" "eventbridge_sfn_invoke_policy" {
 }
 
 resource "aws_cloudwatch_event_target" "target_with_role" {
+  provider = aws.core_services
   rule     = aws_cloudwatch_event_rule.step_function_daily_trigger.name
   arn      = aws_sfn_state_machine.athena_update_table_location.arn
   role_arn = aws_iam_role.eventbridge_role.arn

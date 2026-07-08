@@ -1,19 +1,3 @@
-resource "github_actions_secret" "system_status_static_aws_access_key_id" {
-  count            = var.env == "production" || var.env == "staging" ? 1 : 0
-  repository       = data.github_repository.notification_system_status_frontend.name
-  secret_name      = "${upper(var.env)}_AWS_ACCESS_KEY_ID"
-  plaintext_value  = var.aws_access_key_id
-  destroy_on_drift = false
-}
-
-resource "github_actions_secret" "system_status_static_aws_secret_access_key" {
-  count            = var.env == "production" || var.env == "staging" ? 1 : 0
-  repository       = data.github_repository.notification_system_status_frontend.name
-  secret_name      = "${upper(var.env)}_AWS_SECRET_ACCESS_KEY"
-  plaintext_value  = var.aws_secret_access_key
-  destroy_on_drift = false
-}
-
 resource "github_actions_secret" "system_status_bucket" {
   count            = var.env == "production" || var.env == "staging" ? 1 : 0
   repository       = data.github_repository.notification_system_status_frontend.name

@@ -4,6 +4,7 @@ locals {
 }
 
 resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
+  provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0
   dashboard_name = "Performance-Bottlenecks"
   dashboard_body = <<EOF
@@ -336,15 +337,15 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "view": "timeSeries",
                 "stacked": false,
                 "metrics": [
-                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_ready", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "notify-celery-sms-send-scalable" ],
+                    [ "ContainerInsights/Prometheus", "kube_deployment_status_replicas_ready", "namespace", "notification-canada-ca", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "deployment", "notify-celery-sms-send-burst" ],
                     [ "...", "notify-celery-core-tasks-static" ],
-                    [ "...", "notify-celery-email-send-scalable" ],
+                    [ "...", "notify-celery-email-send-burst" ],
                     [ "...", "notify-celery-email-send-static" ],
                     [ "...", "notify-celery-generate-reports-static" ],
                     [ "...", "notify-celery-beat" ],
-                    [ "...", "notify-celery-delivery-receipts-scalable" ],
+                    [ "...", "notify-celery-delivery-receipts-burst" ],
                     [ "...", "notify-celery-sms-send-static" ],
-                    [ "...", "notify-celery-core-tasks-scalable" ],
+                    [ "...", "notify-celery-core-tasks-burst" ],
                     [ "...", "notify-celery-sms-dedicated-static" ]
                 ],
                 "region": "ca-central-1",
@@ -538,16 +539,16 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "stacked": false,
                 "region": "ca-central-1",
                 "metrics": [
-                    [ "ContainerInsights", "pod_cpu_utilization", "PodName", "notify-celery-sms-send-scalable", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
+                    [ "ContainerInsights", "pod_cpu_utilization", "PodName", "notify-celery-sms-send-burst", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-email-send-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-delivery-receipts-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-delivery-receipts-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-beat", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ]
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ]
                 ],
                 "title": "Celery CPU Utilization"
             }
@@ -568,10 +569,10 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-delivery-receipts-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-sms-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-delivery-receipts-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-sms-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ]
                 ],
                 "title": "Celery Memory Usage"
@@ -588,15 +589,15 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "stacked": false,
                 "region": "ca-central-1",
                 "metrics": [
-                    [ "ContainerInsights", "pod_network_tx_bytes", "PodName", "notify-celery-delivery-receipts-scalable", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
+                    [ "ContainerInsights", "pod_network_tx_bytes", "PodName", "notify-celery-delivery-receipts-burst", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-beat", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-sms-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-sms-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-email-send-static", ".", ".", ".", "." ]
                 ],
                 "title": "Celery Network TX Bytes"
@@ -613,15 +614,15 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                 "stacked": false,
                 "region": "ca-central-1",
                 "metrics": [
-                    [ "ContainerInsights", "pod_network_rx_bytes", "PodName", "notify-celery-sms-send-scalable", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
-                    [ "...", "notify-celery-email-send-scalable", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-delivery-receipts-scalable", ".", ".", ".", "." ],
+                    [ "ContainerInsights", "pod_network_rx_bytes", "PodName", "notify-celery-sms-send-burst", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ],
+                    [ "...", "notify-celery-email-send-burst", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-delivery-receipts-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-generate-reports-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-beat", ".", ".", ".", "." ],
                     [ "...", "notify-celery-core-tasks-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-send-static", ".", ".", ".", "." ],
                     [ "...", "notify-celery-email-send-static", ".", ".", ".", "." ],
-                    [ "...", "notify-celery-core-tasks-scalable", ".", ".", ".", "." ],
+                    [ "...", "notify-celery-core-tasks-burst", ".", ".", ".", "." ],
                     [ "...", "notify-celery-sms-dedicated-static", ".", ".", ".", "." ]
                 ],
                 "title": "Celery Network RX Bytes"
@@ -856,100 +857,6 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
                     [ "ContainerInsights", "pod_network_tx_bytes", "PodName", "notify-api", "ClusterName", "notification-canada-ca-${var.env}-eks-cluster", "Namespace", "notification-canada-ca" ]
                 ],
                 "title": "API Network TX Bytes"
-            }
-        },
-        {
-            "type": "text",
-            "x": 0,
-            "y": 93,
-            "width": 24,
-            "height": 1,
-            "properties": {
-                "markdown": "# API Lambda"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 0,
-            "y": 94,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "metrics": [
-                    [ "AWS/Lambda", "ConcurrentExecutions", "FunctionName", "api-lambda" ]
-                ],
-                "title": "API Lambda Concurrent Executions"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 6,
-            "y": 94,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "metrics": [
-                    [ "AWS/Lambda", "Duration", "FunctionName", "api-lambda" ]
-                ],
-                "title": "API Lambda Request Duration"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 0,
-            "y": 100,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ "AWS/Lambda", "Throttles", "FunctionName", "api-lambda", { "region": "ca-central-1", "color": "#fe6e73" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "title": "API Lambda Throttles"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 6,
-            "y": 100,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ "AWS/Lambda", "Errors", "FunctionName", "api-lambda", { "region": "ca-central-1", "color": "#fe6e73" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "ca-central-1",
-                "stat": "Maximum",
-                "period": 300,
-                "legend": {
-                    "position": "hidden"
-                },
-                "title": "API Lambda Errors"
             }
         },
         {
@@ -1239,22 +1146,6 @@ resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {
             "height": 1,
             "properties": {
                 "markdown": "# Send Rates"
-            }
-        },
-        {
-            "type": "metric",
-            "x": 12,
-            "y": 81,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "view": "timeSeries",
-                "stacked": false,
-                "metrics": [
-                    [ "AWS/ApiGateway", "Latency", "ApiName", "api-lambda" ]
-                ],
-                "region": "ca-central-1",
-                "title": "API Gateway Latency"
             }
         },
         {

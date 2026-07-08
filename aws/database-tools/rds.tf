@@ -5,6 +5,7 @@ resource "random_string" "random" {
 }
 
 resource "aws_db_subnet_group" "database-tools-rds-subnet" {
+  provider   = aws.core_services
   name       = "database-tools-rds-subnet"
   subnet_ids = var.vpc_private_subnets
 

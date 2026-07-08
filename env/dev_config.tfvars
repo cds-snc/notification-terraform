@@ -2,47 +2,36 @@
 env                  = "dev"
 account_budget_limit = 5000
 region               = "ca-central-1"
+region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-dev"
 billing_tag_key      = "CostCenter"
 
 ## EKS     
 primary_worker_desired_size     = 5
-primary_worker_instance_types   = ["c7i.xlarge"]
-secondary_worker_instance_types = ["c7i.xlarge"]
+primary_worker_instance_types   = ["m7i-flex.xlarge"]
+secondary_worker_instance_types = ["m7i-flex.xlarge"]
+enable_signoz                   = true
 node_upgrade                    = false
 force_upgrade                   = true
 primary_worker_max_size         = 7
 primary_worker_min_size         = 1
 eks_cluster_name                = "notification-canada-ca-dev-eks-cluster"
-eks_cluster_version             = "1.34"
-eks_addon_coredns_version       = "v1.12.1-eksbuild.2"
-eks_addon_kube_proxy_version    = "v1.34.0-eksbuild.2"
-eks_addon_vpc_cni_version       = "v1.19.5-eksbuild.3"
-eks_addon_ebs_driver_version    = "v1.44.0-eksbuild.1"
-eks_node_ami_version            = "1.34.2-20260114"
-eks_karpenter_ami_id            = "ami-02da1e32cad7f8c40"
+eks_cluster_version             = "1.36"
+eks_addon_coredns_version       = "v1.14.3-eksbuild.2"
+eks_addon_kube_proxy_version    = "v1.36.0-eksbuild.7"
+eks_addon_vpc_cni_version       = "v1.22.2-eksbuild.1"
+eks_addon_ebs_driver_version    = "v1.61.1-eksbuild.1"
+eks_node_ami_version            = "1.36.2-20260625"
+eks_karpenter_ami_id            = "ami-0d611c44e09e9f52a"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
 celery_queue_prefix             = "eks-notification-canada-ca"
 notify_k8s_namespace            = "notification-canada-ca"
 
-# lambda-api
-api_image_tag                          = "latest"
-redis_enabled                          = "1"
-low_demand_min_concurrency             = 1
-low_demand_max_concurrency             = 5
-high_demand_min_concurrency            = 1
-high_demand_max_concurrency            = 10
-notification_queue_prefix              = "eks-notification-canada-ca"
-
 # New Relic Lambda API configuration
-lambda_new_relic_app_name                       = "notification-lambda-api-dev"
-lambda_new_relic_config_file                    = "/app/newrelic.ini"
-lambda_new_relic_handler                        = "application.handler"
 
 # ENVIRONMENT
-enable_new_relic            = false
 create_cbs_bucket           = true
 force_destroy_s3            = true
 force_delete_ecr            = true
@@ -52,6 +41,7 @@ enable_sentinel_forwarding  = true
 enable_delete_protection    = false
 enable_guardduty_malware_s3 = false
 cloudwatch_enabled          = true
+enable_cloudwatch_fire_drills = false
 recovery                    = true
 aws_xray_sdk_enabled        = true
 
@@ -99,7 +89,7 @@ google_cidr_schedule_expression = "rate(1 day)"
 rds_instance_count                     = 3
 rds_instance_type                      = "db.t3.medium"
 rds_database_name                      = "NotificationCanadaCastaging"
-rds_version                            = "16.6"
+rds_version                            = "16.11"
 platform_data_lake_kms_key_arn         = "arn:aws:kms:ca-central-1:739275439843:key/22f27c88-bb2b-49c3-b731-05123a974af4"
 platform_data_lake_raw_s3_bucket_arn   = "arn:aws:s3:::cds-data-lake-raw-production"
 platform_data_lake_rds_export_role_arn = "arn:aws:iam::739275439843:role/platform-gc-notify-export"
@@ -132,7 +122,9 @@ system_status_schedule_expression   = "rate(5 minutes)"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 100
+ses_daily_email_limit                                              = 1000000
 sns_monthly_spend_limit_us_west_2                                  = 1
+pinpoint_monthly_spend_limit_us_west_2                             = 1
 alarm_warning_document_download_bucket_size_gb                     = 0.5
 alarm_warning_inflight_processed_created_delta_threshold           = 100
 alarm_critical_inflight_processed_created_delta_threshold          = 200
@@ -165,6 +157,8 @@ sqs_send_email_low_queue_name                                      = "send-email
 sqs_send_sms_high_queue_name                                       = "send-sms-high"
 sqs_send_sms_medium_queue_name                                     = "send-sms-medium"
 sqs_send_sms_low_queue_name                                        = "send-sms-low"
+enable_guardduty_scan_api_destination                              = true
+scan_verdict_callback_url                                          = "https://api.dev.notification.cdssandbox.xyz/templates/scan-verdict-callback"
 
 # RANDOM DOCKER TAGS
 system_status_docker_tag                 = "bootstrap"
@@ -177,7 +171,7 @@ pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
 blazer_image_tag   = "latest"
-blazer_rds_version = "15.10"
+blazer_rds_version = "15.18"
 
 ## DATA LAKE
 datalake_bucket_name = "cds-data-lake-raw-production"

@@ -16,68 +16,94 @@ module "eks" {
 
   manage_aws_auth_configmap = true
 
-  aws_auth_roles = [
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/eks-worker-role"
-      username = "system:node:{{EC2PrivateDNSName}}"
-      groups   = ["system:nodes", "system:bootstrappers"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/${data.external.aws_role_name.result.rolename}"
-      username = "AWSAdministratorAccess:{{SessionName}}"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-admin-apply"
-      username = "notification-admin-apply"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-api-apply"
-      username = "notification-api-apply"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-document-download-api-apply"
-      username = "notification-document-download-api-apply"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-documentation-apply"
-      username = "notification-documentation-apply"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-apply"
-      username = "notification-manifests-apply"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-apply"
-      username = "notification-terraform-apply"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-plan"
-      username = "notification-terraform-plan"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/ipv4-geolocate-webservice-apply"
-      username = "ipv4-geolocate-webservice-apply"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-diff"
-      username = "notification-manifests-helmfile-diff"
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-k8s-lambda-apply-main-branch"
-      username = "notification-manifests-k8s-lambda-apply-main-branch"
-      groups   = ["system:masters"]
-    },
-  ]
+  aws_auth_roles = concat(
+    [
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/eks-worker-role"
+        username = "system:node:{{EC2PrivateDNSName}}"
+        groups   = ["system:nodes", "system:bootstrappers"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/${data.external.aws_role_name.result.rolename}"
+        username = "AWSAdministratorAccess:{{SessionName}}"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-admin-apply"
+        username = "notification-admin-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-api-apply"
+        username = "notification-api-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-document-download-api-apply"
+        username = "notification-document-download-api-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-documentation-apply"
+        username = "notification-documentation-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-apply"
+        username = "notification-manifests-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-apply"
+        username = "notification-terraform-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-plan"
+        username = "notification-terraform-plan"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/ipv4-geolocate-webservice-apply"
+        username = "ipv4-geolocate-webservice-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-diff"
+        username = "notification-manifests-helmfile-diff"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-k8s-lambda-apply-main-branch"
+        username = "notification-manifests-k8s-lambda-apply-main-branch"
+        groups   = ["system:masters"]
+      },
+    ],
+    var.env == "staging" ? [
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-staging-apply"
+        username = "notification-manifests-helmfile-staging-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-database-migration-staging"
+        username = "notification-manifests-database-migration-staging"
+        groups   = ["system:masters"]
+      },
+    ] : [],
+    var.env == "production" ? [
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-production-apply"
+        username = "notification-manifests-helmfile-production-apply"
+        groups   = ["system:masters"]
+      },
+      {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-database-migration-production"
+        username = "notification-manifests-database-migration-production"
+        groups   = ["system:masters"]
+      },
+    ] : [],
+  )
 
   aws_auth_accounts = [
     var.account_id

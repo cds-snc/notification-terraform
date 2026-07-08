@@ -6,6 +6,7 @@
 
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-warning"
   alarm_description   = "SNS spending reached 80% of limit this month"
@@ -21,8 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-us-west-2-warning"
   alarm_description   = "SNS spending reached 80% of limit this month"
@@ -38,6 +38,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-critical"
   alarm_description   = "SNS spending reached 90% of limit this month"
@@ -54,8 +55,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-spending-us-west-2-critical"
   alarm_description   = "SNS spending reached 90% of limit this month"
@@ -72,6 +72,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-spending-us-west-2-critical" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-warning"
   alarm_description   = "SMS success rate to Canadian numbers is below 60% over 2 consecutive periods of 12 hours"
@@ -92,7 +93,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-wa
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-warning" {
-  provider = aws.us-west-2
+  provider = aws.core_services_us_west_2
   count    = var.cloudwatch_enabled ? 1 : 0
 
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-warning"
@@ -145,6 +146,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-critical" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-critical"
   alarm_description   = "SMS success rate to Canadian numbers is below 25% with at least 25 messages over 2 consecutive periods of 12 hours"
@@ -197,8 +199,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-cr
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us-west-2-critical" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-success-rate-canadian-numbers-us-west-2-critical"
   alarm_description   = "SMS success rate to Canadian numbers is below 50% over 4 consecutive periods of 6 hrs"
@@ -220,6 +221,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-success-rate-canadian-numbers-us
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-blocked-as-spam-warning"
   alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
@@ -235,8 +237,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-blocked-as-spam-us-west-2-warning"
   alarm_description   = "More than 10 SMS have been blocked as spam over 12 hours"
@@ -252,6 +253,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-blocked-as-spam-us-west-2-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-phone-carrier-unavailable-warning"
   alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
@@ -267,8 +269,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-warnin
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-phone-carrier-unavailable-us-west-2-warning"
   alarm_description   = "More than 100 SMS failed because a phone carrier is unavailable over 3 hours"
@@ -284,6 +285,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-phone-carrier-unavailable-us-wes
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-rate-exceeded-warning"
   alarm_description   = "At least 1 SNS SMS rate exceeded error in 5 minutes"
@@ -299,8 +301,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning" {
-  provider = aws.us-west-2
-
+  provider            = aws.core_services_us_west_2
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sns-sms-rate-exceeded-us-west-2-warning"
   alarm_description   = "At least 1 SNS SMS rate exceeded error in 5 minutes"
@@ -316,6 +317,7 @@ resource "aws_cloudwatch_metric_alarm" "sns-sms-rate-exceeded-us-west-2-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-sms-high-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in send sms high priority queue >= 10 seconds for 3 minutes"
@@ -334,6 +336,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-send-sms-high-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-high queue >= 60 seconds for 5 minutes"
@@ -355,6 +358,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-high-queue-delay-critical" 
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-sms-medium-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-medium queue is >= 10 minutes for 5 minutes"
@@ -373,6 +377,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-warning"
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-send-sms-medium-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-medium queue is >= 15 minutes for 5 minutes"
@@ -393,6 +398,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-medium-queue-delay-critical
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-sms-low-queue-delay-warning"
   alarm_description   = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 10 minutes for 5 minutes"
@@ -411,6 +417,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-warning" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
   alarm_name                = "sqs-send-sms-low-queue-delay-critical"
   alarm_description         = "ApproximateAgeOfOldestMessage in send-sms-low queue is >= 3 hours"
@@ -430,17 +437,18 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-sms-low-queue-delay-critical" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning" {
+resource "aws_cloudwatch_metric_alarm" "sqs-dedicated-number-throttled-sms-stuck-in-queue-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "sqs-throttled-sms-stuck-in-queue-warning"
-  alarm_description   = "Delay in throttled SMS queue >= 45 minutes"
+  alarm_name          = "sqs-dedicated-number-throttled-sms-stuck-in-queue-warning"
+  alarm_description   = "Delay in throttled SMS queue for dedicated numbers >= 1 hour"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = "ApproximateAgeOfOldestMessage"
   namespace           = "AWS/SQS"
   period              = 60
   statistic           = "Average"
-  threshold           = 60 * 45
+  threshold           = 60 * 60 * 1
   treat_missing_data  = "missing"
   alarm_actions       = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
   dimensions = {
@@ -448,17 +456,18 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-warning
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critical" {
+resource "aws_cloudwatch_metric_alarm" "sqs-dedicated-number-throttled-sms-stuck-in-queue-critical" {
+  provider                  = aws.core_services
   count                     = var.cloudwatch_enabled ? 1 : 0
-  alarm_name                = "sqs-throttled-sms-stuck-in-queue-critical"
-  alarm_description         = "Delay in throttled SMS queue >= 60 minute"
+  alarm_name                = "sqs-dedicated-number-throttled-sms-stuck-in-queue-critical"
+  alarm_description         = "Delay in throttled SMS queue for dedicated numbers >= 4 hours"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
   metric_name               = "ApproximateAgeOfOldestMessage"
   namespace                 = "AWS/SQS"
   period                    = 60
   statistic                 = "Average"
-  threshold                 = 60 * 60
+  threshold                 = 60 * 60 * 4
   treat_missing_data        = "missing"
   alarm_actions             = [aws_sns_topic.notification-canada-ca-alert-critical.arn]
   insufficient_data_actions = [aws_sns_topic.notification-canada-ca-alert-warning.arn]
@@ -470,6 +479,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-throttled-sms-stuck-in-queue-critica
 
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rate-warning" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-throttled-sms-tasks-receive-rate-warning"
   alarm_description   = "NumberOfMessagesReceived is more than the expected maximum rate for send-throttled-sms-tasks SQS queue"
@@ -491,6 +501,7 @@ resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rat
 }
 
 resource "aws_cloudwatch_metric_alarm" "sqs-send-throttled-sms-tasks-receive-rate-critical" {
+  provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "sqs-send-throttled-sms-tasks-receive-rate-critical"
   alarm_description   = "NumberOfMessagesReceived is more than the expected maximum rate for send-throttled-sms-tasks SQS queue"

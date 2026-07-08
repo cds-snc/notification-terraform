@@ -1,4 +1,5 @@
 resource "aws_kms_key" "rds_snapshot" {
+  provider                = aws.core_services
   count                   = var.env == "staging" ? 1 : 0
   description             = "A KMS key for encrypting RDS snapshots"
   enable_key_rotation     = true
@@ -91,5 +92,11 @@ resource "aws_kms_key" "rds_snapshot" {
         }
     ]
 }
-    POLICY
+POLICY
+
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+    Terraform  = "true"
+    ssc_cbrid  = "22DH"
+  }
 }

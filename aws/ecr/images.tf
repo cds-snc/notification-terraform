@@ -75,47 +75,6 @@ resource "null_resource" "push_admin_docker_image" {
 
 }
 
-
-#API Lambda Build and Push
-
-resource "null_resource" "api_repo_clone" {
-  count = var.bootstrap ? 1 : 0
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "git clone 'https://github.com/cds-snc/notification-api.git' /var/tmp/notification-api"
-  }
-}
-
-resource "null_resource" "build_api_docker_image" {
-  count = var.bootstrap ? 1 : 0
-
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  depends_on = [
-    null_resource.api_repo_clone
-  ]
-
-  provisioner "local-exec" {
-    command = "cd /var/tmp/notification-api/ && docker build -t ${aws_ecr_repository.api-lambda.repository_url}:bootstrap -f /var/tmp/notification-api/ci/Dockerfile.lambda ."
-  }
-
-}
-
-resource "null_resource" "push_api_docker_image" {
-  count      = var.bootstrap ? 1 : 0
-  depends_on = [null_resource.build_api_docker_image]
-
-  provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.api-lambda.repository_url}:bootstrap"
-  }
-
-}
-
 # Clone Lambda Repository
 resource "null_resource" "lambda_repo_clone" {
   count = var.bootstrap ? 1 : 0

@@ -40,14 +40,6 @@ output "notify_admin_ecr_repository_url" {
   description = "Repository URL of notify_admin ECR"
   value       = var.env == "production" ? "" : aws_ecr_repository.notify_admin[0].repository_url
 }
-output "api_lambda_ecr_arn" {
-  description = "arn of api_lambda ECR"
-  value       = aws_ecr_repository.api-lambda.arn
-}
-output "api_lambda_ecr_repository_url" {
-  description = "Repository URL of api_lambda ECR"
-  value       = aws_ecr_repository.api-lambda.repository_url
-}
 output "google_cidr_ecr_arn" {
   description = "arn of google-cidr ECR"
   value       = aws_ecr_repository.google-cidr.arn

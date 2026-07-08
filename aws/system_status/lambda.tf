@@ -3,7 +3,7 @@ locals {
 }
 
 module "system_status" {
-  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=v9.6.4"
+  source                 = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                   = "system_status"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
@@ -22,10 +22,11 @@ module "system_status" {
   }
 
   environment_variables = {
-    system_status_admin_url        = var.system_status_admin_url
-    system_status_api_url          = var.system_status_api_url
-    system_status_bucket_name      = "notification-canada-ca-${var.env}-system-status"
-    sqlalchemy_database_reader_uri = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.rds_database_name}"
+    system_status_admin_url            = var.system_status_admin_url
+    system_status_api_url              = var.system_status_api_url
+    system_status_bucket_name          = "notification-canada-ca-${var.env}-system-status"
+    sqlalchemy_database_reader_uri     = "postgresql://app_db_user:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.rds_database_name}"
+    gc_articles_waf_rate_bypass_secret = var.manifest_gc_articles_waf_rate_bypass_secret
   }
 }
 
