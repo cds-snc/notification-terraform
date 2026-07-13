@@ -112,6 +112,11 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
     regex_string = "/by-and-for-gc|/par-et-pour-gc|/newsletter-subscription|/known-issues|/problemes-connus|/accessibility-202512|/accessibilite-202512|/counting-text-messages|/compter-les-messages-texte"
   }
 
+  # GCA routes - roadmap pages (future-proofed for yearly roadmap URLs e.g. roadmap-2026-2027)
+  regular_expression {
+    regex_string = "/roadmap-20[0-9]{2}-20[0-9]{2}|/feuille-de-route-20[0-9]{2}-20[0-9]{2}"
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
