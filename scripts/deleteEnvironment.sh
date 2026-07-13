@@ -277,6 +277,14 @@ for target in $PERFTEST_TARGET; do
 done
 echo "Done."
 
+echo "Deleting EventBridge API destination guardduty-scan-verdict-callback-${ENVIRONMENT}..."
+aws events delete-api-destination --name "guardduty-scan-verdict-callback-${ENVIRONMENT}" 2>/dev/null || echo "API destination not found, skipping."
+echo "Done."
+
+echo "Deleting EventBridge connection guardduty-scan-verdict-callback-${ENVIRONMENT}..."
+aws events delete-connection --name "guardduty-scan-verdict-callback-${ENVIRONMENT}" 2>/dev/null || echo "Connection not found, skipping."
+echo "Done."
+
 echo "Clearing active SES receipt rule set..."
 AWS_REGION=us-east-1 aws ses set-active-receipt-rule-set
 echo "Done."
