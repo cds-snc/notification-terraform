@@ -73,14 +73,35 @@ resource "aws_cloudwatch_log_metric_filter" "celery-error-unknown" {
 
 resource "aws_cloudwatch_log_metric_filter" "celery-error-duplicate-record" {
   provider = aws.core_services
-  # This monitors for database duplicate record errors in Celery.
+  # Monitors for expected duplicate-record errors from SQS redelivery / concurrent
+  # workers. These are caught and handled safely by handle_batch_error_and_forward
+  # and tagged with the structured CELERY_KNOWN_ERROR::DUPLICATE_RECORD marker.
+  # See: https://github.com/cds-snc/notification-api/pull/2944
   count          = var.cloudwatch_enabled ? 1 : 0
   name           = "celery-error-duplicate-record"
-  pattern        = "\"duplicate key value violates unique constraint\""
+  pattern        = "\"CELERY_KNOWN_ERROR::DUPLICATE_RECORD\""
   log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
 
   metric_transformation {
     name      = "celery-error-duplicate-record"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_log_metric_filter" "celery-error-unexpected-db-constraint" {
+  provider = aws.core_services
+  # Monitors for unexpected unique-constraint violations that were NOT caught and
+  # classified by handle_batch_error_and_forward. These indicate a DB integrity
+  # problem in a code path outside the known-safe dedup flow and should be
+  # investigated immediately.
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "celery-error-unexpected-db-constraint"
+  pattern        = "\"duplicate key value violates unique constraint\" -\"CELERY_KNOWN_ERROR\""
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "celery-error-unexpected-db-constraint"
     namespace = "LogMetrics"
     value     = "1"
   }

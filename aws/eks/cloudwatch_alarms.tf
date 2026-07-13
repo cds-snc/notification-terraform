@@ -193,6 +193,42 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-criti
   ok_actions          = [var.sns_alert_ok_arn]
 }
 
+# UNEXPECTED_DB_CONSTRAINT — raw unique-constraint violations not caught by the
+# known-safe dedup flow. Any hit here is unexpected and should be investigated.
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unexpected-db-constraint-warning" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-celery-error-unexpected-db-constraint-warning"
+  alarm_description   = "One unexpected DB unique-constraint violation (not from the known dedup flow) in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-unexpected-db-constraint[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-unexpected-db-constraint[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
+}
+
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unexpected-db-constraint-critical" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-celery-error-unexpected-db-constraint-critical"
+  alarm_description   = "Ten unexpected DB unique-constraint violations (not from the known dedup flow) in 1 minute"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-unexpected-db-constraint[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.celery-error-unexpected-db-constraint[0].metric_transformation[0].namespace
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 10
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
+}
+
 # JOB_INCOMPLETE
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-job-incomplete-warning" {
   provider            = aws.core_services
