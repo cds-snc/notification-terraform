@@ -176,23 +176,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warni
   ok_actions          = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-critical" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-celery-error-duplicate-record-critical"
-  alarm_description   = "200 Celery duplicate record errors in 1 minute"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-duplicate-record[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error-duplicate-record[0].metric_transformation[0].namespace
-  period              = 60
-  statistic           = "Sum"
-  threshold           = 200
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_ok_arn]
-}
-
 # UNEXPECTED_DB_CONSTRAINT — raw unique-constraint violations not caught by the
 # known-safe dedup flow. Any hit here is unexpected and should be investigated.
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-unexpected-db-constraint-warning" {
