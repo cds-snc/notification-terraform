@@ -139,23 +139,22 @@ resource "aws_s3_bucket" "document_bucket" {
     }
   }
 
-  # expire linked files after 7 days
+  # Expire API link files after 7 days.
   lifecycle_rule {
-    id      = "tf-s3-lifecycle-linked-files"
+    id      = "delete-api-link-7days"
     enabled = true
+    prefix  = "api_link/"
 
     expiration {
       days = 7
     }
   }
 
-  # Expire files attached directly to emails after a few days.
-  # Those are stored in a `tmp/` folder.
-  # See https://github.com/cds-snc/notification-document-download-api
+  # Expire API attachments after 3 days.
   lifecycle_rule {
-    id      = "tf-s3-lifecycle-attached-files"
+    id      = "delete-api-attachments-3days"
     enabled = true
-    prefix  = "tmp/"
+    prefix  = "api_attachments/"
 
     expiration {
       days = 3
