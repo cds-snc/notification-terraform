@@ -176,10 +176,10 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warni
   ok_actions          = [var.sns_alert_warning_arn]
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-critical" {
+resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-warning-high" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-celery-error-duplicate-record-critical"
+  alarm_name          = "logs-celery-error-duplicate-record-warning-high"
   alarm_description   = "200 Celery duplicate record errors in 1 minute"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
@@ -189,8 +189,8 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-duplicate-record-criti
   statistic           = "Sum"
   threshold           = 200
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_ok_arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_warning_arn]
 }
 
 # JOB_INCOMPLETE
