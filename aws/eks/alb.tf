@@ -35,11 +35,11 @@ resource "aws_alb_listener" "notification-canada-ca" {
 
   lifecycle {
     replace_triggered_by = [
-      aws_alb_target_group.notification-canada-ca-admin,
-      aws_alb_target_group.notification-canada-ca-api,
-      aws_alb_target_group.notification-canada-ca-document-api,
-      aws_alb_target_group.notification-canada-ca-document,
-      aws_alb_target_group.notification-canada-ca-documentation,
+      aws_alb_target_group.notification-canada-ca-admin.arn,
+      aws_alb_target_group.notification-canada-ca-api.arn,
+      aws_alb_target_group.notification-canada-ca-document-api.arn,
+      aws_alb_target_group.notification-canada-ca-document.arn,
+      aws_alb_target_group.notification-canada-ca-documentation.arn,
     ]
   }
 
