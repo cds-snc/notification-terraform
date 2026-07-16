@@ -295,6 +295,7 @@ resource "aws_alb_target_group" "notification-canada-ca-admin" {
     path    = "/_status?simple=true"
     matcher = "200"
   }
+  target_type          = "ip"
   deregistration_delay = 120
 }
 
