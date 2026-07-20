@@ -114,7 +114,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin2" {
 
   # GCA routes - roadmap pages
   regular_expression {
-    regex_string = "/roadmap.*|/feuille-de-route.*"
+    regex_string = "/(roadmap|feuille-de-route)|/roadmap-20[0-9]{2}-20[0-9]{2}|/feuille-de-route-20[0-9]{2}-20[0-9]{2}"
   }
 
   tags = {
