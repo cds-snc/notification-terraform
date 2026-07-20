@@ -1,5 +1,5 @@
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/quicksight?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//quicksight"}"
+  source = "${(get_env("ENVIRONMENT") == "production" && get_env("LOCAL_PROD", "false") != "true") ? "git::https://github.com/cds-snc/notification-terraform//aws/quicksight?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//quicksight"}"
 }
 
 dependencies {
