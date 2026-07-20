@@ -79,7 +79,7 @@ resource "aws_secretsmanager_secret" "admin_target_group_arn" {
 resource "aws_secretsmanager_secret_version" "admin_target_group_arn" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.admin_target_group_arn.id
-  secret_string = aws_alb_target_group.notification-canada-ca-admin.arn
+  secret_string = aws_alb_target_group.notification_canada_ca_admin.arn
 }
 
 resource "aws_secretsmanager_secret" "api_target_group_arn" {
@@ -91,7 +91,7 @@ resource "aws_secretsmanager_secret" "api_target_group_arn" {
 resource "aws_secretsmanager_secret_version" "api_target_group_arn" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.api_target_group_arn.id
-  secret_string = aws_alb_target_group.notification-canada-ca-api.arn
+  secret_string = aws_alb_target_group.notification_canada_ca_api.arn
 }
 
 resource "aws_secretsmanager_secret" "documentation_target_group_arn" {
@@ -103,7 +103,7 @@ resource "aws_secretsmanager_secret" "documentation_target_group_arn" {
 resource "aws_secretsmanager_secret_version" "documentation_target_group_arn" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.documentation_target_group_arn.id
-  secret_string = aws_alb_target_group.notification-canada-ca-documentation.arn
+  secret_string = aws_alb_target_group.notification_canada_ca_documentation.arn
 }
 
 resource "aws_secretsmanager_secret" "document_download_api_target_group_arn" {
@@ -115,7 +115,7 @@ resource "aws_secretsmanager_secret" "document_download_api_target_group_arn" {
 resource "aws_secretsmanager_secret_version" "document_download_api_target_group_arn" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.document_download_api_target_group_arn.id
-  secret_string = aws_alb_target_group.notification-canada-ca-document-api.arn
+  secret_string = aws_alb_target_group.notification_canada_ca_document_api.arn
 }
 
 resource "aws_secretsmanager_secret" "eks_karpenter_ami_id" {
