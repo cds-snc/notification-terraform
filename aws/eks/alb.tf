@@ -43,7 +43,7 @@ resource "aws_alb_listener" "notification-canada-ca" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-admin.arn
+    target_group_arn = aws_alb_target_group.notification_canada_ca_admin.arn
   }
 }
 
@@ -103,19 +103,6 @@ resource "aws_lb_listener_rule" "security-txt" {
 # Document API Specific routing
 ###
 
-resource "aws_alb_target_group" "notification-canada-ca-document-api" {
-  provider             = aws.core_services
-  name                 = "notification-document-api"
-  port                 = 7000
-  protocol             = "HTTP"
-  vpc_id               = var.vpc_id
-  deregistration_delay = 120
-  health_check {
-    path    = "/_status"
-    matcher = "200"
-  }
-}
-
 resource "aws_alb_target_group" "notification_canada_ca_document_api" {
   provider             = aws.core_services
   name                 = "notification-document-api-ip"
@@ -163,7 +150,7 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
+    target_group_arn = aws_alb_target_group.notification_canada_ca_document_api.arn
   }
 
   condition {
@@ -176,19 +163,6 @@ resource "aws_lb_listener_rule" "document-api-host-route" {
 ###
 # Document Specific routing
 ###
-
-resource "aws_alb_target_group" "notification-canada-ca-document" {
-  provider = aws.core_services
-  name     = "notification-alb-document"
-  port     = 7001
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status"
-    matcher = "200"
-  }
-  deregistration_delay = 120
-}
 
 resource "aws_alb_target_group" "notification_canada_ca_document" {
   provider             = aws.core_services
@@ -237,7 +211,7 @@ resource "aws_lb_listener_rule" "document-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-document-api.arn
+    target_group_arn = aws_alb_target_group.notification_canada_ca_document_api.arn
   }
 
   condition {
@@ -250,21 +224,6 @@ resource "aws_lb_listener_rule" "document-host-route" {
 ###
 # API Specific routing
 ###
-
-resource "aws_alb_target_group" "notification-canada-ca-api" {
-  provider             = aws.core_services
-  name                 = "notification-canada-ca-alb-api"
-  port                 = 6011
-  protocol             = "HTTP"
-  vpc_id               = var.vpc_id
-  target_type          = "ip"
-  deregistration_delay = 120
-
-  health_check {
-    path    = "/_status?simple=true"
-    matcher = "200"
-  }
-}
 
 resource "aws_alb_target_group" "notification_canada_ca_api" {
   provider             = aws.core_services
@@ -288,7 +247,7 @@ resource "aws_lb_listener_rule" "api-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-api.arn
+    target_group_arn = aws_alb_target_group.notification_canada_ca_api.arn
   }
 
   condition {
@@ -326,19 +285,6 @@ resource "aws_lb_listener_rule" "alt-domain-host-route" {
       values = [var.alt_domain]
     }
   }
-}
-
-resource "aws_alb_target_group" "notification-canada-ca-admin" {
-  provider = aws.core_services
-  name     = "notification-canada-ca-alb-admin"
-  port     = 6012
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/_status?simple=true"
-    matcher = "200"
-  }
-  deregistration_delay = 120
 }
 
 resource "aws_alb_target_group" "notification_canada_ca_admin" {
@@ -388,19 +334,6 @@ resource "aws_lb_listener_rule" "www-domain-host-route" {
 # Documentation Specific Routing
 ###
 
-resource "aws_alb_target_group" "notification-canada-ca-documentation" {
-  provider = aws.core_services
-  name     = "notification-documentation"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-  health_check {
-    path    = "/"
-    matcher = "200"
-  }
-  deregistration_delay = 120
-}
-
 resource "aws_alb_target_group" "notification_canada_ca_documentation" {
   provider             = aws.core_services
   name                 = "notification-documentation-ip"
@@ -422,7 +355,7 @@ resource "aws_lb_listener_rule" "documentation-host-route" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.notification-canada-ca-documentation.arn
+    target_group_arn = aws_alb_target_group.notification_canada_ca_documentation.arn
   }
 
   condition {
