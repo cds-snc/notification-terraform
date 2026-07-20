@@ -55,7 +55,7 @@ resource "aws_wafv2_regex_pattern_set" "re_admin" {
   }
 
   regular_expression {
-    regex_string = "/register-from-org-invite.*|/registration-continue.*|/resend-email-verification.*|/robots\\.txt.*|/send-new-code.*|/send-new-email-token.*|/services.*|/set-lang.*"
+    regex_string = "/register-from-org-invite.*|/registration-continue.*|/resend-email-verification.*|/robots.txt.*|/send-new-code.*|/send-new-email-token.*|/services.*|/services-or-dashboard.*|/set-lang.*"
   }
 
   regular_expression {
