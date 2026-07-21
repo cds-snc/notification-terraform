@@ -3,7 +3,7 @@ terraform {
 }
 
 dependencies {
-  paths = ["../common", "../lambda-admin-pr", "../rds"]
+  paths = ["../common", "../lambda-admin-pr", "../rds", "../eks"]
 }
 
 dependency "rds" {
