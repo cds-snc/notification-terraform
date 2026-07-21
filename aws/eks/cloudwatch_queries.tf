@@ -539,7 +539,7 @@ resource "aws_cloudwatch_query_definition" "api-errors" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /rror/
+| filter log like /rror/
 | sort @timestamp desc
 | limit 20
 QUERY
@@ -557,8 +557,8 @@ resource "aws_cloudwatch_query_definition" "services-over-daily-rate-limit" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /has been rate limited/
-| parse @message /service (?<service>.*?) has been rate limited for (?<limit_type>..........).*/
+| filter log like /has been rate limited/
+| parse log /service (?<service>.*?) has been rate limited for (?<limit_type>..........).*/
 | stats count(*) by service, limit_type
 QUERY
 }
@@ -575,7 +575,7 @@ resource "aws_cloudwatch_query_definition" "api-504-timeouts" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /HTTP\/\d+\.\d+\\" 504/
+| filter log like /HTTP\/\d+\.\d+" 504/
 | stats count() as error_count by bin(@timestamp, 1h)
 | sort @timestamp desc
 | limit 1000
@@ -594,7 +594,7 @@ resource "aws_cloudwatch_query_definition" "api_response_code_counts" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| parse @message /HTTP\/\d+\.\d+ (?<status>\d{3})/
+| parse log /HTTP\/\d+\.\d+" (?<status>\d{3})/
 | filter ispresent(status)
 | stats count(*) by status
 QUERY
@@ -612,7 +612,7 @@ resource "aws_cloudwatch_query_definition" "api_count_requests_by_minute" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| parse @message /(?<httpMethod>GET|POST|PUT|DELETE|PATCH) /
+| parse log /(?<httpMethod>GET|POST|PUT|DELETE|PATCH) /
 | filter ispresent(httpMethod)
 | stats count(*) by httpMethod, bin(1m) as minute
 | order by minute asc
@@ -632,7 +632,7 @@ resource "aws_cloudwatch_query_definition" "get-trace-by-notification-id" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /d9cc47e6-b1a3-4c83-8d3c-ab40874307b1/
+| filter log like /d9cc47e6-b1a3-4c83-8d3c-ab40874307b1/
 | sort @timestamp asc
 | limit 100
 QUERY
@@ -650,10 +650,10 @@ resource "aws_cloudwatch_query_definition" "api-sending-times-aggregate" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /time_taken/ and @message like /Batch saving/
-| parse @message "time_taken: *ms" as duration
-| parse @message "full_path: '/v2/notifications/*'" as send_type
-| parse @message "template_id: '*'" as template_id
+| filter log like /time_taken/ and log like /Batch saving/
+| parse log "time_taken: *ms" as duration
+| parse log "full_path: '/v2/notifications/*'" as send_type
+| parse log "template_id: '*'" as template_id
 | sort @timestamp desc
 | stats 
     count(*) as total_sends,
@@ -679,10 +679,10 @@ resource "aws_cloudwatch_query_definition" "api-slowest-sends" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /time_taken/ and @message like /Batch saving/
-| parse @message "time_taken: *ms" as duration
-| parse @message "full_path: '/v2/notifications/*'" as send_type
-| parse @message "template_id: '*'" as template_id
+| filter log like /time_taken/ and log like /Batch saving/
+| parse log "time_taken: *ms" as duration
+| parse log "full_path: '/v2/notifications/*'" as send_type
+| parse log "template_id: '*'" as template_id
 | sort duration desc
 | limit 20
 QUERY
@@ -700,8 +700,8 @@ resource "aws_cloudwatch_query_definition" "api_errors_by_ip_address" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /HTTP\/\d+\.\d+\\" 50\d/
-| parse @message /"clientIP":"*"/ as ip
+| filter log like /HTTP\/\d+\.\d+" 50\d/
+| parse log /^(?<ip>[\d.]+)/
 | stats count() as total by ip
 | order by total desc
 | limit 1000
@@ -720,8 +720,8 @@ resource "aws_cloudwatch_query_definition" "api_average_latency" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| parse @message "full_path: '*'" as resourcePath
-| parse @message "time_taken: *ms" as responseLatency
+| parse log "full_path: '*'" as resourcePath
+| parse log "time_taken: *ms" as responseLatency
 | filter ispresent(responseLatency)
 | stats 
     count() as requests,
@@ -748,7 +748,7 @@ resource "aws_cloudwatch_query_definition" "api_concurrent_running_per_min" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| parse @message /(?<httpMethod>GET|POST|PUT|DELETE|PATCH) (?<path>\/[^ ]*)/
+| parse log /(?<httpMethod>GET|POST|PUT|DELETE|PATCH) (?<path>\/[^ ]*)/
 | filter ispresent(httpMethod)
 | stats count() as requests by bin(1m)
 | sort requests desc
@@ -767,8 +767,8 @@ resource "aws_cloudwatch_query_definition" "api_gunicorn_total_running_time" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /Total gunicorn running time/
-| parse @message /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
+| filter log like /Total gunicorn running time/
+| parse log /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
 | order by @timestamp asc
 | display @timestamp, @gunicorn_time
 QUERY
