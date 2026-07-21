@@ -60,8 +60,8 @@ dependency "eks" {
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     gha_vpn_id          = "cvpn-endpoint-00000000000000000"
-    gha_vpn_certificate = "mock-vpn-certificate"
-    gha_vpn_key         = "mock-vpn-key"
+    gha_vpn_certificate = "mock-certificate-pem"
+    gha_vpn_key         = "mock-private-key-pem"
   }
 }
 
