@@ -15,7 +15,11 @@ variable "gha_vpn_id" {
 variable "gha_vpn_certificate" {
   type      = string
   sensitive = true
-  default   = ""
+
+  validation {
+    condition     = trimspace(var.gha_vpn_certificate) != ""
+    error_message = "gha_vpn_certificate must be a non-empty PEM string."
+  }
 }
 
 variable "gha_vpn_key" {
