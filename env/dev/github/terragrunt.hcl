@@ -56,7 +56,7 @@ dependency "system_status_static_site" {
 dependency "eks" {
   config_path = "../eks"
 
-  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show"]
+  mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "apply", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
     gha_vpn_id          = "cvpn-endpoint-00000000000000000"
