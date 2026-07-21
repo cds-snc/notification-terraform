@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "${get_env("ENVIRONMENT") == "production" ? "git::https://github.com/cds-snc/notification-terraform//aws/ecr-us-west-2?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ecr-us-west-2"}"
+  source = "${(get_env("ENVIRONMENT") == "production" && get_env("LOCAL_PROD", "false") != "true") ? "git::https://github.com/cds-snc/notification-terraform//aws/ecr-us-west-2?ref=v${get_env("INFRASTRUCTURE_VERSION")}" : "../../../aws//ecr-us-west-2"}"
 
   after_hook "cleanup-lambdas" {
     commands     = ["apply"]
