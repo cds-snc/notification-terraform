@@ -58,3 +58,24 @@ resource "github_actions_secret" "pr_bot_github_token" {
   plaintext_value  = var.manifest_pr_bot_github_token
   destroy_on_drift = false
 }
+
+resource "github_actions_secret" "manifests_gha_vpn_id" {
+  repository       = data.github_repository.notification_manifests.name
+  secret_name      = "GHA_VPN_ID_${upper(var.env)}"
+  plaintext_value  = var.gha_vpn_id
+  destroy_on_drift = false
+}
+
+resource "github_actions_secret" "manifests_gha_vpn_certificate" {
+  repository       = data.github_repository.notification_manifests.name
+  secret_name      = "GHA_VPN_CERT_${upper(var.env)}"
+  plaintext_value  = var.gha_vpn_certificate
+  destroy_on_drift = false
+}
+
+resource "github_actions_secret" "manifests_gha_vpn_key" {
+  repository       = data.github_repository.notification_manifests.name
+  secret_name      = "GHA_VPN_KEY_${upper(var.env)}"
+  plaintext_value  = var.gha_vpn_key
+  destroy_on_drift = false
+}
