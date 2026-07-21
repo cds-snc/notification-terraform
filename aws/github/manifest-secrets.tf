@@ -60,6 +60,7 @@ resource "github_actions_secret" "pr_bot_github_token" {
 }
 
 resource "github_actions_secret" "manifests_gha_vpn_id" {
+  count            = trimspace(var.gha_vpn_id) != "" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "GHA_VPN_ID_${upper(var.env)}"
   plaintext_value  = var.gha_vpn_id
@@ -67,6 +68,7 @@ resource "github_actions_secret" "manifests_gha_vpn_id" {
 }
 
 resource "github_actions_secret" "manifests_gha_vpn_certificate" {
+  count            = trimspace(var.gha_vpn_certificate) != "" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "GHA_VPN_CERT_${upper(var.env)}"
   plaintext_value  = var.gha_vpn_certificate
@@ -74,6 +76,7 @@ resource "github_actions_secret" "manifests_gha_vpn_certificate" {
 }
 
 resource "github_actions_secret" "manifests_gha_vpn_key" {
+  count            = trimspace(var.gha_vpn_key) != "" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "GHA_VPN_KEY_${upper(var.env)}"
   plaintext_value  = var.gha_vpn_key
