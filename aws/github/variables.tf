@@ -4,8 +4,12 @@ variable "shared_staging_kms_key_id" {
 }
 
 variable "gha_vpn_id" {
-  type    = string
-  default = ""
+  type = string
+
+  validation {
+    condition     = trimspace(var.gha_vpn_id) != ""
+    error_message = "gha_vpn_id must be a non-empty Client VPN endpoint ID."
+  }
 }
 
 variable "gha_vpn_certificate" {
