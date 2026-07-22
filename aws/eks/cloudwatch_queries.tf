@@ -352,7 +352,7 @@ resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
   ]
 
   query_string = <<QUERY
-filter @message like /Total gunicorn running time/
+filter @message like /Total gunicorn API running time/
 | parse @message /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
 | order by @timestamp asc
 | display @timestamp, @gunicorn_time
@@ -370,7 +370,7 @@ resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-e
 
   query_string = <<QUERY
 filter @message like /NXDOMAIN/
-limit 10000
+| limit 10000
 QUERY
 }
 
@@ -767,7 +767,7 @@ resource "aws_cloudwatch_query_definition" "api_gunicorn_total_running_time" {
   query_string = <<QUERY
 fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter log like /Total gunicorn running time/
+| filter log like /Total gunicorn API running time/
 | parse log /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
 | order by @timestamp asc
 | display @timestamp, @gunicorn_time
