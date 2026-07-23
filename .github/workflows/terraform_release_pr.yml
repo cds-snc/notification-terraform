@@ -21,7 +21,7 @@ jobs:
           private-key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
 
       - name: Create terraform release draft PR
-        uses: cds-snc/notification-pr-bot@fc22ac1d3c1be8eaeccb96c2ef1468f2121449de # main
+        uses: cds-snc/notification-pr-bot@f57cef43ca6c20bc47c08dc4e49d90e59d8ec81b # main
         env:
           TOKEN: ${{ steps.generate-token.outputs.token }}
           TARGET_REPO: notification-terraform
