@@ -7,9 +7,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     allow {}
   }
 
-  # Rules are ordered by WCU cost (ascending) to minimise compute spend:
-  # cheap rules with high block potential run first so matched requests
-  # never reach the expensive managed rule groups.
+  # Rules are ordered to minimise compute spend: low-WCU rules with high
+  # block potential run first so matched requests never reach the expensive
+  # managed rule groups. WCU annotations are approximate; ordering also
+  # accounts for block potential, not WCU alone.
   # See https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
 
   # 1 WCU
