@@ -352,7 +352,7 @@ resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
   ]
 
   query_string = <<QUERY
-filter @message like /Total gunicorn running time/
+filter @message like /Total gunicorn API running time/
 | parse @message /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
 | order by @timestamp asc
 | display @timestamp, @gunicorn_time
@@ -370,7 +370,7 @@ resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-e
 
   query_string = <<QUERY
 filter @message like /NXDOMAIN/
-limit 10000
+| limit 10000
 QUERY
 }
 
@@ -522,5 +522,254 @@ fields @timestamp, @notification_id, @url, @error
 | filter @message like /send_delivery_status_to_service request failed for notification_id:/
 | parse @message 'send_delivery_status_to_service request failed for notification_id: * and url: * service: * exc: *' as @notification_id, @url, @service_id, @error
 | limit 10000
+QUERY
+}
+
+### API Queries
+
+resource "aws_cloudwatch_query_definition" "api-errors" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / API errors"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /rror/
+| sort @timestamp desc
+| limit 20
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "services-over-daily-rate-limit" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Services going over daily rate limits"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /has been rate limited/
+| parse log /service (?<service>.*?) has been rate limited for (?<limit_type>..........).*/
+| stats count(*) by service, limit_type
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api-504-timeouts" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / 504 timeouts grouped by hour"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /HTTP\/\d+\.\d+" 504/
+| stats count() as error_count by bin(@timestamp, 1h)
+| sort @timestamp desc
+| limit 1000
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_response_code_counts" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Response Code Counts"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| parse log /HTTP\/\d+\.\d+" (?<status>\d{3})/
+| filter ispresent(status)
+| stats count(*) by status
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_count_requests_by_minute" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Requests By Minute"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| parse log /(?<httpMethod>GET|POST|PUT|DELETE|PATCH) /
+| filter ispresent(httpMethod)
+| stats count(*) by httpMethod, bin(1m) as minute
+| order by minute asc
+| limit 100
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "get-trace-by-notification-id" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Get Trace By Notification ID"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /d9cc47e6-b1a3-4c83-8d3c-ab40874307b1/
+| sort @timestamp asc
+| limit 100
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api-sending-times-aggregate" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / API send times aggregate"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /time_taken/ and log like /Batch saving/
+| parse log "time_taken: *ms" as duration
+| parse log "full_path: '/v2/notifications/*'" as send_type
+| parse log "template_id: '*'" as template_id
+| sort @timestamp desc
+| stats 
+    count(*) as total_sends,
+    sum(if(duration <= 400, 1, 0)) as requests_under_400ms,
+    sum(if(duration > 400 and duration <= 1000, 1, 0)) as requests_under_1s,
+    sum(if(duration > 1000, 1, 0)) as requests_over_1s,
+    (sum(if(duration <= 400, 1, 0)) * 100.0 / count(*)) as percent_under_400ms,
+    (sum(if(duration > 400 and duration <= 1000, 1, 0)) * 100.0 / count(*)) as percent_under_1s, 
+    (sum(if(duration > 1000, 1, 0)) * 100.0 / count(*)) as percent_over_1s
+| limit 20
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api-slowest-sends" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / API slowest sends"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /time_taken/ and log like /Batch saving/
+| parse log "time_taken: *ms" as duration
+| parse log "full_path: '/v2/notifications/*'" as send_type
+| parse log "template_id: '*'" as template_id
+| sort duration desc
+| limit 20
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_errors_by_ip_address" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / API error by IP address"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /HTTP\/\d+\.\d+" 50\d/
+| parse log /^(?<ip>[\d.]+)/
+| stats count() as total by ip
+| order by total desc
+| limit 1000
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_average_latency" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Average Latency"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| parse log "full_path: '*'" as resourcePath
+| parse log "time_taken: *ms" as responseLatency
+| filter ispresent(responseLatency)
+| stats 
+    count() as requests,
+    avg(responseLatency) as avgLatency,
+    pct(responseLatency, 95) as p95Latency,
+    max(responseLatency) as maxLatency
+    by resourcePath,
+       if(responseLatency < 400, "under 400ms",
+          if(responseLatency < 1000, "400ms - 1s", "over 1s")
+       ) as latencyBucket
+| sort avgLatency desc
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_concurrent_running_per_min" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Concurrent API requests per min"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| parse log /(?<httpMethod>GET|POST|PUT|DELETE|PATCH) (?<path>\/[^ ]*)/
+| filter ispresent(httpMethod)
+| stats count() as requests by bin(1m)
+| sort requests desc
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "api_gunicorn_total_running_time" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "API / Gunicorn total running time"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /Total gunicorn API running time/
+| parse log /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
+| order by @timestamp asc
+| display @timestamp, @gunicorn_time
 QUERY
 }
