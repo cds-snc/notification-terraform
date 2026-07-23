@@ -1,6 +1,6 @@
 locals {
-  api_target_group   = join("/", slice(split("/", aws_alb_target_group.notification_canada_ca_api.arn), 1, 3))
-  admin_target_group = join("/", slice(split("/", aws_alb_target_group.notification_canada_ca_admin.arn), 1, 3))
+  api_target_group   = join("/", slice(split("/", aws_alb_target_group.notification-canada-ca-api.arn), 1, 3))
+  admin_target_group = join("/", slice(split("/", aws_alb_target_group.notification-canada-ca-admin.arn), 1, 3))
 }
 
 resource "aws_cloudwatch_dashboard" "performance_bottlenecks" {

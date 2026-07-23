@@ -2,23 +2,23 @@
 # Target groups
 ###
 output "api_target_group_arn" {
-  value = aws_alb_target_group.notification_canada_ca_api.arn
+  value = aws_alb_target_group.notification-canada-ca-api.arn
 }
 
 output "admin_target_group_arn" {
-  value = aws_alb_target_group.notification_canada_ca_admin.arn
+  value = aws_alb_target_group.notification-canada-ca-admin.arn
 }
 
 output "document_target_group_arn" {
-  value = aws_alb_target_group.notification_canada_ca_document.arn
+  value = aws_alb_target_group.notification-canada-ca-document.arn
 }
 
 output "document_api_target_group_arn" {
-  value = aws_alb_target_group.notification_canada_ca_document_api.arn
+  value = aws_alb_target_group.notification-canada-ca-document-api.arn
 }
 
 output "documentation_target_group_arn" {
-  value = aws_alb_target_group.notification_canada_ca_documentation.arn
+  value = aws_alb_target_group.notification-canada-ca-documentation.arn
 }
 
 output "internal_nginx_target_group_arn" {

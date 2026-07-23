@@ -105,7 +105,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "document-download-api-high-request-count-warning"
-  alarm_description   = "More than 300 4XX requests in 10 minutes on ${aws_alb_target_group.notification_canada_ca_document_api.name} target group"
+  alarm_description   = "More than 300 4XX requests in 10 minutes on ${aws_alb_target_group.notification-canada-ca-document-api.name} target group"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   metric_name         = "HTTPCode_Target_4XX_Count"
@@ -117,7 +117,7 @@ resource "aws_cloudwatch_metric_alarm" "document-download-api-high-request-count
   treat_missing_data  = "notBreaching"
   dimensions = {
     LoadBalancer = aws_alb.notification-canada-ca.arn_suffix
-    TargetGroup  = aws_alb_target_group.notification_canada_ca_document_api.arn_suffix
+    TargetGroup  = aws_alb_target_group.notification-canada-ca-document-api.arn_suffix
   }
 }
 
