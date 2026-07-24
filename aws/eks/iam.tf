@@ -248,7 +248,7 @@ data "aws_iam_policy" "ssm_managed_instance" {
 
 module "iam_assumable_role_karpenter" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "5.44.0"
+  version                       = "5.60.0"
   create_role                   = true
   role_name                     = "karpenter-controller-eks"
   provider_url                  = data.aws_eks_cluster.notify_cluster.identity[0].oidc[0].issuer
