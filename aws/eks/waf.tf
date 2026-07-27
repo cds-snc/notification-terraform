@@ -712,7 +712,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 14
 
     action {
-      block {}
+      count {}
     }
 
     statement {
@@ -759,7 +759,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 15
 
     action {
-      block {}
+      count {}
     }
 
     statement {
@@ -859,7 +859,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 16
 
     action {
-      block {}
+      count {}
     }
 
     statement {
@@ -936,7 +936,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 17
 
     action {
-      block {}
+      count {}
     }
 
     statement {
