@@ -26,6 +26,10 @@ eks_karpenter_ami_id            = "ami-0a04e85afc3fdebd8"
 non_api_waf_rate_limit          = 750
 api_waf_rate_limit              = 30000
 sign_in_waf_rate_limit          = 100
+sign_in_ja4_waf_rate_limit      = 500
+api_ja4_waf_rate_limit          = 150000
+api_mutating_waf_rate_limit     = 10000
+api_mutating_ja4_waf_rate_limit = 50000
 celery_queue_prefix             = "eks-notification-canada-ca"
 notify_k8s_namespace            = "notification-canada-ca"
 
