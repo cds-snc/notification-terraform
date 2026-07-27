@@ -97,11 +97,12 @@ CREATE EXTERNAL TABLE `${database_name}.${table_name}` (
                         responsecode:string,
                         solvetimestamp:bigint,
                         failurereason:string
-                    >
+                    >,
+  `ja4fingerprint` string
 )
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 WITH SERDEPROPERTIES (
- 'paths'='action,formatVersion,httpRequest,httpSourceId,httpSourceName,labels,nonTerminatingMatchingRules,rateBasedRuleList,requestHeadersInserted,responseCodeSent,ruleGroupList,terminatingRuleId,terminatingRuleMatchDetails,terminatingRuleType,timestamp,webaclId,captchaResponse')
+ 'paths'='action,formatVersion,httpRequest,httpSourceId,httpSourceName,ja4Fingerprint,labels,nonTerminatingMatchingRules,rateBasedRuleList,requestHeadersInserted,responseCodeSent,ruleGroupList,terminatingRuleId,terminatingRuleMatchDetails,terminatingRuleType,timestamp,webaclId,captchaResponse')
 STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat'
 OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
 LOCATION '${bucket_location}';

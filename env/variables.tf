@@ -255,6 +255,14 @@ variable "sign_in_waf_rate_limit" {
   type = number
 }
 
+variable "sign_in_ja4_waf_rate_limit" {
+  type = number
+}
+
+variable "api_ja4_waf_rate_limit" {
+  type = number
+}
+
 variable "celery_queue_prefix" {
   type = string
 }
