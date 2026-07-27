@@ -263,6 +263,14 @@ variable "api_ja4_waf_rate_limit" {
   type = number
 }
 
+variable "api_mutating_waf_rate_limit" {
+  type = number
+}
+
+variable "api_mutating_ja4_waf_rate_limit" {
+  type = number
+}
+
 variable "celery_queue_prefix" {
   type = string
 }
