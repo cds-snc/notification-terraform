@@ -342,23 +342,6 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "api-gunicorn-total-time" {
-  provider = aws.core_services
-  count    = var.cloudwatch_enabled ? 1 : 0
-  name     = "API / GUnicorn total running time"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-filter @message like /Total gunicorn API running time/
-| parse @message /Total gunicorn API running time: (?<@gunicorn_time>.*?) seconds/
-| order by @timestamp asc
-| display @timestamp, @gunicorn_time
-QUERY
-}
-
 resource "aws_cloudwatch_query_definition" "api-non-existent-domain-resolution-errors" {
   provider = aws.core_services
   count    = var.cloudwatch_enabled ? 1 : 0
