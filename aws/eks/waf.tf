@@ -1026,7 +1026,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         aggregate_key_type = "CUSTOM_KEYS"
         custom_key {
           ja4_fingerprint {
-            fallback_behavior = "MATCH"
+            fallback_behavior = "NO_MATCH"
           }
         }
         scope_down_statement {
@@ -1111,7 +1111,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
         aggregate_key_type = "CUSTOM_KEYS"
         custom_key {
           ja4_fingerprint {
-            fallback_behavior = "MATCH"
+            fallback_behavior = "NO_MATCH"
           }
         }
         scope_down_statement {
