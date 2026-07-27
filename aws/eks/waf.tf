@@ -1004,6 +1004,162 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
+  # ~22 WCU - JA4 fingerprint rate limit on sign-in paths; catches credential-stuffing tools that rotate IPs
+  # Count-only until baseline is established. Move before priority 8 when switching to block.
+  rule {
+    name     = "SigninRateLimitRule_JA4"
+    priority = 18
+
+    action {
+      count {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "SigninRateLimitRule_JA4"
+      sampled_requests_enabled   = true
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = var.sign_in_ja4_waf_rate_limit
+        aggregate_key_type = "CUSTOM_KEYS"
+        custom_key {
+          ja4_fingerprint {
+            fallback_behavior = "NO_MATCH"
+          }
+        }
+        scope_down_statement {
+          or_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  uri_path {}
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "/sign-in"
+                text_transformation {
+                  type     = "LOWERCASE"
+                  priority = 0
+                }
+              }
+            }
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  uri_path {}
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "/register"
+                text_transformation {
+                  type     = "LOWERCASE"
+                  priority = 1
+                }
+              }
+            }
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  uri_path {}
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "/forgot-password"
+                text_transformation {
+                  type     = "LOWERCASE"
+                  priority = 2
+                }
+              }
+            }
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  uri_path {}
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "/forced-password-reset"
+                text_transformation {
+                  type     = "LOWERCASE"
+                  priority = 3
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  # ~22 WCU - JA4 fingerprint rate limit on the API host; catches API abuse tools that rotate IPs
+  # Count-only until baseline is established. Move before priority 8 when switching to block.
+  rule {
+    name     = "ApiRateLimit_JA4"
+    priority = 19
+
+    action {
+      count {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ApiRateLimit_JA4"
+      sampled_requests_enabled   = true
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = var.api_ja4_waf_rate_limit
+        aggregate_key_type = "CUSTOM_KEYS"
+        custom_key {
+          ja4_fingerprint {
+            fallback_behavior = "NO_MATCH"
+          }
+        }
+        scope_down_statement {
+          and_statement {
+            statement {
+              byte_match_statement {
+                positional_constraint = "STARTS_WITH"
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                search_string = "api"
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+            statement {
+              not_statement {
+                statement {
+                  byte_match_statement {
+                    positional_constraint = "EXACTLY"
+                    field_to_match {
+                      single_header {
+                        name = "waf-secret"
+                      }
+                    }
+                    search_string = var.waf_secret
+                    text_transformation {
+                      priority = 1
+                      type     = "NONE"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
