@@ -1160,6 +1160,168 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
+  # ~24 WCU - IP rate limit on mutating methods (POST/PUT/PATCH/DELETE) to the API host.
+  # Lower threshold than ApiRateLimit to catch write-heavy abuse. Count-only until baseline established.
+  # Move before priority 8 when switching to block.
+  rule {
+    name     = "MutatingApiRateLimit"
+    priority = 20
+
+    action {
+      count {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "MutatingApiRateLimit"
+      sampled_requests_enabled   = true
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = var.api_mutating_waf_rate_limit
+        aggregate_key_type = "IP"
+        scope_down_statement {
+          and_statement {
+            statement {
+              byte_match_statement {
+                positional_constraint = "STARTS_WITH"
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                search_string = "api"
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+            statement {
+              not_statement {
+                statement {
+                  byte_match_statement {
+                    positional_constraint = "EXACTLY"
+                    field_to_match {
+                      single_header {
+                        name = "waf-secret"
+                      }
+                    }
+                    search_string = var.waf_secret
+                    text_transformation {
+                      priority = 1
+                      type     = "NONE"
+                    }
+                  }
+                }
+              }
+            }
+            statement {
+              regex_match_statement {
+                field_to_match {
+                  method {}
+                }
+                regex_string = "^(delete|patch|post|put)$"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  # ~24 WCU - JA4 rate limit on mutating methods; catches write-abuse tools that rotate IPs.
+  # Count-only until baseline established. Move before priority 8 when switching to block.
+  rule {
+    name     = "MutatingApiRateLimit_JA4"
+    priority = 21
+
+    action {
+      count {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "MutatingApiRateLimit_JA4"
+      sampled_requests_enabled   = true
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = var.api_mutating_ja4_waf_rate_limit
+        aggregate_key_type = "CUSTOM_KEYS"
+        custom_key {
+          ja4_fingerprint {
+            fallback_behavior = "NO_MATCH"
+          }
+        }
+        scope_down_statement {
+          and_statement {
+            statement {
+              byte_match_statement {
+                positional_constraint = "STARTS_WITH"
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                search_string = "api"
+                text_transformation {
+                  priority = 1
+                  type     = "COMPRESS_WHITE_SPACE"
+                }
+                text_transformation {
+                  priority = 2
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+            statement {
+              not_statement {
+                statement {
+                  byte_match_statement {
+                    positional_constraint = "EXACTLY"
+                    field_to_match {
+                      single_header {
+                        name = "waf-secret"
+                      }
+                    }
+                    search_string = var.waf_secret
+                    text_transformation {
+                      priority = 1
+                      type     = "NONE"
+                    }
+                  }
+                }
+              }
+            }
+            statement {
+              regex_match_statement {
+                field_to_match {
+                  method {}
+                }
+                regex_string = "^(delete|patch|post|put)$"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   tags = {
     CostCenter = "notification-canada-ca-${var.env}"
   }
