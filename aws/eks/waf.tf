@@ -14,7 +14,7 @@
 #   5 |   ~20 | SigninRateLimitRule                         | BLOCK (rate, IP)
 #   6 |   ~22 | SigninRateLimitRule_JA4                     | count → BLOCK (rate, JA4)
 #   7 |   ~22 | ApiRateLimit_JA4                            | count → BLOCK (rate, JA4)
-#   8 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA/US)
+#   8 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA)
 #   9 |   ~24 | MutatingApiRateLimit                        | count → BLOCK (rate, IP)
 #  10 |   ~24 | MutatingApiRateLimit_JA4                    | count → BLOCK (rate, JA4)
 #  11 |   ~25 | PreventHostInjections                       | BLOCK
@@ -733,6 +733,20 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     }
                   }
                 }
+                # Letter PDF uploads
+                statement {
+                  byte_match_statement {
+                    field_to_match {
+                      uri_path {}
+                    }
+                    positional_constraint = "STARTS_WITH"
+                    search_string         = "/letters"
+                    text_transformation {
+                      priority = 0
+                      type     = "LOWERCASE"
+                    }
+                  }
+                }
               }
             }
           }
@@ -1087,7 +1101,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~30 WCU - Block non-CA/US access to authenticated admin pages.
+  # ~30 WCU - Block non-CA access to authenticated admin pages.
   # Public pages (sign-in, register, auth flows, GCA content, contact, newsletter, /_status) remain accessible worldwide.
   rule {
     name     = "AdminAuthenticatedPagesGeoRestriction"
