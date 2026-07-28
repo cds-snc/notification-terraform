@@ -15,7 +15,7 @@
 #   6 |   ~20 | SigninRateLimitRule                         | BLOCK (rate, IP)
 #   7 |   ~22 | SigninRateLimitRule_JA4                     | count → BLOCK (rate, JA4)
 #   8 |   ~22 | ApiRateLimit_JA4                            | count → BLOCK (rate, JA4)
-#   9 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA)
+#   9 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA/US)
 #  10 |   ~24 | MutatingApiRateLimit                        | count → BLOCK (rate, IP)
 #  11 |   ~24 | MutatingApiRateLimit_JA4                    | count → BLOCK (rate, JA4)
 #  12 |   ~25 | PreventHostInjections                       | BLOCK
