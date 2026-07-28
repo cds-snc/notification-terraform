@@ -171,7 +171,7 @@ sqs_send_email_low_queue_name                                      = "send-email
 sqs_send_sms_high_queue_name                                       = "send-sms-high"
 sqs_send_sms_medium_queue_name                                     = "send-sms-medium"
 sqs_send_sms_low_queue_name                                        = "send-sms-low"
-enable_guardduty_scan_api_destination                              = false
+enable_guardduty_scan_api_destination                              = true
 scan_verdict_callback_url                                          = "https://api.notification.canada.ca/templates/scan-verdict-callback"
 
 # RANDOM DOCKER TAGS (These are only used during BCP processes)
