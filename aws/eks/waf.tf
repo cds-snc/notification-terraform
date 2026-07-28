@@ -9,31 +9,32 @@
 # ----|-------|---------------------------------------------|----------------------------
 #   1 |    ~1 | ip_blocklist                                | BLOCK
 #   2 |   ~10 | BlockLargeRequests_CookiesAndHeaders        | count → BLOCK
-#   3 |   ~15 | BlockLargeRequests_Body                     | count → BLOCK
-#   4 |   ~20 | BlockFFUFUserAgent                          | BLOCK
-#   5 |   ~20 | SigninRateLimitRule                         | BLOCK (rate, IP)
-#   6 |   ~22 | SigninRateLimitRule_JA4                     | count → BLOCK (rate, JA4)
-#   7 |   ~22 | ApiRateLimit_JA4                            | count → BLOCK (rate, JA4)
-#   8 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA)
-#   9 |   ~24 | MutatingApiRateLimit                        | count → BLOCK (rate, IP)
-#  10 |   ~24 | MutatingApiRateLimit_JA4                    | count → BLOCK (rate, JA4)
-#  11 |   ~25 | PreventHostInjections                       | BLOCK
-#  12 |    25 | AWSManagedRulesAmazonIpReputationList        | BLOCK (managed)
-#  13 |   ~26 | rate_limit_all_except_api                   | BLOCK (rate, IP)
-#  14 |   ~26 | ApiRateLimit                                | BLOCK (rate, IP)
-#  15 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | count → BLOCK (non-CA)
-#  16 |    50 | AWSManagedRulesAnonymousIpList               | BLOCK (managed)
-#  17 |   157 | valid_paths                                 | BLOCK
-#  18 |   200 | AWSManagedRulesKnownBadInputsRuleSet         | BLOCK (managed)
-#  19 |   200 | AWSManagedRulesLinuxRuleSet                  | BLOCK (managed)
-#  20 |   700 | AWSManagedRulesCommonRuleSet                 | BLOCK (managed, sets labels)
-#  21 |    ~3 | BlockLabeled_SSRF_NoUserAgent_NonCA          | count → BLOCK (label, after 20)
-#  22 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| count → BLOCK (label, after 20)
-#  23 |    ~6 | BlockLFI_Body_ExcludeTemplatePaths           | count → BLOCK (label, after 20)
-#  24 |    ~8 | BlockXSS_Body_ExcludeContentPaths            | count → BLOCK (label, after 20)
-#  25 |   200 | AWSManagedRulesSQLiRuleSet                   | BLOCK (managed, sets labels)
-#  26 |    ~6 | BlockSQLi_Body_ExcludeContentPaths           | count → BLOCK (label, after 25)
-#  27 |    ?? | AWSManagedRulesAntiDDoSRuleSet               | count (managed, non-API only)
+#   3 |   ~20 | BlockLargeRequests_Body_Admin               | count → BLOCK (non-API, 8 KB, excl. /otlp-proxy/)
+#   4 |   ~15 | BlockLargeRequests_Body_Api                 | count → BLOCK (API, 7 MB)
+#   5 |   ~20 | BlockFFUFUserAgent                          | BLOCK
+#   6 |   ~20 | SigninRateLimitRule                         | BLOCK (rate, IP)
+#   7 |   ~22 | SigninRateLimitRule_JA4                     | count → BLOCK (rate, JA4)
+#   8 |   ~22 | ApiRateLimit_JA4                            | count → BLOCK (rate, JA4)
+#   9 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA)
+#  10 |   ~24 | MutatingApiRateLimit                        | count → BLOCK (rate, IP)
+#  11 |   ~24 | MutatingApiRateLimit_JA4                    | count → BLOCK (rate, JA4)
+#  12 |   ~25 | PreventHostInjections                       | BLOCK
+#  13 |    25 | AWSManagedRulesAmazonIpReputationList        | BLOCK (managed)
+#  14 |   ~26 | rate_limit_all_except_api                   | BLOCK (rate, IP)
+#  15 |   ~26 | ApiRateLimit                                | BLOCK (rate, IP)
+#  16 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | count → BLOCK (non-CA)
+#  17 |    50 | AWSManagedRulesAnonymousIpList               | BLOCK (managed)
+#  18 |   157 | valid_paths                                 | BLOCK
+#  19 |   200 | AWSManagedRulesKnownBadInputsRuleSet         | BLOCK (managed)
+#  20 |   200 | AWSManagedRulesLinuxRuleSet                  | BLOCK (managed)
+#  21 |   700 | AWSManagedRulesCommonRuleSet                 | BLOCK (managed, sets labels)
+#  22 |    ~8 | BlockLabeled_SSRF_NoUserAgent_NonCA          | count → BLOCK (label, after 21, non-API)
+#  23 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| count → BLOCK (label, after 21)
+#  24 |    ~6 | BlockLFI_Body_ExcludeTemplatePaths           | count → BLOCK (label, after 21)
+#  25 |    ~8 | BlockXSS_Body_ExcludeContentPaths            | count → BLOCK (label, after 21, excl. /services/)
+#  26 |   200 | AWSManagedRulesSQLiRuleSet                   | BLOCK (managed, sets labels, excl. /services/)
+#  27 |    ~8 | BlockSQLi_Body_ExcludeContentPaths           | count → BLOCK (label, after 26, non-API, excl. /services/)
+#  28 |    ?? | AWSManagedRulesAntiDDoSRuleSet               | count (managed, non-API only)
 # =============================================================================
 
 resource "aws_wafv2_web_acl" "notification-canada-ca" {
@@ -76,7 +77,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 20 WCU
   rule {
     name     = "BlockFFUFUserAgent"
-    priority = 4
+    priority = 5
 
     action {
       block {}
@@ -108,7 +109,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 23 WCU
   rule {
     name     = "CanadaUSOnlyGeoRestriction"
-    priority = 8
+    priority = 9
 
     action {
       block {}
@@ -156,7 +157,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 25 WCU
   rule {
     name     = "PreventHostInjections"
-    priority = 11
+    priority = 12
 
     statement {
       not_statement {
@@ -194,7 +195,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 20 WCU
   rule {
     name     = "SigninRateLimitRule"
-    priority = 5
+    priority = 6
 
     action {
       block {
@@ -281,7 +282,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 26 WCU
   rule {
     name     = "rate_limit_all_except_api"
-    priority = 13
+    priority = 14
 
     action {
       block {
@@ -358,7 +359,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 26 WCU
   rule {
     name     = "ApiRateLimit"
-    priority = 14
+    priority = 15
 
     action {
       block {
@@ -429,7 +430,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 157 WCU
   rule {
     name     = "valid_paths"
-    priority = 17
+    priority = 18
 
     action {
       block {
@@ -644,12 +645,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~15 WCU - Block requests with oversized bodies, excluding file upload and bulk-send paths.
-  # Upload paths: CSV sends, template attachments, letter PDF validation, email branding logos,
-  #               inline bulk notification JSON (/v2/notifications/bulk).
-  # AWS WAF nesting limit (3 operator levels) requires body size and cookie/header size in separate rules.
+  # ~20 WCU - Block oversized bodies on admin/documentation hosts (8 KB limit).
+  # API body size is handled separately by BlockLargeRequests_Body_Api (priority 4) with a 7 MB limit.
   rule {
-    name     = "BlockLargeRequests_Body"
+    name     = "BlockLargeRequests_Body_Admin"
     priority = 3
 
     action {
@@ -658,6 +657,26 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     statement {
       and_statement {
+        # Scope to non-API hosts only
+        statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "api"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
         statement {
           size_constraint_statement {
             field_to_match {
@@ -673,6 +692,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             }
           }
         }
+        # Exclude file upload paths
         statement {
           not_statement {
             statement {
@@ -719,20 +739,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     }
                   }
                 }
-                # Inline bulk notification JSON body (can be large with many recipients)
-                statement {
-                  byte_match_statement {
-                    field_to_match {
-                      uri_path {}
-                    }
-                    positional_constraint = "STARTS_WITH"
-                    search_string         = "/v2/notifications/bulk"
-                    text_transformation {
-                      priority = 0
-                      type     = "LOWERCASE"
-                    }
-                  }
-                }
                 # Letter PDF uploads
                 statement {
                   byte_match_statement {
@@ -741,6 +747,20 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     }
                     positional_constraint = "STARTS_WITH"
                     search_string         = "/letters"
+                    text_transformation {
+                      priority = 0
+                      type     = "LOWERCASE"
+                    }
+                  }
+                }
+                # OTLP trace exports (can be large payloads)
+                statement {
+                  byte_match_statement {
+                    field_to_match {
+                      uri_path {}
+                    }
+                    positional_constraint = "STARTS_WITH"
+                    search_string         = "/otlp-proxy/"
                     text_transformation {
                       priority = 0
                       type     = "LOWERCASE"
@@ -756,7 +776,60 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "BlockLargeRequests_Body"
+      metric_name                = "BlockLargeRequests_Body_Admin"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # ~15 WCU - Block oversized bodies on the API host (7 MB limit).
+  # Higher limit than admin to accommodate large JSON notification payloads.
+  rule {
+    name     = "BlockLargeRequests_Body_Api"
+    priority = 4
+
+    action {
+      count {}
+    }
+
+    statement {
+      and_statement {
+        # Scope to API host only
+        statement {
+          byte_match_statement {
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+            positional_constraint = "STARTS_WITH"
+            search_string         = "api"
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+          }
+        }
+        statement {
+          size_constraint_statement {
+            field_to_match {
+              body {
+                oversize_handling = "MATCH"
+              }
+            }
+            comparison_operator = "GT"
+            size                = 7340032
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockLargeRequests_Body_Api"
       sampled_requests_enabled   = true
     }
   }
@@ -765,7 +838,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Count-only until baseline is established.
   rule {
     name     = "SigninRateLimitRule_JA4"
-    priority = 6
+    priority = 7
 
     action {
       count {}
@@ -850,7 +923,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Count-only until baseline is established.
   rule {
     name     = "ApiRateLimit_JA4"
-    priority = 7
+    priority = 8
 
     action {
       count {}
@@ -921,7 +994,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Lower threshold than ApiRateLimit to catch write-heavy abuse. Count-only until baseline established.
   rule {
     name     = "MutatingApiRateLimit"
-    priority = 9
+    priority = 10
 
     action {
       count {}
@@ -999,7 +1072,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Count-only until baseline established.
   rule {
     name     = "MutatingApiRateLimit_JA4"
-    priority = 10
+    priority = 11
 
     action {
       count {}
@@ -1081,7 +1154,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 25 WCU
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 12
+    priority = 13
 
     override_action {
       none {}
@@ -1105,7 +1178,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Public pages (sign-in, register, auth flows, GCA content, contact, newsletter, /_status) remain accessible worldwide.
   rule {
     name     = "AdminAuthenticatedPagesGeoRestriction"
-    priority = 15
+    priority = 16
 
     action {
       count {}
@@ -1117,7 +1190,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           not_statement {
             statement {
               geo_match_statement {
-                country_codes = ["CA"]
+                country_codes = ["CA", "US"]
               }
             }
           }
@@ -1217,7 +1290,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 50 WCU
   rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 16
+    priority = 17
 
     override_action {
       none {}
@@ -1247,7 +1320,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 200 WCU
   rule {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 18
+    priority = 19
 
     override_action {
       none {}
@@ -1270,7 +1343,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 200 WCU
   rule {
     name     = "AWSManagedRulesLinuxRuleSet"
-    priority = 19
+    priority = 20
 
     override_action {
       none {}
@@ -1293,7 +1366,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 700 WCU
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
-    priority = 20
+    priority = 21
 
     override_action {
       none {}
@@ -1350,11 +1423,12 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~3 WCU - Block non-CA requests that were labelled by EC2MetaDataSSRF_BODY or NoUserAgent_HEADER
-  # Must run after AWSManagedRulesCommonRuleSet (priority 20) so the labels exist.
+  # ~8 WCU - Block non-CA requests on admin/documentation hosts labelled by EC2MetaDataSSRF_BODY
+  # or NoUserAgent_HEADER. Scoped to non-API hosts: API callers legitimately omit User-Agent.
+  # Must run after AWSManagedRulesCommonRuleSet (priority 21) so the labels exist.
   rule {
     name     = "BlockLabeled_SSRF_NoUserAgent_NonCA"
-    priority = 21
+    priority = 22
 
     action {
       count {}
@@ -1382,7 +1456,27 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           not_statement {
             statement {
               geo_match_statement {
-                country_codes = ["CA"]
+                country_codes = ["CA", "US"]
+              }
+            }
+          }
+        }
+        # Exclude API host: API callers commonly omit User-Agent and this is not suspicious there
+        statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "api"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
               }
             }
           }
@@ -1400,7 +1494,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # ~6 WCU - Block oversized bodies, except on bulk-send and file upload endpoints
   rule {
     name     = "BlockSizeRestrictions_Body_ExcludeUploadPaths"
-    priority = 22
+    priority = 23
 
     action {
       count {}
@@ -1477,7 +1571,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # ~6 WCU - Block LFI in body, except on template/notification paths where file-like strings are valid content
   rule {
     name     = "BlockLFI_Body_ExcludeTemplatePaths"
-    priority = 23
+    priority = 24
 
     action {
       count {}
@@ -1552,7 +1646,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # /v2/notifications (email body), /templates, /personalise, /_email, /_letter (preview rendering)
   rule {
     name     = "BlockXSS_Body_ExcludeContentPaths"
-    priority = 24
+    priority = 25
 
     action {
       count {}
@@ -1635,6 +1729,20 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     }
                   }
                 }
+                # Service document uploads (XLSX/CSV files contain XML bytes that trip XSS detection)
+                statement {
+                  byte_match_statement {
+                    field_to_match {
+                      uri_path {}
+                    }
+                    positional_constraint = "STARTS_WITH"
+                    search_string         = "/services/"
+                    text_transformation {
+                      priority = 0
+                      type     = "LOWERCASE"
+                    }
+                  }
+                }
               }
             }
           }
@@ -1652,7 +1760,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 200 WCU
   rule {
     name     = "AWSManagedRulesSQLiRuleSet"
-    priority = 25
+    priority = 26
 
     override_action {
       none {}
@@ -1678,6 +1786,25 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             count {}
           }
         }
+
+        # Exclude service document upload paths — XLSX/CSV files contain XML that trips SQLi detection.
+        scope_down_statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  uri_path {}
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "/services/"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
       }
     }
 
@@ -1689,10 +1816,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~6 WCU - Block SQLi in body except on paths where user-supplied content is expected.
-  # Count-only until baseline established. Must run after AWSManagedRulesSQLiRuleSet (priority 25).
+  # Count-only until baseline established. Must run after AWSManagedRulesSQLiRuleSet (priority 26).
   rule {
     name     = "BlockSQLi_Body_ExcludeContentPaths"
-    priority = 26
+    priority = 27
 
     action {
       count {}
@@ -1700,6 +1827,27 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
     statement {
       and_statement {
+        # Scope to non-API hosts only — API receives user content that legitimately
+        # contains SQL-like keywords (e.g. 'or', '>') in notification messages.
+        statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "api"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
+          }
+        }
         statement {
           or_statement {
             statement {
@@ -1759,6 +1907,20 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     }
                   }
                 }
+                # Service document uploads (XLSX/CSV files contain XML bytes that trip SQLi detection)
+                statement {
+                  byte_match_statement {
+                    field_to_match {
+                      uri_path {}
+                    }
+                    positional_constraint = "STARTS_WITH"
+                    search_string         = "/services/"
+                    text_transformation {
+                      priority = 0
+                      type     = "LOWERCASE"
+                    }
+                  }
+                }
               }
             }
           }
@@ -1780,7 +1942,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # scoping this rule to non-API hosts, or risk breaking API consumers during incidents.
   rule {
     name     = "AWSManagedRulesAntiDDoSRuleSet"
-    priority = 27
+    priority = 28
 
     override_action {
       count {}
