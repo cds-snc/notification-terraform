@@ -1,3 +1,11 @@
+resource "aws_athena_named_query" "waf_rule_hit_counts" {
+  name        = "WAF: rule hit counts"
+  description = "Counts of requests matched per WAF rule (last 7 days), split by BLOCK and COUNT mode. Use to baseline count-mode rules before switching to block."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_rule_hit_counts.sql.tmpl", {})
+}
+
 resource "aws_athena_named_query" "find_blocked_ips" {
   name        = "WAF: find blocked ips"
   description = "Find ips that Notify has recently blocked"
