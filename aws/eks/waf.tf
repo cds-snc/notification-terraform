@@ -813,7 +813,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           size_constraint_statement {
             field_to_match {
               body {
-                oversize_handling = "MATCH"
+                oversize_handling = "CONTINUE"
               }
             }
             comparison_operator = "GT"
