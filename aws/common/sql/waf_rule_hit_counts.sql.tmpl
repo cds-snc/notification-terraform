@@ -1,0 +1,65 @@
+-- WAF: rule hit counts
+-- Shows how many requests each WAF rule matched over the last 7 days, split into:
+--   BLOCK         - rule terminated the request (custom or managed group sub-rule)
+--   COUNT (custom)  - custom rule running in count mode (action { count {} })
+--   COUNT (managed) - managed rule group sub-rule overridden to count
+--                     (e.g. CrossSiteScripting_BODY, SQLi_BODY, NoUserAgent_HEADER)
+--
+-- Use this to baseline count-mode rules before switching them to block.
+-- Adjust the INTERVAL value to change the time window.
+
+WITH time_window AS (
+    SELECT
+        terminatingruleid,
+        action,
+        nonterminatingmatchingrules,
+        rulegrouplist
+    FROM waf_logs
+    WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
+),
+
+-- Requests terminated (blocked/challenged) by a rule
+blocking AS (
+    SELECT
+        terminatingruleid AS rule_id,
+        'BLOCK'           AS match_type,
+        COUNT(*)          AS hits
+    FROM time_window
+    WHERE action IN ('BLOCK', 'CAPTCHA', 'CHALLENGE')
+      AND terminatingruleid != 'Default_Action'
+    GROUP BY terminatingruleid
+),
+
+-- Custom rules running in count mode (action { count {} })
+custom_counting AS (
+    SELECT
+        rule.ruleid      AS rule_id,
+        'COUNT (custom)' AS match_type,
+        COUNT(*)         AS hits
+    FROM time_window
+    CROSS JOIN UNNEST(nonterminatingmatchingrules) AS t(rule)
+    GROUP BY rule.ruleid
+),
+
+-- Managed rule group sub-rules overridden to count
+-- (e.g. CrossSiteScripting_BODY, EC2MetaDataSSRF_BODY, SQLi_BODY, NoUserAgent_HEADER)
+managed_counting AS (
+    SELECT
+        rg_rule.ruleid    AS rule_id,
+        'COUNT (managed)' AS match_type,
+        COUNT(*)          AS hits
+    FROM time_window
+    CROSS JOIN UNNEST(rulegrouplist) AS t(rg)
+    CROSS JOIN UNNEST(rg.nonterminatingmatchingrules) AS t(rg_rule)
+    GROUP BY rg_rule.ruleid
+)
+
+SELECT rule_id, match_type, hits
+FROM blocking
+UNION ALL
+SELECT rule_id, match_type, hits
+FROM custom_counting
+UNION ALL
+SELECT rule_id, match_type, hits
+FROM managed_counting
+ORDER BY match_type, hits DESC
