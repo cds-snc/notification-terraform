@@ -114,7 +114,7 @@ resource "aws_athena_named_query" "waf_sqli_body_custom_hits" {
 
 resource "aws_athena_named_query" "waf_sqli_body_managed_hits" {
   name        = "WAF: SQLi body hits (managed rules)"
-  description = "Managed SQLi_BODY / SQLi_BODY_RC_COUNT / SQLiExtendedPatterns_Body_RC_COUNT hits (excluding api.*, which is not covered by the downstream label rule)."
+  description = "Managed SQLi_BODY / SQLi_BODY_RC_COUNT / SQLiExtendedPatterns_Body / SQLiExtendedPatterns_Body_RC_COUNT hits (excluding api.*, which is not covered by the downstream label rule)."
   workgroup   = aws_athena_workgroup.support.name
   database    = aws_athena_database.notification_athena.name
   query       = templatefile("${path.module}/sql/waf_sqli_body_managed_hits.sql.tmpl", {})

@@ -1,6 +1,9 @@
 -- WAF: SQLi_BODY managed rule hits, all variants (last 7 days)
 -- Shows requests that matched any of the SQLi managed rules:
--- SQLi_BODY, SQLi_BODY_RC_COUNT, SQLiExtendedPatterns_Body_RC_COUNT.
+--   SQLi_BODY, SQLi_BODY_RC_COUNT,
+--   SQLiExtendedPatterns_Body, SQLiExtendedPatterns_Body_RC_COUNT.
+-- SQLi_BODY and SQLiExtendedPatterns_Body are explicitly overridden to count in
+-- aws/eks/waf.tf; the *_RC_COUNT variants are shipped in count mode by AWS.
 -- Excludes api.* hosts because the downstream custom rule
 -- BlockSQLi_Body_ExcludeContentPaths scopes to non-api.
 -- blocked_by_label_rule indicates whether the downstream label rule also fired.
@@ -24,7 +27,12 @@ WITH sqli_hits AS (
     CROSS JOIN UNNEST(rulegrouplist)                  AS t(rg)
     CROSS JOIN UNNEST(rg.nonterminatingmatchingrules) AS t(rg_rule)
     WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
-      AND rg_rule.ruleid IN ('SQLi_BODY', 'SQLi_BODY_RC_COUNT', 'SQLiExtendedPatterns_Body_RC_COUNT')
+      AND rg_rule.ruleid IN (
+          'SQLi_BODY',
+          'SQLi_BODY_RC_COUNT',
+          'SQLiExtendedPatterns_Body',
+          'SQLiExtendedPatterns_Body_RC_COUNT'
+      )
       AND lower(COALESCE(TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value), '')) NOT LIKE 'api%'
 )
 SELECT request_time, client_ip, country, method, host, uri, ja4fingerprint, matched_rule, matched_data, blocked_by_label_rule

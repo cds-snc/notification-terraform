@@ -1,7 +1,10 @@
 -- WAF: BlockSQLi_Body_ExcludeContentPaths hits (last 7 days)
 -- Shows requests that matched the custom count-mode rule
 -- BlockSQLi_Body_ExcludeContentPaths (non-api, excludes /services/).
--- sqli_body and sqli_extended_body indicate which upstream SQLi label triggered.
+-- sqli_body and sqli_extended_body indicate which upstream managed SQLi label
+-- triggered the custom rule. The custom rule matches on WAF labels emitted by
+-- AWSManagedRulesSQLiRuleSet (see aws/eks/waf.tf), so we read those labels
+-- from the top-level waf_logs.labels array rather than nonterminatingmatchingrules.
 
 WITH sqli_hits AS (
     SELECT
@@ -13,12 +16,12 @@ WITH sqli_hits AS (
         httprequest.uri                       AS uri,
         ja4fingerprint,
         cardinality(filter(
-            nonterminatingmatchingrules,
-            r -> r.ruleid = 'SQLi_Body'
+            labels,
+            l -> l.name = 'awswaf:managed:aws:sql-database:SQLi_Body'
         )) > 0                               AS sqli_body,
         cardinality(filter(
-            nonterminatingmatchingrules,
-            r -> r.ruleid = 'SQLiExtendedPatterns_Body'
+            labels,
+            l -> l.name = 'awswaf:managed:aws:sql-database:SQLiExtendedPatterns_Body'
         )) > 0                               AS sqli_extended_body
     FROM waf_logs
     CROSS JOIN UNNEST(nonterminatingmatchingrules) AS t(rule)
