@@ -1,0 +1,25 @@
+-- WAF: HostingProviderIPList hits (last 7 days)
+-- Shows requests that matched the managed rule HostingProviderIPList
+-- (part of AWSManagedRulesAnonymousIpList). Applies to all hosts.
+-- other_rules_fired indicates whether this request also matched another
+-- non-default rule (useful for triage).
+
+SELECT
+    from_unixtime(timestamp / 1000e0)    AS request_time,
+    httprequest.clientip                  AS client_ip,
+    httprequest.country                   AS country,
+    httprequest.httpmethod                AS method,
+    TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value) AS host,
+    httprequest.uri                       AS uri,
+    ja4fingerprint,
+    cardinality(filter(
+        nonterminatingmatchingrules,
+        r -> r.ruleid != 'Default_Action'
+    )) > 0                               AS other_rules_fired
+FROM waf_logs
+CROSS JOIN UNNEST(rulegrouplist)                  AS t(rg)
+CROSS JOIN UNNEST(rg.nonterminatingmatchingrules) AS t(rg_rule)
+WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
+  AND rg_rule.ruleid = 'HostingProviderIPList'
+ORDER BY request_time DESC
+LIMIT 200

@@ -1,0 +1,33 @@
+-- WAF: SQLi_BODY managed rule hits, all variants (last 7 days)
+-- Shows requests that matched any of the SQLi managed rules:
+-- SQLi_BODY, SQLi_BODY_RC_COUNT, SQLiExtendedPatterns_Body_RC_COUNT.
+-- Excludes api.* hosts because the downstream custom rule
+-- BlockSQLi_Body_ExcludeContentPaths scopes to non-api.
+-- blocked_by_label_rule indicates whether the downstream label rule also fired.
+
+WITH sqli_hits AS (
+    SELECT
+        from_unixtime(timestamp / 1000e0)            AS request_time,
+        httprequest.clientip                          AS client_ip,
+        httprequest.country                           AS country,
+        httprequest.httpmethod                        AS method,
+        TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value) AS host,
+        httprequest.uri                               AS uri,
+        ja4fingerprint,
+        rg_rule.ruleid                                AS matched_rule,
+        TRY(rg_rule.rulematchdetails[1].matcheddata)  AS matched_data,
+        cardinality(filter(
+            nonterminatingmatchingrules,
+            r -> r.ruleid = 'BlockSQLi_Body_ExcludeContentPaths'
+        )) > 0                                        AS blocked_by_label_rule
+    FROM waf_logs
+    CROSS JOIN UNNEST(rulegrouplist)                  AS t(rg)
+    CROSS JOIN UNNEST(rg.nonterminatingmatchingrules) AS t(rg_rule)
+    WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
+      AND rg_rule.ruleid IN ('SQLi_BODY', 'SQLi_BODY_RC_COUNT', 'SQLiExtendedPatterns_Body_RC_COUNT')
+      AND lower(COALESCE(TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value), '')) NOT LIKE 'api%'
+)
+SELECT request_time, client_ip, country, method, host, uri, ja4fingerprint, matched_rule, matched_data, blocked_by_label_rule
+FROM sqli_hits
+ORDER BY request_time DESC
+LIMIT 200

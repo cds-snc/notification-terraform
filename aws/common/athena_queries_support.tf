@@ -79,3 +79,67 @@ resource "aws_athena_named_query" "alb_ip_address_by_url" {
   database    = aws_athena_database.notification_athena.name
   query       = templatefile("${path.module}/sql/alb_ip_lookup_by_url.sql.tmpl", {})
 }
+
+resource "aws_athena_named_query" "waf_ssrf_body_hits" {
+  name        = "WAF: EC2 metadata SSRF body hits"
+  description = "Managed EC2MetaDataSSRF_BODY hits (excluding api.*, which is not covered by the downstream label rule)."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_ssrf_body_hits.sql.tmpl", {})
+}
+
+resource "aws_athena_named_query" "waf_ssrf_body_alb_correlation" {
+  name        = "WAF: EC2 metadata SSRF body + ALB correlation"
+  description = "EC2MetaDataSSRF_BODY hits joined with ALB access logs on client IP + timestamp (±5s) so you can see the full URL, user-agent, and response codes."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_ssrf_body_alb_correlation.sql.tmpl", {})
+}
+
+resource "aws_athena_named_query" "waf_xss_body_hits" {
+  name        = "WAF: XSS body hits"
+  description = "Managed CrossSiteScripting_BODY hits (excluding api.document.*, where XLSX/DOCX uploads inherently trip the rule and are already excluded by the downstream label rule)."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_xss_body_hits.sql.tmpl", {})
+}
+
+resource "aws_athena_named_query" "waf_sqli_body_custom_hits" {
+  name        = "WAF: SQLi body hits (custom rule)"
+  description = "Hits on the custom count-mode rule BlockSQLi_Body_ExcludeContentPaths."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_sqli_body_custom_hits.sql.tmpl", {})
+}
+
+resource "aws_athena_named_query" "waf_sqli_body_managed_hits" {
+  name        = "WAF: SQLi body hits (managed rules)"
+  description = "Managed SQLi_BODY / SQLi_BODY_RC_COUNT / SQLiExtendedPatterns_Body_RC_COUNT hits (excluding api.*, which is not covered by the downstream label rule)."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_sqli_body_managed_hits.sql.tmpl", {})
+}
+
+resource "aws_athena_named_query" "waf_hosting_provider_hits" {
+  name        = "WAF: HostingProviderIPList hits"
+  description = "Managed HostingProviderIPList hits (AWSManagedRulesAnonymousIpList)."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_hosting_provider_hits.sql.tmpl", {})
+}
+
+resource "aws_athena_named_query" "waf_admin_geo_restriction_hits" {
+  name        = "WAF: admin geo restriction hits"
+  description = "Hits on the custom AdminAuthenticatedPagesGeoRestriction rule (non-CA/US traffic on admin-authenticated paths)."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_admin_geo_restriction_hits.sql.tmpl", {})
+}
+
+resource "aws_athena_named_query" "waf_size_restrictions_body_hits" {
+  name        = "WAF: SizeRestrictions body hits"
+  description = "Managed SizeRestrictions_BODY hits (~8 KB threshold), excluding api.* which is guarded by the 7 MB BlockLargeRequests_Body_Api rule."
+  workgroup   = aws_athena_workgroup.support.name
+  database    = aws_athena_database.notification_athena.name
+  query       = templatefile("${path.module}/sql/waf_size_restrictions_body_hits.sql.tmpl", {})
+}

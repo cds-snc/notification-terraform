@@ -1,0 +1,22 @@
+-- WAF: AdminAuthenticatedPagesGeoRestriction hits (last 7 days)
+-- Shows requests that matched the custom count-mode rule
+-- AdminAuthenticatedPagesGeoRestriction (non-CA/US traffic on admin-authenticated
+-- paths: /services/, /organisations/, /platform-admin/, /user-profile,
+-- /find-users-by-email, /accounts).
+-- final_action is the terminal action taken on the request.
+
+SELECT
+    from_unixtime(timestamp / 1000e0)    AS request_time,
+    httprequest.clientip                  AS client_ip,
+    httprequest.country                   AS country,
+    httprequest.httpmethod                AS method,
+    TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value) AS host,
+    httprequest.uri                       AS uri,
+    ja4fingerprint,
+    action                                AS final_action
+FROM waf_logs
+CROSS JOIN UNNEST(nonterminatingmatchingrules) AS t(rule)
+WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
+  AND rule.ruleid = 'AdminAuthenticatedPagesGeoRestriction'
+ORDER BY request_time DESC
+LIMIT 200
