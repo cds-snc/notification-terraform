@@ -1,9 +1,21 @@
 -- WAF: rule hit counts
 -- Shows how many requests each WAF rule matched over the last 7 days, split into:
---   BLOCK         - rule terminated the request (custom or managed group sub-rule)
+--   BLOCK           - rule terminated the request (custom or managed group sub-rule)
 --   COUNT (custom)  - custom rule running in count mode (action { count {} })
 --   COUNT (managed) - managed rule group sub-rule overridden to count
 --                     (e.g. CrossSiteScripting_BODY, SQLi_BODY, NoUserAgent_HEADER)
+--
+-- Managed sub-rules whose downstream custom rule is scoped to non-api hosts
+-- have api.* requests excluded from their COUNT (managed) totals so the counts
+-- match what would actually be blocked in production. See aws/eks/waf.tf:
+--   EC2MetaDataSSRF_BODY / NoUserAgent_HEADER  -> BlockLabeled_SSRF_NoUserAgent_NonCA
+--   SizeRestrictions_BODY                      -> BlockSizeRestrictions_Body_ExcludeUploadPaths
+--   SQLi_BODY* variants                        -> BlockSQLi_Body_ExcludeContentPaths
+-- Additionally, CrossSiteScripting_BODY and GenericLFI_BODY have api.document.*
+-- excluded because that host is the document-download-api and its uploads
+-- (POST /services/<uuid>/documents) contain XLSX/DOCX bytes that inherently
+-- trip both rules. Downstream rules already exclude /services/ so those hits
+-- would not actually block.
 --
 -- Use this to baseline count-mode rules before switching them to block.
 -- Adjust the INTERVAL value to change the time window.
@@ -13,7 +25,11 @@ WITH time_window AS (
         terminatingruleid,
         action,
         nonterminatingmatchingrules,
-        rulegrouplist
+        rulegrouplist,
+        lower(COALESCE(
+            TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value),
+            ''
+        )) AS host
     FROM waf_logs
     WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
 ),
@@ -30,7 +46,8 @@ blocking AS (
     GROUP BY terminatingruleid
 ),
 
--- Custom rules running in count mode (action { count {} })
+-- Custom rules running in count mode (action { count {} }).
+-- No api exclusion needed: host-scoped custom rules already can't fire on api.
 custom_counting AS (
     SELECT
         rule.ruleid      AS rule_id,
@@ -41,16 +58,36 @@ custom_counting AS (
     GROUP BY rule.ruleid
 ),
 
--- Managed rule group sub-rules overridden to count
--- (e.g. CrossSiteScripting_BODY, EC2MetaDataSSRF_BODY, SQLi_BODY, NoUserAgent_HEADER)
+-- Managed rule group sub-rules overridden to count.
+-- Exclude api.* hits for sub-rules whose downstream custom rule is non-api scoped.
+-- Exclude api.document.* hits for XSS/LFI sub-rules that fire on file uploads.
 managed_counting AS (
     SELECT
         rg_rule.ruleid    AS rule_id,
         'COUNT (managed)' AS match_type,
         COUNT(*)          AS hits
     FROM time_window
-    CROSS JOIN UNNEST(rulegrouplist) AS t(rg)
+    CROSS JOIN UNNEST(rulegrouplist)                  AS t(rg)
     CROSS JOIN UNNEST(rg.nonterminatingmatchingrules) AS t(rg_rule)
+    WHERE NOT (
+        host LIKE 'api%'
+        AND rg_rule.ruleid IN (
+            'EC2MetaDataSSRF_BODY',
+            'NoUserAgent_HEADER',
+            'SizeRestrictions_BODY',
+            'SQLi_BODY',
+            'SQLi_BODY_RC_COUNT',
+            'SQLiExtendedPatterns_Body',
+            'SQLiExtendedPatterns_Body_RC_COUNT'
+        )
+    )
+    AND NOT (
+        host LIKE 'api.document%'
+        AND rg_rule.ruleid IN (
+            'CrossSiteScripting_BODY',
+            'GenericLFI_BODY'
+        )
+    )
     GROUP BY rg_rule.ruleid
 )
 

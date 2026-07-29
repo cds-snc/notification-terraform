@@ -1,0 +1,39 @@
+-- WAF: EC2MetaDataSSRF_BODY correlated with ALB logs (last 7 days)
+-- Joins WAF SSRF hits with ALB access logs on client IP + timestamp (±5s)
+-- so you can see the actual URL, User-Agent, and response codes for each hit.
+-- Excludes api.* hosts (see waf_ssrf_body_hits for rationale).
+
+WITH ssrf_hits AS (
+    SELECT
+        from_unixtime(timestamp / 1000e0)    AS waf_time,
+        timestamp / 1000e0                   AS waf_epoch_s,
+        httprequest.clientip                 AS client_ip,
+        httprequest.country                  AS country,
+        httprequest.httpmethod               AS method,
+        TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value) AS host,
+        httprequest.uri                      AS waf_uri
+    FROM waf_logs
+    CROSS JOIN UNNEST(rulegrouplist)                  AS t(rg)
+    CROSS JOIN UNNEST(rg.nonterminatingmatchingrules) AS t(rg_rule)
+    WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
+      AND rg_rule.ruleid = 'EC2MetaDataSSRF_BODY'
+      AND lower(COALESCE(TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value), '')) NOT LIKE 'api%'
+)
+SELECT
+    s.waf_time,
+    s.client_ip,
+    s.country,
+    s.method,
+    s.host,
+    s.waf_uri,
+    a.request_url,
+    a.user_agent,
+    a.elb_status_code,
+    a.target_status_code,
+    a.received_bytes
+FROM ssrf_hits s
+JOIN alb_logs a
+    ON  a.client_ip = s.client_ip
+    AND ABS(to_unixtime(from_iso8601_timestamp(a.time)) - s.waf_epoch_s) < 5
+ORDER BY s.waf_time DESC
+LIMIT 200

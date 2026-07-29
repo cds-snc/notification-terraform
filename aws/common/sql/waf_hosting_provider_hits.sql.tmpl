@@ -1,0 +1,45 @@
+-- WAF: HostingProviderIPList hits (last 7 days)
+-- Shows requests that matched the managed rule HostingProviderIPList
+-- (part of AWSManagedRulesAnonymousIpList). Applies to all hosts.
+-- other_rules_fired is true when the request was ALSO acted on by another rule:
+--   - terminated (BLOCK/CAPTCHA/CHALLENGE) by a rule other than Default_Action, OR
+--   - matched a custom rule at the top level (nonterminatingmatchingrules), OR
+--   - matched another managed sub-rule (rulegrouplist[].nonterminatingmatchingrules).
+-- The three component booleans are returned individually for triage.
+
+WITH hits AS (
+    SELECT
+        from_unixtime(timestamp / 1000e0)    AS request_time,
+        httprequest.clientip                  AS client_ip,
+        httprequest.country                   AS country,
+        httprequest.httpmethod                AS method,
+        TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value) AS host,
+        httprequest.uri                       AS uri,
+        ja4fingerprint,
+        action                                AS final_action,
+        terminatingruleid,
+        (terminatingruleid IS NOT NULL
+            AND terminatingruleid != 'Default_Action') AS terminated_by_other,
+        cardinality(filter(
+            nonterminatingmatchingrules,
+            r -> r.ruleid != 'Default_Action'
+        )) > 0                                AS custom_count_rule_fired,
+        cardinality(filter(
+            flatten(transform(rulegrouplist, rg -> rg.nonterminatingmatchingrules)),
+            rg_rule -> rg_rule.ruleid != 'HostingProviderIPList'
+        )) > 0                                AS other_managed_rule_fired
+    FROM waf_logs
+    WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
+      AND cardinality(filter(
+          flatten(transform(rulegrouplist, rg -> rg.nonterminatingmatchingrules)),
+          rg_rule -> rg_rule.ruleid = 'HostingProviderIPList'
+      )) > 0
+)
+SELECT
+    request_time, client_ip, country, method, host, uri, ja4fingerprint,
+    final_action, terminatingruleid,
+    (terminated_by_other OR custom_count_rule_fired OR other_managed_rule_fired) AS other_rules_fired,
+    terminated_by_other, custom_count_rule_fired, other_managed_rule_fired
+FROM hits
+ORDER BY request_time DESC
+LIMIT 200

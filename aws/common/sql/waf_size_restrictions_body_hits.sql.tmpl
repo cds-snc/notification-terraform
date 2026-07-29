@@ -1,0 +1,36 @@
+-- WAF: SizeRestrictions_BODY hits (last 7 days)
+-- Shows requests that matched the managed CRS sub-rule SizeRestrictions_BODY (~8 KB threshold).
+-- Excludes api.* hosts because BlockLargeRequests_Body_Api (priority 4) is the intended
+-- body-size guard on api (7 MB); the CRS sub-rule fires at ~8 KB regardless of host,
+-- so api hits here are noise.
+-- Downstream custom rule BlockSizeRestrictions_Body_ExcludeUploadPaths is non-api scoped
+-- and additionally excludes /v2/notifications/bulk, /services/, /letters on non-api hosts.
+-- content_length_bytes is taken from the Content-Length header (best proxy for body size
+-- in WAF logs; may be null for chunked requests).
+
+WITH size_hits AS (
+    SELECT
+        from_unixtime(timestamp / 1000e0)            AS request_time,
+        httprequest.clientip                          AS client_ip,
+        httprequest.country                           AS country,
+        httprequest.httpmethod                        AS method,
+        TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value) AS host,
+        httprequest.uri                               AS uri,
+        TRY(CAST(filter(httprequest.headers, h -> lower(h.name) = 'content-length')[1].value AS bigint)) AS content_length_bytes,
+        ja4fingerprint,
+        TRY(rg_rule.rulematchdetails[1].matcheddata)  AS matched_data,
+        cardinality(filter(
+            nonterminatingmatchingrules,
+            r -> r.ruleid = 'BlockSizeRestrictions_Body_ExcludeUploadPaths'
+        )) > 0                                        AS blocked_by_label_rule
+    FROM waf_logs
+    CROSS JOIN UNNEST(rulegrouplist)                  AS t(rg)
+    CROSS JOIN UNNEST(rg.nonterminatingmatchingrules) AS t(rg_rule)
+    WHERE from_unixtime(timestamp / 1000e0) >= NOW() - INTERVAL '7' DAY
+      AND rg_rule.ruleid = 'SizeRestrictions_BODY'
+      AND lower(COALESCE(TRY(filter(httprequest.headers, h -> lower(h.name) = 'host')[1].value), '')) NOT LIKE 'api%'
+)
+SELECT request_time, client_ip, country, method, host, uri, content_length_bytes, ja4fingerprint, matched_data, blocked_by_label_rule
+FROM size_hits
+ORDER BY request_time DESC
+LIMIT 200

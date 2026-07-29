@@ -29,7 +29,7 @@
 #  20 |   200 | AWSManagedRulesLinuxRuleSet                  | BLOCK (managed)
 #  21 |   700 | AWSManagedRulesCommonRuleSet                 | BLOCK (managed, sets labels)
 #  22 |    ~8 | BlockLabeled_SSRF_NoUserAgent_NonCA          | count → BLOCK (label, after 21, non-API)
-#  23 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| count → BLOCK (label, after 21)
+#  23 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| count → BLOCK (label, after 21, non-API)
 #  24 |    ~6 | BlockLFI_Body_ExcludeTemplatePaths           | count → BLOCK (label, after 21)
 #  25 |    ~8 | BlockXSS_Body_ExcludeContentPaths            | count → BLOCK (label, after 21, excl. /services/)
 #  26 |   200 | AWSManagedRulesSQLiRuleSet                   | BLOCK (managed, sets labels, excl. /services/)
@@ -1491,7 +1491,10 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~6 WCU - Block oversized bodies, except on bulk-send and file upload endpoints
+  # ~6 WCU - Block oversized bodies on non-API hosts, except on bulk-send and file upload endpoints.
+  # API hosts are excluded here because BlockLargeRequests_Body_Api (priority 4) enforces the
+  # correct 7 MB limit for api; the CRS SizeRestrictions_BODY label fires at ~8 KB regardless
+  # of host, which is the admin threshold and would incorrectly block legitimate api traffic.
   rule {
     name     = "BlockSizeRestrictions_Body_ExcludeUploadPaths"
     priority = 23
@@ -1506,6 +1509,26 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           label_match_statement {
             scope = "LABEL"
             key   = "awswaf:managed:aws:core-rule-set:SizeRestrictions_BODY"
+          }
+        }
+        # Exclude API host: body size on api is enforced by BlockLargeRequests_Body_Api (7 MB)
+        statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "api"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
           }
         }
         statement {
@@ -1568,7 +1591,9 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~6 WCU - Block LFI in body, except on template/notification paths where file-like strings are valid content
+  # ~6 WCU - Block LFI in body, except on paths where file-like strings are valid content:
+  # /v2/notifications (personalisation), /templates, /personalise (template references),
+  # /services/ (XLSX/DOCX uploads contain XML paths like xl/worksheets/sheet1.xml that trip LFI detection)
   rule {
     name     = "BlockLFI_Body_ExcludeTemplatePaths"
     priority = 24
@@ -1622,6 +1647,20 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
                     }
                     positional_constraint = "STARTS_WITH"
                     search_string         = "/personalise"
+                    text_transformation {
+                      priority = 0
+                      type     = "LOWERCASE"
+                    }
+                  }
+                }
+                # Service document uploads (XLSX/DOCX zips contain XML paths that trip LFI detection)
+                statement {
+                  byte_match_statement {
+                    field_to_match {
+                      uri_path {}
+                    }
+                    positional_constraint = "STARTS_WITH"
+                    search_string         = "/services/"
                     text_transformation {
                       priority = 0
                       type     = "LOWERCASE"
