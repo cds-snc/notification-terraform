@@ -9,6 +9,8 @@ Reference docs from GitHub:
 
 > ℹ️ **You already have an SSH key.** Everyone signs into GitHub via SSO using an SSH key for git auth already. Signing commits with that same key is the fastest path - GitHub just needs you to also register it as a **Signing Key** (separate from the **Authentication Key** use you already have). You do **not** need to generate a new key pair for this.
 
+> ⭐ **SSH is the preferred signing method for CDS Notify repos.** It reuses the key you already have, has no agent/`pinentry` headaches, and is what the [Set up SSH signing](#scenario-a-set-up-ssh-signing) scenario below walks you through. GPG still works and is fully supported, but if you're choosing a method or want to simplify, choose SSH.
+
 ## Which scenario are you in?
 
 Run this once to find out:
@@ -20,13 +22,13 @@ git config --get gpg.format
 
 | `commit.gpgsign` | `gpg.format` | Scenario | What to do |
 |---|---|---|---|
-| blank | blank | **A - Not signing at all** | Jump to [Set up SSH signing](#-scenario-a-set-up-ssh-signing) |
-| `true` | blank or `openpgp` | **B - Already signing with GPG** | Jump to [Check your GPG setup](#-scenario-b-check-your-gpg-setup) |
-| `true` | `ssh` | **C - Already signing with SSH** | Jump to [Verify your SSH setup](#-scenario-c-verify-your-ssh-setup) |
+| blank | blank | **A - Not signing at all** | Jump to [Set up SSH signing](#scenario-a-set-up-ssh-signing) (recommended) |
+| `true` | blank or `openpgp` | **B - Already signing with GPG** | Jump to [Check your GPG setup](#scenario-b-check-your-gpg-setup) |
+| `true` | `ssh` | **C - Already signing with SSH** | Jump to [Verify your SSH setup](#scenario-c-verify-your-ssh-setup) |
 
-## 🅰️ Scenario A: Set up SSH signing
+## Scenario A: Set up SSH signing
 
-You're not signing commits yet. Since you already have an SSH key for GitHub, reuse it - no GPG required.
+**✅ Recommended.** You're not signing commits yet. Since you already have an SSH key for GitHub, reuse it - no GPG required.
 
 ### Step 1: Add your SSH key to GitHub as a signing key
 
@@ -84,9 +86,9 @@ echo "$(git config user.email) $(cat ~/.ssh/id_ed25519.pub)" >> ~/.ssh/allowed_s
 git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 ```
 
-Then jump to [Test your setup](#-test-your-setup) below.
+Then jump to [Test your setup](#test-your-setup) below.
 
-## 🅱️ Scenario B: Check your GPG setup
+## Scenario B: Check your GPG setup
 
 You're already configured for GPG signing. Run this quick diagnostic before deciding whether to keep it.
 
@@ -114,8 +116,12 @@ git log -1 --show-signature
 * **Fail:** Output shows `gpg: double check your gpg installation` or no signature info.
 
 > **Verdict**
-> * **All 3 passed?** Your GPG setup is rock solid — no need to switch to SSH unless you want to simplify key management. Continue to the GitHub check below.
-> * **Any failed?** Instead of troubleshooting `gpg-agent` or `pinentry`, switch to **SSH signing** - follow [Scenario A](#-scenario-a-set-up-ssh-signing) above, it takes under 2 minutes and reuses the SSH key you already have.
+> * **All 3 passed?** Your GPG setup works, but SSH is still the preferred method for this org - see [switching to SSH](#want-to-switch-from-gpg-to-ssh) below, or continue to the GitHub check if you'd rather stick with GPG.
+> * **Any failed?** Don't bother troubleshooting `gpg-agent` or `pinentry` - just switch to **SSH signing**, it takes under 2 minutes and reuses the SSH key you already have. See [switching to SSH](#want-to-switch-from-gpg-to-ssh) below.
+
+### Want to switch from GPG to SSH?
+
+Switching takes under 2 minutes and doesn't require removing your GPG key from GitHub - just follow [Scenario A](#scenario-a-set-up-ssh-signing) above. Once `gpg.format` is set to `ssh`, Git will sign new commits with your SSH key instead, regardless of any GPG key still on file.
 
 ### Make sure GitHub actually has your GPG public key
 
@@ -132,11 +138,11 @@ A valid local signature is not enough - GitHub only shows **Verified** if it alr
    ```
    Copy the full `-----BEGIN PGP PUBLIC KEY BLOCK-----` output, then in GitHub click **New GPG key** and paste it in.
 
-Then continue to [Test your setup](#-test-your-setup).
+Then continue to [Test your setup](#test-your-setup).
 
-## 🅲️ Scenario C: Verify your SSH setup
+## Scenario C: Verify your SSH setup
 
-You're already configured for SSH signing (`gpg.format = ssh`) locally. The part people miss here is confirming the key is registered on GitHub specifically as a **Signing Key**, not just an **Authentication Key** - it's easy to have one without the other.
+You're already using the recommended method (`gpg.format = ssh`) locally. The part people miss here is confirming the key is registered on GitHub specifically as a **Signing Key**, not just an **Authentication Key** - it's easy to have one without the other.
 
 1. Check which SSH signing keys GitHub already has on file for you:
    ```bash
@@ -145,9 +151,9 @@ You're already configured for SSH signing (`gpg.format = ssh`) locally. The part
    If this comes back empty, GitHub has no signing key for you yet, even if you use SSH to push/pull every day.
 2. If your key isn't listed, add it: copy your public key (`pbcopy < ~/.ssh/id_ed25519.pub`), go to **GitHub.com → Settings → SSH and GPG keys → New SSH key**, and set **Key type** to **Signing Key** (see [Scenario A, Step 1](#step-1-add-your-ssh-key-to-github-as-a-signing-key) for the full walkthrough).
 
-Then continue to [Test your setup](#-test-your-setup) below.
+Then continue to [Test your setup](#test-your-setup) below.
 
-## ✅ Test your setup
+## Test your setup
 
 Run an empty test commit locally:
 
