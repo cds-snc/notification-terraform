@@ -1,4 +1,4 @@
-# Commit Signing
+# Commit Signing. yes
 
 We are enforcing signed commits across CDS Notify repositories. A signed commit lets GitHub cryptographically verify it really came from you, shown as the green **Verified** badge on commits/PRs.
 
