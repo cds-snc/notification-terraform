@@ -1490,7 +1490,7 @@ resource "aws_cloudwatch_metric_alarm" "international-sms-sent-warning" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "international-sms-sent-warning"
-  alarm_description   = "A service has sent more than 100 international SMS in 24 hours"
+  alarm_description   = "A service has sent more than 100 international SMS in 1 hour"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 100
@@ -1505,7 +1505,7 @@ resource "aws_cloudwatch_metric_alarm" "international-sms-sent-warning" {
       GROUP BY service_id
       ORDER BY SUM() DESC
     EOT
-    period      = 86400
+    period      = 3600
     return_data = true
     label       = "International SMS sent per service"
   }
