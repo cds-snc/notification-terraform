@@ -47,7 +47,7 @@ UNION    SELECT
    , sms_origination_phone_number
    FROM
      notification_history
-) 
+)
 , service_data AS (
    SELECT
      s.id service_id
@@ -65,7 +65,7 @@ UNION    SELECT
    FROM
      (services s
    INNER JOIN organisation o ON (s.organisation_id = o.id))
-) 
+)
 , template_data AS (
    SELECT
      t.id template_id
@@ -73,6 +73,7 @@ UNION    SELECT
    , t.name template_name
    , CAST(t.updated_at AS timestamp) template_updated_at
    , t.version template_version
+   , t.process_type template_process_type
    , tc.id tc_id
    , tc.name_en tc_name_en
    , tc.name_fr tc_name_fr
@@ -82,7 +83,7 @@ UNION    SELECT
    FROM
      (templates t
    LEFT JOIN template_categories tc ON (tc.id = t.template_category_id))
-) 
+)
 SELECT
   notification_id
 , notification_billable_units

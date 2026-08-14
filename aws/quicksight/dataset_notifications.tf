@@ -127,6 +127,10 @@ resource "aws_quicksight_data_set" "notifications_athena" {
         type = "STRING"
       }
       input_columns {
+        name = "template_process_type"
+        type = "STRING"
+      }
+      input_columns {
         name = "template_updated_at"
         type = "DATETIME"
       }
