@@ -1510,3 +1510,28 @@ resource "aws_cloudwatch_metric_alarm" "international-sms-sent-warning" {
     label       = "International SMS sent per service"
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "international-sms-sent-critical" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "international-sms-sent-warning"
+  alarm_description   = "A service has sent more than 100 international SMS in 1 hour"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 100
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "q1"
+    expression  = <<-EOT
+      SELECT SUM(international_sms_sent)
+      FROM SCHEMA("NotificationCanadaCa", service_id)
+      GROUP BY service_id
+      ORDER BY SUM() DESC
+    EOT
+    period      = 3600
+    return_data = true
+    label       = "International SMS sent per service"
+  }
+}
