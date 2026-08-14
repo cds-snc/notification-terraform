@@ -768,8 +768,8 @@ resource "aws_cloudwatch_query_definition" "international-sms-by-service" {
 
   query_string = <<QUERY
 filter @message like "International text sent"
-| parse @message "service_id=* notification_id=*" as service_id, notification_id
-| stats count(*) as international_sms_count by service_id
+| parse @message "service_id=* notification_id=*" as @service_id, @notification_id
+| stats count(*) as international_sms_count by @service_id
 | sort international_sms_count desc
 QUERY
 }
