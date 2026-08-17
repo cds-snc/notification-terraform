@@ -434,4 +434,3 @@ resource "aws_cloudwatch_log_metric_filter" "coredns-nxdomain-notification-filte
     value     = "1"
   }
 }
-
