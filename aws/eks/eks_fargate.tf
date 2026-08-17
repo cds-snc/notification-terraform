@@ -118,6 +118,36 @@ resource "aws_eks_fargate_profile" "notification-canada-ca-fargate-profile" {
     namespace = "kube-system"
   }
 
+  selector {
+    namespace = "aws-observability"
+  }
+
+  selector {
+    namespace = "cert-manager"
+  }
+
+  selector {
+    namespace = "velero"
+  }
+
+  tags = {
+    Name       = "notification-canada-ca-fargate"
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_eks_fargate_profile" "notification-canada-ca-fargate-profile-extras" {
+  provider               = aws.core_services
+  count                  = var.env == "dev" ? 1 : 0
+  cluster_name           = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[count.index].name
+  fargate_profile_name   = "notification-canada-ca-${var.env}-fargate-profile-extras"
+  pod_execution_role_arn = aws_iam_role.eks-fargate-worker-role.arn
+  subnet_ids             = var.vpc_private_subnets_k8s
+
+  selector {
+    namespace = "external-secrets"
+  }
+
   tags = {
     Name       = "notification-canada-ca-fargate"
     CostCenter = "notification-canada-ca-${var.env}"

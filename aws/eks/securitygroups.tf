@@ -526,3 +526,112 @@ resource "aws_security_group_rule" "vpn_k8s_api_access" {
   cidr_blocks       = ["10.0.0.0/16"]
   security_group_id = aws_eks_cluster.notification-canada-ca-eks-cluster.vpc_config[0].cluster_security_group_id
 }
+
+###
+# Fargate cluster security group rules (mirrors main EKS cluster)
+# The Fargate cluster only exists in dev, so all rules are gated on var.env == "dev".
+###
+
+# RDS (port 5432) — RDS proxy is associated with the main EKS cluster SG
+
+resource "aws_security_group_rule" "fargate-egress-rds" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Fargate cluster SG egress to RDS via main EKS cluster SG"
+  type                     = "egress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = data.aws_security_group.eks-securitygroup-rds.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "eks-rds-ingress-fargate" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Main EKS cluster SG ingress from Fargate cluster SG on 5432"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+# Redis (port 6379) — Redis cluster is associated with the main EKS cluster SG
+
+resource "aws_security_group_rule" "fargate-egress-redis" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Fargate cluster SG egress to Redis via main EKS cluster SG"
+  type                     = "egress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  source_security_group_id = data.aws_security_group.eks-securitygroup-rds.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "eks-redis-ingress-fargate" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Main EKS cluster SG ingress from Fargate cluster SG on 6379"
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  source_security_group_id = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+  security_group_id        = data.aws_security_group.eks-securitygroup-rds.id
+}
+
+# Client VPN access to DB and Redis through the Fargate cluster SG
+
+resource "aws_security_group_rule" "client-vpn-fargate-ingress-database" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Client VPN ingress to the database via Fargate cluster SG"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = module.vpn.client_vpn_security_group_id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "client-vpn-fargate-ingress-redis" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Client VPN ingress to Redis via Fargate cluster SG"
+  type                     = "ingress"
+  from_port                = 6379
+  to_port                  = 6379
+  protocol                 = "tcp"
+  source_security_group_id = module.vpn.client_vpn_security_group_id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+# Internal ALB
+
+resource "aws_security_group_rule" "internal-alb-fargate-ingress" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Internal ALB HTTP ingress to Fargate cluster SG"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification_internal.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "internal-alb-fargate-egress" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "Internal ALB HTTP egress from Fargate cluster SG"
+  type                     = "egress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification_internal.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}

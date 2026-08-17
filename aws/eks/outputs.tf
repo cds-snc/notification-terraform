@@ -38,6 +38,14 @@ output "eks_application_log_group" {
 }
 
 ###
+# EFS (Fargate cluster)
+###
+output "efs_fargate_file_system_id" {
+  value       = var.env == "dev" ? aws_efs_file_system.fargate[0].id : null
+  description = "EFS file system ID used by Fargate workloads. Passed to helmfile as EFS_FILE_SYSTEM_ID."
+}
+
+###
 # Databasetools Security group
 ###
 output "database-tools-securitygroup" {
@@ -130,4 +138,9 @@ output "signoz_smtp_username" {
 output "signoz_smtp_password" {
   value     = var.enable_signoz ? aws_iam_access_key.signoz_smtp_user_key[0].ses_smtp_password_v4 : ""
   sensitive = true
+}
+
+output "external_secrets_role_arn" {
+  value       = var.env == "dev" ? aws_iam_role.external_secrets[0].arn : ""
+  description = "IAM role ARN for the External Secrets Operator (IRSA). Annotate the external-secrets SA or set as the ClusterSecretStore role field."
 }
