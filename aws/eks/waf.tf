@@ -10,7 +10,6 @@
 #   1 |    ~1 | ip_blocklist                                | BLOCK
 #   2 |   ~10 | BlockLargeRequests_CookiesAndHeaders        | count → BLOCK
 #   3 |   ~20 | BlockLargeRequests_Body_Admin               | count → BLOCK (non-API, 8 KB, excl. /otlp-proxy/)
-#   4 |   ~15 | BlockLargeRequests_Body_Api                 | count → BLOCK (API, 7 MB)
 #   5 |   ~20 | BlockFFUFUserAgent                          | BLOCK
 #   6 |   ~20 | SigninRateLimitRule                         | BLOCK (rate, IP)
 #   7 |   ~22 | SigninRateLimitRule_JA4                     | count → BLOCK (rate, JA4)
@@ -646,7 +645,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~20 WCU - Block oversized bodies on admin/documentation hosts (8 KB limit).
-  # API body size is handled separately by BlockLargeRequests_Body_Api (priority 4) with a 7 MB limit.
+  # API body size cannot be enforced at the WAF level; enforce via application MAX_CONTENT_LENGTH.
   rule {
     name     = "BlockLargeRequests_Body_Admin"
     priority = 3
@@ -777,59 +776,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "BlockLargeRequests_Body_Admin"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  # ~15 WCU - Block oversized bodies on the API host (7 MB limit).
-  # Higher limit than admin to accommodate large JSON notification payloads.
-  rule {
-    name     = "BlockLargeRequests_Body_Api"
-    priority = 4
-
-    action {
-      count {}
-    }
-
-    statement {
-      and_statement {
-        # Scope to API host only
-        statement {
-          byte_match_statement {
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-            positional_constraint = "STARTS_WITH"
-            search_string         = "api"
-            text_transformation {
-              priority = 0
-              type     = "LOWERCASE"
-            }
-          }
-        }
-        statement {
-          size_constraint_statement {
-            field_to_match {
-              body {
-                oversize_handling = "CONTINUE"
-              }
-            }
-            comparison_operator = "GT"
-            size                = 7340032
-            text_transformation {
-              priority = 0
-              type     = "NONE"
-            }
-          }
-        }
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "BlockLargeRequests_Body_Api"
       sampled_requests_enabled   = true
     }
   }
@@ -1492,9 +1438,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~6 WCU - Block oversized bodies on non-API hosts, except on bulk-send and file upload endpoints.
-  # API hosts are excluded here because BlockLargeRequests_Body_Api (priority 4) enforces the
-  # correct 7 MB limit for api; the CRS SizeRestrictions_BODY label fires at ~8 KB regardless
-  # of host, which is the admin threshold and would incorrectly block legitimate api traffic.
   rule {
     name     = "BlockSizeRestrictions_Body_ExcludeUploadPaths"
     priority = 23
@@ -1511,7 +1454,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             key   = "awswaf:managed:aws:core-rule-set:SizeRestrictions_BODY"
           }
         }
-        # Exclude API host: body size on api is enforced by BlockLargeRequests_Body_Api (7 MB)
+        # SizeRestrictions_BODY fires at ~8 KB which is the admin threshold and would incorrectly flag large API payloads
         statement {
           not_statement {
             statement {
