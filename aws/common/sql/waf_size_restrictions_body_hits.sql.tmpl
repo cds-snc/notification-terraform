@@ -1,8 +1,7 @@
 -- WAF: SizeRestrictions_BODY hits (last 7 days)
 -- Shows requests that matched the managed CRS sub-rule SizeRestrictions_BODY (~8 KB threshold).
--- Excludes api.* hosts because BlockLargeRequests_Body_Api (priority 4) is the intended
--- body-size guard on api (7 MB); the CRS sub-rule fires at ~8 KB regardless of host,
--- so api hits here are noise.
+-- Excludes api.* hosts: the CRS fires at ~8 KB regardless of host, so api hits are noise
+-- (API body size is enforced at the application layer, not WAF).
 -- Downstream custom rule BlockSizeRestrictions_Body_ExcludeUploadPaths is non-api scoped
 -- and additionally excludes /v2/notifications/bulk, /services/, /letters on non-api hosts.
 -- content_length_bytes is taken from the Content-Length header (best proxy for body size

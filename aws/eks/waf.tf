@@ -1438,7 +1438,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~6 WCU - Block oversized bodies on non-API hosts, except on bulk-send and file upload endpoints.
-  # API hosts excluded: AWSManagedRulesCommonRuleSet is scoped to non-API, so this label never fires for API.
   rule {
     name     = "BlockSizeRestrictions_Body_ExcludeUploadPaths"
     priority = 23
@@ -1455,7 +1454,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
             key   = "awswaf:managed:aws:core-rule-set:SizeRestrictions_BODY"
           }
         }
-        # Exclude API host: CommonRuleSet scope-down means this label is never set for API traffic
+        # SizeRestrictions_BODY fires at ~8 KB which is the admin threshold and would incorrectly flag large API payloads
         statement {
           not_statement {
             statement {
