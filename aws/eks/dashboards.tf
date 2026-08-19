@@ -1422,7 +1422,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
+                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/cb455a79e4c6fe9b", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
                     [ ".", "HTTPCode_Target_5XX_Count", ".", ".", ".", ".", { "id": "m2", "visible": false } ],
                     [ { "expression": "m2/m1*100", "label": "API error rate", "id": "e1", "period": 3600, "stat": "Sum", "color": "#d62728", "region": "${var.region}" } ]
                 ],
@@ -1642,7 +1642,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/cb455a79e4c6fe9b", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90" } ],
                     [ "..." ]
                 ],
                 "view": "timeSeries",
