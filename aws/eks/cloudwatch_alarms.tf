@@ -1535,3 +1535,35 @@ resource "aws_cloudwatch_metric_alarm" "international-sms-sent-critical" {
     label       = "International SMS sent per service"
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "international-sms-sent-anomaly" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "international-sms-sent-anomaly"
+  alarm_description   = "Anomaly detected in the total volume of international SMS sent across all services in 10 minutes"
+  comparison_operator = "GreaterThanUpperThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  threshold_metric_id = "e1"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
+
+  metric_query {
+    id          = "e1"
+    expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
+    label       = "International SMS sent (expected band)"
+    return_data = true
+  }
+
+  metric_query {
+    id          = "m1"
+    return_data = true
+    metric {
+      namespace   = "NotificationCanadaCa"
+      metric_name = "international_sms_sent"
+      period      = 600
+      stat        = "Sum"
+    }
+  }
+}
