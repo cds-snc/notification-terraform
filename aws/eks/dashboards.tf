@@ -1337,7 +1337,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-api-ip/cb455a79e4c6fe9b", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m5", "label": "Latency p99" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_api.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m5", "label": "Latency p99" } ],
                     [ "...", { "id": "m6", "stat": "p90", "label": "Latency p90" } ]
                 ],
                 "view": "timeSeries",
