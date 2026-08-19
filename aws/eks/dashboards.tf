@@ -1187,11 +1187,11 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
     "start": "-PT720H",
     "widgets": [
         {
-            "height": 6,
-            "width": 6,
-            "y": 0,
-            "x": 0,
             "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6,
             "properties": {
                 "metrics": [
                     [ { "expression": "100 - FILL(admin_errors,0)/FILL(admin_requests, 1)*100", "label": "Success rate", "id": "e1", "period": 86400, "stat": "Sum", "color": "#1f77b4", "region": "${var.region}" } ],
@@ -1222,11 +1222,11 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             }
         },
         {
-            "height": 6,
-            "width": 6,
-            "y": 0,
-            "x": 6,
             "type": "metric",
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 6,
             "properties": {
                 "metrics": [
                     [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
@@ -1258,11 +1258,11 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             }
         },
         {
-            "height": 6,
-            "width": 6,
-            "y": 6,
-            "x": 0,
             "type": "metric",
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 6,
             "properties": {
                 "metrics": [
                     [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Latency p90" } ],
@@ -1291,46 +1291,11 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             }
         },
         {
-            "height": 6,
-            "width": 6,
-            "y": 6,
-            "x": 6,
             "type": "metric",
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Admin p90", "visible": false } ],
-                    [ "...", { "label": "Admin p99", "visible": false } ],
-                    [ "...", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", ".", ".", { "stat": "p90", "label": "Latency p90", "color": "#1f77b4" } ],
-                    [ "...", { "label": "Latency p99", "color": "#ff7f0e" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "stat": "p99",
-                "period": 86400,
-                "title": "Api k8s latency",
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "200 ms",
-                            "value": 0.2
-                        },
-                        {
-                            "color": "#d62728",
-                            "label": "400 ms",
-                            "value": 0.4,
-                            "fill": "above"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "height": 6,
-            "width": 6,
+            "x": 12,
             "y": 0,
-            "x": 18,
-            "type": "metric",
+            "width": 6,
+            "height": 6,
             "properties": {
                 "metrics": [
                     [ "NotificationCanadaCa", "${var.env}_notifications_celery_email_with-attachments_process_type-normal", "metric_type", "timing", { "stat": "p90", "label": "Send time p90" } ],
@@ -1360,6 +1325,44 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
                 "yAxis": {
                     "left": {
                         "showUnits": false
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 6,
+            "y": 6,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_api.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m5", "label": "Latency p99" } ],
+                    [ "...", { "id": "m6", "stat": "p90", "label": "Latency p90" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "stat": "p99",
+                "period": 604800,
+                "title": "Api k8s latency",
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "200 ms",
+                            "value": 0.2
+                        },
+                        {
+                            "color": "#d62728",
+                            "label": "400 ms",
+                            "value": 0.4,
+                            "fill": "above"
+                        }
+                    ]
+                },
+                "yAxis": {
+                    "left": {
+                        "min": 0
                     }
                 }
             }
