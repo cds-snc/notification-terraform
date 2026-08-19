@@ -1223,42 +1223,6 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
         },
         {
             "type": "metric",
-            "x": 6,
-            "y": 0,
-            "width": 6,
-            "height": 6,
-            "properties": {
-                "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/2d9017625dea5cd0", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
-                    [ ".", "HTTPCode_Target_5XX_Count", ".", ".", ".", ".", { "id": "m2", "visible": false } ],
-                    [ { "expression": "100 - m2/m1*100", "label": "Success rate", "id": "e1", "period": 86400, "stat": "Sum", "color": "#1f77b4", "region": "${var.region}" } ]
-                ],
-                "view": "timeSeries",
-                "stacked": false,
-                "region": "${var.region}",
-                "stat": "Sum",
-                "period": 86400,
-                "annotations": {
-                    "horizontal": [
-                        {
-                            "label": "99%",
-                            "value": 99,
-                            "fill": "below"
-                        }
-                    ]
-                },
-                "liveData": false,
-                "yAxis": {
-                    "left": {
-                        "showUnits": false
-                    }
-                },
-                "title": "API k8s success rate",
-                "timezone": "Local"
-            }
-        },
-        {
-            "type": "metric",
             "x": 0,
             "y": 6,
             "width": 6,
@@ -1365,6 +1329,41 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
                         "min": 0
                     }
                 }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ { "expression": "100 - request_errors / (request_count * 100)", "label": "Success Rate", "id": "success_rate" } ],
+                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-api-ip/cb455a79e4c6fe9b", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "request_errors", "visible": false } ],
+                    [ ".", "RequestCount", ".", ".", ".", ".", { "id": "request_count", "visible": false } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${var.region}",
+                "stat": "Sum",
+                "period": 86400,
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "99%",
+                            "value": 99,
+                            "fill": "below"
+                        }
+                    ]
+                },
+                "liveData": false,
+                "yAxis": {
+                    "left": {
+                        "showUnits": false
+                    }
+                },
+                "title": "API k8s success rate"
             }
         }
     ]
