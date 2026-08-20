@@ -6,6 +6,8 @@ locals {
 inputs = merge(
   local.secret_inputs,local.config_inputs,
   {
+    bootstrap_image_tag = get_env("BOOTSTRAP_IMAGE_TAG", try(local.config_inputs.bootstrap_image_tag, "bootstrap"))
+    bootstrap_image_tag = get_env("BOOTSTRAP_IMAGE_TAG", try(local.config_inputs.bootstrap_image_tag, "bootstrap"))
     elb_account_ids = {
       "${local.config_inputs.region}" = "${local.secret_inputs.elb_account_id}"
     }
@@ -138,7 +140,7 @@ provider "aws" {
 # Production uses the DNS from the Production account, but also has a 
 # different name :/  So we need to handle that here with if Logic
 
-%{ if local.config_inputs.env != "production" && local.config_inputs.env != "staging" }
+%{if local.config_inputs.env != "production" && local.config_inputs.env != "staging"}
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
@@ -154,8 +156,8 @@ provider "aws" {
     role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
   }
 }
-%{ endif }
-%{ if local.config_inputs.env == "staging" }
+%{endif}
+%{if local.config_inputs.env == "staging"}
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
@@ -173,8 +175,8 @@ provider "aws" {
     role_arn = "arn:aws:iam::${local.secret_inputs.staging_account_id}:role/${local.config_inputs.env}_dns_manager_role"
   }
 }
-%{ endif }
-%{ if local.config_inputs.env == "production" }
+%{endif}
+%{if local.config_inputs.env == "production"}
 provider "aws" {
   alias  = "dns"
   region = "ca-central-1"
@@ -190,7 +192,7 @@ provider "aws" {
     role_arn = "arn:aws:iam::${local.secret_inputs.dns_account_id}:role/notify_prod_dns_manager"
   }
 }
-%{ endif }
+%{endif}
 
 provider "github" {
   owner = "cds-snc"

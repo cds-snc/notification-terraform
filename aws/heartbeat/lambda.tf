@@ -1,5 +1,5 @@
 locals {
-  image_tag = var.heartbeat_docker_tag
+  image_tag = var.bootstrap ? var.bootstrap_image_tag : var.heartbeat_docker_tag
 }
 
 module "heartbeat" {

@@ -24,7 +24,7 @@ resource "null_resource" "build_ses_receiving_emails_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/sesreceivingemails && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/sesreceivingemails && docker build -t ${aws_ecr_repository.ses_receiving_emails.repository_url}:${var.bootstrap_image_tag} ."
   }
 
 }
@@ -34,7 +34,7 @@ resource "null_resource" "push_ses_receiving_emails_docker_image" {
   depends_on = [null_resource.build_ses_receiving_emails_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.ses_receiving_emails.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.ses_receiving_emails.repository_url}:${var.bootstrap_image_tag}"
   }
 
 }

@@ -24,7 +24,7 @@ resource "null_resource" "build_pinpoint_to_sqs_sms_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/pinpointsmscallbacks && docker build -t ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/pinpointsmscallbacks && docker build -t ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:${var.bootstrap_image_tag} ."
   }
 
 }
@@ -34,7 +34,7 @@ resource "null_resource" "push_pinpoint_to_sqs_sms_callbacks_docker_image" {
   depends_on = [null_resource.build_pinpoint_to_sqs_sms_callbacks_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:${var.bootstrap_image_tag}"
   }
 
 }

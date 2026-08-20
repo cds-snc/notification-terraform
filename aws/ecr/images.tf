@@ -14,7 +14,7 @@ resource "null_resource" "build_lambda_log_extension_docker_image" {
   }
 
   provisioner "local-exec" {
-    command = "cd extension && docker build -t ${aws_ecr_repository.lambda_log_extension[0].repository_url}:latest ."
+    command = "cd extension && docker build -t ${aws_ecr_repository.lambda_log_extension[0].repository_url}:${var.bootstrap_image_tag} ."
   }
 
 }
@@ -30,7 +30,7 @@ resource "null_resource" "push_lambda_log_extension_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.lambda_log_extension[0].repository_url}:latest"
+    command = "docker push ${aws_ecr_repository.lambda_log_extension[0].repository_url}:${var.bootstrap_image_tag}"
   }
 
 }
@@ -60,7 +60,7 @@ resource "null_resource" "build_admin_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-admin/ && docker build -t ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap -f /var/tmp/notification-admin/ci/Dockerfile.lambda ."
+    command = "cd /var/tmp/notification-admin/ && docker build -t ${aws_ecr_repository.notify_admin[0].repository_url}:${var.bootstrap_image_tag} -f /var/tmp/notification-admin/ci/Dockerfile.lambda ."
   }
 
 }
@@ -70,7 +70,7 @@ resource "null_resource" "push_admin_docker_image" {
   depends_on = [null_resource.build_admin_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.notify_admin[0].repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.notify_admin[0].repository_url}:${var.bootstrap_image_tag}"
   }
 
 }
@@ -101,7 +101,7 @@ resource "null_resource" "build_heartbeat_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/heartbeat && docker build -t ${aws_ecr_repository.heartbeat.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/heartbeat && docker build -t ${aws_ecr_repository.heartbeat.repository_url}:${var.bootstrap_image_tag} ."
   }
 
 }
@@ -111,7 +111,7 @@ resource "null_resource" "push_heartbeat_docker_image" {
   depends_on = [null_resource.build_heartbeat_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.heartbeat.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.heartbeat.repository_url}:${var.bootstrap_image_tag}"
   }
 
 }
@@ -130,7 +130,7 @@ resource "null_resource" "build_google_cidr_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/google-cidr && docker build -t ${aws_ecr_repository.google-cidr.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/google-cidr && docker build -t ${aws_ecr_repository.google-cidr.repository_url}:${var.bootstrap_image_tag} ."
   }
 
 }
@@ -140,7 +140,7 @@ resource "null_resource" "push_google_cidr_docker_image" {
   depends_on = [null_resource.build_google_cidr_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.google-cidr.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.google-cidr.repository_url}:${var.bootstrap_image_tag}"
   }
 
 }
@@ -159,7 +159,7 @@ resource "null_resource" "build_ses_to_sqs_email_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/sesemailcallbacks && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/sesemailcallbacks && docker build -t ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:${var.bootstrap_image_tag} ."
   }
 
 }
@@ -169,7 +169,7 @@ resource "null_resource" "push_ses_to_sqs_email_callbacks_docker_image" {
   depends_on = [null_resource.build_ses_to_sqs_email_callbacks_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.ses_to_sqs_email_callbacks.repository_url}:${var.bootstrap_image_tag}"
   }
 
 }
@@ -188,7 +188,7 @@ resource "null_resource" "build_sns_to_sqs_sms_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/snssmscallbacks && docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/snssmscallbacks && docker build -t ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:${var.bootstrap_image_tag} ."
   }
 
 }
@@ -198,7 +198,7 @@ resource "null_resource" "push_sns_to_sqs_sms_callbacks_docker_image" {
   depends_on = [null_resource.build_sns_to_sqs_sms_callbacks_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.sns_to_sqs_sms_callbacks.repository_url}:${var.bootstrap_image_tag}"
   }
 
 }
@@ -217,7 +217,7 @@ resource "null_resource" "build_system_status_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/system_status && docker build -t ${aws_ecr_repository.system_status.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/system_status && docker build -t ${aws_ecr_repository.system_status.repository_url}:${var.bootstrap_image_tag} ."
   }
 }
 
@@ -226,7 +226,7 @@ resource "null_resource" "push_system_status_docker_image" {
   depends_on = [null_resource.build_system_status_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.system_status.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.system_status.repository_url}:${var.bootstrap_image_tag}"
   }
 
 }
@@ -245,7 +245,7 @@ resource "null_resource" "build_pinpoint_to_sqs_sms_callbacks_docker_image" {
   ]
 
   provisioner "local-exec" {
-    command = "cd /var/tmp/notification-lambdas/pinpointsmscallbacks && docker build -t ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:bootstrap ."
+    command = "cd /var/tmp/notification-lambdas/pinpointsmscallbacks && docker build -t ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:${var.bootstrap_image_tag} ."
   }
 }
 
@@ -254,6 +254,6 @@ resource "null_resource" "push_pinpoint_to_sqs_sms_callbacks_docker_image" {
   depends_on = [null_resource.build_pinpoint_to_sqs_sms_callbacks_docker_image]
 
   provisioner "local-exec" {
-    command = "docker push ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:bootstrap"
+    command = "docker push ${aws_ecr_repository.pinpoint_to_sqs_sms_callbacks.repository_url}:${var.bootstrap_image_tag}"
   }
 }

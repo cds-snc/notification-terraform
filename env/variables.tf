@@ -97,6 +97,11 @@ variable "bootstrap" {
   type = bool
 }
 
+variable "bootstrap_image_tag" {
+  type    = string
+  default = "bootstrap"
+}
+
 variable "enable_sentinel_forwarding" {
   type = bool
 }

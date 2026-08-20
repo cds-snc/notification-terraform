@@ -1,5 +1,5 @@
 locals {
-  image_tag = var.system_status_docker_tag
+  image_tag = var.bootstrap ? var.bootstrap_image_tag : var.system_status_docker_tag
 }
 
 module "system_status" {
