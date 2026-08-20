@@ -16,6 +16,7 @@ env:
   ENVIRONMENT: dev
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
   WORKFLOW: true
+  BOOTSTRAP_IMAGE_TAG: bootstrap-${{ github.run_id }}
 
 permissions:
   id-token: write

@@ -1,10 +1,14 @@
+locals {
+  image_tag = var.bootstrap ? var.bootstrap_image_tag : var.ses_to_sqs_callbacks_docker_tag
+}
+
 module "ses_to_sqs_email_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "ses_to_sqs_email_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_to_sqs_email_callbacks_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.ses_to_sqs_email_callbacks_ecr_repository_url}:${var.ses_to_sqs_callbacks_docker_tag}"
+  image_uri                  = "${var.ses_to_sqs_email_callbacks_ecr_repository_url}:${local.image_tag}"
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
