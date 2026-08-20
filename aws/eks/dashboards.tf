@@ -1339,7 +1339,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ { "expression": "100 - request_errors / (request_count * 100)", "label": "Success Rate", "id": "success_rate" } ],
+                    [ { "expression": "100 - request_errors / request_count * 100", "label": "Success Rate", "id": "success_rate" } ],
                     [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_api.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "request_errors", "visible": false } ],
                     [ ".", "RequestCount", ".", ".", ".", ".", { "id": "request_count", "visible": false } ]
                 ],
