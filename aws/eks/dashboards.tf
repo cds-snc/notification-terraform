@@ -1195,7 +1195,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "properties": {
                 "metrics": [
                     [ { "expression": "100 - FILL(admin_errors,0)/FILL(admin_requests, 1)*100", "label": "Success rate", "id": "e1", "period": 86400, "stat": "Sum", "color": "#1f77b4", "region": "${var.region}" } ],
-                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
+                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_admin.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
                     [ ".", "RequestCount", ".", ".", ".", ".", { "id": "admin_requests", "visible": false } ]
                 ],
                 "view": "timeSeries",
@@ -1229,7 +1229,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Latency p90" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_admin.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90", "label": "Latency p90" } ],
                     [ "...", { "label": "Latency p99" } ]
                 ],
                 "view": "timeSeries",
@@ -1340,7 +1340,7 @@ resource "aws_cloudwatch_dashboard" "new-slo" {
             "properties": {
                 "metrics": [
                     [ { "expression": "100 - request_errors / (request_count * 100)", "label": "Success Rate", "id": "success_rate" } ],
-                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-api-ip/cb455a79e4c6fe9b", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "request_errors", "visible": false } ],
+                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_api.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "request_errors", "visible": false } ],
                     [ ".", "RequestCount", ".", ".", ".", ".", { "id": "request_count", "visible": false } ]
                 ],
                 "view": "timeSeries",
@@ -1388,7 +1388,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "properties": {
                 "metrics": [
                     [ { "expression": "FILL(admin_errors,0)/FILL(admin_requests, 1)*100", "label": "API error rate", "id": "e1", "period": 3600, "stat": "Sum", "color": "#d62728", "region": "${var.region}" } ],
-                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
+                    [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_admin.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "admin_errors", "visible": false } ],
                     [ ".", "RequestCount", ".", ".", ".", ".", { "id": "admin_requests", "visible": false } ]
                 ],
                 "view": "timeSeries",
@@ -1422,7 +1422,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/cb455a79e4c6fe9b", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
+                    [ "AWS/ApplicationELB", "RequestCount", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_api.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "id": "m1", "visible": false } ],
                     [ ".", "HTTPCode_Target_5XX_Count", ".", ".", ".", ".", { "id": "m2", "visible": false } ],
                     [ { "expression": "m2/m1*100", "label": "API error rate", "id": "e1", "period": 3600, "stat": "Sum", "color": "#d62728", "region": "${var.region}" } ]
                 ],
@@ -1642,7 +1642,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-api/cb455a79e4c6fe9b", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90" } ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_api.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}", { "stat": "p90" } ],
                     [ "..." ]
                 ],
                 "view": "timeSeries",
@@ -1675,7 +1675,7 @@ resource "aws_cloudwatch_dashboard" "slos" {
             "type": "metric",
             "properties": {
                 "metrics": [
-                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "targetgroup/notification-canada-ca-alb-admin/7b55c66402cf0ba9", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}" ],
+                    [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", "${aws_alb_target_group.notification_canada_ca_admin.arn_suffix}", "LoadBalancer", "${aws_alb.notification-canada-ca.arn_suffix}" ],
                     [ "...", { "stat": "p99" } ]
                 ],
                 "view": "timeSeries",
