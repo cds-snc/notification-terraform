@@ -6,7 +6,7 @@ locals {
 inputs = merge(
   local.secret_inputs,local.config_inputs,
   {
-    bootstrap_image_tag = get_env("BOOTSTRAP_IMAGE_TAG", try(local.config_inputs.bootstrap_image_tag, "bootstrap"))
+    bootstrap_image_tag = get_env("BOOTSTRAP_IMAGE_TAG", try(local.config_inputs.bootstrap_image_tag, ""))
     elb_account_ids = {
       "${local.config_inputs.region}" = "${local.secret_inputs.elb_account_id}"
     }

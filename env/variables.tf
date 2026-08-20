@@ -99,7 +99,12 @@ variable "bootstrap" {
 
 variable "bootstrap_image_tag" {
   type    = string
-  default = "bootstrap"
+  default = ""
+
+  validation {
+    condition     = !var.bootstrap || (var.bootstrap_image_tag != "" && var.bootstrap_image_tag != "bootstrap" && var.bootstrap_image_tag != "latest")
+    error_message = "bootstrap_image_tag must be an explicit immutable tag when bootstrap is enabled; bootstrap and latest are not allowed."
+  }
 }
 
 variable "enable_sentinel_forwarding" {
