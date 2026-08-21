@@ -174,11 +174,6 @@ resource "aws_secretsmanager_secret_version" "vpc_id" {
 # IAM role for the External Secrets Operator (IRSA)
 ###
 
-data "aws_caller_identity" "fargate_eso" {
-  provider = aws.core_services
-  count    = var.env == "dev" ? 1 : 0
-}
-
 data "aws_iam_policy_document" "external_secrets_assume" {
   count = var.env == "dev" ? 1 : 0
 
@@ -198,17 +193,6 @@ data "aws_iam_policy_document" "external_secrets_assume" {
     }
   }
 
-  # ESO jwt auth with an explicit role does a second sts:AssumeRole after
-  # obtaining web-identity credentials; the role must be allowed to assume itself.
-  statement {
-    actions = ["sts:AssumeRole"]
-    effect  = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.fargate_eso[0].account_id}:role/notification-canada-ca-${var.env}-fargate-external-secrets-role"]
-    }
-  }
 }
 
 data "aws_iam_policy_document" "external_secrets_secrets_manager" {
@@ -275,4 +259,60 @@ resource "aws_iam_role_policy_attachment" "aws_lb_controller_fargate" {
   count      = var.env == "dev" ? 1 : 0
   role       = aws_iam_role.aws_lb_controller_fargate[0].name
   policy_arn = aws_iam_policy.ALB-eks-controller-policy.arn
+}
+
+###
+# IAM role for the CloudWatch agent sidecar (IRSA)
+# Allows the notify-admin service account to call CloudWatch APIs.
+###
+
+data "aws_iam_policy_document" "cloudwatch_agent_fargate_assume" {
+  count = var.env == "dev" ? 1 : 0
+
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    principals {
+      type        = "Federated"
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca-fargate[0].arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca-fargate[0].url, "https://", "")}:sub"
+      values = [
+        "system:serviceaccount:notification-canada-ca:notify-admin",
+        "system:serviceaccount:notification-canada-ca:notify-api",
+        "system:serviceaccount:notification-canada-ca:notify-celery",
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca-fargate[0].url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "cloudwatch_agent_fargate" {
+  provider           = aws.core_services
+  count              = var.env == "dev" ? 1 : 0
+  name               = "notification-canada-ca-${var.env}-fargate-cloudwatch-agent-role"
+  assume_role_policy = data.aws_iam_policy_document.cloudwatch_agent_fargate_assume[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_agent_fargate" {
+  provider   = aws.core_services
+  count      = var.env == "dev" ? 1 : 0
+  role       = aws_iam_role.cloudwatch_agent_fargate[0].name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "notification_worker_fargate" {
+  provider   = aws.core_services
+  count      = var.env == "dev" ? 1 : 0
+  role       = aws_iam_role.cloudwatch_agent_fargate[0].name
+  policy_arn = aws_iam_policy.notification-worker-policy.arn
 }

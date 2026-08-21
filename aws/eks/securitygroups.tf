@@ -635,3 +635,101 @@ resource "aws_security_group_rule" "internal-alb-fargate-egress" {
   source_security_group_id = aws_security_group.notification_internal.id
   security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
 }
+
+# External ALB
+
+resource "aws_security_group_rule" "external-alb-fargate-ingress-api" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB ingress to notify-api (6011) on Fargate cluster SG"
+  type                     = "ingress"
+  from_port                = 6011
+  to_port                  = 6011
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "external-alb-fargate-egress-api" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB egress from notify-api (6011) on Fargate cluster SG"
+  type                     = "egress"
+  from_port                = 6011
+  to_port                  = 6011
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "external-alb-fargate-ingress-admin" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB ingress to notify-admin (6012) on Fargate cluster SG"
+  type                     = "ingress"
+  from_port                = 6012
+  to_port                  = 6012
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "external-alb-fargate-egress-admin" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB egress from notify-admin (6012) on Fargate cluster SG"
+  type                     = "egress"
+  from_port                = 6012
+  to_port                  = 6012
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "external-alb-fargate-ingress-document-download" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB ingress to notify-document-download (7000) on Fargate cluster SG"
+  type                     = "ingress"
+  from_port                = 7000
+  to_port                  = 7000
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "external-alb-fargate-egress-document-download" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB egress from notify-document-download (7000) on Fargate cluster SG"
+  type                     = "egress"
+  from_port                = 7000
+  to_port                  = 7000
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "external-alb-fargate-ingress-documentation" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB ingress to notify-documentation (80) on Fargate cluster SG"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
+
+resource "aws_security_group_rule" "external-alb-fargate-egress-documentation" {
+  provider                 = aws.core_services
+  count                    = var.env == "dev" ? 1 : 0
+  description              = "External ALB egress from notify-documentation (80) on Fargate cluster SG"
+  type                     = "egress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.notification-canada-ca-alb.id
+  security_group_id        = aws_eks_cluster.notification-canada-ca-eks-fargate-cluster[0].vpc_config[0].cluster_security_group_id
+}
