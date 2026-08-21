@@ -9,7 +9,7 @@ locals {
       schedule   = "1 hour"
     }
     "1-day" = {
-      expression = "cron(30 7 * * ? *)"
+      expression = "cron(0 14 * * ? *)" # 9am EST /10am EDT
       schedule   = "1 day"
     }
   } : {}
