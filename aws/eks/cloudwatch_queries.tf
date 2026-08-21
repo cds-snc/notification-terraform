@@ -756,3 +756,20 @@ fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as
 | display @timestamp, @gunicorn_time
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "international-sms-by-service" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "SMS / International SMS by service"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+filter @message like "International text sent"
+| parse @message "service_id=* notification_id=*" as @service_id, @notification_id
+| stats count(*) as international_sms_count by @service_id
+| sort international_sms_count desc
+QUERY
+}
