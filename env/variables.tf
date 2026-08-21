@@ -315,6 +315,11 @@ variable "blazer_slack_webhook_general_topic" {
   sensitive = true
 }
 
+variable "blazer_checks_database_url" {
+  type      = string
+  sensitive = true
+}
+
 variable "cloudwatch_slack_webhook_warning_topic" {
   type      = string
   sensitive = true
