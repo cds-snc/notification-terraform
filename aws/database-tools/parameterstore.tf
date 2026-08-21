@@ -50,6 +50,18 @@ resource "aws_ssm_parameter" "blazer_slack_webhook_general_topic" {
   }
 }
 
+resource "aws_ssm_parameter" "blazer_checks_database_url" {
+  provider = aws.core_services
+  name     = "blazer_checks_database_url"
+  type     = "SecureString"
+  value    = var.blazer_checks_database_url
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+    Terraform             = true
+  }
+}
+
 resource "aws_ssm_parameter" "sqlalchemy_database_reader_uri" {
   provider = aws.core_services
   name     = "sqlalchemy_database_reader_uri"
