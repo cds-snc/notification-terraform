@@ -1117,7 +1117,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~30 WCU - Block non- US or CA access to authenticated admin pages.
+  # ~30 WCU - Count non- US or CA access to authenticated admin pages.
   # Public pages (sign-in, register, auth flows, GCA content, contact, newsletter, /_status) remain accessible worldwide.
   rule {
     name     = "AdminAuthenticatedPagesGeoRestriction"
