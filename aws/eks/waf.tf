@@ -591,14 +591,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 2
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -658,14 +651,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 3
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -801,14 +787,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 7
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -893,14 +872,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 8
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -971,14 +943,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 10
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -1056,14 +1021,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 11
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -1169,14 +1127,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 16
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1426,14 +1377,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 22
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1499,14 +1443,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 23
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1605,14 +1542,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 24
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1701,14 +1631,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 25
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1881,14 +1804,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 27
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
