@@ -8,31 +8,31 @@
 # Pri | WCU   | Name                                        | Action
 # ----|-------|---------------------------------------------|----------------------------
 #   1 |    ~1 | ip_blocklist                                | BLOCK
-#   2 |   ~10 | BlockLargeRequests_CookiesAndHeaders        | count → BLOCK
-#   3 |   ~20 | BlockLargeRequests_Body_Admin               | count → BLOCK (non-API, 8 KB, excl. /otlp-proxy/)
+#   2 |   ~10 | BlockLargeRequests_CookiesAndHeaders        | BLOCK
+#   3 |   ~20 | BlockLargeRequests_Body_Admin               | BLOCK (non-API, 8 KB, excl. /otlp-proxy/)
 #   5 |   ~20 | BlockFFUFUserAgent                          | BLOCK
 #   6 |   ~20 | SigninRateLimitRule                         | BLOCK (rate, IP)
-#   7 |   ~22 | SigninRateLimitRule_JA4                     | count → BLOCK (rate, JA4)
-#   8 |   ~22 | ApiRateLimit_JA4                            | count → BLOCK (rate, JA4)
+#   7 |   ~22 | SigninRateLimitRule_JA4                     | BLOCK (rate, JA4)
+#   8 |   ~22 | ApiRateLimit_JA4                            | BLOCK (rate, JA4)
 #   9 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA/US)
-#  10 |   ~24 | MutatingApiRateLimit                        | count → BLOCK (rate, IP)
-#  11 |   ~24 | MutatingApiRateLimit_JA4                    | count → BLOCK (rate, JA4)
+#  10 |   ~24 | MutatingApiRateLimit                        | BLOCK (rate, IP)
+#  11 |   ~24 | MutatingApiRateLimit_JA4                    | BLOCK (rate, JA4)
 #  12 |   ~25 | PreventHostInjections                       | BLOCK
 #  13 |    25 | AWSManagedRulesAmazonIpReputationList        | BLOCK (managed)
 #  14 |   ~26 | rate_limit_all_except_api                   | BLOCK (rate, IP)
 #  15 |   ~26 | ApiRateLimit                                | BLOCK (rate, IP)
-#  16 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | count → BLOCK (non-CA)
+#  16 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | BLOCK (non-CA/US)
 #  17 |    50 | AWSManagedRulesAnonymousIpList               | BLOCK (managed)
 #  18 |   157 | valid_paths                                 | BLOCK
 #  19 |   200 | AWSManagedRulesKnownBadInputsRuleSet         | BLOCK (managed)
 #  20 |   200 | AWSManagedRulesLinuxRuleSet                  | BLOCK (managed)
 #  21 |   700 | AWSManagedRulesCommonRuleSet                 | BLOCK (managed, sets labels)
-#  22 |    ~8 | BlockLabeled_SSRF_NoUserAgent_NonCA          | count → BLOCK (label, after 21, non-API)
-#  23 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| count → BLOCK (label, after 21, non-API)
-#  24 |    ~6 | BlockLFI_Body_ExcludeTemplatePaths           | count → BLOCK (label, after 21)
-#  25 |    ~8 | BlockXSS_Body_ExcludeContentPaths            | count → BLOCK (label, after 21, excl. /services/)
+#  22 |    ~8 | BlockLabeled_SSRF_NoUserAgent_NonCA          | BLOCK (label, after 21, non-API)
+#  23 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| BLOCK (label, after 21, non-API)
+#  24 |    ~6 | BlockLFI_Body_ExcludeTemplatePaths           | BLOCK (label, after 21)
+#  25 |    ~8 | BlockXSS_Body_ExcludeContentPaths            | BLOCK (label, after 21, excl. /services/)
 #  26 |   200 | AWSManagedRulesSQLiRuleSet                   | BLOCK (managed, sets labels, excl. /services/)
-#  27 |    ~8 | BlockSQLi_Body_ExcludeContentPaths           | count → BLOCK (label, after 26, non-API, excl. /services/)
+#  27 |    ~8 | BlockSQLi_Body_ExcludeContentPaths           | BLOCK (label, after 26, non-API, excl. /services/)
 #  28 |    ?? | AWSManagedRulesAntiDDoSRuleSet               | count (managed, non-API only)
 # =============================================================================
 
@@ -591,14 +591,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 2
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -658,14 +651,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 3
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -795,20 +781,12 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~22 WCU - JA4 fingerprint rate limit on sign-in paths; catches credential-stuffing tools that rotate IPs
-  # Count-only until baseline is established.
   rule {
     name     = "SigninRateLimitRule_JA4"
     priority = 7
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -887,20 +865,12 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~22 WCU - JA4 fingerprint rate limit on the API host; catches API abuse tools that rotate IPs
-  # Count-only until baseline is established.
   rule {
     name     = "ApiRateLimit_JA4"
     priority = 8
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -965,20 +935,13 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~24 WCU - IP rate limit on mutating methods (POST/PUT/PATCH/DELETE) to the API host.
-  # Lower threshold than ApiRateLimit to catch write-heavy abuse. Count-only until baseline established.
+  # Lower threshold than ApiRateLimit to catch write-heavy abuse.
   rule {
     name     = "MutatingApiRateLimit"
     priority = 10
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -1050,20 +1013,12 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~24 WCU - JA4 rate limit on mutating methods; catches write-abuse tools that rotate IPs.
-  # Count-only until baseline established.
   rule {
     name     = "MutatingApiRateLimit_JA4"
     priority = 11
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     visibility_config {
@@ -1162,21 +1117,14 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~30 WCU - Block non-CA access to authenticated admin pages.
+  # ~30 WCU - Block non- US or CA access to authenticated admin pages.
   # Public pages (sign-in, register, auth flows, GCA content, contact, newsletter, /_status) remain accessible worldwide.
   rule {
     name     = "AdminAuthenticatedPagesGeoRestriction"
     priority = 16
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1418,7 +1366,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~8 WCU - Block non-CA requests on admin/documentation hosts labelled by EC2MetaDataSSRF_BODY
+  # ~8 WCU - Block non- US/CA requests on admin/documentation hosts labelled by EC2MetaDataSSRF_BODY
   # or NoUserAgent_HEADER. Scoped to non-API hosts: API callers legitimately omit User-Agent.
   # Must run after AWSManagedRulesCommonRuleSet (priority 21) so the labels exist.
   rule {
@@ -1426,14 +1374,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 22
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1499,14 +1440,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 23
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1605,14 +1539,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 24
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1701,14 +1628,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 25
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
@@ -1875,20 +1795,13 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~6 WCU - Block SQLi in body except on paths where user-supplied content is expected.
-  # Count-only until baseline established. Must run after AWSManagedRulesSQLiRuleSet (priority 26).
+  # Must run after AWSManagedRulesSQLiRuleSet (priority 26).
   rule {
     name     = "BlockSQLi_Body_ExcludeContentPaths"
     priority = 27
 
     action {
-      dynamic "block" {
-        for_each = var.env != "production" ? [1] : []
-        content {}
-      }
-      dynamic "count" {
-        for_each = var.env == "production" ? [1] : []
-        content {}
-      }
+      block {}
     }
 
     statement {
