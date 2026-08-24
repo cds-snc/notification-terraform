@@ -21,7 +21,7 @@
 #  13 |    25 | AWSManagedRulesAmazonIpReputationList        | BLOCK (managed)
 #  14 |   ~26 | rate_limit_all_except_api                   | BLOCK (rate, IP)
 #  15 |   ~26 | ApiRateLimit                                | BLOCK (rate, IP)
-#  16 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | BLOCK (non-CA/US)
+#  16 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | count (non-CA/US)
 #  17 |    50 | AWSManagedRulesAnonymousIpList               | BLOCK (managed)
 #  18 |   157 | valid_paths                                 | BLOCK
 #  19 |   200 | AWSManagedRulesKnownBadInputsRuleSet         | BLOCK (managed)
@@ -1117,14 +1117,14 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~30 WCU - Block non- US or CA access to authenticated admin pages.
+  # ~30 WCU - Count non- US or CA access to authenticated admin pages.
   # Public pages (sign-in, register, auth flows, GCA content, contact, newsletter, /_status) remain accessible worldwide.
   rule {
     name     = "AdminAuthenticatedPagesGeoRestriction"
     priority = 16
 
     action {
-      block {}
+      count {}
     }
 
     statement {
