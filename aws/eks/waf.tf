@@ -1307,6 +1307,9 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # 700 WCU
+  # Scoped to non-API hosts: body-inspection sub-rules (NoUserAgent_HEADER, EC2MetaDataSSRF_BODY,
+  # CrossSiteScripting_BODY, GenericLFI_BODY, GenericRFI_BODY) generate false positives on API traffic
+  # because API clients legitimately omit User-Agent and send user-supplied content in request bodies.
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
     priority = 21
@@ -1354,6 +1357,28 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
           name = "GenericRFI_BODY"
           action_to_use {
             count {}
+          }
+        }
+
+        # Exclude API host: API clients legitimately omit User-Agent and send user content
+        # that trips body-inspection rules (SSRF, XSS, LFI, RFI).
+        scope_down_statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                field_to_match {
+                  single_header {
+                    name = "host"
+                  }
+                }
+                positional_constraint = "STARTS_WITH"
+                search_string         = "api"
+                text_transformation {
+                  priority = 0
+                  type     = "LOWERCASE"
+                }
+              }
+            }
           }
         }
       }
