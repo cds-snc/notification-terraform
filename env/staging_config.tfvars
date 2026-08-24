@@ -8,7 +8,7 @@ billing_tag_key      = "CostCenter"
 
 
 ## EKS     
-primary_worker_desired_size     = 8
+primary_worker_desired_size     = 10
 primary_worker_instance_types   = ["c7i.xlarge"]
 secondary_worker_instance_types = ["c7i.xlarge"]
 enable_signoz                   = true
