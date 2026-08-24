@@ -1362,24 +1362,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
         # Exclude API host: API clients legitimately omit User-Agent and send user content
         # that trips body-inspection rules (SSRF, XSS, LFI, RFI).
-        scope_down_statement {
-          not_statement {
-            statement {
-              byte_match_statement {
-                field_to_match {
-                  single_header {
-                    name = "host"
-                  }
-                }
-                positional_constraint = "STARTS_WITH"
-                search_string         = "api"
-                text_transformation {
-                  priority = 0
-                  type     = "LOWERCASE"
-                }
-              }
-            }
-          }
         }
       }
     }
