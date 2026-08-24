@@ -6,7 +6,8 @@
 -- aws/eks/waf.tf; the *_RC_COUNT variants are shipped in count mode by AWS.
 -- Excludes api.* hosts because the downstream custom rule
 -- BlockSQLi_Body_ExcludeContentPaths scopes to non-api.
--- blocked_by_label_rule indicates whether the downstream label rule also fired.
+-- blocked_by_label_rule is true when BlockSQLi_Body_ExcludeContentPaths fired:
+--   either as terminating (block) in terminatingruleid, or non-terminating (count).
 
 WITH sqli_hits AS (
     SELECT
@@ -19,7 +20,9 @@ WITH sqli_hits AS (
         ja4fingerprint,
         rg_rule.ruleid                                AS matched_rule,
         TRY(rg_rule.rulematchdetails[1].matcheddata)  AS matched_data,
-        cardinality(filter(
+        -- check both block (terminatingruleid) and count (nonterminatingmatchingrules)
+        terminatingruleid = 'BlockSQLi_Body_ExcludeContentPaths'
+        OR cardinality(filter(
             nonterminatingmatchingrules,
             r -> r.ruleid = 'BlockSQLi_Body_ExcludeContentPaths'
         )) > 0                                        AS blocked_by_label_rule
