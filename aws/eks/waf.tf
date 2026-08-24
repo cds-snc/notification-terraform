@@ -781,7 +781,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # ~22 WCU - JA4 fingerprint rate limit on sign-in paths; catches credential-stuffing tools that rotate IPs
-  # ~22 WCU - JA4 fingerprint rate limit on sign-in paths; catches credential-stuffing tools that rotate IPs
   rule {
     name     = "SigninRateLimitRule_JA4"
     priority = 7
@@ -865,7 +864,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~22 WCU - JA4 fingerprint rate limit on the API host; catches API abuse tools that rotate IPs
   # ~22 WCU - JA4 fingerprint rate limit on the API host; catches API abuse tools that rotate IPs
   rule {
     name     = "ApiRateLimit_JA4"
