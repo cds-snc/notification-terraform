@@ -1366,7 +1366,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~8 WCU - Block non-CA requests on admin/documentation hosts labelled by EC2MetaDataSSRF_BODY
+  # ~8 WCU - Block non- US/CA requests on admin/documentation hosts labelled by EC2MetaDataSSRF_BODY
   # or NoUserAgent_HEADER. Scoped to non-API hosts: API callers legitimately omit User-Agent.
   # Must run after AWSManagedRulesCommonRuleSet (priority 21) so the labels exist.
   rule {
