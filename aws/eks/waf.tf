@@ -1117,7 +1117,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~30 WCU - Block non-CA access to authenticated admin pages.
+  # ~30 WCU - Block non- US or CA access to authenticated admin pages.
   # Public pages (sign-in, register, auth flows, GCA content, contact, newsletter, /_status) remain accessible worldwide.
   rule {
     name     = "AdminAuthenticatedPagesGeoRestriction"
@@ -1794,7 +1794,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
-  # ~6 WCU - Block SQLi in body except on paths where user-supplied content is expected.
   # ~6 WCU - Block SQLi in body except on paths where user-supplied content is expected.
   # Must run after AWSManagedRulesSQLiRuleSet (priority 26).
   rule {
