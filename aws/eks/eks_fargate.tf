@@ -147,6 +147,12 @@ resource "aws_eks_fargate_profile" "notification-canada-ca-fargate-profile-extra
   selector {
     namespace = "external-secrets"
   }
+  selector {
+    namespace = "nginx"
+  }
+  selector {
+    namespace = "signoz"
+  }
 
   tags = {
     Name       = "notification-canada-ca-fargate"
