@@ -117,3 +117,17 @@ resource "aws_secretsmanager_secret_version" "perf_test_database_uri" {
   secret_id     = aws_secretsmanager_secret.perf_test_database_uri[0].id
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
 }
+
+resource "aws_secretsmanager_secret" "perf_test_waf_secret" {
+  provider                = aws.core_services
+  count                   = var.env == "production" ? 0 : 1
+  name                    = "perf_test_waf_secret"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "perf_test_waf_secret" {
+  provider      = aws.core_services
+  count         = var.env == "production" ? 0 : 1
+  secret_id     = aws_secretsmanager_secret.perf_test_waf_secret[0].id
+  secret_string = var.waf_secret
+}

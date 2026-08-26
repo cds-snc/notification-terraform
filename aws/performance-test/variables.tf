@@ -28,3 +28,8 @@ variable "perf_test_security_group_id" {
   type        = string
   description = "performance test security group id"
 }
+
+variable "waf_secret" {
+  type      = string
+  sensitive = true
+}
