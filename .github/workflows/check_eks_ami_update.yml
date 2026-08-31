@@ -199,5 +199,5 @@ jobs:
       if: ${{ failure() }}
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
-        json='{"text":"<!here> Check for EKS AMI updates failed in <https://github.com/cds-snc/notification-terraform/actions/workflows/check_eks_ami_update.yml|notification-terraform> !"}'
+        json='{"text":"<!here> Check for EKS AMI updates failed: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|run #${{ github.run_number }}>"}'
         curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
