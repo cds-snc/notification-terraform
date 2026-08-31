@@ -90,6 +90,7 @@ jobs:
       if: steps.latest.outputs.ami != steps.current.outputs.ami
       with:
         token: ${{ steps.generate-token.outputs.token }}
+        sign-commits: true
         commit-message: Dev and Staging EKS AMI patch
         title: Dev and Staging EKS AMI patch
         branch: dev-staging-eks-ami-${{ steps.latest.outputs.ami }}-${{ github.run_id }}
@@ -154,6 +155,7 @@ jobs:
       uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
       with:
         token: ${{ steps.generate-token.outputs.token }}
+        sign-commits: true
         commit-message: Production EKS AMI patch
         title: Production EKS AMI patch
         branch: production-eks-ami-${{ steps.latest.outputs.ami }}-${{ github.run_id }}
@@ -191,4 +193,11 @@ jobs:
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available. Please review and merge the PRs: \n <${{steps.dev_staging_pr.outputs.pull-request-url}}|Staging PR> \n <${{steps.production_pr.outputs.pull-request-url}}|Production PR>"}}]}'
-        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 
+        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
+
+    - name: Notify Slack channel if this job failed
+      if: ${{ failure() }}
+      #checkov:skip=CKV_GHA_3:This is an expected use of curl
+      run: |
+        json='{"text":"<!here> Check for EKS AMI updates failed: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|run #${{ github.run_number }}>"}'
+        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
