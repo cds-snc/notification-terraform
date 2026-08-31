@@ -193,4 +193,11 @@ jobs:
       #checkov:skip=CKV_GHA_3:This is an expected use of curl
       run: |
         json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":kubernetes: Kubernetes worker update available. Please review and merge the PRs: \n <${{steps.dev_staging_pr.outputs.pull-request-url}}|Staging PR> \n <${{steps.production_pr.outputs.pull-request-url}}|Production PR>"}}]}'
-        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }} 
+        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
+
+    - name: Notify Slack channel if this job failed
+      if: ${{ failure() }}
+      #checkov:skip=CKV_GHA_3:This is an expected use of curl
+      run: |
+        json='{"text":"<!here> Check for EKS AMI updates failed in <https://github.com/cds-snc/notification-terraform/actions/workflows/check_eks_ami_update.yml|notification-terraform> !"}'
+        curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.NOTIFY_DEV_SLACK_WEBHOOK }}
