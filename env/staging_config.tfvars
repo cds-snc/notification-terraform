@@ -1,6 +1,6 @@
 ## GENERAL
 env                  = "staging"
-account_budget_limit = 5000
+account_budget_limit = 12000
 region               = "ca-central-1"
 region_pinpoint_us   = "us-west-2"
 billing_tag_value    = "notification-canada-ca-staging"
