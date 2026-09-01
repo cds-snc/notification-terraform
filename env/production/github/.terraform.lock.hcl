@@ -26,7 +26,7 @@ provider "registry.terraform.io/hashicorp/aws" {
 
 provider "registry.terraform.io/hashicorp/tls" {
   version     = "4.1.0"
-  constraints = "~> 4.0"
+  constraints = "4.1.0"
   hashes = [
     "h1:zEv9tY1KR5vaLSyp2lkrucNJ+Vq3c+sTFK9GyQGLtFs=",
     "zh:14c35d89307988c835a7f8e26f1b83ce771e5f9b41e407f86a644c0152089ac2",
@@ -46,7 +46,7 @@ provider "registry.terraform.io/hashicorp/tls" {
 
 provider "registry.terraform.io/integrations/github" {
   version     = "6.7.3"
-  constraints = "~> 6.0"
+  constraints = "6.7.3"
   hashes = [
     "h1:Jwdu/dDXKwrwLFn6RgnjItp4q3DNHKHPOvxQ6rGmPQE=",
     "zh:13686ba2e4e86070a51902b07503c0b3f9d3d3a77ea9ca4487dad68bc9f51e15",
@@ -66,4 +66,3 @@ provider "registry.terraform.io/integrations/github" {
     "zh:fbd1fee2c9df3aa19cf8851ce134dea6e45ea01cb85695c1726670c285797e25",
   ]
 }
-
