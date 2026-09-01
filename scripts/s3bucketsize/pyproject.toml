@@ -18,7 +18,7 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = "~3.12.7"
+python = "~3.14.0"
 
 [tool.poetry.scripts]
 s3bucketsize = "s3bucketsize:main"
