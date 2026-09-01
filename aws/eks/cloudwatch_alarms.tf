@@ -1327,26 +1327,11 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-
   ok_actions          = [var.sns_alert_ok_arn]
 }
 
+
 resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warning" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
   alarm_name          = "service-callback-too-many-failures-warning"
-  alarm_description   = "Service reached the max number of callback retries 25 times in 5 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.callback-request-failures[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.callback-request-failures[0].metric_transformation[0].namespace
-  period              = 60 * 5
-  statistic           = "Sum"
-  threshold           = 25
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
-}
-
-resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-critical" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "service-callback-too-many-failures-critical"
   alarm_description   = "Service reached the max number of callback retries 100 times in 10 minutes"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
@@ -1356,7 +1341,7 @@ resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-criti
   statistic           = "Sum"
   threshold           = 100
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_critical_arn]
+  alarm_actions       = [var.sns_alert_warning_arn]
   ok_actions          = [var.sns_alert_ok_arn]
 }
 
@@ -1482,6 +1467,88 @@ resource "aws_cloudwatch_metric_alarm" "velero_daemonset_unavailable" {
         namespace   = "velero"
         daemonset   = "node-agent"
       }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "international-sms-sent-warning" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "international-sms-sent-warning"
+  alarm_description   = "A service has sent more than 100 international SMS in 1 hour"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 100
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "q1"
+    expression  = <<-EOT
+      SELECT SUM(international_sms_sent)
+      FROM SCHEMA("NotificationCanadaCa", service_id)
+      GROUP BY service_id
+      ORDER BY SUM() DESC
+    EOT
+    period      = 3600
+    return_data = true
+    label       = "International SMS sent per service"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "international-sms-sent-critical" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "international-sms-sent-warning"
+  alarm_description   = "A service has sent more than 100 international SMS in 1 hour"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  threshold           = 100
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+
+  metric_query {
+    id          = "q1"
+    expression  = <<-EOT
+      SELECT SUM(international_sms_sent)
+      FROM SCHEMA("NotificationCanadaCa", service_id)
+      GROUP BY service_id
+      ORDER BY SUM() DESC
+    EOT
+    period      = 3600
+    return_data = true
+    label       = "International SMS sent per service"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "international-sms-sent-anomaly" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "international-sms-sent-anomaly"
+  alarm_description   = "Anomaly detected in the total volume of international SMS sent across all services in 10 minutes"
+  comparison_operator = "GreaterThanUpperThreshold"
+  evaluation_periods  = "2"
+  datapoints_to_alarm = "2"
+  threshold_metric_id = "e1"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
+
+  metric_query {
+    id          = "e1"
+    expression  = "ANOMALY_DETECTION_BAND(m1, 2)"
+    label       = "International SMS sent (expected band)"
+    return_data = true
+  }
+
+  metric_query {
+    id          = "m1"
+    return_data = true
+    metric {
+      namespace   = "NotificationCanadaCa"
+      metric_name = "international_sms_sent"
+      period      = 600
+      stat        = "Sum"
     }
   }
 }

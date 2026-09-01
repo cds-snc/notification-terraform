@@ -19,6 +19,7 @@ jobs:
         with:
           app-id: ${{ secrets.NOTIFY_PR_BOT_APP_ID }}
           private-key: ${{ secrets.NOTIFY_PR_BOT_PRIVATE_KEY }}
+          scope: cds-snc
 
       - name: Create terraform release draft PR
         uses: cds-snc/notification-pr-bot@fc22ac1d3c1be8eaeccb96c2ef1468f2121449de # main
