@@ -837,46 +837,6 @@ variable "manifest_crm_github_personal_access_token" {
   sensitive = true
 }
 
-variable "manifest_salesforce_username" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_salesforce_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_salesforce_security_token" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_salesforce_client_privatekey" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_salesforce_engagement_product_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_salesforce_engagement_record_type" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_salesforce_engagement_standard_pricebook_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_salesforce_generic_account_id" {
-  type      = string
-  sensitive = true
-}
-
 variable "manifest_secret_key" {
   type      = string
   sensitive = true
