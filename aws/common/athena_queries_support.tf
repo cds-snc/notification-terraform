@@ -138,7 +138,7 @@ resource "aws_athena_named_query" "waf_admin_geo_restriction_hits" {
 
 resource "aws_athena_named_query" "waf_size_restrictions_body_hits" {
   name        = "WAF: SizeRestrictions body hits"
-  description = "Managed SizeRestrictions_BODY hits (~8 KB threshold), excluding api.* which is guarded by the 7 MB BlockLargeRequests_Body_Api rule."
+  description = "Managed SizeRestrictions_BODY hits (~8 KB threshold), excluding api.* hosts (API body size is enforced at the application layer)."
   workgroup   = aws_athena_workgroup.support.name
   database    = aws_athena_database.notification_athena.name
   query       = templatefile("${path.module}/sql/waf_size_restrictions_body_hits.sql.tmpl", {})
