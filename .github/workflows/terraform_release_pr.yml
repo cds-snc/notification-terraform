@@ -22,7 +22,7 @@ jobs:
           scope: cds-snc
 
       - name: Create terraform release draft PR
-        uses: cds-snc/notification-pr-bot@main
+        uses: cds-snc/notification-pr-bot@main # zizmor: ignore[unpinned-uses] intentionally tracking main, see PR #2747
         env:
           TOKEN: ${{ steps.generate-token.outputs.token }}
           TARGET_REPO: notification-terraform
