@@ -1,5 +1,3 @@
 boto3==1.43.64
-fsspec==2024.12.0
 pandas==2.3.3
 python-dotenv==1.2.2
-s3fs==2024.12.0
