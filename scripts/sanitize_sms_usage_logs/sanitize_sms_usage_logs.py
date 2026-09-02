@@ -10,9 +10,12 @@ from dotenv import load_dotenv
 
 
 def read_csv_from_s3(s3_resource, bucket_name, key):
-    body = s3_resource.Object(bucket_name, key).get()["Body"].read()
+    body = s3_resource.Object(bucket_name, key).get()["Body"]
     compression = "gzip" if key.endswith(".gz") else None
-    return pd.read_csv(BytesIO(body), compression=compression)
+    try:
+        return pd.read_csv(body, compression=compression)
+    finally:
+        body.close()
 
 
 def main():
