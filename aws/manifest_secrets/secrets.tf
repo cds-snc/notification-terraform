@@ -1,3 +1,11 @@
+# ---------------------------------------------------------------------------
+# LEGACY: MANIFEST_-prefixed secrets. Duplicated below under de-prefixed
+# names (see "_unprefixed" resources at the end of this file) as part of the
+# migration away from the manifest_ prefix. DO NOT delete these until the
+# Helm/ExternalSecret rollout in notification-manifests has been verified to
+# read the new de-prefixed names in every environment. Tracking: PR #2787.
+# ---------------------------------------------------------------------------
+
 resource "aws_secretsmanager_secret" "manifest_admin_client_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_ADMIN_CLIENT_SECRET"
@@ -536,5 +544,548 @@ resource "aws_secretsmanager_secret" "manifest_scan_verdict_callback_token" {
 resource "aws_secretsmanager_secret_version" "manifest_scan_verdict_callback_token" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_scan_verdict_callback_token.id
+  secret_string = var.scan_verdict_callback_token
+}
+
+# ---------------------------------------------------------------------------
+# NEW: de-prefixed duplicates of every secret above, added so the migration
+# is additive-only (nothing above is destroyed by this change). Once the
+# Helm/ExternalSecret rollout is verified against these names, delete the
+# LEGACY MANIFEST_-prefixed block above and drop the "_unprefixed" suffix
+# from the resource labels below. Tracking: PR #2787.
+# ---------------------------------------------------------------------------
+resource "aws_secretsmanager_secret" "manifest_admin_client_secret_unprefixed" {
+  provider                = aws.core_services
+  name                    = "ADMIN_CLIENT_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_admin_client_secret_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_admin_client_secret_unprefixed.id
+  secret_string = var.admin_client_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_auth_tokens_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AUTH_TOKENS"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_auth_tokens_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_auth_tokens_unprefixed.id
+  secret_string = var.auth_tokens
+}
+
+resource "aws_secretsmanager_secret" "manifest_airtable_api_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AIRTABLE_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_airtable_api_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_airtable_api_key_unprefixed.id
+  secret_string = var.airtable_api_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_document_download_api_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "DOCUMENT_DOWNLOAD_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_document_download_api_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_document_download_api_key_unprefixed.id
+  secret_string = var.auth_tokens
+}
+
+resource "aws_secretsmanager_secret" "manifest_aws_route53_zone_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AWS_ROUTE53_ZONE"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_aws_route53_zone_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_aws_route53_zone_unprefixed.id
+  secret_string = var.aws_route53_zone
+}
+
+resource "aws_secretsmanager_secret" "manifest_aws_ses_access_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AWS_SES_ACCESS_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_aws_ses_access_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_aws_ses_access_key_unprefixed.id
+  secret_string = var.aws_ses_access_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_aws_ses_secret_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AWS_SES_SECRET_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_aws_ses_secret_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_aws_ses_secret_key_unprefixed.id
+  secret_string = var.aws_ses_secret_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_dangerous_salt_unprefixed" {
+  provider                = aws.core_services
+  name                    = "DANGEROUS_SALT"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_dangerous_salt_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_dangerous_salt_unprefixed.id
+  secret_string = var.dangerous_salt
+}
+
+resource "aws_secretsmanager_secret" "manifest_debug_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "DEBUG_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_debug_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_debug_key_unprefixed.id
+  secret_string = var.debug_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_fresh_desk_product_id_unprefixed" {
+  provider                = aws.core_services
+  name                    = "FRESH_DESK_PRODUCT_ID"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_product_id_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_fresh_desk_product_id_unprefixed.id
+  secret_string = var.fresh_desk_product_id
+}
+
+resource "aws_secretsmanager_secret" "manifest_fresh_desk_api_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "FRESH_DESK_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_api_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_fresh_desk_api_key_unprefixed.id
+  secret_string = var.fresh_desk_api_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_username_unprefixed" {
+  provider                = aws.core_services
+  name                    = "GC_ARTICLES_API_AUTH_USERNAME"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_username_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_gc_articles_api_auth_username_unprefixed.id
+  secret_string = var.gc_articles_api_auth_username
+}
+
+resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_password_unprefixed" {
+  provider                = aws.core_services
+  name                    = "GC_ARTICLES_API_AUTH_PASSWORD"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_password_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_gc_articles_api_auth_password_unprefixed.id
+  secret_string = var.gc_articles_api_auth_password
+}
+
+resource "aws_secretsmanager_secret" "manifest_gc_articles_waf_rate_bypass_secret_unprefixed" {
+  provider                = aws.core_services
+  name                    = "GC_ARTICLES_WAF_RATE_BYPASS_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_gc_articles_waf_rate_bypass_secret_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_gc_articles_waf_rate_bypass_secret_unprefixed.id
+  secret_string = var.gc_articles_waf_rate_bypass_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_mixpanel_project_token_unprefixed" {
+  provider                = aws.core_services
+  name                    = "MIXPANEL_PROJECT_TOKEN"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_mixpanel_project_token_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_mixpanel_project_token_unprefixed.id
+  secret_string = var.mixpanel_project_token
+}
+
+resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token_unprefixed" {
+  provider                = aws.core_services
+  name                    = "CRM_GITHUB_PERSONAL_ACCESS_TOKEN"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_crm_github_personal_access_token_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_crm_github_personal_access_token_unprefixed.id
+  secret_string = var.crm_github_personal_access_token
+}
+
+resource "aws_secretsmanager_secret" "manifest_secret_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "SECRET_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_secret_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_secret_key_unprefixed.id
+  secret_string = var.secret_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_sendgrid_api_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "SENDGRID_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_sendgrid_api_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_sendgrid_api_key_unprefixed.id
+  secret_string = var.sendgrid_api_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_waf_secret_unprefixed" {
+  provider                = aws.core_services
+  name                    = "WAF_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_waf_secret_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_waf_secret_unprefixed.id
+  secret_string = var.waf_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_zendesk_api_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "ZENDESK_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_zendesk_api_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_zendesk_api_key_unprefixed.id
+  secret_string = var.zendesk_api_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_zendesk_sell_api_key_unprefixed" {
+  provider                = aws.core_services
+  name                    = "ZENDESK_SELL_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_zendesk_sell_api_key_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_zendesk_sell_api_key_unprefixed.id
+  secret_string = var.zendesk_sell_api_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_sre_client_secret_unprefixed" {
+  provider                = aws.core_services
+  name                    = "SRE_CLIENT_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_sre_client_secret_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_sre_client_secret_unprefixed.id
+  secret_string = var.sre_client_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_cache_clear_client_secret_unprefixed" {
+  provider                = aws.core_services
+  name                    = "CACHE_CLEAR_CLIENT_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cache_clear_client_secret_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_cache_clear_client_secret_unprefixed.id
+  secret_string = var.cache_clear_client_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_pool_id_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AWS_PINPOINT_SC_POOL_ID"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_pool_id_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_sc_pool_id_unprefixed.id
+  secret_string = var.aws_pinpoint_sc_pool_id
+}
+
+resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_template_ids_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AWS_PINPOINT_SC_TEMPLATE_IDS"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_template_ids_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_sc_template_ids_unprefixed.id
+  secret_string = var.aws_pinpoint_sc_template_ids
+}
+
+resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_default_pool_id_unprefixed" {
+  provider                = aws.core_services
+  name                    = "AWS_PINPOINT_DEFAULT_POOL_ID"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool_id_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_default_pool_id_unprefixed.id
+  secret_string = var.aws_pinpoint_default_pool_id
+}
+
+resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri_unprefixed" {
+  provider                = aws.core_services
+  name                    = "SQLALCHEMY_DATABASE_URI"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri_unprefixed.id
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri_unprefixed" {
+  provider                = aws.core_services
+  name                    = "SQLALCHEMY_DATABASE_READER_URI"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_reader_uri_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_reader_uri_unprefixed.id
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_postgres_host_unprefixed" {
+  provider                = aws.core_services
+  name                    = "POSTGRES_HOST"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_postgres_host_unprefixed.id
+  secret_string = var.postgres_cluster_endpoint
+}
+
+resource "aws_secretsmanager_secret" "manifest_postgres_sql_unprefixed" {
+  provider                = aws.core_services
+  name                    = "POSTGRES_SQL"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_postgres_sql_unprefixed.id
+  secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_cache_ops_url_unprefixed" {
+  provider                = aws.core_services
+  name                    = "CACHE_OPS_URL"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cache_ops_url_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_cache_ops_url_unprefixed.id
+  secret_string = "redis://${var.elasticache_queue_cache_primary_endpoint_address}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_redis_publish_url_unprefixed" {
+  provider                = aws.core_services
+  name                    = "REDIS_PUBLISH_URL"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_redis_publish_url_unprefixed.id
+  secret_string = var.env != "production" ? "redis://${var.elasticache_queue_cache_primary_endpoint_address}" : "redis://${var.redis_primary_endpoint_address}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_redis_url_unprefixed" {
+  provider                = aws.core_services
+  name                    = "REDIS_URL"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_redis_url_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_redis_url_unprefixed.id
+  secret_string = "redis://${var.redis_primary_endpoint_address}"
+}
+
+resource "aws_secretsmanager_secret" "manifest_cypress_user_pw_secret_unprefixed" {
+  provider                = aws.core_services
+  name                    = "CYPRESS_USER_PW_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cypress_user_pw_secret_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_cypress_user_pw_secret_unprefixed.id
+  secret_string = var.cypress_user_pw_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_cypress_auth_client_secret_unprefixed" {
+  provider                = aws.core_services
+  name                    = "CYPRESS_AUTH_CLIENT_SECRET"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_cypress_auth_client_secret_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_cypress_auth_client_secret_unprefixed.id
+  secret_string = var.cypress_auth_client_secret
+}
+
+resource "aws_secretsmanager_secret" "manifest_docker_hub_username_unprefixed" {
+  provider                = aws.core_services
+  name                    = "DOCKER_HUB_USERNAME"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_docker_hub_username_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_docker_hub_username_unprefixed.id
+  secret_string = var.docker_hub_username
+}
+
+resource "aws_secretsmanager_secret" "manifest_docker_hub_pat_unprefixed" {
+  provider                = aws.core_services
+  name                    = "DOCKER_HUB_PAT"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_docker_hub_pat_unprefixed.id
+  secret_string = var.docker_hub_pat
+}
+
+resource "aws_secretsmanager_secret" "manifest_signoz_smtp_username_unprefixed" {
+  provider                = aws.core_services
+  count                   = var.enable_signoz ? 1 : 0
+  name                    = "SIGNOZ_SMTP_USERNAME"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_username_unprefixed" {
+  provider      = aws.core_services
+  count         = var.enable_signoz ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_username_unprefixed[0].id
+  secret_string = var.signoz_smtp_username
+}
+
+resource "aws_secretsmanager_secret" "manifest_signoz_smtp_password_unprefixed" {
+  provider                = aws.core_services
+  count                   = var.enable_signoz ? 1 : 0
+  name                    = "SIGNOZ_SMTP_PASSWORD"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password_unprefixed" {
+  provider      = aws.core_services
+  count         = var.enable_signoz ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_smtp_password_unprefixed[0].id
+  secret_string = var.signoz_smtp_password
+}
+
+resource "aws_secretsmanager_secret" "manifest_signoz_dashboard_api_key_unprefixed" {
+  provider                = aws.core_services
+  count                   = var.enable_signoz ? 1 : 0
+  name                    = "SIGNOZ_DASHBOARD_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_dashboard_api_key_unprefixed" {
+  provider      = aws.core_services
+  count         = var.enable_signoz ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_dashboard_api_key_unprefixed[0].id
+  secret_string = var.signoz_dashboard_api_key
+}
+
+resource "aws_secretsmanager_secret" "manifest_signoz_postgres_password_unprefixed" {
+  provider                = aws.core_services
+  count                   = var.enable_signoz ? 1 : 0
+  name                    = "SIGNOZ_POSTGRES_PASSWORD"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_signoz_postgres_password_unprefixed" {
+  provider      = aws.core_services
+  count         = var.enable_signoz ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.manifest_signoz_postgres_password_unprefixed[0].id
+  secret_string = var.signoz_postgres_password
+}
+
+resource "aws_secretsmanager_secret" "manifest_falco_credentials_unprefixed" {
+  provider                = aws.core_services
+  name                    = "FALCO_CREDENTIALS"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_falco_credentials_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_falco_credentials_unprefixed.id
+  secret_string = var.falco_credentials
+}
+
+resource "aws_secretsmanager_secret" "manifest_falco_slack_webhook_url_unprefixed" {
+  provider                = aws.core_services
+  name                    = "FALCO_SLACK_WEBHOOK_URL"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_falco_slack_webhook_url_version_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_falco_slack_webhook_url_unprefixed.id
+  secret_string = var.falco_slack_webhook_url
+}
+
+resource "aws_secretsmanager_secret" "manifest_scan_verdict_callback_token_unprefixed" {
+  provider                = aws.core_services
+  name                    = "SCAN_VERDICT_CALLBACK_TOKEN"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "manifest_scan_verdict_callback_token_unprefixed" {
+  provider      = aws.core_services
+  secret_id     = aws_secretsmanager_secret.manifest_scan_verdict_callback_token_unprefixed.id
   secret_string = var.scan_verdict_callback_token
 }
