@@ -572,6 +572,10 @@ resource "aws_secretsmanager_secret_version" "manifest_scan_verdict_callback_tok
 # is additive-only (nothing above is destroyed by this change). Once the
 # Helm/ExternalSecret rollout is verified against these names, delete the
 # LEGACY MANIFEST_-prefixed block above. Tracking: PR #2787.
+#
+# TODO: recovery_window_in_days is temporarily 7 on these (matching the
+# legacy block) purely as a migration safety net. Once the legacy block
+# above is deleted, set these back to 0 to match the original convention.
 # ---------------------------------------------------------------------------
 resource "aws_secretsmanager_secret" "admin_client_secret" {
   provider                = aws.core_services
