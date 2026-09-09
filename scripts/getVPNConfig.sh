@@ -1,4 +1,9 @@
 #!/bin/bash
+# AWS VPN Client 5.x Configuration Script (Legacy)
+# This script is designed for AWS VPN Client 5.x and older versions only
+# Also used for CI/CD configuration of the OpenVPN client
+# For AWS VPN Client 6.x, use getVPNConfig_new.sh instead
+#
 # This script will create or update VPN Configs automatically
 # Usage: ./getVPNConfig.sh -c <profile name> or ./getVPNConfig.sh -u <profile name>
 # Example: ./getVPNConfig.sh -c "Notify Dev"

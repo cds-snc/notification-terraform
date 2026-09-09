@@ -1,4 +1,10 @@
 #!/bin/bash
+# AWS VPN Client 6.x Setup Script
+# This script is designed for AWS VPN Client 6.x only
+# It will not work with older versions of the AWS VPN Client
+# 
+# Usage: AWS_PROFILE=<profile-name> ./getVPNConfig_new.sh
+
 set -e
 
 #Find the logged in user
