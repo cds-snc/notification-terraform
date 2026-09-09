@@ -9,7 +9,7 @@ resource "github_actions_secret" "api_cypress_user_pw_secret" {
   count            = var.env == "staging" ? 1 : 0
   repository       = data.github_repository.notification_api.name
   secret_name      = "CYPRESS_USER_PW_SECRET"
-  plaintext_value  = var.manifest_cypress_user_pw_secret
+  plaintext_value  = var.cypress_user_pw_secret
   destroy_on_drift = false
 }
 

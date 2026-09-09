@@ -58,7 +58,7 @@ resource "aws_cloudwatch_event_connection" "guardduty_scan_verdict_callback" {
   auth_parameters {
     api_key {
       key   = "X-Scan-Callback-Token"
-      value = var.manifest_scan_verdict_callback_token
+      value = var.scan_verdict_callback_token
     }
   }
 }

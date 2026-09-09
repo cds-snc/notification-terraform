@@ -7,7 +7,7 @@ resource "aws_secretsmanager_secret" "manifest_admin_client_secret" {
 resource "aws_secretsmanager_secret_version" "manifest_admin_client_secret_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_admin_client_secret.id
-  secret_string = var.manifest_admin_client_secret
+  secret_string = var.admin_client_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_auth_tokens" {
@@ -19,7 +19,7 @@ resource "aws_secretsmanager_secret" "manifest_auth_tokens" {
 resource "aws_secretsmanager_secret_version" "manifest_auth_tokens_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_auth_tokens.id
-  secret_string = var.manifest_auth_tokens
+  secret_string = var.auth_tokens
 }
 
 resource "aws_secretsmanager_secret" "manifest_airtable_api_key" {
@@ -31,7 +31,7 @@ resource "aws_secretsmanager_secret" "manifest_airtable_api_key" {
 resource "aws_secretsmanager_secret_version" "manifest_airtable_api_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_airtable_api_key.id
-  secret_string = var.manifest_airtable_api_key
+  secret_string = var.airtable_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
@@ -43,7 +43,7 @@ resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
 resource "aws_secretsmanager_secret_version" "manifest_document_download_api_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_document_download_api_key.id
-  secret_string = var.manifest_document_download_api_key
+  secret_string = var.auth_tokens
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_route53_zone" {
@@ -55,7 +55,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_route53_zone" {
 resource "aws_secretsmanager_secret_version" "manifest_aws_route53_zone_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_aws_route53_zone.id
-  secret_string = var.manifest_aws_route53_zone
+  secret_string = var.aws_route53_zone
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_ses_access_key" {
@@ -67,7 +67,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_ses_access_key" {
 resource "aws_secretsmanager_secret_version" "manifest_aws_ses_access_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_aws_ses_access_key.id
-  secret_string = var.manifest_aws_ses_access_key
+  secret_string = var.aws_ses_access_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_ses_secret_key" {
@@ -79,7 +79,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_ses_secret_key" {
 resource "aws_secretsmanager_secret_version" "manifest_aws_ses_secret_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_aws_ses_secret_key.id
-  secret_string = var.manifest_aws_ses_secret_key
+  secret_string = var.aws_ses_secret_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_dangerous_salt" {
@@ -91,7 +91,7 @@ resource "aws_secretsmanager_secret" "manifest_dangerous_salt" {
 resource "aws_secretsmanager_secret_version" "manifest_dangerous_salt_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_dangerous_salt.id
-  secret_string = var.manifest_dangerous_salt
+  secret_string = var.dangerous_salt
 }
 
 resource "aws_secretsmanager_secret" "manifest_debug_key" {
@@ -103,7 +103,7 @@ resource "aws_secretsmanager_secret" "manifest_debug_key" {
 resource "aws_secretsmanager_secret_version" "manifest_debug_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_debug_key.id
-  secret_string = var.manifest_debug_key
+  secret_string = var.debug_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_fresh_desk_product_id" {
@@ -115,7 +115,7 @@ resource "aws_secretsmanager_secret" "manifest_fresh_desk_product_id" {
 resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_product_id_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_fresh_desk_product_id.id
-  secret_string = var.manifest_fresh_desk_product_id
+  secret_string = var.fresh_desk_product_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_fresh_desk_api_key" {
@@ -127,7 +127,7 @@ resource "aws_secretsmanager_secret" "manifest_fresh_desk_api_key" {
 resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_api_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_fresh_desk_api_key.id
-  secret_string = var.manifest_fresh_desk_api_key
+  secret_string = var.fresh_desk_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_username" {
@@ -139,7 +139,7 @@ resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_username" {
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_username_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_gc_articles_api_auth_username.id
-  secret_string = var.manifest_gc_articles_api_auth_username
+  secret_string = var.gc_articles_api_auth_username
 }
 
 resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_password" {
@@ -151,7 +151,7 @@ resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_password" {
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_password_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_gc_articles_api_auth_password.id
-  secret_string = var.manifest_gc_articles_api_auth_password
+  secret_string = var.gc_articles_api_auth_password
 }
 
 resource "aws_secretsmanager_secret" "manifest_gc_articles_waf_rate_bypass_secret" {
@@ -163,7 +163,7 @@ resource "aws_secretsmanager_secret" "manifest_gc_articles_waf_rate_bypass_secre
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_waf_rate_bypass_secret_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_gc_articles_waf_rate_bypass_secret.id
-  secret_string = var.manifest_gc_articles_waf_rate_bypass_secret
+  secret_string = var.gc_articles_waf_rate_bypass_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_mixpanel_project_token" {
@@ -175,7 +175,7 @@ resource "aws_secretsmanager_secret" "manifest_mixpanel_project_token" {
 resource "aws_secretsmanager_secret_version" "manifest_mixpanel_project_token_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_mixpanel_project_token.id
-  secret_string = var.manifest_mixpanel_project_token
+  secret_string = var.mixpanel_project_token
 }
 
 resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token" {
@@ -187,7 +187,7 @@ resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token"
 resource "aws_secretsmanager_secret_version" "manifest_crm_github_personal_access_token_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_crm_github_personal_access_token.id
-  secret_string = var.manifest_crm_github_personal_access_token
+  secret_string = var.crm_github_personal_access_token
 }
 
 resource "aws_secretsmanager_secret" "manifest_secret_key" {
@@ -199,7 +199,7 @@ resource "aws_secretsmanager_secret" "manifest_secret_key" {
 resource "aws_secretsmanager_secret_version" "manifest_secret_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_secret_key.id
-  secret_string = var.manifest_secret_key
+  secret_string = var.secret_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_sendgrid_api_key" {
@@ -211,7 +211,7 @@ resource "aws_secretsmanager_secret" "manifest_sendgrid_api_key" {
 resource "aws_secretsmanager_secret_version" "manifest_sendgrid_api_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_sendgrid_api_key.id
-  secret_string = var.manifest_sendgrid_api_key
+  secret_string = var.sendgrid_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_waf_secret" {
@@ -223,7 +223,7 @@ resource "aws_secretsmanager_secret" "manifest_waf_secret" {
 resource "aws_secretsmanager_secret_version" "manifest_waf_secret_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_waf_secret.id
-  secret_string = var.manifest_waf_secret
+  secret_string = var.waf_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_zendesk_api_key" {
@@ -235,7 +235,7 @@ resource "aws_secretsmanager_secret" "manifest_zendesk_api_key" {
 resource "aws_secretsmanager_secret_version" "manifest_zendesk_api_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_zendesk_api_key.id
-  secret_string = var.manifest_zendesk_api_key
+  secret_string = var.zendesk_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_zendesk_sell_api_key" {
@@ -247,7 +247,7 @@ resource "aws_secretsmanager_secret" "manifest_zendesk_sell_api_key" {
 resource "aws_secretsmanager_secret_version" "manifest_zendesk_sell_api_key_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_zendesk_sell_api_key.id
-  secret_string = var.manifest_zendesk_sell_api_key
+  secret_string = var.zendesk_sell_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_sre_client_secret" {
@@ -259,7 +259,7 @@ resource "aws_secretsmanager_secret" "manifest_sre_client_secret" {
 resource "aws_secretsmanager_secret_version" "manifest_sre_client_secret_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_sre_client_secret.id
-  secret_string = var.manifest_sre_client_secret
+  secret_string = var.sre_client_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_cache_clear_client_secret" {
@@ -271,7 +271,7 @@ resource "aws_secretsmanager_secret" "manifest_cache_clear_client_secret" {
 resource "aws_secretsmanager_secret_version" "manifest_cache_clear_client_secret_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_cache_clear_client_secret.id
-  secret_string = var.manifest_cache_clear_client_secret
+  secret_string = var.cache_clear_client_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_pool_id" {
@@ -283,7 +283,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_pool_id" {
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_pool_id_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_sc_pool_id.id
-  secret_string = var.manifest_aws_pinpoint_sc_pool_id
+  secret_string = var.aws_pinpoint_sc_pool_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_template_ids" {
@@ -295,7 +295,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_template_ids" {
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_template_ids_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_sc_template_ids.id
-  secret_string = var.manifest_aws_pinpoint_sc_template_ids
+  secret_string = var.aws_pinpoint_sc_template_ids
 }
 
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_default_pool_id" {
@@ -307,7 +307,7 @@ resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_default_pool_id" {
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool_id_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_aws_pinpoint_default_pool_id.id
-  secret_string = var.manifest_aws_pinpoint_default_pool_id
+  secret_string = var.aws_pinpoint_default_pool_id
 }
 
 resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
@@ -406,7 +406,7 @@ resource "aws_secretsmanager_secret" "manifest_cypress_user_pw_secret" {
 resource "aws_secretsmanager_secret_version" "manifest_cypress_user_pw_secret" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_cypress_user_pw_secret.id
-  secret_string = var.manifest_cypress_user_pw_secret
+  secret_string = var.cypress_user_pw_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_cypress_auth_client_secret" {
@@ -418,7 +418,7 @@ resource "aws_secretsmanager_secret" "manifest_cypress_auth_client_secret" {
 resource "aws_secretsmanager_secret_version" "manifest_cypress_auth_client_secret" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_cypress_auth_client_secret.id
-  secret_string = var.manifest_cypress_auth_client_secret
+  secret_string = var.cypress_auth_client_secret
 }
 
 resource "aws_secretsmanager_secret" "manifest_docker_hub_username" {
@@ -430,7 +430,7 @@ resource "aws_secretsmanager_secret" "manifest_docker_hub_username" {
 resource "aws_secretsmanager_secret_version" "manifest_docker_hub_username" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_docker_hub_username.id
-  secret_string = var.manifest_docker_hub_username
+  secret_string = var.docker_hub_username
 }
 
 resource "aws_secretsmanager_secret" "manifest_docker_hub_pat" {
@@ -442,7 +442,7 @@ resource "aws_secretsmanager_secret" "manifest_docker_hub_pat" {
 resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_docker_hub_pat.id
-  secret_string = var.manifest_docker_hub_pat
+  secret_string = var.docker_hub_pat
 }
 
 resource "aws_secretsmanager_secret" "manifest_signoz_smtp_username" {
@@ -484,7 +484,7 @@ resource "aws_secretsmanager_secret_version" "manifest_signoz_dashboard_api_key"
   provider      = aws.core_services
   count         = var.enable_signoz ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_dashboard_api_key[0].id
-  secret_string = var.manifest_signoz_dashboard_api_key
+  secret_string = var.signoz_dashboard_api_key
 }
 
 resource "aws_secretsmanager_secret" "manifest_signoz_postgres_password" {
@@ -498,7 +498,7 @@ resource "aws_secretsmanager_secret_version" "manifest_signoz_postgres_password"
   provider      = aws.core_services
   count         = var.enable_signoz ? 1 : 0
   secret_id     = aws_secretsmanager_secret.manifest_signoz_postgres_password[0].id
-  secret_string = var.manifest_signoz_postgres_password
+  secret_string = var.signoz_postgres_password
 }
 
 ### Falco
@@ -512,7 +512,7 @@ resource "aws_secretsmanager_secret" "manifest_falco_credentials" {
 resource "aws_secretsmanager_secret_version" "manifest_falco_credentials_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_falco_credentials.id
-  secret_string = var.manifest_falco_credentials
+  secret_string = var.falco_credentials
 }
 
 resource "aws_secretsmanager_secret" "manifest_falco_slack_webhook_url" {
@@ -524,7 +524,7 @@ resource "aws_secretsmanager_secret" "manifest_falco_slack_webhook_url" {
 resource "aws_secretsmanager_secret_version" "manifest_falco_slack_webhook_url_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_falco_slack_webhook_url.id
-  secret_string = var.manifest_falco_slack_webhook_url
+  secret_string = var.falco_slack_webhook_url
 }
 
 resource "aws_secretsmanager_secret" "manifest_scan_verdict_callback_token" {
@@ -536,5 +536,5 @@ resource "aws_secretsmanager_secret" "manifest_scan_verdict_callback_token" {
 resource "aws_secretsmanager_secret_version" "manifest_scan_verdict_callback_token" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.manifest_scan_verdict_callback_token.id
-  secret_string = var.manifest_scan_verdict_callback_token
+  secret_string = var.scan_verdict_callback_token
 }

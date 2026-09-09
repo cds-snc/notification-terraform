@@ -31,7 +31,7 @@ resource "github_actions_secret" "manifests_notify_dev_slack_webhook" {
 resource "github_actions_secret" "manifests_cache_clear_client_secret" {
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "${upper(var.env)}_CACHE_CLEAR_CLIENT_SECRET"
-  plaintext_value  = var.manifest_cache_clear_client_secret
+  plaintext_value  = var.cache_clear_client_secret
   destroy_on_drift = false
 }
 
@@ -39,7 +39,7 @@ resource "github_actions_secret" "smoke_admin_client_secret" {
   count            = var.env == "production" || var.env == "staging" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "${upper(var.env)}_SMOKE_ADMIN_CLIENT_SECRET"
-  plaintext_value  = var.manifest_smoke_admin_client_secret
+  plaintext_value  = var.smoke_admin_client_secret
   destroy_on_drift = false
 }
 
@@ -47,7 +47,7 @@ resource "github_actions_secret" "smoke_api_key" {
   count            = var.env == "production" || var.env == "staging" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "${upper(var.env)}_SMOKE_API_KEY"
-  plaintext_value  = var.manifest_smoke_api_key
+  plaintext_value  = var.smoke_api_key
   destroy_on_drift = false
 }
 
@@ -55,7 +55,7 @@ resource "github_actions_secret" "pr_bot_github_token" {
   count            = var.env == "staging" ? 1 : 0
   repository       = data.github_repository.notification_manifests.name
   secret_name      = "PR_BOT_GITHUB_TOKEN"
-  plaintext_value  = var.manifest_pr_bot_github_token
+  plaintext_value  = var.pr_bot_github_token
   destroy_on_drift = false
 }
 
