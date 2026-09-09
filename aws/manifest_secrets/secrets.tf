@@ -9,7 +9,7 @@
 resource "aws_secretsmanager_secret" "manifest_admin_client_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_ADMIN_CLIENT_SECRET"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_admin_client_secret_version" {
@@ -21,7 +21,7 @@ resource "aws_secretsmanager_secret_version" "manifest_admin_client_secret_versi
 resource "aws_secretsmanager_secret" "manifest_auth_tokens" {
   provider                = aws.core_services
   name                    = "MANIFEST_AUTH_TOKENS"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_auth_tokens_version" {
@@ -33,7 +33,7 @@ resource "aws_secretsmanager_secret_version" "manifest_auth_tokens_version" {
 resource "aws_secretsmanager_secret" "manifest_airtable_api_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_AIRTABLE_API_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_airtable_api_key_version" {
@@ -45,7 +45,7 @@ resource "aws_secretsmanager_secret_version" "manifest_airtable_api_key_version"
 resource "aws_secretsmanager_secret" "manifest_document_download_api_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_DOCUMENT_DOWNLOAD_API_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_document_download_api_key_version" {
@@ -57,7 +57,7 @@ resource "aws_secretsmanager_secret_version" "manifest_document_download_api_key
 resource "aws_secretsmanager_secret" "manifest_aws_route53_zone" {
   provider                = aws.core_services
   name                    = "MANIFEST_AWS_ROUTE53_ZONE"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_route53_zone_version" {
@@ -69,7 +69,7 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_route53_zone_version"
 resource "aws_secretsmanager_secret" "manifest_aws_ses_access_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_AWS_SES_ACCESS_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_ses_access_key_version" {
@@ -81,7 +81,7 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_ses_access_key_versio
 resource "aws_secretsmanager_secret" "manifest_aws_ses_secret_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_AWS_SES_SECRET_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_ses_secret_key_version" {
@@ -93,7 +93,7 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_ses_secret_key_versio
 resource "aws_secretsmanager_secret" "manifest_dangerous_salt" {
   provider                = aws.core_services
   name                    = "MANIFEST_DANGEROUS_SALT"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_dangerous_salt_version" {
@@ -105,7 +105,7 @@ resource "aws_secretsmanager_secret_version" "manifest_dangerous_salt_version" {
 resource "aws_secretsmanager_secret" "manifest_debug_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_DEBUG_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_debug_key_version" {
@@ -117,7 +117,7 @@ resource "aws_secretsmanager_secret_version" "manifest_debug_key_version" {
 resource "aws_secretsmanager_secret" "manifest_fresh_desk_product_id" {
   provider                = aws.core_services
   name                    = "MANIFEST_FRESH_DESK_PRODUCT_ID"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_product_id_version" {
@@ -129,7 +129,7 @@ resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_product_id_ver
 resource "aws_secretsmanager_secret" "manifest_fresh_desk_api_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_FRESH_DESK_API_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_api_key_version" {
@@ -141,7 +141,7 @@ resource "aws_secretsmanager_secret_version" "manifest_fresh_desk_api_key_versio
 resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_username" {
   provider                = aws.core_services
   name                    = "MANIFEST_GC_ARTICLES_API_AUTH_USERNAME"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_username_version" {
@@ -153,7 +153,7 @@ resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_user
 resource "aws_secretsmanager_secret" "manifest_gc_articles_api_auth_password" {
   provider                = aws.core_services
   name                    = "MANIFEST_GC_ARTICLES_API_AUTH_PASSWORD"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_password_version" {
@@ -165,7 +165,7 @@ resource "aws_secretsmanager_secret_version" "manifest_gc_articles_api_auth_pass
 resource "aws_secretsmanager_secret" "manifest_gc_articles_waf_rate_bypass_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_GC_ARTICLES_WAF_RATE_BYPASS_SECRET"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_gc_articles_waf_rate_bypass_secret_version" {
@@ -177,7 +177,7 @@ resource "aws_secretsmanager_secret_version" "manifest_gc_articles_waf_rate_bypa
 resource "aws_secretsmanager_secret" "manifest_mixpanel_project_token" {
   provider                = aws.core_services
   name                    = "MANIFEST_MIXPANEL_PROJECT_TOKEN"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_mixpanel_project_token_version" {
@@ -189,7 +189,7 @@ resource "aws_secretsmanager_secret_version" "manifest_mixpanel_project_token_ve
 resource "aws_secretsmanager_secret" "manifest_crm_github_personal_access_token" {
   provider                = aws.core_services
   name                    = "MANIFEST_CRM_GITHUB_PERSONAL_ACCESS_TOKEN"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_crm_github_personal_access_token_version" {
@@ -201,7 +201,7 @@ resource "aws_secretsmanager_secret_version" "manifest_crm_github_personal_acces
 resource "aws_secretsmanager_secret" "manifest_secret_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_SECRET_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_secret_key_version" {
@@ -213,7 +213,7 @@ resource "aws_secretsmanager_secret_version" "manifest_secret_key_version" {
 resource "aws_secretsmanager_secret" "manifest_sendgrid_api_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_SENDGRID_API_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_sendgrid_api_key_version" {
@@ -225,7 +225,7 @@ resource "aws_secretsmanager_secret_version" "manifest_sendgrid_api_key_version"
 resource "aws_secretsmanager_secret" "manifest_waf_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_WAF_SECRET"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_waf_secret_version" {
@@ -237,7 +237,7 @@ resource "aws_secretsmanager_secret_version" "manifest_waf_secret_version" {
 resource "aws_secretsmanager_secret" "manifest_zendesk_api_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_ZENDESK_API_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_zendesk_api_key_version" {
@@ -249,7 +249,7 @@ resource "aws_secretsmanager_secret_version" "manifest_zendesk_api_key_version" 
 resource "aws_secretsmanager_secret" "manifest_zendesk_sell_api_key" {
   provider                = aws.core_services
   name                    = "MANIFEST_ZENDESK_SELL_API_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_zendesk_sell_api_key_version" {
@@ -261,7 +261,7 @@ resource "aws_secretsmanager_secret_version" "manifest_zendesk_sell_api_key_vers
 resource "aws_secretsmanager_secret" "manifest_sre_client_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_SRE_CLIENT_SECRET"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_sre_client_secret_version" {
@@ -273,7 +273,7 @@ resource "aws_secretsmanager_secret_version" "manifest_sre_client_secret_version
 resource "aws_secretsmanager_secret" "manifest_cache_clear_client_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_CACHE_CLEAR_CLIENT_SECRET"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_cache_clear_client_secret_version" {
@@ -285,7 +285,7 @@ resource "aws_secretsmanager_secret_version" "manifest_cache_clear_client_secret
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_pool_id" {
   provider                = aws.core_services
   name                    = "MANIFEST_AWS_PINPOINT_SC_POOL_ID"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_pool_id_version" {
@@ -297,7 +297,7 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_pool_id_v
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_sc_template_ids" {
   provider                = aws.core_services
   name                    = "MANIFEST_AWS_PINPOINT_SC_TEMPLATE_IDS"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_template_ids_version" {
@@ -309,7 +309,7 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_sc_template_
 resource "aws_secretsmanager_secret" "manifest_aws_pinpoint_default_pool_id" {
   provider                = aws.core_services
   name                    = "MANIFEST_AWS_PINPOINT_DEFAULT_POOL_ID"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool_id_version" {
@@ -341,7 +341,7 @@ moved {
 resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_uri" {
   provider                = aws.core_services
   name                    = "MANIFEST_SQLALCHEMY_DATABASE_URI"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 # THESE BELOW ARE DEPENDENT ON DYNAMICALLY GENERATED AWS INFORMATION
@@ -355,7 +355,7 @@ resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_uri" 
 resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_reader_uri" {
   provider                = aws.core_services
   name                    = "MANIFEST_SQLALCHEMY_DATABASE_READER_URI"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_reader_uri" {
@@ -367,7 +367,7 @@ resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_reade
 resource "aws_secretsmanager_secret" "manifest_postgres_host" {
   provider                = aws.core_services
   name                    = "MANIFEST_POSTGRES_HOST"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
@@ -379,7 +379,7 @@ resource "aws_secretsmanager_secret_version" "manifest_postgres_host_version" {
 resource "aws_secretsmanager_secret" "manifest_postgres_sql" {
   provider                = aws.core_services
   name                    = "MANIFEST_POSTGRES_SQL"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
@@ -391,7 +391,7 @@ resource "aws_secretsmanager_secret_version" "manifest_postgres_sql_version" {
 resource "aws_secretsmanager_secret" "manifest_cache_ops_url" {
   provider                = aws.core_services
   name                    = "MANIFEST_CACHE_OPS_URL"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_cache_ops_url" {
@@ -403,7 +403,7 @@ resource "aws_secretsmanager_secret_version" "manifest_cache_ops_url" {
 resource "aws_secretsmanager_secret" "manifest_redis_publish_url" {
   provider                = aws.core_services
   name                    = "MANIFEST_REDIS_PUBLISH_URL"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url" {
@@ -416,7 +416,7 @@ resource "aws_secretsmanager_secret_version" "manifest_redis_publish_url" {
 resource "aws_secretsmanager_secret" "manifest_redis_url" {
   provider                = aws.core_services
   name                    = "MANIFEST_REDIS_URL"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_redis_url" {
@@ -428,7 +428,7 @@ resource "aws_secretsmanager_secret_version" "manifest_redis_url" {
 resource "aws_secretsmanager_secret" "manifest_cypress_user_pw_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_CYPRESS_USER_PW_SECRET"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_cypress_user_pw_secret" {
@@ -440,7 +440,7 @@ resource "aws_secretsmanager_secret_version" "manifest_cypress_user_pw_secret" {
 resource "aws_secretsmanager_secret" "manifest_cypress_auth_client_secret" {
   provider                = aws.core_services
   name                    = "MANIFEST_CYPRESS_AUTH_CLIENT_SECRET"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_cypress_auth_client_secret" {
@@ -452,7 +452,7 @@ resource "aws_secretsmanager_secret_version" "manifest_cypress_auth_client_secre
 resource "aws_secretsmanager_secret" "manifest_docker_hub_username" {
   provider                = aws.core_services
   name                    = "MANIFEST_DOCKER_HUB_USERNAME"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_docker_hub_username" {
@@ -464,7 +464,7 @@ resource "aws_secretsmanager_secret_version" "manifest_docker_hub_username" {
 resource "aws_secretsmanager_secret" "manifest_docker_hub_pat" {
   provider                = aws.core_services
   name                    = "MANIFEST_DOCKER_HUB_PAT"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_docker_hub_pat" {
@@ -477,7 +477,7 @@ resource "aws_secretsmanager_secret" "manifest_signoz_smtp_username" {
   provider                = aws.core_services
   count                   = var.enable_signoz ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_SMTP_USERNAME"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_username" {
@@ -491,7 +491,7 @@ resource "aws_secretsmanager_secret" "manifest_signoz_smtp_password" {
   provider                = aws.core_services
   count                   = var.enable_signoz ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_SMTP_PASSWORD"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_smtp_password" {
@@ -505,7 +505,7 @@ resource "aws_secretsmanager_secret" "manifest_signoz_dashboard_api_key" {
   provider                = aws.core_services
   count                   = var.enable_signoz ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_DASHBOARD_API_KEY"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_dashboard_api_key" {
@@ -519,7 +519,7 @@ resource "aws_secretsmanager_secret" "manifest_signoz_postgres_password" {
   provider                = aws.core_services
   count                   = var.enable_signoz ? 1 : 0
   name                    = "MANIFEST_SIGNOZ_POSTGRES_PASSWORD"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_signoz_postgres_password" {
@@ -534,7 +534,7 @@ resource "aws_secretsmanager_secret_version" "manifest_signoz_postgres_password"
 resource "aws_secretsmanager_secret" "manifest_falco_credentials" {
   provider                = aws.core_services
   name                    = "MANIFEST_FALCO_CREDENTIALS"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_falco_credentials_version" {
@@ -546,7 +546,7 @@ resource "aws_secretsmanager_secret_version" "manifest_falco_credentials_version
 resource "aws_secretsmanager_secret" "manifest_falco_slack_webhook_url" {
   provider                = aws.core_services
   name                    = "MANIFEST_FALCO_SLACK_WEBHOOK_URL"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_falco_slack_webhook_url_version" {
@@ -558,7 +558,7 @@ resource "aws_secretsmanager_secret_version" "manifest_falco_slack_webhook_url_v
 resource "aws_secretsmanager_secret" "manifest_scan_verdict_callback_token" {
   provider                = aws.core_services
   name                    = "MANIFEST_SCAN_VERDICT_CALLBACK_TOKEN"
-  recovery_window_in_days = 0
+  recovery_window_in_days = 7
 }
 
 resource "aws_secretsmanager_secret_version" "manifest_scan_verdict_callback_token" {
