@@ -318,7 +318,27 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool
   secret_string = var.aws_pinpoint_default_pool_id
 }
 
-resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
+moved {
+  from = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri
+  to   = aws_secretsmanager_secret.manifest_sqlalchemy_database_uri
+}
+
+moved {
+  from = aws_secretsmanager_secret_version.manifest_sqlalachemy_database_uri
+  to   = aws_secretsmanager_secret_version.manifest_sqlalchemy_database_uri
+}
+
+moved {
+  from = aws_secretsmanager_secret.manifest_sqlalachemy_database_reader_uri
+  to   = aws_secretsmanager_secret.manifest_sqlalchemy_database_reader_uri
+}
+
+moved {
+  from = aws_secretsmanager_secret_version.manifest_sqlalachemy_database_reader_uri
+  to   = aws_secretsmanager_secret_version.manifest_sqlalchemy_database_reader_uri
+}
+
+resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_uri" {
   provider                = aws.core_services
   name                    = "MANIFEST_SQLALCHEMY_DATABASE_URI"
   recovery_window_in_days = 0
@@ -326,21 +346,21 @@ resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri" {
 
 # THESE BELOW ARE DEPENDENT ON DYNAMICALLY GENERATED AWS INFORMATION
 
-resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri" {
+resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_uri" {
   provider      = aws.core_services
-  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri.id
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalchemy_database_uri.id
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
 }
 
-resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri" {
+resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_reader_uri" {
   provider                = aws.core_services
   name                    = "MANIFEST_SQLALCHEMY_DATABASE_READER_URI"
   recovery_window_in_days = 0
 }
 
-resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_reader_uri" {
+resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_reader_uri" {
   provider      = aws.core_services
-  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_reader_uri.id
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalchemy_database_reader_uri.id
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
 }
 
@@ -866,27 +886,27 @@ resource "aws_secretsmanager_secret_version" "manifest_aws_pinpoint_default_pool
   secret_string = var.aws_pinpoint_default_pool_id
 }
 
-resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_uri_unprefixed" {
+resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_uri_unprefixed" {
   provider                = aws.core_services
   name                    = "SQLALCHEMY_DATABASE_URI"
   recovery_window_in_days = 0
 }
 
-resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_uri_unprefixed" {
+resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_uri_unprefixed" {
   provider      = aws.core_services
-  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_uri_unprefixed.id
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalchemy_database_uri_unprefixed.id
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_write_proxy_endpoint}/${var.app_db_database_name}"
 }
 
-resource "aws_secretsmanager_secret" "manifest_sqlalachemy_database_reader_uri_unprefixed" {
+resource "aws_secretsmanager_secret" "manifest_sqlalchemy_database_reader_uri_unprefixed" {
   provider                = aws.core_services
   name                    = "SQLALCHEMY_DATABASE_READER_URI"
   recovery_window_in_days = 0
 }
 
-resource "aws_secretsmanager_secret_version" "manifest_sqlalachemy_database_reader_uri_unprefixed" {
+resource "aws_secretsmanager_secret_version" "manifest_sqlalchemy_database_reader_uri_unprefixed" {
   provider      = aws.core_services
-  secret_id     = aws_secretsmanager_secret.manifest_sqlalachemy_database_reader_uri_unprefixed.id
+  secret_id     = aws_secretsmanager_secret.manifest_sqlalchemy_database_reader_uri_unprefixed.id
   secret_string = "postgresql://${var.app_db_user}:${var.app_db_user_password}@${var.database_read_only_proxy_endpoint}/${var.app_db_database_name}"
 }
 
