@@ -450,16 +450,6 @@ variable "rds_database_name" {
   type = string
 }
 
-variable "admin_client_secret" {
-  type      = string
-  sensitive = true
-}
-
-variable "auth_tokens" {
-  type      = string
-  sensitive = true
-}
-
 variable "ff_batch_insertion" {
   type = string
 }
@@ -756,178 +746,168 @@ variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
   type = string
 }
 
-variable "manifest_admin_client_secret" {
+variable "admin_client_secret" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_auth_tokens" {
+variable "auth_tokens" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_document_download_api_key" {
+variable "airtable_api_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_airtable_api_key" {
+variable "aws_route53_zone" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_aws_route53_zone" {
+variable "aws_ses_access_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_aws_ses_access_key" {
+variable "aws_ses_secret_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_aws_ses_secret_key" {
+variable "dangerous_salt" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_dangerous_salt" {
+variable "debug_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_debug_key" {
+variable "fresh_desk_product_id" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_fresh_desk_product_id" {
+variable "fresh_desk_api_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_fresh_desk_api_key" {
+variable "gc_articles_api_auth_username" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_gc_articles_api_auth_username" {
+variable "gc_articles_api_auth_password" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_gc_articles_api_auth_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_gc_articles_waf_rate_bypass_secret" {
+variable "gc_articles_waf_rate_bypass_secret" {
   type      = string
   sensitive = true
   default   = "changeme"
 }
 
-variable "manifest_mixpanel_project_token" {
+variable "mixpanel_project_token" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_crm_github_personal_access_token" {
+variable "crm_github_personal_access_token" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_secret_key" {
+variable "secret_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_sendgrid_api_key" {
+variable "sendgrid_api_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_waf_secret" {
+variable "zendesk_api_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_zendesk_api_key" {
+variable "zendesk_sell_api_key" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_zendesk_sell_api_key" {
+variable "sre_client_secret" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_sre_client_secret" {
+variable "cache_clear_client_secret" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_cache_clear_client_secret" {
+variable "aws_pinpoint_sc_pool_id" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_aws_pinpoint_sc_pool_id" {
+variable "aws_pinpoint_sc_template_ids" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_aws_pinpoint_sc_template_ids" {
+variable "aws_pinpoint_default_pool_id" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_aws_pinpoint_default_pool_id" {
+variable "cypress_user_pw_secret" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_cypress_user_pw_secret" {
+variable "cypress_auth_client_secret" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_cypress_auth_client_secret" {
-  type      = string
-  sensitive = true
-}
-
-variable "manifest_smoke_api_key" {
+variable "smoke_api_key" {
   type      = string
   default   = "changeme"
   sensitive = true
 }
 
-variable "manifest_smoke_admin_client_secret" {
+variable "smoke_admin_client_secret" {
   type      = string
   default   = "changeme"
   sensitive = true
 }
 
-variable "manifest_pr_bot_github_token" {
+variable "pr_bot_github_token" {
   type      = string
   sensitive = true
   default   = "stagingonly"
 }
 
-variable "manifest_falco_credentials" {
+variable "falco_credentials" {
   type      = string
   sensitive = true
   default   = "changeme"
 }
 
-variable "manifest_falco_slack_webhook_url" {
+variable "falco_slack_webhook_url" {
   type      = string
   sensitive = true
   default   = "changeme"
 }
 
-variable "manifest_scan_verdict_callback_token" {
+variable "scan_verdict_callback_token" {
   type      = string
   sensitive = true
 }
@@ -1000,12 +980,12 @@ variable "github_manifests_workflow_token" {
   default   = "prodonly"
 }
 
-variable "manifest_docker_hub_username" {
+variable "docker_hub_username" {
   type      = string
   sensitive = true
 }
 
-variable "manifest_docker_hub_pat" {
+variable "docker_hub_pat" {
   type      = string
   sensitive = true
 }

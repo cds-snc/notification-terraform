@@ -29,12 +29,12 @@ variable "signoz_smtp_password" {
   sensitive = true
 }
 
-variable "manifest_signoz_postgres_password" {
+variable "signoz_postgres_password" {
   default   = "changeme"
   sensitive = true
 }
 
-variable "manifest_signoz_dashboard_api_key" {
+variable "signoz_dashboard_api_key" {
   default   = "changeme"
   sensitive = true
 }
