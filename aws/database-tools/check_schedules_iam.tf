@@ -6,6 +6,23 @@ data "aws_iam_policy_document" "scheduled_task_blazer_event_role_assume_role_pol
       identifiers = ["events.amazonaws.com"]
       type        = "Service"
     }
+
+    # Prevent a confused-deputy: only allow our own account's EventBridge rules to assume this role.
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [var.account_id]
+    }
+
+    # Skipped when no schedules exist (cloudwatch_enabled = false) since the condition values can't be empty.
+    dynamic "condition" {
+      for_each = length(aws_cloudwatch_event_rule.blazer_run_checks) > 0 ? [1] : []
+      content {
+        test     = "ArnLike"
+        variable = "aws:SourceArn"
+        values   = [for rule in aws_cloudwatch_event_rule.blazer_run_checks : rule.arn]
+      }
+    }
   }
 }
 
