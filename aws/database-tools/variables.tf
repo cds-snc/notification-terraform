@@ -28,3 +28,8 @@ variable "sns_alert_warning_arn" {
   description = "value of the sns alert warning arn"
   type        = string
 }
+
+variable "blazer_checks_database_url" {
+  description = "Database URL used by Blazer checks-only datasource"
+  type        = string
+}
