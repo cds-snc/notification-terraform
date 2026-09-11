@@ -19,10 +19,11 @@ data "aws_iam_policy_document" "scheduled_task_blazer_event_role_cloudwatch_poli
 
   # Required because the ecs_target in check_schedules.tf sets task tags, which makes
   # ECS require ecs:TagResource on the caller for every RunTask invocation.
+  # Scoped to the task ARN (not the task-definition ARN) since RunTask tags the launched task.
   statement {
     effect    = "Allow"
     actions   = ["ecs:TagResource"]
-    resources = [aws_ecs_task_definition.blazer.arn]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task/${aws_ecs_cluster.blazer.name}/*"]
   }
 
   statement {
