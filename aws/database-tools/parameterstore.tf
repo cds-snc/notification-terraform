@@ -42,7 +42,7 @@ resource "aws_ssm_parameter" "blazer_slack_webhook_general_topic" {
   provider = aws.core_services
   name     = "blazer_slack_webhook_general_topic"
   type     = "SecureString"
-  value    = var.blazer_slack_webhook_general_topic
+  value    = var.cloudwatch_slack_webhook_general_topic
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
