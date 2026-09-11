@@ -315,7 +315,7 @@ variable "blazer_slack_webhook_general_topic" {
   sensitive = true
 }
 
-variable "blazer_checks_db_password" {
+variable "blazer_checks_db_user_password" {
   type      = string
   sensitive = true
 }
