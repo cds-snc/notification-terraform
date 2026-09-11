@@ -54,7 +54,7 @@ resource "aws_ssm_parameter" "blazer_checks_database_url" {
   provider = aws.core_services
   name     = "blazer_checks_database_url"
   type     = "SecureString"
-  value    = "postgresql://${var.blazer_checks_db_user}:${var.blazer_checks_db_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
+  value    = "postgresql://someuser:${var.blazer_checks_db_password}@${var.database_read_only_proxy_endpoint}/NotificationCanadaCa${var.env}"
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
