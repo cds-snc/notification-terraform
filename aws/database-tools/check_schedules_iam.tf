@@ -17,6 +17,14 @@ data "aws_iam_policy_document" "scheduled_task_blazer_event_role_cloudwatch_poli
     resources = [aws_ecs_task_definition.blazer.arn]
   }
 
+  # Required because the ecs_target in check_schedules.tf sets task tags, which makes
+  # ECS require ecs:TagResource on the caller for every RunTask invocation.
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:TagResource"]
+    resources = [aws_ecs_task_definition.blazer.arn]
+  }
+
   statement {
     effect  = "Allow"
     actions = ["iam:PassRole"]
@@ -24,6 +32,12 @@ data "aws_iam_policy_document" "scheduled_task_blazer_event_role_cloudwatch_poli
       aws_iam_role.blazer_ecs_task.arn,
       aws_iam_role.blazer_execution_role.arn
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
   }
 }
 
