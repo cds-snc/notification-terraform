@@ -14,14 +14,12 @@ data "aws_iam_policy_document" "scheduled_task_blazer_event_role_assume_role_pol
       values   = [var.account_id]
     }
 
-    # Skipped when no schedules exist (cloudwatch_enabled = false) since the condition values can't be empty.
-    dynamic "condition" {
-      for_each = length(aws_cloudwatch_event_rule.blazer_run_checks) > 0 ? [1] : []
-      content {
-        test     = "ArnLike"
-        variable = "aws:SourceArn"
-        values   = [for rule in aws_cloudwatch_event_rule.blazer_run_checks : rule.arn]
-      }
+    # Wildcard matches the fixed "blazer-run-checks-*" rule name prefix so this stays enforced
+    # even when cloudwatch_enabled = false and no rules currently exist.
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:events:${var.region}:${var.account_id}:rule/blazer-run-checks-*"]
     }
   }
 }
