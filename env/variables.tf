@@ -718,39 +718,6 @@ variable "system_status_admin_url" {
   type = string
 }
 
-variable "blazer_image_tag" {
-  type    = string
-  default = "latest"
-}
-
-variable "system_status_docker_tag" {
-  type = string
-}
-
-variable "heartbeat_docker_tag" {
-  type = string
-}
-
-variable "google_cidr_docker_tag" {
-  type = string
-}
-
-variable "sns_to_sqs_sms_callbacks_docker_tag" {
-  type = string
-}
-
-variable "ses_to_sqs_callbacks_docker_tag" {
-  type = string
-}
-
-variable "ses_receiving_emails_docker_tag" {
-  type = string
-}
-
-variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
-  type = string
-}
-
 variable "admin_client_secret" {
   type      = string
   sensitive = true
