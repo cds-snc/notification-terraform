@@ -123,15 +123,15 @@ Suppose we need to add a new API Key to the GC Notify API Lambda
 
 ```
 ## MANIFESTS REPOSITORY SECRETS
-manifest_admin_client_secret          = "cds-secret-abcdefg1234567890"
-manifest_auth_tokens                  = "cds-secret-abcdefg0987654321"
-manifest_new_api_key                  = "cds-secret-gfedcba3456789012"
+admin_client_secret = "cds-secret-abcdefg1234567890"
+auth_tokens         = "cds-secret-abcdefg0987654321"
+new_api_key         = "cds-secret-gfedcba3456789012"
 ```
 
 2. Declare the new api key as a sensitive variable in the env/variables.tf file in notification-terraform. __Make sure to mark it as sensitive__
 
 ```terraform
-variable "manifest_new_api_key" {
+variable "new_api_key" {
   type = string
   sensitive = true
 }
@@ -140,14 +140,14 @@ variable "manifest_new_api_key" {
 3. Create an AWS Secret and AWS Secret Version in the manifest_secrets terraform folder
 
 ```terraform
-resource "aws_secretsmanager_secret" "manifest_new_api_key" {
-  name                    = "MANIFEST_NEW_API_KEY"
+resource "aws_secretsmanager_secret" "new_api_key" {
+  name                    = "NEW_API_KEY"
   recovery_window_in_days = 0
 }
 
-resource "aws_secretsmanager_secret_version" "manifest_new_api_key" {
-  secret_id     = aws_secretsmanager_secret.manifest_new_api_key.id
-  secret_string = var.manifest_new_api_key
+resource "aws_secretsmanager_secret_version" "new_api_key" {
+  secret_id     = aws_secretsmanager_secret.new_api_key.id
+  secret_string = var.new_api_key
 }
 ```
 
@@ -162,13 +162,13 @@ The key should be how the API will reference the secret, and the value is the na
 
 ```yaml
 apiSecrets:
-  ADMIN_CLIENT_SECRET: MANIFEST_ADMIN_CLIENT_SECRET
-  AWS_ROUTE53_ZONE: MANIFEST_AWS_ROUTE53_ZONE
-  AWS_SES_ACCESS_KEY: MANIFEST_AWS_SES_ACCESS_KEY
-  AWS_SES_SECRET_KEY: MANIFEST_AWS_SES_SECRET_KEY
-  CRM_GITHUB_PERSONAL_ACCESS_TOKEN: MANIFEST_CRM_GITHUB_PERSONAL_ACCESS_TOKEN
-  DANGEROUS_SALT: MANIFEST_DANGEROUS_SALT
-  NEW_API_KEY: MANIFEST_NEW_API_KEY
+  ADMIN_CLIENT_SECRET: ADMIN_CLIENT_SECRET
+  AWS_ROUTE53_ZONE: AWS_ROUTE53_ZONE
+  AWS_SES_ACCESS_KEY: AWS_SES_ACCESS_KEY
+  AWS_SES_SECRET_KEY: AWS_SES_SECRET_KEY
+  CRM_GITHUB_PERSONAL_ACCESS_TOKEN: CRM_GITHUB_PERSONAL_ACCESS_TOKEN
+  DANGEROUS_SALT: DANGEROUS_SALT
+  NEW_API_KEY: NEW_API_KEY
 ```
 
 3. The code will automatically know to fetch this secret from AWS Secrets Manager
