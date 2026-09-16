@@ -663,6 +663,44 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
                 "view": "table",
                 "title": "Out Of Memory Warnings"
             }
+        },
+        {
+            "type": "log",
+            "x": 0,
+            "y": 63,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "query": "SOURCE \"/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application\" |\nfilter kubernetes.container_name like /^notify-api/\n| filter log like /JWT audit event/\n| parse @message /\"event\"\\s*:\\s*\"(?<event_type>[^\"]+)\"/\n| filter ispresent(event_type)\n| stats count(*) as event_count by event_type\n| sort event_count desc",
+                "region": "ca-central-1",
+                "stacked": false,
+                "view": "table",
+                "title": "JWT Audit Event Summary"
+            }
+        },
+        {
+            "type": "text",
+            "x": 0,
+            "y": 62,
+            "width": 24,
+            "height": 1,
+            "properties": {
+                "markdown": "# JWT Auditing"
+            }
+        },
+        {
+            "type": "log",
+            "x": 6,
+            "y": 63,
+            "width": 18,
+            "height": 6,
+            "properties": {
+                "query": "SOURCE \"/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application\" |\nfilter kubernetes.container_name like /^notify-api/\n| filter @message like /JWT audit event/\n| parse @message /\"event\"\\s*:\\s*\"(?<event_type>[^\"]+)\"/\n| filter ispresent(event_type) and event_type != \"jwt.validated\"\n| parse @message /\"token_issuer\"\\s*:\\s*\"(?<token_issuer>[^\"]*)\"/\n| parse @message /\"timestamp\"\\s*:\\s*\"(?<audit_timestamp>[^\"]*)\"/\n| parse @message /\"path\"\\s*:\\s*\"(?<path>[^\"]*)\"/\n| parse @message /\"endpoint\"\\s*:\\s*\"(?<endpoint>[^\"]*)\"/\n| parse @message /\"user_agent\"\\s*:\\s*\"(?<user_agent>[^\"]*)\"/\n| parse @message /\"source_ip\"\\s*:\\s*\"(?<source_ip>[^\"]*)\"/\n| parse @message /\"service_id\"\\s*:\\s*\"(?<service_id>[^\"]*)\"/\n| parse @message /\"api_key_id\"\\s*:\\s*\"(?<api_key_id>[^\"]*)\"/\n| sort @timestamp desc\n| limit 10000\n| display @timestamp, event_type, path, endpoint, user_agent, source_ip, service_id, api_key_id",
+                "region": "ca-central-1",
+                "stacked": false,
+                "view": "table",
+                "title": "Failed JWT Audit Details"
+            }
         }
     ]
 }
