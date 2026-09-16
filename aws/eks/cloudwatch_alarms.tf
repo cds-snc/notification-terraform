@@ -1505,7 +1505,8 @@ resource "aws_cloudwatch_metric_alarm" "international-sms-sent-critical" {
   evaluation_periods  = "1"
   threshold           = 100
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 
   metric_query {
     id          = "q1"
