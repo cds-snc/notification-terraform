@@ -20,45 +20,17 @@ data "aws_iam_policy_document" "staging_developer" {
     resources = ["arn:aws:ses:*:${var.account_id}:identity/*"]
   }
 
-  # VerifyEmailIdentity has no resource-level permissions support; must stay account-wide.
+  # notification-api's aws_sns.py publishes SMS directly to a phone number (no TopicArn),
+  # which has no resource-level permissions support; must stay account-wide.
   statement {
-    sid       = "SesVerifyEmail"
-    actions   = ["ses:VerifyEmailIdentity"]
+    sid       = "SnsPublish"
+    actions   = ["sns:Publish"]
     resources = ["*"]
   }
 
-  statement {
-    sid     = "SnsPublish"
-    actions = ["sns:Publish"]
-
-    resources = [
-      aws_sns_topic.notification-canada-ca-ses-callback.arn,
-      aws_sns_topic.notification-canada-ca-alert-ok.arn,
-      aws_sns_topic.notification-canada-ca-alert-warning.arn,
-      aws_sns_topic.notification-canada-ca-alert-critical.arn,
-      aws_sns_topic.notification-canada-ca-alert-general.arn,
-      aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn,
-      aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn,
-      aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn,
-      aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn,
-      aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn,
-      aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn,
-    ]
-  }
-
-  statement {
-    sid = "PinpointSms"
-
-    actions = [
-      "mobiletargeting:SendMessages",
-      "mobiletargeting:SendUsersMessages",
-    ]
-
-    resources = [
-      "arn:aws:mobiletargeting:us-west-2:${var.account_id}:apps/${aws_pinpoint_app.notification-canada-ca.application_id}",
-    ]
-  }
-
+  # notification-api's aws_pinpoint.py uses the pinpoint-sms-voice-v2 API (sms-voice:*),
+  # not the classic mobiletargeting API, and OriginationIdentity/pool targets have no
+  # resource-level permissions support; must stay account-wide.
   statement {
     sid       = "SmsVoice"
     actions   = ["sms-voice:SendTextMessage"]
@@ -108,29 +80,25 @@ data "aws_iam_policy_document" "staging_developer" {
     ]
   }
 
+  # notification-api's NOTIFICATION_QUEUE_PREFIX lets developers create their own ad hoc
+  # queue names (e.g. <prefix>-tasks), so per-queue actions are scoped to the
+  # account/region rather than a fixed ARN list, which would miss those dev queues.
   statement {
     sid = "Sqs"
 
     actions = [
       "sqs:ChangeMessageVisibility",
+      "sqs:CreateQueue",
       "sqs:DeleteMessage",
+      "sqs:DeleteQueue",
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl",
+      "sqs:PurgeQueue",
       "sqs:ReceiveMessage",
       "sqs:SendMessage",
     ]
 
-    resources = [
-      aws_sqs_queue.priority_db_tasks_queue.arn,
-      aws_sqs_queue.normal_db_tasks_queue.arn,
-      aws_sqs_queue.bulk_db_tasks_queue.arn,
-      aws_sqs_queue.notify_internal_tasks_queue.arn,
-      aws_sqs_queue.eks_notification_canada_ca_sms_high_queue.arn,
-      aws_sqs_queue.eks_notification_canada_ca_email_high_queue.arn,
-      aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn,
-      aws_sqs_queue.eks_notification_canada_usdelivery_receipts.arn,
-      aws_sqs_queue.ses_receipt_callback_buffer.arn,
-    ]
+    resources = ["arn:aws:sqs:ca-central-1:${var.account_id}:*"]
   }
 
   # ListQueues has no resource-level permissions support; must stay account-wide.
@@ -138,39 +106,6 @@ data "aws_iam_policy_document" "staging_developer" {
     sid       = "SqsListQueues"
     actions   = ["sqs:ListQueues"]
     resources = ["*"]
-  }
-
-  # notification-api's NOTIFICATION_QUEUE_PREFIX and delete_sqs_queues.py/run_celery_purge.sh
-  # create, purge, and delete developer-prefixed queues that don't exist as Terraform resources,
-  # so these actions are scoped to the account/region rather than a fixed queue ARN list.
-  statement {
-    sid = "SqsDeveloperQueues"
-
-    actions = [
-      "sqs:CreateQueue",
-      "sqs:DeleteQueue",
-      "sqs:PurgeQueue",
-    ]
-
-    resources = ["arn:aws:sqs:ca-central-1:${var.account_id}:*"]
-  }
-
-  statement {
-    sid = "Kms"
-
-    actions = [
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey",
-      "kms:GenerateDataKeyWithoutPlaintext",
-    ]
-
-    resources = [
-      aws_kms_key.notification-canada-ca.arn,
-      aws_kms_key.notification-canada-ca-us-west-2.arn,
-      aws_kms_key.notification-canada-ca-us-east-1.arn,
-    ]
   }
 
   statement {
@@ -200,7 +135,7 @@ resource "aws_iam_user" "staging_developer" {
 }
 
 # Standalone managed policy: the inline-policy 2,048-character limit is too small
-# for the explicit SES/SNS/S3/SQS/KMS ARNs this identity needs.
+# for the explicit SES/S3/SQS ARNs this identity needs.
 resource "aws_iam_policy" "staging_developer" {
   count = var.env == "staging" ? 1 : 0
 
