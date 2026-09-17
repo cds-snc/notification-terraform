@@ -112,8 +112,11 @@ data "aws_iam_policy_document" "staging_developer" {
     sid = "Sqs"
 
     actions = [
+      "sqs:ChangeMessageVisibility",
+      "sqs:DeleteMessage",
       "sqs:GetQueueAttributes",
       "sqs:GetQueueUrl",
+      "sqs:ReceiveMessage",
       "sqs:SendMessage",
     ]
 
@@ -128,6 +131,28 @@ data "aws_iam_policy_document" "staging_developer" {
       aws_sqs_queue.eks_notification_canada_usdelivery_receipts.arn,
       aws_sqs_queue.ses_receipt_callback_buffer.arn,
     ]
+  }
+
+  # ListQueues has no resource-level permissions support; must stay account-wide.
+  statement {
+    sid       = "SqsListQueues"
+    actions   = ["sqs:ListQueues"]
+    resources = ["*"]
+  }
+
+  # notification-api's NOTIFICATION_QUEUE_PREFIX and delete_sqs_queues.py/run_celery_purge.sh
+  # create, purge, and delete developer-prefixed queues that don't exist as Terraform resources,
+  # so these actions are scoped to the account/region rather than a fixed queue ARN list.
+  statement {
+    sid = "SqsDeveloperQueues"
+
+    actions = [
+      "sqs:CreateQueue",
+      "sqs:DeleteQueue",
+      "sqs:PurgeQueue",
+    ]
+
+    resources = ["arn:aws:sqs:ca-central-1:${var.account_id}:*"]
   }
 
   statement {
