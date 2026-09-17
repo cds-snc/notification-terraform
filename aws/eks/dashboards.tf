@@ -672,7 +672,7 @@ resource "aws_cloudwatch_dashboard" "notify_system" {
             "height": 6,
             "properties": {
                 "query": "SOURCE \"/aws/containerinsights/${aws_eks_cluster.notification-canada-ca-eks-cluster.name}/application\" |\nfilter kubernetes.container_name like /^notify-api/\n| filter log like /JWT audit event/\n| parse @message /\"event\"\\s*:\\s*\"(?<event_type>[^\"]+)\"/\n| filter ispresent(event_type)\n| stats count(*) as event_count by event_type\n| sort event_count desc",
-                "region": "ca-central-1",
+                "region": "${var.region}",
                 "stacked": false,
                 "view": "table",
                 "title": "JWT Audit Event Summary"
