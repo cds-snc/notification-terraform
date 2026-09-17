@@ -15,10 +15,16 @@ data "aws_iam_policy_document" "staging_developer" {
       "ses:GetIdentityVerificationAttributes",
       "ses:SendEmail",
       "ses:SendRawEmail",
-      "ses:VerifyEmailIdentity",
     ]
 
     resources = ["arn:aws:ses:*:${var.account_id}:identity/*"]
+  }
+
+  # VerifyEmailIdentity has no resource-level permissions support; must stay account-wide.
+  statement {
+    sid       = "SesVerifyEmail"
+    actions   = ["ses:VerifyEmailIdentity"]
+    resources = ["*"]
   }
 
   statement {
@@ -168,13 +174,22 @@ resource "aws_iam_user" "staging_developer" {
   }
 }
 
-resource "aws_iam_user_policy" "staging_developer" {
+# Standalone managed policy: the inline-policy 2,048-character limit is too small
+# for the explicit SES/SNS/S3/SQS/KMS ARNs this identity needs.
+resource "aws_iam_policy" "staging_developer" {
   count = var.env == "staging" ? 1 : 0
 
   provider = aws.core_services
   name     = "staging-developer"
-  user     = aws_iam_user.staging_developer[0].name
   policy   = data.aws_iam_policy_document.staging_developer[0].json
+}
+
+resource "aws_iam_user_policy_attachment" "staging_developer" {
+  count = var.env == "staging" ? 1 : 0
+
+  provider   = aws.core_services
+  user       = aws_iam_user.staging_developer[0].name
+  policy_arn = aws_iam_policy.staging_developer[0].arn
 }
 
 resource "aws_iam_access_key" "staging_developer" {
