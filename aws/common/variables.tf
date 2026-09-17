@@ -42,3 +42,16 @@ variable "scan_verdict_event_retry_max_age_seconds" {
   description = "EventBridge retry max event age in seconds"
   default     = 3600
 }
+
+# Proposal only, disabled by default. See staging_developer_sso_role.tf.
+variable "enable_staging_developer_sso_role" {
+  type        = bool
+  description = "Enable the SSO-assumable staging developer role, replacing the static staging-developer IAM user/access key"
+  default     = false
+}
+
+variable "staging_developer_sso_principal_arn" {
+  type        = string
+  description = "IAM Identity Center permission-set (or group) role ARN allowed to assume the staging developer role. Owned by SRE/Platform."
+  default     = ""
+}
