@@ -1,69 +1,43 @@
-locals {
-  staging_developer_enabled = var.env == "staging"
-
-  staging_developer_s3_buckets = [
-    aws_s3_bucket.csv_bucket.arn,
-    aws_s3_bucket.asset_bucket.arn,
-    aws_s3_bucket.document_bucket.arn,
-    aws_s3_bucket.scan_files_document_bucket.arn,
-    aws_s3_bucket.gc_organisations_bucket.arn,
-    aws_s3_bucket.reports_bucket.arn,
-  ]
-
-  staging_developer_sqs_queues = [
-    aws_sqs_queue.priority_db_tasks_queue.arn,
-    aws_sqs_queue.normal_db_tasks_queue.arn,
-    aws_sqs_queue.bulk_db_tasks_queue.arn,
-    aws_sqs_queue.notify_internal_tasks_queue.arn,
-    aws_sqs_queue.eks_notification_canada_ca_sms_high_queue.arn,
-    aws_sqs_queue.eks_notification_canada_ca_email_high_queue.arn,
-    aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn,
-    aws_sqs_queue.eks_notification_canada_usdelivery_receipts.arn,
-    aws_sqs_queue.ses_receipt_callback_buffer.arn,
-  ]
-
-  staging_developer_sns_topics = [
-    aws_sns_topic.notification-canada-ca-ses-callback.arn,
-    aws_sns_topic.notification-canada-ca-alert-ok.arn,
-    aws_sns_topic.notification-canada-ca-alert-warning.arn,
-    aws_sns_topic.notification-canada-ca-alert-critical.arn,
-    aws_sns_topic.notification-canada-ca-alert-general.arn,
-    aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn,
-    aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn,
-    aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn,
-    aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn,
-    aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn,
-    aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn,
-  ]
-
-  staging_developer_kms_keys = [
-    aws_kms_key.notification-canada-ca.arn,
-    aws_kms_key.notification-canada-ca-us-west-2.arn,
-    aws_kms_key.notification-canada-ca-us-east-1.arn,
-  ]
-}
-
 data "aws_iam_policy_document" "staging_developer" {
-  count = local.staging_developer_enabled ? 1 : 0
+  count = var.env == "staging" ? 1 : 0
+
+  # ListIdentities has no resource-level permissions support; must stay account-wide.
+  statement {
+    sid       = "SesList"
+    actions   = ["ses:ListIdentities"]
+    resources = ["*"]
+  }
 
   statement {
     sid = "Ses"
 
     actions = [
       "ses:GetIdentityVerificationAttributes",
-      "ses:ListIdentities",
       "ses:SendEmail",
       "ses:SendRawEmail",
       "ses:VerifyEmailIdentity",
     ]
 
-    resources = ["*"]
+    resources = ["arn:aws:ses:*:${var.account_id}:identity/*"]
   }
 
   statement {
-    sid       = "SnsPublish"
-    actions   = ["sns:Publish"]
-    resources = local.staging_developer_sns_topics
+    sid     = "SnsPublish"
+    actions = ["sns:Publish"]
+
+    resources = [
+      aws_sns_topic.notification-canada-ca-ses-callback.arn,
+      aws_sns_topic.notification-canada-ca-alert-ok.arn,
+      aws_sns_topic.notification-canada-ca-alert-warning.arn,
+      aws_sns_topic.notification-canada-ca-alert-critical.arn,
+      aws_sns_topic.notification-canada-ca-alert-general.arn,
+      aws_sns_topic.notification-canada-ca-alert-warning-us-west-2.arn,
+      aws_sns_topic.notification-canada-ca-alert-ok-us-west-2.arn,
+      aws_sns_topic.notification-canada-ca-alert-critical-us-west-2.arn,
+      aws_sns_topic.notification-canada-ca-alert-ok-us-east-1.arn,
+      aws_sns_topic.notification-canada-ca-alert-warning-us-east-1.arn,
+      aws_sns_topic.notification-canada-ca-alert-critical-us-east-1.arn,
+    ]
   }
 
   statement {
@@ -96,7 +70,16 @@ data "aws_iam_policy_document" "staging_developer" {
       "s3:PutObject",
     ]
 
-    resources = [for bucket in local.staging_developer_s3_buckets : "${bucket}/*"]
+    resources = [
+      for bucket in [
+        aws_s3_bucket.csv_bucket.arn,
+        aws_s3_bucket.asset_bucket.arn,
+        aws_s3_bucket.document_bucket.arn,
+        aws_s3_bucket.scan_files_document_bucket.arn,
+        aws_s3_bucket.gc_organisations_bucket.arn,
+        aws_s3_bucket.reports_bucket.arn,
+      ] : "${bucket}/*"
+    ]
   }
 
   statement {
@@ -109,7 +92,14 @@ data "aws_iam_policy_document" "staging_developer" {
       "s3:ListBucketMultipartUploads",
     ]
 
-    resources = local.staging_developer_s3_buckets
+    resources = [
+      aws_s3_bucket.csv_bucket.arn,
+      aws_s3_bucket.asset_bucket.arn,
+      aws_s3_bucket.document_bucket.arn,
+      aws_s3_bucket.scan_files_document_bucket.arn,
+      aws_s3_bucket.gc_organisations_bucket.arn,
+      aws_s3_bucket.reports_bucket.arn,
+    ]
   }
 
   statement {
@@ -121,7 +111,17 @@ data "aws_iam_policy_document" "staging_developer" {
       "sqs:SendMessage",
     ]
 
-    resources = local.staging_developer_sqs_queues
+    resources = [
+      aws_sqs_queue.priority_db_tasks_queue.arn,
+      aws_sqs_queue.normal_db_tasks_queue.arn,
+      aws_sqs_queue.bulk_db_tasks_queue.arn,
+      aws_sqs_queue.notify_internal_tasks_queue.arn,
+      aws_sqs_queue.eks_notification_canada_ca_sms_high_queue.arn,
+      aws_sqs_queue.eks_notification_canada_ca_email_high_queue.arn,
+      aws_sqs_queue.eks_notification_canada_cadelivery_receipts.arn,
+      aws_sqs_queue.eks_notification_canada_usdelivery_receipts.arn,
+      aws_sqs_queue.ses_receipt_callback_buffer.arn,
+    ]
   }
 
   statement {
@@ -135,7 +135,11 @@ data "aws_iam_policy_document" "staging_developer" {
       "kms:GenerateDataKeyWithoutPlaintext",
     ]
 
-    resources = local.staging_developer_kms_keys
+    resources = [
+      aws_kms_key.notification-canada-ca.arn,
+      aws_kms_key.notification-canada-ca-us-west-2.arn,
+      aws_kms_key.notification-canada-ca-us-east-1.arn,
+    ]
   }
 
   statement {
@@ -152,7 +156,7 @@ data "aws_iam_policy_document" "staging_developer" {
 }
 
 resource "aws_iam_user" "staging_developer" {
-  count = local.staging_developer_enabled ? 1 : 0
+  count = var.env == "staging" ? 1 : 0
 
   provider = aws.core_services
   name     = "staging-developer"
@@ -165,7 +169,7 @@ resource "aws_iam_user" "staging_developer" {
 }
 
 resource "aws_iam_user_policy" "staging_developer" {
-  count = local.staging_developer_enabled ? 1 : 0
+  count = var.env == "staging" ? 1 : 0
 
   provider = aws.core_services
   name     = "staging-developer"
@@ -174,22 +178,24 @@ resource "aws_iam_user_policy" "staging_developer" {
 }
 
 resource "aws_iam_access_key" "staging_developer" {
-  count = local.staging_developer_enabled ? 1 : 0
+  count = var.env == "staging" ? 1 : 0
 
   provider = aws.core_services
   user     = aws_iam_user.staging_developer[0].name
 }
 
 resource "aws_secretsmanager_secret" "staging_developer_credentials" {
-  count = local.staging_developer_enabled ? 1 : 0
+  count = var.env == "staging" ? 1 : 0
 
-  provider                = aws.core_services
-  name                    = "staging/developer/aws-credentials"
-  recovery_window_in_days = 7
+  provider = aws.core_services
+  name     = "staging/developer/aws-credentials"
+  # 1Password is the source of truth for secrets; skip the recovery window so this
+  # code-managed secret can be deleted/recreated immediately if the user is rotated.
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "staging_developer_credentials" {
-  count = local.staging_developer_enabled ? 1 : 0
+  count = var.env == "staging" ? 1 : 0
 
   provider  = aws.core_services
   secret_id = aws_secretsmanager_secret.staging_developer_credentials[0].id
