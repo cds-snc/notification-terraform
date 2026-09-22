@@ -690,8 +690,11 @@ data "aws_iam_policy_document" "notification_lambdas_apply" {
   statement {
     effect = "Allow"
     actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
       "ecr:BatchDeleteImage",
       "ecr:DescribeImages",
+      "ecr:GetDownloadUrlForLayer",
       "ecr:ListImages",
       "ecr:InitiateLayerUpload",
       "ecr:UploadLayerPart",
