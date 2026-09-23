@@ -690,8 +690,10 @@ data "aws_iam_policy_document" "notification_lambdas_apply" {
   statement {
     effect = "Allow"
     actions = [
-      "ecr:BatchDeleteImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
       "ecr:DescribeImages",
+      "ecr:GetDownloadUrlForLayer",
       "ecr:ListImages",
       "ecr:InitiateLayerUpload",
       "ecr:UploadLayerPart",
@@ -700,7 +702,9 @@ data "aws_iam_policy_document" "notification_lambdas_apply" {
     ]
     resources = [
       "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/pinpoint_to_sqs_sms_callbacks",
-      "arn:aws:ecr:us-west-2:${var.account_id}:repository/notify/pinpoint_to_sqs_sms_callbacks"
+      "arn:aws:ecr:us-west-2:${var.account_id}:repository/notify/pinpoint_to_sqs_sms_callbacks",
+      "arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/sns_to_sqs_sms_callbacks",
+      "arn:aws:ecr:us-east-1:${var.account_id}:repository/notify/ses_receiving_emails"
     ]
   }
 
@@ -721,7 +725,11 @@ data "aws_iam_policy_document" "notification_lambdas_apply" {
       "arn:aws:lambda:${var.region}:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks",
       "arn:aws:lambda:${var.region}:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks:*",
       "arn:aws:lambda:us-west-2:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks_us_west_2",
-      "arn:aws:lambda:us-west-2:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks_us_west_2:*"
+      "arn:aws:lambda:us-west-2:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks_us_west_2:*",
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:sns_to_sqs_sms_callbacks",
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:sns_to_sqs_sms_callbacks:*",
+      "arn:aws:lambda:us-east-1:${var.account_id}:function:ses_receiving_emails",
+      "arn:aws:lambda:us-east-1:${var.account_id}:function:ses_receiving_emails:*"
     ]
   }
 }
