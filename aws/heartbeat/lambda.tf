@@ -1,5 +1,23 @@
+data "github_repository_file" "manifests_env" {
+  repository = "notification-manifests"
+  branch     = "main"
+  file       = "helmfile/overrides/${var.env}.env"
+}
+
 locals {
-  image_tag = var.env == "production" ? var.heartbeat_docker_tag : (var.bootstrap == true ? "bootstrap" : "latest")
+  manifest_env_tag_matches = [
+    for line in split("\n", data.github_repository_file.manifests_env.content) :
+    regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line)
+    if can(regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line))
+  ]
+  manifest_image_tags = { for match in local.manifest_env_tag_matches : match[0] => match[1] }
+  image_tag           = local.manifest_image_tags["HEARTBEAT_DOCKER_TAG"]
+  ecr_repository_name = join("/", slice(split("/", var.heartbeat_ecr_repository_url), 1, length(split("/", var.heartbeat_ecr_repository_url))))
+}
+
+data "aws_ecr_image" "heartbeat" {
+  repository_name = local.ecr_repository_name
+  image_tag       = local.image_tag
 }
 
 module "heartbeat" {
@@ -8,7 +26,7 @@ module "heartbeat" {
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.heartbeat_ecr_repository_url}:${local.image_tag}"
+  image_uri              = data.aws_ecr_image.heartbeat.image_uri
   timeout                = 60
   memory                 = 1024
   alias_name             = "latest"

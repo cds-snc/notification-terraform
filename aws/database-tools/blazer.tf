@@ -1,5 +1,23 @@
 locals {
-  image_tag = var.blazer_image_tag
+  manifest_env_tag_matches = [
+    for line in split("\n", data.github_repository_file.manifests_env.content) :
+    regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line)
+    if can(regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line))
+  ]
+  manifest_image_tags = { for match in local.manifest_env_tag_matches : match[0] => match[1] }
+  image_tag           = local.manifest_image_tags["BLAZER_DOCKER_TAG"]
+  ecr_repository_name = aws_ecr_repository.blazer.name
+}
+
+data "github_repository_file" "manifests_env" {
+  repository = "notification-manifests"
+  branch     = "main"
+  file       = "helmfile/overrides/${var.env}.env"
+}
+
+data "aws_ecr_image" "blazer" {
+  repository_name = local.ecr_repository_name
+  image_tag       = local.image_tag
 }
 
 resource "aws_ecs_cluster" "blazer" {
@@ -41,7 +59,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : "${aws_ecr_repository.blazer.repository_url}:${local.image_tag}",
+      "image" : data.aws_ecr_image.blazer.image_uri,
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {

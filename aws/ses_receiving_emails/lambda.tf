@@ -1,3 +1,26 @@
+data "github_repository_file" "manifests_env" {
+  repository = "notification-manifests"
+  branch     = "main"
+  file       = "helmfile/overrides/${var.env}.env"
+}
+
+locals {
+  manifest_env_tag_matches = [
+    for line in split("\n", data.github_repository_file.manifests_env.content) :
+    regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line)
+    if can(regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line))
+  ]
+  manifest_image_tags = { for match in local.manifest_env_tag_matches : match[0] => match[1] }
+  image_tag           = local.manifest_image_tags["SES_RECEIVING_EMAILS_DOCKER_TAG"]
+  ecr_repository_name = join("/", slice(split("/", var.ses_receiving_emails_ecr_repository_url), 1, length(split("/", var.ses_receiving_emails_ecr_repository_url))))
+}
+
+data "aws_ecr_image" "ses_receiving_emails" {
+  provider        = aws.core_services_us_east_1
+  repository_name = local.ecr_repository_name
+  image_tag       = local.image_tag
+}
+
 module "ses_receiving_emails" {
 
   providers = {
@@ -9,7 +32,7 @@ module "ses_receiving_emails" {
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_receiving_emails_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.ses_receiving_emails_ecr_repository_url}:${var.ses_receiving_emails_docker_tag}"
+  image_uri                  = data.aws_ecr_image.ses_receiving_emails.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days

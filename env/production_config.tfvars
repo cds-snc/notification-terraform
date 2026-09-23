@@ -175,16 +175,8 @@ enable_guardduty_scan_api_destination                              = true
 scan_verdict_callback_url                                          = "https://api.notification.canada.ca/templates/scan-verdict-callback"
 
 # RANDOM DOCKER TAGS (These are only used during BCP processes)
-system_status_docker_tag                 = "bootstrap"
-heartbeat_docker_tag                     = "bootstrap"
-google_cidr_docker_tag                   = "bootstrap"
-sns_to_sqs_sms_callbacks_docker_tag      = "bootstrap"
-ses_to_sqs_callbacks_docker_tag          = "bootstrap"
-ses_receiving_emails_docker_tag          = "bootstrap"
-pinpoint_to_sqs_sms_callbacks_docker_tag = "bootstrap"
 
 ## BLAZER
-blazer_image_tag   = "latest"
 blazer_rds_version = "15.18"
 
 ## DATA LAKE
