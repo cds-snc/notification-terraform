@@ -1499,13 +1499,14 @@ resource "aws_cloudwatch_metric_alarm" "international-sms-sent-warning" {
 resource "aws_cloudwatch_metric_alarm" "international-sms-sent-critical" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "international-sms-sent-warning"
+  alarm_name          = "international-sms-sent-critical"
   alarm_description   = "A service has sent more than 100 international SMS in 1 hour"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = 100
   treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
+  alarm_actions       = [var.sns_alert_critical_arn]
+  ok_actions          = [var.sns_alert_ok_arn]
 
   metric_query {
     id          = "q1"
