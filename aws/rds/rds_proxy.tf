@@ -1,6 +1,7 @@
 locals {
-  db_user     = "postgres"
-  app_db_user = "app_db_user"
+  db_user               = "postgres"
+  app_db_user           = "app_db_user"
+  blazer_checks_db_user = "blazer_checks_db_user"
 }
 
 ################################################################################
@@ -8,6 +9,12 @@ locals {
 ################################################################################
 
 resource "random_string" "app_db_user" {
+  count   = var.env == "production" || var.env == "staging" ? 0 : 1
+  length  = 8
+  special = false
+}
+
+resource "random_string" "blazer_checks_db_user" {
   count   = var.env == "production" || var.env == "staging" ? 0 : 1
   length  = 8
   special = false
@@ -56,6 +63,24 @@ resource "aws_secretsmanager_secret_version" "app_db_user" {
   })
 }
 
+resource "aws_secretsmanager_secret" "blazer_checks_db_user" {
+  provider    = aws.core_services
+  name        = var.env == "production" || var.env == "staging" ? local.blazer_checks_db_user : "${local.blazer_checks_db_user}_${random_string.blazer_checks_db_user[0].result}"
+  description = "Database read-only user ${local.blazer_checks_db_user}, database connection values"
+  tags = {
+    CostCenter = "notification-canada-ca-${var.env}"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "blazer_checks_db_user" {
+  provider  = aws.core_services
+  secret_id = aws_secretsmanager_secret.blazer_checks_db_user.id
+  secret_string = jsonencode({
+    username = local.blazer_checks_db_user
+    password = var.blazer_checks_db_user_password
+  })
+}
+
 ################################################################################
 # RDS Proxy
 ################################################################################
@@ -99,6 +124,11 @@ module "rds_proxy" {
     "${local.app_db_user}" = {
       description = aws_secretsmanager_secret.app_db_user.description
       arn         = aws_secretsmanager_secret.app_db_user.arn
+      kms_key_id  = var.kms_arn
+    }
+    "${local.blazer_checks_db_user}" = {
+      description = aws_secretsmanager_secret.blazer_checks_db_user.description
+      arn         = aws_secretsmanager_secret.blazer_checks_db_user.arn
       kms_key_id  = var.kms_arn
     }
   }
