@@ -1,5 +1,5 @@
 locals {
-  image_tag = var.blazer_image_tag
+  image_tag = var.bootstrap ? var.bootstrap_image_tag : var.blazer_image_tag
 }
 
 resource "aws_ecs_cluster" "blazer" {

@@ -1,10 +1,14 @@
+locals {
+  image_tag = var.bootstrap ? var.bootstrap_image_tag : var.pinpoint_to_sqs_sms_callbacks_docker_tag
+}
+
 module "pinpoint_to_sqs_sms_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "pinpoint_to_sqs_sms_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url}:${local.image_tag}"
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
@@ -71,7 +75,7 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url}:${local.image_tag}"
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
