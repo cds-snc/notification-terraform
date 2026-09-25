@@ -28,3 +28,8 @@ variable "sns_alert_warning_arn" {
   description = "value of the sns alert warning arn"
   type        = string
 }
+
+variable "kms_arn" {
+  description = "ARN of the shared notification-canada-ca KMS key"
+  type        = string
+}

@@ -2,8 +2,9 @@
 # published to SNS and delivered to the Slack webhook by SNS itself instead of
 # the blazer container calling hooks.slack.com directly.
 resource "aws_sns_topic" "blazer_check_alerts" {
-  provider = aws.core_services
-  name     = "blazer-check-alerts"
+  provider          = aws.core_services
+  name              = "blazer-check-alerts"
+  kms_master_key_id = var.kms_arn
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value

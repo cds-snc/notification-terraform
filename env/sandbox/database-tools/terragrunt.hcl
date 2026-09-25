@@ -20,6 +20,7 @@ dependency "common" {
       "",
     ]
     sns_alert_warning_arn = ""
+    kms_arn               = ""
   }
 }
 
@@ -67,4 +68,5 @@ inputs = {
   database-tools-db-securitygroup   = dependency.eks.outputs.database-tools-db-securitygroup
   database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
   sns_alert_warning_arn             = dependency.common.outputs.sns_alert_warning_arn
+  kms_arn                           = dependency.common.outputs.kms_arn
 }
