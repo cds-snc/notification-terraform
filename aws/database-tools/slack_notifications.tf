@@ -7,10 +7,9 @@ resource "aws_sns_topic" "blazer_check_alerts" {
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
-    Terraform              = true
+    Terraform             = true
   }
 }
-
 
 resource "aws_sns_topic_subscription" "blazer_check_alerts_to_slack" {
   provider  = aws.core_services

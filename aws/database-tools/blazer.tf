@@ -63,6 +63,12 @@ resource "aws_ecs_task_definition" "blazer" {
         }, {
         "name" : "NOTIFY_URL",
         "value" : "https://${var.base_domain}"
+        }, {
+        "name" : "AWS_REGION",
+        "value" : "${var.region}"
+        }, {
+        "name" : "BLAZER_SLACK_SNS_TOPIC_ARN",
+        "value" : "${aws_sns_topic.blazer_check_alerts.arn}"
       }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",
@@ -73,9 +79,6 @@ resource "aws_ecs_task_definition" "blazer" {
         }, {
         "name" : "DATABASE_URL",
         "valueFrom" : "${aws_ssm_parameter.db_tools_environment_variables.arn}"
-        }, {
-        "name" : "BLAZER_SLACK_WEBHOOK_URL",
-        "valueFrom" : "${aws_ssm_parameter.blazer_slack_webhook_general_topic.arn}"
         }, {
         "name" : "GOOGLE_OAUTH_CLIENT_ID",
         "valueFrom" : "${aws_ssm_parameter.notify_o11y_google_oauth_client_id.arn}"
