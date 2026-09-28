@@ -310,11 +310,6 @@ variable "client_vpn_self_service_saml_metadata" {
   sensitive = true
 }
 
-variable "blazer_slack_webhook_general_topic" {
-  type      = string
-  sensitive = true
-}
-
 variable "blazer_checks_db_user_password" {
   type      = string
   sensitive = true
