@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW vw_notification AS
 WITH
   notification_data AS (
-   SELECT
+  SELECT
      id notification_id
    , billable_units notification_billable_units
    , created_at notification_created_at
@@ -24,7 +24,8 @@ WITH
    , sms_origination_phone_number
    FROM
      notifications
-UNION ALL    SELECT
+UNION ALL
+  SELECT
      id notification_id
    , billable_units notification_billable_units
    , created_at notification_created_at
@@ -65,7 +66,7 @@ UNION ALL    SELECT
    , s.organisation_id
    FROM
      (services s
-   INNER JOIN organisation o ON (s.organisation_id = o.id))
+   LEFT JOIN organisation o ON (s.organisation_id = o.id))
 )
 , template_data AS (
    SELECT
