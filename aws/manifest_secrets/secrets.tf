@@ -370,18 +370,6 @@ resource "aws_secretsmanager_secret_version" "cache_ops_url_version" {
   secret_string = "redis://${var.elasticache_queue_cache_primary_endpoint_address}"
 }
 
-resource "aws_secretsmanager_secret" "redis_publish_url" {
-  provider                = aws.core_services
-  name                    = "REDIS_PUBLISH_URL"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "redis_publish_url_version" {
-  provider      = aws.core_services
-  secret_id     = aws_secretsmanager_secret.redis_publish_url.id
-  secret_string = var.env != "production" ? "redis://${var.elasticache_queue_cache_primary_endpoint_address}" : "redis://${var.redis_primary_endpoint_address}"
-}
-
 resource "aws_secretsmanager_secret" "redis_url" {
   provider                = aws.core_services
   name                    = "REDIS_URL"
