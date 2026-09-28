@@ -238,6 +238,20 @@ resource "aws_cloudwatch_log_metric_filter" "malware-scan-timeout" {
   }
 }
 
+resource "aws_cloudwatch_log_metric_filter" "document-upload-rejected" {
+  provider       = aws.core_services
+  count          = var.cloudwatch_enabled ? 1 : 0
+  name           = "document-upload-rejected"
+  pattern        = jsonencode("Rejecting upload")
+  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
+
+  metric_transformation {
+    name      = "document-upload-rejected"
+    namespace = "LogMetrics"
+    value     = "1"
+  }
+}
+
 moved {
   from = aws_cloudwatch_log_metric_filter.scanfiles-timeout
   to   = aws_cloudwatch_log_metric_filter.malware-scan-timeout

@@ -775,6 +775,22 @@ resource "aws_cloudwatch_metric_alarm" "logs-1-malware-scan-timeout-1-minute-war
   alarm_actions       = [var.sns_alert_warning_arn]
 }
 
+resource "aws_cloudwatch_metric_alarm" "logs-1-document-upload-rejected-10-minute-warning" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  alarm_name          = "logs-1-document-upload-rejected-10-minute-warning"
+  alarm_description   = "One document upload rejected in 10 minutes"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = aws_cloudwatch_log_metric_filter.document-upload-rejected[0].metric_transformation[0].name
+  namespace           = aws_cloudwatch_log_metric_filter.document-upload-rejected[0].metric_transformation[0].namespace
+  period              = 600
+  statistic           = "Sum"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [var.sns_alert_warning_arn]
+}
+
 moved {
   from = aws_cloudwatch_metric_alarm.logs-1-scanfiles-timeout-1-minute-warning
   to   = aws_cloudwatch_metric_alarm.logs-1-malware-scan-timeout-1-minute-warning
