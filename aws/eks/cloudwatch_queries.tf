@@ -784,9 +784,9 @@ resource "aws_cloudwatch_query_definition" "document-upload-rejections" {
   ]
 
   query_string = <<QUERY
-fields @timestamp, service_id, @message, kubernetes.pod_name as pod_name, @logStream
+  fields @timestamp, log, kubernetes.pod_name as pod_name, @logStream
 | filter kubernetes.container_name like /^${local.document_download_name}/
-| filter @message like /Rejecting upload/
+| filter log like /Rejecting upload/
 | sort @timestamp desc
 | limit 100
 QUERY
@@ -802,10 +802,10 @@ resource "aws_cloudwatch_query_definition" "document-file-sending-stats" {
   ]
 
   query_string = <<QUERY
-fields @timestamp, log, kubernetes.container_name, kubernetes.pod_name, @logStream
+  fields @timestamp, log, kubernetes.container_name, kubernetes.pod_name, @logStream
 | filter kubernetes.container_name like /^${local.api_name}/
-| filter @message like /File upload accepted/
-| parse @message "File upload accepted: service_id=* template_id=* filename=* file_extension=* mime_type=* sending_method=* [" as @svcid, @tmplid, @filename, @extension, @mime, @sending_method
+| filter log like /File upload accepted/
+| parse log "File upload accepted: service_id=* template_id=* filename=* file_extension=* mime_type=* sending_method=* [" as @svcid, @tmplid, @filename, @extension, @mime, @sending_method
 | stats count(*) as upload_count by @extension, @mime
 | sort upload_count desc
 QUERY
