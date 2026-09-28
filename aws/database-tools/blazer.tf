@@ -68,7 +68,7 @@ resource "aws_ecs_task_definition" "blazer" {
         "value" : "${var.region}"
         }, {
         "name" : "BLAZER_SLACK_SNS_TOPIC_ARN",
-        "value" : "${aws_sns_topic.blazer_check_alerts.arn}"
+        "value" : "${var.sns_alert_general_arn}"
       }],
       "secrets" : [{
         "name" : "BLAZER_DATABASE_URL",

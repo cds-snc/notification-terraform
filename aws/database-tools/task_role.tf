@@ -74,7 +74,20 @@ data "aws_iam_policy_document" "blazer_task_role_actions" {
       "sns:Publish"
     ]
     resources = [
-      aws_sns_topic.blazer_check_alerts.arn
+      var.sns_alert_general_arn
+    ]
+  }
+
+  # the alert-general topic is KMS-encrypted, so publishing needs the data key
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey*"
+    ]
+    resources = [
+      var.kms_arn
     ]
   }
 }
