@@ -379,7 +379,7 @@ resource "aws_secretsmanager_secret" "redis_publish_url" {
 resource "aws_secretsmanager_secret_version" "redis_publish_url_version" {
   provider      = aws.core_services
   secret_id     = aws_secretsmanager_secret.redis_publish_url.id
-  secret_string = var.env != "production" ? "redis://${var.elasticache_queue_cache_primary_endpoint_address}" : "redis://${var.redis_primary_endpoint_address}"
+  secret_string = "redis://${var.elasticache_queue_cache_primary_endpoint_address}"
 }
 
 resource "aws_secretsmanager_secret" "redis_url" {
