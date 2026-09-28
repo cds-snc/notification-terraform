@@ -62,9 +62,32 @@ data "aws_iam_policy_document" "blazer_task_role_actions" {
       aws_ssm_parameter.sqlalchemy_database_reader_uri.arn,
       aws_ssm_parameter.db_tools_environment_variables.arn,
       aws_ssm_parameter.blazer_checks_database_url.arn,
-      aws_ssm_parameter.blazer_slack_webhook_general_topic.arn,
       aws_ssm_parameter.notify_o11y_google_oauth_client_id.arn,
       aws_ssm_parameter.notify_o11y_google_oauth_client_secret.arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sns:Publish"
+    ]
+    resources = [
+      var.sns_alert_general_arn
+    ]
+  }
+
+  # the alert-general topic is KMS-encrypted, so publishing needs the data key
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "kms:Decrypt",
+      "kms:GenerateDataKey*"
+    ]
+    resources = [
+      var.kms_arn
     ]
   }
 }

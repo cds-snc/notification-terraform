@@ -28,3 +28,13 @@ variable "sns_alert_warning_arn" {
   description = "value of the sns alert warning arn"
   type        = string
 }
+
+variable "sns_alert_general_arn" {
+  description = "ARN of the shared alert-general SNS topic, which already has a confirmed SRE Bot subscription"
+  type        = string
+}
+
+variable "kms_arn" {
+  description = "ARN of the shared notification-canada-ca KMS key"
+  type        = string
+}

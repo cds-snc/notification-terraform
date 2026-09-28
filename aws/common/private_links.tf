@@ -1,10 +1,10 @@
 
-# TODO: add these later - "lambda", "elasticache", "elasticache-fips", "email-smtp", "sns", "sqs",
+# TODO: add these later - "lambda", "elasticache", "elasticache-fips", "email-smtp", "sqs",
 locals {
   endpoints_interface = toset([
     "autoscaling", "ec2", "ec2messages", "ecr.api",
     "ecr.dkr", "ecs", "elasticloadbalancing", "logs",
-    "monitoring", "rds", "ssm", "ssmmessages", "sts"
+    "monitoring", "rds", "sns", "ssm", "ssmmessages", "sts"
   ])
   endpoints_gateway = toset(["s3"])
 }
