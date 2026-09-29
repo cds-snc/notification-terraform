@@ -1,10 +1,11 @@
 data "github_repository_file" "manifests_env" {
   repository = "notification-manifests"
   branch     = "main"
-  file       = "helmfile/overrides/${var.env}.env"
+  file       = "helmfile/overrides/${local.manifest_env}.env"
 }
 
 locals {
+  manifest_env        = var.env == "sandbox" ? "staging" : var.env
   image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["BLAZER_DOCKER_TAG"]
   ecr_repository_name = aws_ecr_repository.blazer.name
 }

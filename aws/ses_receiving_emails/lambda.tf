@@ -1,10 +1,11 @@
 data "github_repository_file" "manifests_env" {
   repository = "notification-manifests"
   branch     = "main"
-  file       = "helmfile/overrides/${var.env}.env"
+  file       = "helmfile/overrides/${local.manifest_env}.env"
 }
 
 locals {
+  manifest_env        = var.env == "sandbox" ? "staging" : var.env
   image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["SES_RECEIVING_EMAILS_DOCKER_TAG"]
   ecr_repository_name = join("/", slice(split("/", var.ses_receiving_emails_ecr_repository_url), 1, length(split("/", var.ses_receiving_emails_ecr_repository_url))))
 }
