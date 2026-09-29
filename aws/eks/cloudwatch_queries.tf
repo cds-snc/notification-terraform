@@ -773,3 +773,40 @@ filter @message like "International text sent"
 | sort international_sms_count desc
 QUERY
 }
+
+resource "aws_cloudwatch_query_definition" "document-upload-rejections" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Document Download / Rejected uploads"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+  fields @timestamp, log, kubernetes.pod_name as pod_name, @logStream
+| filter kubernetes.container_name like /^${local.document_download_name}/
+| filter log like /Rejecting upload/
+| sort @timestamp desc
+| limit 100
+QUERY
+}
+
+resource "aws_cloudwatch_query_definition" "document-file-sending-stats" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+  name     = "Document Download / File sending stats"
+
+  log_group_names = [
+    local.eks_application_log_group
+  ]
+
+  query_string = <<QUERY
+  fields @timestamp, log, kubernetes.container_name, kubernetes.pod_name, @logStream
+| filter kubernetes.container_name like /^${local.api_name}/
+| filter log like /File upload accepted/
+| parse log "File upload accepted: service_id=* template_id=* filename=* file_extension=* mime_type=* sending_method=* [" as @svcid, @tmplid, @filename, @extension, @mime, @sending_method
+| stats count(*) as upload_count by @extension, @mime
+| sort upload_count desc
+QUERY
+}
