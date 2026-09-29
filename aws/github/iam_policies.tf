@@ -593,11 +593,6 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_diff" {
       "sts:GetServiceBearerToken"
     ]
     resources = ["*"]
-    condition {
-      test     = "StringEquals"
-      variable = "sts:AWSServiceName"
-      values   = ["ecr-public.amazonaws.com"]
-    }
   }
 }
 
@@ -700,11 +695,6 @@ data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
       "sts:GetServiceBearerToken"
     ]
     resources = ["*"]
-    condition {
-      test     = "StringEquals"
-      variable = "sts:AWSServiceName"
-      values   = ["ecr-public.amazonaws.com"]
-    }
   }
 }
 
