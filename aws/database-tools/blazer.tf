@@ -1,15 +1,19 @@
 locals {
-  image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["BLAZER_DOCKER_TAG"]
+  use_manifest_image  = var.env != "sandbox" && !var.bootstrap
+  image_tag           = local.use_manifest_image ? yamldecode(data.github_repository_file.manifests_env[0].content)["BLAZER_DOCKER_TAG"] : null
+  ecr_image_available = local.use_manifest_image
   ecr_repository_name = aws_ecr_repository.blazer.name
 }
 
 data "github_repository_file" "manifests_env" {
+  count      = local.use_manifest_image ? 1 : 0
   repository = "notification-manifests"
   branch     = "main"
   file       = "helmfile/overrides/${var.env}.env"
 }
 
 data "aws_ecr_image" "blazer" {
+  count           = local.ecr_image_available ? 1 : 0
   repository_name = local.ecr_repository_name
   image_tag       = local.image_tag
 }
@@ -53,7 +57,7 @@ resource "aws_ecs_task_definition" "blazer" {
       "name" : "blazer",
       "cpu" : 0,
       "essential" : true,
-      "image" : data.aws_ecr_image.blazer.image_uri,
+      "image" : local.ecr_image_available ? data.aws_ecr_image.blazer[0].image_uri : "${aws_ecr_repository.blazer.repository_url}:${var.bootstrap ? "bootstrap" : "latest"}",
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {

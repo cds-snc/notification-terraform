@@ -1,15 +1,19 @@
 data "github_repository_file" "manifests_env" {
+  count      = local.use_manifest_image ? 1 : 0
   repository = "notification-manifests"
   branch     = "main"
   file       = "helmfile/overrides/${var.env}.env"
 }
 
 locals {
-  image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["HEARTBEAT_DOCKER_TAG"]
+  use_manifest_image  = var.env != "sandbox" && !var.bootstrap
+  image_tag           = local.use_manifest_image ? yamldecode(data.github_repository_file.manifests_env[0].content)["HEARTBEAT_DOCKER_TAG"] : null
   ecr_repository_name = join("/", slice(split("/", var.heartbeat_ecr_repository_url), 1, length(split("/", var.heartbeat_ecr_repository_url))))
+  ecr_image_available = local.use_manifest_image && var.heartbeat_ecr_repository_url != "" && !startswith(var.heartbeat_ecr_repository_url, "123456789012.")
 }
 
 data "aws_ecr_image" "heartbeat" {
+  count           = local.ecr_image_available ? 1 : 0
   repository_name = local.ecr_repository_name
   image_tag       = local.image_tag
 }
@@ -20,7 +24,7 @@ module "heartbeat" {
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
-  image_uri              = data.aws_ecr_image.heartbeat.image_uri
+  image_uri              = local.ecr_image_available ? data.aws_ecr_image.heartbeat[0].image_uri : "${var.heartbeat_ecr_repository_url}:${var.bootstrap ? "bootstrap" : "latest"}"
   timeout                = 60
   memory                 = 1024
   alias_name             = "latest"

@@ -1,15 +1,19 @@
 data "github_repository_file" "manifests_env" {
+  count      = local.use_manifest_image ? 1 : 0
   repository = "notification-manifests"
   branch     = "main"
   file       = "helmfile/overrides/${var.env}.env"
 }
 
 locals {
-  image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["SYSTEM_STATUS_DOCKER_TAG"]
+  use_manifest_image  = var.env != "sandbox" && !var.bootstrap
+  image_tag           = local.use_manifest_image ? yamldecode(data.github_repository_file.manifests_env[0].content)["SYSTEM_STATUS_DOCKER_TAG"] : null
   ecr_repository_name = join("/", slice(split("/", var.system_status_ecr_repository_url), 1, length(split("/", var.system_status_ecr_repository_url))))
+  ecr_image_available = local.use_manifest_image && var.system_status_ecr_repository_url != "" && !startswith(var.system_status_ecr_repository_url, "123456789012.")
 }
 
 data "aws_ecr_image" "system_status" {
+  count           = local.ecr_image_available ? 1 : 0
   repository_name = local.ecr_repository_name
   image_tag       = local.image_tag
 }
@@ -20,7 +24,7 @@ module "system_status" {
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
   enable_lambda_insights = true
-  image_uri              = data.aws_ecr_image.system_status.image_uri
+  image_uri              = local.ecr_image_available ? data.aws_ecr_image.system_status[0].image_uri : "${var.system_status_ecr_repository_url}:${var.bootstrap ? "bootstrap" : "latest"}"
   timeout                = 60
   memory                 = 1024
   policies               = [data.aws_iam_policy_document.system_status_s3_permissions.json]
