@@ -1,11 +1,5 @@
 locals {
-  manifest_env_tag_matches = [
-    for line in split("\n", data.github_repository_file.manifests_env.content) :
-    regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line)
-    if can(regex("^([A-Z0-9_]+_DOCKER_TAG):[[:space:]]*\"([^\"]+)\"", line))
-  ]
-  manifest_image_tags = { for match in local.manifest_env_tag_matches : match[0] => match[1] }
-  image_tag           = local.manifest_image_tags["BLAZER_DOCKER_TAG"]
+  image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["BLAZER_DOCKER_TAG"]
   ecr_repository_name = aws_ecr_repository.blazer.name
 }
 
