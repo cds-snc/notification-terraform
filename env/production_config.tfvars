@@ -44,18 +44,18 @@ notify_k8s_namespace            = "notification-canada-ca"
 # New Relic Lambda API configuration
 
 # ENVIRONMENT
-create_cbs_bucket           = false
-force_destroy_s3            = false
-force_delete_ecr            = false
-force_destroy_athena        = false
-bootstrap                   = false
-enable_sentinel_forwarding  = true
-enable_delete_protection    = true
-enable_guardduty_malware_s3 = true
-cloudwatch_enabled          = true
+create_cbs_bucket             = false
+force_destroy_s3              = false
+force_delete_ecr              = false
+force_destroy_athena          = false
+bootstrap                     = false
+enable_sentinel_forwarding    = true
+enable_delete_protection      = true
+enable_guardduty_malware_s3   = true
+cloudwatch_enabled            = true
 enable_cloudwatch_fire_drills = true
-recovery                    = false
-aws_xray_sdk_enabled        = true
+recovery                      = false
+aws_xray_sdk_enabled          = true
 
 ## DNS
 alt_domain                 = "notification.alpha.canada.ca"
@@ -76,9 +76,9 @@ elasticache_cache_ops_node_count = 3
 elasticache_cache_ops_node_type  = "cache.t3.medium"
 
 elasticache_admin_cache_node_count = 3
-elasticache_admin_cache_node_type = "cache.t3.medium"
+elasticache_admin_cache_node_type  = "cache.t3.medium"
 
-elasticache_use_valkey                 = true
+elasticache_use_valkey = true
 
 ## SLACK INTEGRATION
 slack_channel_warning_topic  = "notification-ops"
@@ -90,8 +90,8 @@ athena_workgroup_name    = "primary"
 aws_config_recorder_name = "aws-controltower-BaselineConfigRecorder"
 
 ## HEARTBEAT
-heartbeat_sms_number = "+16135550123"
-heartbeat_schedule_expression  = "rate(1 minute)"
+heartbeat_sms_number          = "+16135550123"
+heartbeat_schedule_expression = "rate(1 minute)"
 
 ## LAMBDA GOOGLE CIDR
 google_cidr_schedule_expression = "rate(1 day)"
@@ -129,10 +129,10 @@ perf_test_sms_template_id_one_var   = "changeme"
 perf_test_email_template_id_one_var = "changeme"
 
 ## SYSTEM STATUS
-system_status_api_url                   = "https://api.notification.canada.ca"
-system_status_bucket_name               = "notification-canada-ca-production-system-status"
-system_status_admin_url                 = "https://notification.canada.ca"
-system_status_schedule_expression       = "rate(5 minutes)"
+system_status_api_url             = "https://api.notification.canada.ca"
+system_status_bucket_name         = "notification-canada-ca-production-system-status"
+system_status_admin_url           = "https://notification.canada.ca"
+system_status_schedule_expression = "rate(5 minutes)"
 
 ## COMMON
 sns_monthly_spend_limit                                            = 30000
