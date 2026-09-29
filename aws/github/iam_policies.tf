@@ -577,6 +577,28 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_diff" {
       "arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"
     ]
   }
+
+  # Authenticated public.ecr.aws pulls avoid the shared anonymous rate limit on GitHub runners
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr-public:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:GetServiceBearerToken"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "sts:AWSServiceName"
+      values   = ["ecr-public.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_policy" "notification_manifests_staging_smoke_test" {
@@ -661,6 +683,28 @@ data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
     resources = [
       "arn:aws:ec2:${var.region}:${var.account_id}:client-vpn-endpoint/*"
     ]
+  }
+
+  # Authenticated public.ecr.aws pulls avoid the shared anonymous rate limit on GitHub runners
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr-public:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:GetServiceBearerToken"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringEquals"
+      variable = "sts:AWSServiceName"
+      values   = ["ecr-public.amazonaws.com"]
+    }
   }
 }
 
