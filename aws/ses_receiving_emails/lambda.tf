@@ -1,3 +1,20 @@
+data "github_repository_file" "manifests_env" {
+  repository = "notification-manifests"
+  branch     = "main"
+  file       = "helmfile/overrides/${var.env}.env"
+}
+
+locals {
+  image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["SES_RECEIVING_EMAILS_DOCKER_TAG"]
+  ecr_repository_name = join("/", slice(split("/", var.ses_receiving_emails_ecr_repository_url), 1, length(split("/", var.ses_receiving_emails_ecr_repository_url))))
+}
+
+data "aws_ecr_image" "ses_receiving_emails" {
+  provider        = aws.core_services_us_east_1
+  repository_name = local.ecr_repository_name
+  image_tag       = local.image_tag
+}
+
 module "ses_receiving_emails" {
 
   providers = {
@@ -9,7 +26,7 @@ module "ses_receiving_emails" {
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_receiving_emails_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.ses_receiving_emails_ecr_repository_url}:${var.ses_receiving_emails_docker_tag}"
+  image_uri                  = data.aws_ecr_image.ses_receiving_emails.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days

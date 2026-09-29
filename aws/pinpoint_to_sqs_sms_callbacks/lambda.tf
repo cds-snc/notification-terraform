@@ -1,10 +1,33 @@
+data "github_repository_file" "manifests_env" {
+  repository = "notification-manifests"
+  branch     = "main"
+  file       = "helmfile/overrides/${var.env}.env"
+}
+
+locals {
+  image_tag                 = yamldecode(data.github_repository_file.manifests_env.content)["PINPOINT_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"]
+  ecr_repository_name       = join("/", slice(split("/", var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url), 1, length(split("/", var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url))))
+  us_west_2_repository_name = join("/", slice(split("/", var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url), 1, length(split("/", var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url))))
+}
+
+data "aws_ecr_image" "pinpoint_to_sqs_sms_callbacks" {
+  repository_name = local.ecr_repository_name
+  image_tag       = local.image_tag
+}
+
+data "aws_ecr_image" "pinpoint_to_sqs_sms_callbacks_us_west_2" {
+  provider        = aws.core_services_us_west_2
+  repository_name = local.us_west_2_repository_name
+  image_tag       = local.image_tag
+}
+
 module "pinpoint_to_sqs_sms_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "pinpoint_to_sqs_sms_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = data.aws_ecr_image.pinpoint_to_sqs_sms_callbacks.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
@@ -71,7 +94,7 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = data.aws_ecr_image.pinpoint_to_sqs_sms_callbacks_us_west_2.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days

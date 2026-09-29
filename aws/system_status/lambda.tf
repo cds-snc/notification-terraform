@@ -1,5 +1,17 @@
+data "github_repository_file" "manifests_env" {
+  repository = "notification-manifests"
+  branch     = "main"
+  file       = "helmfile/overrides/${var.env}.env"
+}
+
 locals {
-  image_tag = var.env == "production" ? var.system_status_docker_tag : (var.bootstrap == true ? "bootstrap" : "latest")
+  image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["SYSTEM_STATUS_DOCKER_TAG"]
+  ecr_repository_name = join("/", slice(split("/", var.system_status_ecr_repository_url), 1, length(split("/", var.system_status_ecr_repository_url))))
+}
+
+data "aws_ecr_image" "system_status" {
+  repository_name = local.ecr_repository_name
+  image_tag       = local.image_tag
 }
 
 module "system_status" {
@@ -8,7 +20,7 @@ module "system_status" {
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.system_status_ecr_repository_url}:${local.image_tag}"
+  image_uri              = data.aws_ecr_image.system_status.image_uri
   timeout                = 60
   memory                 = 1024
   policies               = [data.aws_iam_policy_document.system_status_s3_permissions.json]

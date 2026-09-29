@@ -1,10 +1,26 @@
+data "github_repository_file" "manifests_env" {
+  repository = "notification-manifests"
+  branch     = "main"
+  file       = "helmfile/overrides/${var.env}.env"
+}
+
+locals {
+  image_tag           = yamldecode(data.github_repository_file.manifests_env.content)["GOOGLE_CIDR_DOCKER_TAG"]
+  ecr_repository_name = join("/", slice(split("/", var.google_cidr_ecr_repository_url), 1, length(split("/", var.google_cidr_ecr_repository_url))))
+}
+
+data "aws_ecr_image" "google_cidr" {
+  repository_name = local.ecr_repository_name
+  image_tag       = local.image_tag
+}
+
 module "lambda-google-cidr" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                   = "google-cidr"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.google_cidr_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.google_cidr_ecr_repository_url}:${var.google_cidr_docker_tag}"
+  image_uri              = data.aws_ecr_image.google_cidr.image_uri
   timeout                = 60
   memory                 = 1024
 
