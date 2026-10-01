@@ -171,7 +171,6 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
     actions = [
       "ecs:DescribeServices",
       "ecs:DescribeTaskDefinition",
-      "ecs:RegisterTaskDefinition",
       "ecs:UpdateService"
     ]
     resources = [
@@ -179,6 +178,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
       "arn:aws:ecs:${var.region}:${var.account_id}:service/blazer/blazer",
       "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"
     ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:RegisterTaskDefinition"]
+    resources = ["*"]
   }
 
   statement {
