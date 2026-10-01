@@ -65,6 +65,50 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
     actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
     resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
   }
+
+  statement {
+    effect  = "Allow"
+    actions = ["ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:UpdateService"]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:cluster/blazer",
+      "arn:aws:ecs:${var.region}:${var.account_id}:service/blazer/blazer",
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:RegisterTaskDefinition"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:TagResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:ListTagsForResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["iam:PassRole"]
+    resources = [
+      "arn:aws:iam::${var.account_id}:role/blazer_execution_role",
+      "arn:aws:iam::${var.account_id}:role/blazer-ecs-task"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+
 }
 
 #
@@ -128,6 +172,53 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
     effect    = "Allow"
     actions   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem", "dynamodb:UpdateItem"]
     resources = ["arn:aws:dynamodb:${var.region}:${var.account_id}:table/terraform-state-lock-dynamo"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecs:DescribeServices",
+      "ecs:DescribeTaskDefinition",
+      "ecs:UpdateService"
+    ]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:cluster/blazer",
+      "arn:aws:ecs:${var.region}:${var.account_id}:service/blazer/blazer",
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"
+    ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:RegisterTaskDefinition"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:TagResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:ListTagsForResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["iam:PassRole"]
+    resources = [
+      "arn:aws:iam::${var.account_id}:role/blazer_execution_role",
+      "arn:aws:iam::${var.account_id}:role/blazer-ecs-task"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
   }
 }
 
