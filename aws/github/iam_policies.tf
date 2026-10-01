@@ -743,7 +743,11 @@ data "aws_iam_policy_document" "notification_manifests_k8s_lambda_apply" {
       "lambda:UpdateAlias"
     ]
     resources = [
-      "arn:aws:lambda:${var.region}:${var.account_id}:function:*"
+      "arn:aws:lambda:${var.region}:${var.account_id}:function:*",
+      "arn:aws:lambda:us-east-1:${var.account_id}:function:ses_receiving_emails",
+      "arn:aws:lambda:us-east-1:${var.account_id}:function:ses_receiving_emails:*",
+      "arn:aws:lambda:us-west-2:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks_us_west_2",
+      "arn:aws:lambda:us-west-2:${var.account_id}:function:pinpoint_to_sqs_sms_callbacks_us_west_2:*"
     ]
   }
 
