@@ -89,6 +89,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
   }
 
   statement {
+    effect    = "Allow"
+    actions   = ["ecs:ListTagsForResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
+  }
+
+  statement {
     effect  = "Allow"
     actions = ["iam:PassRole"]
     resources = [
@@ -191,6 +197,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
   statement {
     effect    = "Allow"
     actions   = ["ecs:TagResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:ListTagsForResource"]
     resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
   }
 
