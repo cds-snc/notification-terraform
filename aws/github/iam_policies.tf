@@ -67,12 +67,8 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
   }
 
   statement {
-    effect = "Allow"
-    actions = [
-      "ecs:DescribeServices",
-      "ecs:DescribeTaskDefinition",
-      "ecs:UpdateService"
-    ]
+    effect  = "Allow"
+    actions = ["ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:UpdateService"]
     resources = [
       "arn:aws:ecs:${var.region}:${var.account_id}:cluster/blazer",
       "arn:aws:ecs:${var.region}:${var.account_id}:service/blazer/blazer",
@@ -84,6 +80,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
     effect    = "Allow"
     actions   = ["ecs:RegisterTaskDefinition"]
     resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:TagResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
   }
 
   statement {
@@ -184,6 +186,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
     effect    = "Allow"
     actions   = ["ecs:RegisterTaskDefinition"]
     resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:TagResource"]
+    resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
   }
 
   statement {
