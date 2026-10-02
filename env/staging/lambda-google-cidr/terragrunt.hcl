@@ -22,8 +22,8 @@ dependency "ecr" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    google_cidr_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/google-cidr"
-    google_cidr_ecr_arn           = "arn:aws:ecr:ca-central-1:123456789012:repository/google-cidr"
+    google_cidr_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/lambda/google-cidr"
+    google_cidr_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/lambda/google-cidr"
   }
 }
 
@@ -35,7 +35,7 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan", "init", "fmt", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    google_cidr_prefix_list_id      = ""
+    google_cidr_prefix_list_id = ""
   }
 }
 
@@ -44,7 +44,7 @@ include {
 }
 
 inputs = {
-  google_cidr_prefix_list_id         = dependency.eks.outputs.google_cidr_prefix_list_id
-  google_cidr_ecr_repository_url     = dependency.ecr.outputs.google_cidr_ecr_repository_url
-  google_cidr_ecr_arn                = dependency.ecr.outputs.google_cidr_ecr_arn
+  google_cidr_prefix_list_id     = dependency.eks.outputs.google_cidr_prefix_list_id
+  google_cidr_ecr_repository_url = dependency.ecr.outputs.google_cidr_ecr_repository_url
+  google_cidr_ecr_arn            = dependency.ecr.outputs.google_cidr_ecr_arn
 }
