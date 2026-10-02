@@ -2,15 +2,7 @@ variable "environment" {
   type = string
 }
 
-variable "account_id" {
-  type = string
-}
-
-variable "region" {
-  type = string
-}
-
-variable "repository_name" {
+variable "repository_url" {
   type = string
 }
 
@@ -21,9 +13,4 @@ variable "tag_key" {
 variable "manifest_ref" {
   type    = string
   default = "main"
-}
-
-variable "verify_ecr_image" {
-  type    = bool
-  default = true
 }

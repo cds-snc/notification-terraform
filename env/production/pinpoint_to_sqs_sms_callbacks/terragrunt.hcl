@@ -38,8 +38,8 @@ dependency "ecr" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/notify/pinpoint_to_sqs_sms_callbacks"
-    pinpoint_to_sqs_sms_callbacks_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/notify/pinpoint_to_sqs_sms_callbacks"
+    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = ""
+    pinpoint_to_sqs_sms_callbacks_ecr_arn            = ""
   }
 }
 
@@ -48,8 +48,8 @@ dependency "ecr_us_west_2" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = "123456789012.dkr.ecr.us-west-2.amazonaws.com/notify/pinpoint_to_sqs_sms_callbacks"
-    pinpoint_to_sqs_sms_callbacks_ecr_arn            = "arn:aws:ecr:us-west-2:123456789012:repository/notify/pinpoint_to_sqs_sms_callbacks"
+    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = ""
+    pinpoint_to_sqs_sms_callbacks_ecr_arn            = ""
   }
 }
 

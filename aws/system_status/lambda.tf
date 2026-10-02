@@ -1,12 +1,9 @@
 module "system_status_image" {
-  source           = "../modules/manifest_ecr_image"
-  environment      = var.env
-  account_id       = var.account_id
-  region           = var.region
-  repository_name  = "notify/system_status"
-  tag_key          = "SYSTEM_STATUS_DOCKER_TAG"
-  manifest_ref     = var.manifest_ref
-  verify_ecr_image = var.verify_manifest_image
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.system_status_ecr_repository_url
+  tag_key        = "SYSTEM_STATUS_DOCKER_TAG"
+  manifest_ref   = var.manifest_ref
 }
 
 module "system_status" {

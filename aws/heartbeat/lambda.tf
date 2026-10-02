@@ -1,12 +1,9 @@
 module "heartbeat_image" {
-  source           = "../modules/manifest_ecr_image"
-  environment      = var.env
-  account_id       = var.account_id
-  region           = var.region
-  repository_name  = "notify/heartbeat"
-  tag_key          = "HEARTBEAT_DOCKER_TAG"
-  manifest_ref     = var.manifest_ref
-  verify_ecr_image = var.verify_manifest_image
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.heartbeat_ecr_repository_url
+  tag_key        = "HEARTBEAT_DOCKER_TAG"
+  manifest_ref   = var.manifest_ref
 }
 
 module "heartbeat" {

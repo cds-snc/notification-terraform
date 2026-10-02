@@ -27,8 +27,8 @@ dependency "ecr-us-east" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    ses_receiving_emails_ecr_repository_url = "123456789012.dkr.ecr.us-east-1.amazonaws.com/notify/ses_receiving_emails"
-    ses_receiving_emails_ecr_arn = "arn:aws:ecr:us-east-1:123456789012:repository/notify/ses_receiving_emails"
+    ses_receiving_emails_ecr_repository_url = ""
+    ses_receiving_emails_ecr_arn = ""
   }
 }
 

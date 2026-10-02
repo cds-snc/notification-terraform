@@ -12,7 +12,6 @@ inputs = merge(
     }
     cbs_satellite_bucket_name = local.config_inputs.env != "dev" ? "cbs-satellite-${local.secret_inputs.account_id}" : "cbs-satellite-notification-dev"
     manifest_ref              = get_env("MANIFESTS_REF", "main")
-    verify_manifest_image     = get_env("VERIFY_MANIFEST_IMAGE", "true") == "true"
   }
 )
 

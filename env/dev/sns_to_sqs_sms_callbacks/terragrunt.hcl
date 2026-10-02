@@ -12,8 +12,8 @@ dependency "ecr" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    sns_to_sqs_sms_callbacks_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/notify/sns_to_sqs_sms_callbacks"
-    sns_to_sqs_sms_callbacks_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/notify/sns_to_sqs_sms_callbacks"
+    sns_to_sqs_sms_callbacks_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/sns-to-sqs-sms-callbacks"
+    sns_to_sqs_sms_callbacks_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/sns-to-sqs-sms-callbacks"
   }
 }
 
