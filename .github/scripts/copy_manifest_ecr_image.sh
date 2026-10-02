@@ -17,14 +17,6 @@ fi
 source="${source_account}.dkr.ecr.${region}.amazonaws.com/${repository}:${tag}"
 target="${target_account}.dkr.ecr.${region}.amazonaws.com/${repository}:${tag}"
 
-if aws ecr describe-images \
-  --region "$region" \
-  --repository-name "$repository" \
-  --image-ids "imageTag=$tag" >/dev/null 2>&1; then
-  echo "$repository:$tag already exists in target ECR; skipping copy"
-  exit 0
-fi
-
 docker pull --platform linux/amd64 "$source"
 docker tag "$source" "$target"
 docker push "$target"

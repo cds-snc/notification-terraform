@@ -1,21 +1,7 @@
 locals {
   secret_inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars")))
-  # Environment config is operator-managed; image selectors now come only from manifests.
-  legacy_image_inputs = toset([
-    "bootstrap",
-    "blazer_image_tag",
-    "system_status_docker_tag",
-    "heartbeat_docker_tag",
-    "google_cidr_docker_tag",
-    "sns_to_sqs_sms_callbacks_docker_tag",
-    "ses_to_sqs_callbacks_docker_tag",
-    "ses_receiving_emails_docker_tag",
-    "pinpoint_to_sqs_sms_callbacks_docker_tag"
-  ])
-  config_inputs = {
-    for key, value in jsondecode(read_tfvars_file("../../${get_env("ENVIRONMENT")}_config.tfvars")) :
-    key => value if !contains(local.legacy_image_inputs, key)
-  }
+  # Preserve legacy inputs until production has rolled out the new infrastructure version.
+  config_inputs = jsondecode(read_tfvars_file("../../${get_env("ENVIRONMENT")}_config.tfvars"))
 }
 
 inputs = merge(

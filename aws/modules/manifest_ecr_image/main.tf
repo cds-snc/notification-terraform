@@ -16,6 +16,9 @@ locals {
   repository_uri       = "${var.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.repository_name}"
 }
 
+# This URI seeds Terraform-created functions. The shared Lambda module ignores
+# later image_uri changes; environment deployment workflows own runtime updates.
+
 data "github_repository_file" "environment" {
   repository = "notification-manifests"
   branch     = var.manifest_ref

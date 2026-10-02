@@ -93,6 +93,10 @@ variable "force_destroy_athena" {
   type = bool
 }
 
+variable "bootstrap" {
+  type = bool
+}
+
 variable "manifest_ref" {
   type    = string
   default = "main"
@@ -716,6 +720,40 @@ variable "system_status_bucket_name" {
 }
 
 variable "system_status_admin_url" {
+  type = string
+}
+
+# Compatibility inputs for environments still running the previously released modules.
+variable "blazer_image_tag" {
+  type    = string
+  default = "latest"
+}
+
+variable "system_status_docker_tag" {
+  type = string
+}
+
+variable "heartbeat_docker_tag" {
+  type = string
+}
+
+variable "google_cidr_docker_tag" {
+  type = string
+}
+
+variable "sns_to_sqs_sms_callbacks_docker_tag" {
+  type = string
+}
+
+variable "ses_to_sqs_callbacks_docker_tag" {
+  type = string
+}
+
+variable "ses_receiving_emails_docker_tag" {
+  type = string
+}
+
+variable "pinpoint_to_sqs_sms_callbacks_docker_tag" {
   type = string
 }
 
