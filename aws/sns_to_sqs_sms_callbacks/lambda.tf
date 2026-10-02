@@ -1,8 +1,12 @@
 module "sns_to_sqs_sms_callbacks_image" {
-  source         = "../modules/manifest_ecr_image"
-  environment    = var.env
-  repository_url = var.sns_to_sqs_sms_callbacks_ecr_repository_url
-  tag_key        = "SNS_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+  source           = "../modules/manifest_ecr_image"
+  environment      = var.env
+  account_id       = var.account_id
+  region           = var.region
+  repository_name  = "notify/sns_to_sqs_sms_callbacks"
+  tag_key          = "SNS_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+  manifest_ref     = var.manifest_ref
+  verify_ecr_image = var.verify_manifest_image
 }
 
 module "sns_to_sqs_sms_callbacks" {

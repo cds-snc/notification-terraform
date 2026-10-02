@@ -93,6 +93,16 @@ variable "force_destroy_athena" {
   type = bool
 }
 
+variable "manifest_ref" {
+  type    = string
+  default = "main"
+}
+
+variable "verify_manifest_image" {
+  type    = bool
+  default = true
+}
+
 variable "enable_sentinel_forwarding" {
   type = bool
 }

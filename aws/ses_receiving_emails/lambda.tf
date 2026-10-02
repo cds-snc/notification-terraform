@@ -4,9 +4,13 @@ module "ses_receiving_emails_image" {
     aws    = aws.core_services_us_east_1
     github = github
   }
-  environment    = var.env
-  repository_url = var.ses_receiving_emails_ecr_repository_url
-  tag_key        = "SES_RECEIVING_EMAILS_DOCKER_TAG"
+  environment      = var.env
+  account_id       = var.account_id
+  region           = "us-east-1"
+  repository_name  = "notify/ses_receiving_emails"
+  tag_key          = "SES_RECEIVING_EMAILS_DOCKER_TAG"
+  manifest_ref     = var.manifest_ref
+  verify_ecr_image = var.verify_manifest_image
 }
 
 module "ses_receiving_emails" {

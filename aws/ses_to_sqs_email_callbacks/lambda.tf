@@ -1,8 +1,12 @@
 module "ses_to_sqs_email_callbacks_image" {
-  source         = "../modules/manifest_ecr_image"
-  environment    = var.env
-  repository_url = var.ses_to_sqs_email_callbacks_ecr_repository_url
-  tag_key        = "SES_TO_SQS_EMAIL_CALLBACKS_DOCKER_TAG"
+  source           = "../modules/manifest_ecr_image"
+  environment      = var.env
+  account_id       = var.account_id
+  region           = var.region
+  repository_name  = "notify/ses_to_sqs_email_callbacks"
+  tag_key          = "SES_TO_SQS_EMAIL_CALLBACKS_DOCKER_TAG"
+  manifest_ref     = var.manifest_ref
+  verify_ecr_image = var.verify_manifest_image
 }
 
 module "ses_to_sqs_email_callbacks" {

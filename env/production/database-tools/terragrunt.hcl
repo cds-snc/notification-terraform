@@ -44,8 +44,8 @@ dependency "ecr" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    heartbeat_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/heartbeat"
-    heartbeat_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/heartbeat"
+    heartbeat_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/notify/heartbeat"
+    heartbeat_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/notify/heartbeat"
   }
 }
 

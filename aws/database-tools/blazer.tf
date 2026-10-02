@@ -1,8 +1,12 @@
 module "blazer_image" {
-  source         = "../modules/manifest_ecr_image"
-  environment    = var.env
-  repository_url = aws_ecr_repository.blazer.repository_url
-  tag_key        = "BLAZER_DOCKER_TAG"
+  source           = "../modules/manifest_ecr_image"
+  environment      = var.env
+  account_id       = var.account_id
+  region           = var.region
+  repository_name  = "database-tools/blazer"
+  tag_key          = "BLAZER_DOCKER_TAG"
+  manifest_ref     = var.manifest_ref
+  verify_ecr_image = var.verify_manifest_image
 }
 
 resource "aws_ecs_cluster" "blazer" {

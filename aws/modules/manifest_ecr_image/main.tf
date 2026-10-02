@@ -13,17 +13,18 @@ locals {
   manifest_environment = var.environment == "sandbox" ? "staging" : var.environment
   manifest_content     = yamldecode(data.github_repository_file.environment.content)
   image_tag            = try(local.manifest_content[var.tag_key], "")
-  repository_name      = join("/", slice(split("/", var.repository_url), 1, length(split("/", var.repository_url))))
+  repository_uri       = "${var.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.repository_name}"
 }
 
 data "github_repository_file" "environment" {
   repository = "notification-manifests"
-  branch     = "main"
+  branch     = var.manifest_ref
   file       = "helmfile/overrides/${local.manifest_environment}.env"
 }
 
 data "aws_ecr_image" "selected" {
-  repository_name = local.repository_name
+  count           = var.verify_ecr_image ? 1 : 0
+  repository_name = var.repository_name
   image_tag       = local.image_tag
 
   lifecycle {

@@ -1,8 +1,12 @@
 module "pinpoint_to_sqs_sms_callbacks_image" {
-  source         = "../modules/manifest_ecr_image"
-  environment    = var.env
-  repository_url = var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
-  tag_key        = "PINPOINT_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+  source           = "../modules/manifest_ecr_image"
+  environment      = var.env
+  account_id       = var.account_id
+  region           = var.region
+  repository_name  = "notify/pinpoint_to_sqs_sms_callbacks"
+  tag_key          = "PINPOINT_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+  manifest_ref     = var.manifest_ref
+  verify_ecr_image = var.verify_manifest_image
 }
 
 module "pinpoint_to_sqs_sms_callbacks_us_west_2_image" {
@@ -11,9 +15,13 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2_image" {
     aws    = aws.core_services_us_west_2
     github = github
   }
-  environment    = var.env
-  repository_url = var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url
-  tag_key        = "PINPOINT_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+  environment      = var.env
+  account_id       = var.account_id
+  region           = "us-west-2"
+  repository_name  = "notify/pinpoint_to_sqs_sms_callbacks"
+  tag_key          = "PINPOINT_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+  manifest_ref     = var.manifest_ref
+  verify_ecr_image = var.verify_manifest_image
 }
 
 module "pinpoint_to_sqs_sms_callbacks" {

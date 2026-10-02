@@ -1,8 +1,12 @@
 module "google_cidr_image" {
-  source         = "../modules/manifest_ecr_image"
-  environment    = var.env
-  repository_url = var.google_cidr_ecr_repository_url
-  tag_key        = "GOOGLE_CIDR_DOCKER_TAG"
+  source           = "../modules/manifest_ecr_image"
+  environment      = var.env
+  account_id       = var.account_id
+  region           = var.region
+  repository_name  = "lambda/google-cidr"
+  tag_key          = "GOOGLE_CIDR_DOCKER_TAG"
+  manifest_ref     = var.manifest_ref
+  verify_ecr_image = var.verify_manifest_image
 }
 
 module "lambda-google-cidr" {

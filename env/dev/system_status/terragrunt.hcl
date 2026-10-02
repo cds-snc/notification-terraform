@@ -26,8 +26,8 @@ dependency "ecr" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    system_status_ecr_repository_url = ""
-    system_status_ecr_arn = ""
+    system_status_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/notify/system_status"
+    system_status_ecr_arn = "arn:aws:ecr:ca-central-1:123456789012:repository/notify/system_status"
   }
 }
 
