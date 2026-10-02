@@ -1,10 +1,18 @@
+module "google_cidr_image" {
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.google_cidr_ecr_repository_url
+  tag_key        = "GOOGLE_CIDR_DOCKER_TAG"
+  manifest_ref   = var.manifest_ref
+}
+
 module "lambda-google-cidr" {
   source                 = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                   = "google-cidr"
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.google_cidr_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.google_cidr_ecr_repository_url}:${var.google_cidr_docker_tag}"
+  image_uri              = module.google_cidr_image.image_uri
   timeout                = 60
   memory                 = 1024
 

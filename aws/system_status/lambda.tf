@@ -1,5 +1,9 @@
-locals {
-  image_tag = var.env == "production" ? var.system_status_docker_tag : (var.bootstrap == true ? "bootstrap" : "latest")
+module "system_status_image" {
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.system_status_ecr_repository_url
+  tag_key        = "SYSTEM_STATUS_DOCKER_TAG"
+  manifest_ref   = var.manifest_ref
 }
 
 module "system_status" {
@@ -8,7 +12,7 @@ module "system_status" {
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.system_status_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.system_status_ecr_repository_url}:${local.image_tag}"
+  image_uri              = module.system_status_image.image_uri
   timeout                = 60
   memory                 = 1024
   policies               = [data.aws_iam_policy_document.system_status_s3_permissions.json]

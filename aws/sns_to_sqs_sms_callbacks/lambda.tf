@@ -1,10 +1,18 @@
+module "sns_to_sqs_sms_callbacks_image" {
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.sns_to_sqs_sms_callbacks_ecr_repository_url
+  tag_key        = "SNS_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+  manifest_ref   = var.manifest_ref
+}
+
 module "sns_to_sqs_sms_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "sns_to_sqs_sms_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.sns_to_sqs_sms_callbacks_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.sns_to_sqs_sms_callbacks_ecr_repository_url}:${var.sns_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = module.sns_to_sqs_sms_callbacks_image.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
