@@ -2,7 +2,7 @@
 
 skip-check:
   - CKV_AWS_23  # Security group descriptions are not required
-  - CKV_AWS_51  # Staging and production image producers still publish mutable aliases; dev SHA repositories are immutable
+  - CKV_AWS_51  # ECR `latest` image tag is used in Staging
   - CKV_AWS_115 # Lambda function-level concurrent execution limit not required
   - CKV_AWS_116 # Lambda dead-letter queue not required
   - CKV_AWS_117 # Lambda configured within a VPC not required

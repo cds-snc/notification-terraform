@@ -1,6 +1,6 @@
 resource "aws_ecr_repository" "blazer" {
   name                 = "database-tools/blazer"
-  image_tag_mutability = var.env == "dev" ? "IMMUTABLE" : "MUTABLE"
+  image_tag_mutability = "MUTABLE"
   force_delete         = var.force_delete_ecr
 
   image_scanning_configuration {
