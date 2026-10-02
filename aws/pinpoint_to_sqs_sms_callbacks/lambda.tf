@@ -1,10 +1,28 @@
+module "pinpoint_to_sqs_sms_callbacks_image" {
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
+  tag_key        = "PINPOINT_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+}
+
+module "pinpoint_to_sqs_sms_callbacks_us_west_2_image" {
+  source = "../modules/manifest_ecr_image"
+  providers = {
+    aws    = aws.core_services_us_west_2
+    github = github
+  }
+  environment    = var.env
+  repository_url = var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url
+  tag_key        = "PINPOINT_TO_SQS_SMS_CALLBACKS_DOCKER_TAG"
+}
+
 module "pinpoint_to_sqs_sms_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "pinpoint_to_sqs_sms_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = module.pinpoint_to_sqs_sms_callbacks_image.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
@@ -71,7 +89,7 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url}:${var.pinpoint_to_sqs_sms_callbacks_docker_tag}"
+  image_uri                  = module.pinpoint_to_sqs_sms_callbacks_us_west_2_image.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days

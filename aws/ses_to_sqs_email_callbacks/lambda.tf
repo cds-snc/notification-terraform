@@ -1,10 +1,17 @@
+module "ses_to_sqs_email_callbacks_image" {
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.ses_to_sqs_email_callbacks_ecr_repository_url
+  tag_key        = "SES_TO_SQS_EMAIL_CALLBACKS_DOCKER_TAG"
+}
+
 module "ses_to_sqs_email_callbacks" {
   source                     = "github.com/cds-snc/terraform-modules//lambda?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
   name                       = "ses_to_sqs_email_callbacks"
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_to_sqs_email_callbacks_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.ses_to_sqs_email_callbacks_ecr_repository_url}:${var.ses_to_sqs_callbacks_docker_tag}"
+  image_uri                  = module.ses_to_sqs_email_callbacks_image.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
