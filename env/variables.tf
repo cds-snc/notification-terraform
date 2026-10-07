@@ -97,6 +97,11 @@ variable "bootstrap" {
   type = bool
 }
 
+variable "manifest_ref" {
+  type    = string
+  default = "main"
+}
+
 variable "enable_sentinel_forwarding" {
   type = bool
 }
@@ -713,6 +718,7 @@ variable "system_status_admin_url" {
   type = string
 }
 
+# Compatibility inputs for environments still running the previously released modules.
 variable "blazer_image_tag" {
   type    = string
   default = "latest"

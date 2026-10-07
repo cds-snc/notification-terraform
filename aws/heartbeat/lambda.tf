@@ -1,5 +1,9 @@
-locals {
-  image_tag = var.env == "production" ? var.heartbeat_docker_tag : (var.bootstrap == true ? "bootstrap" : "latest")
+module "heartbeat_image" {
+  source         = "../modules/manifest_ecr_image"
+  environment    = var.env
+  repository_url = var.heartbeat_ecr_repository_url
+  tag_key        = "HEARTBEAT_DOCKER_TAG"
+  manifest_ref   = var.manifest_ref
 }
 
 module "heartbeat" {
@@ -8,7 +12,7 @@ module "heartbeat" {
   billing_tag_value      = var.billing_tag_value
   ecr_arn                = var.heartbeat_ecr_arn
   enable_lambda_insights = true
-  image_uri              = "${var.heartbeat_ecr_repository_url}:${local.image_tag}"
+  image_uri              = module.heartbeat_image.image_uri
   timeout                = 60
   memory                 = 1024
   alias_name             = "latest"

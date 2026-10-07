@@ -27,37 +27,28 @@ resource "aws_iam_role_policy" "github_docker_push" {
 {
   "Version": "2012-10-17",
   "Statement": [
-      {
-          "Effect": "Allow",
-          "Action": [
-              "ecr:CompleteLayerUpload",
-              "ecr:GetAuthorizationToken",
-              "ecr:UploadLayerPart",
-              "ecr:InitiateLayerUpload",
-              "ecr:BatchCheckLayerAvailability",
-              "ecr:PutImage",
-              "ecr:BatchGetImage"
-          ],
-          "Resource": "arn:aws:ecr:${var.region}:${var.account_id}:repository/*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ecr:CompleteLayerUpload",
-                "ecr:GetAuthorizationToken",
-                "ecr:UploadLayerPart",
-                "ecr:InitiateLayerUpload",
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:PutImage",
-                "ecr:BatchGetImage"
-            ],
-            "Resource": "arn:aws:ecr:us-west-2:${var.account_id}:repository/*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "ecr:GetAuthorizationToken",
-            "Resource": "*"
-        }
+    {
+      "Effect": "Allow",
+      "Action": "ecr:GetAuthorizationToken",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+      ],
+      "Resource": [
+        "arn:aws:ecr:${var.region}:${var.account_id}:repository/*",
+        "arn:aws:ecr:us-west-2:${var.account_id}:repository/*",
+        "arn:aws:ecr:us-east-1:${var.account_id}:repository/notify/ses_receiving_emails"
+      ]
+    }
   ]
 }
 POLICY
