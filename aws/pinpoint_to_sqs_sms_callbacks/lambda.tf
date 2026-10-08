@@ -8,6 +8,7 @@ module "pinpoint_to_sqs_sms_callbacks" {
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
+  alias_name                 = "latest"
 
   environment_variables = {
     SQS_QUEUE_URL = "https://sqs.ca-central-1.amazonaws.com/${var.account_id}/eks-notification-canada-cadelivery-receipts"
@@ -75,6 +76,7 @@ module "pinpoint_to_sqs_sms_callbacks_us_west_2" {
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days
+  alias_name                 = "latest"
 
   providers = {
     aws = aws.core_services_us_west_2
