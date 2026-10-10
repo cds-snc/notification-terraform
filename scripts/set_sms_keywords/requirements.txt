@@ -1,2 +1,2 @@
-boto3==1.43.64
-python-dotenv==1.2.2
+boto3==1.43.108
+python-dotenv==1.2.4
