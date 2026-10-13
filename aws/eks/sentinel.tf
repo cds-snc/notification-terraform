@@ -15,14 +15,36 @@ data "external" "get_sentinel_layer_version" {
 # see https://github.com/cds-snc/terraform-modules/issues/203 
 # and https://docs.google.com/document/d/16LLelZ7WEKrnbocrl0Az74JqkCv5DBZ9QILRBUFJQt8/edit#heading=h.z87ipkd84djw
 module "sentinel_forwarder" {
-  source            = "github.com/cds-snc/terraform-modules//sentinel_forwarder?ref=94729229cfcb754146c82a566227e55df6612228" # v11.3.5
+  source            = "github.com/cds-snc/terraform-modules//sentinel_forwarder?ref=b0d9304e1d757150c5f20e3d01f101b8d4f0f54b" # v13.1.0
   function_name     = "sentinel-cloud-watch-forwarder"
   billing_tag_value = "notification-canada-ca-${var.env}"
 
+  # Always the latest layer version, which is 273 or later: the first that
+  # reads SENTINEL_HUB_ROLE_ARN (aws-sentinel-connector-layer#306).
   layer_arn = "arn:aws:lambda:ca-central-1:${var.sentinel_sre_aws_account_id}:layer:aws-sentinel-connector-layer:${data.external.get_sentinel_layer_version.result.version}"
 
+  # Kept so rollback is a config change: the layer ignores these once
+  # dce_endpoint and dcr_config are set. They are removed with the v1 path.
   customer_id = var.sentinel_customer_id
   shared_key  = var.sentinel_shared_key
+
+  # v2 (Logs Ingestion API). No stored secret: the Lambda's role assumes the
+  # Sentinel forwarder hub role in Log Archive (cds-snc/cds-aws-lz), mints a
+  # token there with IAM outbound identity federation, and Entra accepts it for
+  # the managed identity sentinel-forwarder-v2-aws-hub. Nothing is set up in
+  # this account. The hub only admits accounts in the Production, Staging,
+  # SRETools and Security OUs. These name Azure resources in cds-snc/sentinel
+  # and cds-snc/cds-azure-resources.
+  dce_endpoint = "https://dce-sentinel-forwarder-v2-153n.canadacentral-1.ingest.monitor.azure.com"
+  dcr_config = {
+    AWSCloudWatchLog = {
+      dcrImmutableId = "dcr-6eccfc9e7ef34cd293566d5073d551f6"
+      streamName     = "Custom-AWSCloudWatchLog_v2_Input"
+    }
+  }
+  azure_client_id = "97057b1c-9b09-4dd3-a4f9-d9df6d181949"
+  azure_tenant_id = "221ca1d3-b3f2-4346-8abc-88f802495c7d"
+  hub_role_arn    = "arn:aws:iam::274536870005:role/sentinel-forwarder-hub"
 
   cloudwatch_log_arns = [
     local.application_log_group_arn,
