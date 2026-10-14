@@ -12,10 +12,10 @@ dependency "common" {
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
   mock_outputs = {
-    sns_alert_warning_arn             = ""
-    sns_alert_critical_arn            = ""
+    sns_alert_warning_arn  = ""
+    sns_alert_critical_arn = ""
     sns_alert_ok_arn       = ""
-    vpc_private_subnets               = []
+    vpc_private_subnets    = []
   }
 }
 
@@ -26,13 +26,13 @@ dependency "ecr" {
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    system_status_ecr_repository_url = ""
-    system_status_ecr_arn = ""
+    system_status_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/notify/system_status"
+    system_status_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/notify/system_status"
   }
 }
 
 dependency "rds" {
-  config_path = "../rds"
+  config_path                             = "../rds"
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
@@ -57,12 +57,12 @@ include {
 }
 
 inputs = {
-  sns_alert_warning_arn                  = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                 = dependency.common.outputs.sns_alert_critical_arn
-  sns_alert_ok_arn                       = dependency.common.outputs.sns_alert_ok_arn
-  system_status_ecr_repository_url       = dependency.ecr.outputs.system_status_ecr_repository_url
-  system_status_ecr_arn                  = dependency.ecr.outputs.system_status_ecr_arn
-  database_read_only_proxy_endpoint      = dependency.rds.outputs.database_read_only_proxy_endpoint
-  eks_cluster_securitygroup              = dependency.eks.outputs.eks-cluster-securitygroup
-  vpc_private_subnets                    = dependency.common.outputs.vpc_private_subnets
+  sns_alert_warning_arn             = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn            = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                  = dependency.common.outputs.sns_alert_ok_arn
+  system_status_ecr_repository_url  = dependency.ecr.outputs.system_status_ecr_repository_url
+  system_status_ecr_arn             = dependency.ecr.outputs.system_status_ecr_arn
+  database_read_only_proxy_endpoint = dependency.rds.outputs.database_read_only_proxy_endpoint
+  eks_cluster_securitygroup         = dependency.eks.outputs.eks-cluster-securitygroup
+  vpc_private_subnets               = dependency.common.outputs.vpc_private_subnets
 }

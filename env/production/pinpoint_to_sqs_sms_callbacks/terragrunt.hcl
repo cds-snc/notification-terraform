@@ -34,22 +34,22 @@ dependency "common" {
 }
 
 dependency "ecr" {
-  config_path = "../ecr"
+  config_path                             = "../ecr"
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = ""
-    pinpoint_to_sqs_sms_callbacks_ecr_arn            = ""
+    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = "123456789012.dkr.ecr.ca-central-1.amazonaws.com/notify/pinpoint_to_sqs_sms_callbacks"
+    pinpoint_to_sqs_sms_callbacks_ecr_arn            = "arn:aws:ecr:ca-central-1:123456789012:repository/notify/pinpoint_to_sqs_sms_callbacks"
   }
 }
 
 dependency "ecr_us_west_2" {
-  config_path = "../ecr-us-west-2"
+  config_path                             = "../ecr-us-west-2"
   mock_outputs_allowed_terraform_commands = ["init", "fmt", "validate", "plan", "show", "destroy"]
   mock_outputs_merge_with_state           = true
   mock_outputs = {
-    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = ""
-    pinpoint_to_sqs_sms_callbacks_ecr_arn            = ""
+    pinpoint_to_sqs_sms_callbacks_ecr_repository_url = "123456789012.dkr.ecr.us-west-2.amazonaws.com/notify/pinpoint_to_sqs_sms_callbacks"
+    pinpoint_to_sqs_sms_callbacks_ecr_arn            = "arn:aws:ecr:us-west-2:123456789012:repository/notify/pinpoint_to_sqs_sms_callbacks"
   }
 }
 
@@ -58,24 +58,24 @@ include {
 }
 
 inputs = {
-  sns_alert_warning_arn                              = dependency.common.outputs.sns_alert_warning_arn
-  sns_alert_critical_arn                             = dependency.common.outputs.sns_alert_critical_arn
-  sns_alert_ok_arn                                   = dependency.common.outputs.sns_alert_ok_arn
-  sns_alert_warning_arn_us_west_2                    = dependency.common.outputs.sns_alert_warning_arn_us_west_2
-  sns_alert_critical_arn_us_west_2                   = dependency.common.outputs.sns_alert_critical_arn_us_west_2
-  sns_alert_ok_arn_us_west_2                         = dependency.common.outputs.sns_alert_ok_arn_us_west_2
-  sqs_deliver_receipts_queue_arn                     = dependency.common.outputs.sqs_deliver_receipts_queue_arn
-  sqs_deliver_receipts_queue_us_west_2_arn           = dependency.common.outputs.sqs_deliver_receipts_queue_us_west_2_arn
-  pinpoint_to_sqs_sms_callbacks_ecr_repository_url          = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
-  pinpoint_to_sqs_sms_callbacks_ecr_arn                     = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_arn
+  sns_alert_warning_arn                                      = dependency.common.outputs.sns_alert_warning_arn
+  sns_alert_critical_arn                                     = dependency.common.outputs.sns_alert_critical_arn
+  sns_alert_ok_arn                                           = dependency.common.outputs.sns_alert_ok_arn
+  sns_alert_warning_arn_us_west_2                            = dependency.common.outputs.sns_alert_warning_arn_us_west_2
+  sns_alert_critical_arn_us_west_2                           = dependency.common.outputs.sns_alert_critical_arn_us_west_2
+  sns_alert_ok_arn_us_west_2                                 = dependency.common.outputs.sns_alert_ok_arn_us_west_2
+  sqs_deliver_receipts_queue_arn                             = dependency.common.outputs.sqs_deliver_receipts_queue_arn
+  sqs_deliver_receipts_queue_us_west_2_arn                   = dependency.common.outputs.sqs_deliver_receipts_queue_us_west_2_arn
+  pinpoint_to_sqs_sms_callbacks_ecr_repository_url           = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
+  pinpoint_to_sqs_sms_callbacks_ecr_arn                      = dependency.ecr.outputs.pinpoint_to_sqs_sms_callbacks_ecr_arn
   pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_repository_url = dependency.ecr_us_west_2.outputs.pinpoint_to_sqs_sms_callbacks_ecr_repository_url
   pinpoint_to_sqs_sms_callbacks_us_west_2_ecr_arn            = dependency.ecr_us_west_2.outputs.pinpoint_to_sqs_sms_callbacks_ecr_arn
-  sms_monthly_spend_limit                            = dependency.common.outputs.sns_monthly_spend_limit
-  celery_queue_prefix                                = dependency.common.outputs.celery_queue_prefix
-  sqs_send_sms_high_queue_delay_warning_arn          = dependency.common.outputs.sqs_send_sms_high_queue_delay_warning_arn
-  sqs_send_sms_high_queue_delay_critical_arn         = dependency.common.outputs.sqs_send_sms_high_queue_delay_critical_arn
-  sqs_send_sms_medium_queue_delay_warning_arn        = dependency.common.outputs.sqs_send_sms_medium_queue_delay_warning_arn
-  sqs_send_sms_medium_queue_delay_critical_arn       = dependency.common.outputs.sqs_send_sms_medium_queue_delay_critical_arn
-  sqs_send_sms_low_queue_delay_warning_arn           = dependency.common.outputs.sqs_send_sms_low_queue_delay_warning_arn
-  sqs_send_sms_low_queue_delay_critical_arn          = dependency.common.outputs.sqs_send_sms_low_queue_delay_critical_arn
+  sms_monthly_spend_limit                                    = dependency.common.outputs.sns_monthly_spend_limit
+  celery_queue_prefix                                        = dependency.common.outputs.celery_queue_prefix
+  sqs_send_sms_high_queue_delay_warning_arn                  = dependency.common.outputs.sqs_send_sms_high_queue_delay_warning_arn
+  sqs_send_sms_high_queue_delay_critical_arn                 = dependency.common.outputs.sqs_send_sms_high_queue_delay_critical_arn
+  sqs_send_sms_medium_queue_delay_warning_arn                = dependency.common.outputs.sqs_send_sms_medium_queue_delay_warning_arn
+  sqs_send_sms_medium_queue_delay_critical_arn               = dependency.common.outputs.sqs_send_sms_medium_queue_delay_critical_arn
+  sqs_send_sms_low_queue_delay_warning_arn                   = dependency.common.outputs.sqs_send_sms_low_queue_delay_warning_arn
+  sqs_send_sms_low_queue_delay_critical_arn                  = dependency.common.outputs.sqs_send_sms_low_queue_delay_critical_arn
 }
