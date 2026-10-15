@@ -761,23 +761,6 @@ moved {
   to   = aws_cloudwatch_metric_alarm.logs-1-malware-scan-timeout-1-minute-warning
 }
 
-resource "aws_cloudwatch_metric_alarm" "logs-1-bounce-rate-critical" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-1-bounce-rate-critical"
-  alarm_description   = "Bounce rate exceeding 10% in a 12 hour period"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.bounce-rate-critical[0].metric_transformation[0].namespace
-  period              = 60 * 60 * 12
-  statistic           = "Sum"
-  threshold           = 1
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_ok_arn]
-}
-
 resource "aws_cloudwatch_metric_alarm" "kubernetes-failed-nodes" {
   provider            = aws.core_services
   count               = var.cloudwatch_enabled ? 1 : 0
