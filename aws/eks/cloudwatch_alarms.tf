@@ -403,41 +403,6 @@ resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-notification-c
   ok_actions          = [var.sns_alert_ok_arn]
 }
 
-# CLIENTS TIMEOUT
-resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-warning" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-celery-error-timeout-client-warning"
-  alarm_description   = "Warning client timeout error in 1 minute"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].namespace
-  period              = 60
-  statistic           = "Sum"
-  threshold           = 10
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_warning_arn]
-}
-
-resource "aws_cloudwatch_metric_alarm" "logs-celery-error-timeout-client-critical" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "logs-celery-error-timeout-client-critical"
-  alarm_description   = "Critical for client timeout errors in 1 minute"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.celery-error-timeout-client[0].metric_transformation[0].namespace
-  period              = 60
-  statistic           = "Sum"
-  threshold           = 50
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_critical_arn]
-  ok_actions          = [var.sns_alert_ok_arn]
-}
-
 # XRAY
 resource "aws_cloudwatch_metric_alarm" "logs-celery-error-xray-warning" {
   provider            = aws.core_services
@@ -1325,25 +1290,6 @@ resource "aws_cloudwatch_metric_alarm" "aggregating-queues-not-active-5-minutes-
   alarm_actions       = [var.sns_alert_critical_arn]
   ok_actions          = [var.sns_alert_ok_arn]
 }
-
-
-resource "aws_cloudwatch_metric_alarm" "service-callback-too-many-failures-warning" {
-  provider            = aws.core_services
-  count               = var.cloudwatch_enabled ? 1 : 0
-  alarm_name          = "service-callback-too-many-failures-warning"
-  alarm_description   = "Service reached the max number of callback retries 100 times in 10 minutes"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  metric_name         = aws_cloudwatch_log_metric_filter.callback-request-failures[0].metric_transformation[0].name
-  namespace           = aws_cloudwatch_log_metric_filter.callback-request-failures[0].metric_transformation[0].namespace
-  period              = 60 * 10
-  statistic           = "Sum"
-  threshold           = 100
-  treat_missing_data  = "notBreaching"
-  alarm_actions       = [var.sns_alert_warning_arn]
-  ok_actions          = [var.sns_alert_ok_arn]
-}
-
 
 resource "aws_cloudwatch_metric_alarm" "db-migration-failure-critical" {
   provider            = aws.core_services
