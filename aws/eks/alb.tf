@@ -47,7 +47,13 @@ resource "aws_alb_listener" "notification-canada-ca" {
   }
 }
 
+moved {
+  from = aws_lb_listener_certificate.alt_domain_certificate
+  to   = aws_lb_listener_certificate.alt_domain_certificate[0]
+}
+
 resource "aws_lb_listener_certificate" "alt_domain_certificate" {
+  count           = var.alt_domain != "" ? 1 : 0
   depends_on      = [aws_acm_certificate.notification-canada-ca-alt]
   listener_arn    = aws_alb_listener.notification-canada-ca.arn
   certificate_arn = aws_acm_certificate.notification-canada-ca-alt[0].arn
