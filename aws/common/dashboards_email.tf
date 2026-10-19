@@ -507,7 +507,6 @@ resource "aws_cloudwatch_dashboard" "email-bounce_rate" {
             "properties": {
                 "title": "Alarms",
                 "alarms": [
-                    "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:logs-1-bounce-rate-critical",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-bounce-rate-warning",
                     "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:ses-bounce-rate-critical"
                 ]
