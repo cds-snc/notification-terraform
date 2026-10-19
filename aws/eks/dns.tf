@@ -83,7 +83,7 @@ resource "aws_route53_record" "documentation-notification-canada-ca-cname" {
 
 resource "aws_route53_record" "notification-alt-root" {
   #TODO: For production
-  count           = var.env != "production" ? 1 : 0
+  count           = var.alt_domain != "" && var.env != "production" ? 1 : 0
   provider        = aws.dns
   zone_id         = var.route53_zone_id
   name            = var.alt_domain
@@ -99,7 +99,7 @@ resource "aws_route53_record" "notification-alt-root" {
 
 resource "aws_route53_record" "notification-alt-root-WC" {
   #TODO: For production
-  count           = var.env != "production" ? 1 : 0
+  count           = var.alt_domain != "" && var.env != "production" ? 1 : 0
   provider        = aws.dns
   name            = "*.${var.alt_domain}"
   zone_id         = var.route53_zone_id
