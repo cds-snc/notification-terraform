@@ -58,7 +58,6 @@ recovery                    = false
 aws_xray_sdk_enabled        = true
 
 ## DNS
-alt_domain                 = "notification.alpha.canada.ca"
 domain                     = "notification.canada.ca"
 base_domain                = "notification.canada.ca"
 perf_test_domain           = "https://api.notification.canada.ca"
