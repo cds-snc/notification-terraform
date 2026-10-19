@@ -114,13 +114,13 @@ resource "aws_route53_record" "notification-canada-ca-alt" {
 
   provider = aws.dns
 
-  for_each = {
+  for_each = var.alt_domain != "" ? {
     for dvo in aws_acm_certificate.notification-canada-ca-alt[0].domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
     }
-  }
+  } : {}
 
   allow_overwrite = true
   name            = each.value.name
@@ -133,7 +133,7 @@ resource "aws_route53_record" "notification-canada-ca-alt" {
 
 resource "aws_acm_certificate_validation" "notification-canada-ca-alt" {
 
-  count = var.env != "production" ? 1 : 0
+  count = var.alt_domain != "" && var.env != "production" ? 1 : 0
 
   depends_on = [aws_route53_record.notification-canada-ca-alt]
 

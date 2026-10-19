@@ -148,6 +148,7 @@ variable "hosted_zone_id" {
 
 variable "alt_domain" {
   type = string
+  default = ""
 }
 
 variable "domain" {
