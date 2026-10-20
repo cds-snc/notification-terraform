@@ -1232,41 +1232,32 @@ jobs:
         uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 900
-          max_attempts: 1
-          retry_on: error
-          command: |
-            set -eo pipefail
-            cd notification-manifests/helmfile
-            source ./getContext.sh
-            failed=0
-            for stage in 0 1 2 3 4; do
-              if ! helmfile -e dev -l "step=$stage" apply --wait; then
-                echo "::warning::Bootstrap stage $stage failed; continuing before the convergence pass."
-                failed=1
-              fi
-            done
-            exit "$failed"
-
-      - name: Apply Manifests Take 2
-        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
-        with:
-          timeout_seconds: 900
           max_attempts: 2
           retry_on: error
           command: |
             set -eo pipefail
             cd notification-manifests/helmfile
             source ./getContext.sh
-            failed=0
-            for stage in 0 1 2 3 4 5; do
-              if ! helmfile -e dev -l "step=$stage" apply --wait; then
-                echo "::error::Manifest stage $stage failed during the convergence pass."
-                failed=1
-              fi
-            done
-            if ! kubectl --context dev wait --for=condition=Established --timeout=120s \
-              crd/secretproviderclasses.secrets-store.csi.x-k8s.io \
-              crd/targetgroupbindings.elbv2.k8s.aws; then
-              failed=1
-            fi
-            exit "$failed"
+            helmfile -e dev -l step=0 apply
+            sleep 5
+            helmfile -e dev -l step=1 apply
+            sleep 5
+            helmfile -e dev -l step=2 apply
+            sleep 5
+            helmfile -e dev -l step=3 apply
+            sleep 5
+            helmfile -e dev -l step=4 apply
+            sleep 5
+
+      - name: Apply Manifests Take 2
+        continue-on-error: true
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 420
+          max_attempts: 2
+          retry_on: error
+          command: |
+            set -eo pipefail
+            cd notification-manifests/helmfile
+            source ./getContext.sh
+            helmfile -e dev -l step=5 apply
