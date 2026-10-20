@@ -1230,7 +1230,7 @@ jobs:
       - name: Apply Manifests
         uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
-          timeout_seconds: 1200
+          timeout_seconds: 900
           max_attempts: 2
           retry_on: error
           command: |
@@ -1247,7 +1247,7 @@ jobs:
       - name: Apply Manifests Take 2
         uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
-          timeout_seconds: 600
+          timeout_seconds: 420
           max_attempts: 2
           retry_on: error
           command: |
