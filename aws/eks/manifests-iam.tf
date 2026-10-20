@@ -550,6 +550,76 @@ resource "aws_iam_role_policy_attachment" "signoz_worker" {
 }
 
 #
+# SIGNOZ REPORT CRONJOB
+#
+
+resource "aws_iam_policy" "signoz_report" {
+  provider = aws.core_services
+  count    = var.enable_signoz ? 1 : 0
+  name     = "signoz-report-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret",
+        ]
+        Resource = [
+          "arn:aws:secretsmanager:ca-central-1:${var.account_id}:secret:SIGNOZ_REPORT_NOTIFY_API_KEY-??????",
+          "arn:aws:secretsmanager:ca-central-1:${var.account_id}:secret:SIGNOZ_REPORT_EMAIL-??????",
+          "arn:aws:secretsmanager:ca-central-1:${var.account_id}:secret:SIGNOZ_REPORT_PASSWORD-??????",
+        ]
+      }
+    ]
+  })
+}
+
+data "aws_iam_policy_document" "assume_role_policy_signoz_report" {
+  count = var.enable_signoz ? 1 : 0
+
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:signoz:signoz-report"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.notification-canada-ca.url, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.notification-canada-ca.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+# Role
+resource "aws_iam_role" "signoz_report" {
+  provider           = aws.core_services
+  count              = var.enable_signoz ? 1 : 0
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_signoz_report[0].json
+  name               = "signoz-report-eks-role"
+}
+
+# Policy Attachment
+resource "aws_iam_role_policy_attachment" "signoz_report" {
+  provider   = aws.core_services
+  count      = var.enable_signoz ? 1 : 0
+  policy_arn = aws_iam_policy.signoz_report[0].arn
+  role       = aws_iam_role.signoz_report[0].name
+}
+
+#
 # SIGNOZ PROMETHEUS CLOUDWATCH EXPORTER
 #
 
