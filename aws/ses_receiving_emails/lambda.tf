@@ -1,3 +1,14 @@
+module "ses_receiving_emails_image" {
+  source = "../modules/manifest_ecr_image"
+  providers = {
+    github = github
+  }
+  environment    = var.env
+  repository_url = var.ses_receiving_emails_ecr_repository_url
+  tag_key        = "SES_RECEIVING_EMAILS_DOCKER_TAG"
+  manifest_ref   = var.manifest_ref
+}
+
 module "ses_receiving_emails" {
 
   providers = {
@@ -9,7 +20,7 @@ module "ses_receiving_emails" {
   billing_tag_value          = var.billing_tag_value
   ecr_arn                    = var.ses_receiving_emails_ecr_arn
   enable_lambda_insights     = true
-  image_uri                  = "${var.ses_receiving_emails_ecr_repository_url}:${var.ses_receiving_emails_docker_tag}"
+  image_uri                  = module.ses_receiving_emails_image.image_uri
   timeout                    = 60
   memory                     = 1024
   log_group_retention_period = var.sensitive_log_retention_period_days

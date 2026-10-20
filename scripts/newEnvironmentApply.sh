@@ -31,6 +31,12 @@ echo "Are you sure you want to proceed? Only "yes" will be accepted"
 read RESPONSE
 
 if [ "$RESPONSE" == "yes" ]; then
+    if [ "$ENVIRONMENT" == "dev" ]; then
+        echo "Dev environment creation must use the GitHub Actions workflow so manifest SHA images are seeded before Terraform applies."
+        gh workflow run terragrunt_create_dev_environment.yml --repo cds-snc/notification-terraform --ref main
+        exit $?
+    fi
+
    for folder in "${folders[@]}"
    do
       pushd ../env/$ENVIRONMENT/$folder
