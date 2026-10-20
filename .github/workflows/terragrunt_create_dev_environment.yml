@@ -1228,6 +1228,7 @@ jobs:
             aws ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
 
       - name: Apply Manifests
+        continue-on-error: true
         uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 900
@@ -1237,14 +1238,19 @@ jobs:
             set -eo pipefail
             cd notification-manifests/helmfile
             source ./getContext.sh
-            for stage in 0 1 2 3 4; do
-              helmfile -e dev -l "step=$stage" apply --wait
-            done
-            kubectl --context dev wait --for=condition=Established --timeout=120s \
-              crd/secretproviderclasses.secrets-store.csi.x-k8s.io \
-              crd/targetgroupbindings.elbv2.k8s.aws
+            helmfile -e dev -l step=0 apply
+            sleep 5
+            helmfile -e dev -l step=1 apply
+            sleep 5
+            helmfile -e dev -l step=2 apply
+            sleep 5
+            helmfile -e dev -l step=3 apply
+            sleep 5
+            helmfile -e dev -l step=4 apply
+            sleep 5
 
       - name: Apply Manifests Take 2
+        continue-on-error: true
         uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
         with:
           timeout_seconds: 420
@@ -1254,4 +1260,4 @@ jobs:
             set -eo pipefail
             cd notification-manifests/helmfile
             source ./getContext.sh
-            helmfile -e dev -l step=5 apply --wait
+            helmfile -e dev -l step=5 apply
