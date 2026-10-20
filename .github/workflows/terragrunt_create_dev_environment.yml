@@ -1233,7 +1233,16 @@ jobs:
           timeout_seconds: 1200
           max_attempts: 2
           retry_on: error
-          command: bash .github/scripts/apply_dev_manifests.sh bootstrap
+          command: |
+            set -eo pipefail
+            cd notification-manifests/helmfile
+            source ./getContext.sh
+            for stage in 0 1 2 3 4; do
+              helmfile -e dev -l "step=$stage" apply --wait
+            done
+            kubectl --context dev wait --for=condition=Established --timeout=120s \
+              crd/secretproviderclasses.secrets-store.csi.x-k8s.io \
+              crd/targetgroupbindings.elbv2.k8s.aws
 
       - name: Apply Manifests Take 2
         uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
@@ -1241,4 +1250,8 @@ jobs:
           timeout_seconds: 600
           max_attempts: 2
           retry_on: error
-          command: bash .github/scripts/apply_dev_manifests.sh application
+          command: |
+            set -eo pipefail
+            cd notification-manifests/helmfile
+            source ./getContext.sh
+            helmfile -e dev -l step=5 apply --wait
