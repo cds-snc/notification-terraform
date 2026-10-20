@@ -257,20 +257,6 @@ moved {
   to   = aws_cloudwatch_log_metric_filter.malware-scan-timeout
 }
 
-resource "aws_cloudwatch_log_metric_filter" "bounce-rate-critical" {
-  provider       = aws.core_services
-  count          = var.cloudwatch_enabled ? 1 : 0
-  name           = "bounce-rate-critical"
-  pattern        = "critical bounce rate threshold of 10"
-  log_group_name = aws_cloudwatch_log_group.notification-canada-ca-eks-application-logs[0].name
-
-  metric_transformation {
-    name      = "bounce-rate-critical"
-    namespace = "LogMetrics"
-    value     = "1"
-  }
-}
-
 resource "aws_cloudwatch_log_metric_filter" "api-evicted-pods" {
   provider       = aws.core_services
   count          = var.cloudwatch_enabled ? 1 : 0

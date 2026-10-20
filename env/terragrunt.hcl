@@ -1,5 +1,6 @@
 locals {
   secret_inputs = jsondecode(read_tfvars_file(find_in_parent_folders("./aws/${get_env("ENVIRONMENT")}.tfvars")))
+  # Preserve legacy inputs until production has rolled out the new infrastructure version.
   config_inputs = jsondecode(read_tfvars_file("../../${get_env("ENVIRONMENT")}_config.tfvars"))
 }
 
@@ -10,6 +11,7 @@ inputs = merge(
       "${local.config_inputs.region}" = "${local.secret_inputs.elb_account_id}"
     }
     cbs_satellite_bucket_name = local.config_inputs.env != "dev" ? "cbs-satellite-${local.secret_inputs.account_id}" : "cbs-satellite-notification-dev"
+    manifest_ref              = get_env("MANIFESTS_REF", "main")
   }
 )
 
