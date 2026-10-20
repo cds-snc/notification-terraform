@@ -1142,6 +1142,7 @@ jobs:
             terragrunt apply --terragrunt-non-interactive -auto-approve
 
   deploy-application:
+    timeout-minutes: 55
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -1216,25 +1217,28 @@ jobs:
           ref: ${{ needs.resolve-dev-manifests.outputs.ref }}
           path: notification-manifests
 
+      - name: Login to Amazon ECR Public
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 60
+          max_attempts: 3
+          retry_on: error
+          command: |
+            set -eo pipefail
+            aws ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
+
       - name: Apply Manifests
-        continue-on-error: true
-        run: |
-          cd notification-manifests/helmfile
-          source getContext.sh
-          helmfile -e dev -l step=0 apply
-          sleep 5
-          helmfile -e dev -l step=1 apply
-          sleep 5
-          helmfile -e dev -l step=2 apply
-          sleep 5
-          helmfile -e dev -l step=3 apply
-          sleep 5
-          helmfile -e dev -l step=4 apply
-          sleep 5
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 1200
+          max_attempts: 2
+          retry_on: error
+          command: bash .github/scripts/apply_dev_manifests.sh bootstrap
 
       - name: Apply Manifests Take 2
-        continue-on-error: true
-        run: |
-          cd notification-manifests/helmfile
-          source getContext.sh
-          helmfile -e dev -l step=5 apply
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # V3.0
+        with:
+          timeout_seconds: 600
+          max_attempts: 2
+          retry_on: error
+          command: bash .github/scripts/apply_dev_manifests.sh application
