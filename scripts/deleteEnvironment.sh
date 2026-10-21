@@ -277,6 +277,18 @@ for target in $PERFTEST_TARGET; do
 done
 echo "Done."
 
+echo "Deleting blazer-run-checks event targets..."
+for schedule in 5-minutes 1-hour 1-day; do
+  BLAZER_RULE="blazer-run-checks-${schedule}"
+  aws events list-targets-by-rule --rule "$BLAZER_RULE" --query 'Targets[].Id' --output text 2>/dev/null | tr '\t' '\n' | while read -r target; do
+    [ -z "$target" ] && continue
+    echo "Deleting event target $target from $BLAZER_RULE..."
+    aws events remove-targets --rule "$BLAZER_RULE" --ids "$target"
+    echo "Done."
+  done
+done
+echo "Done."
+
 echo "Deleting EventBridge API destination guardduty-scan-verdict-callback-${ENVIRONMENT}..."
 aws events delete-api-destination --name "guardduty-scan-verdict-callback-${ENVIRONMENT}" 2>/dev/null || echo "API destination not found, skipping."
 echo "Done."
