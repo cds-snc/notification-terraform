@@ -396,61 +396,6 @@ fields @timestamp, @message, @logStream, @log
 QUERY
 }
 
-resource "aws_cloudwatch_query_definition" "bounce-rate-critical" {
-  provider = aws.core_services
-  count    = var.cloudwatch_enabled ? 1 : 0
-  name     = "Bounces / Critical bounces"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^${local.celery_name}-email-send-*/
-| filter @message like "critical bounce rate threshold of 10"
-| sort @timestamp desc
-| limit 20
-QUERY
-}
-
-resource "aws_cloudwatch_query_definition" "bounce-rate-warning" {
-  provider = aws.core_services
-  count    = var.cloudwatch_enabled ? 1 : 0
-  name     = "Bounces / Warning bounces"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-fields @timestamp, log, kubernetes.container_name as app, kubernetes.pod_name as pod_name, @logStream
-| filter kubernetes.container_name like /^${local.celery_name}-email-send-*/
-| filter @message like "warning bounce rate threshold of 5"
-| sort @timestamp desc
-| limit 20
-QUERY
-}
-
-resource "aws_cloudwatch_query_definition" "bounce-rate-warnings-and-criticals" {
-  provider = aws.core_services
-  count    = var.cloudwatch_enabled ? 1 : 0
-  name     = "Bounces / Bounce warnings and criticals grouped by type"
-
-  log_group_names = [
-    local.eks_application_log_group
-  ]
-
-  query_string = <<QUERY
-fields @timestamp, @service_id, @bounce_type
-| filter kubernetes.container_name like /^${local.celery_name}-email-send-*/
-| filter @message like /bounce rate threshold of/
-| parse @message "Service: * has met or exceeded a * bounce rate" as @service_id, @bounce_type
-| stats count(*) by @service_id, @bounce_type
-| limit 100
-QUERY
-}
-
 resource "aws_cloudwatch_query_definition" "callback-errors-by-url" {
   provider = aws.core_services
   count    = var.cloudwatch_enabled ? 1 : 0
