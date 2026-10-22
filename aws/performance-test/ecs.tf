@@ -70,6 +70,11 @@ resource "aws_ecs_task_definition" "perf_test_task" {
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
   }
+
+  # API CI owns subsequent container image revisions.
+  lifecycle {
+    ignore_changes = [container_definitions]
+  }
 }
 
 data "template_file" "perf_test_failure_scenarios_container_definition" {
@@ -109,5 +114,10 @@ resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task" {
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
+  }
+
+  # API CI owns subsequent container image revisions.
+  lifecycle {
+    ignore_changes = [container_definitions]
   }
 }

@@ -31,4 +31,9 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
       (var.billing_tag_key) = var.billing_tag_value
     }
   }
+
+  # API CI retargets the schedule after registering a new task definition.
+  lifecycle {
+    ignore_changes = [ecs_target[0].task_definition_arn]
+  }
 }
