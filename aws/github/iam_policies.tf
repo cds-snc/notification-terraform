@@ -78,6 +78,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
 
   statement {
     effect    = "Allow"
+    actions   = ["ecs:RegisterTaskDefinition"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
     actions   = ["ecs:TagResource"]
     resources = ["arn:aws:ecs:${var.region}:${var.account_id}:task-definition/blazer:*"]
   }
@@ -442,6 +448,7 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
   }
 
   statement {
+    # ECS does not support resource-level authorization for RegisterTaskDefinition.
     effect    = "Allow"
     actions   = ["ecs:RegisterTaskDefinition"]
     resources = ["*"]
@@ -454,15 +461,6 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
       "ecs:ListTagsForResource",
       "ecs:TagResource",
     ]
-    resources = [
-      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster:*",
-      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster_failure_scenarios:*",
-    ]
-  }
-
-  statement {
-    effect  = "Allow"
-    actions = ["ecs:RegisterTaskDefinition"]
     resources = [
       "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster:*",
       "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster_failure_scenarios:*",
