@@ -449,19 +449,12 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
   }
 
   statement {
-    # ECS requires Resource = "*" for this action; restrict it to the runner task families.
-    effect    = "Allow"
-    actions   = ["ecs:RegisterTaskDefinition"]
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "ecs:taskDefinitionFamily"
-      values = [
-        "performance_test_cluster",
-        "performance_test_cluster_failure_scenarios",
-      ]
-    }
+    effect  = "Allow"
+    actions = ["ecs:RegisterTaskDefinition"]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster:*",
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster_failure_scenarios:*",
+    ]
   }
 
   statement {
