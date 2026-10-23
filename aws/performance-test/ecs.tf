@@ -57,7 +57,13 @@ data "template_file" "perf_test_container_definition" {
   }
 }
 
+moved {
+  from = aws_ecs_task_definition.perf_test_task
+  to   = aws_ecs_task_definition.perf_test_task[0]
+}
+
 resource "aws_ecs_task_definition" "perf_test_task" {
+  count                    = var.env == "staging" ? 0 : 1
   family                   = aws_ecs_cluster.perf_test.name
   cpu                      = 2048
   memory                   = 4096
@@ -71,7 +77,23 @@ resource "aws_ecs_task_definition" "perf_test_task" {
     (var.billing_tag_key) = var.billing_tag_value
   }
 
-  # API CI owns subsequent container image revisions.
+}
+
+resource "aws_ecs_task_definition" "perf_test_task_staging" {
+  count                    = var.env == "staging" ? 1 : 0
+  family                   = aws_ecs_cluster.perf_test.name
+  cpu                      = 2048
+  memory                   = 4096
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  execution_role_arn       = aws_iam_role.container_execution_role.arn
+  task_role_arn            = aws_iam_role.perf_test_ecs_task.arn
+  container_definitions    = data.template_file.perf_test_container_definition.rendered
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+  }
+
   lifecycle {
     ignore_changes = [container_definitions]
   }
@@ -102,7 +124,7 @@ data "template_file" "perf_test_failure_scenarios_container_definition" {
 }
 
 resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task" {
-  count                    = var.env == "production" ? 0 : 1
+  count                    = var.env != "production" && var.env != "staging" ? 1 : 0
   family                   = "performance_test_cluster_failure_scenarios"
   cpu                      = 2048
   memory                   = 4096
@@ -116,7 +138,23 @@ resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task" {
     (var.billing_tag_key) = var.billing_tag_value
   }
 
-  # API CI owns subsequent container image revisions.
+}
+
+resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task_staging" {
+  count                    = var.env == "staging" ? 1 : 0
+  family                   = "performance_test_cluster_failure_scenarios"
+  cpu                      = 2048
+  memory                   = 4096
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  execution_role_arn       = aws_iam_role.container_execution_role.arn
+  task_role_arn            = aws_iam_role.perf_test_ecs_task.arn
+  container_definitions    = data.template_file.perf_test_failure_scenarios_container_definition[0].rendered
+
+  tags = {
+    (var.billing_tag_key) = var.billing_tag_value
+  }
+
   lifecycle {
     ignore_changes = [container_definitions]
   }
