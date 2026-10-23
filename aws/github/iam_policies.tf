@@ -478,17 +478,6 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
   }
 
   statement {
-    effect = "Allow"
-    actions = [
-      "events:ListTargetsByRule",
-      "events:PutTargets",
-    ]
-    resources = [
-      "arn:aws:events:${var.region}:${var.account_id}:rule/perf_test_event_rule",
-    ]
-  }
-
-  statement {
     effect  = "Allow"
     actions = ["iam:PassRole"]
     resources = [
@@ -503,17 +492,6 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
     }
   }
 
-  statement {
-    effect    = "Allow"
-    actions   = ["iam:PassRole"]
-    resources = ["arn:aws:iam::${var.account_id}:role/perf_test_scheduled_task_role"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "iam:PassedToService"
-      values   = ["events.amazonaws.com"]
-    }
-  }
 }
 
 #
