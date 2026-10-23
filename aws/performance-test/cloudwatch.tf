@@ -17,10 +17,11 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
   role_arn       = aws_iam_role.scheduled_task_perf_test_event_role.arn
 
   ecs_target {
-    launch_type         = "FARGATE"
-    platform_version    = "1.4.0"
-    task_count          = 1
-    task_definition_arn = aws_ecs_task_definition.perf_test_task.arn
+    launch_type      = "FARGATE"
+    platform_version = "1.4.0"
+    task_count       = 1
+    # No revision means ECS runs the latest ACTIVE task-definition revision.
+    task_definition_arn = "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/${aws_ecs_cluster.perf_test.name}"
     network_configuration {
       subnets          = var.vpc_public_subnets
       security_groups  = [var.perf_test_security_group_id]

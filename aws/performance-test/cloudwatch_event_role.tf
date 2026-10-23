@@ -14,14 +14,36 @@ data "aws_iam_policy_document" "scheduled_task_perf_test_event_role_cloudwatch_p
     effect  = "Allow"
     actions = ["ecs:RunTask"]
     #checkov:skip=CKV_AWS_111:for testing only
-    resources = [aws_ecs_task_definition.perf_test_task.arn]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/${aws_ecs_cluster.perf_test.name}:*"
+    ]
+
+    condition {
+      test     = "ArnEquals"
+      variable = "ecs:cluster"
+      values   = [aws_ecs_cluster.perf_test.arn]
+    }
   }
   statement {
+    effect  = "Allow"
+    actions = ["ecs:TagResource"]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task/${aws_ecs_cluster.perf_test.name}/*"
+    ]
+  }
+  statement {
+    effect  = "Allow"
     actions = ["iam:PassRole"]
     resources = [
       aws_iam_role.perf_test_ecs_task.arn,
       aws_iam_role.container_execution_role.arn
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
   }
 }
 
