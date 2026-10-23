@@ -76,7 +76,6 @@ resource "aws_ecs_task_definition" "perf_test_task" {
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
   }
-
 }
 
 resource "aws_ecs_task_definition" "perf_test_task_staging" {
@@ -137,7 +136,6 @@ resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task" {
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
   }
-
 }
 
 resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task_staging" {

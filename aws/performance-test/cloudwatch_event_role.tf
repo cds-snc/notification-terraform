@@ -26,6 +26,13 @@ data "aws_iam_policy_document" "scheduled_task_perf_test_event_role_cloudwatch_p
   }
   statement {
     effect  = "Allow"
+    actions = ["ecs:TagResource"]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task/${aws_ecs_cluster.perf_test.name}/*"
+    ]
+  }
+  statement {
+    effect  = "Allow"
     actions = ["iam:PassRole"]
     resources = [
       aws_iam_role.perf_test_ecs_task.arn,

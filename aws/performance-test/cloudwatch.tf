@@ -31,7 +31,6 @@ resource "aws_cloudwatch_event_target" "ecs_scheduled_task" {
       (var.billing_tag_key) = var.billing_tag_value
     }
   }
-
 }
 
 resource "aws_cloudwatch_event_target" "ecs_scheduled_task_staging" {

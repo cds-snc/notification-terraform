@@ -437,6 +437,7 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
       "ecr:BatchDeleteImage",
       "ecr:DescribeImages",
       "ecr:ListImages",
+      "ecr:BatchCheckLayerAvailability",
       "ecr:InitiateLayerUpload",
       "ecr:UploadLayerPart",
       "ecr:CompleteLayerUpload",
