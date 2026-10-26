@@ -208,6 +208,18 @@ echo "Deleting IAM SAML provider..."
 aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-provider/client-vpn
 echo "Done."
 
+echo "Deleting IAM OIDC providers..."
+for arn in $(aws iam list-open-id-connect-providers --query 'OpenIDConnectProviderList[].Arn' --output text); do
+  # Only delete the EKS providers; others (e.g. GitHub Actions) are not managed by this repo
+  if [[ "$arn" != "arn:aws:iam::${ACCOUNT_ID}:oidc-provider/oidc.eks.${AWS_REGION}.amazonaws.com"* ]]; then
+    echo "Skipping OIDC provider $arn"
+    continue
+  fi
+  echo "Deleting OIDC provider $arn..."
+  aws iam delete-open-id-connect-provider --open-id-connect-provider-arn "$arn"
+done
+echo "Done."
+
 echo "Deleting IAM user ecr-user..."
 for key in $(aws iam list-access-keys --user-name ecr-user --query 'AccessKeyMetadata[].AccessKeyId' --output text); do
   aws iam delete-access-key --user-name ecr-user --access-key-id $key
