@@ -14,9 +14,10 @@ data "aws_iam_policy_document" "scheduled_task_perf_test_event_role_cloudwatch_p
     effect  = "Allow"
     actions = ["ecs:RunTask"]
     #checkov:skip=CKV_AWS_111:for testing only
-    resources = [
-      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/${aws_ecs_cluster.perf_test.name}:*"
-    ]
+    resources = var.env == "staging" ? [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/${aws_ecs_task_definition.perf_test_task.family}",
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/${aws_ecs_task_definition.perf_test_task.family}:*",
+    ] : [aws_ecs_task_definition.perf_test_task.arn]
 
     condition {
       test     = "ArnEquals"
