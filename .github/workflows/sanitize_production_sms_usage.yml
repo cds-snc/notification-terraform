@@ -19,6 +19,8 @@ jobs:
   sanitize-sms-usage:
     runs-on: ubuntu-latest
     steps:
+    - name: Prepare Ubuntu CA trust
+      uses: route06/actions/prepare-ubuntu-ca@aa6b218e4bc5445f54d3649a04297af5e1ce7458 # temporary CA mitigation
 
     - name: Upgrade pip
       run: python -m pip install --upgrade pip
