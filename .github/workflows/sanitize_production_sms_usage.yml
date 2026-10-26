@@ -5,6 +5,10 @@ on:
     - cron: "0 22 * * *"
 
 env:
+  # Temporary CA mitigation; remove with prepare-ubuntu-ca.
+  NODE_OPTIONS: --use-openssl-ca
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  SSL_CERT_DIR: /etc/ssl/certs
   INPUT_BUCKET_1: notification-canada-ca-production-sms-usage-logs
   INPUT_BUCKET_2: notification-canada-ca-production-sms-usage-west-2-logs
   ACCOUNT_ID: ${{ secrets.PRODUCTION_AWS_ACCOUNT_ID }}

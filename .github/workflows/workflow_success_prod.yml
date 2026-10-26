@@ -7,6 +7,12 @@ on:
     types:
       - completed
 
+env:
+  # Temporary CA mitigation; remove with prepare-ubuntu-ca.
+  NODE_OPTIONS: --use-openssl-ca
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  SSL_CERT_DIR: /etc/ssl/certs
+
 jobs:
   on-success:
     runs-on: ubuntu-latest

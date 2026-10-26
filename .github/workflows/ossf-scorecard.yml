@@ -16,6 +16,12 @@ permissions:
   checks: read
   actions: read
 
+env:
+  # Temporary CA mitigation; remove with prepare-ubuntu-ca.
+  NODE_OPTIONS: --use-openssl-ca
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  SSL_CERT_DIR: /etc/ssl/certs
+
 jobs:
   analysis:
     name: Scorecards analysis

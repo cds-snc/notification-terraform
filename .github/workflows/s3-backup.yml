@@ -8,6 +8,12 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  # Temporary CA mitigation; remove with prepare-ubuntu-ca.
+  NODE_OPTIONS: --use-openssl-ca
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  SSL_CERT_DIR: /etc/ssl/certs
+
 jobs:
   s3-backup:
     runs-on: ubuntu-latest
