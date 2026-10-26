@@ -5,6 +5,10 @@ on:
     - cron: "0 13 * * 1" # 1pm Monday UTC
 
 env:
+  # Temporary CA mitigation; remove with prepare-ubuntu-ca.
+  NODE_OPTIONS: --use-openssl-ca
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  SSL_CERT_DIR: /etc/ssl/certs
   ACCOUNT_ID: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}
   AWS_DEFAULT_REGION: ca-central-1
   EKS_CLUSTER_NAME: notification-canada-ca-staging-eks-cluster
@@ -20,6 +24,8 @@ jobs:
   check-eks-ami-update:
     runs-on: ubuntu-latest
     steps:
+    - name: Prepare Ubuntu CA trust
+      uses: route06/actions/prepare-ubuntu-ca@aa6b218e4bc5445f54d3649a04297af5e1ce7458 # temporary CA mitigation
 
     - name: Configure credentials to Notify using OIDC
       uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
