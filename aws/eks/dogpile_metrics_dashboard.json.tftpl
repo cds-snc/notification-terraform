@@ -1,0 +1,256 @@
+{
+  "start": "-PT3H",
+  "periodOverride": "inherit",
+  "widgets": [
+    {
+      "type": "metric", "x": 0, "y": 0, "width": 8, "height": 4,
+      "properties": {
+        "title": "Cache reads / minute", "region": "${region}", "view": "singleValue", "period": 60,
+        "setPeriodToTimeRange": false,
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused","metric_type","counter",{"id": "sr1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused","metric_type","counter",{"id": "sr2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused","metric_type","counter",{"id": "sr3","stat": "Sum","visible": false}],
+          [{"id": "sr","expression": "SUM([sr1,sr2,sr3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated","metric_type","counter",{"id": "sg1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated","metric_type","counter",{"id": "sg2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated","metric_type","counter",{"id": "sg3","stat": "Sum","visible": false}],
+          [{"id": "sg","expression": "SUM([sg1,sg2,sg3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_error","metric_type","counter",{"id": "se1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_error","metric_type","counter",{"id": "se2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_error","metric_type","counter",{"id": "se3","stat": "Sum","visible": false}],
+          [{"id": "se","expression": "SUM([se1,se2,se3])","visible": false}],
+          [{"id": "total","expression": "sr+sg+se","label": "Calls / minute"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 8, "y": 0, "width": 8, "height": 4,
+      "properties": {
+        "title": "Cache reuse (%)", "region": "${region}", "view": "singleValue", "period": 60,
+        "setPeriodToTimeRange": false,
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused","metric_type","counter",{"id": "sr1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused","metric_type","counter",{"id": "sr2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused","metric_type","counter",{"id": "sr3","stat": "Sum","visible": false}],
+          [{"id": "sr","expression": "SUM([sr1,sr2,sr3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated","metric_type","counter",{"id": "sg1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated","metric_type","counter",{"id": "sg2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated","metric_type","counter",{"id": "sg3","stat": "Sum","visible": false}],
+          [{"id": "sg","expression": "SUM([sg1,sg2,sg3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_error","metric_type","counter",{"id": "se1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_error","metric_type","counter",{"id": "se2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_error","metric_type","counter",{"id": "se3","stat": "Sum","visible": false}],
+          [{"id": "se","expression": "SUM([se1,se2,se3])","visible": false}],
+          [{"id": "total","expression": "sr+sg+se","visible": false}],
+          [{"id": "reuse","expression": "IF(total>0,100*sr/total)","label": "Reuse (%)"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 16, "y": 0, "width": 8, "height": 4,
+      "properties": {
+        "title": "Cache access errors (%)", "region": "${region}", "view": "singleValue", "period": 60,
+        "setPeriodToTimeRange": false,
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused","metric_type","counter",{"id": "sr1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused","metric_type","counter",{"id": "sr2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused","metric_type","counter",{"id": "sr3","stat": "Sum","visible": false}],
+          [{"id": "sr","expression": "SUM([sr1,sr2,sr3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated","metric_type","counter",{"id": "sg1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated","metric_type","counter",{"id": "sg2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated","metric_type","counter",{"id": "sg3","stat": "Sum","visible": false}],
+          [{"id": "sg","expression": "SUM([sg1,sg2,sg3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_error","metric_type","counter",{"id": "se1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_error","metric_type","counter",{"id": "se2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_error","metric_type","counter",{"id": "se3","stat": "Sum","visible": false}],
+          [{"id": "se","expression": "SUM([se1,se2,se3])","visible": false}],
+          [{"id": "total","expression": "sr+sg+se","visible": false}],
+          [{"id": "errors","expression": "IF(total>0,100*se/total)","label": "Errors (%)","color": "#d62728"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 0, "y": 4, "width": 12, "height": 6,
+      "properties": {
+        "title": "Cache outcome volume", "region": "${region}", "view": "timeSeries", "period": 60, "stacked": true,
+        "yAxis": {"left": {"min": 0, "label": "Calls / minute", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused","metric_type","counter",{"id": "sr1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused","metric_type","counter",{"id": "sr2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused","metric_type","counter",{"id": "sr3","stat": "Sum","visible": false}],
+          [{"id": "sr","expression": "SUM([sr1,sr2,sr3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated","metric_type","counter",{"id": "sg1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated","metric_type","counter",{"id": "sg2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated","metric_type","counter",{"id": "sg3","stat": "Sum","visible": false}],
+          [{"id": "sg","expression": "SUM([sg1,sg2,sg3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_error","metric_type","counter",{"id": "se1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_error","metric_type","counter",{"id": "se2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_error","metric_type","counter",{"id": "se3","stat": "Sum","visible": false}],
+          [{"id": "se","expression": "SUM([se1,se2,se3])","visible": false}],
+          [{"id": "r","expression": "sr","label": "Reused","color": "#2ca02c"}],
+          [{"id": "g","expression": "sg","label": "Regenerated","color": "#ff7f0e"}],
+          [{"id": "e","expression": "se","label": "Error","color": "#d62728"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 12, "y": 4, "width": 12, "height": 6,
+      "properties": {
+        "title": "Reuse by namespace (%)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "max": 100, "label": "Reuse (%)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused","metric_type","counter",{"id": "sr","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated","metric_type","counter",{"id": "sg","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_error","metric_type","counter",{"id": "se","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused","metric_type","counter",{"id": "tr","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated","metric_type","counter",{"id": "tg","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_error","metric_type","counter",{"id": "te","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused","metric_type","counter",{"id": "ur","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated","metric_type","counter",{"id": "ug","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_error","metric_type","counter",{"id": "ue","stat": "Sum","visible": false}],
+          [{"id": "st","expression": "sr+sg+se","visible": false}],
+          [{"id": "tt","expression": "tr+tg+te","visible": false}],
+          [{"id": "ut","expression": "ur+ug+ue","visible": false}],
+          [{"id": "service","expression": "IF(st>0,100*sr/st)","label": "Service"}],
+          [{"id": "template","expression": "IF(tt>0,100*tr/tt)","label": "Template"}],
+          [{"id": "user","expression": "IF(ut>0,100*ur/ut)","label": "User"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 0, "y": 10, "width": 8, "height": 6,
+      "properties": {
+        "title": "Service cache latency (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Latency (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused_duration","metric_type","timing",{"id": "rs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused_duration","metric_type","timing",{"id": "rc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated_duration","metric_type","timing",{"id": "gs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated_duration","metric_type","timing",{"id": "gc","stat": "SampleCount","visible": false}],
+          [{"id": "r","expression": "IF(rc>0,rs/rc)","label": "Reused","color": "#2ca02c"}],
+          [{"id": "g","expression": "IF(gc>0,gs/gc)","label": "Regenerated","color": "#ff7f0e"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 8, "y": 10, "width": 8, "height": 6,
+      "properties": {
+        "title": "Template cache latency (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Latency (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused_duration","metric_type","timing",{"id": "rs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused_duration","metric_type","timing",{"id": "rc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated_duration","metric_type","timing",{"id": "gs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated_duration","metric_type","timing",{"id": "gc","stat": "SampleCount","visible": false}],
+          [{"id": "r","expression": "IF(rc>0,rs/rc)","label": "Reused","color": "#2ca02c"}],
+          [{"id": "g","expression": "IF(gc>0,gs/gc)","label": "Regenerated","color": "#ff7f0e"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 16, "y": 10, "width": 8, "height": 6,
+      "properties": {
+        "title": "User cache latency (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Latency (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused_duration","metric_type","timing",{"id": "rs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused_duration","metric_type","timing",{"id": "rc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated_duration","metric_type","timing",{"id": "gs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated_duration","metric_type","timing",{"id": "gc","stat": "SampleCount","visible": false}],
+          [{"id": "r","expression": "IF(rc>0,rs/rc)","label": "Reused","color": "#2ca02c"}],
+          [{"id": "g","expression": "IF(gc>0,gs/gc)","label": "Regenerated","color": "#ff7f0e"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 0, "y": 16, "width": 24, "height": 6,
+      "properties": {
+        "title": "Service GET request latency: Dogpile on vs off (2xx mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Latency (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_on_2xx_duration","metric_type","timing",{"id": "ons","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_on_2xx_duration","metric_type","timing",{"id": "onc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_off_2xx_duration","metric_type","timing",{"id": "offs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_off_2xx_duration","metric_type","timing",{"id": "offc","stat": "SampleCount","visible": false}],
+          [{"id": "on","expression": "IF(onc>0,ons/onc)","label": "Flag on","color": "#2ca02c"}],
+          [{"id": "off","expression": "IF(offc>0,offs/offc)","label": "Flag off","color": "#ff7f0e"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 0, "y": 22, "width": 24, "height": 6,
+      "properties": {
+        "title": "Creator vs total regeneration duration (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Duration (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_service_success_duration","metric_type","timing",{"id": "scs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_service_success_duration","metric_type","timing",{"id": "scc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated_duration","metric_type","timing",{"id": "sgs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated_duration","metric_type","timing",{"id": "sgc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_template_success_duration","metric_type","timing",{"id": "tcs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_template_success_duration","metric_type","timing",{"id": "tcc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated_duration","metric_type","timing",{"id": "tgs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated_duration","metric_type","timing",{"id": "tgc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_user_success_duration","metric_type","timing",{"id": "ucs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_user_success_duration","metric_type","timing",{"id": "ucc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated_duration","metric_type","timing",{"id": "ugs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated_duration","metric_type","timing",{"id": "ugc","stat": "SampleCount","visible": false}],
+          [{"id": "sc","expression": "IF(scc>0,scs/scc)","label": "Service creator"}],
+          [{"id": "sg","expression": "IF(sgc>0,sgs/sgc)","label": "Service total"}],
+          [{"id": "tc","expression": "IF(tcc>0,tcs/tcc)","label": "Template creator"}],
+          [{"id": "tg","expression": "IF(tgc>0,tgs/tgc)","label": "Template total"}],
+          [{"id": "uc","expression": "IF(ucc>0,ucs/ucc)","label": "User creator"}],
+          [{"id": "ug","expression": "IF(ugc>0,ugs/ugc)","label": "User total"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 0, "y": 28, "width": 12, "height": 6,
+      "properties": {
+        "title": "Invalidation activity", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {
+          "left": {"min": 0, "label": "Invalidations / minute", "showUnits": false},
+          "right": {"min": 0, "label": "Keys deleted / minute", "showUnits": false}
+        },
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_service_success","metric_type","counter",{"id": "ss1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_template_success","metric_type","counter",{"id": "ss2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_user_success","metric_type","counter",{"id": "ss3","stat": "Sum","visible": false}],
+          [{"id": "ss","expression": "SUM([ss1,ss2,ss3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_service_error","metric_type","counter",{"id": "se1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_template_error","metric_type","counter",{"id": "se2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_user_error","metric_type","counter",{"id": "se3","stat": "Sum","visible": false}],
+          [{"id": "se","expression": "SUM([se1,se2,se3])","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_service_deleted","metric_type","counter",{"id": "sd1","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_template_deleted","metric_type","counter",{"id": "sd2","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_invalidation_user_deleted","metric_type","counter",{"id": "sd3","stat": "Sum","visible": false}],
+          [{"id": "sd","expression": "SUM([sd1,sd2,sd3])","visible": false}],
+          [{"id": "success","expression": "ss","label": "Successful invalidations"}],
+          [{"id": "errors","expression": "se","label": "Failed invalidations","color": "#d62728"}],
+          [{"id": "deleted","expression": "sd","label": "Deleted keys","yAxis": "right"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 12, "y": 28, "width": 12, "height": 6,
+      "properties": {
+        "title": "ORM invalidation collection", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {
+          "left": {"min": 0, "label": "Duration (ms)", "showUnits": false},
+          "right": {"min": 0, "label": "Errors / minute", "showUnits": false}
+        },
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_collect_invalidations_success_duration","metric_type","timing",{"id": "ss","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_collect_invalidations_success_duration","metric_type","timing",{"id": "sc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_collect_invalidations_error_duration","metric_type","timing",{"id": "es","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_collect_invalidations_error_duration","metric_type","timing",{"id": "ec","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_collect_invalidations_error","metric_type","counter",{"id": "se","stat": "Sum","visible": false}],
+          [{"id": "success","expression": "IF(sc>0,ss/sc)","label": "Successful collection"}],
+          [{"id": "failure","expression": "IF(ec>0,es/ec)","label": "Failed collection","color": "#ff7f0e"}],
+          [{"id": "errors","expression": "se","label": "Collection errors","yAxis": "right","color": "#d62728"}]
+        ]
+      }
+    }
+  ]
+}
