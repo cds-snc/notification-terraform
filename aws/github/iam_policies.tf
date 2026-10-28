@@ -448,16 +448,13 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
     resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/performance-test"]
   }
 
+  # Register/DescribeTaskDefinition do not support resource-level permissions
   statement {
-    effect  = "Allow"
-    actions = ["ecs:RegisterTaskDefinition"]
-    resources = [
-      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster:*",
-      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster_failure_scenarios:*",
-    ]
+    effect    = "Allow"
+    actions   = ["ecs:RegisterTaskDefinition"]
+    resources = ["*"]
   }
 
-  # DescribeTaskDefinition does not support resource-level permissions
   statement {
     effect    = "Allow"
     actions   = ["ecs:DescribeTaskDefinition"]
