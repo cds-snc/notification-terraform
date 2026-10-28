@@ -847,6 +847,23 @@ resource "aws_iam_policy" "notification_lambdas_apply" {
 }
 
 data "aws_iam_policy_document" "notification_lambdas_apply" {
+  # Authenticated public.ecr.aws pulls avoid the shared anonymous rate limit on GitHub runners
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr-public:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:GetServiceBearerToken"
+    ]
+    resources = ["*"]
+  }
+
   statement {
     effect = "Allow"
     actions = [
