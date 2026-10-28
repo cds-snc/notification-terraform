@@ -437,6 +437,7 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
       "ecr:BatchDeleteImage",
       "ecr:DescribeImages",
       "ecr:ListImages",
+      "ecr:BatchCheckLayerAvailability",
       "ecr:InitiateLayerUpload",
       "ecr:UploadLayerPart",
       "ecr:CompleteLayerUpload",
@@ -446,6 +447,44 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
     ]
     resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/performance-test"]
   }
+
+  statement {
+    effect  = "Allow"
+    actions = ["ecs:RegisterTaskDefinition"]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster:*",
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster_failure_scenarios:*",
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecs:DescribeTaskDefinition",
+      "ecs:ListTagsForResource",
+      "ecs:TagResource",
+    ]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster:*",
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster_failure_scenarios:*",
+    ]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["iam:PassRole"]
+    resources = [
+      "arn:aws:iam::${var.account_id}:role/container_execution_role",
+      "arn:aws:iam::${var.account_id}:role/performance_test_cluster-ecs-task",
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+
 }
 
 #
