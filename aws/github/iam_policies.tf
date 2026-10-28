@@ -457,10 +457,16 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
     ]
   }
 
+  # DescribeTaskDefinition does not support resource-level permissions
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:DescribeTaskDefinition"]
+    resources = ["*"]
+  }
+
   statement {
     effect = "Allow"
     actions = [
-      "ecs:DescribeTaskDefinition",
       "ecs:ListTagsForResource",
       "ecs:TagResource",
     ]
