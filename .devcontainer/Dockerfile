@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/vscode/devcontainers/python:3.12-bookworm
+# Python 3.12 / Bookworm; image 3.3.1 (release v0.4.36)
+FROM mcr.microsoft.com/vscode/devcontainers/python@sha256:5ff1ba19e3b9273b24ec101055172d0e75046bc9ec40780643c530d2df2c75e5
 
 ARG USERNAME=vscode
 
@@ -11,16 +12,6 @@ ARG TERRAGRUNT_VERSION
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends build-essential ca-certificates curl git gnupg2 jq libffi-dev make openssh-client vim zsh \
     && apt-get autoremove -y && apt-get clean -y 
-
-# -- Install CA certificates and update them to disable emSign ECC Root CA - G3 and Comodo AAA Services root --
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates && \
-    rm -rf /var/lib/apt/lists/* && \
-    sed -i \
-      -e 's|^mozilla/emSign_ECC_Root_CA_-_G3.crt|!&|' \
-      -e 's|^mozilla/Comodo_AAA_Services_root.crt|!&|' \
-      /etc/ca-certificates.conf && \
-    update-ca-certificates --fresh
 
 # Install Terraform
 RUN curl -Lo terraform.zip https://releases.hashicorp.com/terraform/"${TERRAFORM_VERSION}"/terraform_"${TERRAFORM_VERSION}"_linux_"$(dpkg --print-architecture)".zip \
