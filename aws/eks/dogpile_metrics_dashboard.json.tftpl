@@ -164,21 +164,6 @@
       }
     },
     {
-      "type": "metric", "x": 0, "y": 16, "width": 24, "height": 6,
-      "properties": {
-        "title": "Service GET request latency: Dogpile on vs off (2xx mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
-        "yAxis": {"left": {"min": 0, "label": "Latency (ms)", "showUnits": false}},
-        "metrics": [
-          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_on_2xx_duration","metric_type","timing",{"id": "ons","stat": "Sum","visible": false}],
-          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_on_2xx_duration","metric_type","timing",{"id": "onc","stat": "SampleCount","visible": false}],
-          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_off_2xx_duration","metric_type","timing",{"id": "offs","stat": "Sum","visible": false}],
-          ["NotificationCanadaCa","${metric_prefix}_cache_request_service_get_service_by_id_GET_dogpile_off_2xx_duration","metric_type","timing",{"id": "offc","stat": "SampleCount","visible": false}],
-          [{"id": "on","expression": "IF(onc>0,ons/onc)","label": "Flag on","color": "#2ca02c"}],
-          [{"id": "off","expression": "IF(offc>0,offs/offc)","label": "Flag off","color": "#ff7f0e"}]
-        ]
-      }
-    },
-    {
       "type": "metric", "x": 0, "y": 22, "width": 24, "height": 6,
       "properties": {
         "title": "Creator vs total regeneration duration (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
@@ -249,6 +234,66 @@
           [{"id": "success","expression": "IF(sc>0,ss/sc)","label": "Successful collection"}],
           [{"id": "failure","expression": "IF(ec>0,es/ec)","label": "Failed collection","color": "#ff7f0e"}],
           [{"id": "errors","expression": "se","label": "Collection errors","yAxis": "right","color": "#d62728"}]
+        ]
+      }
+    },
+    {
+      "type": "text", "x": 0, "y": 34, "width": 24, "height": 7,
+      "properties": {
+        "markdown": "## DAO execution vs cache reuse and regeneration\nCompare the three paths below for each namespace. All lines are mean milliseconds (Sum / SampleCount) over 60-second periods.\n\n- **DAO execution (DB + payload):** successful creator function execution, including database queries and payload building/serialization inside the DAO. Excludes Dogpile lookup, lock waiting, Dogpile serialization and Redis writes. This is measured during regeneration, not a separate cache-disabled workload.\n- **Cache reuse (no creator):** complete cached call returning an existing value without executing the creator; may include stale values served during concurrent regeneration.\n- **Total regeneration (DAO + cache):** complete successful cached call, including lookup, locking/waiting, creator execution, Dogpile serialization and Redis write. The newly created value is returned directly, without an additional Redis read.\n\n**Interpretation:** compare reuse with DAO execution to understand avoided work; compare total regeneration with DAO execution to estimate cache-path overhead (not just Redis latency). These are different call populations, not a controlled cache-on/off benchmark. Mean differences are approximate: a creator can succeed before a cache write fails, leaving a creator sample without a successful regeneration sample. Missing samples remain gaps, not zero-duration calls."
+      }
+    },
+    {
+      "type": "metric", "x": 0, "y": 41, "width": 8, "height": 7,
+      "properties": {
+        "title": "Service: DAO vs cache paths (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Duration (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_service_success_duration","metric_type","timing",{"id": "ds","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_service_success_duration","metric_type","timing",{"id": "dc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused_duration","metric_type","timing",{"id": "rs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_reused_duration","metric_type","timing",{"id": "rc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated_duration","metric_type","timing",{"id": "gs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_service_regenerated_duration","metric_type","timing",{"id": "gc","stat": "SampleCount","visible": false}],
+          [{"id": "dao","expression": "IF(dc>0,ds/dc)","label": "DAO execution (DB + payload)","color": "#1f77b4"}],
+          [{"id": "reuse","expression": "IF(rc>0,rs/rc)","label": "Cache reuse (no creator)","color": "#2ca02c"}],
+          [{"id": "regen","expression": "IF(gc>0,gs/gc)","label": "Total regeneration (DAO + cache)","color": "#ff7f0e"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 8, "y": 41, "width": 8, "height": 7,
+      "properties": {
+        "title": "Template: DAO vs cache paths (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Duration (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_template_success_duration","metric_type","timing",{"id": "ds","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_template_success_duration","metric_type","timing",{"id": "dc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused_duration","metric_type","timing",{"id": "rs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_reused_duration","metric_type","timing",{"id": "rc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated_duration","metric_type","timing",{"id": "gs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_template_regenerated_duration","metric_type","timing",{"id": "gc","stat": "SampleCount","visible": false}],
+          [{"id": "dao","expression": "IF(dc>0,ds/dc)","label": "DAO execution (DB + payload)","color": "#1f77b4"}],
+          [{"id": "reuse","expression": "IF(rc>0,rs/rc)","label": "Cache reuse (no creator)","color": "#2ca02c"}],
+          [{"id": "regen","expression": "IF(gc>0,gs/gc)","label": "Total regeneration (DAO + cache)","color": "#ff7f0e"}]
+        ]
+      }
+    },
+    {
+      "type": "metric", "x": 16, "y": 41, "width": 8, "height": 7,
+      "properties": {
+        "title": "User: DAO vs cache paths (mean ms)", "region": "${region}", "view": "timeSeries", "period": 60,
+        "yAxis": {"left": {"min": 0, "label": "Duration (ms)", "showUnits": false}},
+        "metrics": [
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_user_success_duration","metric_type","timing",{"id": "ds","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_creator_user_success_duration","metric_type","timing",{"id": "dc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused_duration","metric_type","timing",{"id": "rs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_reused_duration","metric_type","timing",{"id": "rc","stat": "SampleCount","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated_duration","metric_type","timing",{"id": "gs","stat": "Sum","visible": false}],
+          ["NotificationCanadaCa","${metric_prefix}_cache_access_user_regenerated_duration","metric_type","timing",{"id": "gc","stat": "SampleCount","visible": false}],
+          [{"id": "dao","expression": "IF(dc>0,ds/dc)","label": "DAO execution (DB + payload)","color": "#1f77b4"}],
+          [{"id": "reuse","expression": "IF(rc>0,rs/rc)","label": "Cache reuse (no creator)","color": "#2ca02c"}],
+          [{"id": "regen","expression": "IF(gc>0,gs/gc)","label": "Total regeneration (DAO + cache)","color": "#ff7f0e"}]
         ]
       }
     }
