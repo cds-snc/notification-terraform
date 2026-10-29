@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/vscode/devcontainers/python:3.12-bookworm
+# Python 3.12 / Bookworm; image 3.3.1 (release v0.4.36)
+FROM mcr.microsoft.com/vscode/devcontainers/python@sha256:5ff1ba19e3b9273b24ec101055172d0e75046bc9ec40780643c530d2df2c75e5
 
 ARG USERNAME=vscode
 
