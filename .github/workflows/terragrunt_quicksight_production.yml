@@ -26,8 +26,14 @@ permissions:
   pull-requests: write
 
 jobs:
+  secret-scanning:
+    uses: ./.github/workflows/secret_scanning.yml
+    permissions:
+      contents: read
+
 
   terragrunt-apply-quicksight:
+    needs: [secret-scanning]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&

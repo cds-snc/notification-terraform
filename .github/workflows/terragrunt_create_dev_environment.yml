@@ -27,8 +27,14 @@ permissions:
   pull-requests: write
 
 jobs:
+  secret-scanning:
+    uses: ./.github/workflows/secret_scanning.yml
+    permissions:
+      contents: read
+
 
   resolve-dev-manifests:
+    needs: [secret-scanning]
     runs-on: ubuntu-latest
     outputs:
       ref: ${{ steps.manifests.outputs.ref }}
@@ -47,6 +53,7 @@ jobs:
         run: echo "ref=$(git -C notification-manifests rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   terragrunt-apply-common:
+    needs: [secret-scanning]
     runs-on: ubuntu-latest
 
     steps:
@@ -79,6 +86,7 @@ jobs:
             terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr:
+    needs: [secret-scanning]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -127,6 +135,7 @@ jobs:
             terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr-us-east:
+    needs: [secret-scanning]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -175,6 +184,7 @@ jobs:
             terragrunt apply --terragrunt-non-interactive -auto-approve
 
   terragrunt-apply-ecr-us-west-2:
+    needs: [secret-scanning]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -228,7 +238,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
-    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds,terragrunt-apply-ecr]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds,terragrunt-apply-ecr]
     steps:
       - name: Prepare Ubuntu CA trust
         uses: route06/actions/prepare-ubuntu-ca@aa6b218e4bc5445f54d3649a04297af5e1ce7458 # temporary CA mitigation
@@ -259,7 +269,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [resolve-dev-manifests,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr-us-west-2]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr-us-west-2]
     runs-on: ubuntu-latest
     steps:
       - name: Prepare Ubuntu CA trust
@@ -335,7 +345,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [resolve-dev-manifests,terragrunt-prepare-blazer-ecr]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-prepare-blazer-ecr]
     runs-on: ubuntu-latest
     steps:
       - name: Prepare Ubuntu CA trust
@@ -389,7 +399,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr-us-west-2,seed-dev-lambda-images]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr-us-west-2,seed-dev-lambda-images]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -429,7 +439,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-ses_receiving_emails]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-ses_receiving_emails]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -467,7 +477,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-dns]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-dns]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -506,7 +516,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common]
+    needs: [secret-scanning, terragrunt-apply-common]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -544,7 +554,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-dns,terragrunt-apply-cloudfront]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-dns,terragrunt-apply-cloudfront]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -582,7 +592,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-eks]
+    needs: [secret-scanning, terragrunt-apply-eks]
     env:
       COMPONENT: "aws-auth"
     steps:
@@ -655,7 +665,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-eks]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-eks]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -693,7 +703,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-eks]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-eks]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -731,7 +741,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-elasticache,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-elasticache,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -769,7 +779,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds,terragrunt-apply-ecr-us-east]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds,terragrunt-apply-ecr-us-east]
 
     steps:
       - name: Prepare Ubuntu CA trust
@@ -807,7 +817,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr,seed-dev-lambda-images]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr,seed-dev-lambda-images]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -847,7 +857,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds,terragrunt-apply-ecr,seed-dev-blazer-image]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-rds,terragrunt-apply-ecr,seed-dev-blazer-image]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -929,7 +939,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr,seed-dev-lambda-images]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-eks,terragrunt-apply-ecr,seed-dev-lambda-images]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -969,7 +979,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,terragrunt-apply-heartbeat,seed-dev-lambda-images]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,terragrunt-apply-heartbeat,seed-dev-lambda-images]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -1009,7 +1019,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,seed-dev-lambda-images]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,seed-dev-lambda-images]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -1049,7 +1059,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr-us-west-2,seed-dev-lambda-images]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr,terragrunt-apply-ecr-us-east,terragrunt-apply-ecr-us-west-2,seed-dev-lambda-images]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -1089,7 +1099,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,terragrunt-apply-rds,terragrunt-apply-eks,seed-dev-lambda-images]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-common,terragrunt-apply-ecr-us-east,terragrunt-apply-rds,terragrunt-apply-eks,seed-dev-lambda-images]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
 
@@ -1128,7 +1138,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-common,terragrunt-apply-system_status]
+    needs: [secret-scanning, terragrunt-apply-common,terragrunt-apply-system_status]
     runs-on: ubuntu-latest  
 
     steps:
@@ -1166,7 +1176,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-apply-common, terragrunt-apply-eks, terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-ecr, terragrunt-apply-ecr-us-east, terragrunt-apply-lambda-admin-pr, terragrunt-apply-performance-test, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_receiving_emails, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
+    needs: [secret-scanning, terragrunt-apply-common, terragrunt-apply-eks, terragrunt-apply-rds, terragrunt-apply-elasticache, terragrunt-apply-ecr, terragrunt-apply-ecr-us-east, terragrunt-apply-lambda-admin-pr, terragrunt-apply-performance-test, terragrunt-apply-heartbeat, terragrunt-apply-database-tools, terragrunt-apply-lambda-google-cidr, terragrunt-apply-ses_receiving_emails, terragrunt-apply-ses_to_sqs_email_callbacks, terragrunt-apply-sns_to_sqs_sms_callbacks, terragrunt-apply-pinpoint_to_sqs_sms_callbacks, terragrunt-apply-system_status, terragrunt-apply-system_status_static_site]
     runs-on: ubuntu-latest  
 
     steps:
@@ -1205,7 +1215,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [resolve-dev-manifests,terragrunt-apply-eks,terragrunt-apply-aws-auth,terragrunt-apply-rds,terragrunt-apply-database-tools,terragrunt-apply-ses_receiving_emails,terragrunt-apply-manifest_secrets]
+    needs: [secret-scanning, resolve-dev-manifests,terragrunt-apply-eks,terragrunt-apply-aws-auth,terragrunt-apply-rds,terragrunt-apply-database-tools,terragrunt-apply-ses_receiving_emails,terragrunt-apply-manifest_secrets]
     env:
       MANIFESTS_REF: ${{ needs.resolve-dev-manifests.outputs.ref }}
     runs-on: ubuntu-latest            
