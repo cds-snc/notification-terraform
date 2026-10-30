@@ -46,9 +46,13 @@ Changes are applied through Git merges to this repository. Terragrunt supports t
 
 #### Secret scanning
 
+The [TruffleHog scan](.github/workflows/secret_scanning.yml) runs on every pull
+request, regardless of which files change.
+
 The dev, staging, and production plan and apply workflows, including dev environment
 creation and the standalone production Quicksight release, must pass the shared
 [TruffleHog scan](.github/workflows/secret_scanning.yml) before any other jobs run.
+Pull requests that trigger a plan also run the scan within that workflow.
 The scan has read-only repository access and does not receive AWS or 1Password
 secrets.
 
