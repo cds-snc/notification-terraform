@@ -44,6 +44,25 @@ AWS_PROFILE=notify-staging terragrunt plan --var-file ~/TEMP/terraform.tfvars
 
 Changes are applied through Git merges to this repository. Terragrunt supports the idea of [remote Terraform configurations based on tags](https://terragrunt.gruntwork.io/docs/features/keep-your-terraform-code-dry/#remote-terraform-configurations). This mean we can setup the following continuous integration workflows:
 
+#### Secret scanning
+
+The [TruffleHog scan](.github/workflows/secret_scanning.yml) runs on every pull
+request, regardless of which files change.
+
+The dev, staging, and production plan and apply workflows, including dev environment
+creation and the standalone production Quicksight release, must pass the shared
+[TruffleHog scan](.github/workflows/secret_scanning.yml) before any other jobs run.
+Pull requests that trigger a plan also run the scan within that workflow.
+The scan has read-only repository access and does not receive AWS or 1Password
+secrets.
+
+TruffleHog scans the pull request's commits for pull requests, pushed commits for
+pushes, and the checked-out ref's full history for manual and scheduled runs.
+Potential secrets and scan errors fail the workflow. Credential verification is
+disabled so detected values are not sent to external services; findings may
+therefore include false positives. Investigate findings and rotate any exposed
+credentials before retrying.
+
 #### Staging
 
 - All pull requests run a `terraform plan` on all modules against `staging` and report changes if there are any

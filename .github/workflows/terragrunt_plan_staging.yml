@@ -28,7 +28,13 @@ permissions:
   pull-requests: write
 
 jobs:
+  secret-scanning:
+    uses: ./.github/workflows/secret_scanning.yml
+    permissions:
+      contents: read
+
   terragrunt-filter:
+    needs: [secret-scanning]
     runs-on: ubuntu-latest
 
     outputs:
@@ -174,13 +180,16 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.common == 'true' || 
-      needs.terragrunt-filter.outputs.ecr == 'true' ||
-      needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
-      needs.terragrunt-filter.outputs.ecr-us-west-2 == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
+      needs.secret-scanning.result == 'success' &&
+      (
+        needs.terragrunt-filter.outputs.common == 'true' ||
+        needs.terragrunt-filter.outputs.ecr == 'true' ||
+        needs.terragrunt-filter.outputs.ecr-us-east == 'true' ||
+        needs.terragrunt-filter.outputs.ecr-us-west-2 == 'true' ||
+        needs.terragrunt-filter.outputs.config == 'true'
+      )
 
-    needs: terragrunt-filter
+    needs: [secret-scanning, terragrunt-filter]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -242,15 +251,19 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.cloudfront == 'true' || 
-      needs.terragrunt-filter.outputs.heartbeat == 'true' ||
-      needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
-      needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
+      needs.secret-scanning.result == 'success' &&
+      (
+        needs.terragrunt-filter.outputs.cloudfront == 'true' ||
+        needs.terragrunt-filter.outputs.heartbeat == 'true' ||
+        needs.terragrunt-filter.outputs.pinpoint_to_sqs_sms_callbacks == 'true' ||
+        needs.terragrunt-filter.outputs.ses_receiving_emails == 'true' ||
+        needs.terragrunt-filter.outputs.ses_to_sqs_email_callbacks == 'true' ||
+        needs.terragrunt-filter.outputs.sns_to_sqs_sms_callbacks == 'true' ||
+        needs.terragrunt-filter.outputs.config == 'true'
+      )
 
     needs: 
+      - secret-scanning
       - terragrunt-filter
       - terragrunt-plan-step-1
     runs-on: ubuntu-latest
@@ -315,9 +328,13 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.dns == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
+      needs.secret-scanning.result == 'success' &&
+      (
+        needs.terragrunt-filter.outputs.dns == 'true' ||
+        needs.terragrunt-filter.outputs.config == 'true'
+      )
     needs: 
+      - secret-scanning
       - terragrunt-filter
       - terragrunt-plan-step-2
     runs-on: ubuntu-latest
@@ -380,13 +397,17 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.eks == 'true' || 
-      needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
-      needs.terragrunt-filter.outputs.system_status_static_site == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true' ||
-      needs.terragrunt-filter.outputs.quicksight == 'true'
+      needs.secret-scanning.result == 'success' &&
+      (
+        needs.terragrunt-filter.outputs.eks == 'true' ||
+        needs.terragrunt-filter.outputs.ses_validation_dns_entries == 'true' ||
+        needs.terragrunt-filter.outputs.system_status_static_site == 'true' ||
+        needs.terragrunt-filter.outputs.config == 'true' ||
+        needs.terragrunt-filter.outputs.quicksight == 'true'
+      )
 
     needs: 
+      - secret-scanning
       - terragrunt-filter
       - terragrunt-plan-step-3
     runs-on: ubuntu-latest
@@ -452,6 +473,7 @@ jobs:
       needs.terragrunt-filter.outputs.config == 'true' ||
       needs.terragrunt-filter.outputs.config == 'true'
     needs: 
+      - secret-scanning
       - terragrunt-filter
       - terragrunt-plan-step-4
     runs-on: ubuntu-latest
@@ -548,12 +570,16 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.elasticache == 'true' || 
-      needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' ||
-      needs.terragrunt-filter.outputs.rds == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
+      needs.secret-scanning.result == 'success' &&
+      (
+        needs.terragrunt-filter.outputs.elasticache == 'true' ||
+        needs.terragrunt-filter.outputs.lambda-google-cidr == 'true' ||
+        needs.terragrunt-filter.outputs.rds == 'true' ||
+        needs.terragrunt-filter.outputs.config == 'true'
+      )
 
     needs: 
+      - secret-scanning
       - terragrunt-filter
       - terragrunt-plan-step-4
     runs-on: ubuntu-latest
@@ -616,14 +642,18 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.database-tools == 'true' || 
-      needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' ||
-      needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
-      needs.terragrunt-filter.outputs.system_status == 'true' ||
-      needs.terragrunt-filter.outputs.performance-test == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
+      needs.secret-scanning.result == 'success' &&
+      (
+        needs.terragrunt-filter.outputs.database-tools == 'true' ||
+        needs.terragrunt-filter.outputs.lambda-admin-pr == 'true' ||
+        needs.terragrunt-filter.outputs.manifest_secrets == 'true' ||
+        needs.terragrunt-filter.outputs.system_status == 'true' ||
+        needs.terragrunt-filter.outputs.performance-test == 'true' ||
+        needs.terragrunt-filter.outputs.config == 'true'
+      )
 
     needs: 
+      - secret-scanning
       - terragrunt-filter
       - terragrunt-plan-step-5
     runs-on: ubuntu-latest
@@ -688,10 +718,14 @@ jobs:
     name: "${{ matrix.component }}"
     if: |
       always() &&
-      needs.terragrunt-filter.outputs.github == 'true' ||
-      needs.terragrunt-filter.outputs.config == 'true'
+      needs.secret-scanning.result == 'success' &&
+      (
+        needs.terragrunt-filter.outputs.github == 'true' ||
+        needs.terragrunt-filter.outputs.config == 'true'
+      )
 
     needs: 
+      - secret-scanning
       - terragrunt-filter
       - terragrunt-plan-step-6
     runs-on: ubuntu-latest

@@ -20,7 +20,13 @@ permissions:
   pull-requests: write
 
 jobs:
+  secret-scanning:
+    uses: ./.github/workflows/secret_scanning.yml
+    permissions:
+      contents: read
+
   terragrunt-filter:
+    needs: [secret-scanning]
     runs-on: ubuntu-latest
 
     outputs:
@@ -120,6 +126,7 @@ jobs:
               - 'env/${{env.ENVIRONMENT}}/manifest_secrets/**'
 
   terragrunt-plan-common:
+    needs: [secret-scanning]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "common"
@@ -150,6 +157,7 @@ jobs:
             -upgrade   
 
   terragrunt-plan-ecr:
+    needs: [secret-scanning]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -185,6 +193,7 @@ jobs:
             -upgrade
 
   terragrunt-plan-ecr-us-east:
+    needs: [secret-scanning]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -220,6 +229,7 @@ jobs:
             -upgrade
 
   terragrunt-plan-ecr-us-west-2:
+    needs: [secret-scanning]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -262,7 +272,7 @@ jobs:
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "ses_receiving_emails"
-    needs: [terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-ecr-us-east,terragrunt-plan-ecr-us-west-2]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-ecr-us-east,terragrunt-plan-ecr-us-west-2]
     steps:
       - name: Prepare Ubuntu CA trust
         uses: route06/actions/prepare-ubuntu-ca@aa6b218e4bc5445f54d3649a04297af5e1ce7458 # temporary CA mitigation
@@ -297,7 +307,7 @@ jobs:
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "dns"
-    needs: [terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-ses_receiving_emails]
     steps:
       - name: Prepare Ubuntu CA trust
         uses: route06/actions/prepare-ubuntu-ca@aa6b218e4bc5445f54d3649a04297af5e1ce7458 # temporary CA mitigation
@@ -332,7 +342,7 @@ jobs:
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "ses_validation_dns_entries"
-    needs: [terragrunt-plan-common,terragrunt-plan-dns]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-dns]
     steps:
       - name: Prepare Ubuntu CA trust
         uses: route06/actions/prepare-ubuntu-ca@aa6b218e4bc5445f54d3649a04297af5e1ce7458 # temporary CA mitigation
@@ -365,7 +375,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common]
+    needs: [secret-scanning, terragrunt-plan-common]
     env:
       COMPONENT: "cloudfront"
     steps:
@@ -400,7 +410,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront]
     env:
       COMPONENT: "eks"
     steps:
@@ -437,7 +447,7 @@ jobs:
       !contains(needs.*.result, 'cancelled') ||
       needs.terragrunt-filter.outputs.config == 'true'
     runs-on: ubuntu-latest  
-    needs: [terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
+    needs: [secret-scanning, terragrunt-filter,terragrunt-plan-common,terragrunt-plan-dns,terragrunt-plan-cloudfront,terragrunt-plan-eks]
     env:
       COMPONENT: "aws-auth"
     steps:
@@ -525,7 +535,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-eks]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-eks]
     env:
       COMPONENT: "elasticache"
     steps:
@@ -560,7 +570,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-eks]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-eks]
     env:
       COMPONENT: "rds"
     steps:
@@ -595,7 +605,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-elasticache,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-admin-pr"
     steps:
@@ -630,7 +640,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
       COMPONENT: "performance-test"
     steps:
@@ -666,7 +676,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "heartbeat"
     steps:
@@ -701,7 +711,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "database-tools"
     steps:
@@ -736,7 +746,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-rds]
     env:
       COMPONENT: "quicksight"
     steps:
@@ -771,7 +781,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-eks,terragrunt-plan-ecr]
     env:
       COMPONENT: "lambda-google-cidr"
     steps:
@@ -806,7 +816,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "ses_to_sqs_email_callbacks"
     steps:
@@ -841,7 +851,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "sns_to_sqs_sms_callbacks"
     steps:
@@ -876,7 +886,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-ecr]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-ecr]
     env:
       COMPONENT: "pinpoint_to_sqs_sms_callbacks"
     steps:
@@ -911,7 +921,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest  
-    needs: [terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-ecr,terragrunt-plan-rds,terragrunt-plan-eks]
     env:
       COMPONENT: "system_status"
     steps:
@@ -945,7 +955,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-plan-common,terragrunt-plan-system_status]
+    needs: [secret-scanning, terragrunt-plan-common,terragrunt-plan-system_status]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "system_status_static_site"
@@ -980,7 +990,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site]
+    needs: [secret-scanning, terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "manifest_secrets"
@@ -1015,7 +1025,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    needs: [terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site]
+    needs: [secret-scanning, terragrunt-plan-rds, terragrunt-plan-elasticache, terragrunt-plan-eks, terragrunt-plan-lambda-admin-pr, terragrunt-plan-performance-test, terragrunt-plan-heartbeat, terragrunt-plan-database-tools, terragrunt-plan-quicksight, terragrunt-plan-lambda-google-cidr, terragrunt-plan-ses_to_sqs_email_callbacks, terragrunt-plan-sns_to_sqs_sms_callbacks, terragrunt-plan-pinpoint_to_sqs_sms_callbacks, terragrunt-plan-system_status, terragrunt-plan-system_status_static_site]
     runs-on: ubuntu-latest  
     env:
       COMPONENT: "github"
