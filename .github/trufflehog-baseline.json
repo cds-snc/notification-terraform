@@ -1,0 +1,79 @@
+[
+  {
+    "detector": "Github",
+    "commit": "52f38031e154dfc1f1c638234bc1111ebf315cfb",
+    "file": ".github/workflows/terragrunt_plan_staging.yml",
+    "raw_sha256": "25cef16cca31f831c38426756a7ef927ded545cab2ec412b2c2745c99ef0f7bb",
+    "reason": "Public dorny/paths-filter v2.10.2 commit SHA, not a GitHub token."
+  },
+  {
+    "detector": "URI",
+    "commit": "*",
+    "file": "aws/lambda-api/signoz_lambda_layer/dependencies.zip",
+    "raw_sha256": "418dd97050449f2be0d742637abe94ca693d845f3d384519f0bb040c61956931",
+    "reason": "Across all commits, this exact value in this ZIP is the urllib3/util/url.py Url.url documentation example with literal username/password placeholders, also present in its compiled Python bytecode."
+  },
+  {
+    "detector": "URI",
+    "commit": "87120b2b8cc040ce92ec531981b144c612ed724c",
+    "file": ".github/trufflehog-baseline.json",
+    "raw_sha256": "418dd97050449f2be0d742637abe94ca693d845f3d384519f0bb040c61956931",
+    "reason": "The same reviewed urllib3 documentation placeholder was stored verbatim in the initial baseline; newer entries store only its SHA-256 digest."
+  },
+  {
+    "detector": "Postgres",
+    "commit": "4a1e875e636bc7fffdf5515b6904ac8612243e53",
+    "file": "leakstest.txt",
+    "raw_sha256": "584b310e5f98725ac1e90b5e388bd527d7d95ff0b25e2f2c67771a288b53ee5a",
+    "reason": "Repository owner confirmed these are dummy credentials intentionally included in a secret-scanning leak test fixture."
+  },
+  {
+    "detector": "NewRelicLicenseKey",
+    "commit": "ad9fe2937b7e6b7546690a4b09444e8635b7c119",
+    "file": "aws/lambda-api/lambda.tf",
+    "raw_sha256": "2eb3ab70bedd013b48d1f0aabe31b7a42f725c01e7b1586633a051f526a96f56",
+    "reason": "Revoked historical credential, not a false positive. Repository owner verified on 2026-11-02 that this key was removed from New Relic; the service is no longer used."
+  },
+  {
+    "detector": "NewRelicLicenseKey",
+    "commit": "c99a666dbf0abac62ed315d5c0d7cf71bfeef0e3",
+    "file": "aws/lambda-api/lambda.tf",
+    "raw_sha256": "2eb3ab70bedd013b48d1f0aabe31b7a42f725c01e7b1586633a051f526a96f56",
+    "reason": "Revoked historical credential, not a false positive. Same key as the ad9fe293 finding; repository owner verified on 2026-11-02 that it was removed from New Relic."
+  },
+  {
+    "detector": "Box",
+    "commit": "47ecaff7fc27e37c06b8b5a49e61a102861df1ed",
+    "file": "env/staging/plan_output.txt",
+    "raw_sha256": "b84629908100f7ef1dd1dc6b4cdd73189a5aa807e946ef5816bbefedc14529f5",
+    "reason": "Repository owner confirmed on 2026-11-02 that the match at historical line 1011 is a random Route53 DNS entry suffix, not a Box credential."
+  },
+  {
+    "detector": "Box",
+    "commit": "47ecaff7fc27e37c06b8b5a49e61a102861df1ed",
+    "file": "env/staging/plan_output.txt",
+    "raw_sha256": "fdf475bfc611f19338d2df10bbe40718f9c12e40abd3b7b5988122adcf5e4eca",
+    "reason": "Repository owner confirmed on 2026-11-02 that the match at historical line 1016 is a random Route53 DNS entry suffix, not a Box credential."
+  },
+  {
+    "detector": "Box",
+    "commit": "47ecaff7fc27e37c06b8b5a49e61a102861df1ed",
+    "file": "env/staging/plan_output.txt",
+    "raw_sha256": "ed761e3f077c3c4bd00dcbd8ce5b640e16f30defb6a7ae15e8d63562c3f4207c",
+    "reason": "Repository owner confirmed on 2026-11-02 that the match at historical line 1010 is a random Route53 DNS entry suffix, not a Box credential."
+  },
+  {
+    "detector": "URI",
+    "commit": "c8975cc013f4e49808002006b1a1622a22b41330",
+    "file": ".github/scripts/scan-secrets.test.sh",
+    "raw_sha256": "418dd97050449f2be0d742637abe94ca693d845f3d384519f0bb040c61956931",
+    "reason": "The reviewed urllib3 documentation placeholder was copied into a baseline regression test. The current test uses a non-URI synthetic value instead."
+  },
+  {
+    "detector": "URI",
+    "commit": "cc3e91a3248b1fe59438aaa4dd5293cdec46017f",
+    "file": "aws/lambda-api/signoz_lambda_layer/urllib3/util/url.py",
+    "raw_sha256": "418dd97050449f2be0d742637abe94ca693d845f3d384519f0bb040c61956931",
+    "reason": "Same reviewed urllib3 Url.url documentation placeholder as the ZIP finding, present in the unpacked dependency source."
+  }
+]
