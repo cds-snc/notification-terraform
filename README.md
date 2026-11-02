@@ -57,11 +57,53 @@ The scan has read-only repository access and does not receive AWS or 1Password
 secrets.
 
 TruffleHog scans the pull request's commits for pull requests, pushed commits for
-pushes, and the checked-out ref's full history for manual and scheduled runs.
+pushes, and all available branches and tags for manual, scheduled, and local runs.
+The available refs differ between a local clone and a fresh Actions checkout, so
+their finding counts can differ even when their checked-out commit is identical.
 Potential secrets and scan errors fail the workflow. Credential verification is
 disabled so detected values are not sent to external services; findings may
 therefore include false positives. Investigate findings and rotate any exposed
 credentials before retrying.
+
+Reviewed historical exceptions are listed in
+[the TruffleHog baseline](.github/trufflehog-baseline.json). An entry only suppresses
+an unverified finding with the exact detector, commit, file, and detected value.
+An explicit `"commit": "*"` allows that exact detector/value combination in that
+exact file across all commits, for recurring reviewed documentation placeholders.
+Active credentials must never be baselined. A real historical credential may be
+baselined only after its revocation is confirmed, with an exact commit (no
+wildcard) and a reason recording who confirmed revocation and when. Describe it
+as a revoked exposure, not a false positive. Other entries must explain why the
+value is not a secret. A different file or value still
+fails the scan; a different commit also fails unless explicitly wildcarded.
+Scanner errors and malformed results always fail.
+Values are stored as SHA-256 digests in `raw_sha256`, not verbatim, so the baseline
+does not introduce another copy of a detector-triggering placeholder. Hashing is
+for matching, not a substitute for revoking exposed credentials.
+
+The [scan script](.github/scripts/scan-secrets.sh) prints every finding's detector,
+decoder, verification status, commit, file, line, and baseline status, plus scan
+metrics and counts, but not detected values. It adds counts to the job summary. Raw
+results are held in private temporary files and deleted when the script exits.
+To run the same all-ref scan and baseline locally, with Docker, Node.js, and `jq`
+installed, run `bash .github/scripts/scan-secrets.sh` from the repository root.
+
+For detailed local investigation using an installed TruffleHog (use version
+3.99.7 to match CI):
+
+```sh
+bash .github/scripts/scan-secrets.sh --native --output-dir "$HOME/trufflehog-review"
+```
+
+The output directory must not already exist. It is created with private
+permissions and contains `results.jsonl` (complete findings, including detected
+values), `errors.log` (verbose scanner diagnostics), `report.json` (baseline
+decisions and finding locations), and `validation.log` (JSON validation errors).
+These files are retained even if the scan fails. Do not commit or share them.
+Both options are forbidden in GitHub Actions. Omit `--native` to use the pinned
+Docker image instead. Review one complete finding locally with
+`jq 'select(.DetectorName == "Box")' "$HOME/trufflehog-review/results.jsonl"`,
+changing the detector as needed. Non-baselined findings still make the command fail.
 
 #### Staging
 
