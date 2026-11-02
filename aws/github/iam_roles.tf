@@ -23,6 +23,17 @@ locals {
   notification_api_build_push_performance_test          = "notification-api-build-push-performance-test"
   notification_system_status_frontend_upload_to_s3      = "notification-system-status-frontend-upload-to-s3"
   notification_system_status_frontend_prod_upload_to_s3 = "notification-system-status-frontend-prod-upload-to-s3"
+  notification_utils_publish_email_assets               = "notification-utils-publish-email-assets"
+  # Staging receives the email assets from utils' main branch and version tags, production only from version tags.
+  notification_utils_publish_email_assets_roles = {
+    staging = {
+      "${local.notification_utils_publish_email_assets}-main-branch" = "ref:refs/heads/main"
+      "${local.notification_utils_publish_email_assets}-tags"        = "ref:refs/tags/*"
+    }
+    production = {
+      "${local.notification_utils_publish_email_assets}-tags" = "ref:refs/tags/*"
+    }
+  }
 }
 
 # 
@@ -924,4 +935,32 @@ resource "aws_iam_role_policy_attachment" "notification_system_status_frontend_p
   role       = local.notification_system_status_frontend_prod_upload_to_s3
   policy_arn = aws_iam_policy.notification_system_status_frontend_prod_upload_to_s3[0].arn
   depends_on = [module.github_workflow_roles_notification_system_status_production]
+}
+
+#
+# notification-utils publish email assets roles
+#
+module "github_workflow_roles_notification_utils_publish_email_assets" {
+  count = contains(keys(local.notification_utils_publish_email_assets_roles), var.env) ? 1 : 0
+
+  source            = "github.com/cds-snc/terraform-modules//gh_oidc_role?ref=64b19ecfc23025718cd687e24b7115777fd09666" # v10.2.1
+  billing_tag_value = var.billing_tag_value
+  org_name          = "cds-snc"
+
+  roles = [
+    for name, claim in lookup(local.notification_utils_publish_email_assets_roles, var.env, {}) : {
+      name      = name
+      repo_name = "notification-utils"
+      claim     = claim
+    }
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "notification_utils_publish_email_assets" {
+  provider = aws.core_services
+  for_each = lookup(local.notification_utils_publish_email_assets_roles, var.env, {})
+
+  role       = each.key
+  policy_arn = aws_iam_policy.notification_utils_publish_email_assets[0].arn
+  depends_on = [module.github_workflow_roles_notification_utils_publish_email_assets]
 }
