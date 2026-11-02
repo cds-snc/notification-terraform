@@ -570,41 +570,6 @@ data "aws_iam_policy_document" "notification_system_status_frontend_prod_upload_
   }
 }
 
-#
-# notification-utils publish email assets policy (staging and production)
-# Uploads the default email branding images to the asset bucket served from assets.<domain>.
-#
-resource "aws_iam_policy" "notification_utils_publish_email_assets" {
-  provider = aws.core_services
-  count    = contains(keys(local.notification_utils_publish_email_assets_roles), var.env) ? 1 : 0
-
-  name   = local.notification_utils_publish_email_assets
-  path   = "/"
-  policy = data.aws_iam_policy_document.notification_utils_publish_email_assets[0].json
-}
-
-data "aws_iam_policy_document" "notification_utils_publish_email_assets" {
-  count = contains(keys(local.notification_utils_publish_email_assets_roles), var.env) ? 1 : 0
-
-  statement {
-    effect    = "Allow"
-    actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::notification-canada-ca-${var.env}-asset-upload"]
-    condition {
-      test     = "StringLike"
-      variable = "s3:prefix"
-      values   = ["email-assets/*"]
-    }
-  }
-
-  # No delete: emails that have already been sent keep referencing older images.
-  statement {
-    effect    = "Allow"
-    actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::notification-canada-ca-${var.env}-asset-upload/email-assets/*"]
-  }
-}
-
 # resource policies for GitHub OIDC roles
 resource "aws_iam_policy" "notification_admin_test_admin_workflows" {
   provider = aws.core_services

@@ -13,6 +13,18 @@ terraform {
     execute      = ["rm", "-rfd", "/var/tmp/notification-admin"]
     run_on_error = true
   }  
+
+  before_hook "get-utils" {
+    commands     = ["apply", "plan"]
+    execute      = ["git", "clone", "--depth", "1", "https://github.com/cds-snc/notification-utils.git", "/var/tmp/notification-utils"]
+    run_on_error = true
+  }
+
+  after_hook "cleanup-utils" {
+    commands     = ["apply", "plan"]
+    execute      = ["rm", "-rfd", "/var/tmp/notification-utils"]
+    run_on_error = true
+  }
 }
 
 include {
