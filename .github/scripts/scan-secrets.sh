@@ -81,7 +81,8 @@ if [[ "$native" == true ]]; then
   echo "Installed scanner: $version"
   command=(trufflehog git "file://$root")
 else
-  command=(docker run --rm -v "$root:/repo:ro" ghcr.io/trufflesecurity/trufflehog:3.99.7 git file:///repo)
+  # v3.99.7 multi-platform manifest (linux/amd64 and linux/arm64).
+  command=(docker run --rm -v "$root:/repo:ro" ghcr.io/trufflesecurity/trufflehog@sha256:0d003fc3abc4e1565eca8462b992001314de51451e96e3c44de80d116794d5d1 git file:///repo)
 fi
 if "${command[@]}" "${arguments[@]}" > "$temporary/results.jsonl" 2> "$temporary/errors.log"; then
   :

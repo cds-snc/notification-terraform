@@ -105,6 +105,11 @@ Docker image instead. Review one complete finding locally with
 `jq 'select(.DetectorName == "Box")' "$HOME/trufflehog-review/results.jsonl"`,
 changing the detector as needed. Non-baselined findings still make the command fail.
 
+The Docker scanner is pinned by its immutable multi-platform manifest digest in
+the scan script, supporting Linux AMD64 and ARM64. When upgrading TruffleHog,
+intentionally update the digest, version labels, and expected digest in the
+regression test together; do not replace the digest with a mutable image tag.
+
 #### Staging
 
 - All pull requests run a `terraform plan` on all modules against `staging` and report changes if there are any

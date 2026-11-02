@@ -78,6 +78,7 @@ check() {
 
 : > "$FIXTURE"
 check 0 "clean scan"
+grep -qx 'ghcr.io/trufflesecurity/trufflehog@sha256:0d003fc3abc4e1565eca8462b992001314de51451e96e3c44de80d116794d5d1' "$ARGUMENTS"
 if grep -qxE -- '--since-commit|--branch' "$ARGUMENTS"; then
   echo "FAIL: manual scan must include all refs" >&2
   exit 1
