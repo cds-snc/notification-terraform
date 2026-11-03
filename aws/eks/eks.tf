@@ -297,7 +297,7 @@ resource "aws_eks_addon" "coredns" {
       .:53 {
           errors
           log . notification {
-              class denial
+              class error
           }
           health {
               lameduck 5s
@@ -346,4 +346,3 @@ resource "aws_eks_addon" "ebs_driver" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 }
-
