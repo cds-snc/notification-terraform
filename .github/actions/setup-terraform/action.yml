@@ -1,21 +1,14 @@
 name: "setup-terraform"
 
-on:
-  workflow_call:
-    inputs:
-      role_to_assume:
-        description: The roll to assume when configuring AWS credentials
-        required: true
-        type: string
-      role_session_name:
-        description: The name of the session when configuring AWS credentials
-        required: true
-        type: string
+description: Configure Terraform tools and assume the requested AWS role.
 
-permissions:
-  id-token: write
-  contents: write
-  pull-requests: write
+inputs:
+  role_to_assume:
+    description: The role to assume when configuring AWS credentials
+    required: true
+  role_session_name:
+    description: The session name used when configuring AWS credentials
+    required: true
 
 runs:
   using: "composite"

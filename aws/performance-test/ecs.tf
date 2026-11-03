@@ -33,6 +33,17 @@ resource "aws_ecs_cluster_capacity_providers" "perf_test" {
 # Task
 #
 
+# These staging families already exist. Preserve CI's current image when
+# Terraform registers a revision for infrastructure or configuration changes.
+data "aws_ecs_task_definition" "staging_current" {
+  for_each = var.env == "staging" ? toset([
+    "performance_test_cluster",
+    "performance_test_cluster_failure_scenarios",
+  ]) : toset([])
+
+  task_definition = each.key
+}
+
 data "template_file" "perf_test_container_definition" {
   template = file("container_definitions/perf_test.json.tmpl")
 
@@ -65,7 +76,14 @@ resource "aws_ecs_task_definition" "perf_test_task" {
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.container_execution_role.arn
   task_role_arn            = aws_iam_role.perf_test_ecs_task.arn
-  container_definitions    = data.template_file.perf_test_container_definition.rendered
+  container_definitions = var.env == "staging" ? jsonencode([
+    for container in jsondecode(data.template_file.perf_test_container_definition.rendered) : merge(container, {
+      image = one([
+        for current in jsondecode(data.aws_ecs_task_definition.staging_current["performance_test_cluster"].container_definitions) :
+        current.image if current.name == container.name
+      ])
+    })
+  ]) : data.template_file.perf_test_container_definition.rendered
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value
@@ -105,7 +123,14 @@ resource "aws_ecs_task_definition" "perf_test_failure_scenarios_task" {
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.container_execution_role.arn
   task_role_arn            = aws_iam_role.perf_test_ecs_task.arn
-  container_definitions    = data.template_file.perf_test_failure_scenarios_container_definition[0].rendered
+  container_definitions = var.env == "staging" ? jsonencode([
+    for container in jsondecode(data.template_file.perf_test_failure_scenarios_container_definition[0].rendered) : merge(container, {
+      image = one([
+        for current in jsondecode(data.aws_ecs_task_definition.staging_current["performance_test_cluster_failure_scenarios"].container_definitions) :
+        current.image if current.name == container.name
+      ])
+    })
+  ]) : data.template_file.perf_test_failure_scenarios_container_definition[0].rendered
 
   tags = {
     (var.billing_tag_key) = var.billing_tag_value

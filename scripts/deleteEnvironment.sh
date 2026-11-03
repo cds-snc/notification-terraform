@@ -208,6 +208,18 @@ echo "Deleting IAM SAML provider..."
 aws iam delete-saml-provider --saml-provider-arn arn:aws:iam::$ACCOUNT_ID:saml-provider/client-vpn
 echo "Done."
 
+echo "Deleting IAM OIDC providers..."
+for arn in $(aws iam list-open-id-connect-providers --query 'OpenIDConnectProviderList[].Arn' --output text); do
+  # Only delete the EKS providers; others (e.g. GitHub Actions) are not managed by this repo
+  if [[ "$arn" != "arn:aws:iam::${ACCOUNT_ID}:oidc-provider/oidc.eks.${AWS_REGION}.amazonaws.com"* ]]; then
+    echo "Skipping OIDC provider $arn"
+    continue
+  fi
+  echo "Deleting OIDC provider $arn..."
+  aws iam delete-open-id-connect-provider --open-id-connect-provider-arn "$arn"
+done
+echo "Done."
+
 echo "Deleting IAM user ecr-user..."
 for key in $(aws iam list-access-keys --user-name ecr-user --query 'AccessKeyMetadata[].AccessKeyId' --output text); do
   aws iam delete-access-key --user-name ecr-user --access-key-id $key
@@ -274,6 +286,18 @@ for target in $PERFTEST_TARGET; do
   echo "Deleting event target $target..."
   aws events remove-targets --rule "perf_test_event_rule" --ids "$target"
   echo "Done."
+done
+echo "Done."
+
+echo "Deleting blazer-run-checks event targets..."
+for schedule in 5-minutes 1-hour 1-day; do
+  BLAZER_RULE="blazer-run-checks-${schedule}"
+  aws events list-targets-by-rule --rule "$BLAZER_RULE" --query 'Targets[].Id' --output text 2>/dev/null | tr '\t' '\n' | while read -r target; do
+    [ -z "$target" ] && continue
+    echo "Deleting event target $target from $BLAZER_RULE..."
+    aws events remove-targets --rule "$BLAZER_RULE" --ids "$target"
+    echo "Done."
+  done
 done
 echo "Done."
 

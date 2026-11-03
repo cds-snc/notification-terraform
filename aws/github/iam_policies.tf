@@ -437,6 +437,7 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
       "ecr:BatchDeleteImage",
       "ecr:DescribeImages",
       "ecr:ListImages",
+      "ecr:BatchCheckLayerAvailability",
       "ecr:InitiateLayerUpload",
       "ecr:UploadLayerPart",
       "ecr:CompleteLayerUpload",
@@ -446,6 +447,47 @@ data "aws_iam_policy_document" "notification_api_build_push_performance_test" {
     ]
     resources = ["arn:aws:ecr:${var.region}:${var.account_id}:repository/notify/performance-test"]
   }
+
+  # Register/DescribeTaskDefinition do not support resource-level permissions
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:RegisterTaskDefinition"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ecs:DescribeTaskDefinition"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecs:ListTagsForResource",
+      "ecs:TagResource",
+    ]
+    resources = [
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster:*",
+      "arn:aws:ecs:${var.region}:${var.account_id}:task-definition/performance_test_cluster_failure_scenarios:*",
+    ]
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = ["iam:PassRole"]
+    resources = [
+      "arn:aws:iam::${var.account_id}:role/container_execution_role",
+      "arn:aws:iam::${var.account_id}:role/performance_test_cluster-ecs-task",
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+
 }
 
 #
@@ -808,6 +850,23 @@ resource "aws_iam_policy" "notification_lambdas_apply" {
 }
 
 data "aws_iam_policy_document" "notification_lambdas_apply" {
+  # Authenticated public.ecr.aws pulls avoid the shared anonymous rate limit on GitHub runners
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr-public:GetAuthorizationToken"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:GetServiceBearerToken"
+    ]
+    resources = ["*"]
+  }
+
   statement {
     effect = "Allow"
     actions = [
@@ -1184,4 +1243,3 @@ data "aws_iam_policy_document" "notification_performance_test_results" {
     ]
   }
 }
-

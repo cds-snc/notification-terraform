@@ -7,11 +7,19 @@ on:
     types:
       - completed
 
+env:
+  # Temporary CA mitigation; remove with prepare-ubuntu-ca.
+  NODE_OPTIONS: --use-openssl-ca
+  SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+  SSL_CERT_DIR: /etc/ssl/certs
+
 jobs:
   on-success:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
+      - name: Prepare Ubuntu CA trust
+        uses: route06/actions/prepare-ubuntu-ca@aa6b218e4bc5445f54d3649a04297af5e1ce7458 # temporary CA mitigation
       - name: Notify Slack
         run: |
           json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":white_check_mark: Terraform release to PRODUCTION complete: <${{ github.event.workflow_run.html_url }}|${{ github.event.workflow.name }}>"}}]}'
