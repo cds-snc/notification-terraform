@@ -73,6 +73,39 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     }
   }
 
+  # 1 WCU
+  # ALB never sets X-Forwarded-Host, so any value is client-supplied.
+  rule {
+    name     = "BlockXForwardedHost"
+    priority = 4
+
+    action {
+      count {}
+    }
+
+    statement {
+      size_constraint_statement {
+        field_to_match {
+          single_header {
+            name = "x-forwarded-host"
+          }
+        }
+        comparison_operator = "GT"
+        size                = 0
+        text_transformation {
+          priority = 0
+          type     = "NONE"
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockXForwardedHost"
+      sampled_requests_enabled   = true
+    }
+  }
+
   # 20 WCU
   rule {
     name     = "BlockFFUFUserAgent"
@@ -173,7 +206,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
 
             text_transformation {
               priority = 0
-              type     = "NONE"
+              type     = "LOWERCASE"
             }
           }
         }

@@ -194,14 +194,15 @@ resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
   # Regex support is limited, please see:
   # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
 
+  # Only hostnames served by the public ALB (see aws/eks/dns.tf).
   regular_expression {
-    regex_string = "${var.domain}$"
+    regex_string = "^((www|doc|document|api|api-k8s|api\\.document|documentation|otlp\\.gateway)\\.)?${replace(var.domain, ".", "\\.")}(:443)?$"
   }
 
   dynamic "regular_expression" {
     for_each = var.alt_domain != null && trimspace(var.alt_domain) != "" ? [var.alt_domain] : []
     content {
-      regex_string = "${regular_expression.value}$"
+      regex_string = "^((www|doc|document|api|api-k8s|api\\.document|documentation|otlp\\.gateway)\\.)?${replace(regular_expression.value, ".", "\\.")}(:443)?$"
     }
   }
 
