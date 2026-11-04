@@ -38,3 +38,38 @@ variable "signoz_dashboard_api_key" {
   default   = "changeme"
   sensitive = true
 }
+
+variable "enable_signoz_weekly_report" {
+  description = "Create weekly reporting secrets after Notify has been bootstrapped."
+  type        = bool
+  default     = false
+
+  validation {
+    condition = !var.enable_signoz_weekly_report || alltrue([
+      for value in [
+        var.signoz_report_notify_api_key,
+        var.signoz_report_email,
+        var.signoz_report_password,
+      ] : try(length(trimspace(value)) > 0, false)
+    ])
+    error_message = "When enable_signoz_weekly_report is true, signoz_report_notify_api_key, signoz_report_email, and signoz_report_password must all be nonempty."
+  }
+}
+
+variable "signoz_report_notify_api_key" {
+  type      = string
+  sensitive = true
+  default   = null
+}
+
+variable "signoz_report_email" {
+  type      = string
+  sensitive = true
+  default   = null
+}
+
+variable "signoz_report_password" {
+  type      = string
+  sensitive = true
+  default   = null
+}
