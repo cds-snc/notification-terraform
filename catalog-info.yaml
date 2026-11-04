@@ -5,10 +5,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: notification-terraform
+  title: Notification Terraform
   description: >-
     Terraform files for notification.canada.ca | Fichiers Terraform pour notification.canada.ca
   annotations:
     github.com/project-slug: cds-snc/notification-terraform
+    backstage.io/source-location: url:https://github.com/cds-snc/notification-terraform/tree/main/
   labels:
     license: MIT
   tags:

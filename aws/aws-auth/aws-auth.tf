@@ -64,8 +64,8 @@ module "eks" {
         groups   = ["system:masters"]
       },
       {
-        rolearn  = "arn:aws:iam::${var.account_id}:role/ipv4-geolocate-webservice-apply"
-        username = "ipv4-geolocate-webservice-apply"
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-ipv4-geolocate-webservice-apply"
+        username = "notification-ipv4-geolocate-webservice-apply"
         groups   = ["system:masters"]
       },
       {
