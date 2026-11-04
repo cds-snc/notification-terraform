@@ -355,7 +355,7 @@ data "aws_iam_policy_document" "notification_manifests_smoke_test_production" {
 
   statement {
     effect    = "Allow"
-    actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
+    actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["arn:aws:s3:::notification-canada-ca-production-csv-upload/*"]
   }
 }
