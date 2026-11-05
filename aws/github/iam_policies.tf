@@ -2,6 +2,25 @@
 # Create and Manage github workflow policies
 #
 
+locals {
+  notification_manifests_secret_names = [
+    "AWS_ACCOUNT_ID",
+    "NGINX_TARGET_GROUP_ARN",
+    "INTERNAL_DNS_FQDN",
+    "ADMIN_TARGET_GROUP_ARN",
+    "DOCUMENTATION_TARGET_GROUP_ARN",
+    "DOCUMENT_DOWNLOAD_API_TARGET_GROUP_ARN",
+    "API_TARGET_GROUP_ARN",
+    "AWS_REGION",
+    "BASE_DOMAIN",
+    "PINPOINT_DEFAULT_POOL_ID",
+    "PINPOINT_SHORT_CODE_POOL_ID",
+    "DOCKER_HUB_PAT",
+    "DOCKER_HUB_USERNAME",
+    "EKS_KARPENTER_AMI_ID",
+  ]
+}
+
 #
 # notification-manifests helmfile apply policy (staging)
 # Needs: EKS kubeconfig, EC2 VPN cert, Secrets Manager context, SSM lambda env vars
@@ -31,9 +50,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
   }
 
   statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      for secret_name in local.notification_manifests_secret_names :
+      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
+    ]
   }
 
   statement {
@@ -139,9 +161,12 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
   }
 
   statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      for secret_name in local.notification_manifests_secret_names :
+      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
+    ]
   }
 
   statement {
@@ -250,9 +275,12 @@ data "aws_iam_policy_document" "notification_manifests_database_migration" {
   }
 
   statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      for secret_name in local.notification_manifests_secret_names :
+      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
+    ]
   }
 
   statement {
@@ -305,9 +333,12 @@ data "aws_iam_policy_document" "notification_manifests_database_migration_produc
   }
 
   statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      for secret_name in local.notification_manifests_secret_names :
+      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
+    ]
   }
 
   statement {
@@ -355,8 +386,8 @@ data "aws_iam_policy_document" "notification_manifests_smoke_test_production" {
 
   statement {
     effect    = "Allow"
-    actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
-    resources = ["arn:aws:s3:::notification-canada-ca-production-csv-upload/*"]
+    actions   = ["s3:GetObject", "s3:PutObject"]
+    resources = ["arn:aws:s3:::notification-canada-ca-production-csv-upload/service-${var.smoke_service_id}-notify/*"]
   }
 }
 

@@ -884,6 +884,12 @@ variable "cypress_auth_client_secret" {
   sensitive = true
 }
 
+variable "smoke_service_id" {
+  type      = string
+  default   = null
+  sensitive = true
+}
+
 variable "smoke_api_key" {
   type      = string
   default   = "changeme"

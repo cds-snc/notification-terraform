@@ -633,7 +633,7 @@ module "github_workflow_roles_notification_manifests_staging" {
     {
       name      = local.notification_manifests_database_migration_staging
       repo_name = "notification-manifests"
-      claim     = "*"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
@@ -654,12 +654,12 @@ module "github_workflow_roles_notification_manifests_production" {
     {
       name      = local.notification_manifests_database_migration_production
       repo_name = "notification-manifests"
-      claim     = "*"
+      claim     = "ref:refs/heads/main"
     },
     {
       name      = local.notification_manifests_smoke_test_production
       repo_name = "notification-manifests"
-      claim     = "*"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
