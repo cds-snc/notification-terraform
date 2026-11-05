@@ -10,6 +10,11 @@ data "external" "aws_role_name" {
   program = ["./getRoleName.sh"]
 }
 
+locals {
+  notification_namespace_admin_group = "notification-canada-ca-admins"
+  notification_helmfile_diff_group   = "notification-manifests-helmfile-diff-readonly"
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
   version = "~> 20.0"
@@ -31,22 +36,22 @@ module "eks" {
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-admin-apply"
         username = "notification-admin-apply"
-        groups   = ["system:masters"]
+        groups   = [local.notification_namespace_admin_group]
       },
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-api-apply"
         username = "notification-api-apply"
-        groups   = ["system:masters"]
+        groups   = [local.notification_namespace_admin_group]
       },
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-document-download-api-apply"
         username = "notification-document-download-api-apply"
-        groups   = ["system:masters"]
+        groups   = [local.notification_namespace_admin_group]
       },
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-documentation-apply"
         username = "notification-documentation-apply"
-        groups   = ["system:masters"]
+        groups   = [local.notification_namespace_admin_group]
       },
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-apply"
@@ -61,12 +66,12 @@ module "eks" {
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-terraform-plan"
         username = "notification-terraform-plan"
-        groups   = ["system:masters"]
+        groups   = [local.notification_helmfile_diff_group]
       },
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/ipv4-geolocate-webservice-apply"
         username = "ipv4-geolocate-webservice-apply"
-        groups   = ["system:masters"]
+        groups   = [local.notification_namespace_admin_group]
       },
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-geolocate-apply"
@@ -76,7 +81,7 @@ module "eks" {
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-diff"
         username = "notification-manifests-helmfile-diff"
-        groups   = ["system:masters"]
+        groups   = [local.notification_helmfile_diff_group]
       },
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-k8s-lambda-apply-main-branch"
@@ -93,7 +98,7 @@ module "eks" {
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-database-migration-staging"
         username = "notification-manifests-database-migration-staging"
-        groups   = ["system:masters"]
+        groups   = [local.notification_namespace_admin_group]
       },
     ] : [],
     var.env == "production" ? [
@@ -105,7 +110,7 @@ module "eks" {
       {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-database-migration-production"
         username = "notification-manifests-database-migration-production"
-        groups   = ["system:masters"]
+        groups   = [local.notification_namespace_admin_group]
       },
     ] : [],
   )
@@ -113,4 +118,77 @@ module "eks" {
   aws_auth_accounts = [
     var.account_id
   ]
+}
+
+resource "kubernetes_role_binding_v1" "notification_namespace_admins" {
+  metadata {
+    name      = "notification-namespace-admins"
+    namespace = "notification-canada-ca"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "admin"
+  }
+
+  subject {
+    kind      = "Group"
+    name      = local.notification_namespace_admin_group
+    api_group = "rbac.authorization.k8s.io"
+  }
+
+  depends_on = [module.eks]
+}
+
+resource "kubernetes_cluster_role_binding_v1" "notification_helmfile_diff_view" {
+  metadata {
+    name = "notification-manifests-helmfile-diff-view"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "view"
+  }
+
+  subject {
+    kind      = "Group"
+    name      = local.notification_helmfile_diff_group
+    api_group = "rbac.authorization.k8s.io"
+  }
+
+  depends_on = [module.eks]
+}
+
+resource "kubernetes_cluster_role_v1" "notification_helmfile_diff_secrets" {
+  metadata {
+    name = "notification-manifests-helmfile-diff-secrets"
+  }
+
+  rule {
+    api_groups = ["*"]
+    resources  = ["*"]
+    verbs      = ["get", "list", "watch"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding_v1" "notification_helmfile_diff_secrets" {
+  metadata {
+    name = "notification-manifests-helmfile-diff-secrets"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role_v1.notification_helmfile_diff_secrets.metadata[0].name
+  }
+
+  subject {
+    kind      = "Group"
+    name      = local.notification_helmfile_diff_group
+    api_group = "rbac.authorization.k8s.io"
+  }
+
+  depends_on = [module.eks]
 }
