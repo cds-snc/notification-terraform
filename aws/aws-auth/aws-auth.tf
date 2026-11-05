@@ -192,3 +192,36 @@ resource "kubernetes_cluster_role_binding_v1" "notification_helmfile_diff_secret
 
   depends_on = [module.eks]
 }
+
+resource "kubernetes_cluster_role_v1" "notification_helmfile_diff_namespace" {
+  metadata {
+    name = "notification-manifests-helmfile-diff-namespace"
+  }
+
+  rule {
+    api_groups     = [""]
+    resources      = ["namespaces"]
+    resource_names = ["notification-canada-ca"]
+    verbs          = ["patch", "update"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding_v1" "notification_helmfile_diff_namespace" {
+  metadata {
+    name = "notification-manifests-helmfile-diff-namespace"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role_v1.notification_helmfile_diff_namespace.metadata[0].name
+  }
+
+  subject {
+    kind      = "User"
+    name      = "notification-manifests-helmfile-diff"
+    api_group = "rbac.authorization.k8s.io"
+  }
+
+  depends_on = [module.eks]
+}
