@@ -633,7 +633,7 @@ module "github_workflow_roles_notification_manifests_staging" {
     {
       name      = local.notification_manifests_database_migration_staging
       repo_name = "notification-manifests"
-      claim     = "*"
+      claim     = "ref:refs/heads/main"
     }
   ]
 }
