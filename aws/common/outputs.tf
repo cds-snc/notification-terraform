@@ -196,6 +196,11 @@ output "notification_base_url_regex_arn" {
   description = "The ARN of the regex pattern set for the allowed base domains"
 }
 
+output "notification_base_url_shadow_regex_arn" {
+  value       = aws_wafv2_regex_pattern_set.notification_base_url_shadow.arn
+  description = "The ARN of the strict hostname regex pattern set for count-only evaluation"
+}
+
 output "sqs_send_sms_low_queue_name" {
   value = var.sqs_send_sms_low_queue_name
 }
