@@ -74,6 +74,11 @@ module "eks" {
         groups   = ["system:masters"]
       },
       {
+        rolearn  = "arn:aws:iam::${var.account_id}:role/notification-geolocate-webservice-apply"
+        username = "notification-geolocate-webservice-apply"
+        groups   = ["system:masters"]
+      },
+      {
         rolearn  = "arn:aws:iam::${var.account_id}:role/notification-manifests-helmfile-diff"
         username = "notification-manifests-helmfile-diff"
         groups   = ["system:masters"]
