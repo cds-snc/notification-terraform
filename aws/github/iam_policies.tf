@@ -3,7 +3,7 @@
 #
 
 locals {
-  notification_manifests_helmfile_secret_names = [
+  notification_manifests_secret_names = [
     "AWS_ACCOUNT_ID",
     "NGINX_TARGET_GROUP_ARN",
     "INTERNAL_DNS_FQDN",
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply" {
     effect  = "Allow"
     actions = ["secretsmanager:GetSecretValue"]
     resources = [
-      for secret_name in local.notification_manifests_helmfile_secret_names :
+      for secret_name in local.notification_manifests_secret_names :
       "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
     ]
   }
@@ -164,7 +164,7 @@ data "aws_iam_policy_document" "notification_manifests_helmfile_apply_production
     effect  = "Allow"
     actions = ["secretsmanager:GetSecretValue"]
     resources = [
-      for secret_name in local.notification_manifests_helmfile_secret_names :
+      for secret_name in local.notification_manifests_secret_names :
       "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
     ]
   }
@@ -275,9 +275,12 @@ data "aws_iam_policy_document" "notification_manifests_database_migration" {
   }
 
   statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      for secret_name in local.notification_manifests_secret_names :
+      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
+    ]
   }
 
   statement {
@@ -330,9 +333,12 @@ data "aws_iam_policy_document" "notification_manifests_database_migration_produc
   }
 
   statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:*"]
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      for secret_name in local.notification_manifests_secret_names :
+      "arn:aws:secretsmanager:${var.region}:${var.account_id}:secret:${secret_name}-??????"
+    ]
   }
 
   statement {
