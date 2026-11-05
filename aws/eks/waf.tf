@@ -17,23 +17,24 @@
 #   9 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA/US)
 #  10 |   ~24 | MutatingApiRateLimit                        | BLOCK (rate, IP)
 #  11 |   ~24 | MutatingApiRateLimit_JA4                    | BLOCK (rate, JA4)
-#  12 |   ~25 | PreventHostInjections                       | BLOCK
-#  13 |    25 | AWSManagedRulesAmazonIpReputationList        | BLOCK (managed)
-#  14 |   ~26 | rate_limit_all_except_api                   | BLOCK (rate, IP)
-#  15 |   ~26 | ApiRateLimit                                | BLOCK (rate, IP)
-#  16 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | BLOCK (non-CA/US)
-#  17 |    50 | AWSManagedRulesAnonymousIpList               | BLOCK (managed)
-#  18 |   157 | valid_paths                                 | BLOCK
-#  19 |   200 | AWSManagedRulesKnownBadInputsRuleSet         | BLOCK (managed)
-#  20 |   200 | AWSManagedRulesLinuxRuleSet                  | BLOCK (managed)
-#  21 |   700 | AWSManagedRulesCommonRuleSet                 | BLOCK (managed, sets labels)
-#  22 |    ~8 | BlockLabeled_SSRF_NoUserAgent_NonCA          | BLOCK (label, after 21, non-API)
-#  23 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| BLOCK (label, after 21, non-API)
-#  24 |    ~6 | BlockLFI_Body_ExcludeTemplatePaths           | BLOCK (label, after 21)
-#  25 |    ~8 | BlockXSS_Body_ExcludeContentPaths            | BLOCK (label, after 21, excl. /services/)
-#  26 |   200 | AWSManagedRulesSQLiRuleSet                   | BLOCK (managed, sets labels, excl. /services/)
-#  27 |    ~8 | BlockSQLi_Body_ExcludeContentPaths           | BLOCK (label, after 26, non-API, excl. /services/)
-#  28 |    ?? | AWSManagedRulesAntiDDoSRuleSet               | count (managed, non-API only)
+#  12 |   ~25 | PreventHostInjectionsShadow                 | count (strict hostname allowlist)
+#  13 |   ~25 | PreventHostInjections                       | BLOCK (legacy domain suffix)
+#  14 |    25 | AWSManagedRulesAmazonIpReputationList        | BLOCK (managed)
+#  15 |   ~26 | rate_limit_all_except_api                   | BLOCK (rate, IP)
+#  16 |   ~26 | ApiRateLimit                                | BLOCK (rate, IP)
+#  17 |   ~30 | AdminAuthenticatedPagesGeoRestriction        | BLOCK (non-CA/US)
+#  18 |    50 | AWSManagedRulesAnonymousIpList               | BLOCK (managed)
+#  19 |   157 | valid_paths                                 | BLOCK
+#  20 |   200 | AWSManagedRulesKnownBadInputsRuleSet         | BLOCK (managed)
+#  21 |   200 | AWSManagedRulesLinuxRuleSet                  | BLOCK (managed)
+#  22 |   700 | AWSManagedRulesCommonRuleSet                 | BLOCK (managed, sets labels)
+#  23 |    ~8 | BlockLabeled_SSRF_NoUserAgent_NonCA          | BLOCK (label, after 22, non-API)
+#  24 |    ~6 | BlockSizeRestrictions_Body_ExcludeUploadPaths| BLOCK (label, after 22, non-API)
+#  25 |    ~6 | BlockLFI_Body_ExcludeTemplatePaths           | BLOCK (label, after 22)
+#  26 |    ~8 | BlockXSS_Body_ExcludeContentPaths            | BLOCK (label, after 22, excl. /services/)
+#  27 |   200 | AWSManagedRulesSQLiRuleSet                   | BLOCK (managed, sets labels, excl. /services/)
+#  28 |    ~8 | BlockSQLi_Body_ExcludeContentPaths           | BLOCK (label, after 27, non-API, excl. /services/)
+#  29 |    ?? | AWSManagedRulesAntiDDoSRuleSet               | count (managed, non-API only)
 # =============================================================================
 
 resource "aws_wafv2_web_acl" "notification-canada-ca" {
@@ -187,9 +188,47 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # 25 WCU
+  # Count strict-allowlist misses before the legacy rule can terminate them.
+  rule {
+    name     = "PreventHostInjectionsShadow"
+    priority = 12
+
+    action {
+      count {}
+    }
+
+    statement {
+      not_statement {
+        statement {
+          regex_pattern_set_reference_statement {
+            arn = var.notification_base_url_shadow_regex_arn
+
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "PreventHostInjectionsShadow"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # 25 WCU
   rule {
     name     = "PreventHostInjections"
-    priority = 12
+    priority = 13
 
     statement {
       not_statement {
@@ -314,7 +353,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 26 WCU
   rule {
     name     = "rate_limit_all_except_api"
-    priority = 14
+    priority = 15
 
     action {
       block {
@@ -391,7 +430,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 26 WCU
   rule {
     name     = "ApiRateLimit"
-    priority = 15
+    priority = 16
 
     action {
       block {
@@ -462,7 +501,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 157 WCU
   rule {
     name     = "valid_paths"
-    priority = 18
+    priority = 19
 
     action {
       block {
@@ -1130,7 +1169,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 25 WCU
   rule {
     name     = "AWSManagedRulesAmazonIpReputationList"
-    priority = 13
+    priority = 14
 
     override_action {
       none {}
@@ -1154,7 +1193,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Public pages (sign-in, register, auth flows, GCA content, contact, newsletter, /_status) remain accessible worldwide.
   rule {
     name     = "AdminAuthenticatedPagesGeoRestriction"
-    priority = 16
+    priority = 17
 
     action {
       block {}
@@ -1266,7 +1305,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 50 WCU
   rule {
     name     = "AWSManagedRulesAnonymousIpList"
-    priority = 17
+    priority = 18
 
     override_action {
       none {}
@@ -1296,7 +1335,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 200 WCU
   rule {
     name     = "AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 19
+    priority = 20
 
     override_action {
       none {}
@@ -1319,7 +1358,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 200 WCU
   rule {
     name     = "AWSManagedRulesLinuxRuleSet"
-    priority = 20
+    priority = 21
 
     override_action {
       none {}
@@ -1342,7 +1381,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 700 WCU
   rule {
     name     = "AWSManagedRulesCommonRuleSet"
-    priority = 21
+    priority = 22
 
     override_action {
       none {}
@@ -1404,7 +1443,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Must run after AWSManagedRulesCommonRuleSet (priority 21) so the labels exist.
   rule {
     name     = "BlockLabeled_SSRF_NoUserAgent_NonCA"
-    priority = 22
+    priority = 23
 
     action {
       block {}
@@ -1470,7 +1509,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # ~6 WCU - Block oversized bodies on non-API hosts, except on bulk-send and file upload endpoints.
   rule {
     name     = "BlockSizeRestrictions_Body_ExcludeUploadPaths"
-    priority = 23
+    priority = 24
 
     action {
       block {}
@@ -1569,7 +1608,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # /services/ (XLSX/DOCX uploads contain XML paths like xl/worksheets/sheet1.xml that trip LFI detection)
   rule {
     name     = "BlockLFI_Body_ExcludeTemplatePaths"
-    priority = 24
+    priority = 25
 
     action {
       block {}
@@ -1658,7 +1697,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # /v2/notifications (email body), /templates, /personalise, /_email, /_letter (preview rendering)
   rule {
     name     = "BlockXSS_Body_ExcludeContentPaths"
-    priority = 25
+    priority = 26
 
     action {
       block {}
@@ -1772,7 +1811,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # 200 WCU
   rule {
     name     = "AWSManagedRulesSQLiRuleSet"
-    priority = 26
+    priority = 27
 
     override_action {
       none {}
@@ -1831,7 +1870,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # Must run after AWSManagedRulesSQLiRuleSet (priority 26).
   rule {
     name     = "BlockSQLi_Body_ExcludeContentPaths"
-    priority = 27
+    priority = 28
 
     action {
       block {}
@@ -1954,7 +1993,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   # scoping this rule to non-API hosts, or risk breaking API consumers during incidents.
   rule {
     name     = "AWSManagedRulesAntiDDoSRuleSet"
-    priority = 28
+    priority = 29
 
     override_action {
       count {}

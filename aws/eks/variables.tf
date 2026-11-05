@@ -87,6 +87,11 @@ variable "notification_base_url_regex_arn" {
   description = "The ARN of the regex for the notify base URL"
 }
 
+variable "notification_base_url_shadow_regex_arn" {
+  type        = string
+  description = "The ARN of the strict hostname regex for count-only evaluation"
+}
+
 variable "internal_dns_certificate_arn" {
   type        = string
   description = "The ARN for the internal DNS certificate"
