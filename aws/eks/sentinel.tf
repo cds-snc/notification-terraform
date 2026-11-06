@@ -15,7 +15,7 @@ data "external" "get_sentinel_layer_version" {
 # see https://github.com/cds-snc/terraform-modules/issues/203 
 # and https://docs.google.com/document/d/16LLelZ7WEKrnbocrl0Az74JqkCv5DBZ9QILRBUFJQt8/edit#heading=h.z87ipkd84djw
 module "sentinel_forwarder" {
-  source            = "github.com/cds-snc/terraform-modules//sentinel_forwarder?ref=b0d9304e1d757150c5f20e3d01f101b8d4f0f54b" # v13.1.0
+  source            = "github.com/cds-snc/terraform-modules//sentinel_forwarder?ref=v0.0.49" # v13.1.0
   function_name     = "sentinel-cloud-watch-forwarder"
   billing_tag_value = "notification-canada-ca-${var.env}"
 
