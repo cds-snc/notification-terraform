@@ -53,6 +53,7 @@ dependency "common" {
     re_admin_arn2                             = ""
     re_api_arn                                = ""
     notification_base_url_regex_arn           = ""
+    notification_base_url_shadow_regex_arn    = ""
     re_document_download_arn                  = ""
     re_documentation_arn                      = ""
     private-links-vpc-endpoints-securitygroup = ""
@@ -115,6 +116,7 @@ inputs = {
   re_document_download_arn                  = dependency.common.outputs.re_document_download_arn
   re_documentation_arn                      = dependency.common.outputs.re_documentation_arn
   notification_base_url_regex_arn           = dependency.common.outputs.notification_base_url_regex_arn
+  notification_base_url_shadow_regex_arn    = dependency.common.outputs.notification_base_url_shadow_regex_arn
   private-links-vpc-endpoints-securitygroup = dependency.common.outputs.private-links-vpc-endpoints-securitygroup
   private-links-gateway-prefix-list-ids     = dependency.common.outputs.private-links-gateway-prefix-list-ids
   sqs_send_email_low_queue_name             = dependency.common.outputs.sqs_send_email_low_queue_name
