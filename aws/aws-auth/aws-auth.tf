@@ -120,6 +120,24 @@ module "eks" {
   ]
 }
 
+resource "terraform_data" "notification_namespace" {
+  triggers_replace = [var.account_id, var.env]
+
+  provisioner "local-exec" {
+    interpreter = ["bash", "-c"]
+    environment = {
+      KUBE_CONTEXT = var.env
+    }
+    command = <<-EOT
+      set -euo pipefail
+      kubectl --kubeconfig "$HOME/.kube/config" --context "$KUBE_CONTEXT" create namespace notification-canada-ca --dry-run=client -o yaml |
+        kubectl --kubeconfig "$HOME/.kube/config" --context "$KUBE_CONTEXT" apply -f -
+    EOT
+  }
+
+  depends_on = [module.eks]
+}
+
 resource "kubernetes_role_binding_v1" "notification_namespace_admins" {
   metadata {
     name      = "notification-namespace-admins"
@@ -138,7 +156,7 @@ resource "kubernetes_role_binding_v1" "notification_namespace_admins" {
     api_group = "rbac.authorization.k8s.io"
   }
 
-  depends_on = [module.eks]
+  depends_on = [terraform_data.notification_namespace]
 }
 
 resource "kubernetes_cluster_role_binding_v1" "notification_helmfile_diff_view" {
