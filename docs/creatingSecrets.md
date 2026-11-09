@@ -115,6 +115,25 @@ flowchart LR
   k8s_secret-->notifyApp
 ```
 
+#### SigNoz weekly reporting secrets
+
+The `manifest_secrets` module creates `SIGNOZ_REPORT_NOTIFY_API_KEY`,
+`SIGNOZ_REPORT_EMAIL`, and `SIGNOZ_REPORT_PASSWORD` only when
+`enable_signoz_weekly_report = true`. This flag defaults to `false` and is
+independent of `enable_signoz`.
+
+For a new environment, leave the flag disabled until Notify has been bootstrapped.
+Then add `signoz_report_notify_api_key`, `signoz_report_email`, and
+`signoz_report_password` to the environment's `TERRAFORM_SECRETS_ENVIRONMENT`
+entry in 1Password, set `enable_signoz_weekly_report = true`, and apply the module.
+All three values must be nonempty when the flag is enabled; they can be omitted
+when it is disabled.
+
+This flag controls secret provisioning only, not the Kubernetes CronJob. Keep
+the job disabled separately until its secrets are available. Setting the flag
+back to `false` after provisioning destroys these three secrets, with no recovery
+window, following the module's existing secret lifecycle.
+
 #### Step By Step Example: AWS Lambda
 
 Suppose we need to add a new API Key to the GC Notify API Lambda

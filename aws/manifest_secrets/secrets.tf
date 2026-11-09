@@ -486,6 +486,48 @@ resource "aws_secretsmanager_secret_version" "signoz_postgres_password_version" 
   secret_string = var.signoz_postgres_password
 }
 
+resource "aws_secretsmanager_secret" "signoz_report_notify_api_key" {
+  provider                = aws.core_services
+  count                   = var.enable_signoz_weekly_report ? 1 : 0
+  name                    = "SIGNOZ_REPORT_NOTIFY_API_KEY"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "signoz_report_notify_api_key_version" {
+  provider      = aws.core_services
+  count         = var.enable_signoz_weekly_report ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.signoz_report_notify_api_key[0].id
+  secret_string = var.signoz_report_notify_api_key
+}
+
+resource "aws_secretsmanager_secret" "signoz_report_email" {
+  provider                = aws.core_services
+  count                   = var.enable_signoz_weekly_report ? 1 : 0
+  name                    = "SIGNOZ_REPORT_EMAIL"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "signoz_report_email_version" {
+  provider      = aws.core_services
+  count         = var.enable_signoz_weekly_report ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.signoz_report_email[0].id
+  secret_string = var.signoz_report_email
+}
+
+resource "aws_secretsmanager_secret" "signoz_report_password" {
+  provider                = aws.core_services
+  count                   = var.enable_signoz_weekly_report ? 1 : 0
+  name                    = "SIGNOZ_REPORT_PASSWORD"
+  recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "signoz_report_password_version" {
+  provider      = aws.core_services
+  count         = var.enable_signoz_weekly_report ? 1 : 0
+  secret_id     = aws_secretsmanager_secret.signoz_report_password[0].id
+  secret_string = var.signoz_report_password
+}
+
 resource "aws_secretsmanager_secret" "falco_credentials" {
   provider                = aws.core_services
   name                    = "FALCO_CREDENTIALS"
