@@ -17,6 +17,14 @@ The directory structure inside `aws` reflects the split into independent modules
 
 Terragrunt scripts are found in `env`, which defines all the environment specific variables. Contained are subdirectories that define all the Terraform modules that should exist in each environment.
 
+The `aws-auth` component ensures `notification-canada-ca` exists before creating
+its namespace-admin RoleBinding in every environment. The bootstrap requires
+`bash` and `kubectl`, using `~/.kube/config` and the environment-named context.
+It preserves existing namespaces and leaves namespace labels to Helmfile.
+The `terraform_data.notification_namespace` bootstrap runs on creation or
+replacement, not every apply, and does not delete the namespace on destroy.
+If the namespace is deleted externally, replace that resource to rerun it.
+
 ### How do we run terragrunt plan locally?
 
 Running `terragrunt plan` locally (as opposed to through the GitHub actions) can speed up development, in particular to see if your new terraform code is horribly broken. You will need two things:
