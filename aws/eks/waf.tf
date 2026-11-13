@@ -81,7 +81,7 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     priority = 4
 
     action {
-      count {}
+      block {}
     }
 
     statement {
