@@ -124,6 +124,19 @@ echo "Done."
 # Delete the remaining resources that aws-nuke can't delete
 echo "Deleting remaining resources..."
 
+
+echo "Deleting Google Service CIDRs prefix lists..."
+aws ec2 describe-managed-prefix-lists \
+  --filters "Name=prefix-list-name,Values=Google Service CIDRs" \
+  --query 'PrefixLists[].PrefixListId' --output text |
+  tr '\t' '\n' | while IFS= read -r prefix_list_id; do
+    [ -z "$prefix_list_id" ] && continue
+    echo "Deleting prefix list $prefix_list_id..."
+    aws ec2 delete-managed-prefix-list --prefix-list-id "$prefix_list_id"
+  done
+echo "Done."
+
+
 echo "Deleting KMS alias s3_scan_object_queue..."
 aws kms delete-alias --alias-name alias/s3_scan_object_queue
 
