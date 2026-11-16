@@ -132,7 +132,7 @@ aws ec2 describe-managed-prefix-lists \
   tr '\t' '\n' | while IFS= read -r prefix_list_id; do
     [ -z "$prefix_list_id" ] && continue
     echo "Deleting prefix list $prefix_list_id..."
-    aws ec2 delete-managed-prefix-list --prefix-list-id "$prefix_list_id" || exit 1
+    aws ec2 delete-managed-prefix-list --prefix-list-id "$prefix_list_id"
   done
 echo "Done."
 
