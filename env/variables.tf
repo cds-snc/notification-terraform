@@ -1051,8 +1051,8 @@ variable "security_txt_content" {
     Contact: mailto:ZZTBSCYBERS@tbs-sct.gc.ca
     Contact: https://hackerone.com/tbs-sct/
     Policy: https://hackerone.com/tbs-sct/policy
-    Canonical: https://cdssandbox.xyz/.well-known/security.txt
+    Canonical: https://cds-snc.ca/.well-known/security.txt
     Preferred-Languages: en, fr
-    Expires: 2026-03-29T12:00:00.000Z
+    Expires: 2027-04-01T00:00:00Z
   EOT
 }
