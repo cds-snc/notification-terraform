@@ -19,6 +19,7 @@ env:
   ENVIRONMENT: production
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_PRODUCTION }}
   WORKFLOW: true
+  TF_VAR_security_txt_content: ${{ vars.SECURITY_TXT_CDS_SNC_CA }}
 
 permissions:
   id-token: write

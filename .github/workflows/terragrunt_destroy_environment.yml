@@ -19,6 +19,7 @@ env:
   AWS_NUKE_CONFIG_PLACEHOLDER: SCRATCH_ACCOUNT_ID
   OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_STAGING }}
   ENVIRONMENT: dev
+  TF_VAR_security_txt_content: ${{ vars.SECURITY_TXT_CDS_SNC_CA }}
 
 permissions:
   id-token: write
