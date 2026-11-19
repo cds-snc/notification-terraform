@@ -184,37 +184,10 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
   }
 }
 
-resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
-  provider    = aws.core_services
-  name        = "notification_base_url"
-  description = "Regex matching the root domain of notify"
-  scope       = "REGIONAL"
-
-  # WAF Regex blocks are combined with OR logic.
-  # Regex support is limited, please see:
-  # https://docs.aws.amazon.com/waf/latest/developerguide/waf-regex-pattern-set-managing.html
-
-  # Preserve the legacy blocking pattern while the strict allowlist is evaluated.
-  regular_expression {
-    regex_string = "${var.domain}$"
-  }
-
-  dynamic "regular_expression" {
-    for_each = var.alt_domain != null && trimspace(var.alt_domain) != "" ? [var.alt_domain] : []
-    content {
-      regex_string = "${regular_expression.value}$"
-    }
-  }
-
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
-}
-
 resource "aws_wafv2_regex_pattern_set" "notification_base_url_shadow" {
   provider    = aws.core_services
   name        = "notification_base_url_shadow"
-  description = "Strict hostname allowlist evaluated by the count-only host rule"
+  description = "Strict hostname allowlist for host injection protection"
   scope       = "REGIONAL"
 
   # Only hostnames served by the public ALB (see aws/eks/dns.tf).
