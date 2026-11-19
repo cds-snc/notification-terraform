@@ -17,8 +17,7 @@
 #   9 |   ~23 | CanadaUSOnlyGeoRestriction                  | BLOCK (API host, non-CA/US)
 #  10 |   ~24 | MutatingApiRateLimit                        | BLOCK (rate, IP)
 #  11 |   ~24 | MutatingApiRateLimit_JA4                    | BLOCK (rate, JA4)
-#  12 |   ~25 | PreventHostInjectionsShadow                 | count (strict hostname allowlist)
-#  13 |   ~25 | PreventHostInjections                       | BLOCK (legacy domain suffix)
+#  12 |   ~25 | PreventHostInjectionsShadow                 | BLOCK (strict hostname allowlist)
 #  14 |    25 | AWSManagedRulesAmazonIpReputationList        | BLOCK (managed)
 #  15 |   ~26 | rate_limit_all_except_api                   | BLOCK (rate, IP)
 #  16 |   ~26 | ApiRateLimit                                | BLOCK (rate, IP)
@@ -188,13 +187,12 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
   }
 
   # 25 WCU
-  # Count strict-allowlist misses before the legacy rule can terminate them.
   rule {
     name     = "PreventHostInjectionsShadow"
     priority = 12
 
     action {
-      count {}
+      block {}
     }
 
     statement {
@@ -221,44 +219,6 @@ resource "aws_wafv2_web_acl" "notification-canada-ca" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "PreventHostInjectionsShadow"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  # 25 WCU
-  rule {
-    name     = "PreventHostInjections"
-    priority = 13
-
-    statement {
-      not_statement {
-        statement {
-          regex_pattern_set_reference_statement {
-
-            arn = var.notification_base_url_regex_arn
-
-            field_to_match {
-              single_header {
-                name = "host"
-              }
-            }
-
-            text_transformation {
-              priority = 0
-              type     = "LOWERCASE"
-            }
-          }
-        }
-      }
-    }
-
-    action {
-      block {}
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "PreventHostInjections"
       sampled_requests_enabled   = true
     }
   }
