@@ -67,3 +67,53 @@ resource "aws_cloudwatch_event_target" "blazer_run_checks" {
     }
   }
 }
+
+# Checks with an arbitrary cron_expression aren't tied to one of the fixed
+# schedules above; a single frequent tick decides which of them are due
+# (see BlazerCronChecks#due? in the app).
+resource "aws_cloudwatch_event_rule" "blazer_run_due_cron_checks" {
+  provider            = aws.core_services
+  count               = var.cloudwatch_enabled ? 1 : 0
+  name                = "blazer-run-checks-due-cron"
+  schedule_expression = "rate(1 minute)"
+
+  tags = {
+    Name                  = "blazer-run-checks-due-cron"
+    (var.billing_tag_key) = var.billing_tag_value
+  }
+}
+
+resource "aws_cloudwatch_event_target" "blazer_run_due_cron_checks" {
+  provider = aws.core_services
+  count    = var.cloudwatch_enabled ? 1 : 0
+
+  rule           = aws_cloudwatch_event_rule.blazer_run_due_cron_checks[0].name
+  event_bus_name = aws_cloudwatch_event_rule.blazer_run_due_cron_checks[0].event_bus_name
+  arn            = aws_ecs_cluster.blazer.arn
+  role_arn       = aws_iam_role.scheduled_task_blazer_event_role.arn
+
+  input = jsonencode({
+    containerOverrides = [
+      {
+        name    = "blazer"
+        command = ["bundle", "exec", "rake", "blazer:run_due_cron_checks"]
+      }
+    ]
+  })
+
+  ecs_target {
+    launch_type         = "FARGATE"
+    platform_version    = "1.4.0"
+    task_count          = 1
+    task_definition_arn = aws_ecs_task_definition.blazer.arn
+    network_configuration {
+      subnets          = var.vpc_private_subnets
+      security_groups  = [var.database-tools-securitygroup]
+      assign_public_ip = false
+    }
+
+    tags = {
+      (var.billing_tag_key) = var.billing_tag_value
+    }
+  }
+}
