@@ -184,29 +184,6 @@ resource "aws_wafv2_regex_pattern_set" "re_documentation" {
   }
 }
 
-# Retain until EKS has detached the legacy host rule; remove in a follow-up release.
-resource "aws_wafv2_regex_pattern_set" "notification_base_url" {
-  provider    = aws.core_services
-  name        = "notification_base_url"
-  description = "Regex matching the root domain of notify"
-  scope       = "REGIONAL"
-
-  regular_expression {
-    regex_string = "${var.domain}$"
-  }
-
-  dynamic "regular_expression" {
-    for_each = var.alt_domain != null && trimspace(var.alt_domain) != "" ? [var.alt_domain] : []
-    content {
-      regex_string = "${regular_expression.value}$"
-    }
-  }
-
-  tags = {
-    CostCenter = "notification-canada-ca-${var.env}"
-  }
-}
-
 resource "aws_wafv2_regex_pattern_set" "notification_base_url_shadow" {
   provider    = aws.core_services
   name        = "notification_base_url_shadow"
